@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysZckMapper">
+
+    <resultMap type="SysZck" id="SysZckResult">
+        <result property="id" column="id"/>
+        <result property="assetPackageName" column="asset_package_name"/>
+        <result property="assetStatus" column="asset_status"/>
+        <result property="no" column="no"/>
+        <result property="borrower" column="borrower"/>
+        <result property="city" column="city"/>
+        <result property="contractPrincipal" column="contract_principal"/>
+        <result property="principalBalance" column="principal_balance"/>
+        <result property="interestBalance" column="interest_balance"/>
+        <result property="principalInterestBalance" column="principal_interest_balance"/>
+        <result property="bxjsDate" column="bxjs_date"/>
+        <result property="loanBank" column="loan_bank"/>
+        <result property="loanContractNo" column="loan_contract_no"/>
+        <result property="loanTime" column="loan_time"/>
+        <result property="guarantor" column="guarantor"/>
+        <result property="bzrZrrNumber" column="bzr_zrr_number"/>
+        <result property="bzrFrNumber" column="bzr_fr_number"/>
+        <result property="guaranteeAmount" column="guarantee_amount"/>
+        <result property="guaranteeContractNo" column="guarantee_contract_no"/>
+        <result property="guaranteeContractSignTime" column="guarantee_contract_sign_time"/>
+        <result property="maximumGuaranteeAmount" column="maximum_guarantee_amount"/>
+        <result property="maximumGuaranteeContract" column="maximum_guarantee_contract"/>
+        <result property="maximumGuaratnteeSignTime" column="maximum_guaratntee_sign_time"/>
+        <result property="zzqDateTime" column="zzq_date_Time"/>
+        <result property="guaranteeMode" column="guarantee_mode"/>
+        <result property="guaranteePeriod" column="guarantee_period"/>
+        <result property="guaranteeRemarks" column="guarantee_remarks"/>
+        <result property="assetNature" column="asset_nature"/>
+        <result property="address" column="address"/>
+        <result property="qsNo" column="qs_no"/>
+        <result property="area" column="area"/>
+        <result property="sealUp" column="seal_up"/>
+        <result property="mortgage" column="mortgage"/>
+        <result property="otherRemark" column="other_remark"/>
+        <result property="jkrIndustry" column="jkr_industry"/>
+        <result property="soe" column="soe"/>
+        <result property="operation" column="operation"/>
+        <result property="court" column="court"/>
+        <result property="litigation" column="litigation"/>
+        <result property="judicialRemark" column="judicial_remark"/>
+        <result property="dywAddress" column="dyw_address"/>
+        <result property="mortgageAmount" column="mortgage_amount"/>
+        <result property="mortgageContractNo" column="mortgage_contract_no"/>
+        <result property="maximumMortgageContractNo" column="maximum_mortgage_contract_no"/>
+        <result property="zgeContractTime" column="zge_contract_time"/>
+        <result property="dbzzqTime" column="dbzzq_time"/>
+        <result property="mortgagor" column="mortgagor"/>
+        <result property="zgeQsNo" column="zge_qs_no"/>
+        <result property="txQzNo" column="tx_qz_no"/>
+        <result property="caseNo" column="case_no"/>
+        <result property="mortgageRank" column="mortgage_rank"/>
+        <result property="qxswMortgeageAmount" column="qxsw_mortgeage_amount"/>
+        <result property="beforeOrAterAarrival" column="before_or_ater_aarrival"/>
+        <result property="rentalDetails" column="rental_details"/>
+        <result property="juveniles" column="juveniles"/>
+        <result property="onlyHouse" column="only_house"/>
+        <result property="tengfang" column="tengfang"/>
+        <result property="natureLand" column="nature_land"/>
+        <result property="sysynx" column="sysynx"/>
+        <result property="plotRatio" column="plot_ratio"/>
+        <result property="access" column="access"/>
+        <result property="landArea" column="land_area"/>
+        <result property="buildStructure" column="build_structure"/>
+        <result property="completionDate" column="completion_date"/>
+        <result property="floors" column="floors"/>
+        <result property="collateType" column="collate_type"/>
+        <result property="floorage" column="floorage"/>
+        <result property="landUnitPrice" column="land_unit_price"/>
+        <result property="landTotalPrice" column="land_total_price"/>
+        <result property="otherCollateralUnitPrice" column="other_collateral_unit_price"/>
+        <result property="otherCollateralTotalPrice" column="other_collateral_total_price"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="valuationBasis" column="valuation_basis"/>
+        <result property="capValue" column="cap_value"/>
+        <result property="dzywRemark" column="dzyw_remark"/>
+        <result property="borrowerWsqk" column="borrower_wsqk"/>
+        <result property="propertyClues" column="property_clues"/>
+        <result property="zhhknl" column="zhhknl"/>
+        <result property="jkrgzRemark" column="jkrgz_remark"/>
+        <result property="price" column="price"/>
+        <result property="desposalMode" column="desposal_mode"/>
+        <result property="desposalPrice" column="desposal_price"/>
+        <result property="customer" column="customer"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="dzywqdTime" column="dzywqd_time"/>
+        <result property="maximumMortgageAmount" column="maximum_mortgage_amount"/>
+        <result property="rentalSituation" column="rental_situation"/>
+        <result property="zoning" column="zoning"/>
+    </resultMap>
+
+    <sql id="selectSysZckVo">
+        select id, asset_package_name, asset_status, no, borrower, city, contract_principal, principal_balance,
+        interest_balance, principal_interest_balance, bxjs_date, loan_bank, loan_contract_no, loan_time, guarantor,
+        bzr_zrr_number, bzr_fr_number, guarantee_amount, guarantee_contract_no, guarantee_contract_sign_time,
+        maximum_guarantee_amount, maximum_guarantee_contract, maximum_guaratntee_sign_time, zzq_date_Time, guarantee_mode,
+        guarantee_period, guarantee_remarks, asset_nature, address, qs_no, area, seal_up, mortgage, other_remark,
+        jkr_industry, soe, operation, court, litigation, judicial_remark, dyw_address, mortgage_amount, mortgage_contract_no,
+        maximum_mortgage_contract_no, zge_contract_time, dbzzq_time, mortgagor, zge_qs_no, tx_qz_no, case_no, mortgage_rank,
+        qxsw_mortgeage_amount, before_or_ater_aarrival, rental_details, juveniles, only_house, tengfang, nature_land, sysynx,
+        plot_ratio, access, land_area, build_structure, completion_date, floors, collate_type, floorage, land_unit_price,
+        land_total_price, other_collateral_unit_price, other_collateral_total_price, total_price, valuation_basis, cap_value,
+        dzyw_remark, borrower_wsqk, property_clues, zhhknl, jkrgz_remark, price, desposal_mode, desposal_price, customer, create_by,
+        create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning from sys_zck
+    </sql>
+
+    <select id="selectSysZckList" parameterType="SysZck" resultMap="SysZckResult">
+        <include refid="selectSysZckVo"/>
+        <where>
+            <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name like concat('%',
+                #{assetPackageName}, '%')
+            </if>
+            <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
+            <if test="no != null ">and no = #{no}</if>
+            <if test="borrower != null  and borrower != ''">and borrower = #{borrower}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
+            <if test="principalBalance != null ">and principal_balance = #{principalBalance}</if>
+            <if test="interestBalance != null ">and interest_balance = #{interestBalance}</if>
+            <if test="principalInterestBalance != null ">and principal_interest_balance = #{principalInterestBalance}
+            </if>
+            <if test="bxjsDate != null ">and bxjs_date = #{bxjsDate}</if>
+            <if test="loanBank != null  and loanBank != ''">and loan_bank = #{loanBank}</if>
+            <if test="loanContractNo != null  and loanContractNo != ''">and loan_contract_no = #{loanContractNo}</if>
+            <if test="loanTime != null ">and loan_time = #{loanTime}</if>
+            <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
+            <if test="bzrZrrNumber != null ">and bzr_zrr_number = #{bzrZrrNumber}</if>
+            <if test="bzrFrNumber != null ">and bzr_fr_number = #{bzrFrNumber}</if>
+            <if test="guaranteeAmount != null ">and guarantee_amount = #{guaranteeAmount}</if>
+            <if test="guaranteeContractNo != null  and guaranteeContractNo != ''">and guarantee_contract_no =
+                #{guaranteeContractNo}
+            </if>
+            <if test="guaranteeContractSignTime != null ">and guarantee_contract_sign_time =
+                #{guaranteeContractSignTime}
+            </if>
+            <if test="maximumGuaranteeAmount != null ">and maximum_guarantee_amount = #{maximumGuaranteeAmount}</if>
+            <if test="maximumGuaranteeContract != null  and maximumGuaranteeContract != ''">and
+                maximum_guarantee_contract = #{maximumGuaranteeContract}
+            </if>
+            <if test="maximumGuaratnteeSignTime != null ">and maximum_guaratntee_sign_time =
+                #{maximumGuaratnteeSignTime}
+            </if>
+            <if test="zzqDateTime != null  and zzqDateTime != ''">and zzq_date_Time = #{zzqDateTime}</if>
+            <if test="guaranteeMode != null  and guaranteeMode != ''">and guarantee_mode = #{guaranteeMode}</if>
+            <if test="guaranteePeriod != null  and guaranteePeriod != ''">and guarantee_period = #{guaranteePeriod}</if>
+            <if test="guaranteeRemarks != null  and guaranteeRemarks != ''">and guarantee_remarks =
+                #{guaranteeRemarks}
+            </if>
+            <if test="assetNature != null  and assetNature != ''">and asset_nature = #{assetNature}</if>
+            <if test="address != null  and address != ''">and address = #{address}</if>
+            <if test="qsNo != null  and qsNo != ''">and qs_no = #{qsNo}</if>
+            <if test="area != null  and area != ''">and area = #{area}</if>
+            <if test="sealUp != null  and sealUp != ''">and seal_up = #{sealUp}</if>
+            <if test="mortgage != null  and mortgage != ''">and mortgage = #{mortgage}</if>
+            <if test="otherRemark != null  and otherRemark != ''">and other_remark = #{otherRemark}</if>
+            <if test="jkrIndustry != null  and jkrIndustry != ''">and jkr_industry = #{jkrIndustry}</if>
+            <if test="soe != null  and soe != ''">and soe = #{soe}</if>
+            <if test="operation != null  and operation != ''">and operation = #{operation}</if>
+            <if test="court != null  and court != ''">and court = #{court}</if>
+            <if test="litigation != null  and litigation != ''">and litigation = #{litigation}</if>
+            <if test="judicialRemark != null  and judicialRemark != ''">and judicial_remark = #{judicialRemark}</if>
+            <if test="dywAddress != null  and dywAddress != ''">and dyw_address = #{dywAddress}</if>
+            <if test="mortgageAmount != null ">and mortgage_amount = #{mortgageAmount}</if>
+            <if test="mortgageContractNo != null  and mortgageContractNo != ''">and mortgage_contract_no =
+                #{mortgageContractNo}
+            </if>
+            <if test="maximumMortgageContractNo != null  and maximumMortgageContractNo != ''">and
+                maximum_mortgage_contract_no = #{maximumMortgageContractNo}
+            </if>
+            <if test="zgeContractTime != null ">and zge_contract_time = #{zgeContractTime}</if>
+            <if test="dbzzqTime != null  and dbzzqTime != ''">and dbzzq_time = #{dbzzqTime}</if>
+            <if test="mortgagor != null  and mortgagor != ''">and mortgagor = #{mortgagor}</if>
+            <if test="zgeQsNo != null  and zgeQsNo != ''">and zge_qs_no = #{zgeQsNo}</if>
+            <if test="txQzNo != null  and txQzNo != ''">and tx_qz_no = #{txQzNo}</if>
+            <if test="caseNo != null  and caseNo != ''">and case_no = #{caseNo}</if>
+            <if test="mortgageRank != null  and mortgageRank != ''">and mortgage_rank = #{mortgageRank}</if>
+            <if test="qxswMortgeageAmount != null ">and qxsw_mortgeage_amount = #{qxswMortgeageAmount}</if>
+            <if test="beforeOrAterAarrival != null  and beforeOrAterAarrival != ''">and before_or_ater_aarrival =
+                #{beforeOrAterAarrival}
+            </if>
+            <if test="rentalDetails != null  and rentalDetails != ''">and rental_details = #{rentalDetails}</if>
+            <if test="juveniles != null  and juveniles != ''">and juveniles = #{juveniles}</if>
+            <if test="onlyHouse != null  and onlyHouse != ''">and only_house = #{onlyHouse}</if>
+            <if test="tengfang != null  and tengfang != ''">and tengfang = #{tengfang}</if>
+            <if test="natureLand != null  and natureLand != ''">and nature_land = #{natureLand}</if>
+            <if test="sysynx != null  and sysynx != ''">and sysynx = #{sysynx}</if>
+            <if test="plotRatio != null  and plotRatio != ''">and plot_ratio = #{plotRatio}</if>
+            <if test="access != null  and access != ''">and access = #{access}</if>
+            <if test="landArea != null ">and land_area = #{landArea}</if>
+            <if test="buildStructure != null  and buildStructure != ''">and build_structure = #{buildStructure}</if>
+            <if test="completionDate != null ">and completion_date = #{completionDate}</if>
+            <if test="floors != null  and floors != ''">and floors = #{floors}</if>
+            <if test="collateType != null  and collateType != ''">and collate_type = #{collateType}</if>
+            <if test="floorage != null ">and floorage = #{floorage}</if>
+            <if test="landUnitPrice != null ">and land_unit_price = #{landUnitPrice}</if>
+            <if test="landTotalPrice != null ">and land_total_price = #{landTotalPrice}</if>
+            <if test="otherCollateralUnitPrice != null ">and other_collateral_unit_price = #{otherCollateralUnitPrice}
+            </if>
+            <if test="otherCollateralTotalPrice != null ">and other_collateral_total_price =
+                #{otherCollateralTotalPrice}
+            </if>
+            <if test="totalPrice != null ">and total_price = #{totalPrice}</if>
+            <if test="valuationBasis != null  and valuationBasis != ''">and valuation_basis = #{valuationBasis}</if>
+            <if test="capValue != null  and capValue != ''">and cap_value = #{capValue}</if>
+            <if test="dzywRemark != null  and dzywRemark != ''">and dzyw_remark = #{dzywRemark}</if>
+            <if test="borrowerWsqk != null  and borrowerWsqk != ''">and borrower_wsqk = #{borrowerWsqk}</if>
+            <if test="propertyClues != null  and propertyClues != ''">and property_clues = #{propertyClues}</if>
+            <if test="zhhknl != null ">and zhhknl = #{zhhknl}</if>
+            <if test="jkrgzRemark != null  and jkrgzRemark != ''">and jkrgz_remark = #{jkrgzRemark}</if>
+            <if test="price != null ">and price = #{price}</if>
+            <if test="desposalMode != null  and desposalMode != ''">and desposal_mode = #{desposalMode}</if>
+            <if test="desposalPrice != null ">and desposal_price = #{desposalPrice}</if>
+            <if test="customer != null  and customer != ''">and customer = #{customer}</if>
+            <if test="dzywqdTime != null ">and dzywqd_time = #{dzywqdTime}</if>
+            <if test="maximumMortgageAmount != null ">and maximum_mortgage_amount = #{maximumMortgageAmount}</if>
+            <if test="rentalSituation != null  and rentalSituation != ''">and rental_situation = #{rentalSituation}</if>
+            <if test="zoning != null  and zoning != ''">and zoning = #{zoning}</if>
+        </where>
+    </select>
+
+    <select id="selectSysZckById" parameterType="Long" resultMap="SysZckResult">
+        <include refid="selectSysZckVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysZck" parameterType="SysZck" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_zck
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != '' ">id,</if>
+            <if test="assetPackageName != null and assetPackageName != '' ">asset_package_name,</if>
+            <if test="assetStatus != null and assetStatus != '' ">asset_status,</if>
+            <if test="no != null and no != '' ">no,</if>
+            <if test="borrower != null and borrower != '' ">borrower,</if>
+            <if test="city != null and city != '' ">city,</if>
+            <if test="contractPrincipal != null and contractPrincipal != '' ">contract_principal,</if>
+            <if test="principalBalance != null and principalBalance != '' ">principal_balance,</if>
+            <if test="interestBalance != null and interestBalance != '' ">interest_balance,</if>
+            <if test="principalInterestBalance != null and principalInterestBalance != '' ">
+                principal_interest_balance,
+            </if>
+            <if test="bxjsDate != null">bxjs_date,</if>
+            <if test="loanBank != null and loanBank != '' ">loan_bank,</if>
+            <if test="loanContractNo != null and loanContractNo != '' ">loan_contract_no,</if>
+            <if test="loanTime != null">loan_time,</if>
+            <if test="guarantor != null and guarantor != '' ">guarantor,</if>
+            <if test="bzrZrrNumber != null and bzrZrrNumber != '' ">bzr_zrr_number,</if>
+            <if test="bzrFrNumber != null and bzrFrNumber != '' ">bzr_fr_number,</if>
+            <if test="guaranteeAmount != null and guaranteeAmount != '' ">guarantee_amount,</if>
+            <if test="guaranteeContractNo != null and guaranteeContractNo != '' ">guarantee_contract_no,</if>
+            <if test="guaranteeContractSignTime != null">
+                guarantee_contract_sign_time,
+            </if>
+            <if test="maximumGuaranteeAmount != null and maximumGuaranteeAmount != '' ">maximum_guarantee_amount,</if>
+            <if test="maximumGuaranteeContract != null and maximumGuaranteeContract != '' ">
+                maximum_guarantee_contract,
+            </if>
+            <if test="maximumGuaratnteeSignTime != null">
+                maximum_guaratntee_sign_time,
+            </if>
+            <if test="zzqDateTime != null and zzqDateTime != '' ">zzq_date_Time,</if>
+            <if test="guaranteeMode != null and guaranteeMode != '' ">guarantee_mode,</if>
+            <if test="guaranteePeriod != null and guaranteePeriod != '' ">guarantee_period,</if>
+            <if test="guaranteeRemarks != null and guaranteeRemarks != '' ">guarantee_remarks,</if>
+            <if test="assetNature != null and assetNature != '' ">asset_nature,</if>
+            <if test="address != null and address != '' ">address,</if>
+            <if test="qsNo != null and qsNo != '' ">qs_no,</if>
+            <if test="area != null and area != '' ">area,</if>
+            <if test="sealUp != null and sealUp != '' ">seal_up,</if>
+            <if test="mortgage != null and mortgage != '' ">mortgage,</if>
+            <if test="otherRemark != null and otherRemark != '' ">other_remark,</if>
+            <if test="jkrIndustry != null and jkrIndustry != '' ">jkr_industry,</if>
+            <if test="soe != null and soe != '' ">soe,</if>
+            <if test="operation != null and operation != '' ">operation,</if>
+            <if test="court != null and court != '' ">court,</if>
+            <if test="litigation != null and litigation != '' ">litigation,</if>
+            <if test="judicialRemark != null and judicialRemark != '' ">judicial_remark,</if>
+            <if test="dywAddress != null and dywAddress != '' ">dyw_address,</if>
+            <if test="mortgageAmount != null and mortgageAmount != '' ">mortgage_amount,</if>
+            <if test="mortgageContractNo != null and mortgageContractNo != '' ">mortgage_contract_no,</if>
+            <if test="maximumMortgageContractNo != null and maximumMortgageContractNo != '' ">
+                maximum_mortgage_contract_no,
+            </if>
+            <if test="zgeContractTime != null">zge_contract_time,</if>
+            <if test="dbzzqTime != null and dbzzqTime != '' ">dbzzq_time,</if>
+            <if test="mortgagor != null and mortgagor != '' ">mortgagor,</if>
+            <if test="zgeQsNo != null and zgeQsNo != '' ">zge_qs_no,</if>
+            <if test="txQzNo != null and txQzNo != '' ">tx_qz_no,</if>
+            <if test="caseNo != null and caseNo != '' ">case_no,</if>
+            <if test="mortgageRank != null and mortgageRank != '' ">mortgage_rank,</if>
+            <if test="qxswMortgeageAmount != null and qxswMortgeageAmount != '' ">qxsw_mortgeage_amount,</if>
+            <if test="beforeOrAterAarrival != null and beforeOrAterAarrival != '' ">before_or_ater_aarrival,</if>
+            <if test="rentalDetails != null and rentalDetails != '' ">rental_details,</if>
+            <if test="juveniles != null and juveniles != '' ">juveniles,</if>
+            <if test="onlyHouse != null and onlyHouse != '' ">only_house,</if>
+            <if test="tengfang != null and tengfang != '' ">tengfang,</if>
+            <if test="natureLand != null and natureLand != '' ">nature_land,</if>
+            <if test="sysynx != null and sysynx != '' ">sysynx,</if>
+            <if test="plotRatio != null and plotRatio != '' ">plot_ratio,</if>
+            <if test="access != null and access != '' ">access,</if>
+            <if test="landArea != null and landArea != '' ">land_area,</if>
+            <if test="buildStructure != null and buildStructure != '' ">build_structure,</if>
+            <if test="completionDate != null">completion_date,</if>
+            <if test="floors != null and floors != '' ">floors,</if>
+            <if test="collateType != null and collateType != '' ">collate_type,</if>
+            <if test="floorage != null and floorage != '' ">floorage,</if>
+            <if test="landUnitPrice != null and landUnitPrice != '' ">land_unit_price,</if>
+            <if test="landTotalPrice != null and landTotalPrice != '' ">land_total_price,</if>
+            <if test="otherCollateralUnitPrice != null and otherCollateralUnitPrice != '' ">
+                other_collateral_unit_price,
+            </if>
+            <if test="otherCollateralTotalPrice != null and otherCollateralTotalPrice != '' ">
+                other_collateral_total_price,
+            </if>
+            <if test="totalPrice != null and totalPrice != '' ">total_price,</if>
+            <if test="valuationBasis != null and valuationBasis != '' ">valuation_basis,</if>
+            <if test="capValue != null and capValue != '' ">cap_value,</if>
+            <if test="dzywRemark != null and dzywRemark != '' ">dzyw_remark,</if>
+            <if test="borrowerWsqk != null and borrowerWsqk != '' ">borrower_wsqk,</if>
+            <if test="propertyClues != null and propertyClues != '' ">property_clues,</if>
+            <if test="zhhknl != null and zhhknl != '' ">zhhknl,</if>
+            <if test="jkrgzRemark != null and jkrgzRemark != '' ">jkrgz_remark,</if>
+            <if test="price != null and price != '' ">price,</if>
+            <if test="desposalMode != null and desposalMode != '' ">desposal_mode,</if>
+            <if test="desposalPrice != null and desposalPrice != '' ">desposal_price,</if>
+            <if test="customer != null and customer != '' ">customer,</if>
+            <if test="dzywqdTime != null">dzywqd_time,</if>
+            <if test="maximumMortgageAmount != null">maximum_mortgage_amount,</if>
+            <if test="rentalSituation != null">rental_situation,</if>
+            <if test="zoning != null">zoning,</if>
+            <if test="createBy != null and createBy != '' ">create_by,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="assetPackageName != null and assetPackageName != ''">#{assetPackageName},</if>
+            <if test="assetStatus != null and assetStatus != ''">#{assetStatus},</if>
+            <if test="no != null and no != ''">#{no},</if>
+            <if test="borrower != null and borrower != ''">#{borrower},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="contractPrincipal != null and contractPrincipal != ''">#{contractPrincipal},</if>
+            <if test="principalBalance != null and principalBalance != ''">#{principalBalance},</if>
+            <if test="interestBalance != null and interestBalance != ''">#{interestBalance},</if>
+            <if test="principalInterestBalance != null and principalInterestBalance != ''">
+                #{principalInterestBalance},
+            </if>
+            <if test="bxjsDate != null">#{bxjsDate},</if>
+            <if test="loanBank != null and loanBank != ''">#{loanBank},</if>
+            <if test="loanContractNo != null and loanContractNo != ''">#{loanContractNo},</if>
+            <if test="loanTime != null">#{loanTime},</if>
+            <if test="guarantor != null and guarantor != ''">#{guarantor},</if>
+            <if test="bzrZrrNumber != null and bzrZrrNumber != ''">#{bzrZrrNumber},</if>
+            <if test="bzrFrNumber != null and bzrFrNumber != ''">#{bzrFrNumber},</if>
+            <if test="guaranteeAmount != null and guaranteeAmount != ''">#{guaranteeAmount},</if>
+            <if test="guaranteeContractNo != null and guaranteeContractNo != ''">#{guaranteeContractNo},</if>
+            <if test="guaranteeContractSignTime != null">
+                #{guaranteeContractSignTime},
+            </if>
+            <if test="maximumGuaranteeAmount != null and maximumGuaranteeAmount != ''">#{maximumGuaranteeAmount},</if>
+            <if test="maximumGuaranteeContract != null and maximumGuaranteeContract != ''">
+                #{maximumGuaranteeContract},
+            </if>
+            <if test="maximumGuaratnteeSignTime != null">
+                #{maximumGuaratnteeSignTime},
+            </if>
+            <if test="zzqDateTime != null and zzqDateTime != ''">#{zzqDateTime},</if>
+            <if test="guaranteeMode != null and guaranteeMode != ''">#{guaranteeMode},</if>
+            <if test="guaranteePeriod != null and guaranteePeriod != ''">#{guaranteePeriod},</if>
+            <if test="guaranteeRemarks != null and guaranteeRemarks != ''">#{guaranteeRemarks},</if>
+            <if test="assetNature != null and assetNature != ''">#{assetNature},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="qsNo != null and qsNo != ''">#{qsNo},</if>
+            <if test="area != null and area != ''">#{area},</if>
+            <if test="sealUp != null and sealUp != ''">#{sealUp},</if>
+            <if test="mortgage != null and mortgage != ''">#{mortgage},</if>
+            <if test="otherRemark != null and otherRemark != ''">#{otherRemark},</if>
+            <if test="jkrIndustry != null and jkrIndustry != ''">#{jkrIndustry},</if>
+            <if test="soe != null and soe != ''">#{soe},</if>
+            <if test="operation != null and operation != ''">#{operation},</if>
+            <if test="court != null and court != ''">#{court},</if>
+            <if test="litigation != null and litigation != ''">#{litigation},</if>
+            <if test="judicialRemark != null and judicialRemark != ''">#{judicialRemark},</if>
+            <if test="dywAddress != null and dywAddress != ''">#{dywAddress},</if>
+            <if test="mortgageAmount != null and mortgageAmount != ''">#{mortgageAmount},</if>
+            <if test="mortgageContractNo != null and mortgageContractNo != ''">#{mortgageContractNo},</if>
+            <if test="maximumMortgageContractNo != null and maximumMortgageContractNo != ''">
+                #{maximumMortgageContractNo},
+            </if>
+            <if test="zgeContractTime != null">#{zgeContractTime},</if>
+            <if test="dbzzqTime != null and dbzzqTime != ''">#{dbzzqTime},</if>
+            <if test="mortgagor != null and mortgagor != ''">#{mortgagor},</if>
+            <if test="zgeQsNo != null and zgeQsNo != ''">#{zgeQsNo},</if>
+            <if test="txQzNo != null and txQzNo != ''">#{txQzNo},</if>
+            <if test="caseNo != null and caseNo != ''">#{caseNo},</if>
+            <if test="mortgageRank != null and mortgageRank != ''">#{mortgageRank},</if>
+            <if test="qxswMortgeageAmount != null and qxswMortgeageAmount != ''">#{qxswMortgeageAmount},</if>
+            <if test="beforeOrAterAarrival != null and beforeOrAterAarrival != ''">#{beforeOrAterAarrival},</if>
+            <if test="rentalDetails != null and rentalDetails != ''">#{rentalDetails},</if>
+            <if test="juveniles != null and juveniles != ''">#{juveniles},</if>
+            <if test="onlyHouse != null and onlyHouse != ''">#{onlyHouse},</if>
+            <if test="tengfang != null and tengfang != ''">#{tengfang},</if>
+            <if test="natureLand != null and natureLand != ''">#{natureLand},</if>
+            <if test="sysynx != null and sysynx != ''">#{sysynx},</if>
+            <if test="plotRatio != null and plotRatio != ''">#{plotRatio},</if>
+            <if test="access != null and access != ''">#{access},</if>
+            <if test="landArea != null and landArea != ''">#{landArea},</if>
+            <if test="buildStructure != null and buildStructure != ''">#{buildStructure},</if>
+            <if test="completionDate != null">#{completionDate},</if>
+            <if test="floors != null and floors != ''">#{floors},</if>
+            <if test="collateType != null and collateType != ''">#{collateType},</if>
+            <if test="floorage != null and floorage != ''">#{floorage},</if>
+            <if test="landUnitPrice != null and landUnitPrice != ''">#{landUnitPrice},</if>
+            <if test="landTotalPrice != null and landTotalPrice != ''">#{landTotalPrice},</if>
+            <if test="otherCollateralUnitPrice != null and otherCollateralUnitPrice != ''">
+                #{otherCollateralUnitPrice},
+            </if>
+            <if test="otherCollateralTotalPrice != null and otherCollateralTotalPrice != ''">
+                #{otherCollateralTotalPrice},
+            </if>
+            <if test="totalPrice != null and totalPrice != ''">#{totalPrice},</if>
+            <if test="valuationBasis != null and valuationBasis != ''">#{valuationBasis},</if>
+            <if test="capValue != null and capValue != ''">#{capValue},</if>
+            <if test="dzywRemark != null and dzywRemark != ''">#{dzywRemark},</if>
+            <if test="borrowerWsqk != null and borrowerWsqk != ''">#{borrowerWsqk},</if>
+            <if test="propertyClues != null and propertyClues != ''">#{propertyClues},</if>
+            <if test="zhhknl != null and zhhknl != ''">#{zhhknl},</if>
+            <if test="jkrgzRemark != null and jkrgzRemark != ''">#{jkrgzRemark},</if>
+            <if test="price != null and price != ''">#{price},</if>
+            <if test="desposalMode != null and desposalMode != ''">#{desposalMode},</if>
+            <if test="desposalPrice != null and desposalPrice != ''">#{desposalPrice},</if>
+            <if test="customer != null and customer != ''">#{customer},</if>
+            <if test="dzywqdTime != null">#{dzywqdTime},</if>
+            <if test="maximumMortgageAmount != null">#{maximumMortgageAmount},</if>
+            <if test="rentalSituation != null">#{rentalSituation},</if>
+            <if test="zoning != null">#{zoning},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateSysZck" parameterType="SysZck">
+        update sys_zck
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetPackageName != null  and assetPackageName != ''  ">asset_package_name =
+                #{assetPackageName},
+            </if>
+            <if test="assetStatus != null  and assetStatus != ''  ">asset_status = #{assetStatus},</if>
+            <if test="no != null  ">no = #{no},</if>
+            <if test="borrower != null  and borrower != ''  ">borrower = #{borrower},</if>
+            <if test="city != null  and city != ''  ">city = #{city},</if>
+            <if test="contractPrincipal != null  ">contract_principal = #{contractPrincipal},</if>
+            <if test="principalBalance != null  ">principal_balance = #{principalBalance},</if>
+            <if test="interestBalance != null  ">interest_balance = #{interestBalance},</if>
+            <if test="principalInterestBalance != null  ">principal_interest_balance = #{principalInterestBalance},</if>
+            <if test="bxjsDate != null  ">bxjs_date = #{bxjsDate},</if>
+            <if test="loanBank != null  and loanBank != ''  ">loan_bank = #{loanBank},</if>
+            <if test="loanContractNo != null  and loanContractNo != ''  ">loan_contract_no = #{loanContractNo},</if>
+            <if test="loanTime != null  ">loan_time = #{loanTime},</if>
+            <if test="guarantor != null  and guarantor != ''  ">guarantor = #{guarantor},</if>
+            <if test="bzrZrrNumber != null  ">bzr_zrr_number = #{bzrZrrNumber},</if>
+            <if test="bzrFrNumber != null  ">bzr_fr_number = #{bzrFrNumber},</if>
+            <if test="guaranteeAmount != null  ">guarantee_amount = #{guaranteeAmount},</if>
+            <if test="guaranteeContractNo != null  and guaranteeContractNo != ''  ">guarantee_contract_no =
+                #{guaranteeContractNo},
+            </if>
+            <if test="guaranteeContractSignTime != null  ">guarantee_contract_sign_time =
+                #{guaranteeContractSignTime},
+            </if>
+            <if test="maximumGuaranteeAmount != null  ">maximum_guarantee_amount = #{maximumGuaranteeAmount},</if>
+            <if test="maximumGuaranteeContract != null  and maximumGuaranteeContract != ''  ">maximum_guarantee_contract
+                = #{maximumGuaranteeContract},
+            </if>
+            <if test="maximumGuaratnteeSignTime != null  ">maximum_guaratntee_sign_time =
+                #{maximumGuaratnteeSignTime},
+            </if>
+            <if test="zzqDateTime != null  and zzqDateTime != ''  ">zzq_date_Time = #{zzqDateTime},</if>
+            <if test="guaranteeMode != null  and guaranteeMode != ''  ">guarantee_mode = #{guaranteeMode},</if>
+            <if test="guaranteePeriod != null  and guaranteePeriod != ''  ">guarantee_period = #{guaranteePeriod},</if>
+            <if test="guaranteeRemarks != null  and guaranteeRemarks != ''  ">guarantee_remarks = #{guaranteeRemarks},
+            </if>
+            <if test="assetNature != null  and assetNature != ''  ">asset_nature = #{assetNature},</if>
+            <if test="address != null  and address != ''  ">address = #{address},</if>
+            <if test="qsNo != null  and qsNo != ''  ">qs_no = #{qsNo},</if>
+            <if test="area != null  and area != ''  ">area = #{area},</if>
+            <if test="sealUp != null  and sealUp != ''  ">seal_up = #{sealUp},</if>
+            <if test="mortgage != null  and mortgage != ''  ">mortgage = #{mortgage},</if>
+            <if test="otherRemark != null  and otherRemark != ''  ">other_remark = #{otherRemark},</if>
+            <if test="jkrIndustry != null  and jkrIndustry != ''  ">jkr_industry = #{jkrIndustry},</if>
+            <if test="soe != null  and soe != ''  ">soe = #{soe},</if>
+            <if test="operation != null  and operation != ''  ">operation = #{operation},</if>
+            <if test="court != null  and court != ''  ">court = #{court},</if>
+            <if test="litigation != null  and litigation != ''  ">litigation = #{litigation},</if>
+            <if test="judicialRemark != null  and judicialRemark != ''  ">judicial_remark = #{judicialRemark},</if>
+            <if test="dywAddress != null  and dywAddress != ''  ">dyw_address = #{dywAddress},</if>
+            <if test="mortgageAmount != null  ">mortgage_amount = #{mortgageAmount},</if>
+            <if test="mortgageContractNo != null  and mortgageContractNo != ''  ">mortgage_contract_no =
+                #{mortgageContractNo},
+            </if>
+            <if test="maximumMortgageContractNo != null  and maximumMortgageContractNo != ''  ">
+                maximum_mortgage_contract_no = #{maximumMortgageContractNo},
+            </if>
+            <if test="zgeContractTime != null">zge_contract_time = #{zgeContractTime},</if>
+            <if test="dbzzqTime != null  and dbzzqTime != ''  ">dbzzq_time = #{dbzzqTime},</if>
+            <if test="mortgagor != null  and mortgagor != ''  ">mortgagor = #{mortgagor},</if>
+            <if test="zgeQsNo != null  and zgeQsNo != ''  ">zge_qs_no = #{zgeQsNo},</if>
+            <if test="txQzNo != null  and txQzNo != ''  ">tx_qz_no = #{txQzNo},</if>
+            <if test="caseNo != null  and caseNo != ''  ">case_no = #{caseNo},</if>
+            <if test="mortgageRank != null  and mortgageRank != ''  ">mortgage_rank = #{mortgageRank},</if>
+            <if test="qxswMortgeageAmount != null  ">qxsw_mortgeage_amount = #{qxswMortgeageAmount},</if>
+            <if test="beforeOrAterAarrival != null  and beforeOrAterAarrival != ''  ">before_or_ater_aarrival =
+                #{beforeOrAterAarrival},
+            </if>
+            <if test="rentalDetails != null  and rentalDetails != ''  ">rental_details = #{rentalDetails},</if>
+            <if test="juveniles != null  and juveniles != ''  ">juveniles = #{juveniles},</if>
+            <if test="onlyHouse != null  and onlyHouse != ''  ">only_house = #{onlyHouse},</if>
+            <if test="tengfang != null  and tengfang != ''  ">tengfang = #{tengfang},</if>
+            <if test="natureLand != null  and natureLand != ''  ">nature_land = #{natureLand},</if>
+            <if test="sysynx != null  and sysynx != ''  ">sysynx = #{sysynx},</if>
+            <if test="plotRatio != null  and plotRatio != ''  ">plot_ratio = #{plotRatio},</if>
+            <if test="access != null  and access != ''  ">access = #{access},</if>
+            <if test="landArea != null  ">land_area = #{landArea},</if>
+            <if test="buildStructure != null  and buildStructure != ''  ">build_structure = #{buildStructure},</if>
+            <if test="completionDate != null">completion_date = #{completionDate},</if>
+            <if test="floors != null  and floors != ''  ">floors = #{floors},</if>
+            <if test="collateType != null  and collateType != ''  ">collate_type = #{collateType},</if>
+            <if test="floorage != null  ">floorage = #{floorage},</if>
+            <if test="landUnitPrice != null  ">land_unit_price = #{landUnitPrice},</if>
+            <if test="landTotalPrice != null  ">land_total_price = #{landTotalPrice},</if>
+            <if test="otherCollateralUnitPrice != null  ">other_collateral_unit_price = #{otherCollateralUnitPrice},
+            </if>
+            <if test="otherCollateralTotalPrice != null  ">other_collateral_total_price =
+                #{otherCollateralTotalPrice},
+            </if>
+            <if test="totalPrice != null  ">total_price = #{totalPrice},</if>
+            <if test="valuationBasis != null  and valuationBasis != ''  ">valuation_basis = #{valuationBasis},</if>
+            <if test="capValue != null  and capValue != ''  ">cap_value = #{capValue},</if>
+            <if test="dzywRemark != null  and dzywRemark != ''  ">dzyw_remark = #{dzywRemark},</if>
+            <if test="borrowerWsqk != null  and borrowerWsqk != ''  ">borrower_wsqk = #{borrowerWsqk},</if>
+            <if test="propertyClues != null  and propertyClues != ''  ">property_clues = #{propertyClues},</if>
+            <if test="zhhknl != null  ">zhhknl = #{zhhknl},</if>
+            <if test="jkrgzRemark != null  and jkrgzRemark != ''  ">jkrgz_remark = #{jkrgzRemark},</if>
+            <if test="price != null  ">price = #{price},</if>
+            <if test="desposalMode != null  and desposalMode != ''  ">desposal_mode = #{desposalMode},</if>
+            <if test="desposalPrice != null  ">desposal_price = #{desposalPrice},</if>
+            <if test="customer != null  and customer != ''  ">customer = #{customer},</if>
+            <if test="dzywqdTime != null">dzywqd_time = #{dzywqdTime},</if>
+            <if test="maximumMortgageAmount != null">maximum_mortgage_amount = #{maximumMortgageAmount},</if>
+            <if test="rentalSituation != null">rental_situation = #{rentalSituation},</if>
+            <if test="zoning != null">zoning = #{zoning},</if>
+            <if test="updateBy != null  ">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysZckById" parameterType="Long">
+        delete from sys_zck where id = #{id}
+    </delete>
+
+    <delete id="deleteSysZckByIds" parameterType="String">
+        delete from sys_zck where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

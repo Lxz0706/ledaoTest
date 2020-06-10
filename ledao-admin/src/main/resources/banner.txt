@@ -1,0 +1,2 @@
+Application Version: ${ledao.version}
+Spring Boot Version: ${spring-boot.version}

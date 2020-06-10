@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增资产信息库')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-zck-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资产包名称：</label>
+                <div class="col-sm-8">
+                    <input name="assetPackageName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资产状态：</label>
+                <div class="col-sm-8">
+                    <input name="assetStatus" class="form-control" type="text">
+                    <!--<div class="radio-box">
+                        <input type="radio" name="assetStatus" value="">
+                        <label th:for="assetStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>-->
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">序号：</label>
+                <div class="col-sm-8">
+                    <input name="no" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款人名称：</label>
+                <div class="col-sm-8">
+                    <input name="borrower" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">城市/地区：</label>
+                <div class="col-sm-8">
+                    <input name="city" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同本金：</label>
+                <div class="col-sm-8">
+                    <input name="contractPrincipal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">本金余额：</label>
+                <div class="col-sm-8">
+                    <input name="principalBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">利息余额：</label>
+                <div class="col-sm-8">
+                    <input name="interestBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">本息余额：</label>
+                <div class="col-sm-8">
+                    <input name="principalInterestBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">本息计算基准日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="bxjsDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">贷款行：</label>
+                <div class="col-sm-8">
+                    <input name="loanBank" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">贷款合同编号：</label>
+                <div class="col-sm-8">
+                    <input name="loanContractNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款期限：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="loanTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证人：</label>
+                <div class="col-sm-8">
+                    <input name="guarantor" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证人自然人数量：</label>
+                <div class="col-sm-8">
+                    <input name="bzrZrrNumber" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证人法人数量：</label>
+                <div class="col-sm-8">
+                    <input name="bzrFrNumber" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证金额：</label>
+                <div class="col-sm-8">
+                    <input name="guaranteeAmount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证合同编号：</label>
+                <div class="col-sm-8">
+                    <input name="guaranteeContractNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证合同签订时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="guaranteeContractSignTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">最高额保证金额：</label>
+                <div class="col-sm-8">
+                    <input name="maximumGuaranteeAmount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">最高额保证合同·保函编号：</label>
+                <div class="col-sm-8">
+                    <input name="maximumGuaranteeContract" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">最高额保证合同签订时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="maximumGuaratnteeSignTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">担保的主债权发生期间：</label>
+                <div class="col-sm-8">
+                    <input name="zzqDateTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证方式：</label>
+                <div class="col-sm-8">
+                    <input name="guaranteeMode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保证期间：</label>
+                <div class="col-sm-8">
+                    <input name="guaranteePeriod" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注(包括与债务人关系，名下财产，还款意愿等)：</label>
+                <div class="col-sm-8">
+                    <input name="guaranteeRemarks" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资产性质：</label>
+                <div class="col-sm-8">
+                    <input name="assetNature" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">住址：</label>
+                <div class="col-sm-8">
+                    <textarea name="address" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">权属证号：</label>
+                <div class="col-sm-8">
+                    <input name="qsNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">面积·㎡：</label>
+                <div class="col-sm-8">
+                    <input name="area" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">查封情况：</label>
+                <div class="col-sm-8">
+                    <input name="sealUp" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵押情况：</label>
+                <div class="col-sm-8">
+                    <input name="mortgage" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="otherRemark" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款人行业：</label>
+                <div class="col-sm-8">
+                    <input name="jkrIndustry" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">国企/非国企：</label>
+                <div class="col-sm-8">
+                    <input name="soe" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">经营情况：</label>
+                <div class="col-sm-8">
+                    <input name="operation" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">法院：</label>
+                <div class="col-sm-8">
+                    <input name="court" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">诉讼情况：</label>
+                <div class="col-sm-8">
+                    <input name="litigation" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="judicialRemark" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">地址：</label>
+                <div class="col-sm-8">
+                    <input name="dywAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵（质）押金额(本金)：</label>
+                <div class="col-sm-8">
+                    <input name="mortgageAmount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵（质）押合同编号：</label>
+                <div class="col-sm-8">
+                    <input name="mortgageContractNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">最高额抵押合同编号：</label>
+                <div class="col-sm-8">
+                    <input name="maximumMortgageContractNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">最高额抵押合同签订时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="zgeContractTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">担保的主债权发生期间：</label>
+                <div class="col-sm-8">
+                    <input name="dbzzqTime" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵押人：</label>
+                <div class="col-sm-8">
+                    <input name="mortgagor" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">权属证号：</label>
+                <div class="col-sm-8">
+                    <input name="zgeQsNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">他项权证编号：</label>
+                <div class="col-sm-8">
+                    <input name="txQzNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">查封情况/查封法院/案号：</label>
+                <div class="col-sm-8">
+                    <textarea name="caseNo" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵押顺位：</label>
+                <div class="col-sm-8">
+                    <input name="mortgageRank" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">前序顺位抵押金额：</label>
+                <div class="col-sm-8">
+                    <input name="qxswMortgeageAmount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵前or抵后：</label>
+                <div class="col-sm-8">
+                    <input name="beforeOrAterAarrival" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">出租相关细节：</label>
+                <div class="col-sm-8">
+                    <input name="rentalDetails" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否有未成年人：</label>
+                <div class="col-sm-8">
+                    <input name="juveniles" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否唯一住房：</label>
+                <div class="col-sm-8">
+                    <input name="onlyHouse" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否需要腾房：</label>
+                <div class="col-sm-8">
+                    <input name="tengfang" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">土地性质：</label>
+                <div class="col-sm-8">
+                    <input name="natureLand" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">剩余使用年限：</label>
+                <div class="col-sm-8">
+                    <input name="sysynx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">容积率：</label>
+                <div class="col-sm-8">
+                    <input name="plotRatio" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">获得方式：</label>
+                <div class="col-sm-8">
+                    <input name="access" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">土地面积：</label>
+                <div class="col-sm-8">
+                    <input name="landArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">建筑结构：</label>
+                <div class="col-sm-8">
+                    <input name="buildStructure" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">建成日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="completionDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">所在层数/总层数：</label>
+                <div class="col-sm-8">
+                    <input name="floors" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵/置押物类型：</label>
+                <div class="col-sm-8">
+                    <input name="collateType" class="form-control" type="text">
+                    <!--<select name="collateType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>-->
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">建筑面积/㎡：</label>
+                <div class="col-sm-8">
+                    <input name="floorage" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">土地单价：</label>
+                <div class="col-sm-8">
+                    <input name="landUnitPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">土地总价：</label>
+                <div class="col-sm-8">
+                    <input name="landTotalPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">其它抵置押物单价：</label>
+                <div class="col-sm-8">
+                    <input name="otherCollateralUnitPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">其它抵置押物总价：</label>
+                <div class="col-sm-8">
+                    <input name="otherCollateralTotalPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总价：</label>
+                <div class="col-sm-8">
+                    <input name="totalPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">估值依据：</label>
+                <div class="col-sm-8">
+                    <input name="valuationBasis" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">盖帽值：</label>
+                <div class="col-sm-8">
+                    <input name="capValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">抵置押物备注：</label>
+                <div class="col-sm-8">
+                    <input name="dzywRemark" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款人、保证人网搜情况：</label>
+                <div class="col-sm-8">
+                    <input name="borrowerWsqk" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">财产线索：</label>
+                <div class="col-sm-8">
+                    <input name="propertyClues" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">估值建议：</label>
+                <div class="col-sm-8">
+                    <input name="zhhknl" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="jkrgzRemark" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">定价：</label>
+                <div class="col-sm-8">
+                    <input name="price" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">处置方式：</label>
+                <div class="col-sm-8">
+                    <input name="desposalMode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">处置价格：</label>
+                <div class="col-sm-8">
+                    <input name="desposalPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户：</label>
+                <div class="col-sm-8">
+                    <input name="customer" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/zck"
+        $("#form-zck-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-zck-add').serialize());
+            }
+        }
+
+        $("input[name='bxjsDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='loanTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='guaranteeContractSignTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='maximumGuaratnteeSignTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='zgeContractTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='completionDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

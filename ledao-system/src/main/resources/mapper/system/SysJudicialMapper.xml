@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysJudicialMapper">
+
+    <resultMap type="SysJudicial" id="SysJudicialResult">
+        <result property="id" column="id"/>
+        <result property="owner" column="owner"/>
+        <result property="ownertype" column="ownerType"/>
+        <result property="websiteLinks" column="website_links"/>
+    </resultMap>
+
+    <sql id="selectSysJudicialVo">
+        select id, owner, ownerType, website_links from sys_judicial
+    </sql>
+
+    <select id="selectSysJudicialList" parameterType="SysJudicial" resultMap="SysJudicialResult">
+        <include refid="selectSysJudicialVo"/>
+        <where>
+            <if test="owner != null  and owner != ''">and owner = #{owner}</if>
+            <if test="ownertype != null  and ownertype != ''">and ownerType = #{ownertype}</if>
+            <if test="websiteLinks != null  and websiteLinks != ''">and website_links = #{websiteLinks}</if>
+        </where>
+    </select>
+
+    <select id="selectSysJudicialById" parameterType="Long" resultMap="SysJudicialResult">
+        <include refid="selectSysJudicialVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysJudicial" parameterType="SysJudicial" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_judicial
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="owner != null">owner,</if>
+            <if test="ownertype != null">ownerType,</if>
+            <if test="websiteLinks != null">website_links,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="owner != null">#{owner},</if>
+            <if test="ownertype != null">#{ownertype},</if>
+            <if test="websiteLinks != null">#{websiteLinks},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysJudicial" parameterType="SysJudicial">
+        update sys_judicial
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="owner != null">owner = #{owner},</if>
+            <if test="ownertype != null">ownerType = #{ownertype},</if>
+            <if test="websiteLinks != null">website_links = #{websiteLinks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysJudicialById" parameterType="Long">
+        delete from sys_judicial where id = #{id}
+    </delete>
+
+    <delete id="deleteSysJudicialByIds" parameterType="String">
+        delete from sys_judicial where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

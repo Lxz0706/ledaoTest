@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 资产信息库Mapper接口
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 public interface SysZckMapper {
@@ -58,4 +58,9 @@ public interface SysZckMapper {
      * @return 结果
      */
     public int deleteSysZckByIds(String[] ids);
+
+    /**
+     * 根据资产包ID查询资产库
+     * */
+    public List<SysZck> selectSysZckByZcbId(Long zcbId);
 }

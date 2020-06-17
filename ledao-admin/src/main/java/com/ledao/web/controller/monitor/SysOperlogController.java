@@ -23,7 +23,7 @@ import com.ledao.system.service.ISysOperLogService;
 /**
  * 操作日志记录
  *
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/monitor/operlog")

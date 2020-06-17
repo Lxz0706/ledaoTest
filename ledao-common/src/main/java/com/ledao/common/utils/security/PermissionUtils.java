@@ -14,7 +14,7 @@ import com.ledao.common.utils.MessageUtils;
 /**
  * permission 工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class PermissionUtils
 {

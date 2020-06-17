@@ -16,7 +16,7 @@ import com.ledao.system.service.ISysConfigService;
 /**
  * 参数配置 服务层实现
  * 
- * @author ledao
+ * @author lxz
  */
 @Service
 public class SysConfigServiceImpl implements ISysConfigService

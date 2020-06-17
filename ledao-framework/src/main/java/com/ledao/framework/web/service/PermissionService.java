@@ -13,7 +13,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * LeDao首创 js调用 thymeleaf 实现按钮权限可见性
  * 
- * @author ledao
+ * @author lxz
  */
 @Service("permission")
 public class PermissionService

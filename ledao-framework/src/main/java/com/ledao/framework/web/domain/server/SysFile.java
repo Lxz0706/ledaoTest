@@ -3,7 +3,7 @@ package com.ledao.framework.web.domain.server;
 /**
  * 系统文件相关信息
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysFile
 {

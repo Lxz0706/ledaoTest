@@ -25,7 +25,7 @@ import com.ledao.system.service.ISysMenuService;
 /**
  * 菜单 业务层处理
  *
- * @author ledao
+ * @author lxz
  */
 @Service
 public class SysMenuServiceImpl implements ISysMenuService {

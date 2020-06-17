@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 司法对象 sys_judicial
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 public class SysJudicial extends BaseEntity {

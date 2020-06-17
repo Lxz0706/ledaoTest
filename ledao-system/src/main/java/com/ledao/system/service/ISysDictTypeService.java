@@ -8,7 +8,7 @@ import com.ledao.system.domain.SysDictType;
 /**
  * 字典 业务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysDictTypeService
 {

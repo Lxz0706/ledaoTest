@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysBgczzckMapper">
+
+    <resultMap type="SysBgczzck" id="SysBgczzckResult">
+        <result property="id" column="id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="projectStatus" column="project_status"/>
+        <result property="no" column="no"/>
+        <result property="spvName" column="spv_name"/>
+        <result property="city" column="city"/>
+        <result property="contractPrincipal" column="contract_principal"/>
+        <result property="principalBalance" column="principal_balance"/>
+        <result property="interestBalance" column="interest_balance"/>
+        <result property="principalInterestBalance" column="principal_interest_balance"/>
+        <result property="bxjsDate" column="bxjs_date"/>
+        <result property="interestPaymentCycle" column="interest_payment_cycle"/>
+        <result property="interestPaymentDate" column="interest_payment_date"/>
+        <result property="finalParty" column="final_party"/>
+        <result property="finalAgreementNo" column="final_agreement_no"/>
+        <result property="finalTerm" column="final_term"/>
+        <result property="guarantor" column="guarantor"/>
+        <result property="guarantee" column="guarantee"/>
+        <result property="guaranteePeriod" column="guarantee_period"/>
+        <result property="guaranteeDocumentNo" column="guarantee_document_no"/>
+        <result property="natureAssets" column="nature_assets"/>
+        <result property="address" column="address"/>
+        <result property="owerCertificateNo" column="ower_certificate_no"/>
+        <result property="areaMeasure" column="area_measure"/>
+        <result property="indestry" column="indestry"/>
+        <result property="soe" column="soe"/>
+        <result property="operation" column="operation"/>
+        <result property="legalProgress" column="legal_progress"/>
+        <result property="xgsxbljd" column="xgsxbljd"/>
+        <result property="projectStatusComments" column="Project_status_comments"/>
+        <result property="licenseType" column="license_type"/>
+        <result property="licenseNo" column="license_no"/>
+        <result property="acquisitionTime" column="acquisition_time"/>
+        <result property="licenseInformation" column="license_information"/>
+        <result property="projectRemark" column="project_remark"/>
+        <result property="natureLand" column="nature_land"/>
+        <result property="sysynx" column="sysynx"/>
+        <result property="tdPlotRatio" column="td_plot_ratio"/>
+        <result property="access" column="access"/>
+        <result property="zoing" column="zoing"/>
+        <result property="landArea" column="land_area"/>
+        <result property="ghPlotRatio" column="gh_plot_ratio"/>
+        <result property="buildDensity" column="build_density"/>
+        <result property="afforestedArea" column="afforested_area"/>
+        <result property="businessShare" column="business_share"/>
+        <result property="planBuildArea" column="plan_build_area"/>
+        <result property="landUnitPrice" column="land_unit_price"/>
+        <result property="landTotalPrice" column="land_total_price"/>
+        <result property="buildValuation" column="build_valuation"/>
+        <result property="otherAppurtenance" column="other_appurtenance"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="valuationBasis" column="valuation_basis"/>
+        <result property="projectValuationRemarks" column="project_valuation_remarks"/>
+        <result property="cashBack" column="cash_back"/>
+        <result property="cashBackAmount" column="cash_back_amount"/>
+        <result property="repaymentCapacity" column="repayment_capacity"/>
+        <result property="laterProject" column="later_project"/>
+        <result property="laterProjectRemark" column="later_project_remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysBgczzckVo">
+        select id, project_name, project_status, no, spv_name, city, contract_principal, principal_balance,
+        interest_balance, principal_interest_balance, bxjs_date, interest_payment_cycle, interest_payment_date,
+        final_party, final_agreement_no, final_term, guarantor, guarantee, guarantee_period, guarantee_document_no,
+        nature_assets, address, ower_certificate_no, area_measure, indestry, soe, operation, legal_progress, xgsxbljd,
+        Project_status_comments, license_type, license_no, acquisition_time, license_information, project_remark,
+        nature_land, sysynx, td_plot_ratio, access, zoing, land_area, gh_plot_ratio, build_density, afforested_area,
+        business_share, plan_build_area, land_unit_price, land_total_price, build_valuation, other_appurtenance, total_price,
+        valuation_basis, project_valuation_remarks, cash_back, cash_back_amount, repayment_capacity, later_project,
+        later_project_remark, create_by, create_time, update_by, update_time from sys_bgczzck
+    </sql>
+
+    <select id="selectSysBgczzckList" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
+        <include refid="selectSysBgczzckVo"/>
+        <where>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="projectStatus != null  and projectStatus != ''">and project_status = #{projectStatus}</if>
+            <if test="no != null  and no != ''">and no like concat('%',#{no},'%')</if>
+            <if test="spvName != null  and spvName != ''">and spv_name like concat('%', #{spvName}, '%')</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
+            <if test="principalBalance != null ">and principal_balance = #{principalBalance}</if>
+            <if test="interestBalance != null ">and interest_balance = #{interestBalance}</if>
+            <if test="principalInterestBalance != null ">and principal_interest_balance = #{principalInterestBalance}
+            </if>
+            <if test="bxjsDate != null ">and bxjs_date = #{bxjsDate}</if>
+            <if test="interestPaymentCycle != null  and interestPaymentCycle != ''">and interest_payment_cycle =
+                #{interestPaymentCycle}
+            </if>
+            <if test="interestPaymentDate != null ">and interest_payment_date = #{interestPaymentDate}</if>
+            <if test="finalParty != null  and finalParty != ''">and final_party = #{finalParty}</if>
+            <if test="finalAgreementNo != null  and finalAgreementNo != ''">and final_agreement_no =
+                #{finalAgreementNo}
+            </if>
+            <if test="finalTerm != null  and finalTerm != ''">and final_term = #{finalTerm}</if>
+            <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
+            <if test="guarantee != null  and guarantee != ''">and guarantee = #{guarantee}</if>
+            <if test="guaranteePeriod != null  and guaranteePeriod != ''">and guarantee_period = #{guaranteePeriod}</if>
+            <if test="guaranteeDocumentNo != null  and guaranteeDocumentNo != ''">and guarantee_document_no =
+                #{guaranteeDocumentNo}
+            </if>
+            <if test="natureAssets != null  and natureAssets != ''">and nature_assets = #{natureAssets}</if>
+            <if test="address != null  and address != ''">and address = #{address}</if>
+            <if test="owerCertificateNo != null  and owerCertificateNo != ''">and ower_certificate_no =
+                #{owerCertificateNo}
+            </if>
+            <if test="areaMeasure != null  and areaMeasure != ''">and area_measure = #{areaMeasure}</if>
+            <if test="indestry != null  and indestry != ''">and indestry = #{indestry}</if>
+            <if test="soe != null  and soe != ''">and soe = #{soe}</if>
+            <if test="operation != null  and operation != ''">and operation = #{operation}</if>
+            <if test="legalProgress != null  and legalProgress != ''">and legal_progress = #{legalProgress}</if>
+            <if test="xgsxbljd != null  and xgsxbljd != ''">and xgsxbljd = #{xgsxbljd}</if>
+            <if test="projectStatusComments != null  and projectStatusComments != ''">and Project_status_comments =
+                #{projectStatusComments}
+            </if>
+            <if test="licenseType != null  and licenseType != ''">and license_type = #{licenseType}</if>
+            <if test="licenseNo != null  and licenseNo != ''">and license_no = #{licenseNo}</if>
+            <if test="acquisitionTime != null ">and acquisition_time = #{acquisitionTime}</if>
+            <if test="licenseInformation != null  and licenseInformation != ''">and license_information =
+                #{licenseInformation}
+            </if>
+            <if test="projectRemark != null  and projectRemark != ''">and project_remark = #{projectRemark}</if>
+            <if test="natureLand != null  and natureLand != ''">and nature_land = #{natureLand}</if>
+            <if test="sysynx != null  and sysynx != ''">and sysynx = #{sysynx}</if>
+            <if test="tdPlotRatio != null  and tdPlotRatio != ''">and td_plot_ratio = #{tdPlotRatio}</if>
+            <if test="access != null  and access != ''">and access = #{access}</if>
+            <if test="zoing != null  and zoing != ''">and zoing = #{zoing}</if>
+            <if test="landArea != null  and landArea != ''">and land_area = #{landArea}</if>
+            <if test="ghPlotRatio != null  and ghPlotRatio != ''">and gh_plot_ratio = #{ghPlotRatio}</if>
+            <if test="buildDensity != null  and buildDensity != ''">and build_density = #{buildDensity}</if>
+            <if test="afforestedArea != null  and afforestedArea != ''">and afforested_area = #{afforestedArea}</if>
+            <if test="businessShare != null  and businessShare != ''">and business_share = #{businessShare}</if>
+            <if test="planBuildArea != null  and planBuildArea != ''">and plan_build_area = #{planBuildArea}</if>
+            <if test="landUnitPrice != null ">and land_unit_price = #{landUnitPrice}</if>
+            <if test="landTotalPrice != null ">and land_total_price = #{landTotalPrice}</if>
+            <if test="buildValuation != null  and buildValuation != ''">and build_valuation = #{buildValuation}</if>
+            <if test="otherAppurtenance != null  and otherAppurtenance != ''">and other_appurtenance =
+                #{otherAppurtenance}
+            </if>
+            <if test="totalPrice != null ">and total_price = #{totalPrice}</if>
+            <if test="valuationBasis != null  and valuationBasis != ''">and valuation_basis = #{valuationBasis}</if>
+            <if test="projectValuationRemarks != null  and projectValuationRemarks != ''">and project_valuation_remarks
+                = #{projectValuationRemarks}
+            </if>
+            <if test="cashBack != null  and cashBack != ''">and cash_back = #{cashBack}</if>
+            <if test="cashBackAmount != null  and cashBackAmount != ''">and cash_back_amount = #{cashBackAmount}</if>
+            <if test="repaymentCapacity != null  and repaymentCapacity != ''">and repayment_capacity =
+                #{repaymentCapacity}
+            </if>
+            <if test="laterProject != null  and laterProject != ''">and later_project = #{laterProject}</if>
+            <if test="laterProjectRemark != null  and laterProjectRemark != ''">and later_project_remark =
+                #{laterProjectRemark}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSysBgczzckById" parameterType="Long" resultMap="SysBgczzckResult">
+        <include refid="selectSysBgczzckVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysBgczzck" parameterType="SysBgczzck" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_bgczzck
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">project_name,</if>
+            <if test="projectStatus != null">project_status,</if>
+            <if test="no != null">no,</if>
+            <if test="spvName != null">spv_name,</if>
+            <if test="city != null">city,</if>
+            <if test="contractPrincipal != null">contract_principal,</if>
+            <if test="principalBalance != null">principal_balance,</if>
+            <if test="interestBalance != null">interest_balance,</if>
+            <if test="principalInterestBalance != null">principal_interest_balance,</if>
+            <if test="bxjsDate != null">bxjs_date,</if>
+            <if test="interestPaymentCycle != null">interest_payment_cycle,</if>
+            <if test="interestPaymentDate != null">interest_payment_date,</if>
+            <if test="finalParty != null">final_party,</if>
+            <if test="finalAgreementNo != null">final_agreement_no,</if>
+            <if test="finalTerm != null">final_term,</if>
+            <if test="guarantor != null">guarantor,</if>
+            <if test="guarantee != null">guarantee,</if>
+            <if test="guaranteePeriod != null">guarantee_period,</if>
+            <if test="guaranteeDocumentNo != null">guarantee_document_no,</if>
+            <if test="natureAssets != null">nature_assets,</if>
+            <if test="address != null">address,</if>
+            <if test="owerCertificateNo != null">ower_certificate_no,</if>
+            <if test="areaMeasure != null">area_measure,</if>
+            <if test="indestry != null">indestry,</if>
+            <if test="soe != null">soe,</if>
+            <if test="operation != null">operation,</if>
+            <if test="legalProgress != null">legal_progress,</if>
+            <if test="xgsxbljd != null">xgsxbljd,</if>
+            <if test="projectStatusComments != null">Project_status_comments,</if>
+            <if test="licenseType != null">license_type,</if>
+            <if test="licenseNo != null">license_no,</if>
+            <if test="acquisitionTime != null">acquisition_time,</if>
+            <if test="licenseInformation != null">license_information,</if>
+            <if test="projectRemark != null">project_remark,</if>
+            <if test="natureLand != null">nature_land,</if>
+            <if test="sysynx != null">sysynx,</if>
+            <if test="tdPlotRatio != null">td_plot_ratio,</if>
+            <if test="access != null">access,</if>
+            <if test="zoing != null">zoing,</if>
+            <if test="landArea != null">land_area,</if>
+            <if test="ghPlotRatio != null">gh_plot_ratio,</if>
+            <if test="buildDensity != null">build_density,</if>
+            <if test="afforestedArea != null">afforested_area,</if>
+            <if test="businessShare != null">business_share,</if>
+            <if test="planBuildArea != null">plan_build_area,</if>
+            <if test="landUnitPrice != null">land_unit_price,</if>
+            <if test="landTotalPrice != null">land_total_price,</if>
+            <if test="buildValuation != null">build_valuation,</if>
+            <if test="otherAppurtenance != null">other_appurtenance,</if>
+            <if test="totalPrice != null">total_price,</if>
+            <if test="valuationBasis != null">valuation_basis,</if>
+            <if test="projectValuationRemarks != null">project_valuation_remarks,</if>
+            <if test="cashBack != null">cash_back,</if>
+            <if test="cashBackAmount != null">cash_back_amount,</if>
+            <if test="repaymentCapacity != null">repayment_capacity,</if>
+            <if test="laterProject != null">later_project,</if>
+            <if test="laterProjectRemark != null">later_project_remark,</if>
+            <if test="createBy != null and createBy != '' ">create_by,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectStatus != null">#{projectStatus},</if>
+            <if test="no != null">#{no},</if>
+            <if test="spvName != null">#{spvName},</if>
+            <if test="city != null">#{city},</if>
+            <if test="contractPrincipal != null">#{contractPrincipal},</if>
+            <if test="principalBalance != null">#{principalBalance},</if>
+            <if test="interestBalance != null">#{interestBalance},</if>
+            <if test="principalInterestBalance != null">#{principalInterestBalance},</if>
+            <if test="bxjsDate != null">#{bxjsDate},</if>
+            <if test="interestPaymentCycle != null">#{interestPaymentCycle},</if>
+            <if test="interestPaymentDate != null">#{interestPaymentDate},</if>
+            <if test="finalParty != null">#{finalParty},</if>
+            <if test="finalAgreementNo != null">#{finalAgreementNo},</if>
+            <if test="finalTerm != null">#{finalTerm},</if>
+            <if test="guarantor != null">#{guarantor},</if>
+            <if test="guarantee != null">#{guarantee},</if>
+            <if test="guaranteePeriod != null">#{guaranteePeriod},</if>
+            <if test="guaranteeDocumentNo != null">#{guaranteeDocumentNo},</if>
+            <if test="natureAssets != null">#{natureAssets},</if>
+            <if test="address != null">#{address},</if>
+            <if test="owerCertificateNo != null">#{owerCertificateNo},</if>
+            <if test="areaMeasure != null">#{areaMeasure},</if>
+            <if test="indestry != null">#{indestry},</if>
+            <if test="soe != null">#{soe},</if>
+            <if test="operation != null">#{operation},</if>
+            <if test="legalProgress != null">#{legalProgress},</if>
+            <if test="xgsxbljd != null">#{xgsxbljd},</if>
+            <if test="projectStatusComments != null">#{projectStatusComments},</if>
+            <if test="licenseType != null">#{licenseType},</if>
+            <if test="licenseNo != null">#{licenseNo},</if>
+            <if test="acquisitionTime != null">#{acquisitionTime},</if>
+            <if test="licenseInformation != null">#{licenseInformation},</if>
+            <if test="projectRemark != null">#{projectRemark},</if>
+            <if test="natureLand != null">#{natureLand},</if>
+            <if test="sysynx != null">#{sysynx},</if>
+            <if test="tdPlotRatio != null">#{tdPlotRatio},</if>
+            <if test="access != null">#{access},</if>
+            <if test="zoing != null">#{zoing},</if>
+            <if test="landArea != null">#{landArea},</if>
+            <if test="ghPlotRatio != null">#{ghPlotRatio},</if>
+            <if test="buildDensity != null">#{buildDensity},</if>
+            <if test="afforestedArea != null">#{afforestedArea},</if>
+            <if test="businessShare != null">#{businessShare},</if>
+            <if test="planBuildArea != null">#{planBuildArea},</if>
+            <if test="landUnitPrice != null">#{landUnitPrice},</if>
+            <if test="landTotalPrice != null">#{landTotalPrice},</if>
+            <if test="buildValuation != null">#{buildValuation},</if>
+            <if test="otherAppurtenance != null">#{otherAppurtenance},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="valuationBasis != null">#{valuationBasis},</if>
+            <if test="projectValuationRemarks != null">#{projectValuationRemarks},</if>
+            <if test="cashBack != null">#{cashBack},</if>
+            <if test="cashBackAmount != null">#{cashBackAmount},</if>
+            <if test="repaymentCapacity != null">#{repaymentCapacity},</if>
+            <if test="laterProject != null">#{laterProject},</if>
+            <if test="laterProjectRemark != null">#{laterProjectRemark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateSysBgczzck" parameterType="SysBgczzck">
+        update sys_bgczzck
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="projectStatus != null">project_status = #{projectStatus},</if>
+            <if test="no != null">no = #{no},</if>
+            <if test="spvName != null">spv_name = #{spvName},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="contractPrincipal != null">contract_principal = #{contractPrincipal},</if>
+            <if test="principalBalance != null">principal_balance = #{principalBalance},</if>
+            <if test="interestBalance != null">interest_balance = #{interestBalance},</if>
+            <if test="principalInterestBalance != null">principal_interest_balance = #{principalInterestBalance},</if>
+            <if test="bxjsDate != null">bxjs_date = #{bxjsDate},</if>
+            <if test="interestPaymentCycle != null">interest_payment_cycle = #{interestPaymentCycle},</if>
+            <if test="interestPaymentDate != null">interest_payment_date = #{interestPaymentDate},</if>
+            <if test="finalParty != null">final_party = #{finalParty},</if>
+            <if test="finalAgreementNo != null">final_agreement_no = #{finalAgreementNo},</if>
+            <if test="finalTerm != null">final_term = #{finalTerm},</if>
+            <if test="guarantor != null">guarantor = #{guarantor},</if>
+            <if test="guarantee != null">guarantee = #{guarantee},</if>
+            <if test="guaranteePeriod != null">guarantee_period = #{guaranteePeriod},</if>
+            <if test="guaranteeDocumentNo != null">guarantee_document_no = #{guaranteeDocumentNo},</if>
+            <if test="natureAssets != null">nature_assets = #{natureAssets},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="owerCertificateNo != null">ower_certificate_no = #{owerCertificateNo},</if>
+            <if test="areaMeasure != null">area_measure = #{areaMeasure},</if>
+            <if test="indestry != null">indestry = #{indestry},</if>
+            <if test="soe != null">soe = #{soe},</if>
+            <if test="operation != null">operation = #{operation},</if>
+            <if test="legalProgress != null">legal_progress = #{legalProgress},</if>
+            <if test="xgsxbljd != null">xgsxbljd = #{xgsxbljd},</if>
+            <if test="projectStatusComments != null">Project_status_comments = #{projectStatusComments},</if>
+            <if test="licenseType != null">license_type = #{licenseType},</if>
+            <if test="licenseNo != null">license_no = #{licenseNo},</if>
+            <if test="acquisitionTime != null">acquisition_time = #{acquisitionTime},</if>
+            <if test="licenseInformation != null">license_information = #{licenseInformation},</if>
+            <if test="projectRemark != null">project_remark = #{projectRemark},</if>
+            <if test="natureLand != null">nature_land = #{natureLand},</if>
+            <if test="sysynx != null">sysynx = #{sysynx},</if>
+            <if test="tdPlotRatio != null">td_plot_ratio = #{tdPlotRatio},</if>
+            <if test="access != null">access = #{access},</if>
+            <if test="zoing != null">zoing = #{zoing},</if>
+            <if test="landArea != null">land_area = #{landArea},</if>
+            <if test="ghPlotRatio != null">gh_plot_ratio = #{ghPlotRatio},</if>
+            <if test="buildDensity != null">build_density = #{buildDensity},</if>
+            <if test="afforestedArea != null">afforested_area = #{afforestedArea},</if>
+            <if test="businessShare != null">business_share = #{businessShare},</if>
+            <if test="planBuildArea != null">plan_build_area = #{planBuildArea},</if>
+            <if test="landUnitPrice != null">land_unit_price = #{landUnitPrice},</if>
+            <if test="landTotalPrice != null">land_total_price = #{landTotalPrice},</if>
+            <if test="buildValuation != null">build_valuation = #{buildValuation},</if>
+            <if test="otherAppurtenance != null">other_appurtenance = #{otherAppurtenance},</if>
+            <if test="totalPrice != null">total_price = #{totalPrice},</if>
+            <if test="valuationBasis != null">valuation_basis = #{valuationBasis},</if>
+            <if test="projectValuationRemarks != null">project_valuation_remarks = #{projectValuationRemarks},</if>
+            <if test="cashBack != null">cash_back = #{cashBack},</if>
+            <if test="cashBackAmount != null">cash_back_amount = #{cashBackAmount},</if>
+            <if test="repaymentCapacity != null">repayment_capacity = #{repaymentCapacity},</if>
+            <if test="laterProject != null">later_project = #{laterProject},</if>
+            <if test="laterProjectRemark != null">later_project_remark = #{laterProjectRemark},</if>
+            <if test="updateBy != null  ">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysBgczzckById" parameterType="Long">
+        delete from sys_bgczzck where id = #{id}
+    </delete>
+
+    <delete id="deleteSysBgczzckByIds" parameterType="String">
+        delete from sys_bgczzck where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -11,7 +11,7 @@ import com.ledao.system.service.ISysNoticeService;
 /**
  * 公告 服务层实现
  * 
- * @author ledao
+ * @author lxz
  * @date 2018-06-25
  */
 @Service

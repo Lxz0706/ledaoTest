@@ -6,7 +6,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 定时任务调度测试
  * 
- * @author ledao
+ * @author lxz
  */
 @Component("ryTask")
 public class RyTask

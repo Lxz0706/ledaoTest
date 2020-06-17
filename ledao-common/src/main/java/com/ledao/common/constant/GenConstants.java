@@ -3,7 +3,7 @@ package com.ledao.common.constant;
 /**
  * 代码生成通用常量
  * 
- * @author ledao
+ * @author lxz
  */
 public class GenConstants
 {

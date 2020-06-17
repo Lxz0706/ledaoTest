@@ -6,22 +6,18 @@
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
 		<form class="form-horizontal m" id="form-zck-edit">
-			<div class="form-group">
+			<!--<div class="form-group">
 				<label class="col-sm-3 control-label">资产包名称：</label>
 				<div class="col-sm-8">
 					<div class="form-control-static" th:text="${sysZck.assetPackageName}"></div>
 				</div>
-			</div>
-			<!--<div class="form-group">
+			</div>-->
+			<div class="form-group">
 				<label class="col-sm-3 control-label">资产状态：</label>
 				<div class="col-sm-8">
-					<div class="radio-box">
-						<input type="radio" name="assetStatus" value="">
-						<label th:for="assetStatus" th:text="未知"></label>
-					</div>
-					<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_status', sysZck.assetStatus)}"></div>
 				</div>
-			</div>-->
+			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">序号：</label>
 				<div class="col-sm-8">
@@ -219,13 +215,13 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">借款人行业：</label>
 				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.jkrIndustry}"></div>
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_trade', sysZck.jkrIndustry)}"></div>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">国企/非国企：</label>
 				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.soe}"></div>
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_gq', sysZck.soe)}"></div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -243,7 +239,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">诉讼情况：</label>
 				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.litigation}"></div>
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_litigation', sysZck.litigation)}"></div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -359,7 +355,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">土地性质：</label>
 				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.natureLand}"></div>
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_tdxz', sysZck.natureLand)}"></div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -377,7 +373,13 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">获得方式：</label>
 				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.access}"></div>
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_hdfs', sysZck.access)}"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">土地用途：</label>
+				<div class="col-sm-8">
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_tdyt', sysZck.zoning)}"></div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -406,15 +408,12 @@
 					<div class="form-control-static" th:text="${sysZck.floors}"></div>
 				</div>
 			</div>
-			<!--<div class="form-group">
+			<div class="form-group">
 				<label class="col-sm-3 control-label">抵/置押物类型：</label>
 				<div class="col-sm-8">
-					<select name="collateType" class="form-control m-b">
-						<option value="">所有</option>
-					</select>
-					<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_collateraType', sysZck.collateType)}"></div>
 				</div>
-			</div>-->
+			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">建筑面积/㎡：</label>
 				<div class="col-sm-8">

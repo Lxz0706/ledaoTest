@@ -15,7 +15,7 @@ import com.ledao.quartz.util.CronUtils;
 /**
  * 定时任务调度表 sys_job
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysJob extends BaseEntity implements Serializable
 {

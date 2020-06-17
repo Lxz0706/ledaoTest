@@ -9,7 +9,7 @@ import com.ledao.system.domain.SysDictData;
 /**
  * 字典工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class DictUtils
 {

@@ -3,7 +3,7 @@ package com.ledao.common.constant;
 /**
  * 用户常量信息
  * 
- * @author ledao
+ * @author lxz
  */
 public class UserConstants
 {

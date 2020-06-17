@@ -3,7 +3,7 @@ package com.ledao.common.constant;
 /**
  * Shiro通用常量
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ShiroConstants
 {

@@ -25,7 +25,7 @@ import com.ledao.system.service.ISysUserOnlineService;
 /**
  * 在线用户监控
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/monitor/online")

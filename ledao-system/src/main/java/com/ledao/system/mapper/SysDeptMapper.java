@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysDept;
 /**
  * 部门管理 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysDeptMapper
 {

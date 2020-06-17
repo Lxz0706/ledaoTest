@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysZcbMapper">
+
+    <resultMap type="SysZcb" id="SysZcbResult">
+        <result property="id" column="id"/>
+        <result property="assetPackageName" column="asset_package_name"/>
+        <result property="assetStatus" column="asset_status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysZcbVo">
+        select id, asset_package_name, asset_status, create_by, create_time, update_by, update_time from sys_zcb
+    </sql>
+
+    <select id="selectSysZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
+        <include refid="selectSysZcbVo"/>
+        <where>
+            <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name like concat('%',
+                #{assetPackageName}, '%')
+            </if>
+            <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectSysZcbById" parameterType="Long" resultMap="SysZcbResult">
+        <include refid="selectSysZcbVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysZcb" parameterType="SysZcb" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_zcb
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="assetPackageName != null">asset_package_name,</if>
+            <if test="assetStatus != null">asset_status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="assetPackageName != null">#{assetPackageName},</if>
+            <if test="assetStatus != null">#{assetStatus},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysZcb" parameterType="SysZcb">
+        update sys_zcb
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetPackageName != null">asset_package_name = #{assetPackageName},</if>
+            <if test="assetStatus != null">asset_status = #{assetStatus},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysZcbById" parameterType="Long">
+        delete from sys_zcb where id = #{id}
+    </delete>
+
+    <delete id="deleteSysZcbByIds" parameterType="String">
+        delete from sys_zcb where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

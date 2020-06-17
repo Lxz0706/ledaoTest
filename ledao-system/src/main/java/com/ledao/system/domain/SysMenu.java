@@ -10,7 +10,7 @@ import com.ledao.common.core.domain.BaseEntity;
 /**
  * 菜单权限表 sys_menu
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysMenu extends BaseEntity
 {

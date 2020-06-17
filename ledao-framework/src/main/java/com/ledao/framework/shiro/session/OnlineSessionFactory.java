@@ -13,7 +13,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 /**
  * 自定义sessionFactory会话
  * 
- * @author ledao
+ * @author lxz
  */
 @Component
 public class OnlineSessionFactory implements SessionFactory

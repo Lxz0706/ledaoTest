@@ -7,7 +7,7 @@ import com.ledao.generator.domain.GenTable;
 /**
  * 业务 服务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface IGenTableService
 {

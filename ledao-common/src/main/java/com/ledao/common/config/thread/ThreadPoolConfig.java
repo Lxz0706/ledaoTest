@@ -12,7 +12,7 @@ import com.ledao.common.utils.Threads;
 /**
  * 线程池配置
  *
- * @author ledao
+ * @author lxz
  **/
 @Configuration
 public class ThreadPoolConfig

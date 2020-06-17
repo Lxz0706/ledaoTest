@@ -6,7 +6,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 基础异常
  * 
- * @author ledao
+ * @author lxz
  */
 public class BaseException extends RuntimeException
 {

@@ -3,7 +3,7 @@ package com.ledao.common.constant;
 /**
  * 任务调度通用常量
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ScheduleConstants
 {

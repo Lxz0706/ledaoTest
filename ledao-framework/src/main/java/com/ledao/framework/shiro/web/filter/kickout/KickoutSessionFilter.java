@@ -26,7 +26,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * 登录帐号控制过滤器
  * 
- * @author ledao
+ * @author lxz
  */
 public class KickoutSessionFilter extends AccessControlFilter
 {

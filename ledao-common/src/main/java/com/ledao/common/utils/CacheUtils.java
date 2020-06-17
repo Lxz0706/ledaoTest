@@ -11,7 +11,7 @@ import com.ledao.common.utils.spring.SpringUtils;
 /**
  * Cache工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class CacheUtils
 {

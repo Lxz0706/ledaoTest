@@ -13,7 +13,7 @@ import com.ledao.system.service.ISysUserOnlineService;
 /**
  * 在线用户 服务层处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Service
 public class SysUserOnlineServiceImpl implements ISysUserOnlineService

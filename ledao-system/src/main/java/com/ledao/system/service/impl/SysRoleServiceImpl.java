@@ -28,7 +28,7 @@ import com.ledao.system.service.ISysRoleService;
 /**
  * 角色 业务层处理
  *
- * @author ledao
+ * @author lxz
  */
 @Service
 public class SysRoleServiceImpl implements ISysRoleService {

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 获取IP方法
  * 
- * @author ledao
+ * @author lxz
  */
 public class IpUtils
 {

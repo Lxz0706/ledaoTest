@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysOperLog;
 /**
  * 操作日志 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysOperLogMapper
 {

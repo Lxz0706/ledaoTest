@@ -5,7 +5,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 分页数据
  * 
- * @author ledao
+ * @author lxz
  */
 public class PageDomain
 {

@@ -9,7 +9,7 @@ import com.ledao.common.enums.OnlineStatus;
 /**
  * 当前在线会话 sys_user_online
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysUserOnline extends BaseEntity
 {

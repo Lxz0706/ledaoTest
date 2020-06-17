@@ -11,7 +11,7 @@ import com.ledao.system.service.ISysOperLogService;
 /**
  * 操作日志 服务层处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Service
 public class SysOperLogServiceImpl implements ISysOperLogService

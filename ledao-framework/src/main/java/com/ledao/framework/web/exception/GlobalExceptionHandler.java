@@ -18,7 +18,7 @@ import com.ledao.common.utils.security.PermissionUtils;
 /**
  * 全局异常处理器
  * 
- * @author ledao
+ * @author lxz
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler

@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * 用户表 数据层
  *
- * @author ledao
+ * @author lxz
  */
 public interface SysUserMapper {
     /**

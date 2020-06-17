@@ -11,7 +11,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 类型转换器
  * 
- * @author ledao
+ * @author lxz
  */
 public class Convert
 {

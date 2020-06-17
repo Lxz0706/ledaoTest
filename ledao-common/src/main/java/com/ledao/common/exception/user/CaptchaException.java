@@ -3,7 +3,7 @@ package com.ledao.common.exception.user;
 /**
  * 验证码错误异常类
  * 
- * @author ledao
+ * @author lxz
  */
 public class CaptchaException extends UserException
 {

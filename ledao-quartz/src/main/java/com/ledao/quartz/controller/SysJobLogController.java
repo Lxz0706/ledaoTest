@@ -26,7 +26,7 @@ import com.ledao.quartz.service.ISysJobService;
 /**
  * 调度日志操作处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/monitor/jobLog")

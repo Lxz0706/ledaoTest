@@ -26,7 +26,7 @@ import com.ledao.web.controller.demo.domain.UserOperateModel;
 /**
  * 操作控制
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/demo/operate")

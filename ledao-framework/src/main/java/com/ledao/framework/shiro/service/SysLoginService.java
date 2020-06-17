@@ -24,7 +24,7 @@ import com.ledao.system.service.ISysUserService;
 /**
  * 登录校验方法
  * 
- * @author ledao
+ * @author lxz
  */
 @Component
 public class SysLoginService

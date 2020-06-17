@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 工作日志对象 sys_work_log
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 public class SysWorkLog extends BaseEntity {

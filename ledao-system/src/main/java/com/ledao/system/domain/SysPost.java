@@ -10,7 +10,7 @@ import com.ledao.common.core.domain.BaseEntity;
 /**
  * 岗位表 sys_post
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysPost extends BaseEntity
 {

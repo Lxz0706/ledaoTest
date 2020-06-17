@@ -19,7 +19,7 @@ import com.ledao.common.core.controller.BaseController;
 /**
  * 图片验证码（支持算术形式）
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/captcha")

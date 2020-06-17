@@ -11,7 +11,7 @@ import com.ledao.framework.shiro.session.OnlineSessionDAO;
 /**
  * 同步Session数据到Db
  * 
- * @author ledao
+ * @author lxz
  */
 public class SyncOnlineSessionFilter extends PathMatchingFilter
 {

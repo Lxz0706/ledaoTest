@@ -3,7 +3,7 @@ package com.ledao.common.exception.user;
 /**
  * 用户错误最大次数异常类
  * 
- * @author ledao
+ * @author lxz
  */
 public class UserPasswordRetryLimitExceedException extends UserException
 {

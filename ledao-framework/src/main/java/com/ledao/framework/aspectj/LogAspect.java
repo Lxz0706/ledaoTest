@@ -26,7 +26,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * 操作日志记录处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Aspect
 @Component

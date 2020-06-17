@@ -10,7 +10,7 @@ import com.ledao.common.core.domain.BaseEntity;
 /**
  * 系统访问记录表 sys_logininfor
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysLogininfor extends BaseEntity
 {

@@ -22,7 +22,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * 退出过滤器
  * 
- * @author ledao
+ * @author lxz
  */
 public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
 {

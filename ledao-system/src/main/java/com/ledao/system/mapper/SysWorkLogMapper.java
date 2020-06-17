@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysWorkLog;
 /**
  * 工作日志Mapper接口
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 public interface SysWorkLogMapper {

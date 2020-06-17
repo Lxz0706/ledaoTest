@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysUserOnline;
 /**
  * 在线用户 服务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysUserOnlineService
 {

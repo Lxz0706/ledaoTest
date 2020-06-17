@@ -5,7 +5,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * sql操作工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class SqlUtil
 {

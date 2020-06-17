@@ -3,7 +3,7 @@ package com.ledao.common.enums;
 /**
  * 操作状态
  * 
- * @author ledao
+ * @author lxz
  */
 public enum BusinessStatus
 {

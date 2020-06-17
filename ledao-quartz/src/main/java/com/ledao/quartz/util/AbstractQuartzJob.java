@@ -19,7 +19,7 @@ import com.ledao.quartz.service.ISysJobLogService;
 /**
  * 抽象quartz调用
  *
- * @author ledao
+ * @author lxz
  */
 public abstract class AbstractQuartzJob implements Job
 {

@@ -10,7 +10,7 @@ import com.ledao.common.utils.http.HttpUtils;
 /**
  * 获取地址类
  * 
- * @author ledao
+ * @author lxz
  */
 public class AddressUtils
 {

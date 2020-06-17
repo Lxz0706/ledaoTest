@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysNotice;
 /**
  * 公告 服务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysNoticeService
 {

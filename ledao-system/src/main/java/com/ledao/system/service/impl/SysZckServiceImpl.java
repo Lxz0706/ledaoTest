@@ -19,7 +19,7 @@ import com.ledao.common.core.text.Convert;
 /**
  * 资产信息库Service业务层处理
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 @Service
@@ -107,9 +107,9 @@ public class SysZckServiceImpl implements ISysZckService {
      * @return 结果
      */
     @Override
-    public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName) {
+    public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName,Long zcbId) {
         if (StringUtils.isNull(zckList) || zckList.size() == 0) {
-            throw new BusinessException("导入用户数据不能为空！");
+            throw new BusinessException("导入数据不能为空！");
         }
         int successNum = 0;
         int failureNum = 0;
@@ -118,6 +118,7 @@ public class SysZckServiceImpl implements ISysZckService {
         for (SysZck zck : zckList) {
             try {
                 zck.setCreateBy(operName);
+                zck.setZcbId(zcbId);
                 this.insertSysZck(zck);
                 successNum++;
                 successMsg.append("<br/>" + successNum + "、账号 " + zck.getAssetPackageName() + " 导入成功");
@@ -135,5 +136,15 @@ public class SysZckServiceImpl implements ISysZckService {
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+    /**
+     * 根据资产包ID查询资产库信息
+     *
+     * @param zcbId
+     * @return 结果
+     */
+    public List<SysZck> selectSysZckByZcbId(Long zcbId) {
+        return sysZckMapper.selectSysZckByZcbId(zcbId);
     }
 }

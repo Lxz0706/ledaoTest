@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysUserRole;
 /**
  * 用户与角色关联表 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysUserRoleMapper
 {

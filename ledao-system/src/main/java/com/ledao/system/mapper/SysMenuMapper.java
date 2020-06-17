@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysMenu;
 /**
  * 菜单表 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysMenuMapper
 {

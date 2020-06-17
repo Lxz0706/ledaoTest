@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysUserPost;
 /**
  * 用户与岗位关联表 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysUserPostMapper
 {

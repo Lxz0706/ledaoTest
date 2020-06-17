@@ -96,6 +96,7 @@
         <result property="maximumMortgageAmount" column="maximum_mortgage_amount"/>
         <result property="rentalSituation" column="rental_situation"/>
         <result property="zoning" column="zoning"/>
+        <result property="zcbId" column="zcb_id"/>
     </resultMap>
 
     <sql id="selectSysZckVo">
@@ -110,7 +111,7 @@
         plot_ratio, access, land_area, build_structure, completion_date, floors, collate_type, floorage, land_unit_price,
         land_total_price, other_collateral_unit_price, other_collateral_total_price, total_price, valuation_basis, cap_value,
         dzyw_remark, borrower_wsqk, property_clues, zhhknl, jkrgz_remark, price, desposal_mode, desposal_price, customer, create_by,
-        create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning from sys_zck
+        create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning,zcb_id from sys_zck
     </sql>
 
     <select id="selectSysZckList" parameterType="SysZck" resultMap="SysZckResult">
@@ -119,12 +120,16 @@
             <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name like concat('%',
                 #{assetPackageName}, '%')
             </if>
-            <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
-            <if test="no != null ">and no = #{no}</if>
-            <if test="borrower != null  and borrower != ''">and borrower = #{borrower}</if>
-            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="assetStatus != null  and assetStatus != ''">
+                AND asset_status like concat('%', #{asset_status}, '%')
+            </if>
+            <if test="no != null ">and no like concat ('%',#{no },'%')</if>
+            <if test="borrower != null  and borrower != ''">and borrower like concat ('%',#{borrower },'%')</if>
+            <if test="city != null  and city != ''">and city like concat ('%',#{city},'%')</if>
             <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
-            <if test="principalBalance != null ">and principal_balance = #{principalBalance}</if>
+            <if test="principalBalance != null and principalBalance !=''">and principal_balance like concat
+                ('%',${principalBalance},'%')
+            </if>
             <if test="interestBalance != null ">and interest_balance = #{interestBalance}</if>
             <if test="principalInterestBalance != null ">and principal_interest_balance = #{principalInterestBalance}
             </if>
@@ -132,7 +137,7 @@
             <if test="loanBank != null  and loanBank != ''">and loan_bank = #{loanBank}</if>
             <if test="loanContractNo != null  and loanContractNo != ''">and loan_contract_no = #{loanContractNo}</if>
             <if test="loanTime != null ">and loan_time = #{loanTime}</if>
-            <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
+            <if test="guarantor != null  and guarantor != ''">and guarantor like concat ('%',#{guarantor },'%')</if>
             <if test="bzrZrrNumber != null ">and bzr_zrr_number = #{bzrZrrNumber}</if>
             <if test="bzrFrNumber != null ">and bzr_fr_number = #{bzrFrNumber}</if>
             <if test="guaranteeAmount != null ">and guarantee_amount = #{guaranteeAmount}</if>
@@ -182,7 +187,9 @@
             <if test="zgeQsNo != null  and zgeQsNo != ''">and zge_qs_no = #{zgeQsNo}</if>
             <if test="txQzNo != null  and txQzNo != ''">and tx_qz_no = #{txQzNo}</if>
             <if test="caseNo != null  and caseNo != ''">and case_no = #{caseNo}</if>
-            <if test="mortgageRank != null  and mortgageRank != ''">and mortgage_rank = #{mortgageRank}</if>
+            <if test="mortgageRank != null  and mortgageRank != ''">and mortgage_rank like concat
+                ('%',#{mortgageRank },'%')
+            </if>
             <if test="qxswMortgeageAmount != null ">and qxsw_mortgeage_amount = #{qxswMortgeageAmount}</if>
             <if test="beforeOrAterAarrival != null  and beforeOrAterAarrival != ''">and before_or_ater_aarrival =
                 #{beforeOrAterAarrival}
@@ -191,16 +198,19 @@
             <if test="juveniles != null  and juveniles != ''">and juveniles = #{juveniles}</if>
             <if test="onlyHouse != null  and onlyHouse != ''">and only_house = #{onlyHouse}</if>
             <if test="tengfang != null  and tengfang != ''">and tengfang = #{tengfang}</if>
-            <if test="natureLand != null  and natureLand != ''">and nature_land = #{natureLand}</if>
+            <if test="natureLand != null  and natureLand != ''">and nature_land like concat ('%',#{natureLand },'%')
+            </if>
             <if test="sysynx != null  and sysynx != ''">and sysynx = #{sysynx}</if>
             <if test="plotRatio != null  and plotRatio != ''">and plot_ratio = #{plotRatio}</if>
             <if test="access != null  and access != ''">and access = #{access}</if>
-            <if test="landArea != null ">and land_area = #{landArea}</if>
+            <if test="landArea != null ">and land_area like concat ('%',#{landArea },'%')</if>
             <if test="buildStructure != null  and buildStructure != ''">and build_structure = #{buildStructure}</if>
             <if test="completionDate != null ">and completion_date = #{completionDate}</if>
-            <if test="floors != null  and floors != ''">and floors = #{floors}</if>
-            <if test="collateType != null  and collateType != ''">and collate_type = #{collateType}</if>
-            <if test="floorage != null ">and floorage = #{floorage}</if>
+            <if test="floors != null  and floors != ''">and floors like concat ('%',#{floors },'%')</if>
+            <if test="collateType != null  and collateType != ''">and collate_type like concat
+                ('%',#{collateType },'%')
+            </if>
+            <if test="floorage != null ">and floorage like concat ('%',#{floorage },'%')</if>
             <if test="landUnitPrice != null ">and land_unit_price = #{landUnitPrice}</if>
             <if test="landTotalPrice != null ">and land_total_price = #{landTotalPrice}</if>
             <if test="otherCollateralUnitPrice != null ">and other_collateral_unit_price = #{otherCollateralUnitPrice}
@@ -208,9 +218,9 @@
             <if test="otherCollateralTotalPrice != null ">and other_collateral_total_price =
                 #{otherCollateralTotalPrice}
             </if>
-            <if test="totalPrice != null ">and total_price = #{totalPrice}</if>
+            <if test="totalPrice != null ">and total_price like concat ('%',#{totalPrice },'%')</if>
             <if test="valuationBasis != null  and valuationBasis != ''">and valuation_basis = #{valuationBasis}</if>
-            <if test="capValue != null  and capValue != ''">and cap_value = #{capValue}</if>
+            <if test="capValue != null  and capValue != ''">and cap_value like concat ('%',#{capValue },'%')</if>
             <if test="dzywRemark != null  and dzywRemark != ''">and dzyw_remark = #{dzywRemark}</if>
             <if test="borrowerWsqk != null  and borrowerWsqk != ''">and borrower_wsqk = #{borrowerWsqk}</if>
             <if test="propertyClues != null  and propertyClues != ''">and property_clues = #{propertyClues}</if>
@@ -224,6 +234,7 @@
             <if test="maximumMortgageAmount != null ">and maximum_mortgage_amount = #{maximumMortgageAmount}</if>
             <if test="rentalSituation != null  and rentalSituation != ''">and rental_situation = #{rentalSituation}</if>
             <if test="zoning != null  and zoning != ''">and zoning = #{zoning}</if>
+            <if test="zcbId !=null and zcbId !=''">and zcb_id=#{zcbId}</if>
         </where>
     </select>
 
@@ -336,6 +347,7 @@
             <if test="maximumMortgageAmount != null">maximum_mortgage_amount,</if>
             <if test="rentalSituation != null">rental_situation,</if>
             <if test="zoning != null">zoning,</if>
+            <if test="zcbId !=null and zcbId !=''">zcb_id,</if>
             <if test="createBy != null and createBy != '' ">create_by,</if>
             create_time
         </trim>
@@ -441,6 +453,7 @@
             <if test="maximumMortgageAmount != null">#{maximumMortgageAmount},</if>
             <if test="rentalSituation != null">#{rentalSituation},</if>
             <if test="zoning != null">#{zoning},</if>
+            <if test="zcbId !=null and zcbId !=''">#{zcbId},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             sysdate()
         </trim>

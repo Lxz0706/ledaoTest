@@ -26,7 +26,7 @@ import com.ledao.system.service.ISysDeptService;
 /**
  * 部门信息
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/system/dept")

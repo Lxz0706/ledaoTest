@@ -7,7 +7,7 @@ import com.ledao.common.core.text.StrFormatter;
 /**
  * 字符串工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils
 {

@@ -3,7 +3,7 @@ package com.ledao.common.exception.job;
 /**
  * 计划策略异常
  * 
- * @author ledao
+ * @author lxz
  */
 public class TaskException extends Exception
 {

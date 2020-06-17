@@ -8,7 +8,7 @@ import com.ledao.common.core.domain.BaseEntity;
 /**
  * 部门表 sys_dept
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysDept extends BaseEntity
 {

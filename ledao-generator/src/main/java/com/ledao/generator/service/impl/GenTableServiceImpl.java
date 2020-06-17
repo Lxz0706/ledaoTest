@@ -36,7 +36,7 @@ import com.ledao.generator.util.VelocityUtils;
 /**
  * 业务 服务层实现
  * 
- * @author ledao
+ * @author lxz
  */
 @Service
 public class GenTableServiceImpl implements IGenTableService

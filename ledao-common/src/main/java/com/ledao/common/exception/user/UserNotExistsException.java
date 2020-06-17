@@ -3,7 +3,7 @@ package com.ledao.common.exception.user;
 /**
  * 用户不存在异常类
  * 
- * @author ledao
+ * @author lxz
  */
 public class UserNotExistsException extends UserException
 {

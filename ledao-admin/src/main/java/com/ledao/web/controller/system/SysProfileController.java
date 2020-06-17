@@ -26,7 +26,7 @@ import com.ledao.system.service.ISysUserService;
 /**
  * 个人信息 业务处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/system/user/profile")

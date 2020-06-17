@@ -11,7 +11,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 业务表 gen_table
  * 
- * @author ledao
+ * @author lxz
  */
 public class GenTable extends BaseEntity
 {

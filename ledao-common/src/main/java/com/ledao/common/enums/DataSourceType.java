@@ -3,7 +3,7 @@ package com.ledao.common.enums;
 /**
  * 数据源
  * 
- * @author ledao
+ * @author lxz
  */
 public enum DataSourceType
 {

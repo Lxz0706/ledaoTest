@@ -7,7 +7,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 代码生成业务字段表 gen_table_column
  * 
- * @author ledao
+ * @author lxz
  */
 public class GenTableColumn extends BaseEntity
 {

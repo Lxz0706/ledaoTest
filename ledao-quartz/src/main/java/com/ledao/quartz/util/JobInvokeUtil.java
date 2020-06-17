@@ -11,7 +11,7 @@ import com.ledao.quartz.domain.SysJob;
 /**
  * 任务执行工具
  *
- * @author ledao
+ * @author lxz
  */
 public class JobInvokeUtil
 {

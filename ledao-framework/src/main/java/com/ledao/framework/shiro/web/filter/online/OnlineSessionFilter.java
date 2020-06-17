@@ -19,7 +19,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * 自定义访问控制
  * 
- * @author ledao
+ * @author lxz
  */
 public class OnlineSessionFilter extends AccessControlFilter
 {

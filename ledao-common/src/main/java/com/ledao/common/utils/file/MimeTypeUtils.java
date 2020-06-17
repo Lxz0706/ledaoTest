@@ -3,7 +3,7 @@ package com.ledao.common.utils.file;
 /**
  * 媒体类型工具类
  *
- * @author ledao
+ * @author lxz
  */
 public class MimeTypeUtils {
     public static final String IMAGE_PNG = "image/png" ;

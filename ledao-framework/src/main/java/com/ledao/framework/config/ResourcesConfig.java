@@ -14,7 +14,7 @@ import com.ledao.framework.interceptor.RepeatSubmitInterceptor;
 /**
  * 通用配置
  * 
- * @author ledao
+ * @author lxz
  */
 @Configuration
 public class ResourcesConfig implements WebMvcConfigurer

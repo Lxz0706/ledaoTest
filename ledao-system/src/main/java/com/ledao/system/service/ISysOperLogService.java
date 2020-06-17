@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysOperLog;
 /**
  * 操作日志 服务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysOperLogService
 {

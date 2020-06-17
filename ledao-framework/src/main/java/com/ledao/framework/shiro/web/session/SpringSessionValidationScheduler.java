@@ -17,7 +17,7 @@ import com.ledao.common.utils.Threads;
 /**
  * 自定义任务调度器完成
  * 
- * @author ledao
+ * @author lxz
  */
 @Component
 public class SpringSessionValidationScheduler implements SessionValidationScheduler

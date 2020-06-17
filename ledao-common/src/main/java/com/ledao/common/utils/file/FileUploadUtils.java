@@ -16,7 +16,7 @@ import com.ledao.common.utils.security.Md5Utils;
 /**
  * 文件上传工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class FileUploadUtils
 {

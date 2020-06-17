@@ -6,7 +6,7 @@ import com.ledao.common.enums.OnlineStatus;
 /**
  * 在线用户会话属性
  * 
- * @author ledao
+ * @author lxz
  */
 public class OnlineSession extends SimpleSession
 {

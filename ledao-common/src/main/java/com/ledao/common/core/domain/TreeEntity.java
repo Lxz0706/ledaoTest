@@ -3,7 +3,7 @@ package com.ledao.common.core.domain;
 /**
  * Tree基类
  * 
- * @author ledao
+ * @author lxz
  */
 public class TreeEntity extends BaseEntity
 {

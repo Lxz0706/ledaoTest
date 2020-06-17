@@ -16,7 +16,7 @@ import com.ledao.system.service.ISysMenuService;
 /**
  * 首页 业务处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 public class SysIndexController extends BaseController

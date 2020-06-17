@@ -22,18 +22,18 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 资产信息库Controller
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 @Controller
-@RequestMapping("/system/zck")
+@RequestMapping("/system/zcb/zck")
 public class SysZckController extends BaseController {
-    private String prefix = "system/zck";
+    private String prefix = "system/zcb/zck";
 
     @Autowired
     private ISysZckService sysZckService;
 
-    @RequiresPermissions("system:zck:view")
+    @RequiresPermissions("system:zcb:view")
     @GetMapping()
     public String zck() {
         return prefix + "/zck";
@@ -42,7 +42,7 @@ public class SysZckController extends BaseController {
     /**
      * 查询资产信息库列表
      */
-    @RequiresPermissions("system:zck:list")
+    @RequiresPermissions("system:zcb:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysZck sysZck) {
@@ -54,7 +54,7 @@ public class SysZckController extends BaseController {
     /**
      * 导出资产信息库列表
      */
-    @RequiresPermissions("system:zck:export")
+    @RequiresPermissions("system:zcb:export")
     @Log(title = "资产信息库", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -67,19 +67,21 @@ public class SysZckController extends BaseController {
     /**
      * 新增资产信息库
      */
-    @GetMapping("/add")
-    public String add() {
+    @GetMapping("/add/{zcbId}")
+    public String add(@PathVariable("zcbId") Long zcbId, ModelMap mmap) {
+        mmap.put("zcbId", zcbId);
         return prefix + "/add";
     }
 
     /**
      * 新增保存资产信息库
      */
-    @RequiresPermissions("system:zck:add")
+    @RequiresPermissions("system:zcb:add")
     @Log(title = "资产信息库", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysZck sysZck) {
+        sysZck.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysZckService.insertSysZck(sysZck));
     }
 
@@ -96,18 +98,19 @@ public class SysZckController extends BaseController {
     /**
      * 修改保存资产信息库
      */
-    @RequiresPermissions("system:zck:edit")
+    @RequiresPermissions("system:zcb:edit")
     @Log(title = "资产信息库", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysZck sysZck) {
+        sysZck.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(sysZckService.updateSysZck(sysZck));
     }
 
     /**
      * 删除资产信息库
      */
-    @RequiresPermissions("system:zck:remove")
+    @RequiresPermissions("system:zcb:remove")
     @Log(title = "资产信息库", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -118,7 +121,7 @@ public class SysZckController extends BaseController {
     /**
      * 查看详细
      */
-    @RequiresPermissions("system:zck:detail")
+    @RequiresPermissions("system:zcb:detail")
     @Log(title = "资产信息库", businessType = BusinessType.DETAIL)
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
@@ -126,23 +129,23 @@ public class SysZckController extends BaseController {
         return prefix + "/detail";
     }
 
-    @Log(title = "用户管理", businessType = BusinessType.IMPORT)
-    @RequiresPermissions("system:zck:import")
+    @Log(title = "资产信息库", businessType = BusinessType.IMPORT)
+    @RequiresPermissions("system:zcb:import")
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+    public AjaxResult importData(MultipartFile file, boolean updateSupport, Long zcbId) throws Exception {
         ExcelUtil<SysZck> util = new ExcelUtil<SysZck>(SysZck.class);
-        List<SysZck> userList = util.importExcel(file.getInputStream());
+        List<SysZck> sysZckList = util.importExcel(file.getInputStream());
         String operName = ShiroUtils.getSysUser().getLoginName();
-        String message = sysZckService.importZck(userList, updateSupport, operName);
+        String message = sysZckService.importZck(sysZckList, updateSupport, operName, zcbId);
         return AjaxResult.success(message);
     }
 
-    @RequiresPermissions("system:zck:view")
+    @RequiresPermissions("system:zcb:view")
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate() {
         ExcelUtil<SysZck> util = new ExcelUtil<SysZck>(SysZck.class);
-        return util.importTemplateExcel("z资产库");
+        return util.importTemplateExcel("资产库");
     }
 }

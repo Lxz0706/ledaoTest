@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysUserRole;
 /**
  * 用户 业务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysUserService
 {

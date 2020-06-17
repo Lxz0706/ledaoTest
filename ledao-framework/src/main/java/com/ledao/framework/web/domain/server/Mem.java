@@ -5,7 +5,7 @@ import com.ledao.common.utils.Arith;
 /**
  * 內存相关信息
  * 
- * @author ledao
+ * @author lxz
  */
 public class Mem
 {

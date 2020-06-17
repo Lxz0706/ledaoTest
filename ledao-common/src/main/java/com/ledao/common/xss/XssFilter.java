@@ -19,7 +19,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 防止XSS攻击的过滤器
  *
- * @author ledao
+ * @author lxz
  */
 public class XssFilter implements Filter {
     /**

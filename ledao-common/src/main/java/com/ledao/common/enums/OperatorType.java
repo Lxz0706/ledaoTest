@@ -3,7 +3,7 @@ package com.ledao.common.enums;
 /**
  * 操作人类别
  * 
- * @author ledao
+ * @author lxz
  */
 public enum OperatorType
 {

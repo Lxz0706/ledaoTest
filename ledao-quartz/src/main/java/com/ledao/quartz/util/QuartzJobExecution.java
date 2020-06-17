@@ -6,7 +6,7 @@ import com.ledao.quartz.domain.SysJob;
 /**
  * 定时任务处理（允许并发执行）
  * 
- * @author ledao
+ * @author lxz
  *
  */
 public class QuartzJobExecution extends AbstractQuartzJob

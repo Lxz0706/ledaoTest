@@ -3,7 +3,7 @@ package com.ledao.common.constant;
 /**
  * 通用常量信息
  * 
- * @author ledao
+ * @author lxz
  */
 public class Constants
 {

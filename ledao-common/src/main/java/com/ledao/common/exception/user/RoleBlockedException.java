@@ -3,7 +3,7 @@ package com.ledao.common.exception.user;
 /**
  * 角色锁定异常类
  * 
- * @author ledao
+ * @author lxz
  */
 public class RoleBlockedException extends UserException
 {

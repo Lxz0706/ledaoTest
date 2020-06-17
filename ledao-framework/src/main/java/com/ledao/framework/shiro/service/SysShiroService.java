@@ -12,7 +12,7 @@ import com.ledao.system.service.ISysUserOnlineService;
 /**
  * 会话db操作处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Component
 public class SysShiroService

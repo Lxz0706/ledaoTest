@@ -23,7 +23,7 @@ import com.ledao.common.constant.Constants;
 /**
  * 通用http发送方法
  * 
- * @author ledao
+ * @author lxz
  */
 public class HttpUtils
 {

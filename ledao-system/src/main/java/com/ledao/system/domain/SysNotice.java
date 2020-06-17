@@ -8,7 +8,7 @@ import com.ledao.common.core.domain.BaseEntity;
 /**
  * 通知公告表 sys_notice
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysNotice extends BaseEntity
 {

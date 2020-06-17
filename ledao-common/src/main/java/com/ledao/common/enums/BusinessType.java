@@ -3,7 +3,7 @@ package com.ledao.common.enums;
 /**
  * 业务操作类型
  *
- * @author ledao
+ * @author lxz
  */
 public enum BusinessType {
     /**

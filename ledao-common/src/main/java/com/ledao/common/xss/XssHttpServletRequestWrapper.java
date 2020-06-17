@@ -7,7 +7,7 @@ import com.ledao.common.utils.html.EscapeUtil;
 /**
  * XSS过滤处理
  * 
- * @author ledao
+ * @author lxz
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper
 {

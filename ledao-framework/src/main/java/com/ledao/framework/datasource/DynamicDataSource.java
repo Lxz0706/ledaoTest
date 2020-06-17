@@ -8,7 +8,7 @@ import com.ledao.common.config.datasource.DynamicDataSourceContextHolder;
 /**
  * 动态数据源
  * 
- * @author ledao
+ * @author lxz
  */
 public class DynamicDataSource extends AbstractRoutingDataSource
 {

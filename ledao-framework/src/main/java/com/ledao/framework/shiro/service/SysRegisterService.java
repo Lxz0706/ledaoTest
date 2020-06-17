@@ -17,7 +17,7 @@ import com.ledao.system.service.ISysUserService;
 /**
  * 注册校验方法
  * 
- * @author ledao
+ * @author lxz
  */
 @Component
 public class SysRegisterService

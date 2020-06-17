@@ -11,7 +11,7 @@ import com.ledao.quartz.service.ISysJobLogService;
 /**
  * 定时任务调度日志信息 服务层
  * 
- * @author ledao
+ * @author lxz
  */
 @Service
 public class SysJobLogServiceImpl implements ISysJobLogService

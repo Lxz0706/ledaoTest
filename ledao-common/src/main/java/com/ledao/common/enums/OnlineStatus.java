@@ -3,7 +3,7 @@ package com.ledao.common.enums;
 /**
  * 用户会话
  * 
- * @author ledao
+ * @author lxz
  */
 public enum OnlineStatus
 {

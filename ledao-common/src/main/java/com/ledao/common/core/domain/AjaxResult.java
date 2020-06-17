@@ -6,7 +6,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 操作消息提醒
  * 
- * @author ledao
+ * @author lxz
  */
 public class AjaxResult extends HashMap<String, Object>
 {

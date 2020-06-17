@@ -5,7 +5,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 字符串格式化
  * 
- * @author ledao
+ * @author lxz
  */
 public class StrFormatter
 {

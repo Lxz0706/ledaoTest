@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysDictData;
 /**
  * 字典 业务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysDictDataService
 {

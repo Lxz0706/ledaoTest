@@ -15,7 +15,7 @@ import com.ledao.common.core.domain.BaseEntity;
 /**
  * 用户对象 sys_user
  *
- * @author ledao
+ * @author lxz
  */
 public class SysUser extends BaseEntity {
     private static final long serialVersionUID = 1L;

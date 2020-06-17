@@ -1,0 +1,132 @@
+package com.ledao.web.controller.system;
+
+import java.util.List;
+
+import com.ledao.framework.util.ShiroUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.ledao.common.annotation.Log;
+import com.ledao.common.enums.BusinessType;
+import com.ledao.system.domain.SysZcb;
+import com.ledao.system.service.ISysZcbService;
+import com.ledao.common.core.controller.BaseController;
+import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.utils.poi.ExcelUtil;
+import com.ledao.common.core.page.TableDataInfo;
+
+/**
+ * 资产包Controller
+ *
+ * @author lxz
+ * @date 2020-06-11
+ */
+@Controller
+@RequestMapping("/system/zcb")
+public class SysZcbController extends BaseController {
+    private String prefix = "system/zcb";
+
+    @Autowired
+    private ISysZcbService sysZcbService;
+
+    @RequiresPermissions("system:zcb:view")
+    @GetMapping()
+    public String zcb() {
+        return prefix + "/zcb";
+    }
+
+    /**
+     * 查询资产包列表
+     */
+    @RequiresPermissions("system:zcb:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(SysZcb sysZcb) {
+        startPage();
+        List<SysZcb> list = sysZcbService.selectSysZcbList(sysZcb);
+        return getDataTable(list);
+    }
+
+    /**
+     * 导出资产包列表
+     */
+    @RequiresPermissions("system:zcb:export")
+    @Log(title = "资产包", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(SysZcb sysZcb) {
+        List<SysZcb> list = sysZcbService.selectSysZcbList(sysZcb);
+        ExcelUtil<SysZcb> util = new ExcelUtil<SysZcb>(SysZcb.class);
+        return util.exportExcel(list, "zcb");
+    }
+
+    /**
+     * 新增资产包
+     */
+    @GetMapping("/add")
+    public String add() {
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存资产包
+     */
+    @RequiresPermissions("system:zcb:add")
+    @Log(title = "资产包", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(SysZcb sysZcb) {
+        sysZcb.setCreateBy(ShiroUtils.getLoginName());
+        return toAjax(sysZcbService.insertSysZcb(sysZcb));
+    }
+
+    /**
+     * 修改资产包
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+        SysZcb sysZcb = sysZcbService.selectSysZcbById(id);
+        mmap.put("sysZcb", sysZcb);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存资产包
+     */
+    @RequiresPermissions("system:zcb:edit")
+    @Log(title = "资产包", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(SysZcb sysZcb) {
+        sysZcb.setUpdateBy(ShiroUtils.getLoginName());
+        return toAjax(sysZcbService.updateSysZcb(sysZcb));
+    }
+
+    /**
+     * 删除资产包
+     */
+    @RequiresPermissions("system:zcb:remove")
+    @Log(title = "资产包", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        return toAjax(sysZcbService.deleteSysZcbByIds(ids));
+    }
+
+    /**
+     * 查看详细
+     */
+    @RequiresPermissions("system:zcb:detail")
+    @Log(title = "资产包", businessType = BusinessType.DETAIL)
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+        mmap.put("sysZck", sysZcbService.selectSysZcbById(id));
+        return "system/zcb/zck/zck";
+    }
+}

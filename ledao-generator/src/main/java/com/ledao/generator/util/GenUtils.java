@@ -11,7 +11,7 @@ import com.ledao.generator.domain.GenTableColumn;
 /**
  * 代码生成器 工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class GenUtils
 {

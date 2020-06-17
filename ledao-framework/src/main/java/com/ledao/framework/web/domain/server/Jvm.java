@@ -7,7 +7,7 @@ import com.ledao.common.utils.DateUtils;
 /**
  * JVM相关信息
  * 
- * @author ledao
+ * @author lxz
  */
 public class Jvm
 {

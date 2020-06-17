@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 /**
  * web容器中进行部署
  *
- * @author ledao
+ * @author lxz
  */
 public class LeDaoServletInitializer extends SpringBootServletInitializer {
     @Override

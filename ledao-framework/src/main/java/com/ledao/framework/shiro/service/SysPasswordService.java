@@ -20,7 +20,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * 登录密码方法
  * 
- * @author ledao
+ * @author lxz
  */
 @Component
 public class SysPasswordService

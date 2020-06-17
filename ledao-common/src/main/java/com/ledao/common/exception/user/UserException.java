@@ -5,7 +5,7 @@ import com.ledao.common.exception.base.BaseException;
 /**
  * 用户信息异常类
  * 
- * @author ledao
+ * @author lxz
  */
 public class UserException extends BaseException
 {

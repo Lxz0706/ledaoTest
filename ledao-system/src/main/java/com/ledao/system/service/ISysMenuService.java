@@ -11,7 +11,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * 菜单 业务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysMenuService
 {

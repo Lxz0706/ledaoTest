@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 /**
  * JSON解析处理
  * 
- * @author ledao
+ * @author lxz
  */
 public class JSON
 {

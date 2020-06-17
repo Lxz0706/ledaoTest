@@ -3,7 +3,7 @@ package com.ledao.common.exception;
 /**
  * 演示模式异常
  * 
- * @author ledao
+ * @author lxz
  */
 public class DemoModeException extends RuntimeException
 {

@@ -6,7 +6,7 @@ import com.ledao.generator.domain.GenTableColumn;
 /**
  * 业务字段 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface GenTableColumnMapper
 {

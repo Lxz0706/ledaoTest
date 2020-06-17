@@ -3,7 +3,7 @@ package com.ledao.common.exception.user;
 /**
  * 用户账号已被删除
  * 
- * @author ledao
+ * @author lxz
  */
 public class UserDeleteException extends UserException
 {

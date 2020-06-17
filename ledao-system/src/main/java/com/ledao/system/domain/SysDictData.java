@@ -11,7 +11,7 @@ import com.ledao.common.core.domain.BaseEntity;
 /**
  * 字典数据表 sys_dict_data
  * 
- * @author ledao
+ * @author lxz
  */
 public class SysDictData extends BaseEntity
 {

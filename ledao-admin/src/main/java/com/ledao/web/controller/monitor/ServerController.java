@@ -11,7 +11,7 @@ import com.ledao.framework.web.domain.Server;
 /**
  * 服务器监控
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/monitor/server")

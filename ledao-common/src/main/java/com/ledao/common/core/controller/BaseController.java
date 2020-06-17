@@ -25,7 +25,7 @@ import com.ledao.common.utils.sql.SqlUtil;
 /**
  * web层通用数据处理
  * 
- * @author ledao
+ * @author lxz
  */
 public class BaseController
 {

@@ -21,7 +21,7 @@ import com.ledao.system.service.ISysLogininforService;
 /**
  * 系统访问记录
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/monitor/logininfor")

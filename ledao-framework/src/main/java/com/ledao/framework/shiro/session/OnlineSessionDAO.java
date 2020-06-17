@@ -15,7 +15,7 @@ import com.ledao.framework.shiro.service.SysShiroService;
 /**
  * 针对自定义的ShiroSession的db操作
  * 
- * @author ledao
+ * @author lxz
  */
 public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
 {

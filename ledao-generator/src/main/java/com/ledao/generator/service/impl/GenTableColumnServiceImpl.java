@@ -11,7 +11,7 @@ import com.ledao.generator.service.IGenTableColumnService;
 /**
  * 业务字段 服务层实现
  * 
- * @author ledao
+ * @author lxz
  */
 @Service
 public class GenTableColumnServiceImpl implements IGenTableColumnService

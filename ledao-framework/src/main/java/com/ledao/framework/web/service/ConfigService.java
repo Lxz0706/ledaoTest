@@ -7,7 +7,7 @@ import com.ledao.system.service.ISysConfigService;
 /**
  * LeDao首创 html调用 thymeleaf 实现参数管理
  * 
- * @author ledao
+ * @author lxz
  */
 @Service("config")
 public class ConfigService

@@ -15,7 +15,7 @@ import com.ledao.system.service.ISysConfigService;
 /**
  * 注册验证
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 public class SysRegisterController extends BaseController

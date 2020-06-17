@@ -3,7 +3,7 @@ package com.ledao.common.exception;
 /**
  * 业务异常
  * 
- * @author ledao
+ * @author lxz
  */
 public class BusinessException extends RuntimeException
 {

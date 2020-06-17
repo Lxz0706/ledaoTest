@@ -7,7 +7,7 @@ import com.ledao.system.domain.SysJudicial;
 /**
  * 司法Service接口
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 public interface ISysJudicialService {

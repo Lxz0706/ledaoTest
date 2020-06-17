@@ -27,7 +27,7 @@ import com.ledao.framework.datasource.DynamicDataSource;
 /**
  * druid 配置多数据源
  * 
- * @author ledao
+ * @author lxz
  */
 @Configuration
 public class DruidConfig

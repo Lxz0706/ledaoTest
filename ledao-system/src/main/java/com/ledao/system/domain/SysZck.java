@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 资产信息库对象 sys_zck
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-10
  */
 public class SysZck extends BaseEntity {
@@ -26,7 +26,7 @@ public class SysZck extends BaseEntity {
     /**
      * 资产包名称
      */
-    @Excel(name = "资产包名称")
+    //@Excel(name = "资产包名称")
     private String assetPackageName;
 
     /**
@@ -272,7 +272,7 @@ public class SysZck extends BaseEntity {
     private String dywAddress;
 
     /**
-     * 抵（质）押金额(本金)
+     * 抵（质）押金额(本金)	sys_user_sex
      */
     @Excel(name = "抵（质）押金额(本金)")
     private Double mortgageAmount;
@@ -551,6 +551,11 @@ public class SysZck extends BaseEntity {
     @Excel(name = "客户")
     private String customer;
 
+    /**
+     * 资产包ID
+     */
+    private Long zcbId;
+
     public Long getId() {
         return id;
     }
@@ -559,692 +564,700 @@ public class SysZck extends BaseEntity {
         this.id = id;
     }
 
-    public void setAssetPackageName(String assetPackageName) {
-        this.assetPackageName = assetPackageName;
-    }
-
     public String getAssetPackageName() {
         return assetPackageName;
     }
 
-    public void setAssetStatus(String assetStatus) {
-        this.assetStatus = assetStatus;
+    public void setAssetPackageName(String assetPackageName) {
+        this.assetPackageName = assetPackageName;
     }
 
     public String getAssetStatus() {
         return assetStatus;
     }
 
-    public void setNo(Integer no) {
-        this.no = no;
+    public void setAssetStatus(String assetStatus) {
+        this.assetStatus = assetStatus;
     }
 
     public Integer getNo() {
         return no;
     }
 
-    public void setBorrower(String borrower) {
-        this.borrower = borrower;
+    public void setNo(Integer no) {
+        this.no = no;
     }
 
     public String getBorrower() {
         return borrower;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setBorrower(String borrower) {
+        this.borrower = borrower;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setContractPrincipal(Double contractPrincipal) {
-        this.contractPrincipal = contractPrincipal;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public Double getContractPrincipal() {
         return contractPrincipal;
     }
 
-    public void setPrincipalBalance(Double principalBalance) {
-        this.principalBalance = principalBalance;
+    public void setContractPrincipal(Double contractPrincipal) {
+        this.contractPrincipal = contractPrincipal;
     }
 
     public Double getPrincipalBalance() {
         return principalBalance;
     }
 
-    public void setInterestBalance(Double interestBalance) {
-        this.interestBalance = interestBalance;
+    public void setPrincipalBalance(Double principalBalance) {
+        this.principalBalance = principalBalance;
     }
 
     public Double getInterestBalance() {
         return interestBalance;
     }
 
-    public void setPrincipalInterestBalance(Double principalInterestBalance) {
-        this.principalInterestBalance = principalInterestBalance;
+    public void setInterestBalance(Double interestBalance) {
+        this.interestBalance = interestBalance;
     }
 
     public Double getPrincipalInterestBalance() {
         return principalInterestBalance;
     }
 
-    public void setBxjsDate(Date bxjsDate) {
-        this.bxjsDate = bxjsDate;
+    public void setPrincipalInterestBalance(Double principalInterestBalance) {
+        this.principalInterestBalance = principalInterestBalance;
     }
 
     public Date getBxjsDate() {
         return bxjsDate;
     }
 
-    public void setLoanBank(String loanBank) {
-        this.loanBank = loanBank;
+    public void setBxjsDate(Date bxjsDate) {
+        this.bxjsDate = bxjsDate;
     }
 
     public String getLoanBank() {
         return loanBank;
     }
 
-    public void setLoanContractNo(String loanContractNo) {
-        this.loanContractNo = loanContractNo;
+    public void setLoanBank(String loanBank) {
+        this.loanBank = loanBank;
     }
 
     public String getLoanContractNo() {
         return loanContractNo;
     }
 
-    public void setLoanTime(Date loanTime) {
-        this.loanTime = loanTime;
+    public void setLoanContractNo(String loanContractNo) {
+        this.loanContractNo = loanContractNo;
     }
 
     public Date getLoanTime() {
         return loanTime;
     }
 
-    public void setGuarantor(String guarantor) {
-        this.guarantor = guarantor;
+    public void setLoanTime(Date loanTime) {
+        this.loanTime = loanTime;
     }
 
     public String getGuarantor() {
         return guarantor;
     }
 
-    public void setBzrZrrNumber(Integer bzrZrrNumber) {
-        this.bzrZrrNumber = bzrZrrNumber;
+    public void setGuarantor(String guarantor) {
+        this.guarantor = guarantor;
     }
 
     public Integer getBzrZrrNumber() {
         return bzrZrrNumber;
     }
 
-    public void setBzrFrNumber(Integer bzrFrNumber) {
-        this.bzrFrNumber = bzrFrNumber;
+    public void setBzrZrrNumber(Integer bzrZrrNumber) {
+        this.bzrZrrNumber = bzrZrrNumber;
     }
 
     public Integer getBzrFrNumber() {
         return bzrFrNumber;
     }
 
-    public void setGuaranteeAmount(Double guaranteeAmount) {
-        this.guaranteeAmount = guaranteeAmount;
+    public void setBzrFrNumber(Integer bzrFrNumber) {
+        this.bzrFrNumber = bzrFrNumber;
     }
 
     public Double getGuaranteeAmount() {
         return guaranteeAmount;
     }
 
-    public void setGuaranteeContractNo(String guaranteeContractNo) {
-        this.guaranteeContractNo = guaranteeContractNo;
+    public void setGuaranteeAmount(Double guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
     }
 
     public String getGuaranteeContractNo() {
         return guaranteeContractNo;
     }
 
-    public void setGuaranteeContractSignTime(Date guaranteeContractSignTime) {
-        this.guaranteeContractSignTime = guaranteeContractSignTime;
+    public void setGuaranteeContractNo(String guaranteeContractNo) {
+        this.guaranteeContractNo = guaranteeContractNo;
     }
 
     public Date getGuaranteeContractSignTime() {
         return guaranteeContractSignTime;
     }
 
-    public void setMaximumGuaranteeAmount(Double maximumGuaranteeAmount) {
-        this.maximumGuaranteeAmount = maximumGuaranteeAmount;
+    public void setGuaranteeContractSignTime(Date guaranteeContractSignTime) {
+        this.guaranteeContractSignTime = guaranteeContractSignTime;
     }
 
     public Double getMaximumGuaranteeAmount() {
         return maximumGuaranteeAmount;
     }
 
-    public void setMaximumGuaranteeContract(String maximumGuaranteeContract) {
-        this.maximumGuaranteeContract = maximumGuaranteeContract;
+    public void setMaximumGuaranteeAmount(Double maximumGuaranteeAmount) {
+        this.maximumGuaranteeAmount = maximumGuaranteeAmount;
     }
 
     public String getMaximumGuaranteeContract() {
         return maximumGuaranteeContract;
     }
 
-    public void setMaximumGuaratnteeSignTime(Date maximumGuaratnteeSignTime) {
-        this.maximumGuaratnteeSignTime = maximumGuaratnteeSignTime;
+    public void setMaximumGuaranteeContract(String maximumGuaranteeContract) {
+        this.maximumGuaranteeContract = maximumGuaranteeContract;
     }
 
     public Date getMaximumGuaratnteeSignTime() {
         return maximumGuaratnteeSignTime;
     }
 
-    public void setZzqDateTime(String zzqDateTime) {
-        this.zzqDateTime = zzqDateTime;
+    public void setMaximumGuaratnteeSignTime(Date maximumGuaratnteeSignTime) {
+        this.maximumGuaratnteeSignTime = maximumGuaratnteeSignTime;
     }
 
     public String getZzqDateTime() {
         return zzqDateTime;
     }
 
-    public void setGuaranteeMode(String guaranteeMode) {
-        this.guaranteeMode = guaranteeMode;
+    public void setZzqDateTime(String zzqDateTime) {
+        this.zzqDateTime = zzqDateTime;
     }
 
     public String getGuaranteeMode() {
         return guaranteeMode;
     }
 
-    public void setGuaranteePeriod(String guaranteePeriod) {
-        this.guaranteePeriod = guaranteePeriod;
+    public void setGuaranteeMode(String guaranteeMode) {
+        this.guaranteeMode = guaranteeMode;
     }
 
     public String getGuaranteePeriod() {
         return guaranteePeriod;
     }
 
-    public void setGuaranteeRemarks(String guaranteeRemarks) {
-        this.guaranteeRemarks = guaranteeRemarks;
+    public void setGuaranteePeriod(String guaranteePeriod) {
+        this.guaranteePeriod = guaranteePeriod;
     }
 
     public String getGuaranteeRemarks() {
         return guaranteeRemarks;
     }
 
-    public void setAssetNature(String assetNature) {
-        this.assetNature = assetNature;
+    public void setGuaranteeRemarks(String guaranteeRemarks) {
+        this.guaranteeRemarks = guaranteeRemarks;
     }
 
     public String getAssetNature() {
         return assetNature;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAssetNature(String assetNature) {
+        this.assetNature = assetNature;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setQsNo(String qsNo) {
-        this.qsNo = qsNo;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getQsNo() {
         return qsNo;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setQsNo(String qsNo) {
+        this.qsNo = qsNo;
     }
 
     public String getArea() {
         return area;
     }
 
-    public void setSealUp(String sealUp) {
-        this.sealUp = sealUp;
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getSealUp() {
         return sealUp;
     }
 
-    public void setMortgage(String mortgage) {
-        this.mortgage = mortgage;
+    public void setSealUp(String sealUp) {
+        this.sealUp = sealUp;
     }
 
     public String getMortgage() {
         return mortgage;
     }
 
-    public void setOtherRemark(String otherRemark) {
-        this.otherRemark = otherRemark;
+    public void setMortgage(String mortgage) {
+        this.mortgage = mortgage;
     }
 
     public String getOtherRemark() {
         return otherRemark;
     }
 
-    public void setJkrIndustry(String jkrIndustry) {
-        this.jkrIndustry = jkrIndustry;
+    public void setOtherRemark(String otherRemark) {
+        this.otherRemark = otherRemark;
     }
 
     public String getJkrIndustry() {
         return jkrIndustry;
     }
 
-    public void setSoe(String soe) {
-        this.soe = soe;
+    public void setJkrIndustry(String jkrIndustry) {
+        this.jkrIndustry = jkrIndustry;
     }
 
     public String getSoe() {
         return soe;
     }
 
-    public void setOperation(String operation) {
-        this.operation = operation;
+    public void setSoe(String soe) {
+        this.soe = soe;
     }
 
     public String getOperation() {
         return operation;
     }
 
-    public void setCourt(String court) {
-        this.court = court;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public String getCourt() {
         return court;
     }
 
-    public void setLitigation(String litigation) {
-        this.litigation = litigation;
+    public void setCourt(String court) {
+        this.court = court;
     }
 
     public String getLitigation() {
         return litigation;
     }
 
-    public void setJudicialRemark(String judicialRemark) {
-        this.judicialRemark = judicialRemark;
+    public void setLitigation(String litigation) {
+        this.litigation = litigation;
     }
 
     public String getJudicialRemark() {
         return judicialRemark;
     }
 
-    public void setDywAddress(String dywAddress) {
-        this.dywAddress = dywAddress;
+    public void setJudicialRemark(String judicialRemark) {
+        this.judicialRemark = judicialRemark;
     }
 
     public String getDywAddress() {
         return dywAddress;
     }
 
-    public void setMortgageAmount(Double mortgageAmount) {
-        this.mortgageAmount = mortgageAmount;
+    public void setDywAddress(String dywAddress) {
+        this.dywAddress = dywAddress;
     }
 
     public Double getMortgageAmount() {
         return mortgageAmount;
     }
 
-    public void setMortgageContractNo(String mortgageContractNo) {
-        this.mortgageContractNo = mortgageContractNo;
+    public void setMortgageAmount(Double mortgageAmount) {
+        this.mortgageAmount = mortgageAmount;
     }
 
     public String getMortgageContractNo() {
         return mortgageContractNo;
     }
 
-    public void setDzywqdTime(Date dzywqdTime) {
-        this.dzywqdTime = dzywqdTime;
+    public void setMortgageContractNo(String mortgageContractNo) {
+        this.mortgageContractNo = mortgageContractNo;
     }
 
     public Date getDzywqdTime() {
         return dzywqdTime;
     }
 
-    public void setMaximumMortgageAmount(Long maximumMortgageAmount) {
-        this.maximumMortgageAmount = maximumMortgageAmount;
+    public void setDzywqdTime(Date dzywqdTime) {
+        this.dzywqdTime = dzywqdTime;
     }
 
     public Long getMaximumMortgageAmount() {
         return maximumMortgageAmount;
     }
 
-    public void setMaximumMortgageContractNo(String maximumMortgageContractNo) {
-        this.maximumMortgageContractNo = maximumMortgageContractNo;
+    public void setMaximumMortgageAmount(Long maximumMortgageAmount) {
+        this.maximumMortgageAmount = maximumMortgageAmount;
     }
 
     public String getMaximumMortgageContractNo() {
         return maximumMortgageContractNo;
     }
 
-    public void setZgeContractTime(Date zgeContractTime) {
-        this.zgeContractTime = zgeContractTime;
+    public void setMaximumMortgageContractNo(String maximumMortgageContractNo) {
+        this.maximumMortgageContractNo = maximumMortgageContractNo;
     }
 
     public Date getZgeContractTime() {
         return zgeContractTime;
     }
 
-    public void setDbzzqTime(String dbzzqTime) {
-        this.dbzzqTime = dbzzqTime;
+    public void setZgeContractTime(Date zgeContractTime) {
+        this.zgeContractTime = zgeContractTime;
     }
 
     public String getDbzzqTime() {
         return dbzzqTime;
     }
 
-    public void setMortgagor(String mortgagor) {
-        this.mortgagor = mortgagor;
+    public void setDbzzqTime(String dbzzqTime) {
+        this.dbzzqTime = dbzzqTime;
     }
 
     public String getMortgagor() {
         return mortgagor;
     }
 
-    public void setZgeQsNo(String zgeQsNo) {
-        this.zgeQsNo = zgeQsNo;
+    public void setMortgagor(String mortgagor) {
+        this.mortgagor = mortgagor;
     }
 
     public String getZgeQsNo() {
         return zgeQsNo;
     }
 
-    public void setTxQzNo(String txQzNo) {
-        this.txQzNo = txQzNo;
+    public void setZgeQsNo(String zgeQsNo) {
+        this.zgeQsNo = zgeQsNo;
     }
 
     public String getTxQzNo() {
         return txQzNo;
     }
 
-    public void setCaseNo(String caseNo) {
-        this.caseNo = caseNo;
+    public void setTxQzNo(String txQzNo) {
+        this.txQzNo = txQzNo;
     }
 
     public String getCaseNo() {
         return caseNo;
     }
 
-    public void setMortgageRank(String mortgageRank) {
-        this.mortgageRank = mortgageRank;
+    public void setCaseNo(String caseNo) {
+        this.caseNo = caseNo;
     }
 
     public String getMortgageRank() {
         return mortgageRank;
     }
 
-    public void setQxswMortgeageAmount(Double qxswMortgeageAmount) {
-        this.qxswMortgeageAmount = qxswMortgeageAmount;
+    public void setMortgageRank(String mortgageRank) {
+        this.mortgageRank = mortgageRank;
     }
 
     public Double getQxswMortgeageAmount() {
         return qxswMortgeageAmount;
     }
 
-    public void setRentalSituation(String rentalSituation) {
-        this.rentalSituation = rentalSituation;
+    public void setQxswMortgeageAmount(Double qxswMortgeageAmount) {
+        this.qxswMortgeageAmount = qxswMortgeageAmount;
     }
 
     public String getRentalSituation() {
         return rentalSituation;
     }
 
-    public void setBeforeOrAterAarrival(String beforeOrAterAarrival) {
-        this.beforeOrAterAarrival = beforeOrAterAarrival;
+    public void setRentalSituation(String rentalSituation) {
+        this.rentalSituation = rentalSituation;
     }
 
     public String getBeforeOrAterAarrival() {
         return beforeOrAterAarrival;
     }
 
-    public void setRentalDetails(String rentalDetails) {
-        this.rentalDetails = rentalDetails;
+    public void setBeforeOrAterAarrival(String beforeOrAterAarrival) {
+        this.beforeOrAterAarrival = beforeOrAterAarrival;
     }
 
     public String getRentalDetails() {
         return rentalDetails;
     }
 
-    public void setJuveniles(String juveniles) {
-        this.juveniles = juveniles;
+    public void setRentalDetails(String rentalDetails) {
+        this.rentalDetails = rentalDetails;
     }
 
     public String getJuveniles() {
         return juveniles;
     }
 
-    public void setOnlyHouse(String onlyHouse) {
-        this.onlyHouse = onlyHouse;
+    public void setJuveniles(String juveniles) {
+        this.juveniles = juveniles;
     }
 
     public String getOnlyHouse() {
         return onlyHouse;
     }
 
-    public void setTengfang(String tengfang) {
-        this.tengfang = tengfang;
+    public void setOnlyHouse(String onlyHouse) {
+        this.onlyHouse = onlyHouse;
     }
 
     public String getTengfang() {
         return tengfang;
     }
 
-    public void setNatureLand(String natureLand) {
-        this.natureLand = natureLand;
+    public void setTengfang(String tengfang) {
+        this.tengfang = tengfang;
     }
 
     public String getNatureLand() {
         return natureLand;
     }
 
-    public void setSysynx(String sysynx) {
-        this.sysynx = sysynx;
+    public void setNatureLand(String natureLand) {
+        this.natureLand = natureLand;
     }
 
     public String getSysynx() {
         return sysynx;
     }
 
-    public void setPlotRatio(String plotRatio) {
-        this.plotRatio = plotRatio;
+    public void setSysynx(String sysynx) {
+        this.sysynx = sysynx;
     }
 
     public String getPlotRatio() {
         return plotRatio;
     }
 
-    public void setAccess(String access) {
-        this.access = access;
+    public void setPlotRatio(String plotRatio) {
+        this.plotRatio = plotRatio;
     }
 
     public String getAccess() {
         return access;
     }
 
-    public void setZoning(String zoning) {
-        this.zoning = zoning;
+    public void setAccess(String access) {
+        this.access = access;
     }
 
     public String getZoning() {
         return zoning;
     }
 
-    public void setLandArea(Double landArea) {
-        this.landArea = landArea;
+    public void setZoning(String zoning) {
+        this.zoning = zoning;
     }
 
     public Double getLandArea() {
         return landArea;
     }
 
-    public void setBuildStructure(String buildStructure) {
-        this.buildStructure = buildStructure;
+    public void setLandArea(Double landArea) {
+        this.landArea = landArea;
     }
 
     public String getBuildStructure() {
         return buildStructure;
     }
 
-    public void setCompletionDate(Date completionDate) {
-        this.completionDate = completionDate;
+    public void setBuildStructure(String buildStructure) {
+        this.buildStructure = buildStructure;
     }
 
     public Date getCompletionDate() {
         return completionDate;
     }
 
-    public void setFloors(String floors) {
-        this.floors = floors;
+    public void setCompletionDate(Date completionDate) {
+        this.completionDate = completionDate;
     }
 
     public String getFloors() {
         return floors;
     }
 
-    public void setCollateType(String collateType) {
-        this.collateType = collateType;
+    public void setFloors(String floors) {
+        this.floors = floors;
     }
 
     public String getCollateType() {
         return collateType;
     }
 
-    public void setFloorage(Double floorage) {
-        this.floorage = floorage;
+    public void setCollateType(String collateType) {
+        this.collateType = collateType;
     }
 
     public Double getFloorage() {
         return floorage;
     }
 
-    public void setLandUnitPrice(Double landUnitPrice) {
-        this.landUnitPrice = landUnitPrice;
+    public void setFloorage(Double floorage) {
+        this.floorage = floorage;
     }
 
     public Double getLandUnitPrice() {
         return landUnitPrice;
     }
 
-    public void setLandTotalPrice(Double landTotalPrice) {
-        this.landTotalPrice = landTotalPrice;
+    public void setLandUnitPrice(Double landUnitPrice) {
+        this.landUnitPrice = landUnitPrice;
     }
 
     public Double getLandTotalPrice() {
         return landTotalPrice;
     }
 
-    public void setOtherCollateralUnitPrice(Double otherCollateralUnitPrice) {
-        this.otherCollateralUnitPrice = otherCollateralUnitPrice;
+    public void setLandTotalPrice(Double landTotalPrice) {
+        this.landTotalPrice = landTotalPrice;
     }
 
     public Double getOtherCollateralUnitPrice() {
         return otherCollateralUnitPrice;
     }
 
-    public void setOtherCollateralTotalPrice(Double otherCollateralTotalPrice) {
-        this.otherCollateralTotalPrice = otherCollateralTotalPrice;
+    public void setOtherCollateralUnitPrice(Double otherCollateralUnitPrice) {
+        this.otherCollateralUnitPrice = otherCollateralUnitPrice;
     }
 
     public Double getOtherCollateralTotalPrice() {
         return otherCollateralTotalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setOtherCollateralTotalPrice(Double otherCollateralTotalPrice) {
+        this.otherCollateralTotalPrice = otherCollateralTotalPrice;
     }
 
     public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setValuationBasis(String valuationBasis) {
-        this.valuationBasis = valuationBasis;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getValuationBasis() {
         return valuationBasis;
     }
 
-    public void setCapValue(String capValue) {
-        this.capValue = capValue;
+    public void setValuationBasis(String valuationBasis) {
+        this.valuationBasis = valuationBasis;
     }
 
     public String getCapValue() {
         return capValue;
     }
 
-    public void setDzywRemark(String dzywRemark) {
-        this.dzywRemark = dzywRemark;
+    public void setCapValue(String capValue) {
+        this.capValue = capValue;
     }
 
     public String getDzywRemark() {
         return dzywRemark;
     }
 
-    public void setBorrowerWsqk(String borrowerWsqk) {
-        this.borrowerWsqk = borrowerWsqk;
+    public void setDzywRemark(String dzywRemark) {
+        this.dzywRemark = dzywRemark;
     }
 
     public String getBorrowerWsqk() {
         return borrowerWsqk;
     }
 
-    public void setPropertyClues(String propertyClues) {
-        this.propertyClues = propertyClues;
+    public void setBorrowerWsqk(String borrowerWsqk) {
+        this.borrowerWsqk = borrowerWsqk;
     }
 
     public String getPropertyClues() {
         return propertyClues;
     }
 
-    public void setZhhknl(Double zhhknl) {
-        this.zhhknl = zhhknl;
+    public void setPropertyClues(String propertyClues) {
+        this.propertyClues = propertyClues;
     }
 
     public Double getZhhknl() {
         return zhhknl;
     }
 
-    public void setJkrgzRemark(String jkrgzRemark) {
-        this.jkrgzRemark = jkrgzRemark;
+    public void setZhhknl(Double zhhknl) {
+        this.zhhknl = zhhknl;
     }
 
     public String getJkrgzRemark() {
         return jkrgzRemark;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setJkrgzRemark(String jkrgzRemark) {
+        this.jkrgzRemark = jkrgzRemark;
     }
 
     public Double getPrice() {
         return price;
     }
 
-    public void setDesposalMode(String desposalMode) {
-        this.desposalMode = desposalMode;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getDesposalMode() {
         return desposalMode;
     }
 
-    public void setDesposalPrice(Double desposalPrice) {
-        this.desposalPrice = desposalPrice;
+    public void setDesposalMode(String desposalMode) {
+        this.desposalMode = desposalMode;
     }
 
     public Double getDesposalPrice() {
         return desposalPrice;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setDesposalPrice(Double desposalPrice) {
+        this.desposalPrice = desposalPrice;
     }
 
     public String getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
+    public Long getZcbId() {
+        return zcbId;
+    }
+
+    public void setZcbId(Long zcbId) {
+        this.zcbId = zcbId;
     }
 
     @Override
@@ -1337,6 +1350,7 @@ public class SysZck extends BaseEntity {
                 .append("desposalMode", getDesposalMode())
                 .append("desposalPrice", getDesposalPrice())
                 .append("customer", getCustomer())
+                .append("zcbId", getZcbId())
                 .toString();
     }
 }

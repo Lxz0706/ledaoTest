@@ -28,7 +28,7 @@ import com.ledao.system.service.ISysUserService;
 /**
  * 角色信息
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/system/role")

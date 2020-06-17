@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysDictType;
 /**
  * 字典表 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysDictTypeMapper
 {

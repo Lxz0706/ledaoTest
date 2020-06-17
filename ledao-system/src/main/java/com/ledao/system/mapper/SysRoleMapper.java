@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysRole;
 /**
  * 角色表 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysRoleMapper
 {

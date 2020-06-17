@@ -22,7 +22,7 @@ import com.ledao.system.service.ISysNoticeService;
 /**
  * 公告 信息操作处理
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/system/notice")

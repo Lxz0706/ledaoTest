@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysRoleMenu;
 /**
  * 角色与菜单关联表 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysRoleMenuMapper
 {

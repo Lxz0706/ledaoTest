@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysUserOnline;
 /**
  * 在线用户 数据层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface SysUserOnlineMapper
 {

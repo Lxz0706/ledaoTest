@@ -30,7 +30,7 @@ import com.ledao.system.service.ISysUserService;
 /**
  * 用户 业务层处理
  *
- * @author ledao
+ * @author lxz
  */
 @Service
 public class SysUserServiceImpl implements ISysUserService {

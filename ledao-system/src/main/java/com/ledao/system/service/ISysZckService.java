@@ -8,7 +8,7 @@ import com.ledao.system.domain.SysZck;
 /**
  * 资产信息库Service接口
  *
- * @author ledao
+ * @author lxz
  * @date 2020-06-09
  */
 public interface ISysZckService {
@@ -68,5 +68,13 @@ public interface ISysZckService {
      * @param operName        操作用户
      * @return 结果
      */
-    public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName);
+    public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName,Long zcbId);
+
+    /**
+     * 根据资产包ID查询资产库信息
+     *
+     * @param zcbId
+     * @return 结果
+     */
+    public List<SysZck> selectSysZckByZcbId(Long zcbId);
 }

@@ -15,7 +15,7 @@ import com.ledao.system.domain.SysUser;
 /**
  * shiro 工具类
  * 
- * @author ledao
+ * @author lxz
  */
 public class ShiroUtils
 {

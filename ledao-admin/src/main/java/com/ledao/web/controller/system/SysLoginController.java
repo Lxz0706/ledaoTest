@@ -18,7 +18,7 @@ import com.ledao.common.utils.StringUtils;
 /**
  * 登录验证
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 public class SysLoginController extends BaseController

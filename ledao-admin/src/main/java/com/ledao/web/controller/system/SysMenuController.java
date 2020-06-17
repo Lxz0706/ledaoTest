@@ -25,7 +25,7 @@ import com.ledao.system.service.ISysMenuService;
 /**
  * 菜单信息
  * 
- * @author ledao
+ * @author lxz
  */
 @Controller
 @RequestMapping("/system/menu")

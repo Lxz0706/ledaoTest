@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改资产包')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-zcb-edit" th:object="${sysZcb}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资产包名称：</label>
+                <div class="col-sm-8">
+                    <input name="assetPackageName" th:field="*{assetPackageName}" class="form-control" type="text">
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">资产包状态：</label>
+                <div class="col-sm-8">
+                    <select name="assetStatus" class="form-control m-b" th:with="type=${@dict.getType('sys_zcb_status')}">
+                        <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{assetStatus}"></option>
+                    </select>
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/zcb";
+        $("#form-zcb-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-zcb-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

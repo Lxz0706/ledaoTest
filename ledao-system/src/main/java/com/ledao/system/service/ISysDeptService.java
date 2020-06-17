@@ -8,7 +8,7 @@ import com.ledao.system.domain.SysRole;
 /**
  * 部门管理 服务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysDeptService
 {

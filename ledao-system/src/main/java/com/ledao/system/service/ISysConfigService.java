@@ -6,7 +6,7 @@ import com.ledao.system.domain.SysConfig;
 /**
  * 参数配置 服务层
  * 
- * @author ledao
+ * @author lxz
  */
 public interface ISysConfigService
 {

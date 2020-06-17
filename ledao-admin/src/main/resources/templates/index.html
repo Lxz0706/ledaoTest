@@ -20,17 +20,17 @@
 <div id="wrapper">
 
     <!--左侧导航开始-->
-    <nav class="navbar-default navbar-static-side" role="navigation">
+    <nav class="navbar-default navbar-static-side navbarImg" role="navigation">
         <div class="nav-close">
             <i class="fa fa-times-circle"></i>
         </div>
         <a th:href="@{/index}">
-            <li class="logo hidden-xs">
+            <li class="logo hidden-xs navbarImg">
                 <span class="logo-lg">LeDao</span>
             </li>
          </a>
         <div class="sidebar-collapse">
-            <ul class="nav" id="side-menu">
+            <ul class="nav navbarImg" id="side-menu">
             	<li>
             		<div class="user-panel">
             			<a class="menuItem noactive" title="个人中心" th:href="@{/system/user/profile}"> 
@@ -71,7 +71,7 @@
 						</li>
 					</ul>
                 </li>
-                <li th:if="${demoEnabled}">
+                <!--<li th:if="${demoEnabled}">
                     <a href="#"><i class="fa fa-desktop"></i><span class="nav-label">实例演示</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li> <a>表单<span class="fa arrow"></span></a>
@@ -163,7 +163,7 @@
 	                        </ul>
 	                    </li>
                     </ul>
-                </li>
+                </li>-->
             </ul>
         </div>
     </nav>
@@ -172,7 +172,7 @@
     <!--右侧部分开始-->
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
-            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <nav class="navbar navbar-static-top navbarImg" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2" style="color:#FFF;" href="#" title="收起菜单">
                     	<i class="fa fa-bars"></i>
@@ -186,20 +186,20 @@
 							<span class="hidden-xs">[[${#strings.defaultString(user.userName, '-')}]]</span>
 						</a>
 						<ul class="dropdown-menu">
-							<li class="mt5">
+							<li class="mt5" style="color: #1a2226">
 								<a th:href="@{/system/user/profile}" class="menuItem">
 								<i class="fa fa-user"></i> 个人中心</a>
 							</li>
-							<li>
+							<li style="color: #1a2226">
 								<a onclick="resetPwd()">
 								<i class="fa fa-key"></i> 修改密码</a>
 							</li>
-							<li>
+							<!--<li>
 								<a onclick="switchSkin()">
 								<i class="fa fa-dashboard"></i> 切换主题</a>
-							</li>
+							</li>-->
 							<li class="divider"></li>
-							<li>
+							<li style="color: #1a2226">
 								<a th:href="@{logout}">
 								<i class="fa fa-sign-out"></i> 退出登录</a>
 							</li>

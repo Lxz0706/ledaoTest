@@ -31,7 +31,7 @@ server:
 # 日志配置
 logging:
   level:
-    com.ledao: ERROR
+    com.ledao: debug
     org.springframework: warn
    # com.ledao.system.mapper.SysZckMapper: info
 

@@ -8,6 +8,15 @@
 .navbar, .skin-blue .navbar {
 	background-color: #3c8dbc
 }
+.navbarImg{
+	height:auto;
+	background:url(../img/login-background.jpg) no-repeat center fixed;
+	-webkit-background-size:cover;
+	-moz-background-size:cover;
+	-o-background-size:cover;
+	background-size:cover;
+	color:rgba(255,255,255,.95)
+}
 
 .skin-blue .navbar-default .nav>li.selected>a,
 .skin-blue .navbar-default .nav>li.selected>a:focus {

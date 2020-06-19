@@ -11,20 +11,16 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">项目名称：</label>
                 <div class="col-sm-8">
-                    <textarea name="projectName" class="form-control">[[*{projectName}]]</textarea>
+                    <input name="projectName" th:field="*{projectName}" class="form-control" type="text"/>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">项目状态：</label>
                 <div class="col-sm-8">
-                    <div class="radio-box">
-                        <input type="radio" name="projectStatus" value="">
-                        <label th:for="projectStatus" th:text="未知"></label>
-                    </div>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                    <input name="projectStatus" th:field="*{projectStatus}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">序号：</label>
                 <div class="col-sm-8">
                     <input name="no" th:field="*{no}" class="form-control" type="text">
@@ -33,46 +29,43 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">SPV名称：</label>
                 <div class="col-sm-8">
-                    <textarea name="spvName" class="form-control">[[*{spvName}]]</textarea>
+                    <input name="spvName" th:field="*{spvName}" class="form-control" type="text"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">城市/地区：</label>
                 <div class="col-sm-8">
-                    <textarea name="city" class="form-control">[[*{city}]]</textarea>
+                    <input name="city" th:field="*{city}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">合同本金：</label>
                 <div class="col-sm-8">
                     <input name="contractPrincipal" th:field="*{contractPrincipal}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">本金余额：</label>
                 <div class="col-sm-8">
                     <input name="principalBalance" th:field="*{principalBalance}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">利息余额：</label>
                 <div class="col-sm-8">
                     <input name="interestBalance" th:field="*{interestBalance}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">本息余额：</label>
                 <div class="col-sm-8">
                     <input name="principalInterestBalance" th:field="*{principalInterestBalance}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">本息计算基准日：</label>
                 <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="bxjsDate" th:value="${#dates.format(sysBgczzck.bxjsDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
+                    <input name="bxjsDate" class="form-control" type="text" th:field="*{bxjsDate}">
                 </div>
             </div>
             <div class="form-group">
@@ -84,16 +77,13 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">付息日：</label>
                 <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="interestPaymentDate" th:value="${#dates.format(sysBgczzck.interestPaymentDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                 </div>
+                    <input name="interestPaymentDate" class="form-control" type="text" th:field="*{interestPaymentDate}">
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">融资方：</label>
                 <div class="col-sm-8">
-                    <textarea name="finalParty" class="form-control">[[*{finalParty}]]</textarea>
+                    <input name="finalParty" th:field="*{finalParty}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -108,64 +98,31 @@
                     <textarea name="finalTerm" class="form-control">[[*{finalTerm}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">保证人：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">协议名称：</label>
                 <div class="col-sm-8">
-                    <input name="guarantor" th:field="*{guarantor}" class="form-control" type="text">
+                    <select name="agreementName" class="form-control m-b" th:with="type=${@dict.getType('sys_bgzc_xymc')}">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{agreementName}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">保证方式：</label>
+                <label class="col-sm-3 control-label">投前签署协议编号：</label>
                 <div class="col-sm-8">
-                    <textarea name="guarantee" class="form-control">[[*{guarantee}]]</textarea>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">保证期间：</label>
-                <div class="col-sm-8">
-                    <input name="guaranteePeriod" th:field="*{guaranteePeriod}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">保证文件编号：</label>
-                <div class="col-sm-8">
-                    <input name="guaranteeDocumentNo" th:field="*{guaranteeDocumentNo}" class="form-control" type="text">
+                    <input name="agreementNo" th:field="*{agreementNo}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">资产性质：</label>
-                <div class="col-sm-8">
-                    <textarea name="natureAssets" class="form-control">[[*{natureAssets}]]</textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">地址：</label>
-                <div class="col-sm-8">
-                    <textarea name="address" class="form-control">[[*{address}]]</textarea>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">权属证号：</label>
-                <div class="col-sm-8">
-                    <input name="owerCertificateNo" th:field="*{owerCertificateNo}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">面积·㎡：</label>
-                <div class="col-sm-8">
-                    <input name="areaMeasure" th:field="*{areaMeasure}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
                 <label class="col-sm-3 control-label">行业：</label>
                 <div class="col-sm-8">
                     <input name="indestry" th:field="*{indestry}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">国企/非国企：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">投资人名称：</label>
                 <div class="col-sm-8">
-                    <input name="soe" th:field="*{soe}" class="form-control" type="text">
+                    <input name="investorName" th:field="*{investorName}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -186,28 +143,28 @@
                     <textarea name="xgsxbljd" class="form-control">[[*{xgsxbljd}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">项目状态备注：</label>
                 <div class="col-sm-8">
                     <input name="projectStatusComments" th:field="*{projectStatusComments}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">证照类型：</label>
                 <div class="col-sm-8">
-                    <select name="licenseType" class="form-control m-b">
-                        <option value="">所有</option>
+                    <select name="licenseType" class="form-control m-b" th:with="type=${@dict.getType('sys_bgzc_zzlx')}">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{licenseType}"></option>
                     </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">证照编号：</label>
                 <div class="col-sm-8">
                     <input name="licenseNo" th:field="*{licenseNo}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">取得时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
@@ -222,25 +179,28 @@
                     <textarea name="licenseInformation" class="form-control">[[*{licenseInformation}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">项目基本信息备注：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目取得证照备注：</label>
                 <div class="col-sm-8">
                     <input name="projectRemark" th:field="*{projectRemark}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">土地性质：</label>
                 <div class="col-sm-8">
-                    <input name="natureLand" th:field="*{natureLand}" class="form-control" type="text">
+                    <select name="natureLand" class="form-control m-b" th:with="type=${@dict.getType('sys_zcb_tdxz')}">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{natureLand}"></option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">剩余使用年限：</label>
                 <div class="col-sm-8">
                     <input name="sysynx" th:field="*{sysynx}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">土地基本信息容积率：</label>
                 <div class="col-sm-8">
                     <input name="tdPlotRatio" th:field="*{tdPlotRatio}" class="form-control" type="text">
@@ -249,79 +209,94 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">获得方式：</label>
                 <div class="col-sm-8">
-                    <textarea name="access" class="form-control">[[*{access}]]</textarea>
+                    <select name="access" class="form-control m-b" th:with="type=${@dict.getType('sys_zcb_hdfs')}">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{access}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">土地用途：</label>
+                <label class="col-sm-3 control-label">合同概要：</label>
                 <div class="col-sm-8">
-                    <textarea name="zoing" class="form-control">[[*{zoing}]]</textarea>
+                    <input name="contractSummary" th:field="*{contractSummary}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
+                <label class="col-sm-3 control-label">合同金额：</label>
+                <div class="col-sm-8">
+                    <input name="contractAmount" th:field="*{contractAmount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目运行中协议编号：</label>
+                <div class="col-sm-8">
+                    <input name="projectYxzName" th:field="*{projectYxzName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目运行中编号：</label>
+                <div class="col-sm-8">
+                    <input name="projectYxzNo" th:field="*{projectYxzNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 control-label">土地面积/㎡：</label>
                 <div class="col-sm-8">
                     <input name="landArea" th:field="*{landArea}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">规划信息容积率：</label>
                 <div class="col-sm-8">
                     <input name="ghPlotRatio" th:field="*{ghPlotRatio}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">建筑密度：</label>
                 <div class="col-sm-8">
                     <input name="buildDensity" th:field="*{buildDensity}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">绿化面积：</label>
                 <div class="col-sm-8">
                     <input name="afforestedArea" th:field="*{afforestedArea}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">商业占比：</label>
                 <div class="col-sm-8">
                     <input name="businessShare" th:field="*{businessShare}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">规划建筑面积：</label>
                 <div class="col-sm-8">
                     <input name="planBuildArea" th:field="*{planBuildArea}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">土地单价：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">土地单价(元/亩)：</label>
                 <div class="col-sm-8">
                     <input name="landUnitPrice" th:field="*{landUnitPrice}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">土地总价：</label>
-                <div class="col-sm-8">
-                    <input name="landTotalPrice" th:field="*{landTotalPrice}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">建筑估值：</label>
                 <div class="col-sm-8">
                     <input name="buildValuation" th:field="*{buildValuation}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
+                <label class="col-sm-3 control-label">土地总价：</label>
+                <div class="col-sm-8">
+                    <input name="landTotalPrice" th:field="*{landTotalPrice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 control-label">其它附属物：</label>
                 <div class="col-sm-8">
                     <input name="otherAppurtenance" th:field="*{otherAppurtenance}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">总价：</label>
-                <div class="col-sm-8">
-                    <input name="totalPrice" th:field="*{totalPrice}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -330,7 +305,13 @@
                     <textarea name="valuationBasis" class="form-control">[[*{valuationBasis}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
+                <label class="col-sm-3 control-label">总价：</label>
+                <div class="col-sm-8">
+                    <input name="totalPrice" th:field="*{totalPrice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 control-label">项目估值备注：</label>
                 <div class="col-sm-8">
                     <input name="projectValuationRemarks" th:field="*{projectValuationRemarks}" class="form-control" type="text">
@@ -342,25 +323,28 @@
                     <textarea name="cashBack" class="form-control">[[*{cashBack}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">回现金额：</label>
                 <div class="col-sm-8">
                     <input name="cashBackAmount" th:field="*{cashBackAmount}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">还款能力分析：</label>
                 <div class="col-sm-8">
-                    <input name="repaymentCapacity" th:field="*{repaymentCapacity}" class="form-control" type="text">
+                    <select name="repaymentCapacity" class="form-control m-b" th:with="type=${@dict.getType('sys_bgcz_hknl')}">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{repaymentCapacity}"></option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">后期项目建议：</label>
                 <div class="col-sm-8">
                     <input name="laterProject" th:field="*{laterProject}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">退出计划备注：</label>
                 <div class="col-sm-8">
                     <input name="laterProjectRemark" th:field="*{laterProjectRemark}" class="form-control" type="text">

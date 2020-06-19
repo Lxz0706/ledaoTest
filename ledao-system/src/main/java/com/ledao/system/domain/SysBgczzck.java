@@ -1,5 +1,6 @@
 package com.ledao.system.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ledao.common.annotation.Excel;
@@ -10,8 +11,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 重组并购项目信息库对象 sys_bgczzck
  *
- * @author lxz
- * @date 2020-06-16
+ * @author ledao
+ * @date 2020-06-17
  */
 public class SysBgczzck extends BaseEntity {
     private static final long serialVersionUID = 1L;
@@ -55,7 +56,7 @@ public class SysBgczzck extends BaseEntity {
      * 合同本金
      */
     @Excel(name = "合同本金")
-    private Double contractPrincipal;
+    private BigDecimal contractPrincipal;
 
     /**
      * 本金余额
@@ -91,7 +92,7 @@ public class SysBgczzck extends BaseEntity {
      * 付息日
      */
     @Excel(name = "付息日")
-    private Date interestPaymentDate;
+    private String interestPaymentDate;
 
     /**
      * 融资方
@@ -112,52 +113,16 @@ public class SysBgczzck extends BaseEntity {
     private String finalTerm;
 
     /**
-     * 保证人
+     * 协议名称
      */
-    @Excel(name = "保证人")
-    private String guarantor;
+    @Excel(name = "协议名称")
+    private String agreementName;
 
     /**
-     * 保证方式
+     * 投前签署协议编号
      */
-    @Excel(name = "保证方式")
-    private String guarantee;
-
-    /**
-     * 保证期间
-     */
-    @Excel(name = "保证期间")
-    private String guaranteePeriod;
-
-    /**
-     * 保证文件编号
-     */
-    @Excel(name = "保证文件编号")
-    private String guaranteeDocumentNo;
-
-    /**
-     * 资产性质
-     */
-    @Excel(name = "资产性质")
-    private String natureAssets;
-
-    /**
-     * 地址
-     */
-    @Excel(name = "地址")
-    private String address;
-
-    /**
-     * 权属证号
-     */
-    @Excel(name = "权属证号")
-    private String owerCertificateNo;
-
-    /**
-     * 面积·㎡
-     */
-    @Excel(name = "面积·㎡")
-    private String areaMeasure;
+    @Excel(name = "投前签署协议编号")
+    private String agreementNo;
 
     /**
      * 行业
@@ -166,10 +131,10 @@ public class SysBgczzck extends BaseEntity {
     private String indestry;
 
     /**
-     * 国企/非国企
+     * 投资人名称
      */
-    @Excel(name = "国企/非国企")
-    private String soe;
+    @Excel(name = "投资人名称")
+    private String investorName;
 
     /**
      * 经营情况
@@ -220,9 +185,9 @@ public class SysBgczzck extends BaseEntity {
     private String licenseInformation;
 
     /**
-     * 项目基本信息备注
+     * 项目取得证照备注
      */
-    @Excel(name = "项目基本信息备注")
+    @Excel(name = "项目取得证照备注")
     private String projectRemark;
 
     /**
@@ -250,10 +215,28 @@ public class SysBgczzck extends BaseEntity {
     private String access;
 
     /**
-     * 土地用途
+     * 合同概要
      */
-    @Excel(name = "土地用途")
-    private String zoing;
+    @Excel(name = "合同概要")
+    private String contractSummary;
+
+    /**
+     * 合同金额
+     */
+    @Excel(name = "合同金额")
+    private String contractAmount;
+
+    /**
+     * 项目运行中协议编号
+     */
+    @Excel(name = "项目运行中协议编号")
+    private String projectYxzName;
+
+    /**
+     * 项目运行中编号
+     */
+    @Excel(name = "项目运行中编号")
+    private String projectYxzNo;
 
     /**
      * 土地面积/㎡
@@ -292,16 +275,10 @@ public class SysBgczzck extends BaseEntity {
     private String planBuildArea;
 
     /**
-     * 土地单价
+     * 土地单价(元/亩)
      */
-    @Excel(name = "土地单价")
+    @Excel(name = "土地单价(元/亩)")
     private Double landUnitPrice;
-
-    /**
-     * 土地总价
-     */
-    @Excel(name = "土地总价")
-    private Double landTotalPrice;
 
     /**
      * 建筑估值
@@ -310,22 +287,28 @@ public class SysBgczzck extends BaseEntity {
     private String buildValuation;
 
     /**
+     * 土地总价
+     */
+    @Excel(name = "土地总价")
+    private Double landTotalPrice;
+
+    /**
      * 其它附属物
      */
     @Excel(name = "其它附属物")
     private String otherAppurtenance;
 
     /**
-     * 总价
-     */
-    @Excel(name = "总价")
-    private Double totalPrice;
-
-    /**
      * 估值依据
      */
     @Excel(name = "估值依据")
     private String valuationBasis;
+
+    /**
+     * 总价
+     */
+    @Excel(name = "总价")
+    private Double totalPrice;
 
     /**
      * 项目估值备注
@@ -348,7 +331,7 @@ public class SysBgczzck extends BaseEntity {
     /**
      * 还款能力分析（较好、一般、无）
      */
-    @Excel(name = "还款能力分析", readConverterExp = "较=好、一般、无")
+    @Excel(name = "还款能力分析（较好、一般、无）")
     private String repaymentCapacity;
 
     /**
@@ -363,6 +346,65 @@ public class SysBgczzck extends BaseEntity {
     @Excel(name = "退出计划备注")
     private String laterProjectRemark;
 
+    /**
+     * 保证人
+     */
+    // @Excel(name = "保证人")
+    private String guarantor;
+
+    /**
+     * 保证方式
+     */
+    // @Excel(name = "保证方式")
+    private String guarantee;
+
+    /**
+     * 保证期间
+     */
+    // @Excel(name = "保证期间")
+    private String guaranteePeriod;
+
+    /**
+     * 保证文件编号
+     */
+    // @Excel(name = "保证文件编号")
+    private String guaranteeDocumentNo;
+
+    /**
+     * 资产性质
+     */
+    // @Excel(name = "资产性质")
+    private String natureAssets;
+
+    /**
+     * 地址
+     */
+    // @Excel(name = "地址")
+    private String address;
+
+    /**
+     * 权属证号
+     */
+    // @Excel(name = "权属证号")
+    private String owerCertificateNo;
+
+    /**
+     * 面积·㎡
+     */
+    //@Excel(name = "面积·㎡")
+    private String areaMeasure;
+
+    /**
+     * 国企/非国企
+     */
+    //@Excel(name = "国企/非国企")
+    private String soe;
+
+    /**
+     * 土地用途
+     */
+    //@Excel(name = "土地用途")
+    private String zoing;
 
     public Long getId() {
         return id;
@@ -412,12 +454,12 @@ public class SysBgczzck extends BaseEntity {
         return city;
     }
 
-    public void setContractPrincipal(Double contractPrincipal) {
-        this.contractPrincipal = contractPrincipal;
+    public BigDecimal getContractPrincipal() {
+        return contractPrincipal;
     }
 
-    public Double getContractPrincipal() {
-        return contractPrincipal;
+    public void setContractPrincipal(BigDecimal contractPrincipal) {
+        this.contractPrincipal = contractPrincipal;
     }
 
     public void setPrincipalBalance(Double principalBalance) {
@@ -452,6 +494,22 @@ public class SysBgczzck extends BaseEntity {
         return bxjsDate;
     }
 
+    public void setInterestPaymentCycle(String interestPaymentCycle) {
+        this.interestPaymentCycle = interestPaymentCycle;
+    }
+
+    public String getInterestPaymentCycle() {
+        return interestPaymentCycle;
+    }
+
+    public String getInterestPaymentDate() {
+        return interestPaymentDate;
+    }
+
+    public void setInterestPaymentDate(String interestPaymentDate) {
+        this.interestPaymentDate = interestPaymentDate;
+    }
+
     public void setFinalParty(String finalParty) {
         this.finalParty = finalParty;
     }
@@ -476,68 +534,20 @@ public class SysBgczzck extends BaseEntity {
         return finalTerm;
     }
 
-    public void setGuarantor(String guarantor) {
-        this.guarantor = guarantor;
+    public void setAgreementName(String agreementName) {
+        this.agreementName = agreementName;
     }
 
-    public String getGuarantor() {
-        return guarantor;
+    public String getAgreementName() {
+        return agreementName;
     }
 
-    public void setGuarantee(String guarantee) {
-        this.guarantee = guarantee;
+    public void setAgreementNo(String agreementNo) {
+        this.agreementNo = agreementNo;
     }
 
-    public String getGuarantee() {
-        return guarantee;
-    }
-
-    public void setGuaranteePeriod(String guaranteePeriod) {
-        this.guaranteePeriod = guaranteePeriod;
-    }
-
-    public String getGuaranteePeriod() {
-        return guaranteePeriod;
-    }
-
-    public void setGuaranteeDocumentNo(String guaranteeDocumentNo) {
-        this.guaranteeDocumentNo = guaranteeDocumentNo;
-    }
-
-    public String getGuaranteeDocumentNo() {
-        return guaranteeDocumentNo;
-    }
-
-    public void setNatureAssets(String natureAssets) {
-        this.natureAssets = natureAssets;
-    }
-
-    public String getNatureAssets() {
-        return natureAssets;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setOwerCertificateNo(String owerCertificateNo) {
-        this.owerCertificateNo = owerCertificateNo;
-    }
-
-    public String getOwerCertificateNo() {
-        return owerCertificateNo;
-    }
-
-    public void setAreaMeasure(String areaMeasure) {
-        this.areaMeasure = areaMeasure;
-    }
-
-    public String getAreaMeasure() {
-        return areaMeasure;
+    public String getAgreementNo() {
+        return agreementNo;
     }
 
     public void setIndestry(String indestry) {
@@ -548,12 +558,12 @@ public class SysBgczzck extends BaseEntity {
         return indestry;
     }
 
-    public void setSoe(String soe) {
-        this.soe = soe;
+    public void setInvestorName(String investorName) {
+        this.investorName = investorName;
     }
 
-    public String getSoe() {
-        return soe;
+    public String getInvestorName() {
+        return investorName;
     }
 
     public void setOperation(String operation) {
@@ -660,12 +670,36 @@ public class SysBgczzck extends BaseEntity {
         return access;
     }
 
-    public void setZoing(String zoing) {
-        this.zoing = zoing;
+    public void setContractSummary(String contractSummary) {
+        this.contractSummary = contractSummary;
     }
 
-    public String getZoing() {
-        return zoing;
+    public String getContractSummary() {
+        return contractSummary;
+    }
+
+    public void setContractAmount(String contractAmount) {
+        this.contractAmount = contractAmount;
+    }
+
+    public String getContractAmount() {
+        return contractAmount;
+    }
+
+    public void setProjectYxzName(String projectYxzName) {
+        this.projectYxzName = projectYxzName;
+    }
+
+    public String getProjectYxzName() {
+        return projectYxzName;
+    }
+
+    public void setProjectYxzNo(String projectYxzNo) {
+        this.projectYxzNo = projectYxzNo;
+    }
+
+    public String getProjectYxzNo() {
+        return projectYxzNo;
     }
 
     public void setLandArea(String landArea) {
@@ -724,20 +758,20 @@ public class SysBgczzck extends BaseEntity {
         return landUnitPrice;
     }
 
-    public void setLandTotalPrice(Double landTotalPrice) {
-        this.landTotalPrice = landTotalPrice;
-    }
-
-    public Double getLandTotalPrice() {
-        return landTotalPrice;
-    }
-
     public void setBuildValuation(String buildValuation) {
         this.buildValuation = buildValuation;
     }
 
     public String getBuildValuation() {
         return buildValuation;
+    }
+
+    public void setLandTotalPrice(Double landTotalPrice) {
+        this.landTotalPrice = landTotalPrice;
+    }
+
+    public Double getLandTotalPrice() {
+        return landTotalPrice;
     }
 
     public void setOtherAppurtenance(String otherAppurtenance) {
@@ -748,20 +782,20 @@ public class SysBgczzck extends BaseEntity {
         return otherAppurtenance;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
     public void setValuationBasis(String valuationBasis) {
         this.valuationBasis = valuationBasis;
     }
 
     public String getValuationBasis() {
         return valuationBasis;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
     }
 
     public void setProjectValuationRemarks(String projectValuationRemarks) {
@@ -812,20 +846,84 @@ public class SysBgczzck extends BaseEntity {
         return laterProjectRemark;
     }
 
-    public String getInterestPaymentCycle() {
-        return interestPaymentCycle;
+    public void setGuarantor(String guarantor) {
+        this.guarantor = guarantor;
     }
 
-    public void setInterestPaymentCycle(String interestPaymentCycle) {
-        this.interestPaymentCycle = interestPaymentCycle;
+    public String getGuarantor() {
+        return guarantor;
     }
 
-    public Date getInterestPaymentDate() {
-        return interestPaymentDate;
+    public void setGuarantee(String guarantee) {
+        this.guarantee = guarantee;
     }
 
-    public void setInterestPaymentDate(Date interestPaymentDate) {
-        this.interestPaymentDate = interestPaymentDate;
+    public String getGuarantee() {
+        return guarantee;
+    }
+
+    public void setGuaranteePeriod(String guaranteePeriod) {
+        this.guaranteePeriod = guaranteePeriod;
+    }
+
+    public String getGuaranteePeriod() {
+        return guaranteePeriod;
+    }
+
+    public void setGuaranteeDocumentNo(String guaranteeDocumentNo) {
+        this.guaranteeDocumentNo = guaranteeDocumentNo;
+    }
+
+    public String getGuaranteeDocumentNo() {
+        return guaranteeDocumentNo;
+    }
+
+    public void setNatureAssets(String natureAssets) {
+        this.natureAssets = natureAssets;
+    }
+
+    public String getNatureAssets() {
+        return natureAssets;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setOwerCertificateNo(String owerCertificateNo) {
+        this.owerCertificateNo = owerCertificateNo;
+    }
+
+    public String getOwerCertificateNo() {
+        return owerCertificateNo;
+    }
+
+    public void setAreaMeasure(String areaMeasure) {
+        this.areaMeasure = areaMeasure;
+    }
+
+    public String getAreaMeasure() {
+        return areaMeasure;
+    }
+
+    public void setSoe(String soe) {
+        this.soe = soe;
+    }
+
+    public String getSoe() {
+        return soe;
+    }
+
+    public void setZoing(String zoing) {
+        this.zoing = zoing;
+    }
+
+    public String getZoing() {
+        return zoing;
     }
 
     @Override
@@ -842,19 +940,15 @@ public class SysBgczzck extends BaseEntity {
                 .append("interestBalance", getInterestBalance())
                 .append("principalInterestBalance", getPrincipalInterestBalance())
                 .append("bxjsDate", getBxjsDate())
+                .append("interestPaymentCycle", getInterestPaymentCycle())
+                .append("interestPaymentDate", getInterestPaymentDate())
                 .append("finalParty", getFinalParty())
                 .append("finalAgreementNo", getFinalAgreementNo())
                 .append("finalTerm", getFinalTerm())
-                .append("guarantor", getGuarantor())
-                .append("guarantee", getGuarantee())
-                .append("guaranteePeriod", getGuaranteePeriod())
-                .append("guaranteeDocumentNo", getGuaranteeDocumentNo())
-                .append("natureAssets", getNatureAssets())
-                .append("address", getAddress())
-                .append("owerCertificateNo", getOwerCertificateNo())
-                .append("areaMeasure", getAreaMeasure())
+                .append("agreementName", getAgreementName())
+                .append("agreementNo", getAgreementNo())
                 .append("indestry", getIndestry())
-                .append("soe", getSoe())
+                .append("investorName", getInvestorName())
                 .append("operation", getOperation())
                 .append("legalProgress", getLegalProgress())
                 .append("xgsxbljd", getXgsxbljd())
@@ -868,7 +962,10 @@ public class SysBgczzck extends BaseEntity {
                 .append("sysynx", getSysynx())
                 .append("tdPlotRatio", getTdPlotRatio())
                 .append("access", getAccess())
-                .append("zoing", getZoing())
+                .append("contractSummary", getContractSummary())
+                .append("contractAmount", getContractAmount())
+                .append("projectYxzName", getProjectYxzName())
+                .append("projectYxzNo", getProjectYxzNo())
                 .append("landArea", getLandArea())
                 .append("ghPlotRatio", getGhPlotRatio())
                 .append("buildDensity", getBuildDensity())
@@ -876,26 +973,27 @@ public class SysBgczzck extends BaseEntity {
                 .append("businessShare", getBusinessShare())
                 .append("planBuildArea", getPlanBuildArea())
                 .append("landUnitPrice", getLandUnitPrice())
-                .append("landTotalPrice", getLandTotalPrice())
                 .append("buildValuation", getBuildValuation())
+                .append("landTotalPrice", getLandTotalPrice())
                 .append("otherAppurtenance", getOtherAppurtenance())
-                .append("totalPrice", getTotalPrice())
                 .append("valuationBasis", getValuationBasis())
+                .append("totalPrice", getTotalPrice())
                 .append("projectValuationRemarks", getProjectValuationRemarks())
                 .append("cashBack", getCashBack())
                 .append("cashBackAmount", getCashBackAmount())
                 .append("repaymentCapacity", getRepaymentCapacity())
                 .append("laterProject", getLaterProject())
                 .append("laterProjectRemark", getLaterProjectRemark())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime()).append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .append("interestPaymentCycle",getInterestPaymentCycle())
-                .append("interestPaymentDate",getInterestPaymentDate())
+                .append("guarantor", getGuarantor())
+                .append("guarantee", getGuarantee())
+                .append("guaranteePeriod", getGuaranteePeriod())
+                .append("guaranteeDocumentNo", getGuaranteeDocumentNo())
+                .append("natureAssets", getNatureAssets())
+                .append("address", getAddress())
+                .append("owerCertificateNo", getOwerCertificateNo())
+                .append("areaMeasure", getAreaMeasure())
+                .append("soe", getSoe())
+                .append("zoing", getZoing())
                 .toString();
     }
 }

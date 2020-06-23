@@ -40,7 +40,7 @@ public class SysZck extends BaseEntity {
      * 序号
      */
     @Excel(name = "序号")
-    private Integer no;
+    private String no;
 
     /**
      * 借款人名称
@@ -191,37 +191,37 @@ public class SysZck extends BaseEntity {
     /**
      * 资产性质
      */
-    @Excel(name = "资产性质")
+    @Excel(name = "其他资产性质")
     private String assetNature;
 
     /**
      * 住址
      */
-    @Excel(name = "住址")
+    @Excel(name = "其他住址")
     private String address;
 
     /**
      * 权属证号
      */
-    @Excel(name = "权属证号")
+    @Excel(name = "其他资产权属证号")
     private String qsNo;
 
     /**
      * 面积·㎡
      */
-    @Excel(name = "面积·㎡")
+    @Excel(name = "其他资产面积·㎡")
     private String area;
 
     /**
      * 查封情况
      */
-    @Excel(name = "查封情况")
+    @Excel(name = "其他资产查封情况")
     private String sealUp;
 
     /**
      * 抵押情况
      */
-    @Excel(name = "抵押情况")
+    @Excel(name = "其他资产抵押情况")
     private String mortgage;
 
     /**
@@ -281,13 +281,13 @@ public class SysZck extends BaseEntity {
     /**
      * 抵（质）押合同编号
      */
-    @Excel(name = "抵（质）押合同编号")
+    @Excel(name = "一般抵（质）押合同编号")
     private String mortgageContractNo;
 
     /**
      * 抵（质）押合同签订时间
      */
-    @Excel(name = "抵（质）押合同签订时间")
+    @Excel(name = "一般抵（质）押合同签订时间")
     private Date dzywqdTime;
 
     /**
@@ -447,7 +447,7 @@ public class SysZck extends BaseEntity {
     /**
      * 抵/置押物类型
      */
-    @Excel(name = "抵/置押物类型")
+    @Excel(name = "抵/质押物类型")
     private String collateType;
 
     /**
@@ -471,13 +471,13 @@ public class SysZck extends BaseEntity {
     /**
      * 其它抵置押物单价
      */
-    @Excel(name = "其它抵置押物单价")
+    @Excel(name = "其它抵质押物单价")
     private BigDecimal otherCollateralUnitPrice;
 
     /**
      * 其它抵置押物总价
      */
-    @Excel(name = "其它抵置押物总价")
+    @Excel(name = "其它抵质押物总价")
     private BigDecimal otherCollateralTotalPrice;
 
     /**
@@ -501,7 +501,7 @@ public class SysZck extends BaseEntity {
     /**
      * 抵置押物备注
      */
-    @Excel(name = "抵置押物备注")
+    @Excel(name = "抵质押物备注")
     private String dzywRemark;
 
     /**
@@ -581,11 +581,11 @@ public class SysZck extends BaseEntity {
         this.assetStatus = assetStatus;
     }
 
-    public Integer getNo() {
+    public String getNo() {
         return no;
     }
 
-    public void setNo(Integer no) {
+    public void setNo(String no) {
         this.no = no;
     }
 

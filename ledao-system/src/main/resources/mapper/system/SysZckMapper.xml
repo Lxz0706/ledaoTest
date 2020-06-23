@@ -585,4 +585,10 @@
         </foreach>
     </delete>
 
+    <select id="selectSysZckByZcbId" parameterType="Long" resultMap="SysZckResult">
+        <include refid="selectSysZckVo"/>
+        where zcb_id = #{id}
+
+    </select>
+
 </mapper>

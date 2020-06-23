@@ -85,19 +85,19 @@
 				<td colspan="8" style="text-align: center" class="success"><h3>其它资产情况</h3></td>
 			</tr>
 			<tr>
-				<td  class="col-sm-1 text-right"><h5>资产性质：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其他资产资产性质：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.assetNature}"/></td>
-				<td  class="col-sm-1 text-right"><h5>住址：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其他资产住址：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.address}"/></td>
-				<td  class="col-sm-1 text-right"><h5>权属证号：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其他资产权属证号：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.qsNo}"/></td>
-				<td  class="col-sm-1 text-right"><h5>面积·㎡：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其他资产面积·㎡：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.area}"/></td>
 			</tr>
 			<tr>
-				<td  class="col-sm-1 text-right"><h5>查封情况：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其他资产查封情况：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.sealUp}"/></td>
-				<td  class="col-sm-1 text-right"><h5>抵押情况：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其他资产抵押情况：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.mortgage}"/></td>
 				<td  class="col-sm-1 text-right"><h5>备注（包括权属人与债务人关系，处置及回款情况）：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.otherRemark}"/></td>
@@ -137,9 +137,9 @@
 			<tr>
 				<td  class="col-sm-1 text-right"><h5>抵（质）押金额(本金)：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.mortgageAmount}"/></td>
-				<td  class="col-sm-1 text-right"><h5>抵（质）押合同编号：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>一般抵（质）押合同编号：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.mortgageContractNo}"/></td>
-				<td  class="col-sm-1 text-right"><h5>抵（质）押合同签订时间：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>一般抵（质）押合同签订时间：</h5></td>
 				<td  class="col-sm-1" colspan="3"><span th:text="${#dates.format(sysZck.dzywqdTime, 'yyyy-MM-dd')}"/></td>
 			</tr>
 			<tr>
@@ -222,7 +222,7 @@
 				<td  class="col-sm-1"><span th:text="${#dates.format(sysZck.completionDate, 'yyyy-MM-dd')}"/></td>
 				<td  class="col-sm-1 text-right"><h5>所在层数/总层数：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.floors}"/></td>
-				<td  class="col-sm-1 text-right"><h5>抵/置押物类型：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>抵/质押物类型：</h5></td>
 				<td  class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_collateraType', sysZck.collateType)}"/></td>
 			</tr>
 			<tr>
@@ -237,9 +237,9 @@
 				<td  class="col-sm-1"><span th:text="${sysZck.landUnitPrice}"/></td>
 				<td  class="col-sm-1 text-right"><h5>土地总价：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.landTotalPrice}"/></td>
-				<td  class="col-sm-1 text-right"><h5>其它抵置押物单价：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其它抵质押物单价：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.otherCollateralUnitPrice}"/></td>
-				<td  class="col-sm-1 text-right"><h5>其它抵置押物总价：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>其它抵质押物总价：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.otherCollateralTotalPrice}"/></td>
 			</tr>
 			<tr>
@@ -249,7 +249,7 @@
 				<td  class="col-sm-1"><span th:text="${sysZck.valuationBasis}"/></td>
 				<td  class="col-sm-1 text-right"><h5>盖帽值：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.capValue}"/></td>
-				<td  class="col-sm-1 text-right"><h5>抵置押物备注：</h5></td>
+				<td  class="col-sm-1 text-right"><h5>抵质押物备注：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.dzywRemark}"/></td>
 			</tr>
 			<tr>

@@ -2,7 +2,9 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,9 @@ public class SysZcbController extends BaseController {
 
     @Autowired
     private ISysZcbService sysZcbService;
+
+    @Autowired
+    private ISysZckService sysZckService;
 
     @RequiresPermissions("system:zcb:view")
     @GetMapping()
@@ -116,6 +121,11 @@ public class SysZcbController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        for (String id : ids.split(",")) {
+            if (sysZckService.selectSysZckByZcbId(Long.valueOf(id)).size() > 0) {
+                return AjaxResult.warn("存在子项目,不允许删除");
+            }
+        }
         return toAjax(sysZcbService.deleteSysZcbByIds(ids));
     }
 

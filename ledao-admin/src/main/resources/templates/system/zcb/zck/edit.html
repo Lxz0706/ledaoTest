@@ -180,43 +180,43 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">资产性质：</label>
+                <label class="col-sm-3 control-label">其他资产资产性质：</label>
                 <div class="col-sm-8">
                     <input name="assetNature" th:field="*{assetNature}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">住址：</label>
+                <label class="col-sm-3 control-label">其他资产住址：</label>
                 <div class="col-sm-8">
                     <textarea name="address" class="form-control">[[*{address}]]</textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">权属证号：</label>
+                <label class="col-sm-3 control-label">其他资产权属证号：</label>
                 <div class="col-sm-8">
                     <textarea name="qsNo" class="form-control">[[*{qsNo}]]</textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">面积·㎡：</label>
+                <label class="col-sm-3 control-label">其他资产面积·㎡：</label>
                 <div class="col-sm-8">
                     <input name="area" th:field="*{area}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">查封情况：</label>
+                <label class="col-sm-3 control-label">其他资产查封情况：</label>
                 <div class="col-sm-8">
                     <input name="sealUp" th:field="*{sealUp}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">抵押情况：</label>
+                <label class="col-sm-3 control-label">其他资产抵押情况：</label>
                 <div class="col-sm-8">
                     <input name="mortgage" th:field="*{mortgage}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">备注：</label>
+                <label class="col-sm-3 control-label">备注（包括权属人与债务人关系，处置及回款情况）：</label>
                 <div class="col-sm-8">
                     <input name="otherRemark" th:field="*{otherRemark}" class="form-control" type="text">
                 </div>
@@ -279,13 +279,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">抵（质）押合同编号：</label>
+                <label class="col-sm-3 control-label">一般抵（质）押合同编号：</label>
                 <div class="col-sm-8">
                     <input name="mortgageContractNo" th:field="*{mortgageContractNo}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">抵（质）押合同签订时间：</label>
+                <label class="col-sm-3 control-label">一般抵（质）押合同签订时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -459,7 +459,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">抵/置押物类型：</label>
+                <label class="col-sm-3 control-label">抵/质押物类型：</label>
                 <div class="col-sm-8">
                     <select name="collateType" class="form-control m-b" th:with="type=${@dict.getType('sys_zcb_collateraType')}">
                         <option value="">--请选择一条数据--</option>
@@ -486,13 +486,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">其它抵置押物单价：</label>
+                <label class="col-sm-3 control-label">其它抵质押物单价：</label>
                 <div class="col-sm-8">
                     <input name="otherCollateralUnitPrice" th:field="*{otherCollateralUnitPrice}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">其它抵置押物总价：</label>
+                <label class="col-sm-3 control-label">其它抵质押物总价：</label>
                 <div class="col-sm-8">
                     <input name="otherCollateralTotalPrice" th:field="*{otherCollateralTotalPrice}" class="form-control" type="text">
                 </div>
@@ -516,7 +516,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">抵置押物备注：</label>
+                <label class="col-sm-3 control-label">抵质押物备注：</label>
                 <div class="col-sm-8">
                     <input name="dzywRemark" th:field="*{dzywRemark}" class="form-control" type="text">
                 </div>

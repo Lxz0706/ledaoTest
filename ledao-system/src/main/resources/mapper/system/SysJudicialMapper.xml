@@ -18,7 +18,7 @@
     <select id="selectSysJudicialList" parameterType="SysJudicial" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
         <where>
-            <if test="owner != null  and owner != ''">and owner = #{owner}</if>
+            <if test="owner != null  and owner != ''">and owner like concat('%',#{owner},'%')</if>
             <if test="ownertype != null  and ownertype != ''">and ownerType = #{ownertype}</if>
             <if test="websiteLinks != null  and websiteLinks != ''">and website_links = #{websiteLinks}</if>
         </where>

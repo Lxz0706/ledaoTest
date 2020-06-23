@@ -1,5 +1,6 @@
 package com.ledao.system.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -57,25 +58,25 @@ public class SysZck extends BaseEntity {
      * 合同本金
      */
     @Excel(name = "合同本金")
-    private Double contractPrincipal;
+    private BigDecimal contractPrincipal;
 
     /**
      * 本金余额
      */
     @Excel(name = "本金余额")
-    private Double principalBalance;
+    private BigDecimal principalBalance;
 
     /**
      * 利息余额
      */
     @Excel(name = "利息余额")
-    private Double interestBalance;
+    private BigDecimal interestBalance;
 
     /**
      * 本息余额
      */
     @Excel(name = "本息余额")
-    private Double principalInterestBalance;
+    private BigDecimal principalInterestBalance;
 
     /**
      * 本息计算基准日
@@ -127,7 +128,7 @@ public class SysZck extends BaseEntity {
      * 保证金额
      */
     @Excel(name = "保证金额")
-    private Double guaranteeAmount;
+    private BigDecimal guaranteeAmount;
 
     /**
      * 保证合同编号
@@ -147,7 +148,7 @@ public class SysZck extends BaseEntity {
      * 最高额保证金额
      */
     @Excel(name = "最高额保证金额")
-    private Double maximumGuaranteeAmount;
+    private BigDecimal maximumGuaranteeAmount;
 
     /**
      * 最高额保证合同·保函编号
@@ -275,7 +276,7 @@ public class SysZck extends BaseEntity {
      * 抵（质）押金额(本金)	sys_user_sex
      */
     @Excel(name = "抵（质）押金额(本金)")
-    private Double mortgageAmount;
+    private BigDecimal mortgageAmount;
 
     /**
      * 抵（质）押合同编号
@@ -349,7 +350,7 @@ public class SysZck extends BaseEntity {
      * 前序顺位抵押金额
      */
     @Excel(name = "前序顺位抵押金额")
-    private Double qxswMortgeageAmount;
+    private BigDecimal qxswMortgeageAmount;
 
     /**
      * 出租情况
@@ -421,7 +422,7 @@ public class SysZck extends BaseEntity {
      * 土地面积
      */
     @Excel(name = "土地面积")
-    private Double landArea;
+    private BigDecimal landArea;
 
     /**
      * 建筑结构
@@ -453,37 +454,37 @@ public class SysZck extends BaseEntity {
      * 建筑面积/㎡
      */
     @Excel(name = "建筑面积/㎡")
-    private Double floorage;
+    private BigDecimal floorage;
 
     /**
      * 土地单价
      */
     @Excel(name = "土地单价")
-    private Double landUnitPrice;
+    private BigDecimal landUnitPrice;
 
     /**
      * 土地总价
      */
     @Excel(name = "土地总价")
-    private Double landTotalPrice;
+    private BigDecimal landTotalPrice;
 
     /**
      * 其它抵置押物单价
      */
     @Excel(name = "其它抵置押物单价")
-    private Double otherCollateralUnitPrice;
+    private BigDecimal otherCollateralUnitPrice;
 
     /**
      * 其它抵置押物总价
      */
     @Excel(name = "其它抵置押物总价")
-    private Double otherCollateralTotalPrice;
+    private BigDecimal otherCollateralTotalPrice;
 
     /**
      * 总价
      */
     @Excel(name = "总价")
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     /**
      * 估值依据
@@ -519,7 +520,7 @@ public class SysZck extends BaseEntity {
      * 估值建议
      */
     @Excel(name = "估值建议")
-    private Double zhhknl;
+    private BigDecimal zhhknl;
 
     /**
      * 备注
@@ -531,7 +532,7 @@ public class SysZck extends BaseEntity {
      * 定价
      */
     @Excel(name = "定价")
-    private Double price;
+    private BigDecimal price;
 
     /**
      * 处置方式
@@ -543,7 +544,7 @@ public class SysZck extends BaseEntity {
      * 处置价格
      */
     @Excel(name = "处置价格")
-    private Double desposalPrice;
+    private BigDecimal desposalPrice;
 
     /**
      * 客户
@@ -604,35 +605,35 @@ public class SysZck extends BaseEntity {
         this.city = city;
     }
 
-    public Double getContractPrincipal() {
+    public BigDecimal getContractPrincipal() {
         return contractPrincipal;
     }
 
-    public void setContractPrincipal(Double contractPrincipal) {
+    public void setContractPrincipal(BigDecimal contractPrincipal) {
         this.contractPrincipal = contractPrincipal;
     }
 
-    public Double getPrincipalBalance() {
+    public BigDecimal getPrincipalBalance() {
         return principalBalance;
     }
 
-    public void setPrincipalBalance(Double principalBalance) {
+    public void setPrincipalBalance(BigDecimal principalBalance) {
         this.principalBalance = principalBalance;
     }
 
-    public Double getInterestBalance() {
+    public BigDecimal getInterestBalance() {
         return interestBalance;
     }
 
-    public void setInterestBalance(Double interestBalance) {
+    public void setInterestBalance(BigDecimal interestBalance) {
         this.interestBalance = interestBalance;
     }
 
-    public Double getPrincipalInterestBalance() {
+    public BigDecimal getPrincipalInterestBalance() {
         return principalInterestBalance;
     }
 
-    public void setPrincipalInterestBalance(Double principalInterestBalance) {
+    public void setPrincipalInterestBalance(BigDecimal principalInterestBalance) {
         this.principalInterestBalance = principalInterestBalance;
     }
 
@@ -692,11 +693,11 @@ public class SysZck extends BaseEntity {
         this.bzrFrNumber = bzrFrNumber;
     }
 
-    public Double getGuaranteeAmount() {
+    public BigDecimal getGuaranteeAmount() {
         return guaranteeAmount;
     }
 
-    public void setGuaranteeAmount(Double guaranteeAmount) {
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
         this.guaranteeAmount = guaranteeAmount;
     }
 
@@ -716,11 +717,11 @@ public class SysZck extends BaseEntity {
         this.guaranteeContractSignTime = guaranteeContractSignTime;
     }
 
-    public Double getMaximumGuaranteeAmount() {
+    public BigDecimal getMaximumGuaranteeAmount() {
         return maximumGuaranteeAmount;
     }
 
-    public void setMaximumGuaranteeAmount(Double maximumGuaranteeAmount) {
+    public void setMaximumGuaranteeAmount(BigDecimal maximumGuaranteeAmount) {
         this.maximumGuaranteeAmount = maximumGuaranteeAmount;
     }
 
@@ -884,11 +885,11 @@ public class SysZck extends BaseEntity {
         this.dywAddress = dywAddress;
     }
 
-    public Double getMortgageAmount() {
+    public BigDecimal getMortgageAmount() {
         return mortgageAmount;
     }
 
-    public void setMortgageAmount(Double mortgageAmount) {
+    public void setMortgageAmount(BigDecimal mortgageAmount) {
         this.mortgageAmount = mortgageAmount;
     }
 
@@ -980,11 +981,11 @@ public class SysZck extends BaseEntity {
         this.mortgageRank = mortgageRank;
     }
 
-    public Double getQxswMortgeageAmount() {
+    public BigDecimal getQxswMortgeageAmount() {
         return qxswMortgeageAmount;
     }
 
-    public void setQxswMortgeageAmount(Double qxswMortgeageAmount) {
+    public void setQxswMortgeageAmount(BigDecimal qxswMortgeageAmount) {
         this.qxswMortgeageAmount = qxswMortgeageAmount;
     }
 
@@ -1076,11 +1077,11 @@ public class SysZck extends BaseEntity {
         this.zoning = zoning;
     }
 
-    public Double getLandArea() {
+    public BigDecimal getLandArea() {
         return landArea;
     }
 
-    public void setLandArea(Double landArea) {
+    public void setLandArea(BigDecimal landArea) {
         this.landArea = landArea;
     }
 
@@ -1116,51 +1117,51 @@ public class SysZck extends BaseEntity {
         this.collateType = collateType;
     }
 
-    public Double getFloorage() {
+    public BigDecimal getFloorage() {
         return floorage;
     }
 
-    public void setFloorage(Double floorage) {
+    public void setFloorage(BigDecimal floorage) {
         this.floorage = floorage;
     }
 
-    public Double getLandUnitPrice() {
+    public BigDecimal getLandUnitPrice() {
         return landUnitPrice;
     }
 
-    public void setLandUnitPrice(Double landUnitPrice) {
+    public void setLandUnitPrice(BigDecimal landUnitPrice) {
         this.landUnitPrice = landUnitPrice;
     }
 
-    public Double getLandTotalPrice() {
+    public BigDecimal getLandTotalPrice() {
         return landTotalPrice;
     }
 
-    public void setLandTotalPrice(Double landTotalPrice) {
+    public void setLandTotalPrice(BigDecimal landTotalPrice) {
         this.landTotalPrice = landTotalPrice;
     }
 
-    public Double getOtherCollateralUnitPrice() {
+    public BigDecimal getOtherCollateralUnitPrice() {
         return otherCollateralUnitPrice;
     }
 
-    public void setOtherCollateralUnitPrice(Double otherCollateralUnitPrice) {
+    public void setOtherCollateralUnitPrice(BigDecimal otherCollateralUnitPrice) {
         this.otherCollateralUnitPrice = otherCollateralUnitPrice;
     }
 
-    public Double getOtherCollateralTotalPrice() {
+    public BigDecimal getOtherCollateralTotalPrice() {
         return otherCollateralTotalPrice;
     }
 
-    public void setOtherCollateralTotalPrice(Double otherCollateralTotalPrice) {
+    public void setOtherCollateralTotalPrice(BigDecimal otherCollateralTotalPrice) {
         this.otherCollateralTotalPrice = otherCollateralTotalPrice;
     }
 
-    public Double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -1204,11 +1205,11 @@ public class SysZck extends BaseEntity {
         this.propertyClues = propertyClues;
     }
 
-    public Double getZhhknl() {
+    public BigDecimal getZhhknl() {
         return zhhknl;
     }
 
-    public void setZhhknl(Double zhhknl) {
+    public void setZhhknl(BigDecimal zhhknl) {
         this.zhhknl = zhhknl;
     }
 
@@ -1220,11 +1221,11 @@ public class SysZck extends BaseEntity {
         this.jkrgzRemark = jkrgzRemark;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -1236,11 +1237,11 @@ public class SysZck extends BaseEntity {
         this.desposalMode = desposalMode;
     }
 
-    public Double getDesposalPrice() {
+    public BigDecimal getDesposalPrice() {
         return desposalPrice;
     }
 
-    public void setDesposalPrice(Double desposalPrice) {
+    public void setDesposalPrice(BigDecimal desposalPrice) {
         this.desposalPrice = desposalPrice;
     }
 

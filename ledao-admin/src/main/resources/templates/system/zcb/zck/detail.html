@@ -5,541 +5,288 @@
 </head>
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-		<form class="form-horizontal m" id="form-zck-edit">
-			<!--<div class="form-group">
-				<label class="col-sm-3 control-label">资产包名称：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.assetPackageName}"></div>
-				</div>
-			</div>-->
-			<div class="form-group">
-				<label class="col-sm-3 control-label">资产状态：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_status', sysZck.assetStatus)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">序号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.no}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">借款人名称：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.borrower}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">城市/地区：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.city}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">合同本金：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.contractPrincipal}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">本金余额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.principalBalance}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">利息余额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.interestBalance}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">本息余额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.principalInterestBalance}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">本息计算基准日：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysZck.bxjsDate, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">贷款行：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.loanBank}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">贷款合同编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.loanContractNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">借款期限：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysZck.loanTime, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证人：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.guarantor}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证人自然人数量：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.bzrZrrNumber}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证人法人数量：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.bzrFrNumber}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证金额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.guaranteeAmount}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证合同编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.guaranteeContractNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证合同签订时间：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysZck.guaranteeContractSignTime, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">最高额保证金额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.maximumGuaranteeAmount}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">最高额保证合同·保函编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.maximumGuaranteeContract}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">最高额保证合同签订时间：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysZck.maximumGuaratnteeSignTime, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">担保的主债权发生期间：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.zzqDateTime}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证方式：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.guaranteeMode}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">保证期间：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.guaranteePeriod}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">备注(包括与债务人关系，名下财产，还款意愿等)：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.guaranteeRemarks}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">资产性质：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.assetNature}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">住址：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.address}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">权属证号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.qsNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">面积·㎡：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.area}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">查封情况：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.sealUp}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵押情况：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.mortgage}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.otherRemark}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">借款人行业：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_trade', sysZck.jkrIndustry)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">国企/非国企：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_gq', sysZck.soe)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">经营情况：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.operation}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">法院：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.court}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">诉讼情况：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_litigation', sysZck.litigation)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.judicialRemark}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">地址：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.dywAddress}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵（质）押金额(本金)：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.mortgageAmount}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵（质）押合同编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.mortgageContractNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">最高额抵押合同编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.maximumMortgageContractNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">最高额抵押合同签订时间：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysZck.zgeContractTime, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">担保的主债权发生期间：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.dbzzqTime}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵押人：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.mortgagor}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">权属证号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.zgeQsNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">他项权证编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.txQzNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">查封情况/查封法院/案号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.caseNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵押顺位：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.mortgageRank}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">前序顺位抵押金额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.qxswMortgeageAmount}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵前or抵后：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.beforeOrAterAarrival}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">出租相关细节：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.rentalDetails}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">是否有未成年人：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.juveniles}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">是否唯一住房：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.onlyHouse}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">是否需要腾房：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.tengfang}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地性质：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_tdxz', sysZck.natureLand)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">剩余使用年限：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.sysynx}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">容积率：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.plotRatio}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">获得方式：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_hdfs', sysZck.access)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地用途：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_tdyt', sysZck.zoning)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地面积：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.landArea}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">建筑结构：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.buildStructure}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">建成日期：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysZck.completionDate, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">所在层数/总层数：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.floors}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵/置押物类型：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_collateraType', sysZck.collateType)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">建筑面积/㎡：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.floorage}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地单价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.landUnitPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地总价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.landTotalPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">其它抵置押物单价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.otherCollateralUnitPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">其它抵置押物总价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.otherCollateralTotalPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">总价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.totalPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">估值依据：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.valuationBasis}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">盖帽值：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.capValue}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">抵置押物备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.dzywRemark}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">借款人、保证人网搜情况：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.borrowerWsqk}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">财产线索：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.propertyClues}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">估值建议：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.zhhknl}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.jkrgzRemark}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">定价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.price}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">处置方式：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.desposalMode}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">处置价格：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.desposalPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">客户：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysZck.customer}"></div>
-				</div>
-			</div>
-		</form>
+		<table class="table table-border">
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>资产包情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>资产状态:</h5></td>
+				<td  class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_status', sysZck.assetStatus)}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>借款基本情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right">序号:</td>
+				<td  class="col-sm-1"><span th:text="${sysZck.no}"/></td>
+				<td  class="col-sm-1 text-right">借款人名称：</td>
+				<td  class="col-sm-1"><span th:text="${sysZck.borrower}"/></td>
+				<td  class="col-sm-1 text-right"><h5>城市/名称:</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.city}"/></td>
+				<td  class="col-sm-1 text-right"><h5>合同本金：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.contractPrincipal}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>本金余额：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.principalBalance}"/></td>
+				<td  class="col-sm-1 text-right"><h5>利息余额：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.interestBalance}"/></td>
+				<td  class="col-sm-1 text-right"><h5>本息余额：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.principalInterestBalance}"/></td>
+				<td  class="col-sm-1 text-right"><h5>本息计算基准日：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysZck.bxjsDate, 'yyyy-MM-dd')}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>贷款行：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.loanBank}"/></td>
+				<td  class="col-sm-1 text-right"><h5>贷款合同编号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.loanContractNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>借款期限：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysZck.loanTime, 'yyyy-MM-dd')}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>保证情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>保证人：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.guarantor}"/></td>
+				<td  class="col-sm-1 text-right"><h5>保证人自然人数量：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.bzrZrrNumber}"/></td>
+				<td  class="col-sm-1 text-right"><h5>保证人法人数量：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.bzrFrNumber}"/></td>
+				<td  class="col-sm-1 text-right"><h5>保证金额：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.guaranteeAmount}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>保证合同编号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.guaranteeContractNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>保证合同签订时间：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysZck.guaranteeContractSignTime, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>最高额保证金额：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.maximumGuaranteeAmount}"/></td>
+				<td  class="col-sm-1 text-right"><h5>最高额保证合同·保函编号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.maximumGuaranteeContract}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>最高额保证合同签订时间：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysZck.maximumGuaratnteeSignTime, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>担保的主债权发生期间：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.zzqDateTime}"/></td>
+				<td  class="col-sm-1 text-right"><h5>保证方式：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.guaranteeMode}"/></td>
+				<td  class="col-sm-1 text-right"><h5>保证期间：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.guaranteePeriod}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>备注(包括与债务人关系，名下财产，还款意愿等)：</h5></td>
+				<td colspan="8"  class="col-sm-1"><span th:text="${sysZck.guaranteeRemarks}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>其它资产情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>资产性质：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.assetNature}"/></td>
+				<td  class="col-sm-1 text-right"><h5>住址：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.address}"/></td>
+				<td  class="col-sm-1 text-right"><h5>权属证号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.qsNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>面积·㎡：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.area}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>查封情况：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.sealUp}"/></td>
+				<td  class="col-sm-1 text-right"><h5>抵押情况：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.mortgage}"/></td>
+				<td  class="col-sm-1 text-right"><h5>备注（包括权属人与债务人关系，处置及回款情况）：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.otherRemark}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>借款人情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>借款人行业：</h5></td>
+				<td  class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_trade', sysZck.jkrIndustry)}"/></td>
+				<td  class="col-sm-1 text-right"><h5>国企/非国企：</h5></td>
+				<td  class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_gq', sysZck.soe)}"/></td>
+				<td  class="col-sm-1 text-right"><h5>经营情况：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.operation}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>司法状态</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>法院：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.court}"/></td>
+				<td  class="col-sm-1 text-right"><h5>诉讼情况：</h5></td>
+				<td  class="col-sm-1right"><span th:text="${@dict.getLabel('sys_zcb_litigation', sysZck.litigation)}"/></td>
+				<td  class="col-sm-1 text-right"><h5>备注：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysZck.judicialRemark}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>抵押物地址</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>地址：</h5></td>
+				<td  class="col-sm-1" colspan="8"><span th:text="${sysZck.dywAddress}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>一般抵押</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>抵（质）押金额(本金)：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.mortgageAmount}"/></td>
+				<td  class="col-sm-1 text-right"><h5>抵（质）押合同编号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.mortgageContractNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>抵（质）押合同签订时间：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${#dates.format(sysZck.dzywqdTime, 'yyyy-MM-dd')}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>最高额抵押</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>最高额抵押金额：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.maximumMortgageAmount}"/></td>
+				<td  class="col-sm-1 text-right"><h5>最高额抵押合同编号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.maximumMortgageContractNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>最高额抵押合同签订时间：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysZck.zgeContractTime, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>担保的主债权发生期间：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.dbzzqTime}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>抵押基本信息</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>抵押人：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.mortgagor}"/></td>
+				<td  class="col-sm-1 text-right"><h5>权属证号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.zgeQsNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>他项权证编号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.txQzNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>查封情况/查封法院/案号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.caseNo}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>抵押顺位：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysZck.mortgageRank}"/></td>
+				<td  class="col-sm-1 text-right"><h5>前序顺位抵押金额：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysZck.qxswMortgeageAmount}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>抵押物出租及使用情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>出租情况：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.rentalSituation}"/></td>
+				<td  class="col-sm-1 text-right"><h5>抵前or抵后：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.beforeOrAterAarrival}"/></td>
+				<td  class="col-sm-1 text-right"><h5>出租相关细节：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.rentalDetails}"/></td>
+				<td  class="col-sm-1 text-right"><h5>是否有未成年人：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.juveniles}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>是否唯一住房：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysZck.onlyHouse}"/></td>
+				<td  class="col-sm-1 text-right"><h5>是否需要腾房：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysZck.tengfang}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>抵押土地基本信息</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>土地性质：</h5></td>
+				<td  class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_tdxz', sysZck.natureLand)}"/></td>
+				<td  class="col-sm-1 text-right"><h5>剩余使用年限：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.sysynx}"/></td>
+				<td  class="col-sm-1 text-right"><h5>容积率：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.plotRatio}"/></td>
+				<td  class="col-sm-1 text-right"><h5>获得方式：</h5></td>
+				<td  class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_hdfs', sysZck.access)}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>土地用途：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_zcb_tdyt', sysZck.zoning)}"/></td>
+				<td  class="col-sm-1 text-right"><h5>土地面积：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysZck.landArea}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>其它抵/质押物基本信息</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>建筑结构：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.buildStructure}"/></td>
+				<td  class="col-sm-1 text-right"><h5>建成日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysZck.completionDate, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>所在层数/总层数：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.floors}"/></td>
+				<td  class="col-sm-1 text-right"><h5>抵/置押物类型：</h5></td>
+				<td  class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_collateraType', sysZck.collateType)}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>建筑面积/㎡：</h5></td>
+				<td  class="col-sm-1" colspan="8"><span th:text="${sysZck.floorage}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>抵押物估值</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>土地单价：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.landUnitPrice}"/></td>
+				<td  class="col-sm-1 text-right"><h5>土地总价：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.landTotalPrice}"/></td>
+				<td  class="col-sm-1 text-right"><h5>其它抵置押物单价：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.otherCollateralUnitPrice}"/></td>
+				<td  class="col-sm-1 text-right"><h5>其它抵置押物总价：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.otherCollateralTotalPrice}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>总价：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.totalPrice}"/></td>
+				<td  class="col-sm-1 text-right"><h5>估值依据：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.valuationBasis}"/></td>
+				<td  class="col-sm-1 text-right"><h5>盖帽值：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.capValue}"/></td>
+				<td  class="col-sm-1 text-right"><h5>抵置押物备注：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.dzywRemark}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>借款人保证人网搜估值</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>借款人、保证人网搜情况：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.borrowerWsqk}"/></td>
+				<td  class="col-sm-1 text-right"><h5>财产线索：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.propertyClues}"/></td>
+				<td  class="col-sm-1 text-right"><h5>综合还款能力分析（较好、一般、无）：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.zhhknl}"/></td>
+				<td  class="col-sm-1 text-right"><h5>估值建议（本金*？%）：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysZck.zhhknl}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>备注：</h5></td>
+				<td  class="col-sm-1" colspan="8"><span th:text="${sysZck.jkrgzRemark}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>定价：</h5></td>
+				<td  class="col-sm-1" colspan="8"><span th:text="${sysZck.price}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>处置方式：</h5></td>
+				<td  class="col-sm-1" colspan="8"><span th:text="${sysZck.desposalMode}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>处置价格：</h5></td>
+				<td  class="col-sm-1" colspan="8"><span th:text="${sysZck.desposalPrice}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>客户：</h5></td>
+				<td  class="col-sm-1sys" colspan="8"><span th:text="${sysZck.customer}"/></td>
+			</tr>
+		</table>
 	</div>
 	<th:block th:include="include :: footer" />
-	<script type="text/javascript">
-		/*var prefix = ctx + "demo/operate";
-		
-		$("#form-user-add").validate({
-			onkeyup: false,
-			rules:{
-				userPhone:{
-					isPhone:true
-				},
-				userEmail:{
-					email:true
-				},
-			},
-		    focusCleanup: true
-		});
-		
-		function submitHandler() {
-	        if ($.validate.form()) {
-	        	$.operate.save(prefix + "/edit", $('#form-user-edit').serialize());
-	        }
-	    }*/
-	</script>
 </body>
 </html>

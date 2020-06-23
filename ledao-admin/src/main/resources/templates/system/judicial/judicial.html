@@ -14,7 +14,7 @@
                                 <label>所有人：</label>
                                 <input type="text" name="owner"/>
                             </li>
-                            <li>
+                            <!--<li>
                                 <label>所有人类型：</label>
                                 <select name="ownertype">
                                     <option value="">所有</option>
@@ -24,7 +24,7 @@
                             <li>
                                 <label>网站链接：</label>
                                 <input type="text" name="websiteLinks"/>
-                            </li>
+                            </li>-->
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -75,17 +75,21 @@
                     title: 'id',
                     visible: false
                 },
-                {
+                /*{
                     field: 'owner', 
                     title: '所有人'
                 },
                 {
                     field: 'ownertype', 
                     title: '所有人类型'
-                },
+                },*/
                 {
                     field: 'websiteLinks', 
-                    title: '网站链接'
+                    title: '网站链接',
+                    formatter: function(value, row, index) {
+                    /*<a href="http://www.baidu.com" target="_blank">跳到百度</a>*/
+                        return '<a href="'+value+'" target="_blank">' + value + '</a>';
+                    }
                 },
                 {
                     title: '操作',

@@ -1,9 +1,11 @@
 package com.ledao.web.controller.system;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.domain.SysZck;
 import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,20 @@ public class SysZcbController extends BaseController {
     public TableDataInfo list(SysZcb sysZcb) {
         startPage();
         List<SysZcb> list = sysZcbService.selectSysZcbList(sysZcb);
+        StringBuffer ids = new StringBuffer();
+        for (SysZcb sysZcb1 : list) {
+            ids.append(sysZcb1.getId());
+            List<SysZck> zckList = sysZckService.selectSysZckByZcbId(sysZcb1.getId());
+            for (SysZck sysZck : zckList) {
+                if (sysZcb1.getCollateralTotal() == null) {
+                    sysZcb1.setCollateralTotal(new BigDecimal(0));
+                }
+                if (sysZck.getTotalPrice() == null) {
+                    sysZck.setTotalPrice(new BigDecimal(0));
+                }
+                sysZcb1.setCollateralTotal(sysZcb1.getCollateralTotal().add(sysZck.getTotalPrice()));
+            }
+        }
         return getDataTable(list);
     }
 

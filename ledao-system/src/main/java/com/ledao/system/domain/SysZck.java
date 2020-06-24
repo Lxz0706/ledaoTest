@@ -501,7 +501,7 @@ public class SysZck extends BaseEntity {
     /**
      * 抵置押物备注
      */
-    @Excel(name = "抵质押物备注")
+    @Excel(name = "抵质押物备注           ")
     private String dzywRemark;
 
     /**

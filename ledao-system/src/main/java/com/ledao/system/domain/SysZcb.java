@@ -5,6 +5,8 @@ import com.ledao.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
+
 /**
  * 资产包对象 sys_zcb
  *
@@ -31,6 +33,8 @@ public class SysZcb extends BaseEntity {
     @Excel(name = "资产包状态")
     private String assetStatus;
 
+    private BigDecimal collateralTotal;
+
     public Long getId() {
         return id;
     }
@@ -53,6 +57,14 @@ public class SysZcb extends BaseEntity {
 
     public String getAssetStatus() {
         return assetStatus;
+    }
+
+    public BigDecimal getCollateralTotal() {
+        return collateralTotal;
+    }
+
+    public void setCollateralTotal(BigDecimal collateralTotal) {
+        this.collateralTotal = collateralTotal;
     }
 
     @Override

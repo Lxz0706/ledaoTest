@@ -731,7 +731,7 @@ var table = {
         	    });
             },
             // 弹出层指定宽度
-            open: function (title, url, width, height, callback) {
+			open: function (title, url, width, height, callback) {
             	//如果是移动端，就使用自适应大小弹窗
             	if ($.common.isMobile()) {
             	    width = 'auto';

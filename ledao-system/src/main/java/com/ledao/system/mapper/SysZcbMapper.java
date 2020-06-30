@@ -58,4 +58,10 @@ public interface SysZcbMapper {
      * @return 结果
      */
     public int deleteSysZcbByIds(String[] ids);
+
+    /**
+     * 根据资产包状态查询
+     */
+
+    public List<SysZcb> selectZcbByAssetStatus();
 }

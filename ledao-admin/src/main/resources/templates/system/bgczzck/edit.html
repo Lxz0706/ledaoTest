@@ -39,6 +39,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 control-label">取得成本：</label>
+                <div class="col-sm-8">
+                    <input name="acquisitionCost" th:field="*{acquisitionCost}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 control-label">合同本金：</label>
                 <div class="col-sm-8">
                     <input name="contractPrincipal" th:field="*{contractPrincipal}" class="form-control" type="text">
@@ -81,7 +87,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">融资方：</label>
+                <label class="col-sm-3 control-label">融资人名称：</label>
                 <div class="col-sm-8">
                     <input name="finalParty" th:field="*{finalParty}" class="form-control" type="text">
                 </div>
@@ -113,12 +119,12 @@
                     <input name="agreementNo" th:field="*{agreementNo}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">行业：</label>
                 <div class="col-sm-8">
                     <input name="indestry" th:field="*{indestry}" class="form-control" type="text">
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">
                 <label class="col-sm-3 control-label">投资人名称：</label>
                 <div class="col-sm-8">
@@ -150,7 +156,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">证照类型：</label>
+                <label class="col-sm-3 control-label">已取得证照类型：</label>
                 <div class="col-sm-8">
                     <select name="licenseType" class="form-control m-b" th:with="type=${@dict.getType('sys_bgzc_zzlx')}">
                         <option value="">--请选择一条数据--</option>
@@ -159,7 +165,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">证照编号：</label>
+                <label class="col-sm-3 control-label">已取得证照编号：</label>
                 <div class="col-sm-8">
                     <input name="licenseNo" th:field="*{licenseNo}" class="form-control" type="text">
                 </div>
@@ -228,7 +234,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">项目运行中协议编号：</label>
+                <label class="col-sm-3 control-label">项目运行中签署协议名称：</label>
                 <div class="col-sm-8">
                     <input name="projectYxzName" th:field="*{projectYxzName}" class="form-control" type="text">
                 </div>

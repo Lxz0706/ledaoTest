@@ -11,6 +11,7 @@
         <result property="no" column="no"/>
         <result property="spvName" column="spv_name"/>
         <result property="city" column="city"/>
+        <result property="acquisitionCost" column="acquisition_cost"/>
         <result property="contractPrincipal" column="contract_principal"/>
         <result property="principalBalance" column="principal_balance"/>
         <result property="interestBalance" column="interest_balance"/>
@@ -77,7 +78,7 @@
     </resultMap>
 
     <sql id="selectSysBgczzckVo">
-        select id, project_name, project_status, no, spv_name, city, contract_principal, principal_balance,
+        select id, project_name, project_status, no, spv_name, city,acquisition_cost, contract_principal, principal_balance,
         interest_balance, principal_interest_balance, bxjs_date, interest_payment_cycle, interest_payment_date,
         final_party, final_agreement_no, final_term, agreement_name, agreement_no, indestry, investor_name, operation,
         legal_progress, xgsxbljd, Project_status_comments, license_type, license_no, acquisition_time, license_information,
@@ -95,10 +96,13 @@
             <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="projectStatus != null  and projectStatus != ''">and project_status like concat('%', #{projectStatus},'%')</if>
+            <if test="projectStatus != null  and projectStatus != ''">and project_status like concat('%',
+                #{projectStatus},'%')
+            </if>
             <if test="no != null  and no != ''">and no like concat('%', #{no}, '%')</if>
             <if test="spvName != null  and spvName != ''">and spv_name like concat('%', #{spvName}, '%')</if>
             <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="acquisitionCost !=null and acquisitionCost !=''">and acquisition_cost =#{acquisitionCost}</if>
             <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
             <if test="principalBalance != null ">and principal_balance = #{principalBalance}</if>
             <if test="interestBalance != null ">and interest_balance = #{interestBalance}</if>
@@ -108,7 +112,9 @@
             <if test="interestPaymentCycle != null  and interestPaymentCycle != ''">and interest_payment_cycle =
                 #{interestPaymentCycle}
             </if>
-            <if test="interestPaymentDate != null and interestPaymentDate != ''">and interest_payment_date like concat('%', #{interestPaymentDate}, '%') </if>
+            <if test="interestPaymentDate != null and interestPaymentDate != ''">and interest_payment_date like
+                concat('%', #{interestPaymentDate}, '%')
+            </if>
             <if test="finalParty != null  and finalParty != ''">and final_party = #{finalParty}</if>
             <if test="finalAgreementNo != null  and finalAgreementNo != ''">and final_agreement_no =
                 #{finalAgreementNo}
@@ -201,6 +207,7 @@
             <if test="no != null">no,</if>
             <if test="spvName != null">spv_name,</if>
             <if test="city != null">city,</if>
+            <if test="acquisitionCost !=null">acquisition_cost,</if>
             <if test="contractPrincipal != null">contract_principal,</if>
             <if test="principalBalance != null">principal_balance,</if>
             <if test="interestBalance != null">interest_balance,</if>
@@ -269,6 +276,7 @@
             <if test="no != null">#{no},</if>
             <if test="spvName != null">#{spvName},</if>
             <if test="city != null">#{city},</if>
+            <if test="acquisitionCost !=null">#{acquisitionCost},</if>
             <if test="contractPrincipal != null">#{contractPrincipal},</if>
             <if test="principalBalance != null">#{principalBalance},</if>
             <if test="interestBalance != null">#{interestBalance},</if>
@@ -341,6 +349,7 @@
             <if test="no != null">no = #{no},</if>
             <if test="spvName != null">spv_name = #{spvName},</if>
             <if test="city != null">city = #{city},</if>
+            <if test="acquisitionCost != null">acquisitionCost =#{acquisitionCost}</if>
             <if test="contractPrincipal != null">contract_principal = #{contractPrincipal},</if>
             <if test="principalBalance != null">principal_balance = #{principalBalance},</if>
             <if test="interestBalance != null">interest_balance = #{interestBalance},</if>

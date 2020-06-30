@@ -79,4 +79,7 @@
         </foreach>
     </delete>
 
+    <select id="selectZcbByAssetStatus" resultMap="SysZcbResult">
+        SELECT DISTINCT asset_status FROM sys_zcb
+    </select>
 </mapper>

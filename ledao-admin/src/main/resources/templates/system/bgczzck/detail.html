@@ -6,334 +6,187 @@
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
 		<form class="form-horizontal m" id="form-bgczzck-edit">
-			<div class="form-group">
-				<label class="col-sm-3 control-label">项目名称：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.projectName}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">项目状态：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.projectStatus}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">序号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.no}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">SPV名称：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.spvName}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">城市/地区：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.city}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">合同本金：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.contractPrincipal}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">本金余额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.principalBalance}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">利息余额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.interestBalance}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">本息余额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.principalInterestBalance}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">本息计算基准日：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysBgczzck.bxjsDate, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">付息周期：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.interestPaymentCycle}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">付息日：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.interestPaymentDate}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">融资方：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.finalParty}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">融资协议编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.finalAgreementNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">融资期限：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.finalTerm}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">协议名称：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">投前签署协议编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.agreementNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">行业：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_trade', sysBgczzck.indestry)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">投资人名称：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.investorName}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">经营情况：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.operation}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">法律进度：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.legalProgress}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">相关手续办理进度：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.xgsxbljd}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">项目状态备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.projectStatusComments}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">证照类型：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_bgzc_zzlx', sysBgczzck.licenseType)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">证照编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.licenseNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">取得时间：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<div class="form-control-static" th:text="${#dates.format(sysBgczzck.acquisitionTime, 'yyyy-MM-dd')}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">证照信息：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.licenseInformation}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">项目取得备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.projectRemark}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地性质：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_tdxz', sysBgczzck.natureLand)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">剩余使用年限：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.sysynx}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地基本信息容积率：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.tdPlotRatio}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">获得方式：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_zcb_hdfs', sysBgczzck.access)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">合同概要：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.contractSummary}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">合同金额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.contractAmount}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">项目运行中协议编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.projectYxzName}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">项目运行中编号：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.projectYxzNo}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地面积/㎡：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.landArea}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">规划信息容积率：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.ghPlotRatio}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">建筑密度：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.buildDensity}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">绿化面积：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.afforestedArea}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">商业占比：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.businessShare}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">规划建筑面积：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.planBuildArea}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地单价(元/亩)：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.landUnitPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">建筑估值：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.buildValuation}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">土地总价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.landTotalPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">其它附属物：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.otherAppurtenance}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">估值依据：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.valuationBasis}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">总价：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.totalPrice}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">项目估值备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.projectValuationRemarks}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">回现资金或退出资金进度：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.cashBack}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">回现金额：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.cashBackAmount}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">还款能力分析：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${@dict.getLabel('sys_bgcz_hknl', sysBgczzck.repaymentCapacity)}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">后期项目建议：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.laterProject}"></div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">退出计划备注：</label>
-				<div class="col-sm-8">
-					<div class="form-control-static" th:text="${sysBgczzck.laterProjectRemark}"></div>
-				</div>
-			</div>
+			<table class="table table-border">
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>资产包情况</h3></td>
+				</tr>
+				<tr>
+					<td  class="col-sm-1 text-right"><h5>项目名称：</h5></td>
+					<td  class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectName}"/></td>
+					<td  class="col-sm-1 text-right"><h5>项目状态：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectStatus}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>融资基本情况</h3></td>
+				</tr>
+				<tr>
+					<td  class="col-sm-1 text-right"><h5>序号：</h5></td>
+					<td  class="col-sm-1"><span th:text="${sysBgczzck.no}"/></td>
+					<td  class="col-sm-1 text-right"><h5>SPV名称：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.spvName}"/></td>
+					<td  class="col-sm-1 text-right"><h5>城市/地区：</h5></td>
+					<td  class="col-sm-1"><span th:text="${sysBgczzck.city}"/></td>
+					<td  class="col-sm-1 text-right"><h5>取得成本：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.acquisitionCost}"/></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>合同本金：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.contractPrincipal}"/></td>
+					<td class="col-sm-1 text-right"><h5>本金余额：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.principalBalance}"/></td>
+					<td class="col-sm-1 text-right"><h5>利息余额：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.interestBalance}"/></td>
+					<td class="col-sm-1 text-right"><h5>本息余额：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.principalInterestBalance}"/></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>本息计算基准日：</h5></td>
+					<td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.bxjsDate, 'yyyy-MM-dd')}"/></td>
+					<td class="col-sm-1 text-right"><h5>付息周期：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentCycle}"/></td>
+					<td class="col-sm-1 text-right"><h5>付息日：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentDate}"/></td>
+					<td class="col-sm-1 text-right"><h5>融资人名称：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.finalParty}"/></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>融资协议编号：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.finalAgreementNo}"/></td>
+					<td class="col-sm-1 text-right"><h5>融资期限：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.finalTerm}"/></td>
+					<td class="col-sm-1 text-right"><h5>协议名称：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>投前签署协议</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>协议名称：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
+					<td class="col-sm-1 text-right"><h5>投前签署协议编号：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.agreementNo}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>投资人情况</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>投资人名称：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.investorName}"/></td>
+					<td class="col-sm-1 text-right"><h5>经营情况：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.operation}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>项目状态</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>法律进度：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.legalProgress}"/></td>
+					<td class="col-sm-1 text-right"><h5>相关手续办理进度：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.xgsxbljd}"/></td>
+					<td class="col-sm-1 text-right"><h5>项目状态备注：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectStatusComments}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>项目取得证照信息</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>已取得证照类型：</h5></td>
+					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_bgzc_zzlx', sysBgczzck.licenseType)}"/></td>
+					<td class="col-sm-1 text-right"><h5>已取得证照编号：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.licenseNo}"/></td>
+					<td class="col-sm-1 text-right"><h5>取得时间：</h5></td>
+					<td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.acquisitionTime, 'yyyy-MM-dd')}"/></td>
+					<td class="col-sm-1 text-right"><h5>证照信息：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.licenseInformation}"/></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
+					<td class="col-sm-1" colspan="7"><span th:text="${sysBgczzck.projectRemark}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>土地基本信息</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>土地性质：</h5></td>
+					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_tdxz', sysBgczzck.natureLand)}"/></td>
+					<td class="col-sm-1 text-right"><h5>剩余使用年限：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.sysynx}"/></td>
+					<td class="col-sm-1 text-right"><h5>土地基本信息容积率：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.tdPlotRatio}"/></td>
+					<td class="col-sm-1 text-right"><h5>获得方式：</h5></td>
+					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_hdfs', sysBgczzck.access)}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>项目运行中协议签署情况</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>合同概要：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.contractSummary}"/></td>
+					<td class="col-sm-1 text-right"><h5>合同金额：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.contractAmount}"/></td>
+					<td class="col-sm-1 text-right"><h5>签署协议名称：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.projectYxzName}"/></td>
+					<td class="col-sm-1 text-right"><h5>签署协议编号：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.projectYxzNo}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>规划信息</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>土地面积/㎡：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.landArea}"/></td>
+					<td class="col-sm-1 text-right"><h5>规划信息容积率：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.ghPlotRatio}"/></td>
+					<td class="col-sm-1 text-right"><h5>建筑密度：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.buildDensity}"/></td>
+					<td class="col-sm-1 text-right"><h5>绿化面积：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.afforestedArea}"/></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>商业占比：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.businessShare}"/></td>
+					<td class="col-sm-1 text-right"><h5>规划建筑面积：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.planBuildArea}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>项目估值</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>土地单价(元/亩)：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.landUnitPrice}"/></td>
+					<td class="col-sm-1 text-right"><h5>建筑估值：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.buildValuation}"/></td>
+					<td class="col-sm-1 text-right"><h5>土地总价：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.landTotalPrice}"/></td>
+					<td class="col-sm-1 text-right"><h5>其它附属物：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.otherAppurtenance}"/></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>估值依据：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.valuationBasis}"/></td>
+					<td class="col-sm-1 text-right"><h5>总价：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.totalPrice}"/></td>
+					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.projectValuationRemarks}"/></td>
+				</tr>
+				<tr>
+					<td colspan="8" style="text-align: center" class="success"><h3>退出计划</h3></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>回现资金或退出资金进度：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.cashBack}"/></td>
+					<td class="col-sm-1 text-right"><h5>回现金额：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.cashBackAmount}"/></td>
+					<td class="col-sm-1 text-right"><h5>还款能力分析：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_bgcz_hknl', sysBgczzck.repaymentCapacity)}"/></td>
+				</tr>
+				<tr>
+					<td class="col-sm-1 text-right"><h5>后期项目建议：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.laterProject}"/></td>
+					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.laterProjectRemark}"/></td>
+				</tr>
+			</table>
 		</form>
 	</div>
 	<th:block th:include="include :: footer" />

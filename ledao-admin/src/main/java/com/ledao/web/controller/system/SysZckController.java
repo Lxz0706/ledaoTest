@@ -52,6 +52,19 @@ public class SysZckController extends BaseController {
     }
 
     /**
+     * 查询资产信息库列表
+     */
+    @RequiresPermissions("system:zcb:list")
+    @GetMapping("/lists")
+    @ResponseBody
+    public TableDataInfo lists(SysZck sysZck) {
+        logger.info("进来了！！！！！！！！！！！！");
+        startPage();
+        List<SysZck> list = sysZckService.selectSysZckList(sysZck);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出资产信息库列表
      */
     @RequiresPermissions("system:zcb:export")

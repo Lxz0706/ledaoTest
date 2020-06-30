@@ -48,18 +48,29 @@ public class SysZcbController extends BaseController {
         return prefix + "/zcb";
     }
 
-    /**
-     * 查询资产包列表
-     */
-    @RequiresPermissions("system:zcb:list")
-    @PostMapping("/list")
+    @RequiresPermissions({"system:zcb:list"})
+    @PostMapping({"/list"})
     @ResponseBody
-    public TableDataInfo list(SysZcb sysZcb) {
+    public TableDataInfo list() {
         startPage();
-        List<SysZcb> list = sysZcbService.selectSysZcbList(sysZcb);
-        StringBuffer ids = new StringBuffer();
+        List<SysZcb> list = this.sysZcbService.selectZcbByAssetStatus();
+        return this.getDataTable(list);
+    }
+
+    @RequiresPermissions({"system:zcb:list"})
+    @GetMapping({"/selectZcbByAssetStatus/{assetStatus}"})
+    public String selectZcbByAssetStatus(@PathVariable("assetStatus") String assetStatus, ModelMap modelMap) {
+        modelMap.put("assetStatus", assetStatus);
+        return "system/zcb/zcbList";
+    }
+
+    @RequiresPermissions({"system:zcb:list"})
+    @PostMapping({"/lists"})
+    @ResponseBody
+    public TableDataInfo lists(SysZcb sysZcb) {
+        startPage();
+        List<SysZcb> list = this.sysZcbService.selectSysZcbList(sysZcb);
         for (SysZcb sysZcb1 : list) {
-            ids.append(sysZcb1.getId());
             List<SysZck> zckList = sysZckService.selectSysZckByZcbId(sysZcb1.getId());
             for (SysZck sysZck : zckList) {
                 if (sysZcb1.getCollateralTotal() == null) {
@@ -71,7 +82,7 @@ public class SysZcbController extends BaseController {
                 sysZcb1.setCollateralTotal(sysZcb1.getCollateralTotal().add(sysZck.getTotalPrice()));
             }
         }
-        return getDataTable(list);
+        return this.getDataTable(list);
     }
 
     /**

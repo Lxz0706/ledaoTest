@@ -88,4 +88,13 @@ public class SysZcbServiceImpl implements ISysZcbService {
     public int deleteSysZcbById(Long id) {
         return sysZcbMapper.deleteSysZcbById(id);
     }
+
+    /**
+     * 根据资产包状态查询
+     */
+    public List<SysZcb> selectZcbByAssetStatus() {
+        return sysZcbMapper.selectZcbByAssetStatus();
+    }
+
+
 }

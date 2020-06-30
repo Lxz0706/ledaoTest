@@ -53,6 +53,12 @@ public class SysBgczzck extends BaseEntity {
     private String city;
 
     /**
+     * 取得成本
+     */
+    @Excel(name = "取得成本")
+    private BigDecimal acquisitionCost;
+
+    /**
      * 合同本金
      */
     @Excel(name = "合同本金")
@@ -127,7 +133,7 @@ public class SysBgczzck extends BaseEntity {
     /**
      * 行业
      */
-    @Excel(name = "行业")
+    //@Excel(name = "行业")
     private String indestry;
 
     /**
@@ -452,6 +458,14 @@ public class SysBgczzck extends BaseEntity {
 
     public String getCity() {
         return city;
+    }
+
+    public BigDecimal getAcquisitionCost() {
+        return acquisitionCost;
+    }
+
+    public void setAcquisitionCost(BigDecimal acquisitionCost) {
+        this.acquisitionCost = acquisitionCost;
     }
 
     public BigDecimal getContractPrincipal() {
@@ -935,6 +949,7 @@ public class SysBgczzck extends BaseEntity {
                 .append("no", getNo())
                 .append("spvName", getSpvName())
                 .append("city", getCity())
+                .append("acquisitionCost", getAcquisitionCost())
                 .append("contractPrincipal", getContractPrincipal())
                 .append("principalBalance", getPrincipalBalance())
                 .append("interestBalance", getInterestBalance())

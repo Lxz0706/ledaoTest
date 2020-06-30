@@ -12,20 +12,12 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>序号：</label>
-                                <input type="text" name="no"/>
-                            </li>
-                            <li>
                                 <label>借款人名称：</label>
                                 <input type="text" name="borrower"/>
                             </li>
                             <li>
                                 <label>城市/地区：</label>
                                 <input type="text" name="city"/>
-                            </li>
-                            <li>
-                                <label>本金余额：</label>
-                                <input type="text" name="principalBalance"/>
                             </li>
                             <li>
                                 <label>保证人：</label>
@@ -40,35 +32,11 @@
                                 <input type="text" name="natureLand"/>
                             </li>
                             <li>
-                                <label>土地面积：</label>
-                                <input type="text" name="landArea"/>
-                            </li>
-                            <li>
-                                <label>所在层数/总层数：</label>
-                                <input type="text" name="floors"/>
-                            </li>
-                            <li>
                                 <label>抵/置押物类型：</label>
-                                <!--<select name="collateType">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>-->
                                 <select name="collateType" th:with="type=${@dict.getType('sys_zcb_collateraType')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
-                            <li>
-                                <label>建筑面积/㎡：</label>
-                                <input type="text" name="floorage"/>
-                            </li>
-                            <li>
-                                <label>总价：</label>
-                                <input type="text" name="totalPrice"/>
-                            </li>
-                            <li>
-                                <label>盖帽值：</label>
-                                <input type="text" name="capValue"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -157,7 +125,8 @@
                 },
                 {
                     field: 'landArea', 
-                    title: '土地面积'
+                    title: '土地面积',
+                    sortable: true
                 },
                 {
                     field: 'floors', 
@@ -169,7 +138,8 @@
                 },
                 {
                     field: 'floorage', 
-                    title: '建筑面积/㎡'
+                    title: '建筑面积/㎡',
+                    sortable: true
                 },
                 {
                     field: 'landUnitPrice', 
@@ -181,11 +151,13 @@
                 },
                 {
                     field: 'totalPrice', 
-                    title: '总价'
+                    title: '总价',
+                    sortable: true
                 },
                 {
                     field: 'capValue', 
-                    title: '盖帽值'
+                    title: '盖帽值',
+                    sortable: true
                 },
                 {
                     title: '操作',

@@ -133,4 +133,11 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
         }
         return successMsg.toString();
     }
+
+    /**
+     * 根据项目状态查询项目
+     * */
+    public List<SysBgczzck> selectByProjectStatus(){
+        return sysBgczzckMapper.selectByProjectStatus();
+    }
 }

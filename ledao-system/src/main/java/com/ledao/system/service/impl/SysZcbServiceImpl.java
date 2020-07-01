@@ -93,6 +93,7 @@ public class SysZcbServiceImpl implements ISysZcbService {
      * 根据资产包状态查询
      */
     public List<SysZcb> selectZcbByAssetStatus() {
+        List<SysZcb> list=sysZcbMapper.selectZcbByAssetStatus();
         return sysZcbMapper.selectZcbByAssetStatus();
     }
 

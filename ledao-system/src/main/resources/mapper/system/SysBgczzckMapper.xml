@@ -108,7 +108,13 @@
             <if test="interestBalance != null ">and interest_balance = #{interestBalance}</if>
             <if test="principalInterestBalance != null ">and principal_interest_balance = #{principalInterestBalance}
             </if>
-            <if test="bxjsDate != null ">and bxjs_date = #{bxjsDate}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(bxjs_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <!--<if test="bxjsDate != null ">and bxjs_date = #{bxjsDate}</if>-->
             <if test="interestPaymentCycle != null  and interestPaymentCycle != ''">and interest_payment_cycle =
                 #{interestPaymentCycle}
             </if>
@@ -425,5 +431,10 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectByProjectStatus" resultMap="SysBgczzckResult">
+        SELECT DISTINCT dict_sort,project_status FROM (SELECT a2.dict_label,a2.dict_sort,a1.project_status FROM
+        sys_bgczzck	a1 INNER JOIN sys_dict_data a2 ON a1.project_status=a2.dict_value WHERE a2.dict_type='sys_dxdtxm_project_status') as temp ORDER BY dict_sort
+    </select>
 
 </mapper>

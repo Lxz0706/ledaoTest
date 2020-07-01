@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">资产包状态：</label>
                 <div class="col-sm-8">
-                    <select name="assetStatus" class="form-control m-b" th:with="type=${@dict.getType('sys_zcb_status')}">
+                    <select name="assetStatus" class="form-control m-b" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
                         <option value="">--请选择一条数据--</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{assetStatus}"></option>
                     </select>

@@ -14,7 +14,7 @@
 					<td  class="col-sm-1 text-right"><h5>项目名称：</h5></td>
 					<td  class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectName}"/></td>
 					<td  class="col-sm-1 text-right"><h5>项目状态：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectStatus}"/></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_dxdtxm_project_status', sysBgczzck.projectStatus)}"/></td>
 				</tr>
 				<tr>
 					<td colspan="8" style="text-align: center" class="success"><h3>融资基本情况</h3></td>
@@ -81,7 +81,7 @@
 				<tr>
 					<td class="col-sm-1 text-right"><h5>法律进度：</h5></td>
 					<td class="col-sm-1"><span th:text="${sysBgczzck.legalProgress}"/></td>
-					<td class="col-sm-1 text-right"><h5>相关手续办理进度：</h5></td>
+					<td class="col-sm-1 text-right"><h5>项目进度：</h5></td>
 					<td class="col-sm-1"><span th:text="${sysBgczzck.xgsxbljd}"/></td>
 					<td class="col-sm-1 text-right"><h5>项目状态备注：</h5></td>
 					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectStatusComments}"/></td>

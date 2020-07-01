@@ -273,7 +273,7 @@ public class SysZck extends BaseEntity {
     private String dywAddress;
 
     /**
-     * 抵（质）押金额(本金)	sys_user_sex
+     * 抵（质）押金额(本金)
      */
     @Excel(name = "抵（质）押金额(本金)")
     private BigDecimal mortgageAmount;

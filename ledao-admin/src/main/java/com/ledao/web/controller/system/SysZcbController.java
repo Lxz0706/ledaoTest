@@ -49,7 +49,7 @@ public class SysZcbController extends BaseController {
     }
 
     @RequiresPermissions({"system:zcb:list"})
-    @PostMapping({"/list"})
+    @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list() {
         startPage();

@@ -63,10 +63,16 @@ public interface ISysBgczzckService {
     /**
      * 导入用户数据
      *
-     * @param sysBgczzckList         用户数据列表
+     * @param sysBgczzckList  用户数据列表
      * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
      * @param operName        操作用户
      * @return 结果
      */
     public String importBgczzk(List<SysBgczzck> sysBgczzckList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 根据项目状态查询项目
+     */
+    public List<SysBgczzck> selectByProjectStatus();
+
 }

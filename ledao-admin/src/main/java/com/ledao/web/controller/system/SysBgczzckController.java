@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.domain.SysZck;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,8 +50,31 @@ public class SysBgczzckController extends BaseController {
     @RequiresPermissions("system:bgczzck:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysBgczzck sysBgczzck) {
+    public TableDataInfo list() {
         startPage();
+        List<SysBgczzck> list = sysBgczzckService.selectByProjectStatus();
+        return getDataTable(list);
+    }
+
+    /**
+     * 根据项目状态查询项目
+     */
+    @RequiresPermissions("system:bgczzck:list")
+    @GetMapping({"/selectByProjectStatus/{projectStatus}"})
+    public String selectZcbByAssetStatus(@PathVariable("projectStatus") String projectStatus, ModelMap modelMap) {
+        modelMap.put("projectStatus", projectStatus);
+        return "system/bgczzck/bgczzckList";
+    }
+
+    @RequiresPermissions("system:bgczzck:list")
+    @PostMapping("/lists")
+    @ResponseBody
+    public TableDataInfo lists(SysBgczzck sysBgczzck) {
+        startPage();
+        /*logger.info("getRequest().getAttribute():========"+getRequest().getAttribute("params[beginTime]"));
+        if(StringUtils.isNull(getRequest().getParameter("params[beginTime]"))){
+            getRequest().getParameter("params[beginTime]");
+        }*/
         List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
         return getDataTable(list);
     }

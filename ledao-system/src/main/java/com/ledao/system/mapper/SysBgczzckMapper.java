@@ -58,4 +58,9 @@ public interface SysBgczzckMapper {
      * @return 结果
      */
     public int deleteSysBgczzckByIds(String[] ids);
+
+    /**
+     * 根据项目状态查询项目
+     */
+    public List<SysBgczzck> selectByProjectStatus();
 }

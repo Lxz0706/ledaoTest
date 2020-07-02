@@ -9,42 +9,13 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
-                        <input name="projectStatus" type="hidden" th:value="*{projectStatus}"/>
-                        <!--<ul>
-                            <li>
-                                项目名称：<input type="text" name="projectName"/>
-                            </li>
-                            &lt;!&ndash;<li>
-                                <label>项目状态：</label>
-                                <input type="text" name="projectStatus"/>
-                            </li>&ndash;&gt;
-                            <li>
-                                签署协议名称：<input type="text" name="projectYxzName"/>
-                            </li>
-                            <li>
-                                协议名称：
-                                <select name="agreementName" th:with="type=${@dict.getType('sys_bgzc_xymc')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                            <li class="select-time">
-                                <label>付息日： </label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                       name="params[beginTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                       name="params[endTime]"/>
-                            </li>
-                                &lt;!&ndash;付息日：<input type="text" name="bxjsDate"/>&ndash;&gt;
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>-->
+                        <input type="hidden" name="projectName" th:value="*{projectName}"/>
+                        <input type="hidden" name="projectYxzName" th:value="*{projectYxzName}"/>
+                        <input type="hidden" name="agreementName" th:value="*{agreementName}"/>
+                        <input type="hidden" class="time-input" id="startTime" placeholder="开始时间"
+                               name="params[beginTime]"/>
+                        <input type="hidden" class="time-input" id="endTime" placeholder="结束时间"
+                               name="params[endTime]"/>
                     </div>
                 </form>
             </div>
@@ -79,7 +50,7 @@
         var prefix = ctx + "system/bgczzck";
         $(function() {
             var options = {
-                url: prefix + "/lists",
+                url: prefix + "/listes",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",

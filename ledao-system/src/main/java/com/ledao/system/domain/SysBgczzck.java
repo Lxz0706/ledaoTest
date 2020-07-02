@@ -98,7 +98,13 @@ public class SysBgczzck extends BaseEntity {
      * 付息日
      */
     @Excel(name = "付息日")
-    private String interestPaymentDate;
+    private Date interestPaymentDate;
+
+    /**
+     * 付息日备注
+     */
+    @Excel(name = "付息日备注")
+    private String interestPaymentDateRemark;
 
     /**
      * 融资方
@@ -516,12 +522,20 @@ public class SysBgczzck extends BaseEntity {
         return interestPaymentCycle;
     }
 
-    public String getInterestPaymentDate() {
+    public Date getInterestPaymentDate() {
         return interestPaymentDate;
     }
 
-    public void setInterestPaymentDate(String interestPaymentDate) {
+    public void setInterestPaymentDate(Date interestPaymentDate) {
         this.interestPaymentDate = interestPaymentDate;
+    }
+
+    public String getInterestPaymentDateRemark() {
+        return interestPaymentDateRemark;
+    }
+
+    public void setInterestPaymentDateRemark(String interestPaymentDateRemark) {
+        this.interestPaymentDateRemark = interestPaymentDateRemark;
     }
 
     public void setFinalParty(String finalParty) {
@@ -957,6 +971,7 @@ public class SysBgczzck extends BaseEntity {
                 .append("bxjsDate", getBxjsDate())
                 .append("interestPaymentCycle", getInterestPaymentCycle())
                 .append("interestPaymentDate", getInterestPaymentDate())
+                .append("interestPaymentDateRemark",getInterestPaymentDateRemark())
                 .append("finalParty", getFinalParty())
                 .append("finalAgreementNo", getFinalAgreementNo())
                 .append("finalTerm", getFinalTerm())

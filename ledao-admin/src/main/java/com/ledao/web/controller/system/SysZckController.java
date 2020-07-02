@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.domain.SysUser;
+import com.ledao.system.domain.SysZcb;
 import com.ledao.system.domain.SysZck;
+import com.ledao.system.service.ISysZcbService;
 import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class SysZckController extends BaseController {
     @Autowired
     private ISysZckService sysZckService;
 
+    @Autowired
+    private ISysZcbService sysZcbService;
+
     @RequiresPermissions("system:zcb:view")
     @GetMapping()
     public String zck() {
@@ -58,7 +63,6 @@ public class SysZckController extends BaseController {
     @GetMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(SysZck sysZck) {
-        logger.info("进来了！！！！！！！！！！！！");
         startPage();
         List<SysZck> list = sysZckService.selectSysZckList(sysZck);
         return getDataTable(list);
@@ -160,5 +164,19 @@ public class SysZckController extends BaseController {
     public AjaxResult importTemplate() {
         ExcelUtil<SysZck> util = new ExcelUtil<SysZck>(SysZck.class);
         return util.importTemplateExcel("资产库");
+    }
+
+    @RequiresPermissions("system:zcb:list")
+    @PostMapping("/listes")
+    @ResponseBody
+    public TableDataInfo listes(SysZck sysZck) {
+        startPage();
+        List<SysZck> list = sysZckService.selectSysZckList(sysZck);
+        for (SysZck syszck : list) {
+            SysZcb sysZcb = sysZcbService.selectSysZcbById(syszck.getZcbId());
+            syszck.setZcbStatus(sysZcb.getAssetStatus());
+            syszck.setZcbName(sysZcb.getAssetPackageName());
+        }
+        return getDataTable(list);
     }
 }

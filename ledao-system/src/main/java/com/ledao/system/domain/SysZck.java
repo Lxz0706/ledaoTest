@@ -557,6 +557,17 @@ public class SysZck extends BaseEntity {
      */
     private Long zcbId;
 
+
+    /**
+     * 资产包状态
+     * */
+    private String zcbStatus;
+
+    /**
+     * 资产包名称
+     * */
+    private String zcbName;
+
     public Long getId() {
         return id;
     }
@@ -1259,6 +1270,22 @@ public class SysZck extends BaseEntity {
 
     public void setZcbId(Long zcbId) {
         this.zcbId = zcbId;
+    }
+
+    public String getZcbStatus() {
+        return zcbStatus;
+    }
+
+    public void setZcbStatus(String zcbStatus) {
+        this.zcbStatus = zcbStatus;
+    }
+
+    public String getZcbName() {
+        return zcbName;
+    }
+
+    public void setZcbName(String zcbName) {
+        this.zcbName = zcbName;
     }
 
     @Override

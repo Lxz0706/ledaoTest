@@ -5,6 +5,7 @@ import java.util.List;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.domain.SysZck;
+import com.ledao.system.service.ISysDictTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,9 @@ public class SysBgczzckController extends BaseController {
 
     @Autowired
     private ISysBgczzckService sysBgczzckService;
+
+    @Autowired
+    private ISysDictTypeService dictTypeService;
 
     @RequiresPermissions("system:bgczzck:view")
     @GetMapping()
@@ -71,10 +75,7 @@ public class SysBgczzckController extends BaseController {
     @ResponseBody
     public TableDataInfo lists(SysBgczzck sysBgczzck) {
         startPage();
-        /*logger.info("getRequest().getAttribute():========"+getRequest().getAttribute("params[beginTime]"));
-        if(StringUtils.isNull(getRequest().getParameter("params[beginTime]"))){
-            getRequest().getParameter("params[beginTime]");
-        }*/
+        logger.info("签署协议名称：========" + getRequest().getParameter("projectYxzName"));
         List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
         return getDataTable(list);
     }
@@ -174,6 +175,26 @@ public class SysBgczzckController extends BaseController {
     public AjaxResult importTemplate() {
         ExcelUtil<SysBgczzck> util = new ExcelUtil<SysBgczzck>(SysBgczzck.class);
         return util.importTemplateExcel("重组并购项目信息库");
+    }
+
+    @RequiresPermissions("system:bgczzck:list")
+    @GetMapping({"/queryAll"})
+    public String queryAll(ModelMap modelMap) {
+        modelMap.put("projectYxzName",getRequest().getParameter("projectYxzName"));
+        modelMap.put("projectName",getRequest().getParameter("projectName"));
+        modelMap.put("agreementName",getRequest().getParameter("agreementName"));
+        modelMap.put("params[beginTime]",getRequest().getParameter("params[beginTime]"));
+        modelMap.put("params[endTime]",getRequest().getParameter("params[endTime]"));
+        return "system/bgczzck/queryAll";
+    }
+
+    @RequiresPermissions("system:bgczzck:list")
+    @PostMapping("/listes")
+    @ResponseBody
+    public TableDataInfo listes(SysBgczzck sysBgczzck) {
+        startPage();
+        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        return getDataTable(list);
     }
 
 }

@@ -6,6 +6,47 @@
 <body class="gray-bg">
      <div class="container-div">
         <div class="row">
+
+            <div class="col-sm-12 search-collapse">
+                <form id="formId" method="get" action="/system/bgczzck/queryAll">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                项目名称：<input type="text" name="projectName" id="projectName"/>
+                            </li>
+                            <!--<li>
+                                <label>项目状态：</label>
+                                <input type="text" name="projectStatus"/>
+                            </li>-->
+                            <li>
+                                签署协议名称：<input type="text" name="projectYxzName"/>
+                            </li>
+                            <li>
+                                协议名称：
+                                <select name="agreementName" th:with="type=${@dict.getType('sys_bgzc_xymc')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                            <li class="select-time">
+                                <label>付息日： </label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                       name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                       name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <button type="submit" class="btn btn-primary">提交</button>
+                                <button onclick="$.form.reset()" class="btn btn-danger" type="button">关闭</button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>

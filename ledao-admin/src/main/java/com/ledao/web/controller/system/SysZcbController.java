@@ -3,7 +3,6 @@ package com.ledao.web.controller.system;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.domain.SysZck;
 import com.ledao.system.service.ISysZckService;
@@ -166,4 +165,17 @@ public class SysZcbController extends BaseController {
         mmap.put("sysZck", sysZcbService.selectSysZcbById(id));
         return "system/zcb/zck/zck";
     }
+
+    @RequiresPermissions("system:zcb:list")
+    @GetMapping({"/queryAll"})
+    public String queryAll(ModelMap modelMap) {
+        modelMap.put("borrower",getRequest().getParameter("borrower"));
+        modelMap.put("city",getRequest().getParameter("city"));
+        modelMap.put("guarantor",getRequest().getParameter("guarantor"));
+        modelMap.put("mortgageRank",getRequest().getParameter("mortgageRank"));
+        modelMap.put("natureLand",getRequest().getParameter("natureLand"));
+        modelMap.put("collateType",getRequest().getParameter("collateType"));
+        return "system/zcb/queryAll";
+    }
+
 }

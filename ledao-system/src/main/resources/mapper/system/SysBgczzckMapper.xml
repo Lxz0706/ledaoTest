@@ -19,6 +19,7 @@
         <result property="bxjsDate" column="bxjs_date"/>
         <result property="interestPaymentCycle" column="interest_payment_cycle"/>
         <result property="interestPaymentDate" column="interest_payment_date"/>
+        <result property="interestPaymentDateRemark" column="interest_payment_date_remark"/>
         <result property="finalParty" column="final_party"/>
         <result property="finalAgreementNo" column="final_agreement_no"/>
         <result property="finalTerm" column="final_term"/>
@@ -121,6 +122,9 @@
             <if test="interestPaymentDate != null and interestPaymentDate != ''">and interest_payment_date like
                 concat('%', #{interestPaymentDate}, '%')
             </if>
+            <if test="interestPaymentDateRemark !=null and interestPaymentDateRemark !=''">and interest_payment_date_remark like
+            concat('%',#{interestPaymentDateRemark},'%')
+            </if>
             <if test="finalParty != null  and finalParty != ''">and final_party = #{finalParty}</if>
             <if test="finalAgreementNo != null  and finalAgreementNo != ''">and final_agreement_no =
                 #{finalAgreementNo}
@@ -221,6 +225,7 @@
             <if test="bxjsDate != null">bxjs_date,</if>
             <if test="interestPaymentCycle != null">interest_payment_cycle,</if>
             <if test="interestPaymentDate != null">interest_payment_date,</if>
+            <if test="interestPaymentDateRemark != null">interest_payment_date_remark,</if>
             <if test="finalParty != null">final_party,</if>
             <if test="finalAgreementNo != null">final_agreement_no,</if>
             <if test="finalTerm != null">final_term,</if>
@@ -290,6 +295,7 @@
             <if test="bxjsDate != null">#{bxjsDate},</if>
             <if test="interestPaymentCycle != null">#{interestPaymentCycle},</if>
             <if test="interestPaymentDate != null">#{interestPaymentDate},</if>
+            <if test="interestPaymentDateRemark != null">#{interestPaymentDateRemark},</if>
             <if test="finalParty != null">#{finalParty},</if>
             <if test="finalAgreementNo != null">#{finalAgreementNo},</if>
             <if test="finalTerm != null">#{finalTerm},</if>
@@ -363,6 +369,7 @@
             <if test="bxjsDate != null">bxjs_date = #{bxjsDate},</if>
             <if test="interestPaymentCycle != null">interest_payment_cycle = #{interestPaymentCycle},</if>
             <if test="interestPaymentDate != null">interest_payment_date = #{interestPaymentDate},</if>
+            <if test="interestPaymentDateRemark != null">interest_payment_date_remark = #{interestPaymentDateRemark},</if>
             <if test="finalParty != null">final_party = #{finalParty},</if>
             <if test="finalAgreementNo != null">final_agreement_no = #{finalAgreementNo},</if>
             <if test="finalTerm != null">final_term = #{finalTerm},</if>

@@ -45,17 +45,19 @@
 					<td class="col-sm-1 text-right"><h5>付息周期：</h5></td>
 					<td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentCycle}"/></td>
 					<td class="col-sm-1 text-right"><h5>付息日：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentDate}"/></td>
-					<td class="col-sm-1 text-right"><h5>融资人名称：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.finalParty}"/></td>
+					<td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.interestPaymentDate, 'yyyy-MM-dd')}"/></td>
+					<td class="col-sm-1 text-right"><h5>付息备注：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentDateRemark}"/></td>
 				</tr>
 				<tr>
+					<td class="col-sm-1 text-right"><h5>融资人名称：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.finalParty}"/></td>
 					<td class="col-sm-1 text-right"><h5>融资协议编号：</h5></td>
 					<td class="col-sm-1"><span th:text="${sysBgczzck.finalAgreementNo}"/></td>
 					<td class="col-sm-1 text-right"><h5>融资期限：</h5></td>
 					<td class="col-sm-1"><span th:text="${sysBgczzck.finalTerm}"/></td>
 					<td class="col-sm-1 text-right"><h5>协议名称：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
+					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
 				</tr>
 				<tr>
 					<td colspan="8" style="text-align: center" class="success"><h3>投前签署协议</h3></td>

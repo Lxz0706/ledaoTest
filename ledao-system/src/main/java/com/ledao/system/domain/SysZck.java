@@ -81,9 +81,9 @@ public class SysZck extends BaseEntity {
     /**
      * 本息计算基准日
      */
-    @Excel(name = "本息计算基准日", width = 30, dateFormat = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Excel(name = "本息计算基准日", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date bxjsDate;
 
     /**
@@ -101,9 +101,9 @@ public class SysZck extends BaseEntity {
     /**
      * 借款期限
      */
-    @Excel(name = "借款期限", width = 30, dateFormat = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Excel(name = "借款期限", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date loanTime;
 
     /**
@@ -139,9 +139,9 @@ public class SysZck extends BaseEntity {
     /**
      * 保证合同签订时间
      */
-    @Excel(name = "保证合同签订时间", width = 30, dateFormat = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Excel(name = "保证合同签订时间", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date guaranteeContractSignTime;
 
     /**
@@ -159,9 +159,9 @@ public class SysZck extends BaseEntity {
     /**
      * 最高额保证合同签订时间
      */
-    @Excel(name = "最高额保证合同签订时间", width = 30, dateFormat = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Excel(name = "最高额保证合同签订时间", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date maximumGuaratnteeSignTime;
 
     /**
@@ -305,9 +305,9 @@ public class SysZck extends BaseEntity {
     /**
      * 最高额抵押合同签订时间
      */
-    @Excel(name = "最高额抵押合同签订时间", width = 30, dateFormat = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Excel(name = "最高额抵押合同签订时间", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date zgeContractTime;
 
     /**
@@ -433,9 +433,9 @@ public class SysZck extends BaseEntity {
     /**
      * 建成日期
      */
-    @Excel(name = "建成日期", width = 30, dateFormat = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Excel(name = "建成日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date completionDate;
 
     /**
@@ -501,7 +501,7 @@ public class SysZck extends BaseEntity {
     /**
      * 抵置押物备注
      */
-    @Excel(name = "抵质押物备注           ")
+    @Excel(name = "抵质押物备注")
     private String dzywRemark;
 
     /**
@@ -567,6 +567,11 @@ public class SysZck extends BaseEntity {
      * 资产包名称
      * */
     private String zcbName;
+
+    /**
+     * 删除标志（0代表存在 2代表删除）
+     */
+    private String delFlag;
 
     public Long getId() {
         return id;
@@ -1288,6 +1293,14 @@ public class SysZck extends BaseEntity {
         this.zcbName = zcbName;
     }
 
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1379,6 +1392,7 @@ public class SysZck extends BaseEntity {
                 .append("desposalPrice", getDesposalPrice())
                 .append("customer", getCustomer())
                 .append("zcbId", getZcbId())
+                .append("delFlag",getDelFlag())
                 .toString();
     }
 }

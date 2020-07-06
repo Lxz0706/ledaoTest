@@ -12,6 +12,7 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
     </resultMap>
 
     <sql id="selectSysZcbVo">
@@ -21,6 +22,7 @@
     <select id="selectSysZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
         <include refid="selectSysZcbVo"/>
         <where>
+            del_flag='0'
             <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name like concat('%',
                 #{assetPackageName}, '%')
             </if>
@@ -30,7 +32,7 @@
 
     <select id="selectSysZcbById" parameterType="Long" resultMap="SysZcbResult">
         <include refid="selectSysZcbVo"/>
-        where id = #{id}
+        where id = #{id} and del_flag ='0'
     </select>
 
     <insert id="insertSysZcb" parameterType="SysZcb" useGeneratedKeys="true" keyProperty="id">
@@ -69,11 +71,11 @@
     </update>
 
     <delete id="deleteSysZcbById" parameterType="Long">
-        delete from sys_zcb where id = #{id}
+        update sys_zcb set del_flag ='2' where id = #{id}
     </delete>
 
     <delete id="deleteSysZcbByIds" parameterType="String">
-        delete from sys_zcb where id in
+        update sys_zcb set del_flag ='2' where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

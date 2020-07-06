@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.domain.SysZck;
@@ -90,7 +91,7 @@ public class SysBgczzckController extends BaseController {
     public AjaxResult export(SysBgczzck sysBgczzck) {
         List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
         ExcelUtil<SysBgczzck> util = new ExcelUtil<SysBgczzck>(SysBgczzck.class);
-        return util.exportExcel(list, "bgczzck");
+        return util.exportExcel(list, "大型单体项目");
     }
 
     /**
@@ -183,8 +184,8 @@ public class SysBgczzckController extends BaseController {
         modelMap.put("projectYxzName",getRequest().getParameter("projectYxzName"));
         modelMap.put("projectName",getRequest().getParameter("projectName"));
         modelMap.put("agreementName",getRequest().getParameter("agreementName"));
-        modelMap.put("params[beginTime]",getRequest().getParameter("params[beginTime]"));
-        modelMap.put("params[endTime]",getRequest().getParameter("params[endTime]"));
+        modelMap.put("beginTime", getRequest().getParameter("params[beginTime]"));
+        modelMap.put("endTime",getRequest().getParameter("params[endTime]"));
         return "system/bgczzck/queryAll";
     }
 

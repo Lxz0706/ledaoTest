@@ -85,7 +85,7 @@ public class SysBgczzck extends BaseEntity {
     /**
      * 本息计算基准日
      */
-    @Excel(name = "本息计算基准日", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "本息计算基准日", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
     private Date bxjsDate;
 
     /**
@@ -97,7 +97,7 @@ public class SysBgczzck extends BaseEntity {
     /**
      * 付息日
      */
-    @Excel(name = "付息日")
+    @Excel(name = "付息日", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
     private Date interestPaymentDate;
 
     /**
@@ -187,7 +187,7 @@ public class SysBgczzck extends BaseEntity {
     /**
      * 取得时间
      */
-    @Excel(name = "取得时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "取得时间", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
     private Date acquisitionTime;
 
     /**

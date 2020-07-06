@@ -76,6 +76,7 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
     </resultMap>
 
     <sql id="selectSysBgczzckVo">
@@ -94,6 +95,7 @@
     <select id="selectSysBgczzckList" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
         <include refid="selectSysBgczzckVo"/>
         <where>
+            del_flag='0'
             <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
                 '%')
             </if>
@@ -206,7 +208,7 @@
 
     <select id="selectSysBgczzckById" parameterType="Long" resultMap="SysBgczzckResult">
         <include refid="selectSysBgczzckVo"/>
-        where id = #{id}
+        where id = #{id} and del_flag='0'
     </select>
 
     <insert id="insertSysBgczzck" parameterType="SysBgczzck" useGeneratedKeys="true" keyProperty="id">
@@ -429,11 +431,11 @@
     </update>
 
     <delete id="deleteSysBgczzckById" parameterType="Long">
-        delete from sys_bgczzck where id = #{id}
+        update sys_bgczzck set del_flag='2' where id = #{id}
     </delete>
 
     <delete id="deleteSysBgczzckByIds" parameterType="String">
-        delete from sys_bgczzck where id in
+        update sys_bgczzck set del_flag='2' where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

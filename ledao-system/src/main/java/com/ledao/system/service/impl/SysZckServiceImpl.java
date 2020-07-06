@@ -121,10 +121,10 @@ public class SysZckServiceImpl implements ISysZckService {
                 zck.setZcbId(zcbId);
                 this.insertSysZck(zck);
                 successNum++;
-                successMsg.append("<br/>" + successNum + "、账号 " + zck.getAssetPackageName() + " 导入成功");
+                successMsg.append("<br/>" + successNum + "、借款人名称 " + zck.getBorrower() + " 导入成功");
             } catch (Exception e) {
                 failureNum++;
-                String msg = "<br/>" + failureNum + "、账号 " + zck.getAssetPackageName() + " 导入失败：";
+                String msg = "<br/>" + failureNum + "、借款人名称 " + zck.getBorrower() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());
                 log.error(msg, e);
             }

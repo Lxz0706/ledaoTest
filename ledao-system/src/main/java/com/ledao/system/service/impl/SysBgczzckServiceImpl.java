@@ -117,10 +117,10 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
                 sysBgczzck.setCreateBy(operName);
                 this.insertSysBgczzck(sysBgczzck);
                 successNum++;
-                successMsg.append("<br/>" + successNum + "、账号 " + sysBgczzck.getProjectName() + " 导入成功");
+                successMsg.append("<br/>" + successNum + "、项目 " + sysBgczzck.getProjectName() + " 导入成功");
             } catch (Exception e) {
                 failureNum++;
-                String msg = "<br/>" + failureNum + "、账号 " + sysBgczzck.getProjectName() + " 导入失败：";
+                String msg = "<br/>" + failureNum + "、项目 " + sysBgczzck.getProjectName() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());
                 log.error(msg, e);
             }

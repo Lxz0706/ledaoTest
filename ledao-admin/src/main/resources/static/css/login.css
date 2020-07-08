@@ -4,7 +4,7 @@ html {
 
 body.signin {
     height: auto;
-    background: url(../img/login-background.jpg) no-repeat center fixed;
+    background: url(../img/login.png) no-repeat center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -173,7 +173,7 @@ body.signin {
 
 .login-div {
     width: 30%;
-    background-color: #75ACC8;
+    /*background-color: #75ACC8;*/
     margin-top: 30%;
     margin-left: 30%;
     text-align: center;

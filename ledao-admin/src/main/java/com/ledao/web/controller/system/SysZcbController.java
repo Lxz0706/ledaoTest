@@ -47,7 +47,7 @@ public class SysZcbController extends BaseController {
         return prefix + "/zcb";
     }
 
-    @RequiresPermissions({"system:zcb:list"})
+    @RequiresPermissions("system:zcb:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list() {
@@ -56,15 +56,15 @@ public class SysZcbController extends BaseController {
         return this.getDataTable(list);
     }
 
-    @RequiresPermissions({"system:zcb:list"})
+    @RequiresPermissions("system:zcb:list")
     @GetMapping({"/selectZcbByAssetStatus/{assetStatus}"})
     public String selectZcbByAssetStatus(@PathVariable("assetStatus") String assetStatus, ModelMap modelMap) {
         modelMap.put("assetStatus", assetStatus);
         return "system/zcb/zcbList";
     }
 
-    @RequiresPermissions({"system:zcb:list"})
-    @PostMapping({"/lists"})
+    @RequiresPermissions("system:zcb:list")
+    @PostMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(SysZcb sysZcb) {
         startPage();

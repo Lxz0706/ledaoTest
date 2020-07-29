@@ -51,6 +51,10 @@ public class SysWorkLog extends BaseEntity {
     @Excel(name = "所属部门")
     private Integer deptId;
 
+    private SysDept dept;
+
+    private SysRole role;
+
     /**
      * 所属角色
      */
@@ -127,6 +131,30 @@ public class SysWorkLog extends BaseEntity {
         return userId;
     }
 
+    public SysDept getDept() {
+        if (dept == null) {
+            dept = new SysDept();
+        }
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+
+        this.dept = dept;
+    }
+
+
+    public SysRole getRole() {
+        if(role == null){
+            role=new SysRole();
+        }
+        return role;
+    }
+
+    public void setRole(SysRole role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -142,6 +170,8 @@ public class SysWorkLog extends BaseEntity {
                 .append("deptId", getDeptId())
                 .append("roleId", getRoleId())
                 .append("userId", getUserId())
+                .append("dept", getDept())
+                .append("role", getRole())
                 .toString();
     }
 }

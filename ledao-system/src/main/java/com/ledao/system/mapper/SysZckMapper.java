@@ -61,6 +61,40 @@ public interface SysZckMapper {
 
     /**
      * 根据资产包ID查询资产库
-     * */
+     */
     public List<SysZck> selectSysZckByZcbId(Long zcbId);
+
+    /**
+     * 根据zcbID查询相同借款人
+     *
+     * @param sysZck
+     * @return 结果
+     */
+    public List<SysZck> selectSysZck(SysZck sysZck);
+
+    /**
+     * 查询出自己以及子集的数据
+     *
+     * @param sysZck
+     * @return 结果
+     */
+    public List<SysZck> selectSysZckByParentId(SysZck sysZck);
+
+
+    /**
+     * 根据zckId查询结果
+     *
+     * @param zckIds
+     * @return 结果
+     */
+    public List<SysZck> selectSysZckByZckId(String[] zckIds);
+
+
+    /**
+     * 查询所有
+     *
+     * @param sysZck
+     * @return 结果
+     */
+    public List<SysZck> queryAll(SysZck sysZck);
 }

@@ -68,7 +68,7 @@ public interface ISysZckService {
      * @param operName        操作用户
      * @return 结果
      */
-    public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName,Long zcbId);
+    public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName, Long zcbId);
 
     /**
      * 根据资产包ID查询资产库信息
@@ -77,4 +77,37 @@ public interface ISysZckService {
      * @return 结果
      */
     public List<SysZck> selectSysZckByZcbId(Long zcbId);
+
+
+    /**
+     * 根据借款人名称分
+     *
+     * @param sysZck
+     * @return 结果
+     */
+    public List<SysZck> selectSysZck(SysZck sysZck);
+
+    /**
+     * 查询出自己以及子集的数据
+     *
+     * @param sysZck
+     * @return 结果
+     */
+    public List<SysZck> selectSysZckByParentId(SysZck sysZck);
+
+    /**
+     * 根据zckId查询结果
+     *
+     * @param zckIds
+     * @return 结果
+     */
+    public List<SysZck> selectSysZckByZckId(String zckIds);
+
+    /**
+     * 查询所有数据
+     *
+     * @param sysZck
+     * @return 结果
+     */
+    public List<SysZck> queryAll(SysZck sysZck);
 }

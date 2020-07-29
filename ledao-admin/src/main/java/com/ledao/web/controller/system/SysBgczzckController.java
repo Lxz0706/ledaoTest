@@ -76,7 +76,6 @@ public class SysBgczzckController extends BaseController {
     @ResponseBody
     public TableDataInfo lists(SysBgczzck sysBgczzck) {
         startPage();
-        logger.info("签署协议名称：========" + getRequest().getParameter("projectYxzName"));
         List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
         return getDataTable(list);
     }
@@ -144,6 +143,7 @@ public class SysBgczzckController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        logger.info("ids:===="+ids);
         return toAjax(sysBgczzckService.deleteSysBgczzckByIds(ids));
     }
 

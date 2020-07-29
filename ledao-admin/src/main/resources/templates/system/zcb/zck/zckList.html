@@ -8,7 +8,8 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <input type="hidden" id="zcbId" name="zcbId" th:value="*{sysZcb.id}">
+                    <input type="hidden" id="id" name="id" th:value="*{id}">
+                    <input type="hidden" id="zcbId" name="zcbId" th:value="*{zcbId}">
                 </form>
             </div>
 
@@ -21,9 +22,6 @@
                 </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:zcb:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:zcb:import">
-                    <i class="fa fa-upload"></i> 导入
                 </a>
                 <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:zcb:export">
                     <i class="fa fa-download"></i> 导出
@@ -43,8 +41,8 @@
 
         $(function() {
             var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
+                url: prefix + "/zckList",
+                createUrl: prefix + "/adds/{id}/{ids}",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
@@ -61,68 +59,69 @@
                     visible: false
                 },
                 {
+                    field: 'no',
+                    title: '序号'
+                },
+                /*{
                     field: 'borrower',
-                    title: '借款人名称',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.id+"',\'" + row.borrower + '\')">' + value + '</a>';
-                    }
-                }/*,
+                    title: '借款人名称'
+                },*/
                 {
-                    field: 'city', 
+                    field: 'city',
                     title: '城市/地区'
                 },
                 {
-                    field: 'principalBalance', 
+                    field: 'principalBalance',
                     title: '本金余额'
                 },
                 {
-                    field: 'guarantor', 
+                    field: 'guarantor',
                     title: '保证人'
                 },
                 {
-                    field: 'mortgageRank', 
+                    field: 'mortgageRank',
                     title: '抵押顺位'
                 },
                 {
-                    field: 'natureLand', 
+                    field: 'natureLand',
                     title: '土地性质'
                 },
                 {
-                    field: 'landArea', 
+                    field: 'landArea',
                     title: '土地面积',
                     sortable: true
                 },
                 {
-                    field: 'floors', 
+                    field: 'floors',
                     title: '所在层数/总层数'
                 },
                 {
-                    field: 'collateType', 
+                    field: 'collateType',
                     title: '抵/置押物类型'
                 },
                 {
-                    field: 'floorage', 
+                    field: 'floorage',
                     title: '建筑面积/㎡',
                     sortable: true
                 },
                 {
-                    field: 'landUnitPrice', 
+                    field: 'landUnitPrice',
                     title: '土地单价'
                 },
                 {
-                    field: 'otherCollateralUnitPrice', 
+                    field: 'otherCollateralUnitPrice',
                     title: '其它抵置押物单价'
                 },
                 {
-                    field: 'totalPrice', 
+                    field: 'totalPrice',
                     title: '总价',
                     sortable: true
                 },
                 {
-                    field: 'capValue', 
+                    field: 'capValue',
                     title: '盖帽值',
                     sortable: true
-                },,
+                },
                 {
                     title: '操作',
                     align: 'center',
@@ -133,7 +132,7 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
-                }*/]
+                }]
             };
             $.table.init(options);
         });
@@ -141,17 +140,23 @@
         /*资产库数据-新增资产库数据*/
         function add() {
             var zcbId=$("#zcbId").val();
-            $.operate.add(zcbId);
+            var parentId=$("#id").val();
+            $.operate.adds(zcbId,parentId);
         }
 
         /*资产库列表-详细*/
         function detail(id,borrower) {
-            var zcbId=$("#zcbId").val();
-            var url = prefix + '/zckList/' + id+"/"+zcbId;
-            $.modal.openTab(borrower+"列表", url);
+            var url = prefix + '/detail/' + id;
+            if(borrower =='' ||borrower ==null){
+                $.modal.openTab("资产库详情", url);
+            }else{
+                $.modal.openTab(borrower, url);
+            }
         }
 
+
         function exportExcel(){
+            var id=$("#id").val();
             var zcbId=$("#zcbId").val();
             var row=$.map($("#bootstrap-table").bootstrapTable('getSelections'),function(row){
                 return row ;
@@ -168,7 +173,8 @@
             $.ajax({
                 url:prefix +"/export",
                 data:{
-                    "id":str,
+                    "ids":str,
+                    "id":id,
                     "zcbId":zcbId
                 },
                 type:"post",
@@ -179,19 +185,4 @@
         }
     </script>
 </body>
-<!-- 导入区域 -->
-<script id="importTpl" type="text/template">
-    <form enctype="multipart/form-data" class="mt20 mb10">
-        <div class="col-xs-offset-1">
-            <input type="hidden" id="zcbIds" name="zcbId" th:value="*{sysZcb.id}">
-            <input type="file" id="file" name="file"/>
-            <div class="mt10 pt5">
-                &nbsp;<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
-            </div>
-            <font color="red" class="pull-left mt10">
-                提示：仅允许导入“xls”或“xlsx”格式文件！
-            </font>
-        </div>
-    </form>
-</script>
 </html>

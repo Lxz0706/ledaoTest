@@ -94,7 +94,7 @@ public class SysZcbController extends BaseController {
     public AjaxResult export(SysZcb sysZcb) {
         List<SysZcb> list = sysZcbService.selectSysZcbList(sysZcb);
         ExcelUtil<SysZcb> util = new ExcelUtil<SysZcb>(SysZcb.class);
-        return util.exportExcel(list, "zcb");
+        return util.exportExcel(list, "资产包");
     }
 
     /**
@@ -162,7 +162,7 @@ public class SysZcbController extends BaseController {
     @Log(title = "资产包", businessType = BusinessType.DETAIL)
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
-        mmap.put("sysZck", sysZcbService.selectSysZcbById(id));
+        mmap.put("sysZcb", sysZcbService.selectSysZcbById(id));
         return "system/zcb/zck/zck";
     }
 

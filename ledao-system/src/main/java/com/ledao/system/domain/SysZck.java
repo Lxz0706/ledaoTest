@@ -573,6 +573,8 @@ public class SysZck extends BaseEntity {
      */
     private String delFlag;
 
+    private Long parentId;
+
     public Long getId() {
         return id;
     }
@@ -1301,6 +1303,14 @@ public class SysZck extends BaseEntity {
         this.delFlag = delFlag;
     }
 
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1393,6 +1403,7 @@ public class SysZck extends BaseEntity {
                 .append("customer", getCustomer())
                 .append("zcbId", getZcbId())
                 .append("delFlag",getDelFlag())
+                .append("parentId",getParentId())
                 .toString();
     }
 }

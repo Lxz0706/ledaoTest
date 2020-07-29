@@ -9,22 +9,36 @@
         <result property="owner" column="owner"/>
         <result property="ownertype" column="ownerType"/>
         <result property="websiteLinks" column="website_links"/>
+        <result property="startPrice" column="start_price"/>
+        <result property="appraisalPrice" column="appraisal_price"/>
+        <result property="finalPrice" column="final_price"/>
+        <result property="tableData" column="table_data"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <sql id="selectSysJudicialVo">
-        select id, owner, ownerType, website_links from sys_judicial
+        select id, owner, ownerType, website_links, start_price, appraisal_price, final_price, table_data, start_time, end_time, status from sys_judicial
     </sql>
 
     <select id="selectSysJudicialList" parameterType="SysJudicial" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
         <where>
-            <if test="owner != null  and owner != ''">and owner like concat('%',#{owner},'%')</if>
+            <if test="owner != null  and owner != ''">and owner like concat ('%',#{owner },'%')</if>
             <if test="ownertype != null  and ownertype != ''">and ownerType = #{ownertype}</if>
             <if test="websiteLinks != null  and websiteLinks != ''">and website_links = #{websiteLinks}</if>
+            <if test="startPrice != null  and startPrice != ''">and start_price = #{startPrice}</if>
+            <if test="appraisalPrice != null  and appraisalPrice != ''">and appraisal_price = #{appraisalPrice}</if>
+            <if test="finalPrice != null  and finalPrice != ''">and final_price = #{finalPrice}</if>
+            <if test="tableData != null  and tableData != ''">and table_data = #{tableData}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
         </where>
     </select>
 
-    <select id="selectSysJudicialById" parameterType="Long" resultMap="SysJudicialResult">
+    <select id="selectSysJudicialById" parameterType="Integer" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
         where id = #{id}
     </select>
@@ -35,11 +49,25 @@
             <if test="owner != null">owner,</if>
             <if test="ownertype != null">ownerType,</if>
             <if test="websiteLinks != null">website_links,</if>
+            <if test="startPrice != null">start_price,</if>
+            <if test="appraisalPrice != null">appraisal_price,</if>
+            <if test="finalPrice != null">final_price,</if>
+            <if test="tableData != null">table_data,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="status != null">status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="owner != null">#{owner},</if>
             <if test="ownertype != null">#{ownertype},</if>
             <if test="websiteLinks != null">#{websiteLinks},</if>
+            <if test="startPrice != null">#{startPrice},</if>
+            <if test="appraisalPrice != null">#{appraisalPrice},</if>
+            <if test="finalPrice != null">#{finalPrice},</if>
+            <if test="tableData != null">#{tableData},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="status != null">#{status},</if>
         </trim>
     </insert>
 
@@ -49,11 +77,18 @@
             <if test="owner != null">owner = #{owner},</if>
             <if test="ownertype != null">ownerType = #{ownertype},</if>
             <if test="websiteLinks != null">website_links = #{websiteLinks},</if>
+            <if test="startPrice != null">start_price = #{startPrice},</if>
+            <if test="appraisalPrice != null">appraisal_price = #{appraisalPrice},</if>
+            <if test="finalPrice != null">final_price = #{finalPrice},</if>
+            <if test="tableData != null">table_data = #{tableData},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="status != null">status = #{status},</if>
         </trim>
         where id = #{id}
     </update>
 
-    <delete id="deleteSysJudicialById" parameterType="Long">
+    <delete id="deleteSysJudicialById" parameterType="Integer">
         delete from sys_judicial where id = #{id}
     </delete>
 

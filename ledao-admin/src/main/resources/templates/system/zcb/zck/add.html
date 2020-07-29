@@ -7,7 +7,8 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-zck-add">
-            <input name="zcbId" type="text" th:value="${zcbId}">
+            <input name="zcbId" type="hidden" th:value="${zcbId}">
+            <input name="parentId" type="hidden" th:value="${parentId}">
             <!--<div class="form-group">
                 <label class="col-sm-3 control-label">资产包名称：</label>
                 <div class="col-sm-8">

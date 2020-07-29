@@ -33,8 +33,6 @@ logging:
   level:
     com.ledao: debug
     org.springframework: warn
-   # com.ledao.system.mapper.SysZckMapper: info
-
 
 # 用户配置
 user:

@@ -147,7 +147,6 @@ public class SysZckController extends BaseController {
         String mortgageRank = getRequest().getParameter("mortgageRank");
         String natureLand = getRequest().getParameter("natureLand");
         String collateType = getRequest().getParameter("collateType");
-        logger.info("id:========="+getRequest().getParameter("ids"));
         List<SysZck> zckList = new ArrayList<>();
         if (StringUtils.isNull(getRequest().getParameter("ids"))) {
             sysZck.setBorrower(borrower);
@@ -157,7 +156,6 @@ public class SysZckController extends BaseController {
             sysZck.setNatureLand(natureLand);
             sysZck.setCollateType(collateType);
             zckList = sysZckService.queryAll(sysZck);
-            logger.info("查询数量：====="+zckList.size());
         } else {
             zckList = sysZckService.selectSysZckByZckId(getRequest().getParameter("ids"));
         }

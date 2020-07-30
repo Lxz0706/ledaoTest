@@ -120,7 +120,7 @@
         <include refid="selectSysZckVo"/>
         <where>
             del_flag='0'
-            <if test="id !=null and id ！= '' ">
+            <if test="id !=null and id != '' ">
                 and id in
                 <foreach item="id" collection="array" open="(" separator="," close=")">
                     #{id}

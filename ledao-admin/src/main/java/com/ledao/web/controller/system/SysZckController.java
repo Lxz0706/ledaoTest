@@ -256,24 +256,6 @@ public class SysZckController extends BaseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport, Long zcbId) throws Exception {
         ExcelUtil<SysZck> util = new ExcelUtil<SysZck>(SysZck.class);
         List<SysZck> sysZckList = util.importExcel(file.getInputStream());
-        List<SysZck> sysZckList1 = sysZckService.selectSysZckList(new SysZck());
-        Map<String, Long> map = new HashMap<>();
-        Map<String, String> map1 = new HashMap<>();
-        for (SysZck sysZck : sysZckList1) {
-            map.put(sysZck.getBorrower(), sysZck.getId());
-            map1.put(sysZck.getBorrower(), sysZck.getBorrower());
-        }
-        for (SysZck sysZck : sysZckList) {
-            if (StringUtils.isNotNull(map1.get(sysZck.getBorrower()))) {
-                if (map1.get(sysZck.getBorrower()).equals(sysZck.getBorrower())) {
-                    sysZck.setParentId(map.get(sysZck.getBorrower()));
-                } else {
-                    sysZck = new SysZck();
-                    sysZckService.insertSysZck(sysZck);
-                }
-            }
-
-        }
         String operName = ShiroUtils.getSysUser().getLoginName();
         String message = sysZckService.importZck(sysZckList, updateSupport, operName, zcbId);
         return AjaxResult.success(message);

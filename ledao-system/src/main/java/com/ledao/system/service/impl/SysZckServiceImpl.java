@@ -1,6 +1,8 @@
 package com.ledao.system.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
@@ -115,8 +117,16 @@ public class SysZckServiceImpl implements ISysZckService {
         int failureNum = 0;
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
+        SysZck sysZck1 = new SysZck();
         for (SysZck zck : zckList) {
             try {
+                if (StringUtils.isNotNull(zck.getBorrower())) {
+                    sysZck1.setBorrower(zck.getBorrower());
+                    List<SysZck> zckList2 = this.selectSysZckList(sysZck1);
+                    if (zckList2.size() > 0) {
+                        zck.setParentId(zckList2.get(0).getId());
+                    }
+                }
                 zck.setCreateBy(operName);
                 zck.setZcbId(zcbId);
                 this.insertSysZck(zck);
@@ -184,7 +194,7 @@ public class SysZckServiceImpl implements ISysZckService {
      * @param sysZck
      * @return 结果
      */
-    public List<SysZck> queryAll(SysZck sysZck){
+    public List<SysZck> queryAll(SysZck sysZck) {
         return sysZckMapper.queryAll(sysZck);
     }
 }

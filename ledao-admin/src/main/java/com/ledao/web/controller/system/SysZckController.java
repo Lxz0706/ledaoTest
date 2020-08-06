@@ -235,7 +235,18 @@ public class SysZckController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(sysZckService.deleteSysZckByIds(ids));
+        StringBuffer sb = new StringBuffer();
+        for (String string : ids.split(",")) {
+            SysZck sysZck = new SysZck();
+            sysZck.setId(Long.valueOf(string));
+            List<SysZck> list = sysZckService.selectSysZckByParentId(sysZck);
+            for (SysZck syszck : list) {
+                sb.append(syszck.getId()).append(",");
+            }
+        }
+
+        String id = sb.deleteCharAt(sb.length() - 1).toString();
+        return toAjax(sysZckService.deleteSysZckByIds(id));
     }
 
     /**

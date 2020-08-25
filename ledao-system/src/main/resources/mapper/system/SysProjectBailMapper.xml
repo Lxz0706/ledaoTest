@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysProjectBailMapper">
+
+    <resultMap type="SysProjectBail" id="SysProjectBailResult">
+        <result property="bailId" column="bail_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="contractNo" column="contract_no"/>
+        <result property="bail" column="bail"/>
+        <result property="amountGuaranteed" column="amount_guaranteed"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="amountCompensated" column="amount_compensated"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysProjectBailVo">
+        select bail_id, project_id, project_name, contract_no, bail, amount_guaranteed, start_time,
+        end_time, amount_compensated, del_flag, create_by, create_time, update_by, update_time from sys_project_bail
+    </sql>
+
+    <select id="selectSysProjectBailList" parameterType="SysProjectBail" resultMap="SysProjectBailResult">
+        <include refid="selectSysProjectBailVo"/>
+        <where>
+            del_flag='0'
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="contractNo != null  and contractNo != ''">and contract_no = #{contractNo}</if>
+            <if test="bail != null  and bail != ''">and bail = #{bail}</if>
+            <if test="amountGuaranteed != null ">and amount_guaranteed = #{amountGuaranteed}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="amountCompensated != null ">and amount_compensated = #{amountCompensated}</if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectBailById" parameterType="Long" resultMap="SysProjectBailResult">
+        <include refid="selectSysProjectBailVo"/>
+        where bail_id = #{bailId} and del_flag='0'
+    </select>
+
+    <insert id="insertSysProjectBail" parameterType="SysProjectBail" useGeneratedKeys="true" keyProperty="bailId">
+        insert into sys_project_bail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="bail != null">bail,</if>
+            <if test="amountGuaranteed != null">amount_guaranteed,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="amountCompensated != null">amount_compensated,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="projectId != null">project_id</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="bail != null">#{bail},</if>
+            <if test="amountGuaranteed != null">#{amountGuaranteed},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="amountCompensated != null">#{amountCompensated},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="projectId != null">#{projectId}</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectBail" parameterType="SysProjectBail">
+        update sys_project_bail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="bail != null">bail = #{bail},</if>
+            <if test="amountGuaranteed != null">amount_guaranteed = #{amountGuaranteed},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="amountCompensated != null">amount_compensated = #{amountCompensated},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where bail_id = #{bailId}
+    </update>
+
+    <delete id="deleteSysProjectBailById" parameterType="Long">
+        update sys_project_bail set del_flag = '2' where bail_id = #{bailId}
+    </delete>
+
+    <delete id="deleteSysProjectBailByIds" parameterType="String">
+        update sys_project_bail set del_flag = '2' where bail_id in
+        <foreach item="bailId" collection="array" open="(" separator="," close=")">
+            #{bailId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysProjectBailByProjectId" parameterType="String" resultMap="SysProjectBailResult">
+        <include refid="selectSysProjectBailVo"/> where project_id in
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+        and del_flag = '0'
+    </select>
+
+</mapper>

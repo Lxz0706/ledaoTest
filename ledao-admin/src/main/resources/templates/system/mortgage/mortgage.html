@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('投后部项目管理抵押物列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" name="projectIds" id="projectId" th:value="*{projectIds}"/>
+                            <!--<li>
+                                <label>项目ID：</label>
+                                <input type="text" name="projectId"/>
+                            </li>
+                            <li>
+                                <label>抵押物类型：</label>
+                                <select name="collateralType">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>抵押金额：</label>
+                                <input type="text" name="mortgageAmount"/>
+                            </li>
+                            <li>
+                                <label>抵押类型：</label>
+                                <select name="mortgageStatus">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>-->
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:mortgage:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:mortgage:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:mortgage:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:mortgage:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:mortgage:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:mortgage:remove')}]];
+        var prefix = ctx + "system/mortgage";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "投后部项目管理抵押物",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'mortgageId', 
+                    title: '抵押物ID',
+                    visible: false
+                },
+                {
+                    field: 'projectId', 
+                    title: '项目ID',
+                    visible: false
+                },
+                {
+                    field: 'projectName', 
+                    title: '项目名称'
+                },
+                {
+                    field: 'collateralType', 
+                    title: '抵押物类型'
+                },
+                {
+                    field: 'mortgageContractNo', 
+                    title: '抵押合同编号'
+                },
+                {
+                    field: 'mortgagor', 
+                    title: '抵押人'
+                },
+                {
+                    field: 'mortgageAmount', 
+                    title: '抵押金额'
+                },
+                {
+                    field: 'mortgageStatus', 
+                    title: '抵押类型'
+                },
+                {
+                    field: 'maximumAmountTime', 
+                    title: '最高额确定期间'
+                },
+                {
+                    field: 'otherWarrantsNumber', 
+                    title: '他项权证编号'
+                },
+                {
+                    field: 'landArea', 
+                    title: '土地面积(㎡)'
+                },
+                {
+                    field: 'buildingArea', 
+                    title: '建筑物面积(㎡)'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.mortgageId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.mortgageId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function add() {
+            var projectId=$("#projectId").val();
+            $.operate.add(projectId);
+        }
+    </script>
+</body>
+</html>

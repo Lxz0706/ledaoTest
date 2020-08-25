@@ -1030,6 +1030,47 @@ var table = {
                 var url1 = $.common.isEmpty(ids) ? url.replace("{ids}", "") : url.replace("{ids}", ids);
                 return url1;
             },
+            // 详细信息
+            details: function (id, width, height,ids) {
+                table.set();
+                var _url = $.operate.detailUrls(id,ids);
+                var _width = $.common.isEmpty(width) ? "800" : width;
+                var _height = $.common.isEmpty(height) ? ($(window).height() - 50) : height;
+                //如果是移动端，就使用自适应大小弹窗
+                if ($.common.isMobile()) {
+                    _width = 'auto';
+                    _height = 'auto';
+                }
+                var options = {
+                    title: table.options.modalName + "详细",
+                    width: _width,
+                    height: _height,
+                    url: _url,
+                    skin: 'layui-layer-gray',
+                    btn: ['关闭'],
+                    yes: function (index, layero) {
+                        layer.close(index);
+                    }
+                };
+                $.modal.openOptions(options);
+            },
+            // 详细访问地址
+            detailUrls: function (id,ids) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id) && $.common.isNotEmpty(ids)) {
+                    url = table.options.detailUrl.replace("{id}", id);
+                    url = table.options.detailUrl.replace("{ids}",ids);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.detailUrl.replace("{id}", id);
+                    url = table.options.detailUrl.replace("{ids}",ids);
+                }
+                return url;
+            },
             // 修改信息
             edit: function (id) {
                 table.set();

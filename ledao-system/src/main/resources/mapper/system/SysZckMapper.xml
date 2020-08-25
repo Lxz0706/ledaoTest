@@ -130,10 +130,10 @@
                 #{assetPackageName}, '%')
             </if>
             <if test="assetStatus != null  and assetStatus != ''">
-                AND asset_status like concat('%', #{asset_status}, '%')
+                AND asset_status = #{assetStatus}
             </if>
             <if test="no != null ">and no like concat ('%',#{no },'%')</if>
-            <if test="borrower != null  and borrower != ''">and borrower like concat ('%',#{borrower },'%')</if>
+            <if test="borrower != null  and borrower != ''">and borrower like concat ('%',#{borrower},'%')</if>
             <if test="city != null  and city != ''">and city like concat ('%',#{city},'%')</if>
             <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
             <if test="principalBalance != null and principalBalance !=''">and principal_balance like concat
@@ -256,7 +256,7 @@
                 #{assetPackageName}, '%')
             </if>
             <if test="assetStatus != null  and assetStatus != ''">
-                AND asset_status like concat('%', #{asset_status}, '%')
+                AND asset_status = #{asset_status}
             </if>
             <if test="no != null ">and no like concat ('%',#{no },'%')</if>
             <if test="borrower != null  and borrower != ''">and borrower like concat ('%',#{borrower },'%')</if>

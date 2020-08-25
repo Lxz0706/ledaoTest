@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('项目详细')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<table class="table table-border">
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>债权情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right">序号:</td>
+				<td  class="col-sm-1"><span th:text="${sysProject.no}"/></td>
+				<td  class="col-sm-1 text-right">借款人名称：</td>
+				<td  class="col-sm-1"><span th:text="${sysProject.projectName}"/></td>
+				<td  class="col-sm-1 text-right"><h5>城市/名称:</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.city}"/></td>
+				<td  class="col-sm-1 text-right"><h5>放款银行：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.loanBank}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>合同本金（元）：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.contractPrincipal}"/></td>
+				<td  class="col-sm-1 text-right"><h5>本金余额（元）：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.principalBalance}"/></td>
+				<td  class="col-sm-1 text-right"><h5>利息余额（元）：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.interestBalance}"/></td>
+				<td  class="col-sm-1 text-right"><h5>本息余额（元）：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.principalInterestBalance}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>保证人：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.guarantor}"/></td>
+				<td  class="col-sm-1 text-right"><h5>抵押物：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.collateral}"/></td>
+				<td  class="col-sm-1 text-right"><h5>项目经理：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysProject.projectManager}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>司法情况</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>司法状态：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.judicialStatus}"/></td>
+				<td  class="col-sm-1 text-right"><h5>管辖法院：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.competentCourt}"/></td>
+				<td  class="col-sm-1 text-right"><h5>法官及联系方式：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.judgeContact}"/></td>
+				<td  class="col-sm-1 text-right"><h5>律所：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.lawFirm}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>律师及联系方式：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.lawyerContact}"/></td>
+				<td  class="col-sm-1 text-right"><h5>备注：</h5></td>
+				<td  class="col-sm-1" colspan="4"><span th:text="${sysProject.judicialRemarks}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>成交信息</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>抵押物/债权：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.collateralClaims}"/></td>
+				<td  class="col-sm-1 text-right"><h5>成交类型：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.transactionType}"/></td>
+				<td  class="col-sm-1 text-right"><h5>买家：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.buyer}"/></td>
+				<td  class="col-sm-1 text-right"><h5>买家来源：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.buyerSources}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>买家联系方式：</h5></td>
+				<td  class="col-sm-1" colspan="7"><span th:text="${sysProject.buyerContact}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>诉讼及执行进展</h3></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>所属债权合同编号：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.contractNo}"/></td>
+				<td  class="col-sm-1 text-right"><h5>诉讼时效起算日：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.limitationAction}"/></td>
+				<td  class="col-sm-1 text-right"><h5>查封标的：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.sealUpSubjectMatter}"/></td>
+				<td  class="col-sm-1 text-right"><h5>查封日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.sealUpDate, 'yyyy-MM-dd')}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>执行时效起算日：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.limitationExecution}"/></td>
+				<td  class="col-sm-1 text-right"><h5>起诉立案日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.dateFiling, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>一审判决案号及日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.firstInstance}"/></td>
+				<td  class="col-sm-1 text-right"><h5>二审判决案号及日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.secondInstance}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>再审判决案号及日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.retrial}"/></td>
+				<td  class="col-sm-1 text-right"><h5>执行立案日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.enforcementFilingDate, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>出具评估报告日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.appraisalReportDate, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>第一次挂拍日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.firstShotDate, 'yyyy-MM-dd')}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>第二次挂拍日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.secondShotDate, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>变卖挂拍日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.sellShotDate, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>拍卖成交日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.successfulBidderDate, 'yyyy-MM-dd')}"/></td>
+				<td  class="col-sm-1 text-right"><h5>执行款到账日期：</h5></td>
+				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.paymentReceivedDate, 'yyyy-MM-dd')}"/></td>
+			</tr>
+		</table>
+	</div>
+	<th:block th:include="include :: footer" />
+</body>
+</html>

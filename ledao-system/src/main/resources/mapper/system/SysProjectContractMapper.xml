@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysProjectContractMapper">
+
+    <resultMap type="SysProjectContract" id="SysProjectContractResult">
+        <result property="contractId" column="contract_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="contractNo" column="contract_no"/>
+        <result property="capital" column="capital"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="interestRate" column="interest_rate"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysProjectContractVo">
+        select contract_id, project_id, project_name,
+        contract_no, capital, start_time, end_time, interest_rate,
+        del_flag, create_by, create_time, update_by, update_time from sys_project_contract
+    </sql>
+
+    <select id="selectSysProjectContractList" parameterType="SysProjectContract" resultMap="SysProjectContractResult">
+        <include refid="selectSysProjectContractVo"/>
+        <where>
+            del_flag = '0'
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="contractNo != null  and contractNo != ''">and contract_no = #{contractNo}</if>
+            <if test="capital != null ">and capital = #{capital}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="interestRate != null  and interestRate != ''">and interest_rate = #{interestRate}</if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectContractById" parameterType="Long" resultMap="SysProjectContractResult">
+        <include refid="selectSysProjectContractVo"/>
+        where contract_id = #{contractId} and del_flag='0'
+    </select>
+
+    <insert id="insertSysProjectContract" parameterType="SysProjectContract" useGeneratedKeys="true"
+            keyProperty="contractId">
+        insert into sys_project_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="capital != null">capital,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="interestRate != null">interest_rate,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="projectId != null">project_id</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="capital != null">#{capital},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="interestRate != null">#{interestRate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="projectId != null">#{projectId}</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectContract" parameterType="SysProjectContract">
+        update sys_project_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="capital != null">capital = #{capital},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="interestRate != null">interest_rate = #{interestRate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where contract_id = #{contractId}
+    </update>
+
+    <delete id="deleteSysProjectContractById" parameterType="Long">
+        update sys_project_contract set del_flag = '2' where contract_id = #{contractId}
+    </delete>
+
+    <delete id="deleteSysProjectContractByIds" parameterType="String">
+        update sys_project_contract set del_flag = '2' where contract_id in
+        <foreach item="contractId" collection="array" open="(" separator="," close=")">
+            #{contractId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysProjectContractByProjectId" parameterType="String" resultMap="SysProjectContractResult">
+        <include refid="selectSysProjectContractVo"/> where project_id in
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+        and del_flag = '0'
+    </select>
+
+</mapper>

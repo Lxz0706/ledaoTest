@@ -75,20 +75,39 @@
                     title: 'id',
                     visible: false
                 },
-                /*{
+                {
                     field: 'owner', 
                     title: '所有人'
                 },
                 {
                     field: 'ownertype', 
                     title: '所有人类型'
-                },*/
+                },
+                {
+                 field: 'startPrice',
+                 title: '起拍价格'
+                },
+                {
+                    field: 'finalPrice',
+                    title: '当前/成交价'
+                },
+                {
+                    field: 'startTime',
+                    title: '开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '结束时间'
+                },
+                {
+                  field: 'status',
+                  title: '状态'
+                },
                 {
                     field: 'websiteLinks', 
                     title: '网站链接',
                     formatter: function(value, row, index) {
-                    /*<a href="http://www.baidu.com" target="_blank">跳到百度</a>*/
-                        return '<a href="'+value+'" target="_blank">' + value + '</a>';
+                        return '<a href="'+row.websiteLinks+'" target="_blank">' + value + '</a>';
                     }
                 },
                 {

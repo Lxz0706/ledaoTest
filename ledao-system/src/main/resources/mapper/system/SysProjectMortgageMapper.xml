@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysProjectMortgageMapper">
+
+    <resultMap type="SysProjectMortgage" id="SysProjectMortgageResult">
+        <result property="mortgageId" column="mortgage_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="collateralType" column="collateral_type"/>
+        <result property="mortgageContractNo" column="mortgage_contract_no"/>
+        <result property="mortgagor" column="mortgagor"/>
+        <result property="mortgageAmount" column="mortgage_amount"/>
+        <result property="mortgageStatus" column="mortgage_status"/>
+        <result property="maximumAmountTime" column="maximum_amount_time"/>
+        <result property="otherWarrantsNumber" column="other_warrants_number"/>
+        <result property="landArea" column="land_area"/>
+        <result property="buildingArea" column="building_area"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysProjectMortgageVo">
+        select mortgage_id, project_id, project_name, collateral_type,
+        mortgage_contract_no, mortgagor, mortgage_amount, mortgage_status,
+        maximum_amount_time, other_warrants_number, land_area, building_area, del_flag,
+        create_by, create_time, update_by, update_time from sys_project_mortgage
+    </sql>
+
+    <select id="selectSysProjectMortgageList" parameterType="SysProjectMortgage" resultMap="SysProjectMortgageResult">
+        <include refid="selectSysProjectMortgageVo"/>
+        <where>
+            del_flag = '0'
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="collateralType != null  and collateralType != ''">and collateral_type = #{collateralType}</if>
+            <if test="mortgageContractNo != null  and mortgageContractNo != ''">and mortgage_contract_no =
+                #{mortgageContractNo}
+            </if>
+            <if test="mortgagor != null  and mortgagor != ''">and mortgagor = #{mortgagor}</if>
+            <if test="mortgageAmount != null ">and mortgage_amount = #{mortgageAmount}</if>
+            <if test="mortgageStatus != null  and mortgageStatus != ''">and mortgage_status = #{mortgageStatus}</if>
+            <if test="maximumAmountTime != null  and maximumAmountTime != ''">and maximum_amount_time =
+                #{maximumAmountTime}
+            </if>
+            <if test="otherWarrantsNumber != null  and otherWarrantsNumber != ''">and other_warrants_number =
+                #{otherWarrantsNumber}
+            </if>
+            <if test="landArea != null  and landArea != ''">and land_area = #{landArea}</if>
+            <if test="buildingArea != null  and buildingArea != ''">and building_area = #{buildingArea}</if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectMortgageById" parameterType="Long" resultMap="SysProjectMortgageResult">
+        <include refid="selectSysProjectMortgageVo"/>
+        where mortgage_id = #{mortgageId} and del_flag='0'
+    </select>
+
+    <insert id="insertSysProjectMortgage" parameterType="SysProjectMortgage" useGeneratedKeys="true"
+            keyProperty="mortgageId">
+        insert into sys_project_mortgage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="collateralType != null">collateral_type,</if>
+            <if test="mortgageContractNo != null">mortgage_contract_no,</if>
+            <if test="mortgagor != null">mortgagor,</if>
+            <if test="mortgageAmount != null">mortgage_amount,</if>
+            <if test="mortgageStatus != null">mortgage_status,</if>
+            <if test="maximumAmountTime != null">maximum_amount_time,</if>
+            <if test="otherWarrantsNumber != null">other_warrants_number,</if>
+            <if test="landArea != null">land_area,</if>
+            <if test="buildingArea != null">building_area,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="projectId != null">project_id</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="collateralType != null">#{collateralType},</if>
+            <if test="mortgageContractNo != null">#{mortgageContractNo},</if>
+            <if test="mortgagor != null">#{mortgagor},</if>
+            <if test="mortgageAmount != null">#{mortgageAmount},</if>
+            <if test="mortgageStatus != null">#{mortgageStatus},</if>
+            <if test="maximumAmountTime != null">#{maximumAmountTime},</if>
+            <if test="otherWarrantsNumber != null">#{otherWarrantsNumber},</if>
+            <if test="landArea != null">#{landArea},</if>
+            <if test="buildingArea != null">#{buildingArea},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="projectId != null">#{projectId}</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectMortgage" parameterType="SysProjectMortgage">
+        update sys_project_mortgage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="collateralType != null">collateral_type = #{collateralType},</if>
+            <if test="mortgageContractNo != null">mortgage_contract_no = #{mortgageContractNo},</if>
+            <if test="mortgagor != null">mortgagor = #{mortgagor},</if>
+            <if test="mortgageAmount != null">mortgage_amount = #{mortgageAmount},</if>
+            <if test="mortgageStatus != null">mortgage_status = #{mortgageStatus},</if>
+            <if test="maximumAmountTime != null">maximum_amount_time = #{maximumAmountTime},</if>
+            <if test="otherWarrantsNumber != null">other_warrants_number = #{otherWarrantsNumber},</if>
+            <if test="landArea != null">land_area = #{landArea},</if>
+            <if test="buildingArea != null">building_area = #{buildingArea},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where mortgage_id = #{mortgageId}
+    </update>
+
+    <delete id="deleteSysProjectMortgageById" parameterType="Long">
+        update sys_project_mortgage set del_flag = '2' where mortgage_id = #{mortgageId}
+    </delete>
+
+    <delete id="deleteSysProjectMortgageByIds" parameterType="String">
+        update sys_project_mortgage set del_flag = '2' where mortgage_id in
+        <foreach item="mortgageId" collection="array" open="(" separator="," close=")">
+            #{mortgageId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysProjectMortgageByProjectId" parameterType="String" resultMap="SysProjectMortgageResult">
+        <include refid="selectSysProjectMortgageVo"/> where project_id in
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+        and del_flag = '0'
+    </select>
+
+</mapper>

@@ -133,6 +133,42 @@ public class SysZckController extends BaseController {
         return util.exportExcel(zckList, "资产库");
     }
 
+
+    /**
+     * 导出资产信息库列表
+     */
+    @RequiresPermissions("system:zcb:export")
+    @Log(title = "资产信息库", businessType = BusinessType.EXPORT)
+    @PostMapping("/export2")
+    @ResponseBody
+    public AjaxResult export2(SysZck sysZck) {
+        String id = getRequest().getParameter("id");
+        String zcbId = getRequest().getParameter("zcbId");
+        List<SysZck> zckList = new ArrayList<>();
+        if (StringUtils.isEmpty(id)) {
+            StringBuffer sb = new StringBuffer();
+            List<SysZck> zckList1 = sysZckService.selectSysZckByZcbId(Long.valueOf(zcbId));
+            for (SysZck syszck : zckList1) {
+                sb.append(syszck.getId()).append(",");
+            }
+            String ids = sb.deleteCharAt(sb.length() - 1).toString();
+            zckList = sysZckService.selectSysZckByZckId(ids);
+        } else {
+            StringBuffer sb = new StringBuffer();
+            sysZck.setParentId(Long.valueOf(id));
+            List<SysZck> zckList1 = sysZckService.selectSysZckByParentId(sysZck);
+            for (SysZck syszck : zckList1) {
+                sb.append(syszck.getId()).append(",");
+            }
+            String ids = sb.deleteCharAt(sb.length() - 1).toString();
+            zckList = sysZckService.selectSysZckByZckId(ids);
+        }
+
+        ExcelUtil<SysZck> util = new ExcelUtil<SysZck>(SysZck.class);
+        return util.exportExcel(zckList, "资产库");
+    }
+
+
     /**
      * 导出资产信息库列表
      */
@@ -191,16 +227,21 @@ public class SysZckController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysZck sysZck) {
-        List<SysZck> sysZckList = sysZckService.selectSysZckList(new SysZck());
+        List<SysZck> sysZckList = sysZckService.selectSysZckList(sysZck);
         Map<String, Long> map = new HashMap<>();
         Map<String, String> map1 = new HashMap<>();
+        Map<String, Long> map2 = new HashMap<>();
         for (SysZck sysZck1 : sysZckList) {
             map.put(sysZck1.getBorrower(), sysZck1.getId());
             map1.put(sysZck1.getBorrower(), sysZck1.getBorrower());
+            map2.put(sysZck1.getBorrower(), sysZck1.getZcbId());
         }
-        if (map1.get(sysZck.getBorrower()).equals(sysZck.getBorrower())) {
-            sysZck.setParentId(map.get(sysZck.getBorrower()));
+        if (StringUtils.isNotNull(map1.get(sysZck.getBorrower()))) {
+            if (map1.get(sysZck.getBorrower()).equals(sysZck.getBorrower())) {
+                sysZck.setParentId(map.get(sysZck.getBorrower()));
+            }
         }
+
         sysZck.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysZckService.insertSysZck(sysZck));
     }

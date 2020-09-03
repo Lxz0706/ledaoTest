@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <!--<div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>投资金额：</label>
+                                <input type="text" name="investmentAmount"/>
+                            </li>
+
+                        </ul>
+                    </div>
+                </form>
+            </div>-->
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectmanagent:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:projectmanagent:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:projectmanagent:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectmanagent:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:projectmanagent:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:projectmanagent:remove')}]];
+        var detailFlag = [[${@permission.hasPermi('system:projectmanagent:detail')}]];
+        var prefix = ctx + "system/projectmanagent";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "项目管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'projectManagementId', 
+                    title: '主键ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectManagementName', 
+                    title: '项目名称'
+                },
+                {
+                    field: 'projectLeader', 
+                    title: '项目负责人'
+                },
+                {
+                    field: 'investmentAmount',
+                    title: '投资金额',
+                },
+                {
+                    field: 'investmentDate',
+                    title: '投资日期'
+                },
+                {
+                    field: 'amountPaid',
+                    title: '已支付金额',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    }
+                },
+                {
+                    field: 'entryAmount',
+                    title: '已回收金额',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="money2(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    }
+                },
+                {
+                    title: '结算情况',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="money3(\'' + row.projectManagementId+'\')">结算情况</a>';
+                    }
+                },
+                {
+                    field: 'targetRecoveryAmount',
+                    title: '目标回收金额',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="money4(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    }
+                },
+                {
+                    field: 'targetRecoverDate',
+                    title: '目标日期'
+                },
+                {
+                    title: '最新进度情况',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectManagementId+'\')">最新进度情况</a>';
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.projectManagementId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.projectManagementId + '\')"><i class="fa fa-search"></i>详细</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.projectManagementId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        function progress(id) {
+            var url = ctx + 'system/progress/progressList/' + id;
+            $.modal.openTab("进度情况列表", url);
+        }
+
+        function detail(id) {
+            var url = prefix + '/detail/' + id;
+            $.modal.openTab("项目流转表详情", url);
+        }
+
+        function money1(id){
+            var url = ctx + 'system/projectysyf/projectysyfList/' + id;
+            $.modal.openTab("已支付金额列表", url);
+        }
+
+        function money2(id){
+            var url = ctx + 'system/recovered/recoveredList/' + id;
+            $.modal.openTab("已回收金额列表", url);
+        }
+
+        function money3(id){
+            var url = ctx + 'system/money/moneyList/' + id;
+            $.modal.openTab("结算情况列表", url);
+        }
+
+        function money4(id){
+            var url = ctx + 'system/targetrecover/projectTargetRecoverList/' + id;
+            $.modal.openTab("结算情况列表", url);
+        }
+
+    </script>
+</body>
+</html>

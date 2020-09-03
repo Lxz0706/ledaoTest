@@ -7,38 +7,47 @@
     <resultMap type="SysJudicial" id="SysJudicialResult">
         <result property="id" column="id"/>
         <result property="owner" column="owner"/>
-        <result property="ownertype" column="ownerType"/>
+        <result property="auctionsType" column="auctions_Type"/>
         <result property="websiteLinks" column="website_links"/>
         <result property="startPrice" column="start_price"/>
         <result property="appraisalPrice" column="appraisal_price"/>
         <result property="finalPrice" column="final_price"/>
-        <result property="tableData" column="table_data"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="status" column="status"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="county" column="county"/>
+        <result property="itemId" column="item_id"/>
+        <result property="title" column="title"/>
     </resultMap>
 
     <sql id="selectSysJudicialVo">
-        select id, owner, ownerType, website_links, start_price, appraisal_price, final_price, table_data, start_time, end_time, status from sys_judicial
+        select id, owner, auctions_Type, website_links, start_price, appraisal_price,
+        final_price, start_time, end_time, status, province, city, county, item_id,title from sys_judicial
     </sql>
 
     <select id="selectSysJudicialList" parameterType="SysJudicial" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
         <where>
-            <if test="owner != null  and owner != ''">and owner like concat ('%',#{owner },'%')</if>
-            <if test="ownertype != null  and ownertype != ''">and ownerType = #{ownertype}</if>
+            <if test="owner != null  and owner != ''">and owner like concat('%',#{owner}, '%')</if>
+            <if test="title != null  and title != ''">and title like concat('%',#{title}, '%')</if>
+            <if test="auctionsType != null  and auctionsType != ''">and auctions_Type = #{auctionsType}</if>
             <if test="websiteLinks != null  and websiteLinks != ''">and website_links = #{websiteLinks}</if>
             <if test="startPrice != null  and startPrice != ''">and start_price = #{startPrice}</if>
             <if test="appraisalPrice != null  and appraisalPrice != ''">and appraisal_price = #{appraisalPrice}</if>
             <if test="finalPrice != null  and finalPrice != ''">and final_price = #{finalPrice}</if>
-            <if test="tableData != null  and tableData != ''">and table_data = #{tableData}</if>
             <if test="startTime != null ">and start_time = #{startTime}</if>
             <if test="endTime != null ">and end_time = #{endTime}</if>
             <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="province != null  and province != ''">and province = #{province}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="county != null  and county != ''">and county = #{county}</if>
+            <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
         </where>
     </select>
 
-    <select id="selectSysJudicialById" parameterType="Integer" resultMap="SysJudicialResult">
+    <select id="selectSysJudicialById" parameterType="Long" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
         where id = #{id}
     </select>
@@ -47,27 +56,35 @@
         insert into sys_judicial
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="owner != null">owner,</if>
-            <if test="ownertype != null">ownerType,</if>
+            <if test="auctionsType != null">auctions_Type,</if>
             <if test="websiteLinks != null">website_links,</if>
             <if test="startPrice != null">start_price,</if>
             <if test="appraisalPrice != null">appraisal_price,</if>
             <if test="finalPrice != null">final_price,</if>
-            <if test="tableData != null">table_data,</if>
             <if test="startTime != null">start_time,</if>
             <if test="endTime != null">end_time,</if>
             <if test="status != null">status,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="county != null">county,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="title != null">title,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="owner != null">#{owner},</if>
-            <if test="ownertype != null">#{ownertype},</if>
+            <if test="auctionsType != null">#{auctionsType},</if>
             <if test="websiteLinks != null">#{websiteLinks},</if>
             <if test="startPrice != null">#{startPrice},</if>
             <if test="appraisalPrice != null">#{appraisalPrice},</if>
             <if test="finalPrice != null">#{finalPrice},</if>
-            <if test="tableData != null">#{tableData},</if>
             <if test="startTime != null">#{startTime},</if>
             <if test="endTime != null">#{endTime},</if>
             <if test="status != null">#{status},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="county != null">#{county},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="title != null">#{title},</if>
         </trim>
     </insert>
 
@@ -75,20 +92,24 @@
         update sys_judicial
         <trim prefix="SET" suffixOverrides=",">
             <if test="owner != null">owner = #{owner},</if>
-            <if test="ownertype != null">ownerType = #{ownertype},</if>
+            <if test="auctionsType != null">auctions_Type = #{auctionsType},</if>
             <if test="websiteLinks != null">website_links = #{websiteLinks},</if>
             <if test="startPrice != null">start_price = #{startPrice},</if>
             <if test="appraisalPrice != null">appraisal_price = #{appraisalPrice},</if>
             <if test="finalPrice != null">final_price = #{finalPrice},</if>
-            <if test="tableData != null">table_data = #{tableData},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="county != null">county = #{county},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="title != null">title = #{title},</if>
         </trim>
         where id = #{id}
     </update>
 
-    <delete id="deleteSysJudicialById" parameterType="Integer">
+    <delete id="deleteSysJudicialById" parameterType="Long">
         delete from sys_judicial where id = #{id}
     </delete>
 

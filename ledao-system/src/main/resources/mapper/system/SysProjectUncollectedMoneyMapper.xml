@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysProjectUncollectedMoneyMapper">
+
+    <resultMap type="SysProjectUncollectedMoney" id="SysProjectUncollectedMoneyResult">
+        <result property="id" column="id"/>
+        <result property="projectManagementId" column="project_management_id"/>
+        <result property="fundType" column="fund_type"/>
+        <result property="time" column="time"/>
+        <result property="amountMoney" column="amount_money"/>
+        <result property="state" column="state"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysProjectUncollectedMoneyVo">
+        select id, project_management_id, fund_type, time, amount_money, state, del_flag, create_by, create_time, update_by, update_time from sys_project_uncollected_money
+    </sql>
+
+    <select id="selectSysProjectUncollectedMoneyList" parameterType="SysProjectUncollectedMoney"
+            resultMap="SysProjectUncollectedMoneyResult">
+        <include refid="selectSysProjectUncollectedMoneyVo"/>
+        <where>
+            del_flag = '0'
+            <if test="projectManagementId != null ">and project_management_id = #{projectManagementId}</if>
+            <if test="fundType != null  and fundType != ''">and fund_type = #{fundType}</if>
+            <if test="time != null ">and time = #{time}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="amountMoney != null ">and amount_money = #{amountMoney}</if>
+            <if test="state != null  and state != ''">and state = #{state}</if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectUncollectedMoneyById" parameterType="Long"
+            resultMap="SysProjectUncollectedMoneyResult">
+        <include refid="selectSysProjectUncollectedMoneyVo"/>
+        where id = #{id} and del_flag = '0'
+    </select>
+
+    <insert id="insertSysProjectUncollectedMoney" parameterType="SysProjectUncollectedMoney" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into sys_project_uncollected_money
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectManagementId != null">project_management_id,</if>
+            <if test="fundType != null">fund_type,</if>
+            <if test="time != null">time,</if>
+            <if test="amountMoney != null">amount_money,</if>
+            <if test="state != null">state,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectManagementId != null">#{projectManagementId},</if>
+            <if test="fundType != null">#{fundType},</if>
+            <if test="time != null">#{time},</if>
+            <if test="amountMoney != null">#{amountMoney},</if>
+            <if test="state != null">#{state},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectUncollectedMoney" parameterType="SysProjectUncollectedMoney">
+        update sys_project_uncollected_money
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectManagementId != null">project_management_id = #{projectManagementId},</if>
+            <if test="fundType != null">fund_type = #{fundType},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="amountMoney != null">amount_money = #{amountMoney},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysProjectUncollectedMoneyById" parameterType="Long">
+        update sys_project_uncollected_money set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteSysProjectUncollectedMoneyByIds" parameterType="String">
+        update sys_project_uncollected_money set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

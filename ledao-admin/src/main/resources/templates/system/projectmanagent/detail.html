@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('项目详细')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<table class="table table-border">
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>优先方:</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProjectManagent.priority}"/></td>
+				<td  class="col-sm-1 text-right"><h5>劣后方：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProjectManagent.inferiorRear}"/></td>
+				<td  class="col-sm-1 text-right"><h5>收支结算方式：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProjectManagent.expensesReceipts}"/></td>
+				<td  class="col-sm-1 text-right"><h5>投资机构：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProjectManagent.investmentInstituions}"/></td>
+			</tr>
+			<tr>
+				<td  class="col-sm-1 text-right"><h5>服务费结算方式：</h5></td>
+				<td  class="col-sm-1" colspan="7"><span th:text="${sysProjectManagent.serviceFee}"/></td>
+			</tr>
+		</table>
+	</div>
+	<th:block th:include="include :: footer" />
+</body>
+</html>

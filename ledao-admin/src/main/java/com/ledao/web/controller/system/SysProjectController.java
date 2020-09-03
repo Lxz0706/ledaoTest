@@ -244,7 +244,6 @@ public class SysProjectController extends BaseController {
         } else {
             url = "/detail";
         }
-        logger.info("路径：======"+url);
         return prefix + url;
     }
 }

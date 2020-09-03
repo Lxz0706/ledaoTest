@@ -5,7 +5,7 @@
 </head>
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-		<table class="table table-border">
+		<table class="table table-border" style="table-layout: auto;word-break: break-all">
 			<tr>
 				<td colspan="8" style="text-align: center" class="success"><h3>资产包情况</h3></td>
 			</tr>
@@ -17,9 +17,9 @@
 				<td colspan="8" style="text-align: center" class="success"><h3>借款基本情况</h3></td>
 			</tr>
 			<tr>
-				<td  class="col-sm-1 text-right">序号:</td>
+				<td  class="col-sm-1 text-right"><h5>序号:</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.no}"/></td>
-				<td  class="col-sm-1 text-right">借款人名称：</td>
+				<td  class="col-sm-1 text-right"><h5>借款人名称：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.borrower}"/></td>
 				<td  class="col-sm-1 text-right"><h5>城市/名称:</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.city}"/></td>
@@ -246,7 +246,7 @@
 				<td  class="col-sm-1 text-right"><h5>总价：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.totalPrice}"/></td>
 				<td  class="col-sm-1 text-right"><h5>估值依据：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysZck.valuationBasis}"/></td>
+				<td  class="col-sm-1" style="width: 10px!important;"><span th:text="${sysZck.valuationBasis}"/></td>
 				<td  class="col-sm-1 text-right"><h5>盖帽值：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysZck.capValue}"/></td>
 				<td  class="col-sm-1 text-right"><h5>抵质押物备注：</h5></td>

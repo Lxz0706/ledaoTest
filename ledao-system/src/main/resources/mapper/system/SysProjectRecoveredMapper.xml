@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysProjectRecoveredMapper">
+
+    <resultMap type="SysProjectRecovered" id="SysProjectRecoveredResult">
+        <result property="id" column="id"/>
+        <result property="projectManagementId" column="project_management_id"/>
+        <result property="amountRecovered" column="amount_recovered"/>
+        <result property="recoveredDate" column="recovered_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysProjectRecoveredVo">
+        select id, project_management_id, amount_recovered, recovered_date, del_flag, create_by, create_time, update_by, update_time from sys_project_recovered
+    </sql>
+
+    <select id="selectSysProjectRecoveredList" parameterType="SysProjectRecovered"
+            resultMap="SysProjectRecoveredResult">
+        <include refid="selectSysProjectRecoveredVo"/>
+        <where>
+            del_flag = '0'
+            <if test="projectManagementId != null ">and project_management_id = #{projectManagementId}</if>
+            <if test="amountRecovered != null ">and amount_recovered = #{amountRecovered}</if>
+            <if test="recoveredDate != null ">and recovered_date = #{recoveredDate}</if>
+            <if test="params.beginRecoveredDate != null and params.beginRecoveredDate != ''"><!-- 开始时间检索 -->
+                AND date_format(recovered_date,'%y%m%d') &gt;= date_format(#{params.beginRecoveredDate},'%y%m%d')
+            </if>
+            <if test="params.endRecoveredDate != null and params.endRecoveredDate != ''"><!-- 结束时间检索 -->
+                AND date_format(recovered_date,'%y%m%d') &lt;= date_format(#{params.endRecoveredDate},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectRecoveredById" parameterType="Long" resultMap="SysProjectRecoveredResult">
+        <include refid="selectSysProjectRecoveredVo"/>
+        where id = #{id} and del_flag = '0'
+    </select>
+
+    <insert id="insertSysProjectRecovered" parameterType="SysProjectRecovered" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_project_recovered
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectManagementId != null">project_management_id,</if>
+            <if test="amountRecovered != null">amount_recovered,</if>
+            <if test="recoveredDate != null">recovered_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectManagementId != null">#{projectManagementId},</if>
+            <if test="amountRecovered != null">#{amountRecovered},</if>
+            <if test="recoveredDate != null">#{recoveredDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectRecovered" parameterType="SysProjectRecovered">
+        update sys_project_recovered
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectManagementId != null">project_management_id = #{projectManagementId},</if>
+            <if test="amountRecovered != null">amount_recovered = #{amountRecovered},</if>
+            <if test="recoveredDate != null">recovered_date = #{recoveredDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysProjectRecoveredById" parameterType="Long">
+        update sys_project_recovered set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteSysProjectRecoveredByIds" parameterType="String">
+        update sys_project_recovered set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

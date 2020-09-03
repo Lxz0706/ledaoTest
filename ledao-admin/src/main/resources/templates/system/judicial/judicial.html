@@ -2,91 +2,99 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('司法列表')" />
+    <style type="text/css">
+        .select-table table{table-layout:fixed;}.select-table .table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .form-control{padding:3px 6px 4px;height:30px;}.icheckbox-blue{top:0px;left:6px;}
+        .form-control.select2-hidden-accessible{position:static!important;}.select-table table label.error{position: inherit;}select + label.error{z-index:1;right:40px;}
+    </style>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <label>所有人：</label>
-                                <input type="text" name="owner"/>
-                            </li>
-                            <!--<li>
-                                <label>所有人类型：</label>
-                                <select name="ownertype">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>网站链接：</label>
-                                <input type="text" name="websiteLinks"/>
-                            </li>-->
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>标题：</label>
+                            <input type="text" name="title"/>
+                        </li>
+                        <li>
+                            <label>所有人：</label>
+                            <input type="text" name="owner"/>
+                        </li>
+                        <!--<li>
+                            <label>所有人类型：</label>
+                            <select name="ownertype">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>网站链接：</label>
+                            <input type="text" name="websiteLinks"/>
+                        </li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:judicial:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:judicial:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:judicial:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:judicial:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:judicial:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:judicial:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:judicial:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:judicial:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <div class="select-table table-striped" style="margin-top: 0px;padding-top: 0px;padding-bottom: 0px;">
                 <table id="bootstrap-table"></table>
             </div>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:judicial:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:judicial:remove')}]];
-        var prefix = ctx + "system/judicial";
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:judicial:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:judicial:remove')}]];
+    var prefix = ctx + "system/judicial";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "司法",
-                columns: [{
-                    checkbox: true
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "司法",
+            columns: [
+                {
+                    field: 'title',
+                    title: '标题'
                 },
                 {
-                    field: 'id', 
-                    title: 'id',
-                    visible: false
-                },
-                {
-                    field: 'owner', 
+                    field: 'owner',
                     title: '所有人'
                 },
                 {
-                    field: 'ownertype', 
-                    title: '所有人类型'
+                    field: 'auctionsType',
+                    title: '拍品类型'
                 },
-                {
+                /*{
                  field: 'startPrice',
                  title: '起拍价格'
-                },
+                },*/
                 {
                     field: 'finalPrice',
                     title: '当前/成交价'
@@ -100,16 +108,16 @@
                     title: '结束时间'
                 },
                 {
-                  field: 'status',
-                  title: '状态'
+                    field: 'status',
+                    title: '状态'
                 },
                 {
-                    field: 'websiteLinks', 
+                    field: 'websiteLinks',
                     title: '网站链接',
                     formatter: function(value, row, index) {
                         return '<a href="'+row.websiteLinks+'" target="_blank">' + value + '</a>';
                     }
-                },
+                }/*,
                 {
                     title: '操作',
                     align: 'center',
@@ -119,10 +127,16 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
-                }]
-            };
-            $.table.init(options);
-        });
-    </script>
+                }*/],
+            onLoadSuccess: function () {
+                $('.bootstrap-table tr td').each(function () {
+                    $(this).attr("title", $(this).text());
+                    $(this).css("cursor", 'pointer');
+                });
+            }
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>

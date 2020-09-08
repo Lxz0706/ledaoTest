@@ -90,32 +90,20 @@ public class SysProjectUncollectedMoneyController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(SysProjectUncollectedMoney sysProjectUncollectedMoney) {
         SysProjectysyf sysProjectysyf = new SysProjectysyf();
-        SysProjectUncollectedMoney sysProjectUncollectedMoney1 = new SysProjectUncollectedMoney();
-        if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getFundType())) {
-            if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getState())) {
-                if ("是".equals(sysProjectUncollectedMoney.getState())) {
-                    if ("应（未）付金额".equals(sysProjectUncollectedMoney.getState())) {
-                        sysProjectysyf.setFundType("已付金额");
-                        sysProjectysyf.setPaidDate(sysProjectUncollectedMoney.getTime());
-                        sysProjectysyf.setAmountPaid(sysProjectUncollectedMoney.getAmountMoney());
-                        sysProjectysyf.setCreateBy(ShiroUtils.getLoginName());
-                        sysProjectysyfService.insertSysProjectysyf(sysProjectysyf);
-                    } else if ("应（未）收金额".equals(sysProjectUncollectedMoney.getState())) {
-                        sysProjectysyf.setFundType("已收金额");
-                        sysProjectysyf.setPaidDate(sysProjectUncollectedMoney.getTime());
-                        sysProjectysyf.setAmountPaid(sysProjectUncollectedMoney.getAmountMoney());
-                        sysProjectysyf.setCreateBy(ShiroUtils.getLoginName());
-                        sysProjectysyfService.insertSysProjectysyf(sysProjectysyf);
-                    } else if ("未收服务费金额".equals(sysProjectUncollectedMoney.getState())) {
-                        sysProjectUncollectedMoney1.setFundType("已收服务费金额");
-                        sysProjectUncollectedMoney1.setAmountMoney(sysProjectUncollectedMoney.getAmountMoney());
-                        sysProjectUncollectedMoney1.setTime(sysProjectUncollectedMoney.getTime());
-                        sysProjectUncollectedMoney1.setState("是");
-                        sysProjectUncollectedMoney1.setCreateBy(ShiroUtils.getLoginName());
-                        sysProjectUncollectedMoneyService.insertSysProjectUncollectedMoney(sysProjectUncollectedMoney1);
-                    }
-                }
+        if ("是".equals(sysProjectUncollectedMoney.getState())) {
+            if ("应（未）付金额".equals(sysProjectUncollectedMoney.getFundType())) {
+                sysProjectysyf.setFundType("已付金额");
+            } else if ("应（未）收金额".equals(sysProjectUncollectedMoney.getFundType())) {
+                sysProjectysyf.setFundType("已收金额");
+            } else if ("未收服务费金额".equals(sysProjectUncollectedMoney.getFundType())) {
+                sysProjectysyf.setFundType("已收服务费金额");
             }
+            sysProjectysyf.setProjectManagementId(sysProjectUncollectedMoney.getProjectManagementId());
+            sysProjectysyf.setPaidDate(sysProjectUncollectedMoney.getTime());
+            sysProjectysyf.setAmountPaid(sysProjectUncollectedMoney.getAmountMoney());
+            sysProjectysyf.setCreateBy(ShiroUtils.getLoginName());
+            sysProjectysyf.setRemarks(sysProjectUncollectedMoney.getRemarks());
+            sysProjectysyfService.insertSysProjectysyf(sysProjectysyf);
         }
         sysProjectUncollectedMoney.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysProjectUncollectedMoneyService.insertSysProjectUncollectedMoney(sysProjectUncollectedMoney));
@@ -140,36 +128,36 @@ public class SysProjectUncollectedMoneyController extends BaseController {
     @ResponseBody
     public AjaxResult editSave(SysProjectUncollectedMoney sysProjectUncollectedMoney) {
         SysProjectysyf sysProjectysyf = new SysProjectysyf();
-        SysProjectUncollectedMoney sysProjectUncollectedMoney1 = new SysProjectUncollectedMoney();
-        logger.info("sysProjectUncollectedMoney.getFundType():==============="+sysProjectUncollectedMoney.getFundType());
         if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getFundType())) {
-            logger.info("sysProjectUncollectedMoney.getFundType():----------------------"+sysProjectUncollectedMoney.getFundType());
             if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getState())) {
-                logger.info("sysProjectUncollectedMoney.getState():==============="+sysProjectUncollectedMoney.getState());
                 if ("是".equals(sysProjectUncollectedMoney.getState())) {
                     if ("应（未）付金额".equals(sysProjectUncollectedMoney.getFundType())) {
-                        logger.info("捡来了！！！！！！！！！！");
                         sysProjectysyf.setFundType("已付金额");
                         sysProjectysyf.setProjectManagementId(sysProjectUncollectedMoney.getProjectManagementId());
                         sysProjectysyf.setPaidDate(sysProjectUncollectedMoney.getTime());
                         sysProjectysyf.setAmountPaid(sysProjectUncollectedMoney.getAmountMoney());
                         sysProjectysyf.setCreateBy(ShiroUtils.getLoginName());
+                        sysProjectysyf.setRemarks(sysProjectUncollectedMoney.getRemarks());
                         sysProjectysyfService.insertSysProjectysyf(sysProjectysyf);
+                        sysProjectUncollectedMoneyService.deleteSysProjectUncollectedMoneyById(sysProjectUncollectedMoney.getId());
                     } else if ("应（未）收金额".equals(sysProjectUncollectedMoney.getFundType())) {
                         sysProjectysyf.setFundType("已收金额");
                         sysProjectysyf.setProjectManagementId(sysProjectUncollectedMoney.getProjectManagementId());
                         sysProjectysyf.setPaidDate(sysProjectUncollectedMoney.getTime());
                         sysProjectysyf.setAmountPaid(sysProjectUncollectedMoney.getAmountMoney());
                         sysProjectysyf.setCreateBy(ShiroUtils.getLoginName());
+                        sysProjectysyf.setRemarks(sysProjectUncollectedMoney.getRemarks());
                         sysProjectysyfService.insertSysProjectysyf(sysProjectysyf);
+                        sysProjectUncollectedMoneyService.deleteSysProjectUncollectedMoneyById(sysProjectUncollectedMoney.getId());
                     } else if ("未收服务费金额".equals(sysProjectUncollectedMoney.getFundType())) {
-                        sysProjectUncollectedMoney1.setFundType("已收服务费金额");
-                        sysProjectUncollectedMoney1.setProjectManagementId(sysProjectUncollectedMoney.getProjectManagementId());
-                        sysProjectUncollectedMoney1.setAmountMoney(sysProjectUncollectedMoney.getAmountMoney());
-                        sysProjectUncollectedMoney1.setTime(sysProjectUncollectedMoney.getTime());
-                        sysProjectUncollectedMoney1.setState("是");
-                        sysProjectUncollectedMoney1.setCreateBy(ShiroUtils.getLoginName());
-                        sysProjectUncollectedMoneyService.insertSysProjectUncollectedMoney(sysProjectUncollectedMoney1);
+                        sysProjectysyf.setFundType("已收服务费金额");
+                        sysProjectysyf.setProjectManagementId(sysProjectUncollectedMoney.getProjectManagementId());
+                        sysProjectysyf.setPaidDate(sysProjectUncollectedMoney.getTime());
+                        sysProjectysyf.setAmountPaid(sysProjectUncollectedMoney.getAmountMoney());
+                        sysProjectysyf.setCreateBy(ShiroUtils.getLoginName());
+                        sysProjectysyf.setRemarks(sysProjectUncollectedMoney.getRemarks());
+                        sysProjectysyfService.insertSysProjectysyf(sysProjectysyf);
+                        sysProjectUncollectedMoneyService.deleteSysProjectUncollectedMoneyById(sysProjectUncollectedMoney.getId());
                     }
                 }
             }

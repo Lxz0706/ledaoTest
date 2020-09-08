@@ -11,14 +11,14 @@
 				<td  class="col-sm-1"><span th:text="${sysProjectManagent.priority}"/></td>
 				<td  class="col-sm-1 text-right"><h5>劣后方：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysProjectManagent.inferiorRear}"/></td>
-				<td  class="col-sm-1 text-right"><h5>收支结算方式：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProjectManagent.expensesReceipts}"/></td>
 				<td  class="col-sm-1 text-right"><h5>投资机构：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProjectManagent.investmentInstituions}"/></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysProjectManagent.investmentInstituions}"/></td>
 			</tr>
 			<tr>
 				<td  class="col-sm-1 text-right"><h5>服务费结算方式：</h5></td>
-				<td  class="col-sm-1" colspan="7"><span th:text="${sysProjectManagent.serviceFee}"/></td>
+				<td  class="col-sm-1"><span th:text="${sysProjectManagent.serviceFee}"/></td>
+				<td  class="col-sm-1 text-right"><h5>收支结算方式：</h5></td>
+				<td  class="col-sm-1" colspan="3"><span th:text="${sysProjectManagent.expensesReceipts}"/></td>
 			</tr>
 		</table>
 	</div>

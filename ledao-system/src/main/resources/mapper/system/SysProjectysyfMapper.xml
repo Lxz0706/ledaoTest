@@ -15,10 +15,11 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="fundType" column="fund_type"/>
+        <result property="remarks" column="remarks"/>
     </resultMap>
 
     <sql id="selectSysProjectysyfVo">
-        select id, project_management_id, paid_date, amount_paid, del_flag, create_by, create_time, update_by, update_time, fund_type from sys_projectysyf
+        select id, project_management_id, paid_date, amount_paid, del_flag, create_by, create_time, update_by, update_time, fund_type,remarks from sys_projectysyf
     </sql>
 
     <select id="selectSysProjectysyfList" parameterType="SysProjectysyf" resultMap="SysProjectysyfResult">
@@ -34,6 +35,7 @@
             </if>
             <if test="amountPaid != null ">and amount_paid = #{amountPaid}</if>
             <if test="fundType != null  and fundType != ''">and fund_type = #{fundType}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
         </where>
     </select>
 
@@ -55,6 +57,7 @@
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="fundType != null">fund_type,</if>
+            <if test="remarks != null">remarks,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -67,6 +70,7 @@
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="fundType != null">#{fundType},</if>
+            <if test="remarks != null">#{remarks},</if>
         </trim>
     </insert>
 
@@ -82,6 +86,7 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="fundType != null">fund_type = #{fundType},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
         </trim>
         where id = #{id}
     </update>

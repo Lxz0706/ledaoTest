@@ -57,6 +57,8 @@ public class SysProjectUncollectedMoney extends BaseEntity {
      */
     private String delFlag;
 
+    private String remarks;
+
     public Long getId() {
         return id;
     }
@@ -113,6 +115,14 @@ public class SysProjectUncollectedMoney extends BaseEntity {
         this.delFlag = delFlag;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -127,6 +137,7 @@ public class SysProjectUncollectedMoney extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("remarks", getRemarks())
                 .toString();
     }
 }

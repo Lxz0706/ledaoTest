@@ -16,17 +16,18 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="remarks" column="remarks"/>
     </resultMap>
 
     <sql id="selectSysProjectUncollectedMoneyVo">
-        select id, project_management_id, fund_type, time, amount_money, state, del_flag, create_by, create_time, update_by, update_time from sys_project_uncollected_money
+        select id, project_management_id, fund_type, time, amount_money, state, del_flag, create_by, create_time, update_by, update_time,remarks from sys_project_uncollected_money
     </sql>
 
     <select id="selectSysProjectUncollectedMoneyList" parameterType="SysProjectUncollectedMoney"
             resultMap="SysProjectUncollectedMoneyResult">
         <include refid="selectSysProjectUncollectedMoneyVo"/>
         <where>
-            del_flag = '0'
+            del_flag = '0' and state = '否'
             <if test="projectManagementId != null ">and project_management_id = #{projectManagementId}</if>
             <if test="fundType != null  and fundType != ''">and fund_type = #{fundType}</if>
             <if test="time != null ">and time = #{time}</if>
@@ -38,6 +39,7 @@
             </if>
             <if test="amountMoney != null ">and amount_money = #{amountMoney}</if>
             <if test="state != null  and state != ''">and state = #{state}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
         </where>
     </select>
 
@@ -61,6 +63,7 @@
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="remarks != null">remarks,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectManagementId != null">#{projectManagementId},</if>
@@ -73,6 +76,7 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="remarks != null">#{remarks},</if>
         </trim>
     </insert>
 
@@ -89,6 +93,7 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
         </trim>
         where id = #{id}
     </update>

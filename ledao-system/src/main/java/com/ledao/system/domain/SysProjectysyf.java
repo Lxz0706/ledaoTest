@@ -52,6 +52,8 @@ public class SysProjectysyf extends BaseEntity {
     @Excel(name = "资金类型")
     private String fundType;
 
+    private String remarks;
+
     public Long getId() {
         return id;
     }
@@ -100,6 +102,14 @@ public class SysProjectysyf extends BaseEntity {
         this.fundType = fundType;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -113,6 +123,7 @@ public class SysProjectysyf extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("fundType", getFundType())
+                .append("remarks",getRemarks())
                 .toString();
     }
 }

@@ -77,7 +77,6 @@ public class SysProjectmanagentController extends BaseController {
 
             //已收金额总和
             SysProjectysyf sysProjectysyf = new SysProjectysyf();
-            sysProjectysyf.setFundType("已付金额");
             sysProjectysyf.setProjectManagementId(sysProjectmanagent1.getProjectManagementId());
             List<SysProjectysyf> sysProjectysyfList = sysProjectysyfService.selectSysProjectysyfList(sysProjectysyf);
             if (StringUtils.isNotEmpty(sysProjectysyfList)) {

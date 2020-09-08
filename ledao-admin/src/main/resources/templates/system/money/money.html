@@ -2,6 +2,11 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('【请填写功能名称】列表')" />
+    <style type="text/css">
+        .select-table table{table-layout:fixed;}.select-table .table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .form-control{padding:3px 6px 4px;height:30px;}.icheckbox-blue{top:0px;left:6px;}
+        .form-control.select2-hidden-accessible{position:static!important;}.select-table table label.error{position: inherit;}select + label.error{z-index:1;right:40px;}
+    </style>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -107,6 +112,10 @@
                 {
                     field: 'state', 
                     title: '状态'
+                },
+                {
+                    field: 'remarks',
+                    title: '备注'
                 },
                 {
                     title: '操作',

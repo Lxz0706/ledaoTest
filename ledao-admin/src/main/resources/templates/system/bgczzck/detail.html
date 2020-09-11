@@ -111,12 +111,18 @@
 				<tr>
 					<td class="col-sm-1 text-right"><h5>土地性质：</h5></td>
 					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_tdxz', sysBgczzck.natureLand)}"/></td>
+					<td class="col-sm-1 text-right"><h5>土地性质：</h5></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.zoing}"/></td>
 					<td class="col-sm-1 text-right"><h5>剩余使用年限：</h5></td>
 					<td class="col-sm-1"><span th:text="${sysBgczzck.sysynx}"/></td>
 					<td class="col-sm-1 text-right"><h5>土地基本信息容积率：</h5></td>
 					<td class="col-sm-1"><span th:text="${sysBgczzck.tdPlotRatio}"/></td>
+				</tr>
+				<tr>
 					<td class="col-sm-1 text-right"><h5>获得方式：</h5></td>
-					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_hdfs', sysBgczzck.access)}"/></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_zcb_hdfs', sysBgczzck.access)}"/></td>
+					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.comment}"/></td>
 				</tr>
 				<tr>
 					<td colspan="8" style="text-align: center" class="success"><h3>项目运行中协议签署情况</h3></td>
@@ -146,9 +152,11 @@
 				</tr>
 				<tr>
 					<td class="col-sm-1 text-right"><h5>商业占比：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.businessShare}"/></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.businessShare}"/></td>
 					<td class="col-sm-1 text-right"><h5>规划建筑面积：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.planBuildArea}"/></td>
+					<td class="col-sm-1"><span th:text="${sysBgczzck.planBuildArea}"/></td>
+					<td class="col-sm-1 text-right"><h5>规划建筑面积：</h5></td>
+					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.remarks}"/></td>
 				</tr>
 				<tr>
 					<td colspan="8" style="text-align: center" class="success"><h3>项目估值</h3></td>

@@ -77,6 +77,9 @@
                 {
                     field: 'investmentAmount',
                     title: '投资金额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'investmentDate',
@@ -85,15 +88,15 @@
                 {
                     field: 'amountPaid',
                     title: '已支付金额',
-                    formatter:function(value, row, index){
-                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    formatter:function (value,row,index) {
+                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId+'\')">' + $.operate.numberFormatter(value) + '</a>';
                     }
                 },
                 {
                     field: 'entryAmount',
                     title: '已回收金额',
-                    formatter:function(value, row, index){
-                        return '<a href="javascript:void(0)" onclick="money2(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    formatter:function (value,row,index) {
+                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId+'\')">' + $.operate.numberFormatter(value) + '</a>';
                     }
                 },
                 {
@@ -105,8 +108,8 @@
                 {
                     field: 'targetRecoveryAmount',
                     title: '目标回收金额',
-                    formatter:function(value, row, index){
-                        return '<a href="javascript:void(0)" onclick="money4(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    formatter:function (value,row,index) {
+                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId+'\')">' + $.operate.numberFormatter(value) + '</a>';
                     }
                 },
                 {
@@ -161,6 +164,12 @@
         function money4(id){
             var url = ctx + 'system/targetrecover/projectTargetRecoverList/' + id;
             $.modal.openTab("目标回收金额列表", url);
+        }
+
+
+        function toThou(str){
+            var reg=/(\d)(?=(?:\d{3})+\b)/g
+            return  str.replace(reg,'$1,')
         }
 
     </script>

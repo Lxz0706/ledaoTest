@@ -209,6 +209,12 @@ public class SysBgczzck extends BaseEntity {
     private String natureLand;
 
     /**
+     * 土地用途
+     */
+    @Excel(name = "土地用途")
+    private String zoing;
+
+    /**
      * 剩余使用年限
      */
     @Excel(name = "剩余使用年限")
@@ -227,10 +233,17 @@ public class SysBgczzck extends BaseEntity {
     private String access;
 
     /**
+     * 备注
+     * */
+    @Excel(name = "备注")
+    private String comment;
+
+    /**
      * 合同概要
      */
     @Excel(name = "合同概要")
     private String contractSummary;
+
 
     /**
      * 合同金额
@@ -285,6 +298,9 @@ public class SysBgczzck extends BaseEntity {
      */
     @Excel(name = "规划建筑面积")
     private String planBuildArea;
+
+    @Excel(name = "备注")
+    private String remarks;
 
     /**
      * 土地单价(元/亩)
@@ -412,11 +428,6 @@ public class SysBgczzck extends BaseEntity {
     //@Excel(name = "国企/非国企")
     private String soe;
 
-    /**
-     * 土地用途
-     */
-    //@Excel(name = "土地用途")
-    private String zoing;
 
     public Long getId() {
         return id;
@@ -954,6 +965,23 @@ public class SysBgczzck extends BaseEntity {
         return zoing;
     }
 
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -971,7 +999,7 @@ public class SysBgczzck extends BaseEntity {
                 .append("bxjsDate", getBxjsDate())
                 .append("interestPaymentCycle", getInterestPaymentCycle())
                 .append("interestPaymentDate", getInterestPaymentDate())
-                .append("interestPaymentDateRemark",getInterestPaymentDateRemark())
+                .append("interestPaymentDateRemark", getInterestPaymentDateRemark())
                 .append("finalParty", getFinalParty())
                 .append("finalAgreementNo", getFinalAgreementNo())
                 .append("finalTerm", getFinalTerm())

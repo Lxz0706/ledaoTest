@@ -8,16 +8,12 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <input id="beginDate" th:value="*{beginTime}" type="hidden"/>
-                    <input id="endDate" th:value="*{endTime}" type="hidden"/>
+                    <input name="params[beginTime]" id="beginDate" th:value="*{beginTime}" type="hidden"/>
+                    <input name="params[endTime]" id="endDate" th:value="*{endTime}" type="hidden"/>
                     <div class="select-list">
                         <input type="hidden" name="projectName" th:value="*{projectName}"/>
                         <input type="hidden" name="projectYxzName" th:value="*{projectYxzName}"/>
                         <input type="hidden" name="agreementName" th:value="*{agreementName}"/>
-                        <input type="hidden" class="time-input" id="startTime" placeholder="开始时间"
-                               name="params[beginTime]"/>
-                        <input type="hidden" class="time-input" id="endTime" placeholder="结束时间"
-                               name="params[endTime]"/>
                     </div>
                 </form>
             </div>
@@ -79,19 +75,31 @@
                 },
                 {
                     field: 'contractPrincipal', 
-                    title: '合同本金'
+                    title: '合同本金',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'principalBalance', 
-                    title: '本金余额'
+                    title: '本金余额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'interestBalance', 
-                    title: '利息余额'
+                    title: '利息余额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'principalInterestBalance', 
-                    title: '本息余额'
+                    title: '本息余额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'finalParty', 

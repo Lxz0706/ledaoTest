@@ -95,7 +95,10 @@
                 },
                 {
                     field: 'capital', 
-                    title: '本金'
+                    title: '本金',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'startTime', 

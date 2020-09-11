@@ -1264,6 +1264,30 @@ var table = {
                     $.modal.alertError(result.msg);
                 }
                 $.modal.closeLoading();
+            },
+            // 修改访问地址
+            numberFormatter: function (value) {
+                //格式化金额的小数点
+                var b = false;
+                if (value == null || value == "") return "0";
+                value = value.toString();
+                if(value.indexOf('-') != -1){
+                    b= true;
+                    value = value.substring(1,value.length);
+                }
+                if (/^\-?[0-9]+(.[0-9]+)?$/.test(value)){
+                    value = value.toString().replace(/^(\d*)$/, "$1.");
+                    value = (value + "00").replace(/(\d*\.\d\d)\d*/, "$1");
+                    value = value.replace(".", ",");
+                    var re = /(\d)(\d{3},)/;
+                    while (re.test(value))
+                        value = value.replace(re, "$1,$2");
+                    value = value.replace(/,(\d\d)$/, ".$1");
+                }
+                if(b){
+                    value = "-"+value;
+                }
+                return value;
             }
         },
         // 校验封装处理

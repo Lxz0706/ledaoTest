@@ -77,6 +77,8 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="delFlag" column="del_flag"/>
+        <result property="remarks" column="remarks"/>
+        <result property="comment" column="comment"/>
     </resultMap>
 
     <sql id="selectSysBgczzckVo">
@@ -89,19 +91,15 @@
         build_valuation, land_total_price, other_appurtenance, valuation_basis, total_price, project_valuation_remarks, cash_back,
         cash_back_amount, repayment_capacity, later_project, later_project_remark, guarantor, guarantee, guarantee_period,
         guarantee_document_no, nature_assets, address, ower_certificate_no, area_measure, soe, zoing, create_by, create_time,
-        update_by, update_time from sys_bgczzck
+        update_by, update_time,remarks,comment from sys_bgczzck
     </sql>
 
     <select id="selectSysBgczzckList" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
         <include refid="selectSysBgczzckVo"/>
         <where>
             del_flag='0'
-            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
-                '%')
-            </if>
-            <if test="projectStatus != null  and projectStatus != ''">and project_status like concat('%',
-                #{projectStatus},'%')
-            </if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},'%')</if>
+            <if test="projectStatus != null  and projectStatus != ''">and project_status like concat('%',#{projectStatus},'%') </if>
             <if test="no != null  and no != ''">and no like concat('%', #{no}, '%')</if>
             <if test="spvName != null  and spvName != ''">and spv_name like concat('%', #{spvName}, '%')</if>
             <if test="city != null  and city != ''">and city = #{city}</if>
@@ -115,7 +113,7 @@
                 AND date_format(bxjs_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(bxjs_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
             <!--<if test="bxjsDate != null ">and bxjs_date = #{bxjsDate}</if>-->
             <if test="interestPaymentCycle != null  and interestPaymentCycle != ''">and interest_payment_cycle =
@@ -124,8 +122,9 @@
             <if test="interestPaymentDate != null and interestPaymentDate != ''">and interest_payment_date like
                 concat('%', #{interestPaymentDate}, '%')
             </if>
-            <if test="interestPaymentDateRemark !=null and interestPaymentDateRemark !=''">and interest_payment_date_remark like
-            concat('%',#{interestPaymentDateRemark},'%')
+            <if test="interestPaymentDateRemark !=null and interestPaymentDateRemark !=''">and
+                interest_payment_date_remark like
+                concat('%',#{interestPaymentDateRemark},'%')
             </if>
             <if test="finalParty != null  and finalParty != ''">and final_party = #{finalParty}</if>
             <if test="finalAgreementNo != null  and finalAgreementNo != ''">and final_agreement_no =
@@ -203,6 +202,8 @@
             <if test="areaMeasure != null  and areaMeasure != ''">and area_measure = #{areaMeasure}</if>
             <if test="soe != null  and soe != ''">and soe = #{soe}</if>
             <if test="zoing != null  and zoing != ''">and zoing = #{zoing}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="comment != null  and comment != ''">and comment = #{comment}</if>
         </where>
     </select>
 
@@ -280,6 +281,8 @@
             <if test="areaMeasure != null">area_measure,</if>
             <if test="soe != null">soe,</if>
             <if test="zoing != null">zoing,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="comment != null">comment,</if>
             <if test="createBy != null and createBy != '' ">create_by,</if>
             create_time
         </trim>
@@ -350,6 +353,8 @@
             <if test="areaMeasure != null">#{areaMeasure},</if>
             <if test="soe != null">#{soe},</if>
             <if test="zoing != null">#{zoing},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="comment != null">#{comment},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             sysdate()
         </trim>
@@ -363,15 +368,16 @@
             <if test="no != null">no = #{no},</if>
             <if test="spvName != null">spv_name = #{spvName},</if>
             <if test="city != null">city = #{city},</if>
-            <if test="acquisitionCost != null">acquisitionCost =#{acquisitionCost}</if>
-            <if test="contractPrincipal != null">contract_principal = #{contractPrincipal},</if>
+            <if test="acquisitionCost != null">acquisition_cost =#{acquisitionCost},</if>
+            <if test="contractPrincipal != null  ">contract_principal = #{contractPrincipal},</if>
             <if test="principalBalance != null">principal_balance = #{principalBalance},</if>
             <if test="interestBalance != null">interest_balance = #{interestBalance},</if>
             <if test="principalInterestBalance != null">principal_interest_balance = #{principalInterestBalance},</if>
             <if test="bxjsDate != null">bxjs_date = #{bxjsDate},</if>
             <if test="interestPaymentCycle != null">interest_payment_cycle = #{interestPaymentCycle},</if>
             <if test="interestPaymentDate != null">interest_payment_date = #{interestPaymentDate},</if>
-            <if test="interestPaymentDateRemark != null">interest_payment_date_remark = #{interestPaymentDateRemark},</if>
+            <if test="interestPaymentDateRemark != null">interest_payment_date_remark = #{interestPaymentDateRemark},
+            </if>
             <if test="finalParty != null">final_party = #{finalParty},</if>
             <if test="finalAgreementNo != null">final_agreement_no = #{finalAgreementNo},</if>
             <if test="finalTerm != null">final_term = #{finalTerm},</if>
@@ -424,6 +430,8 @@
             <if test="areaMeasure != null">area_measure = #{areaMeasure},</if>
             <if test="soe != null">soe = #{soe},</if>
             <if test="zoing != null">zoing = #{zoing},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="comment != null">comment = #{comment},</if>
             <if test="updateBy != null  ">update_by = #{updateBy},</if>
             update_time = sysdate()
         </trim>

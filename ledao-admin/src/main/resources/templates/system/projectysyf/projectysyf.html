@@ -99,7 +99,10 @@
                 },
                 {
                     field: 'amountPaid', 
-                    title: '已付金额'
+                    title: '已付金额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'remarks',

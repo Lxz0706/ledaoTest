@@ -78,7 +78,10 @@
                 },
                 {
                     field: 'amountRecovered',
-                    title: '已回收金额'
+                    title: '已回收金额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'recoveredDate',

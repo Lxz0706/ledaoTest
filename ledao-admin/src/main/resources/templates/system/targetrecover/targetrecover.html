@@ -78,7 +78,10 @@
                 },
                 {
                     field: 'targetRecoveryAmount', 
-                    title: '目标回收金额'
+                    title: '目标回收金额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'targetRecoveryDate', 

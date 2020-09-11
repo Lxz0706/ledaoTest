@@ -36,7 +36,7 @@ import com.ledao.system.service.ISysUserService;
 @Controller
 @RequestMapping("/system/user")
 public class SysUserController extends BaseController {
-    private String prefix = "system/user" ;
+    private String prefix = "system/user";
 
     @Autowired
     private ISysUserService userService;
@@ -53,7 +53,7 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("system:user:view")
     @GetMapping()
     public String user() {
-        return prefix + "/user" ;
+        return prefix + "/user";
     }
 
     @RequiresPermissions("system:user:list")
@@ -61,7 +61,6 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysUser user) {
         startPage();
-        logger.info("user:开始时间：======="+user.getCreateTime());
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
@@ -103,7 +102,7 @@ public class SysUserController extends BaseController {
     public String add(ModelMap mmap) {
         mmap.put("roles", roleService.selectRoleAll());
         mmap.put("posts", postService.selectPostAll());
-        return prefix + "/add" ;
+        return prefix + "/add";
     }
 
     /**
@@ -135,7 +134,7 @@ public class SysUserController extends BaseController {
         mmap.put("user", userService.selectUserById(userId));
         mmap.put("roles", roleService.selectRolesByUserId(userId));
         mmap.put("posts", postService.selectPostsByUserId(userId));
-        return prefix + "/edit" ;
+        return prefix + "/edit";
     }
 
     /**
@@ -161,7 +160,7 @@ public class SysUserController extends BaseController {
     @GetMapping("/resetPwd/{userId}")
     public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap) {
         mmap.put("user", userService.selectUserById(userId));
-        return prefix + "/resetPwd" ;
+        return prefix + "/resetPwd";
     }
 
     @RequiresPermissions("system:user:resetPwd")
@@ -191,7 +190,7 @@ public class SysUserController extends BaseController {
         List<SysUserRole> userRoles = userService.selectUserRoleByUserId(userId);
         mmap.put("user", user);
         mmap.put("userRoles", userRoles);
-        return prefix + "/authRole" ;
+        return prefix + "/authRole";
     }
 
     /**

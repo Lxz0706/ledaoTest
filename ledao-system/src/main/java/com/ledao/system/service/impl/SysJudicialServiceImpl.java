@@ -2,18 +2,18 @@ package com.ledao.system.service.impl;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysJudicial;
-import com.ledao.system.mapper.SysJudicialMapper;
-import com.ledao.system.service.ISysJudicialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.ledao.system.mapper.SysJudicialMapper;
+import com.ledao.system.domain.SysJudicial;
+import com.ledao.system.service.ISysJudicialService;
 import com.ledao.common.core.text.Convert;
 
 /**
- * 司法Service业务层处理
+ * 司法拍卖项目Service业务层处理
  *
- * @author lxz
- * @date 2020-06-09
+ * @author ledao
+ * @date 2020-09-14
  */
 @Service
 public class SysJudicialServiceImpl implements ISysJudicialService {
@@ -21,21 +21,21 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
     private SysJudicialMapper sysJudicialMapper;
 
     /**
-     * 查询司法
+     * 查询司法拍卖项目
      *
-     * @param id 司法ID
-     * @return 司法
+     * @param id 司法拍卖项目ID
+     * @return 司法拍卖项目
      */
     @Override
-    public SysJudicial selectSysJudicialById(Long id) {
+    public SysJudicial selectSysJudicialById(Integer id) {
         return sysJudicialMapper.selectSysJudicialById(id);
     }
 
     /**
-     * 查询司法列表
+     * 查询司法拍卖项目列表
      *
-     * @param sysJudicial 司法
-     * @return 司法
+     * @param sysJudicial 司法拍卖项目
+     * @return 司法拍卖项目
      */
     @Override
     public List<SysJudicial> selectSysJudicialList(SysJudicial sysJudicial) {
@@ -43,9 +43,9 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
     }
 
     /**
-     * 新增司法
+     * 新增司法拍卖项目
      *
-     * @param sysJudicial 司法
+     * @param sysJudicial 司法拍卖项目
      * @return 结果
      */
     @Override
@@ -54,9 +54,9 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
     }
 
     /**
-     * 修改司法
+     * 修改司法拍卖项目
      *
-     * @param sysJudicial 司法
+     * @param sysJudicial 司法拍卖项目
      * @return 结果
      */
     @Override
@@ -65,7 +65,7 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
     }
 
     /**
-     * 删除司法对象
+     * 删除司法拍卖项目对象
      *
      * @param ids 需要删除的数据ID
      * @return 结果
@@ -76,13 +76,13 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
     }
 
     /**
-     * 删除司法信息
+     * 删除司法拍卖项目信息
      *
-     * @param id 司法ID
+     * @param id 司法拍卖项目ID
      * @return 结果
      */
     @Override
-    public int deleteSysJudicialById(Long id) {
+    public int deleteSysJudicialById(Integer id) {
         return sysJudicialMapper.deleteSysJudicialById(id);
     }
 }

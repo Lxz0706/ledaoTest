@@ -1,36 +1,126 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改司法')" />
+    <th:block th:include="include :: header('修改司法拍卖项目')" />
+    <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-judicial-edit" th:object="${sysJudicial}">
             <input name="id" th:field="*{id}" type="hidden">
             <div class="form-group">    
-                <label class="col-sm-3 control-label">所有人：</label>
+                <label class="col-sm-3 control-label">项目id：</label>
                 <div class="col-sm-8">
-                    <input name="owner" th:field="*{owner}" class="form-control" type="text">
+                    <input name="itemId" th:field="*{itemId}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">所有人类型：</label>
+                <label class="col-sm-3 control-label">项目title：</label>
                 <div class="col-sm-8">
-                    <select name="ownertype" class="form-control m-b">
+                    <input name="itemTitle" th:field="*{itemTitle}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目所有人：</label>
+                <div class="col-sm-8">
+                    <textarea name="itemOwner" class="form-control">[[*{itemOwner}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目类型：</label>
+                <div class="col-sm-8">
+                    <select name="itemType" class="form-control m-b">
                         <option value="">所有</option>
                     </select>
                     <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">网站链接：</label>
+                <label class="col-sm-3 control-label">项目状态：</label>
                 <div class="col-sm-8">
-                    <input name="websiteLinks" th:field="*{websiteLinks}" class="form-control" type="text">
+                    <div class="radio-box">
+                        <input type="radio" name="itemStatus" value="">
+                        <label th:for="itemStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目网址：</label>
+                <div class="col-sm-8">
+                    <textarea name="itemLink" class="form-control">[[*{itemLink}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目起拍价：</label>
+                <div class="col-sm-8">
+                    <input name="itemInitialprice" th:field="*{itemInitialprice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目当前价：</label>
+                <div class="col-sm-8">
+                    <input name="itemCurrentprice" th:field="*{itemCurrentprice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目评估价：</label>
+                <div class="col-sm-8">
+                    <input name="itemConsultprice" th:field="*{itemConsultprice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目市场价：</label>
+                <div class="col-sm-8">
+                    <input name="itemMarketprice" th:field="*{itemMarketprice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="itemStartTime" th:value="${#dates.format(sysJudicial.itemStartTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="itemEndTime" th:value="${#dates.format(sysJudicial.itemEndTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目所在省：</label>
+                <div class="col-sm-8">
+                    <input name="itemProvince" th:field="*{itemProvince}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目所在市：</label>
+                <div class="col-sm-8">
+                    <input name="itemCity" th:field="*{itemCity}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目所在区(县)：</label>
+                <div class="col-sm-8">
+                    <input name="itemCounty" th:field="*{itemCounty}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目来源：</label>
+                <div class="col-sm-8">
+                    <input name="itemSource" th:field="*{itemSource}" class="form-control" type="text">
                 </div>
             </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
         var prefix = ctx + "system/judicial";
         $("#form-judicial-edit").validate({
@@ -42,6 +132,18 @@
                 $.operate.save(prefix + "/edit", $('#form-judicial-edit').serialize());
             }
         }
+
+        $("input[name='itemStartTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='itemEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
     </script>
 </body>
 </html>

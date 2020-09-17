@@ -55,3 +55,5 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+                #通过connectProperties属性来打开mergeSql功能；慢SQL记录32
+                connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1

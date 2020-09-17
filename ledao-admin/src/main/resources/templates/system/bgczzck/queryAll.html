@@ -8,12 +8,12 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <input name="params[beginTime]" id="beginDate" th:value="*{beginTime}" type="hidden"/>
-                    <input name="params[endTime]" id="endDate" th:value="*{endTime}" type="hidden"/>
+                    <input name="params[beginTime]" id="beginDate" th:value="${sysBgczzck.beginTime}" type="hidden"/>
+                    <input name="params[endTime]" id="endDate" th:value="${sysBgczzck.endTime}" type="hidden"/>
                     <div class="select-list">
-                        <input type="hidden" name="projectName" th:value="*{projectName}"/>
-                        <input type="hidden" name="projectYxzName" th:value="*{projectYxzName}"/>
-                        <input type="hidden" name="agreementName" th:value="*{agreementName}"/>
+                        <input type="hidden" name="projectName" th:value="${sysBgczzck.projectName}"/>
+                        <input type="hidden" name="projectYxzName" th:value="${sysBgczzck.projectYxzName}"/>
+                        <input type="hidden" name="agreementName" th:value="${sysBgczzck.agreementName}"/>
                     </div>
                 </form>
             </div>
@@ -59,7 +59,8 @@
                 },
                 {
                     field: 'projectName', 
-                    title: '项目名称'
+                    title: '项目名称',
+                    sortable: true
                 },
                 {
                     field: 'projectStatus', 

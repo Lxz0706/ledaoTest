@@ -8,12 +8,12 @@
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <form id="formId">
-                <input type="hidden" id="borrower" name="borrower" th:value="*{borrower}"/>
-                <input type="hidden" id="city" name="city" th:value="*{city}"/>
-                <input type="hidden" id="guarantor" name="guarantor" th:value="*{guarantor}"/>
-                <input type="hidden" id="mortgageRank" name="mortgageRank" th:value="*{mortgageRank}"/>
-                <input type="hidden" id="natureLand" name="natureLand" th:value="*{natureLand}"/>
-                <input type="hidden" id="collateType" name="collateType" th:value="*{collateType}"/>
+                <input type="hidden" id="borrower" name="borrower" th:value="${sysZck.borrower}"/>
+                <input type="hidden" id="city" name="city" th:value="${sysZck.city}"/>
+                <input type="hidden" id="guarantor" name="guarantor" th:value="${sysZck.guarantor}"/>
+                <input type="hidden" id="mortgageRank" name="mortgageRank" th:value="${sysZck.mortgageRank}"/>
+                <input type="hidden" id="natureLand" name="natureLand" th:value="${sysZck.natureLand}"/>
+                <input type="hidden" id="collateType" name="collateType" th:value="${sysZck.collateType}"/>
             </form>
         </div>
 
@@ -199,6 +199,12 @@
                 window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
             }
         })
+    };
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
     }
 </script>
 </body>

@@ -7,7 +7,7 @@
      <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
-                <form id="formId" method="get" action="/system/zcb/queryAll">
+                <!--<form id="formId" method="get" action="/system/zcb/queryAll">
                     <div class="select-list">
                         <ul>
                             <li>
@@ -39,6 +39,43 @@
                             </li>
                             <li>
                                 <button type="submit" class="btn btn-primary">查询</button>
+                                <button onclick="$.form.reset()" class="btn btn-danger" type="button">重置</button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>-->
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>借款人名称：</label>
+                                <input type="text" name="borrower"/>
+                            </li>
+                            <li>
+                                <label>城市/地区：</label>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <label>保证人：</label>
+                                <input type="text" name="guarantor"/>
+                            </li>
+                            <li>
+                                <label>抵押顺位：</label>
+                                <input type="text" name="mortgageRank"/>
+                            </li>
+                            <li>
+                                <label>土地性质：</label>
+                                <input type="text" name="natureLand"/>
+                            </li>
+                            <li>
+                                <label>抵/置押物类型：</label>
+                                <select name="collateType" id="collateType" th:with="type=${@dict.getType('sys_zcb_collateraType')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
                                 <button onclick="$.form.reset()" class="btn btn-danger" type="button">重置</button>
                             </li>
                         </ul>
@@ -100,6 +137,11 @@
         function detail(assetStatus) {
             var url = prefix + '/selectZcbByAssetStatus/' + assetStatus;
             $.modal.openTab(assetStatus+"列表", url);
+        }
+
+        function jump(){
+            var data=$("#formId").serialize();
+            $.operate.gets(prefix + "/queryAll", data,"查询界面");
         }
     </script>
 </body>

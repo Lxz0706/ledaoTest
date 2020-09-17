@@ -96,7 +96,7 @@
                     field: 'entryAmount',
                     title: '已回收金额',
                     formatter:function (value,row,index) {
-                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId+'\')">' + $.operate.numberFormatter(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="money2(\'' + row.projectManagementId+'\')">' + $.operate.numberFormatter(value) + '</a>';
                     }
                 },
                 {
@@ -109,7 +109,7 @@
                     field: 'targetRecoveryAmount',
                     title: '目标回收金额',
                     formatter:function (value,row,index) {
-                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId+'\')">' + $.operate.numberFormatter(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="money4(\'' + row.projectManagementId+'\')">' + $.operate.numberFormatter(value) + '</a>';
                     }
                 },
                 {

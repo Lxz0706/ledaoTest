@@ -180,12 +180,13 @@ public class SysBgczzckController extends BaseController {
 
     @RequiresPermissions("system:bgczzck:list")
     @GetMapping({"/queryAll"})
-    public String queryAll(ModelMap modelMap) {
-        modelMap.put("projectYxzName",getRequest().getParameter("projectYxzName"));
-        modelMap.put("projectName",getRequest().getParameter("projectName"));
-        modelMap.put("agreementName",getRequest().getParameter("agreementName"));
+    public String queryAll(ModelMap modelMap,SysBgczzck sysBgczzck) {
+        /*modelMap.put("projectYxzName",sysBgczzck.getProjectYxzName());
+        modelMap.put("projectName",sysBgczzck.getProjectName());
+        modelMap.put("agreementName",sysBgczzck.getAgreementName());
         modelMap.put("beginTime", getRequest().getParameter("params[beginTime]"));
-        modelMap.put("endTime",getRequest().getParameter("params[endTime]"));
+        modelMap.put("endTime",getRequest().getParameter("params[endTime]"));*/
+        modelMap.put("sysBgczzck",sysBgczzck);
         return "system/bgczzck/queryAll";
     }
 

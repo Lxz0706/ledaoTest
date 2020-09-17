@@ -68,19 +68,19 @@ public class SysBgczzck extends BaseEntity {
      * 本金余额
      */
     @Excel(name = "本金余额")
-    private Double principalBalance;
+    private BigDecimal principalBalance;
 
     /**
      * 利息余额
      */
     @Excel(name = "利息余额")
-    private Double interestBalance;
+    private BigDecimal interestBalance;
 
     /**
      * 本息余额
      */
     @Excel(name = "本息余额")
-    private Double principalInterestBalance;
+    private BigDecimal principalInterestBalance;
 
     /**
      * 本息计算基准日
@@ -306,7 +306,7 @@ public class SysBgczzck extends BaseEntity {
      * 土地单价(元/亩)
      */
     @Excel(name = "土地单价(元/亩)")
-    private Double landUnitPrice;
+    private BigDecimal landUnitPrice;
 
     /**
      * 建筑估值
@@ -318,7 +318,7 @@ public class SysBgczzck extends BaseEntity {
      * 土地总价
      */
     @Excel(name = "土地总价")
-    private Double landTotalPrice;
+    private BigDecimal landTotalPrice;
 
     /**
      * 其它附属物
@@ -336,7 +336,7 @@ public class SysBgczzck extends BaseEntity {
      * 总价
      */
     @Excel(name = "总价")
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     /**
      * 项目估值备注
@@ -428,6 +428,9 @@ public class SysBgczzck extends BaseEntity {
     //@Excel(name = "国企/非国企")
     private String soe;
 
+    private String beginTime;
+
+    private String endTime;
 
     public Long getId() {
         return id;
@@ -493,27 +496,27 @@ public class SysBgczzck extends BaseEntity {
         this.contractPrincipal = contractPrincipal;
     }
 
-    public void setPrincipalBalance(Double principalBalance) {
+    public void setPrincipalBalance(BigDecimal principalBalance) {
         this.principalBalance = principalBalance;
     }
 
-    public Double getPrincipalBalance() {
+    public BigDecimal getPrincipalBalance() {
         return principalBalance;
     }
 
-    public void setInterestBalance(Double interestBalance) {
+    public void setInterestBalance(BigDecimal interestBalance) {
         this.interestBalance = interestBalance;
     }
 
-    public Double getInterestBalance() {
+    public BigDecimal getInterestBalance() {
         return interestBalance;
     }
 
-    public void setPrincipalInterestBalance(Double principalInterestBalance) {
+    public void setPrincipalInterestBalance(BigDecimal principalInterestBalance) {
         this.principalInterestBalance = principalInterestBalance;
     }
 
-    public Double getPrincipalInterestBalance() {
+    public BigDecimal getPrincipalInterestBalance() {
         return principalInterestBalance;
     }
 
@@ -789,11 +792,11 @@ public class SysBgczzck extends BaseEntity {
         return planBuildArea;
     }
 
-    public void setLandUnitPrice(Double landUnitPrice) {
+    public void setLandUnitPrice(BigDecimal landUnitPrice) {
         this.landUnitPrice = landUnitPrice;
     }
 
-    public Double getLandUnitPrice() {
+    public BigDecimal getLandUnitPrice() {
         return landUnitPrice;
     }
 
@@ -805,11 +808,11 @@ public class SysBgczzck extends BaseEntity {
         return buildValuation;
     }
 
-    public void setLandTotalPrice(Double landTotalPrice) {
+    public void setLandTotalPrice(BigDecimal landTotalPrice) {
         this.landTotalPrice = landTotalPrice;
     }
 
-    public Double getLandTotalPrice() {
+    public BigDecimal getLandTotalPrice() {
         return landTotalPrice;
     }
 
@@ -829,11 +832,11 @@ public class SysBgczzck extends BaseEntity {
         return valuationBasis;
     }
 
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public Double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
@@ -980,6 +983,22 @@ public class SysBgczzck extends BaseEntity {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     @Override

@@ -61,6 +61,7 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysUser user) {
         startPage();
+        logger.info("user:======="+user);
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }

@@ -8,7 +8,7 @@
         <div class="row">
 
             <div class="col-sm-12 search-collapse">
-                <form id="formId" method="get" action="/system/bgczzck/queryAll">
+                <form id="formId">
                     <div class="select-list">
                         <ul>
                             <li>
@@ -33,13 +33,13 @@
                             <li class="select-time">
                                 <label>付息日： </label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                       name="params[beginTime]"/>
+                                       name="beginTime"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                       name="params[endTime]"/>
+                                       name="endTime"/>
                             </li>
                             <li>
-                                <button type="submit" class="btn btn-primary">查询</button>
+                                <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
                                 <button onclick="$.form.reset()" class="btn btn-danger" type="button">重置</button>
                             </li>
                         </ul>
@@ -92,7 +92,12 @@
         function detail(projectStatus) {
             var url = prefix + '/selectByProjectStatus/' + projectStatus;
             $.modal.openTab(projectStatus+"列表", url);
+        }
 
+        //查询
+        function jump(){
+            var data = $("#formId").serialize();
+            $.operate.gets(prefix + "/queryAll", data,"查询界面");
         }
     </script>
 </body>

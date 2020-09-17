@@ -3,6 +3,7 @@ package com.ledao.common.utils;
 import java.util.Collection;
 import java.util.Map;
 
+import com.ledao.common.constant.Constants;
 import com.ledao.common.core.text.StrFormatter;
 
 /**
@@ -246,6 +247,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         boolean curreCharIsUpperCase = true;
         // 下一字符是否大写
         boolean nexteCharIsUpperCase = true;
+
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
             if (i > 0) {
@@ -267,7 +269,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             }
             sb.append(Character.toLowerCase(c));
         }
-
         return sb.toString();
     }
 

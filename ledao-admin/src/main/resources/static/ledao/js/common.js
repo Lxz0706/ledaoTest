@@ -291,6 +291,7 @@ function createMenuItem(dataUrl, menuName) {
     // 选项卡菜单不存在
     if (flag) {
         var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '" data-panel="' + panelUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+		log.info("新开页签：======="+str);
         $('.menuTab', topWindow).removeClass('active');
 
         // 添加选项卡对应的iframe

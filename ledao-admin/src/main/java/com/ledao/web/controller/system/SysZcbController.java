@@ -168,13 +168,14 @@ public class SysZcbController extends BaseController {
 
     @RequiresPermissions("system:zcb:list")
     @GetMapping({"/queryAll"})
-    public String queryAll(ModelMap modelMap) {
-        modelMap.put("borrower",getRequest().getParameter("borrower"));
-        modelMap.put("city",getRequest().getParameter("city"));
-        modelMap.put("guarantor",getRequest().getParameter("guarantor"));
-        modelMap.put("mortgageRank",getRequest().getParameter("mortgageRank"));
-        modelMap.put("natureLand",getRequest().getParameter("natureLand"));
-        modelMap.put("collateType",getRequest().getParameter("collateType"));
+    public String queryAll(ModelMap modelMap,SysZck sysZck) {
+/*        modelMap.put("borrower",sysZck.getBorrower());
+        modelMap.put("city",sysZck.getCity());
+        modelMap.put("guarantor",sysZck.getGuarantor());
+        modelMap.put("mortgageRank",sysZck.getMortgageRank());
+        modelMap.put("natureLand",sysZck.getNatureLand());
+        modelMap.put("collateType",sysZck.getCollateType());*/
+        modelMap.put("sysZck",sysZck);
         return "system/zcb/queryAll";
     }
 

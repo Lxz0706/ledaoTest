@@ -54,10 +54,10 @@
                 {
                     field: 'assetPackageName',
                     title: '资产包名称',
-                    sortable: true,
                     formatter: function(value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detail(\'' + row.id+"',\'" + row.assetPackageName + '\')">' + value + '</a>';
-                    }
+                    },
+                    sortable: true
                 },
                 {
                   field:'collateralTotal',

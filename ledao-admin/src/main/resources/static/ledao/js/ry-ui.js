@@ -925,6 +925,14 @@ var table = {
             get: function (url, callback) {
                 $.operate.submit(url, "get", "json", "", callback);
             },
+            // get请求传输
+            gets: function (url,data,title, callback,) {
+                log.info("url:====="+url);
+                log.info("data:======"+data);
+                $.modal.openTab(title,url+"?"+data);
+                //$.operate.submit(url, "get", "json", data, callback);
+
+            },
             // 详细信息
             detail: function (id, width, height) {
                 table.set();
@@ -1288,6 +1296,26 @@ var table = {
                     value = "-"+value;
                 }
                 return value;
+            },
+            // 查询信息 刷新表格
+            queryAll: function (url, data, callback) {
+                var config = {
+                    url: url,
+                    type: "get",
+                    dataType: "json",
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function (result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        $.operate.successCallback(result);
+                    }
+                };
+                $.modal.openTab("查询结果",url);
             }
         },
         // 校验封装处理

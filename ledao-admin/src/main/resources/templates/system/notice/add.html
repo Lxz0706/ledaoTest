@@ -21,6 +21,13 @@
 	                </select>
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">接收人：</label>
+				<div class="col-sm-10">
+					<input class="form-control" type="hidden" name="receiverId" id="receiverId">
+					<input class="form-control" type="text" name="receiver"  onclick="selectUserTree()" id="receiver">
+				</div>
+			</div>
 			<div class="form-group">	
 				<label class="col-sm-2 control-label">公告内容：</label>
 				<div class="col-sm-10">
@@ -92,6 +99,40 @@
 				$.operate.save(prefix + "/add", $('#form-notice-add').serialize());
 	        }
 	    }
+
+		//人员树形选择器
+		function selectUserTree() {
+			var options = {
+				title: '人员选择',
+				width: "750",
+				url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#receiverId").val() + "&selectedUserNames=" + $("#receiver").val() + "&multiSelectFlag=false",
+				callBack: doSelect
+			};
+			$.modal.openOptions(options);
+		}
+
+		function doSelect(index, layero){
+
+			var body = layer.getChildFrame('body', index);
+
+			var userIds = "";
+			var userNames = "";
+			body.find("#multiselect_to option").each(function(){  //遍历所有option
+				var val = $(this).val();   //获取option值
+				var txt = $(this).text();  //获取option的文本内容
+				if(val!= '' && txt!=''){
+					userIds = userIds + val + ",";
+					userNames = userNames + txt + ",";
+				}
+			});
+
+			userIds = userIds.substring(0,userIds.length-1);
+			userNames = userNames.substring(0,userNames.length-1);
+
+			$("#receiverId").val(userIds);
+			$("#receiver").val(userNames);
+			layer.close(index);
+		}
 	</script>
 </body>
 </html>

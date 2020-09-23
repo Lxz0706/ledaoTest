@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('用户分配角色')" />
+    <style>
+        body{height:auto;font-family: "Microsoft YaHei";}
+        button{font-family: "SimSun","Helvetica Neue",Helvetica,Arial;}
+    </style>
+</head>
+<body>
+    <div class="wrapper"><div class="treeShowHideButton" onclick="$.tree.toggleSearch();">
+        <label id="btnShow" title="显示搜索" style="display:none;">︾</label>
+        <label id="btnHide" title="隐藏搜索">︽</label>
+    </div>
+    <div class="treeSearchInput" id="search">
+        <label for="keyword">关键字：</label><input type="text" class="empty" id="keyword" maxlength="50">
+        <button class="btn" id="btn" onclick="$.tree.searchNode()"> 搜索 </button>
+    </div>
+    <div class="treeExpandCollapse">
+        <a href="#" onclick="$.tree.expand()">展开</a> /
+        <a href="#" onclick="$.tree.collapse()">折叠</a>
+    </div>
+      
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+	    var prefix = ctx + "system/notice/authUser";
+	    var sysNoticeList = [[${sysNoticeList}]]
+	    
+	    $(function() {
+		    var options = {
+		        url: ctx + "system/user/list",
+		        showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                clickToSelect: true,
+		        columns: [{
+		            checkbox: true,
+		            /*formatter:function (value, row, index) {
+		            	for (var i = 0; i < sysNoticeList.length; i++) {
+		            	    if (sysNoticeList[i].receiver == row.userId) {
+		            	        return { checked: true };
+		            	    }
+		            	}
+		            	return { checked: false };
+		            }*/
+		        },
+                {
+                    field: 'userId',
+                    title: '用户ID',
+                    visible: false
+                },
+                {
+                    field: 'loginName',
+                    title: '登录名称',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '用户名称'
+                },
+                {
+                    field: 'dept.deptName',
+                    title: '部门'
+                }]
+		    };
+		    $.table.init(options);
+		});
+	    
+	    /* 添加角色-提交 */
+        function submitHandler(index, layero){
+        	var rows = $.table.selectFirstColumns();
+        	var data = { "userId": $("#userId").val(), "roleIds": rows.join() };
+			$.operate.saveTab(prefix + "/insertAuthRole", data);
+        }
+        /* 用户状态显示 */
+        function statusTools(row) {
+            if (row.status == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
+            }
+        }
+    </script>
+</body>
+</html>

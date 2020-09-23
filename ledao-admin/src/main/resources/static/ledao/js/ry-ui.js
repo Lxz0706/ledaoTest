@@ -41,7 +41,7 @@ var table = {
                     height: undefined,
                     sidePagination: "server",
                     sortName: "",
-                    sortOrder: "asc",
+                    sortOrder: "desc",
                     pagination: true,
                     paginationLoop: false,
                     pageSize: 10,

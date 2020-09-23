@@ -1,14 +1,21 @@
 package com.ledao.web.controller.system;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.framework.util.ShiroUtils;
 import com.ledao.framework.web.domain.server.Sys;
 import com.ledao.system.domain.*;
 import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +55,15 @@ public class SysProjectmanagentController extends BaseController {
 
     @Autowired
     private ISysProjectTargetrecoverService sysProjectTargetrecoverService;
+
+    @Autowired
+    private ISysProjectUncollectedMoneyService sysProjectUncollectedMoneyService;
+
+    @Autowired
+    private ISysNoticeService sysNoticeService;
+
+    @Autowired
+    private ISysUserService sysUserService;
 
     @RequiresPermissions("system:projectmanagent:view")
     @GetMapping()
@@ -213,4 +229,43 @@ public class SysProjectmanagentController extends BaseController {
         mmap.put("sysProjectManagent", sysProjectmanagentService.selectSysProjectmanagentById(id));
         return prefix + "/detail";
     }
+
+    /**
+     * 定时查询数据库中时间，如果时间到了则提醒相关人员，将数据插入到消息公告中
+     */
+    //@Scheduled(cron = "* * 6 * * ?")
+    public void timedTasks() {
+        SysNotice sysNotice = new SysNotice();
+        //查询出接收人名称和ID
+        SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
+        //应收应付未收服务费消息提醒
+        SysProjectUncollectedMoney sysProjectUncollectedMoney = new SysProjectUncollectedMoney();
+        List<SysProjectUncollectedMoney> sysProjectUncollectedMoneyList = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyList(sysProjectUncollectedMoney);
+        for (SysProjectUncollectedMoney projectUncollectedMoney : sysProjectUncollectedMoneyList) {
+            if (StringUtils.isNotNull(projectUncollectedMoney.getTime())) {
+                if (DateUtils.timeDifference(new Date(), projectUncollectedMoney.getTime(), 90)) {
+                    SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectUncollectedMoney.getProjectManagementId());
+                    if (StringUtils.isNotNull(sysProjectmanagent)) {
+                        if (StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
+                            sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
+                                    + "有一笔：" + projectUncollectedMoney.getFundType() + "，金额为：" + projectUncollectedMoney.getAmountMoney()
+                                    + "，距离天数为：" + DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime()));
+                            sysNotice.setNoticeType("3");
+                            sysNotice.setNoticeContent(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
+                                    + "有一笔：" + projectUncollectedMoney.getFundType() + "，金额为：" + projectUncollectedMoney.getAmountMoney()
+                                    + "，距离天数为：" + DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime()));
+                            sysNotice.setStatus("0");
+                            sysNotice.setReceiverId(sysUser.getUserId().toString());
+                            sysNotice.setReceiver(sysUser.getUserName());
+                            sysNotice.setCreateBy(sysUser.getLoginName());
+                            sysNoticeService.insertNotice(sysNotice);
+                        }
+                    }
+                }
+            }
+        }
+
+        //
+    }
+
 }

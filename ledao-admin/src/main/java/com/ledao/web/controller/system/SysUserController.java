@@ -2,6 +2,9 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ledao.system.domain.SysDept;
+import com.ledao.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +53,9 @@ public class SysUserController extends BaseController {
     @Autowired
     private SysPasswordService passwordService;
 
+    @Autowired
+    private ISysDeptService deptService;
+
     @RequiresPermissions("system:user:view")
     @GetMapping()
     public String user() {
@@ -61,7 +67,6 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysUser user) {
         startPage();
-        logger.info("user:======="+user);
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
@@ -255,5 +260,29 @@ public class SysUserController extends BaseController {
     public AjaxResult changeStatus(SysUser user) {
         userService.checkUserAllowed(user);
         return toAjax(userService.changeStatus(user));
+    }
+
+    /**
+     * 选择人员树
+     */
+    @GetMapping("/selectUserTree")
+    public String selectUserTree(String selectedUserIds, String selectedUserNames, Boolean multiSelectFlag, ModelMap mmap) {
+        mmap.put("dept", deptService.selectDeptById((long) 100));
+        mmap.put("selectedUserIds", selectedUserIds);
+        mmap.put("selectedUserNames", selectedUserNames);
+        mmap.put("multiSelectFlag", multiSelectFlag);
+        return prefix + "/tree";
+    }
+
+
+    @GetMapping("/listForTree")
+    @ResponseBody
+    public String listForTree(SysUser user) {
+        logger.info(user.getDeptId()+"========="+user.getUserName());
+        List<SysUser> list = userService.selectUserList(user);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("success", true);
+        jsonObject.put("userList", list);
+        return jsonObject.toString();
     }
 }

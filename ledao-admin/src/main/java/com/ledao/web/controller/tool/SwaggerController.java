@@ -8,17 +8,15 @@ import com.ledao.common.core.controller.BaseController;
 
 /**
  * swagger 接口
- * 
+ *
  * @author lxz
  */
 @Controller
 @RequestMapping("/tool/swagger")
-public class SwaggerController extends BaseController
-{
+public class SwaggerController extends BaseController {
     @RequiresPermissions("tool:swagger:view")
     @GetMapping()
-    public String index()
-    {
+    public String index() {
         return redirect("/swagger-ui.html");
     }
 }

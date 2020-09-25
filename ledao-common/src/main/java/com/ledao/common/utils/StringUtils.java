@@ -349,4 +349,21 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static <T> T cast(Object obj) {
         return (T) obj;
     }
+
+    /**
+     * @param str
+     * @return
+     */
+    public static String inputDataFilter(String str) {
+        if (str == null) {
+            return "";
+        }
+
+        String s = str;
+        /** 删除普通标签  */
+        s = s.replaceAll("<(S*?)[^>]*>.*?|<.*? />", "");
+        /** 删除转义字符 */
+        s = s.replaceAll("&.{2,6}?;", "");
+        return s;
+    }
 }

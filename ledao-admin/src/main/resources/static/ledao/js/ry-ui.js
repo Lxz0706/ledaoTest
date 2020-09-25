@@ -926,12 +926,8 @@ var table = {
                 $.operate.submit(url, "get", "json", "", callback);
             },
             // get请求传输
-            gets: function (url,data,title, callback,) {
-                log.info("url:====="+url);
-                log.info("data:======"+data);
+            gets: function (url,data,title, callback) {
                 $.modal.openTab(title,url+"?"+data);
-                //$.operate.submit(url, "get", "json", data, callback);
-
             },
             // 详细信息
             detail: function (id, width, height) {
@@ -996,6 +992,34 @@ var table = {
                 }
                 $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function () {
                     var url = table.options.removeUrl;
+                    var data = {"ids": rows.join()};
+                    $.operate.submit(url, "post", "json", data);
+                });
+            },
+            // 设置信息为已读
+            read: function (id) {
+                table.set();
+                $.modal.confirm("确定设置该条" + table.options.modalName + "信息为已读吗？", function () {
+                    var url = $.common.isEmpty(id) ? table.options.readUrl : table.options.readUrl.replace("{id}", id);
+                    if (table.options.type == table_type.bootstrapTreeTable) {
+                        $.operate.get(url);
+                    } else {
+                        var data = {"ids": id};
+                        $.operate.submit(url, "post", "json", data);
+                    }
+                });
+
+            },
+            // 批量设置信息为已读
+            readAll: function () {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确认选中的" + rows.length + "条数据设置为已读吗？", function () {
+                    var url = table.options.readUrl;
                     var data = {"ids": rows.join()};
                     $.operate.submit(url, "post", "json", data);
                 });

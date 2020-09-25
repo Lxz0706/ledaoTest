@@ -33,11 +33,11 @@
         <div class="col-sm-5">
             <h2>乐道后台管理框架</h2>
         </div>
-
     </div>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script th:src="@{/ledao/js/ry-ui.js}"></script>
     <script type="text/javascript">
 	    $('#pay-qrcode').click(function(){
 	        var html=$(this).html();
@@ -50,6 +50,23 @@
 	            content: html
 	        });
 	    });
+        $(function(){
+            notice();
+        });
+
+        function notice() {
+            $.ajax({
+                type: 'post',
+                url: '/system/notice/noticeList',
+                data: '',
+                dataType: "JSON",
+                success: function(result) {
+                    if(result.msg>0){
+                        $.modal.alertWarning('您共有'+result.msg+'条信息未读！！！');
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

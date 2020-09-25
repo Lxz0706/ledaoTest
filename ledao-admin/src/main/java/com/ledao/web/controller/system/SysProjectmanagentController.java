@@ -230,42 +230,4 @@ public class SysProjectmanagentController extends BaseController {
         return prefix + "/detail";
     }
 
-    /**
-     * 定时查询数据库中时间，如果时间到了则提醒相关人员，将数据插入到消息公告中
-     */
-    //@Scheduled(cron = "* * 6 * * ?")
-    public void timedTasks() {
-        SysNotice sysNotice = new SysNotice();
-        //查询出接收人名称和ID
-        SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
-        //应收应付未收服务费消息提醒
-        SysProjectUncollectedMoney sysProjectUncollectedMoney = new SysProjectUncollectedMoney();
-        List<SysProjectUncollectedMoney> sysProjectUncollectedMoneyList = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyList(sysProjectUncollectedMoney);
-        for (SysProjectUncollectedMoney projectUncollectedMoney : sysProjectUncollectedMoneyList) {
-            if (StringUtils.isNotNull(projectUncollectedMoney.getTime())) {
-                if (DateUtils.timeDifference(new Date(), projectUncollectedMoney.getTime(), 90)) {
-                    SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectUncollectedMoney.getProjectManagementId());
-                    if (StringUtils.isNotNull(sysProjectmanagent)) {
-                        if (StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
-                            sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
-                                    + "有一笔：" + projectUncollectedMoney.getFundType() + "，金额为：" + projectUncollectedMoney.getAmountMoney()
-                                    + "，距离天数为：" + DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime()));
-                            sysNotice.setNoticeType("3");
-                            sysNotice.setNoticeContent(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
-                                    + "有一笔：" + projectUncollectedMoney.getFundType() + "，金额为：" + projectUncollectedMoney.getAmountMoney()
-                                    + "，距离天数为：" + DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime()));
-                            sysNotice.setStatus("0");
-                            sysNotice.setReceiverId(sysUser.getUserId().toString());
-                            sysNotice.setReceiver(sysUser.getUserName());
-                            sysNotice.setCreateBy(sysUser.getLoginName());
-                            sysNoticeService.insertNotice(sysNotice);
-                        }
-                    }
-                }
-            }
-        }
-
-        //
-    }
-
 }

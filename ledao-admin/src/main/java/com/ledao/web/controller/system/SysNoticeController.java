@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.system.domain.SysUser;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -82,7 +83,7 @@ public class SysNoticeController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysNotice notice) {
-
+        notice.setReadFlag("未读");
         notice.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(noticeService.insertNotice(notice));
     }
@@ -125,5 +126,50 @@ public class SysNoticeController extends BaseController {
         List<SysNotice> sysNoticeList = noticeService.selectNoticeList(sysNotice);
         modelMap.put("sysNoticeList", sysNoticeList);
         return prefix + "/authUser";
+    }
+
+    /**
+     * 系统提醒
+     */
+    @RequiresPermissions("system:notice:list")
+    @PostMapping("/noticeList")
+    @ResponseBody
+    public AjaxResult noticeList() {
+        SysNotice sysNotice = new SysNotice();
+        sysNotice.setReadFlag("未读");
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                logger.info("不是管理员！！！！！！！");
+                sysNotice.setCreateBy(ShiroUtils.getLoginName());
+                sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
+            }
+        }
+        List<SysNotice> list = noticeService.selectNoticeList(sysNotice);
+        return AjaxResult.success(String.valueOf(list.size()));
+    }
+
+    //将信息设置为已读
+    @RequiresPermissions("system:notice:list")
+    @PostMapping("/read")
+    @ResponseBody
+    public AjaxResult read(String ids) {
+        return toAjax(noticeService.readNoticeByIds(ids));
+    }
+
+    /**
+     * 通知公告详细
+     */
+    @RequiresPermissions("system:notice:list")
+    @GetMapping("/detail/{noticeId}")
+    public String detail(@PathVariable("noticeId") Long noticeId, ModelMap mmap) {
+        SysNotice sysNotice = noticeService.selectNoticeById(noticeId);
+        if (StringUtils.isNotNull(sysNotice.getNoticeContent())) {
+            sysNotice.setNoticeContent(StringUtils.inputDataFilter(sysNotice.getNoticeContent()));
+        }
+        mmap.put("notice", sysNotice);
+        return prefix + "/detail";
     }
 }

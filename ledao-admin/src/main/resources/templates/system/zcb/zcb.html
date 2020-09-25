@@ -75,6 +75,13 @@
                                 </select>
                             </li>
                             <li>
+                                <label>资产包状态：</label>
+                                <select name="zcbStatus" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
                                 <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
                                 <button onclick="$.form.reset()" class="btn btn-danger" type="button">重置</button>
                             </li>

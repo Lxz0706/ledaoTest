@@ -17,10 +17,11 @@
         <result property="remark" column="remark"/>
         <result property="receiver" column="receiver"/>
         <result property="receiverId" column="receiver_Id"/>
+        <result property="readFlag" column="read_flag"/>
     </resultMap>
 
     <sql id="selectNoticeVo">
-        select notice_id, notice_title, notice_type, notice_content, status, create_by, create_time, update_by, update_time, remark ,receiver,receiver_Id
+        select notice_id, notice_title, notice_type, notice_content, status, create_by, create_time, update_by, update_time, remark ,receiver,receiver_Id,read_flag
 		from sys_notice
     </sql>
 
@@ -40,9 +41,18 @@
             </if>
             <if test="createBy != null and createBy != ''">
                 AND create_by like concat('%', #{createBy}, '%')
+                <if test="receiver != null and receiver !=''">
+                    or receiver  like concat('%',#{receiver},'%')
+                </if>
             </if>
-            <if test="receiver != null and receiver !=''">
-                and receiver  like concat('%',#{receiver},'%')
+           <!-- <if test="receiver != null and receiver !=''">
+                <if test="createBy != null and createBy != ''">
+                    AND create_by like concat('%', #{createBy}, '%')
+                    or receiver  like concat('%',#{receiver},'%')
+                </if>
+            </if>-->
+            <if test="readFlag != null and readFlag !=''">
+                and read_flag  = #{readFlag}
             </if>
         </where>
     </select>
@@ -92,5 +102,12 @@
             #{noticeId}
         </foreach>
     </delete>
+
+    <update id="readNoticeByIds" parameterType="String">
+        update sys_notice set read_flag = '已读' where notice_id in
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </update>
 
 </mapper>

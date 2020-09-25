@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('通知公告详细')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<div class="form-group">
+			<label class="col-sm-3 control-label">公告标题：</label>
+			<div class="form-control-static" th:text="${notice.noticeTitle}"></div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">公告类型：</label>
+			<div class="form-control-static" th:text="${@dict.getLabel('sys_notice_type', notice.noticeType)}"></div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">接收人：</label>
+			<div class="form-control-static" th:text="${notice.receiver}"></div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">公告内容：</label>
+			<div class="form-control-static"><span th:text="${notice.noticeContent}"/></div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">公告状态：</label>
+			<div class="form-control-static" th:text="${@dict.getLabel('sys_notice_status', notice.status)}"></div>
+		</div>
+    </div>
+</body>
+</html>

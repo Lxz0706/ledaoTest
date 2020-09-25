@@ -1404,6 +1404,7 @@ public class SysZck extends BaseEntity {
                 .append("zcbId", getZcbId())
                 .append("delFlag",getDelFlag())
                 .append("parentId",getParentId())
+                .append("zcbStatus",getZcbStatus())
                 .toString();
     }
 }

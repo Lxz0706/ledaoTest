@@ -50,6 +50,11 @@ public class SysNotice extends BaseEntity {
      */
     private String receiver;
 
+    /**
+     * 是否已读
+     */
+    private String readFlag;
+
     public Long getNoticeId() {
         return noticeId;
     }
@@ -108,6 +113,14 @@ public class SysNotice extends BaseEntity {
         this.receiver = receiver;
     }
 
+    public String getReadFlag() {
+        return readFlag;
+    }
+
+    public void setReadFlag(String readFlag) {
+        this.readFlag = readFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -122,6 +135,7 @@ public class SysNotice extends BaseEntity {
                 .append("updateTime", getUpdateTime())
                 .append("remark", getRemark())
                 .append("receiver", getReceiver())
+                .append("readFlag", getReadFlag())
                 .toString();
     }
 }

@@ -2,8 +2,10 @@ package com.ledao.web.controller.timeTask;
 
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.framework.web.domain.server.Sys;
 import com.ledao.system.domain.*;
 import com.ledao.system.service.*;
+import org.quartz.DisallowConcurrentExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 @Component("timedTask")
-@Lazy(false)
 public class TimedTask {
     @Autowired
     private ISysProjectmanagentService sysProjectmanagentService;
@@ -38,9 +39,15 @@ public class TimedTask {
     @Autowired
     private ISysUserService sysUserService;
 
-    public void timedTasks() {
-        System.out.println("进来了！！！！！！！！！！");
-        SysNotice sysNotice = new SysNotice();
+    public void timeTask() {
+        //应收应付未收服务费消息提醒
+        projectUncollectedMoney();
+        //目标回收金额消息提醒
+        projectTargetRecover();
+    }
+
+    public void projectUncollectedMoney() {
+        System.out.println("应收应付未收服务费消息提醒进来了！！！！！！");
         //查询出接收人名称和ID
         SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
         //应收应付未收服务费消息提醒
@@ -52,6 +59,7 @@ public class TimedTask {
                     if (StringUtils.isNotNull(projectUncollectedMoney.getProjectManagementId())) {
                         SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectUncollectedMoney.getProjectManagementId());
                         if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
+                            SysNotice sysNotice = new SysNotice();
                             sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
                                     + "有一笔：" + projectUncollectedMoney.getFundType() + "，金额为：" + projectUncollectedMoney.getAmountMoney()
                                     + "，距离天数为：" + DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime()));
@@ -69,7 +77,12 @@ public class TimedTask {
                 }
             }
         }
+    }
 
+    public void projectTargetRecover() {
+        System.out.println("目标回收金额消息提醒进来了！！！！！！");
+        //查询出接收人名称和ID
+        SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
         //目标回收金额消息提醒
         SysProjectTargetrecover sysProjectTargetrecover = new SysProjectTargetrecover();
         List<SysProjectTargetrecover> sysProjectTargetrecoverList = sysProjectTargetrecoverService.selectSysProjectTargetrecoverList(sysProjectTargetrecover);
@@ -80,6 +93,7 @@ public class TimedTask {
                         if (StringUtils.isNotNull(projectTargetrecover.getProjectManagementId())) {
                             SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectTargetrecover.getProjectManagementId());
                             if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
+                                SysNotice sysNotice = new SysNotice();
                                 sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectTargetrecover.getTargetRecoveryDate())
                                         + "有一笔：目标回收金额，金额为：" + projectTargetrecover.getTargetRecoveryAmount()
                                         + "，距离天数为：" + DateUtils.differentDays(new Date(), projectTargetrecover.getTargetRecoveryDate()));

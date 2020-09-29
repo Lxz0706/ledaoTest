@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectProgress;
+import com.ledao.system.dao.SysProjectProgress;
 
 /**
  * 【请填写功能名称】Service接口

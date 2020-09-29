@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysNotice;
+import com.ledao.system.dao.SysNotice;
 
 /**
  * 公告 数据层

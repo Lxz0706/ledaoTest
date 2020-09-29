@@ -1,9 +1,9 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.common.core.domain.Ztree;
-import com.ledao.system.domain.SysDictData;
-import com.ledao.system.domain.SysDictType;
+import com.ledao.common.core.dao.Ztree;
+import com.ledao.system.dao.SysDictData;
+import com.ledao.system.dao.SysDictType;
 
 /**
  * 字典 业务层

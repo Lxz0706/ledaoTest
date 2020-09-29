@@ -6,7 +6,7 @@ import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysProjectBailMapper;
-import com.ledao.system.domain.SysProjectBail;
+import com.ledao.system.dao.SysProjectBail;
 import com.ledao.system.service.ISysProjectBailService;
 import com.ledao.common.core.text.Convert;
 

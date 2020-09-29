@@ -1,4 +1,4 @@
-package com.ledao.framework.web.domain.server;
+package com.ledao.framework.web.dao.server;
 
 import java.lang.management.ManagementFactory;
 import com.ledao.common.utils.Arith;

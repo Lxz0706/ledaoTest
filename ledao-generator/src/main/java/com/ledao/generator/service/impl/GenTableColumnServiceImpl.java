@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.core.text.Convert;
-import com.ledao.generator.domain.GenTableColumn;
+import com.ledao.generator.dao.GenTableColumn;
 import com.ledao.generator.mapper.GenTableColumnMapper;
 import com.ledao.generator.service.IGenTableColumnService;
 

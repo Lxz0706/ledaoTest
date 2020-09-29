@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysDictType;
+import com.ledao.system.dao.SysDictType;
 
 /**
  * 字典表 数据层

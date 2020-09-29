@@ -15,7 +15,7 @@ import com.ledao.common.exception.user.UserPasswordRetryLimitExceedException;
 import com.ledao.common.utils.MessageUtils;
 import com.ledao.framework.manager.AsyncManager;
 import com.ledao.framework.manager.factory.AsyncFactory;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 登录密码方法

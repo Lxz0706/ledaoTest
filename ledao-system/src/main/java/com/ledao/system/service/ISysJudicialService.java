@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysJudicial;
+import com.ledao.system.dao.SysJudicial;
 
 /**
  * 司法拍卖项目Service接口

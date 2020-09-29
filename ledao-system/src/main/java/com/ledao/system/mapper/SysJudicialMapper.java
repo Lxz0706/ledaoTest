@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysJudicial;
+import com.ledao.system.dao.SysJudicial;
 
 /**
  * 司法拍卖项目Mapper接口

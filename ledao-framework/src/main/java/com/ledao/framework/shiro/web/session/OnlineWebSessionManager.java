@@ -18,7 +18,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.bean.BeanUtils;
 import com.ledao.common.utils.spring.SpringUtils;
 import com.ledao.framework.shiro.session.OnlineSession;
-import com.ledao.system.domain.SysUserOnline;
+import com.ledao.system.dao.SysUserOnline;
 import com.ledao.system.service.ISysUserOnlineService;
 
 /**

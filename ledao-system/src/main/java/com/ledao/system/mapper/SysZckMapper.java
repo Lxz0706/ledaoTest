@@ -1,6 +1,6 @@
 package com.ledao.system.mapper;
 
-import com.ledao.system.domain.SysZck;
+import com.ledao.system.dao.SysZck;
 
 import java.util.List;
 

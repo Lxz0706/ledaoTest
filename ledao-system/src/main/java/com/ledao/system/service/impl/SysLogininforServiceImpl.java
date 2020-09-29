@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.core.text.Convert;
-import com.ledao.system.domain.SysLogininfor;
+import com.ledao.system.dao.SysLogininfor;
 import com.ledao.system.mapper.SysLogininforMapper;
 import com.ledao.system.service.ISysLogininforService;
 

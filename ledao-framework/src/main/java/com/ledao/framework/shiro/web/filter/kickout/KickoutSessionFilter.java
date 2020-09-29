@@ -18,10 +18,10 @@ import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ledao.common.constant.ShiroConstants;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.ServletUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 登录帐号控制过滤器

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
-import com.ledao.common.core.domain.Ztree;
+import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.dao.Ztree;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysMenu;
-import com.ledao.system.domain.SysRole;
+import com.ledao.system.dao.SysMenu;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.service.ISysMenuService;
 
 /**

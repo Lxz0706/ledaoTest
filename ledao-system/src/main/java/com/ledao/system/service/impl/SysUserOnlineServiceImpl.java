@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.domain.SysUserOnline;
+import com.ledao.system.dao.SysUserOnline;
 import com.ledao.system.mapper.SysUserOnlineMapper;
 import com.ledao.system.service.ISysUserOnlineService;
 

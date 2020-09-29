@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysProjectTargetrecover;
+import com.ledao.system.dao.SysProjectTargetrecover;
 
 /**
  * 目标回收Mapper接口

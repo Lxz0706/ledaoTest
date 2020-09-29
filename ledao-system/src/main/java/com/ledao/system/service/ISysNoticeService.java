@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysNotice;
+import com.ledao.system.dao.SysNotice;
 
 /**
  * 公告 服务层

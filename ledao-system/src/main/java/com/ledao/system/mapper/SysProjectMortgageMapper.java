@@ -2,8 +2,8 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectBail;
-import com.ledao.system.domain.SysProjectMortgage;
+import com.ledao.system.dao.SysProjectBail;
+import com.ledao.system.dao.SysProjectMortgage;
 
 /**
  * 投后部项目管理抵押物Mapper接口

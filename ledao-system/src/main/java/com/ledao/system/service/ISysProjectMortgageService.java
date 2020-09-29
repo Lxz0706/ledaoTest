@@ -2,8 +2,8 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectContract;
-import com.ledao.system.domain.SysProjectMortgage;
+import com.ledao.system.dao.SysProjectContract;
+import com.ledao.system.dao.SysProjectMortgage;
 
 /**
  * 投后部项目管理抵押物Service接口

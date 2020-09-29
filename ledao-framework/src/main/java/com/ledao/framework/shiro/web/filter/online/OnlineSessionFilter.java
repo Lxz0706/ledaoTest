@@ -14,7 +14,7 @@ import com.ledao.common.enums.OnlineStatus;
 import com.ledao.framework.shiro.session.OnlineSession;
 import com.ledao.framework.shiro.session.OnlineSessionDAO;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 自定义访问控制

@@ -2,8 +2,8 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysUser;
-import com.ledao.system.domain.SysZck;
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.dao.SysZck;
 
 /**
  * 资产信息库Service接口

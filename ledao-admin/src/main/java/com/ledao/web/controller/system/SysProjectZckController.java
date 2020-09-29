@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.domain.SysProjectZck;
+import com.ledao.system.dao.SysProjectZck;
 import com.ledao.system.service.ISysProjectZckService;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 

@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectProgress;
+import com.ledao.system.dao.SysProjectProgress;
 
 /**
  * 【请填写功能名称】Mapper接口

@@ -3,7 +3,7 @@ package ${packageName}.service.impl;
 import java.util.List;
 #if($table.tree)
 import java.util.ArrayList;
-import com.ledao.common.core.domain.Ztree;
+import com.ledao.common.core.dao.Ztree;
 #end
 #foreach ($column in $columns)
 #if($column.javaField == 'createTime' || $column.javaField == 'updateTime')
@@ -14,7 +14,7 @@ import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ${packageName}.mapper.${ClassName}Mapper;
-import ${packageName}.domain.${ClassName};
+import ${packageName}.dao.${ClassName};
 import ${packageName}.service.I${ClassName}Service;
 import com.ledao.common.core.text.Convert;
 

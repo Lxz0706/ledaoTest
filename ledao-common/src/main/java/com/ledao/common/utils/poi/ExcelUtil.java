@@ -45,7 +45,7 @@ import com.ledao.common.annotation.Excel.ColumnType;
 import com.ledao.common.annotation.Excel.Type;
 import com.ledao.common.annotation.Excels;
 import com.ledao.common.config.Global;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;

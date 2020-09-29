@@ -1,8 +1,8 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.system.domain.SysUser;
-import com.ledao.system.domain.SysUserRole;
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.dao.SysUserRole;
 
 /**
  * 用户 业务层

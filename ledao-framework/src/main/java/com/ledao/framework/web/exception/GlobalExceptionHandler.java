@@ -9,7 +9,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.exception.DemoModeException;
 import com.ledao.common.utils.ServletUtils;

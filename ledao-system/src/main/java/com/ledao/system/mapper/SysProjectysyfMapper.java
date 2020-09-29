@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysProjectysyf;
+import com.ledao.system.dao.SysProjectysyf;
 
 /**
  * 流转已收已付Mapper接口

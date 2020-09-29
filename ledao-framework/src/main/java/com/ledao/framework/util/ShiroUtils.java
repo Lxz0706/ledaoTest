@@ -10,7 +10,7 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.bean.BeanUtils;
 import com.ledao.framework.shiro.realm.UserRealm;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 
 /**
  * shiro 工具类

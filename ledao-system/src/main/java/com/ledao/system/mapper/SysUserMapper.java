@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 用户表 数据层

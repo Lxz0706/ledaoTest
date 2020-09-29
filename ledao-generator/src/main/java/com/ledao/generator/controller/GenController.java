@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +18,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.security.PermissionUtils;
-import com.ledao.generator.domain.GenTable;
-import com.ledao.generator.domain.GenTableColumn;
+import com.ledao.generator.dao.GenTable;
+import com.ledao.generator.dao.GenTableColumn;
 import com.ledao.generator.service.IGenTableColumnService;
 import com.ledao.generator.service.IGenTableService;
 
 /**
  * 代码生成 操作处理
- * 
+ *
  * @author lxz
  */
 @Controller
 @RequestMapping("/tool/gen")
-public class GenController extends BaseController
-{
+public class GenController extends BaseController {
     private String prefix = "tool/gen";
 
     @Autowired
@@ -46,8 +46,7 @@ public class GenController extends BaseController
 
     @RequiresPermissions("tool:gen:view")
     @GetMapping()
-    public String gen()
-    {
+    public String gen() {
         return prefix + "/gen";
     }
 
@@ -57,8 +56,7 @@ public class GenController extends BaseController
     @RequiresPermissions("tool:gen:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo genList(GenTable genTable)
-    {
+    public TableDataInfo genList(GenTable genTable) {
         startPage();
         List<GenTable> list = genTableService.selectGenTableList(genTable);
         return getDataTable(list);
@@ -70,8 +68,7 @@ public class GenController extends BaseController
     @RequiresPermissions("tool:gen:list")
     @PostMapping("/db/list")
     @ResponseBody
-    public TableDataInfo dataList(GenTable genTable)
-    {
+    public TableDataInfo dataList(GenTable genTable) {
         startPage();
         List<GenTable> list = genTableService.selectDbTableList(genTable);
         return getDataTable(list);
@@ -83,8 +80,7 @@ public class GenController extends BaseController
     @RequiresPermissions("tool:gen:list")
     @PostMapping("/column/list")
     @ResponseBody
-    public TableDataInfo columnList(GenTableColumn genTableColumn)
-    {
+    public TableDataInfo columnList(GenTableColumn genTableColumn) {
         TableDataInfo dataInfo = new TableDataInfo();
         List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(genTableColumn);
         dataInfo.setRows(list);
@@ -97,8 +93,7 @@ public class GenController extends BaseController
      */
     @RequiresPermissions("tool:gen:list")
     @GetMapping("/importTable")
-    public String importTable()
-    {
+    public String importTable() {
         return prefix + "/importTable";
     }
 
@@ -109,8 +104,7 @@ public class GenController extends BaseController
     @Log(title = "代码生成", businessType = BusinessType.IMPORT)
     @PostMapping("/importTable")
     @ResponseBody
-    public AjaxResult importTableSave(String tables)
-    {
+    public AjaxResult importTableSave(String tables) {
         String[] tableNames = Convert.toStrArray(tables);
         // 查询表信息
         List<GenTable> tableList = genTableService.selectDbTableListByNames(tableNames);
@@ -123,8 +117,7 @@ public class GenController extends BaseController
      * 修改代码生成业务
      */
     @GetMapping("/edit/{tableId}")
-    public String edit(@PathVariable("tableId") Long tableId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("tableId") Long tableId, ModelMap mmap) {
         GenTable table = genTableService.selectGenTableById(tableId);
         mmap.put("table", table);
         return prefix + "/edit";
@@ -137,8 +130,7 @@ public class GenController extends BaseController
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(@Validated GenTable genTable)
-    {
+    public AjaxResult editSave(@Validated GenTable genTable) {
         genTableService.validateEdit(genTable);
         genTableService.updateGenTable(genTable);
         return AjaxResult.success();
@@ -148,8 +140,7 @@ public class GenController extends BaseController
     @Log(title = "代码生成", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         genTableService.deleteGenTableByIds(ids);
         return AjaxResult.success();
     }
@@ -160,8 +151,7 @@ public class GenController extends BaseController
     @RequiresPermissions("tool:gen:preview")
     @GetMapping("/preview/{tableId}")
     @ResponseBody
-    public AjaxResult preview(@PathVariable("tableId") Long tableId) throws IOException
-    {
+    public AjaxResult preview(@PathVariable("tableId") Long tableId) throws IOException {
         Map<String, String> dataMap = genTableService.previewCode(tableId);
         return AjaxResult.success(dataMap);
     }
@@ -172,8 +162,7 @@ public class GenController extends BaseController
     @RequiresPermissions("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/genCode/{tableName}")
-    public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException
-    {
+    public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
         byte[] data = genTableService.generatorCode(tableName);
         genCode(response, data);
     }
@@ -185,8 +174,7 @@ public class GenController extends BaseController
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/batchGenCode")
     @ResponseBody
-    public void batchGenCode(HttpServletResponse response, String tables) throws IOException
-    {
+    public void batchGenCode(HttpServletResponse response, String tables) throws IOException {
         String[] tableNames = Convert.toStrArray(tables);
         byte[] data = genTableService.generatorCode(tableNames);
         genCode(response, data);
@@ -195,8 +183,7 @@ public class GenController extends BaseController
     /**
      * 生成zip文件
      */
-    private void genCode(HttpServletResponse response, byte[] data) throws IOException
-    {
+    private void genCode(HttpServletResponse response, byte[] data) throws IOException {
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"ledao.zip\"");
         response.addHeader("Content-Length", "" + data.length);

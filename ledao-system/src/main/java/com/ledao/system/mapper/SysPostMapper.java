@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysPost;
+import com.ledao.system.dao.SysPost;
 
 /**
  * 岗位信息 数据层

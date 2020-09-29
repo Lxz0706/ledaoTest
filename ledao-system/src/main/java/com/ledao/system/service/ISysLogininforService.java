@@ -1,7 +1,7 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.system.domain.SysLogininfor;
+import com.ledao.system.dao.SysLogininfor;
 
 /**
  * 系统访问日志情况信息 服务层

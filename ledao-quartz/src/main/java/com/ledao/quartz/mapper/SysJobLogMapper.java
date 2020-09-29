@@ -1,6 +1,6 @@
 package com.ledao.quartz.mapper;
 
-import com.ledao.quartz.domain.SysJobLog;
+import com.ledao.quartz.dao.SysJobLog;
 import java.util.List;
 
 /**

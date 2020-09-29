@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectRecovered;
+import com.ledao.system.dao.SysProjectRecovered;
 
 /**
  * 已回收Service接口

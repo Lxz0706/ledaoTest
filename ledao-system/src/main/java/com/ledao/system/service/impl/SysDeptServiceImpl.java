@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ledao.common.annotation.DataScope;
 import com.ledao.common.constant.UserConstants;
-import com.ledao.common.core.domain.Ztree;
+import com.ledao.common.core.dao.Ztree;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.domain.SysDept;
-import com.ledao.system.domain.SysRole;
+import com.ledao.system.dao.SysDept;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.mapper.SysDeptMapper;
 import com.ledao.system.service.ISysDeptService;
 

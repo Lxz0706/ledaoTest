@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.core.text.Convert;
-import com.ledao.system.domain.SysDictData;
+import com.ledao.system.dao.SysDictData;
 import com.ledao.system.mapper.SysDictDataMapper;
 import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.utils.DictUtils;

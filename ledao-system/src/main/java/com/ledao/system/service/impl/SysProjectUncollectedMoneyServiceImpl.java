@@ -6,7 +6,7 @@ import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysProjectUncollectedMoneyMapper;
-import com.ledao.system.domain.SysProjectUncollectedMoney;
+import com.ledao.system.dao.SysProjectUncollectedMoney;
 import com.ledao.system.service.ISysProjectUncollectedMoneyService;
 import com.ledao.common.core.text.Convert;
 

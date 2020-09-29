@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import com.ledao.system.domain.SysDept;
+import com.ledao.system.dao.SysDept;
 
 /**
  * 部门管理 数据层

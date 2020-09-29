@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.core.text.Convert;
-import com.ledao.system.domain.SysOperLog;
+import com.ledao.system.dao.SysOperLog;
 import com.ledao.system.mapper.SysOperLogMapper;
 import com.ledao.system.service.ISysOperLogService;
 

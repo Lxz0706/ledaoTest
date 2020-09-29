@@ -17,7 +17,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.manager.AsyncManager;
 import com.ledao.framework.manager.factory.AsyncFactory;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 退出过滤器

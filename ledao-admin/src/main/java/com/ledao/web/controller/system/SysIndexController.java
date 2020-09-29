@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.ledao.common.config.Global;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysMenu;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysMenu;
+import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysMenuService;
 

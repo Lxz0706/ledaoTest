@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysJudicialMapper;
-import com.ledao.system.domain.SysJudicial;
+import com.ledao.system.dao.SysJudicial;
 import com.ledao.system.service.ISysJudicialService;
 import com.ledao.common.core.text.Convert;
 

@@ -1,9 +1,9 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.common.core.domain.Ztree;
-import com.ledao.system.domain.SysDept;
-import com.ledao.system.domain.SysRole;
+import com.ledao.common.core.dao.Ztree;
+import com.ledao.system.dao.SysDept;
+import com.ledao.system.dao.SysRole;
 
 /**
  * 部门管理 服务层

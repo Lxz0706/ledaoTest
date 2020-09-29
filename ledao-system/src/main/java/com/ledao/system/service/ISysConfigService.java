@@ -1,7 +1,7 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.system.domain.SysConfig;
+import com.ledao.system.dao.SysConfig;
 
 /**
  * 参数配置 服务层

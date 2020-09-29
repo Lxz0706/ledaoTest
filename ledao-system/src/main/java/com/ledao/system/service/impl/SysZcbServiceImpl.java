@@ -6,7 +6,7 @@ import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysZcbMapper;
-import com.ledao.system.domain.SysZcb;
+import com.ledao.system.dao.SysZcb;
 import com.ledao.system.service.ISysZcbService;
 import com.ledao.common.core.text.Convert;
 

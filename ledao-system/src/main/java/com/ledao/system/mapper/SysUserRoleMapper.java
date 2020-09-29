@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import com.ledao.system.domain.SysUserRole;
+import com.ledao.system.dao.SysUserRole;
 
 /**
  * 用户与角色关联表 数据层

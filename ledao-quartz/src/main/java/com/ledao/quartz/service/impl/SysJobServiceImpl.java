@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ledao.common.constant.ScheduleConstants;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.exception.job.TaskException;
-import com.ledao.quartz.domain.SysJob;
+import com.ledao.quartz.dao.SysJob;
 import com.ledao.quartz.mapper.SysJobMapper;
 import com.ledao.quartz.service.ISysJobService;
 import com.ledao.quartz.util.CronUtils;

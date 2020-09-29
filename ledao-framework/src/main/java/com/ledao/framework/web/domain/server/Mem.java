@@ -1,4 +1,4 @@
-package com.ledao.framework.web.domain.server;
+package com.ledao.framework.web.dao.server;
 
 import com.ledao.common.utils.Arith;
 

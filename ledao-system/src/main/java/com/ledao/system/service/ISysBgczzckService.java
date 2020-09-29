@@ -2,8 +2,8 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysBgczzck;
-import com.ledao.system.domain.SysZck;
+import com.ledao.system.dao.SysBgczzck;
+import com.ledao.system.dao.SysZck;
 
 /**
  * 重组并购项目信息库Service接口

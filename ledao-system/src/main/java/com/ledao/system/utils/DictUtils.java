@@ -5,7 +5,7 @@ import java.util.List;
 import com.ledao.common.constant.Constants;
 import com.ledao.common.utils.CacheUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.domain.SysDictData;
+import com.ledao.system.dao.SysDictData;
 
 /**
  * 字典工具类

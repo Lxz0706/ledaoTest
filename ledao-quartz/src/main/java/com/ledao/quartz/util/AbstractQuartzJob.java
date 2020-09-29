@@ -12,8 +12,8 @@ import com.ledao.common.utils.ExceptionUtil;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.bean.BeanUtils;
 import com.ledao.common.utils.spring.SpringUtils;
-import com.ledao.quartz.domain.SysJob;
-import com.ledao.quartz.domain.SysJobLog;
+import com.ledao.quartz.dao.SysJob;
+import com.ledao.quartz.dao.SysJobLog;
 import com.ledao.quartz.service.ISysJobLogService;
 
 /**

@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.Date;
 import java.util.List;
-import com.ledao.system.domain.SysUserOnline;
+import com.ledao.system.dao.SysUserOnline;
 
 /**
  * 在线用户 服务层

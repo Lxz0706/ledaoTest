@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectBail;
+import com.ledao.system.dao.SysProjectBail;
 
 /**
  * 投后部项目管理保证人Mapper接口

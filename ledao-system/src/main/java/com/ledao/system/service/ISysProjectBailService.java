@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectBail;
+import com.ledao.system.dao.SysProjectBail;
 
 /**
  * 投后部项目管理保证人Service接口

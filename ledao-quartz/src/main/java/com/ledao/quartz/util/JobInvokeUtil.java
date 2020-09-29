@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.spring.SpringUtils;
-import com.ledao.quartz.domain.SysJob;
+import com.ledao.quartz.dao.SysJob;
 
 /**
  * 任务执行工具

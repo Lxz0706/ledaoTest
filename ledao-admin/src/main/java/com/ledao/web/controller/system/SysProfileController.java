@@ -14,13 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.config.Global;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.shiro.service.SysPasswordService;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysUserService;
 
 /**

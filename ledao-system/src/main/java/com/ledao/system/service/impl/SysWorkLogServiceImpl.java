@@ -3,7 +3,7 @@ package com.ledao.system.service.impl;
 import java.util.List;
 
 import com.ledao.common.utils.DateUtils;
-import com.ledao.system.domain.SysWorkLog;
+import com.ledao.system.dao.SysWorkLog;
 import com.ledao.system.mapper.SysWorkLogMapper;
 import com.ledao.system.service.ISysWorkLogService;
 import org.springframework.beans.factory.annotation.Autowired;

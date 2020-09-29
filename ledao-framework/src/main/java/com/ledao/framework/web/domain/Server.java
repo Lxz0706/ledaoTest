@@ -1,4 +1,4 @@
-package com.ledao.framework.web.domain;
+package com.ledao.framework.web.dao;
 
 import java.net.UnknownHostException;
 import java.util.LinkedList;
@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Properties;
 import com.ledao.common.utils.Arith;
 import com.ledao.common.utils.IpUtils;
-import com.ledao.framework.web.domain.server.Cpu;
-import com.ledao.framework.web.domain.server.Jvm;
-import com.ledao.framework.web.domain.server.Mem;
-import com.ledao.framework.web.domain.server.Sys;
-import com.ledao.framework.web.domain.server.SysFile;
+import com.ledao.framework.web.dao.server.Cpu;
+import com.ledao.framework.web.dao.server.Jvm;
+import com.ledao.framework.web.dao.server.Mem;
+import com.ledao.framework.web.dao.server.Sys;
+import com.ledao.framework.web.dao.server.SysFile;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.CentralProcessor.TickType;

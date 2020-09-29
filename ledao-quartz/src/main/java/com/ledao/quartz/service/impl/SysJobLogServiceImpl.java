@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.core.text.Convert;
-import com.ledao.quartz.domain.SysJobLog;
+import com.ledao.quartz.dao.SysJobLog;
 import com.ledao.quartz.mapper.SysJobLogMapper;
 import com.ledao.quartz.service.ISysJobLogService;
 

@@ -21,10 +21,10 @@ public class ServerConfig
     public String getUrl()
     {
         HttpServletRequest request = ServletUtils.getRequest();
-        return getDomain(request);
+        return getdao(request);
     }
 
-    public static String getDomain(HttpServletRequest request)
+    public static String getdao(HttpServletRequest request)
     {
         StringBuffer url = request.getRequestURL();
         String contextPath = request.getServletContext().getContextPath();

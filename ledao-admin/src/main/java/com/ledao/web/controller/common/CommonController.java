@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ledao.common.config.Global;
 import com.ledao.common.config.ServerConfig;
 import com.ledao.common.constant.Constants;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;

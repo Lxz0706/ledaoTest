@@ -1,7 +1,7 @@
 package com.ledao.quartz.service;
 
 import java.util.List;
-import com.ledao.quartz.domain.SysJobLog;
+import com.ledao.quartz.dao.SysJobLog;
 
 /**
  * 定时任务调度日志信息信息 服务层

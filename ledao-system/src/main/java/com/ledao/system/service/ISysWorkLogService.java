@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysWorkLog;
+import com.ledao.system.dao.SysWorkLog;
 
 /**
  * 工作日志Service接口

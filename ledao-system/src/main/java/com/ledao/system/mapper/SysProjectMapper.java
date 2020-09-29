@@ -2,8 +2,8 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProject;
-import com.ledao.system.domain.SysZck;
+import com.ledao.system.dao.SysProject;
+import com.ledao.system.dao.SysZck;
 
 /**
  * 投后部项目管理Mapper接口

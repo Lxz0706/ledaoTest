@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ledao.common.core.page.PageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ledao.common.core.domain.AjaxResult;
-import com.ledao.common.core.domain.AjaxResult.Type;
-import com.ledao.common.core.page.PageDomain;
+import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult.Type;
 import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.utils.DateUtils;
@@ -49,11 +49,11 @@ public class BaseController {
      * 设置请求分页数据
      */
     protected void startPage() {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        Integer pageNum = pageDomain.getPageNum();
-        Integer pageSize = pageDomain.getPageSize();
+        PageDao pagedao = TableSupport.buildPageRequest();
+        Integer pageNum = pagedao.getPageNum();
+        Integer pageSize = pagedao.getPageSize();
         if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize)) {
-            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            String orderBy = SqlUtil.escapeOrderBySql(pagedao.getOrderBy());
             PageHelper.startPage(pageNum, pageSize, orderBy);
         }
     }
@@ -62,9 +62,9 @@ public class BaseController {
      * 设置请求排序数据
      */
     protected void startOrderBy() {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        if (StringUtils.isNotEmpty(pageDomain.getOrderBy())) {
-            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+        PageDao pagedao = TableSupport.buildPageRequest();
+        if (StringUtils.isNotEmpty(pagedao.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(pagedao.getOrderBy());
             PageHelper.orderBy(orderBy);
         }
     }

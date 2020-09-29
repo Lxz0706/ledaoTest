@@ -5,13 +5,13 @@ import java.util.List;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.domain.SysZck;
+import com.ledao.system.dao.SysZck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysBgczzckMapper;
-import com.ledao.system.domain.SysBgczzck;
+import com.ledao.system.dao.SysBgczzck;
 import com.ledao.system.service.ISysBgczzckService;
 import com.ledao.common.core.text.Convert;
 

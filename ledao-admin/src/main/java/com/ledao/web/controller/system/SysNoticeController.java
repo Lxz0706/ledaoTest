@@ -3,7 +3,7 @@ package com.ledao.web.controller.system;
 import java.util.List;
 
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysNotice;
+import com.ledao.system.dao.SysNotice;
 import com.ledao.system.service.ISysNoticeService;
 
 /**

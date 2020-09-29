@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectmanagent;
+import com.ledao.system.dao.SysProjectmanagent;
 
 /**
  * 【请填写功能名称】Service接口

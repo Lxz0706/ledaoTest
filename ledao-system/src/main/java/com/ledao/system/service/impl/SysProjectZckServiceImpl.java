@@ -6,7 +6,7 @@ import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysProjectZckMapper;
-import com.ledao.system.domain.SysProjectZck;
+import com.ledao.system.dao.SysProjectZck;
 import com.ledao.system.service.ISysProjectZckService;
 import com.ledao.common.core.text.Convert;
 

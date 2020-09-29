@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysZcb;
+import com.ledao.system.dao.SysZcb;
 
 /**
  * 资产包Service接口

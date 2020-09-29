@@ -6,7 +6,7 @@ import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysProjectmanagentMapper;
-import com.ledao.system.domain.SysProjectmanagent;
+import com.ledao.system.dao.SysProjectmanagent;
 import com.ledao.system.service.ISysProjectmanagentService;
 import com.ledao.common.core.text.Convert;
 

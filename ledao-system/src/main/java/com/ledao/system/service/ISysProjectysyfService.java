@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProjectysyf;
+import com.ledao.system.dao.SysProjectysyf;
 
 /**
  * 流转已收已付Service接口

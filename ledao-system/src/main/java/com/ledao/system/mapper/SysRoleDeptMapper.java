@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysRoleDept;
+import com.ledao.system.dao.SysRoleDept;
 
 /**
  * 角色与部门关联表 数据层

@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProject;
+import com.ledao.system.dao.SysProject;
 
 /**
  * 投后部项目管理Service接口

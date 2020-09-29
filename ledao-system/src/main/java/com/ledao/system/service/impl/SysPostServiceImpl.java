@@ -7,7 +7,7 @@ import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.domain.SysPost;
+import com.ledao.system.dao.SysPost;
 import com.ledao.system.mapper.SysPostMapper;
 import com.ledao.system.mapper.SysUserPostMapper;
 import com.ledao.system.service.ISysPostService;

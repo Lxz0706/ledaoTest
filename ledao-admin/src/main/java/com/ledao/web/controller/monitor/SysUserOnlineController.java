@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.enums.BusinessType;
@@ -19,7 +19,7 @@ import com.ledao.common.enums.OnlineStatus;
 import com.ledao.framework.shiro.session.OnlineSession;
 import com.ledao.framework.shiro.session.OnlineSessionDAO;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysUserOnline;
+import com.ledao.system.dao.SysUserOnline;
 import com.ledao.system.service.ISysUserOnlineService;
 
 /**

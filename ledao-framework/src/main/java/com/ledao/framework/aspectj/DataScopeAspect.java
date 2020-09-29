@@ -10,11 +10,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import com.ledao.common.annotation.DataScope;
-import com.ledao.common.core.domain.BaseEntity;
+import com.ledao.common.core.dao.BaseEntity;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysRole;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 数据过滤处理

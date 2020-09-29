@@ -20,8 +20,8 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.manager.AsyncManager;
 import com.ledao.framework.manager.factory.AsyncFactory;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysOperLog;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysOperLog;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 操作日志记录处理

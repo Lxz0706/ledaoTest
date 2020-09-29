@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.domain.SysZck;
+import com.ledao.system.dao.SysZck;
 import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.domain.SysZcb;
+import com.ledao.system.dao.SysZcb;
 import com.ledao.system.service.ISysZcbService;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 

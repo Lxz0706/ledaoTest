@@ -2,7 +2,7 @@ package com.ledao.quartz.util;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
-import com.ledao.quartz.domain.SysJob;
+import com.ledao.quartz.dao.SysJob;
 
 /**
  * 定时任务处理（禁止并发执行）

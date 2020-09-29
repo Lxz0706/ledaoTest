@@ -3,10 +3,10 @@ package com.ledao.system.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.ledao.common.core.domain.Ztree;
-import com.ledao.system.domain.SysMenu;
-import com.ledao.system.domain.SysRole;
-import com.ledao.system.domain.SysUser;
+import com.ledao.common.core.dao.Ztree;
+import com.ledao.system.dao.SysMenu;
+import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 菜单 业务层

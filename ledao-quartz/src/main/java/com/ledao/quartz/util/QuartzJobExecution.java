@@ -1,7 +1,7 @@
 package com.ledao.quartz.util;
 
 import org.quartz.JobExecutionContext;
-import com.ledao.quartz.domain.SysJob;
+import com.ledao.quartz.dao.SysJob;
 
 /**
  * 定时任务处理（允许并发执行）

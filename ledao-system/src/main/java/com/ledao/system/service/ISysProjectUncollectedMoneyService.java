@@ -1,7 +1,7 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.system.domain.SysProjectUncollectedMoney;
+import com.ledao.system.dao.SysProjectUncollectedMoney;
 
 /**
  * 【请填写功能名称】Service接口

@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysUserOnline;
+import com.ledao.system.dao.SysUserOnline;
 
 /**
  * 在线用户 数据层

@@ -13,7 +13,7 @@ import org.quartz.TriggerKey;
 import com.ledao.common.constant.ScheduleConstants;
 import com.ledao.common.exception.job.TaskException;
 import com.ledao.common.exception.job.TaskException.Code;
-import com.ledao.quartz.domain.SysJob;
+import com.ledao.quartz.dao.SysJob;
 
 /**
  * 定时任务工具类

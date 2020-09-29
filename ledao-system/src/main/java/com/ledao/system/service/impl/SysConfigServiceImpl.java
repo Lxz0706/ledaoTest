@@ -9,7 +9,7 @@ import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.CacheUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.domain.SysConfig;
+import com.ledao.system.dao.SysConfig;
 import com.ledao.system.mapper.SysConfigMapper;
 import com.ledao.system.service.ISysConfigService;
 

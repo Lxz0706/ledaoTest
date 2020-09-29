@@ -1,7 +1,7 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.system.domain.SysPost;
+import com.ledao.system.dao.SysPost;
 
 /**
  * 岗位信息 服务层

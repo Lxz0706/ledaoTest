@@ -2,8 +2,8 @@ package com.ledao.web.controller.timeTask;
 
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.framework.web.domain.server.Sys;
-import com.ledao.system.domain.*;
+import com.ledao.framework.web.dao.server.Sys;
+import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
 import org.quartz.DisallowConcurrentExecution;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.ledao.system.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import com.ledao.system.domain.SysDictData;
+import com.ledao.system.dao.SysDictData;
 
 /**
  * 字典表 数据层

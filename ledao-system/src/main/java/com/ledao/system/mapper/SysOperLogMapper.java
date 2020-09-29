@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysOperLog;
+import com.ledao.system.dao.SysOperLog;
 
 /**
  * 操作日志 数据层

@@ -6,7 +6,7 @@ import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysProjectTargetrecoverMapper;
-import com.ledao.system.domain.SysProjectTargetrecover;
+import com.ledao.system.dao.SysProjectTargetrecover;
 import com.ledao.system.service.ISysProjectTargetrecoverService;
 import com.ledao.common.core.text.Convert;
 

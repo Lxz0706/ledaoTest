@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.core.text.Convert;
-import com.ledao.system.domain.SysNotice;
+import com.ledao.system.dao.SysNotice;
 import com.ledao.system.mapper.SysNoticeMapper;
 import com.ledao.system.service.ISysNoticeService;
 

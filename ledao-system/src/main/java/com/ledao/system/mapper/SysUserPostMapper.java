@@ -1,7 +1,7 @@
 package com.ledao.system.mapper;
 
 import java.util.List;
-import com.ledao.system.domain.SysUserPost;
+import com.ledao.system.dao.SysUserPost;
 
 /**
  * 用户与岗位关联表 数据层

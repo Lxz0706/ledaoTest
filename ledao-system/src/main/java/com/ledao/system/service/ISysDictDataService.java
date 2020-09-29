@@ -1,7 +1,7 @@
 package com.ledao.system.service;
 
 import java.util.List;
-import com.ledao.system.domain.SysDictData;
+import com.ledao.system.dao.SysDictData;
 
 /**
  * 字典 业务层

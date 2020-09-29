@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.domain.AjaxResult;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.framework.shiro.service.SysRegisterService;
-import com.ledao.system.domain.SysUser;
+import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysConfigService;
 
 /**

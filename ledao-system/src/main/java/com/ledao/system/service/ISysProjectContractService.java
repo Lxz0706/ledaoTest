@@ -2,8 +2,8 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.domain.SysProject;
-import com.ledao.system.domain.SysProjectContract;
+import com.ledao.system.dao.SysProject;
+import com.ledao.system.dao.SysProjectContract;
 
 /**
  * 投后部项目管理合同本金Service接口

@@ -3,7 +3,7 @@ package com.ledao.quartz.service;
 import java.util.List;
 import org.quartz.SchedulerException;
 import com.ledao.common.exception.job.TaskException;
-import com.ledao.quartz.domain.SysJob;
+import com.ledao.quartz.dao.SysJob;
 
 /**
  * 定时任务调度信息信息 服务层

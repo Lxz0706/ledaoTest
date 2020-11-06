@@ -67,4 +67,12 @@ public interface ISysProjectBailService {
      * @return 结果
      */
     public List<SysProjectBail> selectSysProjectBailByProjectId(String projectId);
+
+    /**
+     * 根据projectId查询
+     *
+     * @param projectId
+     * @return 结果
+     */
+    public SysProjectBail selectProjectBailByProjectId(Long projectId);
 }

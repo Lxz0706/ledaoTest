@@ -11,18 +11,18 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>资产库名称：</label>
-                                <input type="text" name="zckName"/>
+                                <label>借款人名称：</label>
+                                <input type="text" name="projectName"/>
                             </li>
-                            <li>
+                            <!--<li>
                                 <label>资产库状态：</label>
-                                <select name="zckStatus" id="zckStatus" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
+                                <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
+                            </li>-->
                             <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
@@ -101,6 +101,12 @@
         function detail(id,zckName) {
             var url = prefix + '/projectList/' + id;
             $.modal.openTab(zckName+"列表", url);
+        }
+
+        //查询
+        function jump(){
+            var data = $("#formId").serialize();
+            $.operate.gets(ctx + "system/project/queryAll", data,"查询界面");
         }
 
     </script>

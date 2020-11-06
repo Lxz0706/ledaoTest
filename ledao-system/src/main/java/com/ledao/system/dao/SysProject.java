@@ -95,6 +95,16 @@ public class SysProject extends BaseEntity {
     private String collateral;
 
     /**
+     * 质押物
+     */
+    private String pledge;
+
+    /**
+     * 项目经理ID
+     */
+    private Long projectManagerId;
+
+    /**
      * 项目经理
      */
     @Excel(name = "项目经理")
@@ -188,7 +198,7 @@ public class SysProject extends BaseEntity {
      * 诉讼时效起算日
      */
     @Excel(name = "诉讼时效起算日")
-    private String limitationAction;
+    private Date limitationAction;
 
     /**
      * 查封标的
@@ -206,7 +216,7 @@ public class SysProject extends BaseEntity {
      * 执行时效起算日
      */
     @Excel(name = "执行时效起算日")
-    private String limitationExecution;
+    private Date limitationExecution;
 
     /**
      * 起诉立案日期
@@ -293,6 +303,12 @@ public class SysProject extends BaseEntity {
     private BigDecimal totalPrice;
 
     private BigDecimal totalInterestBalance;
+
+    /**
+     * 债权状态
+     */
+    @Excel(name = "债权状态")
+    private String debtStatus;
 
     public Long getProjectId() {
         return projectId;
@@ -390,12 +406,28 @@ public class SysProject extends BaseEntity {
         return guarantor;
     }
 
+    public String getPledge() {
+        return pledge;
+    }
+
+    public void setPledge(String pledge) {
+        this.pledge = pledge;
+    }
+
     public void setCollateral(String collateral) {
         this.collateral = collateral;
     }
 
     public String getCollateral() {
         return collateral;
+    }
+
+    public Long getProjectManagerId() {
+        return projectManagerId;
+    }
+
+    public void setProjectManagerId(Long projectManagerId) {
+        this.projectManagerId = projectManagerId;
     }
 
     public void setProjectManager(String projectManager) {
@@ -502,12 +534,12 @@ public class SysProject extends BaseEntity {
         return contractNo;
     }
 
-    public void setLimitationAction(String limitationAction) {
-        this.limitationAction = limitationAction;
+    public Date getLimitationAction() {
+        return limitationAction;
     }
 
-    public String getLimitationAction() {
-        return limitationAction;
+    public void setLimitationAction(Date limitationAction) {
+        this.limitationAction = limitationAction;
     }
 
     public void setSealUpSubjectMatter(String sealUpSubjectMatter) {
@@ -526,12 +558,12 @@ public class SysProject extends BaseEntity {
         return sealUpDate;
     }
 
-    public void setLimitationExecution(String limitationExecution) {
-        this.limitationExecution = limitationExecution;
+    public Date getLimitationExecution() {
+        return limitationExecution;
     }
 
-    public String getLimitationExecution() {
-        return limitationExecution;
+    public void setLimitationExecution(Date limitationExecution) {
+        this.limitationExecution = limitationExecution;
     }
 
     public void setDateFiling(Date dateFiling) {
@@ -678,6 +710,14 @@ public class SysProject extends BaseEntity {
         this.lawyerContact = lawyerContact;
     }
 
+    public String getDebtStatus() {
+        return debtStatus;
+    }
+
+    public void setDebtStatus(String debtStatus) {
+        this.debtStatus = debtStatus;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -693,7 +733,9 @@ public class SysProject extends BaseEntity {
                 .append("interestBalance", getInterestBalance())
                 .append("principalInterestBalance", getPrincipalInterestBalance())
                 .append("guarantor", getGuarantor())
+                .append("pledge", getPledge())
                 .append("collateral", getCollateral())
+                .append("projectManagerId", getProjectManagerId())
                 .append("projectManager", getProjectManager())
                 .append("userId", getUserId())
                 .append("judicialStatus", getJudicialStatus())
@@ -731,6 +773,7 @@ public class SysProject extends BaseEntity {
                 .append("projectZckId", getProjectZckId())
                 .append("lawFirm", getLawFirm())
                 .append("lawyerContact", getLawyerContact())
+                .append("debtStatus", getDebtStatus())
                 .toString();
     }
 }

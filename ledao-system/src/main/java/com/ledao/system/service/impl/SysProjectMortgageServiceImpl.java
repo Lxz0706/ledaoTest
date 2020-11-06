@@ -100,4 +100,14 @@ public class SysProjectMortgageServiceImpl implements ISysProjectMortgageService
     public List<SysProjectMortgage> selectSysProjectMortgageByProjectId(String projectId) {
         return sysProjectMortgageMapper.selectSysProjectMortgageByProjectId(Convert.toStrArray(projectId));
     }
+
+    /**
+     * 根据projectId查询
+     *
+     * @param projectId
+     * @return 结果
+     */
+    public SysProjectMortgage selectProjectMortgageByProjectId(Long projectId){
+        return sysProjectMortgageMapper.selectProjectMortgageByProjectId(projectId);
+    }
 }

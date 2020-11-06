@@ -2,6 +2,10 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
+import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysTagging;
+import com.ledao.system.service.ISysTaggingService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,9 @@ public class SysJudicialController extends BaseController {
     @Autowired
     private ISysJudicialService sysJudicialService;
 
+    @Autowired
+    private ISysTaggingService sysTaggingService;
+
     @RequiresPermissions("system:judicial:view")
     @GetMapping()
     public String judicial() {
@@ -49,6 +56,14 @@ public class SysJudicialController extends BaseController {
     public TableDataInfo list(SysJudicial sysJudicial) {
         startPage();
         List<SysJudicial> list = sysJudicialService.selectSysJudicialList(sysJudicial);
+        /*for (SysJudicial sysJudicial1 : list) {
+            SysTagging sysTagging = sysTaggingService.selectSysTaggingByJudicialId(sysJudicial1.getId());
+            if (StringUtils.isNotNull(sysTagging)) {
+                sysJudicial1.setTagging("Y");
+            } else {
+                sysJudicial1.setTagging("N");
+            }
+        }*/
         return getDataTable(list);
     }
 
@@ -88,7 +103,7 @@ public class SysJudicialController extends BaseController {
      * 修改司法拍卖项目
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, ModelMap mmap) {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         SysJudicial sysJudicial = sysJudicialService.selectSysJudicialById(id);
         mmap.put("sysJudicial", sysJudicial);
         return prefix + "/edit";
@@ -114,5 +129,41 @@ public class SysJudicialController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(sysJudicialService.deleteSysJudicialByIds(ids));
+    }
+
+
+    /**
+     * 新增保存星标库
+     */
+    @RequiresPermissions("system:tagging:add")
+    @Log(title = "星标库", businessType = BusinessType.INSERT)
+    @PostMapping("/addTagging")
+    @ResponseBody
+    public AjaxResult addTagging(SysTagging sysTagging) {
+        SysJudicial sysJudicial = new SysJudicial();
+        sysJudicial.setId(sysTagging.getJudicialId());
+        sysJudicial.setTagging("Y");
+        sysJudicial.setUpdateBy(ShiroUtils.getLoginName());
+        sysJudicialService.updateSysJudicial(sysJudicial);
+        sysTagging.setCreateBy(ShiroUtils.getLoginName());
+        return toAjax(sysTaggingService.insertSysTagging(sysTagging));
+    }
+
+    /**
+     * 删除星标库
+     */
+    @RequiresPermissions("system:tagging:remove")
+    @Log(title = "星标库", businessType = BusinessType.DELETE)
+    @PostMapping("/removeTagging")
+    @ResponseBody
+    public AjaxResult removeTagging(SysTagging sysTagging) {
+        SysJudicial sysJudicial = new SysJudicial();
+        sysJudicial.setId(sysTagging.getJudicialId());
+        sysJudicial.setTagging("");
+        sysJudicial.setUpdateBy(ShiroUtils.getLoginName());
+        sysJudicialService.updateSysJudicial(sysJudicial);
+
+        SysTagging sysTagging1 = sysTaggingService.selectSysTaggingByJudicialId(sysTagging.getJudicialId());
+        return toAjax(sysTaggingService.deleteSysTaggingById(sysTagging1.getId()));
     }
 }

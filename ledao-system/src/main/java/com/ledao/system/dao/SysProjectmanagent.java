@@ -32,7 +32,7 @@ public class SysProjectmanagent extends BaseEntity {
      * 序号
      */
     @Excel(name = "序号")
-    private String no;
+    private Long no;
 
     /**
      * 项目负责人
@@ -184,9 +184,13 @@ public class SysProjectmanagent extends BaseEntity {
 
     /**
      * 目标回收日期
-     * */
+     */
     private Date targetRecoverDate;
 
+    /**
+     * 项目类型
+     */
+    private String projectType;
 
     public Long getProjectManagementId() {
         return projectManagementId;
@@ -204,11 +208,11 @@ public class SysProjectmanagent extends BaseEntity {
         this.projectManagementName = projectManagementName;
     }
 
-    public String getNo() {
+    public Long getNo() {
         return no;
     }
 
-    public void setNo(String no) {
+    public void setNo(Long no) {
         this.no = no;
     }
 
@@ -420,6 +424,14 @@ public class SysProjectmanagent extends BaseEntity {
         this.targetRecoverDate = targetRecoverDate;
     }
 
+    public String getProjectType() {
+        return projectType;
+    }
+
+    public void setProjectType(String projectType) {
+        this.projectType = projectType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -453,6 +465,7 @@ public class SysProjectmanagent extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("projectType", getProjectType())
                 .toString();
     }
 }

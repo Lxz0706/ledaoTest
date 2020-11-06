@@ -8,6 +8,16 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-projectContract-edit" th:object="${sysProjectContract}">
             <input name="contractId" th:field="*{contractId}" type="hidden">
+            <input name="projectId" th:field="*{projectId}" type="hidden">
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">是否逾期：</label>
+                <div class="col-sm-8">
+                    <select name="overdue" onchange="selectOnchange(this)" class="form-control m-b" th:with="type=${@dict.getType('sys_project_overdue')}">
+                        <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{overdue}"></option>
+                    </select>
+                </div>
+            </div>-->
             <div class="form-group">
                 <label class="col-sm-3 control-label">合同编号：</label>
                 <div class="col-sm-8">
@@ -17,31 +27,56 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">本金：</label>
                 <div class="col-sm-8">
-                    <input name="capital" th:field="*{capital}" class="form-control" type="text">
+                    <input name="capital" th:field="*{capital}" id="capital" class="form-control" type="text" readonly="true" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">期内起始日：</label>
+                <label class="col-sm-3 control-label">起始日：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="startTime" th:value="${#dates.format(sysProjectContract.startTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="startTime" id="startTime" onchange="changeMoney()" th:value="${#dates.format(sysProjectContract.startTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text"required>
                     </div>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">期内到期日：</label>
+                <label class="col-sm-3 control-label">到期日：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="endTime" th:value="${#dates.format(sysProjectContract.endTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="endTime" id="endTime" onchange="changeMoney()" th:value="${#dates.format(sysProjectContract.endTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
                     </div>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">利率：</label>
                 <div class="col-sm-8">
-                    <input name="interestRate" th:field="*{interestRate}" class="form-control" type="text">
+                    <input name="interestRate" id="interestRate" th:field="*{interestRate}" class="form-control" type="text" onchange="changeMoney()" required>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：本利率为%</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">期内利息：</label>
+                <div class="col-sm-8">
+                    <input name="interest" id="interest" class="form-control" th:field="*{interest}" type="text" readonly="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">逾期利息：</label>
+                <div class="col-sm-8">
+                    <input name="overdueInterest" id="overdueInterest" class="form-control" th:field="*{overdueInterest}" type="text" readonly="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">利息复利：</label>
+                <div class="col-sm-8">
+                    <input name="compoundInterest" id="compoundInterest" class="form-control" th:field="*{compoundInterest}" type="text" readonly="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">总利息：</label>
+                <div class="col-sm-8">
+                    <input name="totalInterest" id="totalInterest" class="form-control" th:field="*{totalInterest}" type="text" readonly="true">
                 </div>
             </div>
         </form>
@@ -71,6 +106,146 @@
             minView: "month",
             autoclose: true
         });
+
+
+        $('input[name="price_min"]').on('input propertychange', function() {
+            alert(2)
+        })
+
+        //nput失去焦点后 如果值发生改变后，触发
+        $('input[name="price_min"]').change(function() {
+            alert(1)
+        })
+
+        function changeMoney(){
+            //本金
+            var capital = $("#capital").val();
+
+            //起始日
+            var startTime = $("#startTime").val();
+
+            //到期日
+            var endTime = $("#endTime").val();
+
+            //利率
+            var interestRate=$("#interestRate").val();
+
+            if($.common.isEmpty(startTime)){
+                alert("请选择起始日");
+                return;
+            }
+
+            if($.common.isEmpty(endTime)){
+                alert("请选择到期日");
+                return;
+            }
+
+            if($.common.isEmpty(interestRate)){
+                alert("请输入利率");
+                return;
+            }
+
+            //期内利息
+            //本金*（到期日-起始日）/360 *（1+利率）
+            var dates1 = getDateDiff(startTime,endTime);
+            var num = capital*dates1/360*(1+interestRate/100);
+            $("#interest").val(num);
+
+            //逾期利息
+            //本金*（到期日-起始日）/360 *（1+利率）/360*1.5
+            var startTime1 = addDate(endTime,1);
+            var endTime2 = getNowFormatDate();
+            var dates2 = getDateDiff(startTime1,endTime2);
+            var num1 = capital*dates2/360*(1+interestRate/100)*1.5;
+            $("#overdueInterest").val(num1);
+
+            //利息复利
+            //利息复利=期内利息*合同利率*1.5*（今日-合同到期日）/360
+            var num2= num * (interestRate/100)*1.5*getDateDiff(endTime,getNowFormatDate())/360
+            $("#compoundInterest").val(num2);
+
+            //总利息
+            $("#totalInterest").val(num+num1+num2);
+        }
+
+/*            function selectOnchange(obj){
+            //获取被选中的option标签选项
+            var value = obj.options[obj.selectedIndex].value;
+
+            //本金
+            var capital = $("#capital").val();
+
+            //起始日
+            var startTime = $("#startTime").val();
+
+            //到期日
+            var endTime = $("#endTime").val();
+
+            //利率
+            var interestRate=$("#interestRate").val();
+
+
+            if("是" == value){
+                startTime = addDate(endTime,1);
+                endTime = getNowFormatDate();
+                var dates = getDateDiff(startTime,endTime);
+                var num=capital*dates/360*(1+interestRate/100)*1.5;
+                $("#interest").val(num);
+            }else if("否" == value){
+                var dates = getDateDiff(startTime,endTime);
+                var num =capital*dates/360*(1+interestRate/100);
+                $("#interest").val(num);
+            }
+        }*/
+
+        //计算两个时间的时间差
+        function getDateDiff(startDate,endDate) {
+            var startTime = new Date(Date.parse(startDate.replace(/-/g,   "/" ))).getTime();
+            var endTime = new Date(Date.parse(endDate.replace(/-/g,   "/" ))).getTime();
+            var dates = Math.abs((endTime - startTime))/(1000*60*60*24);
+            return dates;
+        }
+
+
+        function addDate(date, days) {
+            if (days == undefined || days == '') {
+                days = 1;
+            }
+            var date = new Date(date);
+            date.setDate(date.getDate() + days);
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            return date.getFullYear() + '-' + getFormatDate(month) + '-' + getFormatDate(day);
+        }
+
+        // 日期月份/天的显示，如果是1位数，则在前面加上'0'
+        function getFormatDate(arg) {
+            if (arg == undefined || arg == '') {
+                return '';
+            }
+            var re = arg + '';
+            if (re.length < 2) {
+                re = '0' + re;
+            }
+            return re;
+        }
+
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+                return currentdate;
+            }
+
     </script>
 </body>
 </html>

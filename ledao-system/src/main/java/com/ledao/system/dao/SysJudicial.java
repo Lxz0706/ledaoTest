@@ -20,7 +20,7 @@ public class SysJudicial extends BaseEntity {
     /**
      * id
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 项目id
@@ -118,12 +118,14 @@ public class SysJudicial extends BaseEntity {
     @Excel(name = "项目来源")
     private String itemSource;
 
-    public void setId(Integer id) {
-        this.id = id;
+    private String tagging;
+
+    public Long getId() {
+        return id;
     }
 
-    public Integer getId() {
-        return id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setItemId(String itemId) {
@@ -254,6 +256,14 @@ public class SysJudicial extends BaseEntity {
         return itemSource;
     }
 
+    public String getTagging() {
+        return tagging;
+    }
+
+    public void setTagging(String tagging) {
+        this.tagging = tagging;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -274,6 +284,7 @@ public class SysJudicial extends BaseEntity {
                 .append("itemCity", getItemCity())
                 .append("itemCounty", getItemCounty())
                 .append("itemSource", getItemSource())
+                .append("tagging", getTagging())
                 .toString();
     }
 }

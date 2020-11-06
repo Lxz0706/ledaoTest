@@ -17,7 +17,7 @@ public interface ISysJudicialService {
      * @param id 司法拍卖项目ID
      * @return 司法拍卖项目
      */
-    public SysJudicial selectSysJudicialById(Integer id);
+    public SysJudicial selectSysJudicialById(Long id);
 
     /**
      * 查询司法拍卖项目列表
@@ -57,5 +57,5 @@ public interface ISysJudicialService {
      * @param id 司法拍卖项目ID
      * @return 结果
      */
-    public int deleteSysJudicialById(Integer id);
+    public int deleteSysJudicialById(Long id);
 }

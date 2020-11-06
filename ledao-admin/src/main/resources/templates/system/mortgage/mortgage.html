@@ -43,9 +43,9 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:mortgage:add">
+                <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:mortgage:add">
                     <i class="fa fa-plus"></i> 添加
-                </a>
+                </a>-->
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:mortgage:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
@@ -110,7 +110,6 @@
                     formatter:function (value,row,index) {
                         return $.operate.numberFormatter(value);
                     }
-
                 },
                 {
                     field: 'mortgageStatus', 

@@ -171,6 +171,15 @@ public class SysProjectmanagentController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysProjectmanagent sysProjectmanagent) {
+        SysProjectmanagent sysProjectmanagent1 = new SysProjectmanagent();
+        sysProjectmanagent1.setProjectType(sysProjectmanagent.getProjectType());
+        List<SysProjectmanagent> sysProjectmanagentList = sysProjectmanagentService.selectSysProjectmanagentList(sysProjectmanagent1);
+        if (sysProjectmanagentList.size() > 0) {
+            sysProjectmanagent.setNo(sysProjectmanagentList.get(0).getNo() + 1);
+        } else {
+            sysProjectmanagent.setNo(Long.valueOf(1));
+        }
+
         return toAjax(sysProjectmanagentService.insertSysProjectmanagent(sysProjectmanagent));
     }
 
@@ -192,6 +201,14 @@ public class SysProjectmanagentController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysProjectmanagent sysProjectmanagent) {
+        SysProjectmanagent sysProjectmanagent1 = new SysProjectmanagent();
+        sysProjectmanagent1.setProjectType(sysProjectmanagent.getProjectType());
+        List<SysProjectmanagent> sysProjectmanagentList = sysProjectmanagentService.selectSysProjectmanagentList(sysProjectmanagent1);
+        if (sysProjectmanagentList.size() > 0) {
+            sysProjectmanagent.setNo(sysProjectmanagentList.get(0).getNo() + 1);
+        } else {
+            sysProjectmanagent.setNo(Long.valueOf(1));
+        }
         return toAjax(sysProjectmanagentService.updateSysProjectmanagent(sysProjectmanagent));
     }
 

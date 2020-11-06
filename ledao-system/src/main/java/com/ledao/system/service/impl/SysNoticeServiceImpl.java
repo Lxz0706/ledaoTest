@@ -84,4 +84,15 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
     public int readNoticeByIds(String noticeIds) {
         return noticeMapper.readNoticeByIds(Convert.toStrArray(noticeIds));
     }
+
+    /**
+     * 查询公告列表
+     *
+     * @param notice 公告信息
+     * @return 公告集合
+     */
+    @Override
+    public List<SysNotice> selectNoticeLists(SysNotice notice) {
+        return noticeMapper.selectNoticeLists(notice);
+    }
 }

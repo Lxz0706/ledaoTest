@@ -80,13 +80,9 @@
 
         //如果是非多选，进行如下处理，变成单选
         if(!multiSelectFlag || multiSelectFlag != 'true'){
-
             $("#multiselect_rightSelected").click(function(){
-
                 var checkValue=$("#multiselect").val();
-
-                if(checkValue != ''){
-
+                if(checkValue != '' || checkValue !=null){
                     $("#multiselect_to option").each(function(){  //遍历所有option
                         var val = $(this).val();   //获取option值
                         var text = $(this).text(); //获取option文本内容
@@ -94,10 +90,8 @@
                             $("#multiselect").append("<option value='" +  val + "'>" +  text + "</option>");
                         }
                     });
-
                     $("#multiselect_to").find("option").remove();
                 }
-
             });
 
             $("#multiselect_rightAll").hide();

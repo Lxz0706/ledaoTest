@@ -98,4 +98,14 @@ public class SysProjectContractServiceImpl implements ISysProjectContractService
     public List<SysProjectContract> selectSysProjectContractByProjectId(String projectId) {
         return sysProjectContractMapper.selectSysProjectContractByProjectId(Convert.toStrArray(projectId));
     }
+
+    /**
+     * 根据projectId查询
+     *
+     * @param projectId
+     * @return 结果
+     */
+    public SysProjectContract selectProjectContractByProjectId(Long projectId){
+        return sysProjectContractMapper.selectProjectContractByProjectId(projectId);
+    }
 }

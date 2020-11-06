@@ -1,9 +1,12 @@
 package com.ledao.web.controller.system;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysProject;
+import com.ledao.system.dao.SysProjectMortgage;
 import com.ledao.system.service.ISysProjectService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,6 +140,9 @@ public class SysProjectContractController extends BaseController {
     @ResponseBody
     public AjaxResult editSave(SysProjectContract sysProjectContract) {
         sysProjectContract.setUpdateBy(ShiroUtils.getLoginName());
+        SysProject sysProject = sysProjectService.selectSysProjectById(sysProjectContract.getProjectId());
+        sysProject.setInterestBalance(sysProjectContract.getTotalInterest());
+        sysProjectService.updateSysProject(sysProject);
         return toAjax(sysProjectContractService.updateSysProjectContract(sysProjectContract));
     }
 
@@ -148,6 +154,15 @@ public class SysProjectContractController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        for (String string1 : ids.split(",")) {
+            SysProjectContract sysProjectContract = sysProjectContractService.selectSysProjectContractById(Long.valueOf(string1));
+            if (StringUtils.isNotNull(sysProjectContract.getProjectId())) {
+                SysProject sysProject = sysProjectService.selectSysProjectById(sysProjectContract.getProjectId());
+                sysProject.setContractPrincipal(new BigDecimal(0));
+                sysProject.setUpdateBy(ShiroUtils.getLoginName());
+                sysProjectService.updateSysProject(sysProject);
+            }
+        }
         return toAjax(sysProjectContractService.deleteSysProjectContractByIds(ids));
     }
 }

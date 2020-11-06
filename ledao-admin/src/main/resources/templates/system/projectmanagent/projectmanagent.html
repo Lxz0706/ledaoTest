@@ -62,9 +62,13 @@
                     title: '主键ID',
                     visible: false
                 },
-                {
+                /*{
                     field: 'no',
                     title: '序号'
+                },*/
+                {
+                    field: 'projectType',
+                    title: '项目类型'
                 },
                 {
                     field: 'projectManagementName', 
@@ -137,7 +141,7 @@
             $.table.init(options);
         });
         function progress(id) {
-            var url = ctx + 'system/progress/progressList/' + id;
+            var url = ctx + 'system/progress/progressLists/' + id + "/N";
             $.modal.openTab("进度情况列表", url);
         }
 

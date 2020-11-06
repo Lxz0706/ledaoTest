@@ -34,8 +34,14 @@
 				<td  class="col-sm-1"><span th:text="${sysProject.guarantor}"/></td>
 				<td  class="col-sm-1 text-right"><h5>抵押物：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysProject.collateral}"/></td>
+				<td  class="col-sm-1 text-right"><h5>质押物：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.pledge}"/></td>
 				<td  class="col-sm-1 text-right"><h5>项目经理：</h5></td>
-				<td  class="col-sm-1" colspan="3"><span th:text="${sysProject.projectManager}"/></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.projectManager}"/></td>
+			</tr>
+			<tr>
+				<td class="col-sm-1 text-right"><h5>债权状态</h5></td>
+				<td class="col-sm-1" colspan="7"><span th:text="${sysProject.debtStatus}"/></td>
 			</tr>
 		</table>
 	</div>

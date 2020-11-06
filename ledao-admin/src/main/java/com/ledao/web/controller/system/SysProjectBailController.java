@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectContract;
@@ -152,6 +153,15 @@ public class SysProjectBailController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        for (String string1 : ids.split(",")) {
+            SysProjectBail sysProjectBail = sysProjectBailService.selectSysProjectBailById(Long.valueOf(string1));
+            if (StringUtils.isNotNull(sysProjectBail.getProjectId())) {
+                SysProject sysProject = sysProjectService.selectSysProjectById(sysProjectBail.getProjectId());
+                sysProject.setGuarantor("");
+                sysProject.setUpdateBy(ShiroUtils.getLoginName());
+                sysProjectService.updateSysProject(sysProject);
+            }
+        }
         return toAjax(sysProjectBailService.deleteSysProjectBailByIds(ids));
     }
 }

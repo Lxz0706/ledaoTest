@@ -34,8 +34,14 @@
 				<td  class="col-sm-1"><span th:text="${sysProject.guarantor}"/></td>
 				<td  class="col-sm-1 text-right"><h5>抵押物：</h5></td>
 				<td  class="col-sm-1"><span th:text="${sysProject.collateral}"/></td>
+				<td  class="col-sm-1 text-right"><h5>质押物：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.pledge}"/></td>
 				<td  class="col-sm-1 text-right"><h5>项目经理：</h5></td>
-				<td  class="col-sm-1" colspan="3"><span th:text="${sysProject.projectManager}"/></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.projectManager}"/></td>
+			</tr>
+			<tr>
+				<td class="col-sm-1 text-right"><h5>债权状态</h5></td>
+				<td class="col-sm-1" colspan="7"><span th:text="${sysProject.debtStatus}"/></td>
 			</tr>
 			<tr>
 				<td colspan="8" style="text-align: center" class="success"><h3>司法情况</h3></td>
@@ -55,23 +61,6 @@
 				<td  class="col-sm-1"><span th:text="${sysProject.lawyerContact}"/></td>
 				<td  class="col-sm-1 text-right"><h5>备注：</h5></td>
 				<td  class="col-sm-1" colspan="4"><span th:text="${sysProject.judicialRemarks}"/></td>
-			</tr>
-			<tr>
-				<td colspan="8" style="text-align: center" class="success"><h3>成交信息</h3></td>
-			</tr>
-			<tr>
-				<td  class="col-sm-1 text-right"><h5>抵押物/债权：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.collateralClaims}"/></td>
-				<td  class="col-sm-1 text-right"><h5>成交类型：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.transactionType}"/></td>
-				<td  class="col-sm-1 text-right"><h5>买家：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.buyer}"/></td>
-				<td  class="col-sm-1 text-right"><h5>买家来源：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.buyerSources}"/></td>
-			</tr>
-			<tr>
-				<td  class="col-sm-1 text-right"><h5>买家联系方式：</h5></td>
-				<td  class="col-sm-1" colspan="7"><span th:text="${sysProject.buyerContact}"/></td>
 			</tr>
 			<tr>
 				<td colspan="8" style="text-align: center" class="success"><h3>诉讼及执行进展</h3></td>
@@ -115,6 +104,21 @@
 				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.successfulBidderDate, 'yyyy-MM-dd')}"/></td>
 				<td  class="col-sm-1 text-right"><h5>执行款到账日期：</h5></td>
 				<td  class="col-sm-1"><span th:text="${#dates.format(sysProject.paymentReceivedDate, 'yyyy-MM-dd')}"/></td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center" class="success"><h3>成交信息</h3></td>
+			</tr>
+			<tr>
+				<!--<td  class="col-sm-1 text-right"><h5>抵押物/债权：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.collateralClaims}"/></td>-->
+				<td  class="col-sm-1 text-right"><h5>成交类型：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.transactionType}"/></td>
+				<td  class="col-sm-1 text-right"><h5>买家：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.buyer}"/></td>
+				<td  class="col-sm-1 text-right"><h5>买家来源：</h5></td>
+				<td  class="col-sm-1"><span th:text="${sysProject.buyerSources}"/></td>
+				<td  class="col-sm-1 text-right"><h5>买家联系方式：</h5></td>
+				<td  class="col-sm-1" colspan="7"><span th:text="${sysProject.buyerContact}"/></td>
 			</tr>
 		</table>
 	</div>

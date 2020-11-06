@@ -142,7 +142,7 @@ public class SysZckController extends BaseController {
     @PostMapping("/export2")
     @ResponseBody
     public AjaxResult export2(SysZck sysZck) {
-        String id = getRequest().getParameter("id");
+        String id = getRequest().getParameter("ids");
         String zcbId = getRequest().getParameter("zcbId");
         List<SysZck> zckList = new ArrayList<>();
         if (StringUtils.isEmpty(id)) {
@@ -155,13 +155,16 @@ public class SysZckController extends BaseController {
             zckList = sysZckService.selectSysZckByZckId(ids);
         } else {
             StringBuffer sb = new StringBuffer();
-            sysZck.setParentId(Long.valueOf(id));
-            List<SysZck> zckList1 = sysZckService.selectSysZckByParentId(sysZck);
-            for (SysZck syszck : zckList1) {
-                sb.append(syszck.getId()).append(",");
+            for (String string1 : id.split(",")) {
+                sysZck.setId(Long.valueOf(string1));
+                List<SysZck> zckList1 = sysZckService.selectSysZckByParentId(sysZck);
+                for (SysZck syszck : zckList1) {
+                    sb.append(syszck.getId()).append(",");
+                }
             }
             String ids = sb.deleteCharAt(sb.length() - 1).toString();
             zckList = sysZckService.selectSysZckByZckId(ids);
+
         }
 
         ExcelUtil<SysZck> util = new ExcelUtil<SysZck>(SysZck.class);
@@ -230,11 +233,9 @@ public class SysZckController extends BaseController {
         List<SysZck> sysZckList = sysZckService.selectSysZckList(sysZck);
         Map<String, Long> map = new HashMap<>();
         Map<String, String> map1 = new HashMap<>();
-        Map<String, Long> map2 = new HashMap<>();
         for (SysZck sysZck1 : sysZckList) {
             map.put(sysZck1.getBorrower(), sysZck1.getId());
             map1.put(sysZck1.getBorrower(), sysZck1.getBorrower());
-            map2.put(sysZck1.getBorrower(), sysZck1.getZcbId());
         }
         if (StringUtils.isNotNull(map1.get(sysZck.getBorrower()))) {
             if (map1.get(sysZck.getBorrower()).equals(sysZck.getBorrower())) {

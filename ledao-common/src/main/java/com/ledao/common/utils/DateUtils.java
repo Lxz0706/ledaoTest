@@ -212,4 +212,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         }
     }
 
+    /**
+     * 时间添加或减少
+     */
+    public static Date addTime(Date dateTime, int index, int type) {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateTime);//设置起时间
+        if (type == Calendar.YEAR) {
+            cal.add(Calendar.YEAR, index);
+        } else if (type == Calendar.MONTH) {
+            cal.add(Calendar.MONTH, index);
+        } else if (type == Calendar.DATE) {
+            cal.add(Calendar.DATE, index);
+        }
+        cal.add(Calendar.YEAR, 1);//增加一年
+        return dateTime;
+    }
+
 }

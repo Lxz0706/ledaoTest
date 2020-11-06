@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysTaggingMapper">
+
+    <resultMap type="SysTagging" id="SysTaggingResult">
+        <result property="id" column="id"/>
+        <result property="judicialId" column="judicial_id"/>
+    </resultMap>
+
+    <sql id="selectSysTaggingVo">
+        select id, judicial_id from sys_tagging
+    </sql>
+
+    <select id="selectSysTaggingList" parameterType="SysTagging" resultMap="SysTaggingResult">
+        <include refid="selectSysTaggingVo"/>
+        <where>
+            <if test="judicialId != null ">and judicial_id = #{judicialId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysTaggingById" parameterType="Long" resultMap="SysTaggingResult">
+        <include refid="selectSysTaggingVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysTagging" parameterType="SysTagging" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_tagging
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="judicialId != null">judicial_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="judicialId != null">#{judicialId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysTagging" parameterType="SysTagging">
+        update sys_tagging
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="judicialId != null">judicial_id = #{judicialId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysTaggingById" parameterType="Long">
+        delete from sys_tagging where id = #{id}
+    </delete>
+
+    <delete id="deleteSysTaggingByIds" parameterType="String">
+        delete from sys_tagging where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectSysTaggingByJudicialId" parameterType="Long" resultMap="SysTaggingResult">
+        <include refid="selectSysTaggingVo"/>
+        where judicial_id = #{judicialId}
+    </select>
+
+</mapper>

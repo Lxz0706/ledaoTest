@@ -19,15 +19,6 @@ public class TimedTask {
     private ISysProjectmanagentService sysProjectmanagentService;
 
     @Autowired
-    private ISysProjectProgressService sysProjectProgressService;
-
-    @Autowired
-    private ISysProjectysyfService sysProjectysyfService;
-
-    @Autowired
-    private ISysProjectRecoveredService sysProjectRecoveredService;
-
-    @Autowired
     private ISysProjectTargetrecoverService sysProjectTargetrecoverService;
 
     @Autowired
@@ -39,15 +30,23 @@ public class TimedTask {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private ISysProjectService sysProjectService;
+
+    @Autowired
+    private ISysProjectZckService sysProjectZckService;
+
     public void timeTask() {
         //应收应付未收服务费消息提醒
         projectUncollectedMoney();
         //目标回收金额消息提醒
         projectTargetRecover();
+
+        //投后项目消息提醒
+        sysProject();
     }
 
     public void projectUncollectedMoney() {
-        System.out.println("应收应付未收服务费消息提醒进来了！！！！！！");
         //查询出接收人名称和ID
         SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
         //应收应付未收服务费消息提醒
@@ -80,7 +79,6 @@ public class TimedTask {
     }
 
     public void projectTargetRecover() {
-        System.out.println("目标回收金额消息提醒进来了！！！！！！");
         //查询出接收人名称和ID
         SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
         //目标回收金额消息提醒
@@ -112,6 +110,44 @@ public class TimedTask {
                 }
             }
 
+        }
+    }
+
+
+    //投后项目消息提醒
+    public void sysProject() {
+        SysProject sysProject = new SysProject();
+        SysUser sysUser1 = sysUserService.selectUserByLoginName("xukai");
+        List<SysProject> sysProjectList = sysProjectService.selectSysProjectList(sysProject);
+        if (StringUtils.isNotNull(sysProject)) {
+            for (SysProject sysProject1 : sysProjectList) {
+                if (StringUtils.isNotNull(sysProject1.getPaymentReceivedDate())) {
+                    Date limitationAction = DateUtils.addTime(sysProject1.getLimitationAction(), 3, 1);
+                    if (DateUtils.timeDifference(new Date(), limitationAction, 90)) {
+                        if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
+                            SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
+                            SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+                            SysNotice sysNotice = new SysNotice();
+                            sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
+                            sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
+                            sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
+                            sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                            if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId())) {
+                                sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
+                                sysNotice.setReceiver(sysProject1.getProjectManager());
+                            } else {
+                                sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
+                                sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                            }
+                            sysNotice.setStatus("0");
+                            sysNotice.setNoticeType("3");
+                            sysNotice.setCreateBy(sysUser.getLoginName());
+                            sysNoticeService.insertNotice(sysNotice);
+
+                        }
+                    }
+                }
+            }
         }
     }
 }

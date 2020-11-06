@@ -13,10 +13,11 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="project" column="project"/>
     </resultMap>
 
     <sql id="selectSysProjectProgressVo">
-        select progress_id, project_management_id, progress, del_flag, create_by, create_time, update_by, update_time from sys_project_progress
+        select progress_id, project_management_id, progress, del_flag, create_by, create_time, update_by, update_time,project from sys_project_progress
     </sql>
 
     <select id="selectSysProjectProgressList" parameterType="SysProjectProgress" resultMap="SysProjectProgressResult">
@@ -25,7 +26,6 @@
             del_flag = '0'
             <if test="projectManagementId != null ">and project_management_id = #{projectManagementId}</if>
             <if test="progress != null  and progress != ''">and progress = #{progress}</if>
-            <if test="delFlag != null  and delFlag != ''">and del_flag = #{delFlag}</if>
         </where>
         ORDER BY create_time DESC
     </select>
@@ -42,6 +42,7 @@
             <if test="projectManagementId != null">project_management_id,</if>
             <if test="progress != null">progress,</if>
             <if test="delFlag != null">del_flag,</if>
+            <if test="project != null">project,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -51,6 +52,7 @@
             <if test="projectManagementId != null">#{projectManagementId},</if>
             <if test="progress != null">#{progress},</if>
             <if test="delFlag != null">#{delFlag},</if>
+            <if test="project !=null">#{project},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>

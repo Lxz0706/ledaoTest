@@ -306,6 +306,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             // 不含下划线，仅将首字母大写
             return name.substring(0, 1).toUpperCase() + name.substring(1);
         }
+        System.out.println("name:========"+name);
         // 用下划线将原始字符串分割
         String[] camels = name.split("_");
         for (String camel : camels) {
@@ -317,6 +318,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             result.append(camel.substring(0, 1).toUpperCase());
             result.append(camel.substring(1).toLowerCase());
         }
+        System.out.println("result:======"+result);
         return result.toString();
     }
 

@@ -105,7 +105,7 @@
 			var options = {
 				title: '人员选择',
 				width: "750",
-				url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#receiverId").val() + "&selectedUserNames=" + $("#receiver").val() + "&multiSelectFlag=false",
+				url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#receiverId").val() + "&selectedUserNames=" + $("#receiver").val() + "&multiSelectFlag=true",
 				callBack: doSelect
 			};
 			$.modal.openOptions(options);

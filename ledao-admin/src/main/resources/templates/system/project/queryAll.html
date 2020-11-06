@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('投后部项目管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <input type="hidden" name="projectName" th:value="${sysProject.projectName}"/>
+                        <input type="hidden" id="assetStatus" name="assetStatus" th:value="${sysProject.assetStatus}"/>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:project:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:project:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
+        var prefix = ctx + "system/project";
+
+        $(function() {
+            var options = {
+                url: prefix + "/lists",
+                createUrl: prefix + "/add/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "投后部项目管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'projectId',
+                    title: '项目ID',
+                    visible: false
+                },
+                {
+                    field: 'projectName',
+                    title: '借款人名称',
+                    formatter: function(value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId+"',\'" + row.projectName + '\')">' + value + '</a>';
+                    }
+                },
+                {
+                    field: 'totalPrice',
+                    title: '本金余额(元)',
+                    formatter: function(value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId+"',\'" + row.principalBalance + '\')">' + $.operate.numberFormatter(value) + '</a>';
+                    }
+                },
+                {
+                    field: 'totalInterestBalance',
+                    title: '利息',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'guarantor',
+                    title: '保证人',
+                    formatter: function(value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail1(\'' + row.projectId+"',\'" + row.guarantor + '\')">' + value + '</a>';
+                    }
+                },
+                {
+                    field: 'collateral',
+                    title: '抵押物',
+                    formatter: function(value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail2(\'' + row.projectId+"',\'" + row.collateral + '\')">' + value + '</a>';
+                    }
+                },
+                {
+                 field: 'projectManager',
+                 title: '项目经理'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function exportExcel() {
+            var row = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+                return row;
+            });
+            var str = "";
+            //根据name获取所有元素
+            for (var i = 0; i < row.length; i++) {
+                str += row[i].projectId + ",";
+            }
+            //去掉最后一个逗号(如果不需要去掉，就不用写)
+            if (str.length > 0) {
+                str = str.substr(0, str.length - 1);
+            }
+            console.log(str);
+            var projectName = $("#projectName").val();
+            var assetStatus = $("#assetStatus").val();
+            $.ajax({
+                url: prefix + "/export1",
+                data: {
+                    "ids": str,
+                    "projectName": projectName,
+                    "assetStatus": assetStatus
+                },
+                type: "post",
+                success: function (result) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                }
+            })
+        };
+    </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.ledao.system.dao;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ledao.common.annotation.Excel;
@@ -43,7 +44,7 @@ public class SysProjectContract extends BaseEntity {
      * 本金
      */
     @Excel(name = "本金")
-    private Double capital;
+    private BigDecimal capital;
 
     /**
      * 期内起始日
@@ -61,7 +62,7 @@ public class SysProjectContract extends BaseEntity {
      * 利率
      */
     @Excel(name = "利率")
-    private String interestRate;
+    private BigDecimal interestRate;
 
     /**
      * 删除标志（0代表存在 2代表删除）
@@ -69,6 +70,31 @@ public class SysProjectContract extends BaseEntity {
     private String delFlag;
 
     private String projectIds;
+
+    /**
+     * 是否逾期
+     */
+    private String overdue;
+
+    /**
+     * 利息
+     */
+    private BigDecimal interest;
+
+    /**
+     * 逾期利息
+     */
+    private BigDecimal overdueInterest;
+
+    /**
+     * 总利息
+     */
+    private BigDecimal totalInterest;
+
+    /**
+     * 利息复利
+     */
+    private BigDecimal compoundInterest;
 
     public Long getContractId() {
         return contractId;
@@ -102,12 +128,12 @@ public class SysProjectContract extends BaseEntity {
         return contractNo;
     }
 
-    public void setCapital(Double capital) {
-        this.capital = capital;
+    public BigDecimal getCapital() {
+        return capital;
     }
 
-    public Double getCapital() {
-        return capital;
+    public void setCapital(BigDecimal capital) {
+        this.capital = capital;
     }
 
     public void setStartTime(Date startTime) {
@@ -126,12 +152,12 @@ public class SysProjectContract extends BaseEntity {
         return endTime;
     }
 
-    public void setInterestRate(String interestRate) {
-        this.interestRate = interestRate;
+    public BigDecimal getInterestRate() {
+        return interestRate;
     }
 
-    public String getInterestRate() {
-        return interestRate;
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 
     public void setDelFlag(String delFlag) {
@@ -150,6 +176,46 @@ public class SysProjectContract extends BaseEntity {
         this.projectIds = projectIds;
     }
 
+    public String getOverdue() {
+        return overdue;
+    }
+
+    public void setOverdue(String overdue) {
+        this.overdue = overdue;
+    }
+
+    public BigDecimal getInterest() {
+        return interest;
+    }
+
+    public void setInterest(BigDecimal interest) {
+        this.interest = interest;
+    }
+
+    public BigDecimal getOverdueInterest() {
+        return overdueInterest;
+    }
+
+    public void setOverdueInterest(BigDecimal overdueInterest) {
+        this.overdueInterest = overdueInterest;
+    }
+
+    public BigDecimal getTotalInterest() {
+        return totalInterest;
+    }
+
+    public void setTotalInterest(BigDecimal totalInterest) {
+        this.totalInterest = totalInterest;
+    }
+
+    public BigDecimal getCompoundInterest() {
+        return compoundInterest;
+    }
+
+    public void setCompoundInterest(BigDecimal compoundInterest) {
+        this.compoundInterest = compoundInterest;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -166,6 +232,11 @@ public class SysProjectContract extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("overdue", getOverdue())
+                .append("interest", getInterest())
+                .append("overdueInterest", getOverdueInterest())
+                .append("totalInterest", getTotalInterest())
+                .append("compoundInterest", getCompoundInterest())
                 .toString();
     }
 }

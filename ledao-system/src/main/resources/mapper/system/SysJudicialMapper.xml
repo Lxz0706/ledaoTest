@@ -22,11 +22,12 @@
         <result property="itemCity" column="item_city"/>
         <result property="itemCounty" column="item_county"/>
         <result property="itemSource" column="item_source"/>
+        <result property="tagging" column="tagging"/>
     </resultMap>
 
     <sql id="selectSysJudicialVo">
         select id, item_id, item_title, item_owner, item_type, item_status, item_link, item_initialPrice, item_currentPrice,
-        item_consultPrice, item_marketPrice, item_start_time, item_end_time, item_province, item_city, item_county, item_source from sys_judicial
+        item_consultPrice, item_marketPrice, item_start_time, item_end_time, item_province, item_city, item_county, item_source,tagging from sys_judicial
     </sql>
 
     <select id="selectSysJudicialList" parameterType="SysJudicial" resultMap="SysJudicialResult">
@@ -48,10 +49,12 @@
             <if test="itemCity != null  and itemCity != ''">and item_city = #{itemCity}</if>
             <if test="itemCounty != null  and itemCounty != ''">and item_county = #{itemCounty}</if>
             <if test="itemSource != null  and itemSource != ''">and item_source = #{itemSource}</if>
+            <if test="tagging != null  and tagging != ''">and tagging = #{tagging}</if>
         </where>
+        order by tagging desc
     </select>
 
-    <select id="selectSysJudicialById" parameterType="Integer" resultMap="SysJudicialResult">
+    <select id="selectSysJudicialById" parameterType="Long" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
         where id = #{id}
     </select>
@@ -75,6 +78,7 @@
             <if test="itemCity != null">item_city,</if>
             <if test="itemCounty != null">item_county,</if>
             <if test="itemSource != null">item_source,</if>
+            <if test="tagging != null">#{tagging},</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="itemId != null">#{itemId},</if>
@@ -93,6 +97,7 @@
             <if test="itemCity != null">#{itemCity},</if>
             <if test="itemCounty != null">#{itemCounty},</if>
             <if test="itemSource != null">#{itemSource},</if>
+            <if test="tagging != null">#{tagging},</if>
         </trim>
     </insert>
 
@@ -115,11 +120,12 @@
             <if test="itemCity != null">item_city = #{itemCity},</if>
             <if test="itemCounty != null">item_county = #{itemCounty},</if>
             <if test="itemSource != null">item_source = #{itemSource},</if>
+            <if test="tagging != null">tagging = #{tagging},</if>
         </trim>
         where id = #{id}
     </update>
 
-    <delete id="deleteSysJudicialById" parameterType="Integer">
+    <delete id="deleteSysJudicialById" parameterType="Long">
         delete from sys_judicial where id = #{id}
     </delete>
 

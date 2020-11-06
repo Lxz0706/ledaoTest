@@ -11,6 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <input type="hidden" name="projectManagementId" id="projectManagementId" th:value="*{projectManagementId}"/>
+                            <input type="hidden" name="project" id="project" th:value="*{project}"/>
                             <!--<li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -48,7 +49,7 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
+                createUrl: prefix + "/adds/{id}/{ids}",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
@@ -75,6 +76,10 @@
                     title: '进度情况'
                 },
                 {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -90,7 +95,8 @@
 
         function add() {
             var projectManagementId=$("#projectManagementId").val();
-            $.operate.add(projectManagementId);
+            var project=$("#project").val();
+            $.operate.adds(projectManagementId,project);
         }
     </script>
 </body>

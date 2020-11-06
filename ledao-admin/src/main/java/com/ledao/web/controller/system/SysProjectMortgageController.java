@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectBail;
@@ -66,7 +67,7 @@ public class SysProjectMortgageController extends BaseController {
     /**
      * 根据项目ID查询抵押物
      */
-    @RequiresPermissions("system:project:list")
+    @RequiresPermissions("system:mortgage:list")
     @GetMapping("/mortgageList/{projectId}")
     public String selectProjectMortgageByProjectId(@PathVariable("projectId") String projectId, ModelMap modelMap) {
         StringBuffer sb = new StringBuffer();
@@ -151,6 +152,15 @@ public class SysProjectMortgageController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        for (String string1 : ids.split(",")) {
+            SysProjectMortgage sysProjectMortgage = sysProjectMortgageService.selectSysProjectMortgageById(Long.valueOf(string1));
+            if (StringUtils.isNotNull(sysProjectMortgage.getProjectId())) {
+                SysProject sysProject = sysProjectService.selectSysProjectById(sysProjectMortgage.getProjectId());
+                sysProject.setCollateral("");
+                sysProject.setUpdateBy(ShiroUtils.getLoginName());
+                sysProjectService.updateSysProject(sysProject);
+            }
+        }
         return toAjax(sysProjectMortgageService.deleteSysProjectMortgageByIds(ids));
     }
 }

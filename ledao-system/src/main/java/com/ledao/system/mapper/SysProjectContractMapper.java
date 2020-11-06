@@ -66,4 +66,12 @@ public interface SysProjectContractMapper {
      * @return 结果
      */
     public List<SysProjectContract> selectSysProjectContractByProjectId(String[] projectId);
+
+    /**
+     * 查询projectId查询
+     *
+     * @param projectId
+     * @return 结果
+     */
+    public SysProjectContract selectProjectContractByProjectId(Long projectId);
 }

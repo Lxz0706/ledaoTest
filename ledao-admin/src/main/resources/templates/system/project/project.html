@@ -9,10 +9,10 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <input type="hidden" name="projectZckId" id="projectZckId" th:value="*{projectZckId}"/>
-                    <div class="select-list">
+                    <!--<div class="select-list">
                         <ul>
                             <li>
-                                <label>项目名称：</label>
+                                <label>借款人名称：</label>
                                 <input type="text" name="projectName"/>
                             </li>
                             <li>
@@ -22,7 +22,7 @@
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-                            <!--<li>
+                            <li>
                                 <label>序号：</label>
                                 <input type="text" name="no"/>
                             </li>
@@ -141,13 +141,13 @@
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPaymentReceivedDate]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endPaymentReceivedDate]"/>
-                            </li>-->
+                            </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
-                    </div>
+                    </div>-->
                 </form>
             </div>
 
@@ -203,7 +203,7 @@
                     field: 'totalPrice',
                     title: '本金余额(元)',
                     formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId+"',\'" + row.principalBalance + '\')">' + $.operate.numberFormatter(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId+"',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value) + '</a>';
                     }
                 },
                 {
@@ -228,8 +228,25 @@
                     }
                 },
                 {
+                    field: 'pledge',
+                    title: '质押物',
+                    formatter: function(value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail4(\'' + row.projectId+"',\'" + row.pledge + '\')">' + value + '</a>';
+                    }
+                },
+                {
                  field: 'projectManager',
                  title: '项目经理'
+                },
+                {
+                    title: '最新进度情况',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectId+'\')">最新进度情况</a>';
+                    }
+                },
+                {
+                    field: 'debtStatus',
+                    title: '债权状态'
                 }]
             };
             $.table.init(options);
@@ -256,15 +273,26 @@
         }
 
         /*保证人列表-详细*/
-        function detail1(id,guarantor) {
+        function detail1(id,bail) {
             var url = ctx + 'system/bail/bailList/' + id;
-            $.modal.openTab(guarantor+"列表", url);
+            $.modal.openTab(bail+"列表", url);
         }
 
         /*抵押物列表-详细*/
         function detail2(id,guarantor) {
             var url = ctx + 'system/mortgage/mortgageList/' + id;
             $.modal.openTab(guarantor+"列表", url);
+        }
+
+        /*质押物列表-详细*/
+        function detail4(id,pledge) {
+            var url = ctx + 'system/pledge/pledgeList/' + id;
+            $.modal.openTab(pledge+"列表", url);
+        }
+
+        function progress(id) {
+            var url = ctx + 'system/progress/progressLists/' + id + "/Y";
+            $.modal.openTab("进度情况列表", url);
         }
     </script>
 </body>

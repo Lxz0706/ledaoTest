@@ -27,7 +27,7 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
      * @return 司法拍卖项目
      */
     @Override
-    public SysJudicial selectSysJudicialById(Integer id) {
+    public SysJudicial selectSysJudicialById(Long id) {
         return sysJudicialMapper.selectSysJudicialById(id);
     }
 
@@ -82,7 +82,7 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
      * @return 结果
      */
     @Override
-    public int deleteSysJudicialById(Integer id) {
+    public int deleteSysJudicialById(Long id) {
         return sysJudicialMapper.deleteSysJudicialById(id);
     }
 }

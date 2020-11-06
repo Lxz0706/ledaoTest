@@ -52,7 +52,7 @@ public class GenUtils {
             column.setHtmlType(GenConstants.HTML_INPUT);
 
             // 如果是浮点型
-            String[] str = StringUtils.split(StringUtils.substringBetween(column.getColumnType(), "(", ")"), ",");
+            String[] str = StringUtils.split(StringUtils.substringBetween(column.getColumnType(), "(" , ")"), ",");
             if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
                 column.setJavaType(GenConstants.TYPE_DOUBLE);
             }
@@ -147,10 +147,12 @@ public class GenUtils {
             String[] searchList = StringUtils.split(tablePrefix, ",");
             tableName = replaceFirst(tableName, searchList);
         }
+
+        System.out.println("表名：======" + tableName);
         return StringUtils.convertToCamelCase(tableName);
     }
 
-    /**
+    /**模拟农场
      * 批量替换前缀
      *
      * @param replacementm 替换值
@@ -171,11 +173,11 @@ public class GenUtils {
     /**
      * 关键字替换
      *
-     * @param name 需要被替换的名字
+     * @param text 需要被替换的名字
      * @return 替换后的名字
      */
     public static String replaceText(String text) {
-        return RegExUtils.replaceAll(text, "(?:表|乐道)", "");
+        return RegExUtils.replaceAll(text, "(?:表|乐道)" , "");
     }
 
     /**
@@ -200,7 +202,7 @@ public class GenUtils {
      */
     public static Integer getColumnLength(String columnType) {
         if (StringUtils.indexOf(columnType, "(") > 0) {
-            String length = StringUtils.substringBetween(columnType, "(", ")");
+            String length = StringUtils.substringBetween(columnType, "(" , ")");
             return Integer.valueOf(length);
         } else {
             return 0;

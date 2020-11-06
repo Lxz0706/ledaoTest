@@ -1,9 +1,13 @@
 package com.ledao.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectmanagent;
+import com.ledao.system.service.ISysProjectService;
 import com.ledao.system.service.ISysProjectmanagentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,9 @@ public class SysProjectProgressController extends BaseController {
     @Autowired
     private ISysProjectmanagentService sysProjectmanagentService;
 
+    @Autowired
+    private ISysProjectService sysProjectService;
+
     @RequiresPermissions("system:progress:view")
     @GetMapping()
     public String progress() {
@@ -53,6 +60,14 @@ public class SysProjectProgressController extends BaseController {
         return "system/progress/progress";
     }
 
+    @RequiresPermissions("system:projectmanagent:list")
+    @GetMapping("/progressLists/{projectManagementId}/{project}")
+    public String selectProjectProgressByProjectIds(@PathVariable("projectManagementId") String projectManagementId, @PathVariable("project") String project, ModelMap modelMap) {
+        modelMap.put("projectManagementId", projectManagementId);
+        modelMap.put("project", project);
+        return "system/progress/progress";
+    }
+
     /**
      * 查询【请填写功能名称】列表
      */
@@ -61,16 +76,29 @@ public class SysProjectProgressController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysProjectProgress sysProjectProgress) {
         startPage();
+        List<SysProjectProgress> list = new ArrayList<>();
         SysProjectmanagent sysProjectmanagent = new SysProjectmanagent();
+        SysProject sysProject = new SysProject();
         if (StringUtils.isNotNull(sysProjectProgress.getProjectManagementId())) {
-            sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(sysProjectProgress.getProjectManagementId());
-        }
-        List<SysProjectProgress> list = sysProjectProgressService.selectSysProjectProgressList(sysProjectProgress);
-        for (SysProjectProgress sysProjectProgress1 : list) {
-            if (StringUtils.isNotEmpty(sysProjectmanagent.getProjectManagementName())) {
-                sysProjectProgress1.setProjectManagementName(sysProjectmanagent.getProjectManagementName());
+            if (StringUtils.isNotNull(sysProjectProgress.getProject())) {
+                if ("Y".equals(sysProjectProgress.getProject())) {
+                    sysProject = sysProjectService.selectSysProjectById(sysProjectProgress.getProjectManagementId());
+                    list = sysProjectProgressService.selectSysProjectProgressList(sysProjectProgress);
+                    for (SysProjectProgress sysProjectProgress1 : list) {
+                        if (StringUtils.isNotEmpty(sysProject.getProjectName())) {
+                            sysProjectProgress1.setProjectManagementName(sysProject.getProjectName());
+                        }
+                    }
+                } else {
+                    sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(sysProjectProgress.getProjectManagementId());
+                    list = sysProjectProgressService.selectSysProjectProgressList(sysProjectProgress);
+                    for (SysProjectProgress sysProjectProgress1 : list) {
+                        if (StringUtils.isNotEmpty(sysProjectmanagent.getProjectManagementName())) {
+                            sysProjectProgress1.setProjectManagementName(sysProjectmanagent.getProjectManagementName());
+                        }
+                    }
+                }
             }
-
         }
         return getDataTable(list);
     }
@@ -88,12 +116,23 @@ public class SysProjectProgressController extends BaseController {
         return util.exportExcel(list, "progress");
     }
 
+/*    *//**
+     * 新增【请填写功能名称】
+     *//*
+    @GetMapping("/add/{projectManagementId}")
+    public String add(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
+        logger.info("111111111");
+        modelMap.put("projectManagementId", projectManagementId);
+        return prefix + "/add";
+    }*/
+
     /**
      * 新增【请填写功能名称】
      */
-    @GetMapping("/add/{projectManagementId}")
-    public String add(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
+    @GetMapping("/adds/{projectManagementId}/{project}")
+    public String adds(@PathVariable("projectManagementId") String projectManagementId,@PathVariable("project") String project, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
+        modelMap.put("project", project);
         return prefix + "/add";
     }
 

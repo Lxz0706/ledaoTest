@@ -142,12 +142,11 @@ public class SysNoticeController extends BaseController {
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
-                logger.info("不是管理员！！！！！！！");
-                sysNotice.setCreateBy(ShiroUtils.getLoginName());
+                //sysNotice.setCreateBy(ShiroUtils.getLoginName());
                 sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
             }
         }
-        List<SysNotice> list = noticeService.selectNoticeList(sysNotice);
+        List<SysNotice> list = noticeService.selectNoticeLists(sysNotice);
         return AjaxResult.success(String.valueOf(list.size()));
     }
 

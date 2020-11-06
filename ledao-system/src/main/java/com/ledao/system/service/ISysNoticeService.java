@@ -57,4 +57,12 @@ public interface ISysNoticeService {
      * @return 结果
      */
     public int readNoticeByIds(String noticeIds);
+
+    /**
+     * 查询公告列表
+     *
+     * @param notice 公告信息
+     * @return 公告集合
+     */
+    public List<SysNotice> selectNoticeLists(SysNotice notice);
 }

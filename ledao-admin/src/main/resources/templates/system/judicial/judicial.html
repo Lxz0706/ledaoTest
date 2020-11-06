@@ -124,36 +124,36 @@
                 exportUrl: prefix + "/export",
                 modalName: "司法拍卖项目",
                 columns: [{
-                    field: 'id', 
+                    field: 'id',
                     title: 'id',
                     visible: false
                 },
                 {
-                    field: 'itemTitle', 
+                    field: 'itemTitle',
                     title: '标题'
                 },
                 {
-                    field: 'itemOwner', 
+                    field: 'itemOwner',
                     title: '所有人'
                 },
                 {
-                    field: 'itemType', 
+                    field: 'itemType',
                     title: '拍品类型'
                 },
                 {
-                    field: 'itemInitialprice', 
+                    field: 'itemInitialprice',
                     title: '项目起拍价'
                 },
                 {
-                    field: 'itemCurrentprice', 
+                    field: 'itemCurrentprice',
                     title: '当前/成交价'
                 },
                 {
-                    field: 'itemStartTime', 
+                    field: 'itemStartTime',
                     title: '开始时间'
                 },
                 {
-                    field: 'itemEndTime', 
+                    field: 'itemEndTime',
                     title: '结束时间'
                 },
                 {
@@ -168,8 +168,14 @@
                     }
                 },
                 {
-                    field: 'itemSource', 
+                    field: 'itemSource',
                     title: '项目来源'
+                },
+                {
+                    title: '是否加入星标库',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
                 }]/*,
                 onLoadSuccess: function () {
                     $('.bootstrap-table tr td').each(function () {
@@ -180,6 +186,26 @@
             };
             $.table.init(options);
         });
+
+        function statusTools(row){
+            if(row.tagging == 'Y'){
+                return '<a href="javascript:void(0)" onclick="detail1(\'' + row.id+'\')">★</a>';
+            }else {
+                return '<a href="javascript:void(0)" onclick="detail(\'' + row.id+'\')">☆</a>';
+            }
+        }
+
+        function detail(id){
+            $.modal.confirm("确认要加入星标库吗？", function () {
+                $.operate.post(prefix + "/addTagging", {"judicialId": id});
+            })
+        }
+
+        function detail1(id){
+            $.modal.confirm("确认要从星标库删除该条吗？", function () {
+                $.operate.post(prefix + "/removeTagging", {"judicialId": id});
+            })
+        }
     </script>
 </body>
 </html>

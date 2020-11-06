@@ -17,7 +17,9 @@
         <result property="interestBalance" column="interest_balance"/>
         <result property="principalInterestBalance" column="principal_interest_balance"/>
         <result property="guarantor" column="guarantor"/>
+        <result property="pledge" column="pledge"/>
         <result property="collateral" column="collateral"/>
+        <result property="projectManagerId" column="project_manager_id"/>
         <result property="projectManager" column="project_manager"/>
         <result property="userId" column="user_id"/>
         <result property="judicialStatus" column="judicial_status"/>
@@ -55,25 +57,24 @@
         <result property="projectZckId" column="project_zck_id"/>
         <result property="lawFirm" column="law_firm"/>
         <result property="lawyerContact" column="lawyer_contact"/>
+        <result property="debtStatus" column="debt_status"/>
     </resultMap>
 
     <sql id="selectSysProjectVo">
         select project_id, project_name,project_zck_id, asset_status, no, borrower, city, loan_bank, contract_principal,
-        principal_balance, interest_balance, principal_interest_balance, guarantor, collateral, project_manager, user_id,
+        principal_balance, interest_balance, principal_interest_balance, guarantor,pledge, collateral,project_manager_id, project_manager, user_id,
         judicial_status, competent_court, judge_contact, judicial_remarks, collateral_claims, transaction_type, buyer, buyer_id,
         buyer_sources, buyer_contact, contract_no, limitation_action, seal_up_subject_matter, seal_up_date, limitation_execution,
         date_filing, first_instance, second_instance, retrial, enforcement_filing_date, appraisal_report_date, first_shot_date,
         second_shot_date, sell_shot_date, successful_bidder_date, payment_received_date, del_flag, parent_id, create_by, create_time,
-        update_by, update_time,project_zck_id,law_firm,lawyer_contact from sys_project
+        update_by, update_time,project_zck_id,law_firm,lawyer_contact,debt_status from sys_project
     </sql>
 
     <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         <where>
             del_flag = '0'
-            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
-                '%')
-            </if>
+            <if test="projectName != null">and project_name like concat ('%', #{projectName},'%')</if>
             <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
             <if test="no != null  and no != ''">and no = #{no}</if>
             <if test="borrower != null  and borrower != ''">and borrower = #{borrower}</if>
@@ -85,7 +86,10 @@
             <if test="principalInterestBalance != null ">and principal_interest_balance = #{principalInterestBalance}
             </if>
             <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
+            <if test="pledge !=null and pledge !=''">and pledge = #{pledge}</if>
             <if test="collateral != null  and collateral != ''">and collateral = #{collateral}</if>
+            <if test="projectManagerId !=null and projectManagerId !=''">and project_manager_id = #{projectManagerId}
+            </if>
             <if test="projectManager != null  and projectManager != ''">and project_manager = #{projectManager}</if>
             <if test="userId != null ">and user_id = #{userId}</if>
             <if test="judicialStatus != null  and judicialStatus != ''">and judicial_status = #{judicialStatus}</if>
@@ -101,16 +105,12 @@
             <if test="buyerSources != null  and buyerSources != ''">and buyer_sources = #{buyerSources}</if>
             <if test="buyerContact != null  and buyerContact != ''">and buyer_contact = #{buyerContact}</if>
             <if test="contractNo != null  and contractNo != ''">and contract_no = #{contractNo}</if>
-            <if test="limitationAction != null  and limitationAction != ''">and limitation_action =
-                #{limitationAction}
-            </if>
+            <if test="limitationAction != null ">and limitation_action = #{limitationAction}</if>
             <if test="sealUpSubjectMatter != null  and sealUpSubjectMatter != ''">and seal_up_subject_matter =
                 #{sealUpSubjectMatter}
             </if>
             <if test="sealUpDate != null ">and seal_up_date = #{sealUpDate}</if>
-            <if test="limitationExecution != null  and limitationExecution != ''">and limitation_execution =
-                #{limitationExecution}
-            </if>
+            <if test="limitationExecution != null ">and limitation_execution = #{limitationExecution}</if>
             <if test="dateFiling != null ">and date_filing = #{dateFiling}</if>
             <if test="firstInstance != null  and firstInstance != ''">and first_instance = #{firstInstance}</if>
             <if test="secondInstance != null  and secondInstance != ''">and second_instance = #{secondInstance}</if>
@@ -126,6 +126,7 @@
             <if test="projectZckId != null and projectZckId != ''">and project_zck_id = #{projectZckId}</if>
             <if test="lawyerContact != null and lawyerContact != ''">and lawyer_contact = #{lawyerContact}</if>
             <if test="lawFirm != null and lawFirm != ''">and law_firm = #{lawFirm}</if>
+            <if test="debtStatus !=null and debtStatus !=''"> and debt_status = #{debtStatus}</if>
         </where>
     </select>
 
@@ -148,7 +149,9 @@
             <if test="interestBalance != null">interest_balance,</if>
             <if test="principalInterestBalance != null">principal_interest_balance,</if>
             <if test="guarantor != null">guarantor,</if>
+            <if test="pledge !=null">pledge,</if>
             <if test="collateral != null">collateral,</if>
+            <if test="projectManagerId !=null">project_manager_id,</if>
             <if test="projectManager != null">project_manager,</if>
             <if test="userId != null">user_id,</if>
             <if test="judicialStatus != null">judicial_status,</if>
@@ -183,9 +186,10 @@
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-            <if test="projectZckId != null">project_zck_id</if>
-            <if test="lawyerContact != null">lawyer_contact</if>
-            <if test="lawFirm != null">law_firm</if>
+            <if test="projectZckId != null">project_zck_id,</if>
+            <if test="lawyerContact != null">lawyer_contact,</if>
+            <if test="lawFirm != null">law_firm,</if>
+            <if test="debtStatus !=null">debt_status</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
@@ -199,7 +203,9 @@
             <if test="interestBalance != null">#{interestBalance},</if>
             <if test="principalInterestBalance != null">#{principalInterestBalance},</if>
             <if test="guarantor != null">#{guarantor},</if>
+            <if test="pledge !=null">#{pledge},</if>
             <if test="collateral != null">#{collateral},</if>
+            <if test="projectManagerId !=null">#{projectManagerId},</if>
             <if test="projectManager != null">#{projectManager},</if>
             <if test="userId != null">#{userId},</if>
             <if test="judicialStatus != null">#{judicialStatus},</if>
@@ -234,9 +240,10 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-            <if test="projectZckId != null">#{projectZckId}</if>
-            <if test="lawyerContact != null">#{lawyerContact}</if>
-            <if test="lawFirm != null">#{lawFirm}</if>
+            <if test="projectZckId != null">#{projectZckId},</if>
+            <if test="lawyerContact != null">#{lawyerContact},</if>
+            <if test="lawFirm != null">#{lawFirm},</if>
+            <if test="debtStatus !=null">#{debtStatus}</if>
         </trim>
     </insert>
 
@@ -254,7 +261,9 @@
             <if test="interestBalance != null">interest_balance = #{interestBalance},</if>
             <if test="principalInterestBalance != null">principal_interest_balance = #{principalInterestBalance},</if>
             <if test="guarantor != null">guarantor = #{guarantor},</if>
+            <if test="pledge !=null">pledge = #{pledge},</if>
             <if test="collateral != null">collateral = #{collateral},</if>
+            <if test="projectManagerId !=null">project_manager_id =#{projectManagerId},</if>
             <if test="projectManager != null">project_manager = #{projectManager},</if>
             <if test="userId != null">user_id = #{userId},</if>
             <if test="judicialStatus != null">judicial_status = #{judicialStatus},</if>
@@ -289,9 +298,10 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="projectZckId !=null">project_zck_id = #{projectZckId}</if>
-            <if test="lawFirm !=null">law_firm = #{lawFirm}</if>
-            <if test="lawyerContact !=null">lawyer_contact = #{lawyerContact}</if>
+            <if test="projectZckId !=null">project_zck_id = #{projectZckId},</if>
+            <if test="lawFirm !=null">law_firm = #{lawFirm},</if>
+            <if test="lawyerContact !=null">lawyer_contact = #{lawyerContact},</if>
+            <if test="debtStatus !=null">debt_status = #{debtStatus}</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -306,10 +316,10 @@
             #{projectId}
         </foreach>
     </delete>
-    
+
     <select id="selectProject" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
-        where  parent_id IS NULL AND del_flag='0' AND project_zck_id = #{projectZckId}
+        where parent_id IS NULL AND del_flag='0' AND project_zck_id = #{projectZckId}
     </select>
 
     <select id="selectSysProjectByParentId" parameterType="SysProject" resultMap="SysProjectResult">

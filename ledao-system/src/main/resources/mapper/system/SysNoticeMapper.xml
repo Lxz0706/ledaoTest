@@ -57,6 +57,24 @@
         </where>
     </select>
 
+    <select id="selectNoticeLists" parameterType="SysNotice" resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        <where>
+            <if test="noticeTitle != null and noticeTitle != ''">
+                AND notice_title like concat('%', #{noticeTitle}, '%')
+            </if>
+            <if test="noticeType != null and noticeType != ''">
+                AND notice_type = #{noticeType}
+            </if>
+            <if test="receiver != null and receiver !=''">
+                and receiver  like concat('%',#{receiver},'%')
+            </if>
+            <if test="readFlag != null and readFlag !=''">
+                and read_flag  = #{readFlag}
+            </if>
+        </where>
+    </select>
+
     <insert id="insertNotice" parameterType="SysNotice">
         insert into sys_notice (
         <if test="noticeTitle != null and noticeTitle != '' ">notice_title,</if>

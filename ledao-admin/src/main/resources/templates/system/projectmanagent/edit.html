@@ -8,10 +8,19 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-projectmanagent-edit" th:object="${sysProjectmanagent}">
             <input name="projectManagementId" th:field="*{projectManagementId}" type="hidden">
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">序号：</label>
                 <div class="col-sm-8">
                     <input name="no" class="form-control" th:field="*{no}"/>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目类型：</label>
+                <div class="col-sm-8">
+                    <select name="projectType" class="form-control m-b" th:with="type=${@dict.getType('sys_projectType')}">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:fleld="*{projectType}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">

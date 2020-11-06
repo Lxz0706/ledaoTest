@@ -67,4 +67,12 @@ public interface ISysProjectContractService {
      * @return 结果
      */
     public List<SysProjectContract> selectSysProjectContractByProjectId(String projectId);
+
+    /**
+     * 根据projectId查询
+     *
+     * @param projectId
+     * @return 结果
+     */
+    public SysProjectContract selectProjectContractByProjectId(Long projectId);
 }

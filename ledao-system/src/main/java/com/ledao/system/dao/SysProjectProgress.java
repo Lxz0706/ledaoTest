@@ -2,6 +2,7 @@ package com.ledao.system.dao;
 
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -36,6 +37,12 @@ public class SysProjectProgress extends BaseEntity {
      */
     @Excel(name = "删除标志", readConverterExp = "0=代表存在,2=代表删除")
     private String delFlag;
+
+
+    /**
+     * 是否是投后项目
+     */
+    private String project;
 
     private String projectManagementName;
 
@@ -79,6 +86,14 @@ public class SysProjectProgress extends BaseEntity {
         this.projectManagementName = projectManagementName;
     }
 
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -90,6 +105,7 @@ public class SysProjectProgress extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("isProject", getProject())
                 .toString();
     }
 }

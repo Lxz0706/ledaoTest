@@ -98,4 +98,14 @@ public class SysProjectBailServiceImpl implements ISysProjectBailService {
     public List<SysProjectBail> selectSysProjectBailByProjectId(String projectId) {
         return sysProjectBailMapper.selectSysProjectBailByProjectId(Convert.toStrArray(projectId));
     }
+
+    /**
+     * 根据projectId查询
+     *
+     * @param projectId
+     * @return 结果
+     */
+    public SysProjectBail selectProjectBailByProjectId(Long projectId) {
+        return sysProjectBailMapper.selectProjectBailByProjectId(projectId);
+    }
 }

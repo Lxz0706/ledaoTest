@@ -30,20 +30,20 @@
                             <li>
                                 <label>利率：</label>
                                 <input type="text" name="interestRate"/>
-                            </li>-->
+                            </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
+                            </li>-->
                         </ul>
                     </div>
                 </form>
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:contract:add">
+                <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:contract:add">
                     <i class="fa fa-plus"></i> 添加
-                </a>
+                </a>-->
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:contract:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
@@ -83,7 +83,8 @@
                 },
                 {
                     field: 'projectId', 
-                    title: '项目ID'
+                    title: '项目ID',
+                    visible: false
                 },
                 {
                     field: 'projectName', 
@@ -111,6 +112,34 @@
                 {
                     field: 'interestRate', 
                     title: '利率'
+                },
+                {
+                    field: 'interest',
+                    title: '期内利息',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'overdueInterest',
+                    title: '逾期利息',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'compoundInterest',
+                    title: '利息复利',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'totalInterest',
+                    title: '总利息',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     title: '操作',

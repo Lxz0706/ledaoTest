@@ -82,7 +82,6 @@
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-            <if test="projectId != null">project_id</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
@@ -101,7 +100,6 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-            <if test="projectId != null">#{projectId}</if>
         </trim>
     </insert>
 
@@ -145,6 +143,11 @@
             #{projectId}
         </foreach>
         and del_flag = '0'
+    </select>
+
+    <select id="selectProjectMortgageByProjectId" parameterType="Long" resultMap="SysProjectMortgageResult">
+        <include refid="selectSysProjectMortgageVo"/>
+        where project_id = #{projectId} and del_flag='0'
     </select>
 
 </mapper>

@@ -45,6 +45,16 @@ public class SysProjectRecovered extends BaseEntity {
      */
     private String delFlag;
 
+    /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
+     * 图片路径
+     */
+    private String imgUrl;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -85,6 +95,22 @@ public class SysProjectRecovered extends BaseEntity {
         return delFlag;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -97,6 +123,8 @@ public class SysProjectRecovered extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("remarks", getRemarks())
+                .append("imgUrl", getImgUrl())
                 .toString();
     }
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysRecaptureMapper">
+
+    <resultMap type="SysRecapture" id="SysRecaptureResult">
+        <result property="recaptureId" column="recapture_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="recapture" column="recapture"/>
+        <result property="remarks" column="remarks"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysRecaptureVo">
+        select recapture_id, project_id, recapture, remarks, del_flag, create_by, create_time, update_by, update_time from sys_recapture
+    </sql>
+
+    <select id="selectSysRecaptureList" parameterType="SysRecapture" resultMap="SysRecaptureResult">
+        <include refid="selectSysRecaptureVo"/>
+        <where>
+            del_flag = '0'
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="recapture != null ">and recapture = #{recapture}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+        </where>
+    </select>
+
+    <select id="selectSysRecaptureById" parameterType="Long" resultMap="SysRecaptureResult">
+        <include refid="selectSysRecaptureVo"/>
+        where recapture_id = #{recaptureId} and del_flag = '0'
+    </select>
+
+    <insert id="insertSysRecapture" parameterType="SysRecapture" useGeneratedKeys="true" keyProperty="recaptureId">
+        insert into sys_recapture
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="recapture != null">recapture,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="recapture != null">#{recapture},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateSysRecapture" parameterType="SysRecapture">
+        update sys_recapture
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="recapture != null">recapture = #{recapture},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </trim>
+        where recapture_id = #{recaptureId}
+    </update>
+
+    <delete id="deleteSysRecaptureById" parameterType="Long">
+        update sys_recapture set del_flag = '2' where recapture_id = #{recaptureId}
+    </delete>
+
+    <delete id="deleteSysRecaptureByIds" parameterType="String">
+        update sys_recapture set del_flag = '2' where recapture_id in
+        <foreach item="recaptureId" collection="array" open="(" separator="," close=")">
+            #{recaptureId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysRecaptureByProjectId" parameterType="Long" resultMap="SysRecaptureResult">
+        <include refid="selectSysRecaptureVo"/>
+        where project_id = #{projectId} and del_flag = '0'
+    </select>
+</mapper>

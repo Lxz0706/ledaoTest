@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('名片列表')" />
+    <style>
+        .img{
+            width: 50%!important;
+            height: 50% !important;
+            display:block;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>姓名：</label>
+                                <input type="text" name="cardName"/>
+                            </li>
+                            <li>
+                                <label>手机号：</label>
+                                <input type="text" name="phoneNumber"/>
+                            </li>
+                            <li>
+                                <label>公司：</label>
+                                <input type="text" name="company"/>
+                            </li>
+                            <li>
+                                <label>地址：</label>
+                                <input type="text" name="address"/>
+                            </li>
+                            <li>
+                                <label>职位：</label>
+                                <input type="text" name="position"/>
+                            </li>
+                            <li>
+                                <label>电话：</label>
+                                <input type="text" name="telephone"/>
+                            </li>
+                            <li>
+                                <label>微信：</label>
+                                <input type="text" name="wechat"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:namecard:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:namecard:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:namecard:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:namecard:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:namecard:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:namecard:remove')}]];
+        var prefix = ctx + "system/namecard";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "名片",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'cardId', 
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'cardName', 
+                    title: '姓名'
+                },
+                {
+                    field: 'position',
+                    title: '职位'
+                },
+                {
+                    field: 'phoneNumber', 
+                    title: '手机号'
+                },
+                {
+                    field: 'wechat',
+                    title: '微信'
+                },
+                {
+                    field: 'company',
+                    title: '公司'
+                },
+                {
+                    field: 'address',
+                    title: '地址'
+                },
+                {
+                    field: 'telephone', 
+                    title: '电话'
+                }/*,
+                {
+                    field: 'avatar', 
+                    title: '名片路径',
+                    formatter:function(value,row,index){
+                        return '<div style="width: 70%;height: 70%"><img style="height: 70%;width: 70%" src="data:image/png;base64,'+value+'"></div>';
+                    }
+                }*/]
+            };
+            $.table.init(options);
+        });
+
+        function exportExcel(){
+            var row=$.map($("#bootstrap-table").bootstrapTable('getSelections'),function(row){
+                return row ;
+            });
+            var str = "";
+            //根据name获取所有元素
+            for (var i = 0; i < row.length; i++) {
+                str += row[i].cardId + ",";
+            }
+            //去掉最后一个逗号(如果不需要去掉，就不用写)
+            if (str.length > 0) {
+                str = str.substr(0, str.length - 1);
+            }
+            $.ajax({
+                url:prefix +"/export",
+                data:{
+                    "ids":str
+                },
+                type:"post",
+                success:function (result) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                }
+            })
+        }
+    </script>
+</body>
+</html>

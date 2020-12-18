@@ -58,4 +58,10 @@ public interface ISysProjectmanagentService {
      * @return 结果
      */
     public int deleteSysProjectmanagentById(Long projectManagementId);
+
+    /**
+     * 根据类型分类查询
+     * */
+    public List<SysProjectmanagent> selectSysProjectmanagentListByProjectType();
+
 }

@@ -120,23 +120,26 @@ public class SysZckServiceImpl implements ISysZckService {
         SysZck sysZck1 = new SysZck();
         for (SysZck zck : zckList) {
             try {
-                if (StringUtils.isNotNull(zck.getBorrower()) && StringUtils.isNotEmpty(zck.getBorrower())) {
-                    sysZck1.setBorrower(zck.getBorrower().trim());
+                if (StringUtils.isNotNull(zck.getProjectName()) && StringUtils.isNotEmpty(zck.getProjectName())
+                        && StringUtils.isNotNull(zck.getAssetPackageName()) && StringUtils.isNotEmpty(zck.getAssetPackageName())) {
+                    sysZck1.setAssetPackageName(zck.getAssetPackageName());
+                    sysZck1.setProjectName(zck.getProjectName().trim());
                     sysZck1.setZcbId(zcbId);
                     List<SysZck> zckList2 = this.selectSysZckList(sysZck1);
                     if (zckList2.size() > 0) {
                         zck.setParentId(zckList2.get(0).getId());
                     }
+
                     zck.setCreateBy(operName);
                     zck.setZcbId(zcbId);
                     this.insertSysZck(zck);
                 }
 
                 successNum++;
-                successMsg.append("<br/>" + successNum + "、借款人名称 " + zck.getBorrower() + " 导入成功");
+                successMsg.append("<br/>" + successNum + "、借款人名称 " + zck.getProjectName() + " 导入成功");
             } catch (Exception e) {
                 failureNum++;
-                String msg = "<br/>" + failureNum + "、借款人名称 " + zck.getBorrower() + " 导入失败：";
+                String msg = "<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());
                 log.error(msg, e);
             }

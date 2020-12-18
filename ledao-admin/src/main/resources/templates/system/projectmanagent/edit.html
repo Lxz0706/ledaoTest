@@ -1,28 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改【请填写功能名称】')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('修改【请填写功能名称】')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <div id="ztl">
         <form class="form-horizontal m" id="form-projectmanagent-edit" th:object="${sysProjectmanagent}">
             <input name="projectManagementId" th:field="*{projectManagementId}" type="hidden">
-            <!--<div class="form-group">
-                <label class="col-sm-3 control-label">序号：</label>
-                <div class="col-sm-8">
-                    <input name="no" class="form-control" th:field="*{no}"/>
-                </div>
-            </div>-->
-            <div class="form-group">
-                <label class="col-sm-3 control-label">项目类型：</label>
-                <div class="col-sm-8">
-                    <select name="projectType" class="form-control m-b" th:with="type=${@dict.getType('sys_projectType')}">
-                        <option value="">--请选择一条数据--</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:fleld="*{projectType}"></option>
-                    </select>
-                </div>
-            </div>
+            <input name="projectType" th:field="*{projectType}" id="projectType" type="hidden">
             <div class="form-group">
                 <label class="col-sm-3 control-label">项目名称：</label>
                 <div class="col-sm-8">
@@ -33,6 +20,12 @@
                 <label class="col-sm-3 control-label">项目负责人：</label>
                 <div class="col-sm-8">
                     <input name="projectLeader" class="form-control" th:field="*{projectLeader}"/></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">投资金额（金额必须纯数字，不能有分隔符）：</label>
+                <div class="col-sm-8">
+                    <input name="investmentAmount" th:field="*{investmentAmount}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -47,19 +40,15 @@
                     <textarea name="inferiorRear" class="form-control">[[*{inferiorRear}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">投资日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="investmentDate" th:value="${#dates.format(sysProjectmanagent.investmentDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="investmentDate"
+                               th:value="${#dates.format(sysProjectmanagent.investmentDate, 'yyyy-MM-dd')}"
+                               class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">投资金额（金额必须纯数字，不能有分隔符）：</label>
-                <div class="col-sm-8">
-                    <input name="investmentAmount" th:field="*{investmentAmount}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -68,186 +57,189 @@
                     <textarea name="expensesReceipts" class="form-control">[[*{expensesReceipts}]]</textarea>
                 </div>
             </div>
-            <!--<div class="form-group">
-                <label class="col-sm-3 control-label">已付日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="paidDate" th:value="${#dates.format(sysProjectmanagent.paidDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">已付金额（金额必须纯数字，不能有分隔符）：</label>
-                <div class="col-sm-8">
-                    <input name="amountPaid" th:field="*{amountPaid}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">应（未）付日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="dueDate" th:value="${#dates.format(sysProjectmanagent.dueDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">应（未）付金额（金额必须纯数字，不能有分隔符）：</label>
-                <div class="col-sm-8">
-                    <input name="amountDue" th:field="*{amountDue}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">已收日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="receivedDate" th:value="${#dates.format(sysProjectmanagent.receivedDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">已收金额：</label>
-                <div class="col-sm-8">
-                    <input name="amountReceived" th:field="*{amountReceived}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">应（未）收日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="receivableDate" th:value="${#dates.format(sysProjectmanagent.receivableDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">应（未）收金额（金额必须纯数字，不能有分隔符）：</label>
-                <div class="col-sm-8">
-                    <input name="amountReceivable" th:field="*{amountReceivable}" class="form-control" type="text">
-                </div>
-            </div>-->
             <div class="form-group">
                 <label class="col-sm-3 control-label">投资机构：</label>
                 <div class="col-sm-8">
                     <textarea name="investmentInstituions" class="form-control">[[*{investmentInstituions}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">清收金额：</label>
                 <div class="col-sm-8">
                     <input name="amountRecovered" th:field="*{amountRecovered}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">清收日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="recoveryDate" th:value="${#dates.format(sysProjectmanagent.recoveryDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="recoveryDate"
+                               th:value="${#dates.format(sysProjectmanagent.recoveryDate, 'yyyy-MM-dd')}"
+                               class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">服务费结算方式：</label>
                 <div class="col-sm-8">
-                    <textarea name="serviceFee" class="form-control">[[*{serviceFee}]]</textarea>
+                    <input name="serviceFee" th:field="*{serviceFee}" class="form-control" type="text">
                 </div>
             </div>
-            <!--<div class="form-group">
-                <label class="col-sm-3 control-label">已收服务费入账金额（金额必须纯数字，不能有分隔符）：</label>
-                <div class="col-sm-8">
-                    <input name="entryAmount" th:field="*{entryAmount}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">已收服务费入账日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="entryDate" th:value="${#dates.format(sysProjectmanagent.entryDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">未收服务费预期金额（金额必须纯数字，不能有分隔符）：</label>
-                <div class="col-sm-8">
-                    <input name="expectedAmount" th:field="*{expectedAmount}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">未收服务费预期日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="expectedDate" th:value="${#dates.format(sysProjectmanagent.expectedDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>-->
         </form>
     </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "system/projectmanagent";
-        $("#form-projectmanagent-edit").validate({
-            focusCleanup: true
-        });
+    <div id="fwl">
+        <form class="form-horizontal m" id="form-projectmanagent-edit1" th:object="${sysProjectmanagent}">
+            <input name="projectManagementId" th:field="*{projectManagementId}" type="hidden">
+            <input name="projectType" th:field="*{projectType}" id="projectType" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目名称：</label>
+                <div class="col-sm-8">
+                    <input name="projectManagementName" class="form-control" th:field="*{projectManagementName}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目负责人：</label>
+                <div class="col-sm-8">
+                    <input name="projectLeader" class="form-control" th:field="*{projectLeader}"/></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">投资金额（金额必须纯数字，不能有分隔符）：</label>
+                <div class="col-sm-8">
+                    <input name="investmentAmount" th:field="*{investmentAmount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">投资日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="investmentDate"
+                               th:value="${#dates.format(sysProjectmanagent.investmentDate, 'yyyy-MM-dd')}"
+                               class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">目标回现金额（金额必须纯数字，不能有分隔符）：</label>
+                <div class="col-sm-8">
+                    <input name="amountPaid" class="form-control" type="text" th:field="*{amountPaid}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">已回现（金额必须纯数字，不能有分隔符）：</label>
+                <div class="col-sm-8">
+                    <input name="entryAmount" class="form-control" type="text" th:field="*{entryAmount}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">服务费结算方式：</label>
+                <div class="col-sm-8">
+                    <input name="serviceFee" class="form-control" type="text" th:field="*{serviceFee}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">服务费结算费率：</label>
+                <div class="col-sm-8">
+                    <input name="amountDue" class="form-control" type="text" th:field="*{amountDue}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">已结算服务费（金额必须纯数字，不能有分隔符）：</label>
+                <div class="col-sm-8">
+                    <input name="amountRecovered" class="form-control" type="text" th:field="*{amountRecovered}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">待结算服务费（金额必须纯数字，不能有分隔符）：</label>
+                <div class="col-sm-8">
+                    <input name="expectedAmount" class="form-control" type="text" th:field="*{expectedAmount}">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
 
-        function submitHandler() {
-            if ($.validate.form()) {
+    $(function () {
+        var projectType = $("#projectType").val();
+        if (projectType == "服务类项目") {
+            $("#fwl").attr("style", "display:block");
+            $("#ztl").attr("style", "display:none");
+        } else if (projectType == "自投类项目") {
+            $("#ztl").attr("style", "display:block");
+            $("#fwl").attr("style", "display:none");
+        }
+    });
+    var prefix = ctx + "system/projectmanagent";
+    $("#form-projectmanagent-edit").validate({
+        focusCleanup: true
+    });
+    $("#form-projectmanagent-edit1").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var projectType = $("#projectType").val();
+            if (projectType == "服务类项目") {
+                $.operate.save(prefix + "/edit", $('#form-projectmanagent-edit1').serialize());
+            } else if (projectType == "自投类项目") {
                 $.operate.save(prefix + "/edit", $('#form-projectmanagent-edit').serialize());
             }
         }
+    }
 
-        $("input[name='investmentDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='investmentDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='paidDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='paidDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='dueDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='dueDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='receivedDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='receivedDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='receivableDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='receivableDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='recoveryDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='recoveryDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='entryDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $("input[name='entryDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
 
-        $("input[name='expectedDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-    </script>
+    $("input[name='expectedDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
 </body>
 </html>

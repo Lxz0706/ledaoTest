@@ -7,16 +7,21 @@
     <resultMap type="SysTagging" id="SysTaggingResult">
         <result property="id" column="id"/>
         <result property="judicialId" column="judicial_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectSysTaggingVo">
-        select id, judicial_id from sys_tagging
+        select id, judicial_id, create_by, create_time, update_by, update_time from sys_tagging
     </sql>
 
     <select id="selectSysTaggingList" parameterType="SysTagging" resultMap="SysTaggingResult">
         <include refid="selectSysTaggingVo"/>
         <where>
             <if test="judicialId != null ">and judicial_id = #{judicialId}</if>
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
         </where>
     </select>
 
@@ -29,9 +34,14 @@
         insert into sys_tagging
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="judicialId != null">judicial_id,</if>
+            <if test="createBy != null">create_by,</if>
+            create_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="judicialId != null">#{judicialId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            sysdate()
         </trim>
     </insert>
 
@@ -39,6 +49,10 @@
         update sys_tagging
         <trim prefix="SET" suffixOverrides=",">
             <if test="judicialId != null">judicial_id = #{judicialId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where id = #{id}
     </update>

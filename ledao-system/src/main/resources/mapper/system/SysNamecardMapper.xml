@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysNamecardMapper">
+
+    <resultMap type="SysNamecard" id="SysNamecardResult">
+        <result property="cardId" column="card_id"/>
+        <result property="cardName" column="card_name"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="company" column="company"/>
+        <result property="address" column="address"/>
+        <result property="position" column="position"/>
+        <result property="telephone" column="telephone"/>
+        <result property="wechat" column="wechat"/>
+        <result property="avatar" column="avatar"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysNamecardVo">
+        select card_id, card_name, phone_number, company, address, position, telephone, wechat, avatar, create_by, create_time, update_by, update_time from sys_namecard
+    </sql>
+
+    <select id="selectSysNamecardList" parameterType="SysNamecard" resultMap="SysNamecardResult">
+        <include refid="selectSysNamecardVo"/>
+        <where>
+            <if test="cardName != null  and cardName != ''">and card_name like concat('%', #{cardName}, '%')</if>
+            <if test="phoneNumber != null  and phoneNumber != ''">and phone_number = #{phoneNumber}</if>
+            <if test="company != null  and company != ''">and company like concat('%', #{company}, '%')</if>
+            <if test="address != null  and address != ''">and address like concat('%', #{address}, '%')</if>
+            <if test="position != null  and position != ''">and position = #{position}</if>
+            <if test="telephone != null  and telephone != ''">and telephone = #{telephone}</if>
+            <if test="wechat != null  and wechat != ''">and wechat = #{wechat}</if>
+            <if test="avatar != null  and avatar != ''">and avatar = #{avatar}</if>
+        </where>
+    </select>
+
+    <select id="selectSysNamecardById" parameterType="Long" resultMap="SysNamecardResult">
+        <include refid="selectSysNamecardVo"/>
+        where card_id = #{cardId}
+    </select>
+
+    <insert id="insertSysNamecard" parameterType="SysNamecard" useGeneratedKeys="true" keyProperty="cardId">
+        insert into sys_namecard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cardName != null">card_name,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="company != null">company,</if>
+            <if test="address != null">address,</if>
+            <if test="position != null">position,</if>
+            <if test="telephone != null">telephone,</if>
+            <if test="wechat != null">wechat,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cardName != null">#{cardName},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="company != null">#{company},</if>
+            <if test="address != null">#{address},</if>
+            <if test="position != null">#{position},</if>
+            <if test="telephone != null">#{telephone},</if>
+            <if test="wechat != null">#{wechat},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysNamecard" parameterType="SysNamecard">
+        update sys_namecard
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cardName != null">card_name = #{cardName},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="telephone != null">telephone = #{telephone},</if>
+            <if test="wechat != null">wechat = #{wechat},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where card_id = #{cardId}
+    </update>
+
+    <delete id="deleteSysNamecardById" parameterType="Long">
+        delete from sys_namecard where card_id = #{cardId}
+    </delete>
+
+    <delete id="deleteSysNamecardByIds" parameterType="String">
+        delete from sys_namecard where card_id in
+        <foreach item="cardId" collection="array" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysNamecardListByCardId" parameterType="String" resultMap="SysNamecardResult">
+        <include refid="selectSysNamecardVo"/>
+        where card_id in
+        <foreach item="cardId" collection="array" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+    </select>
+
+</mapper>

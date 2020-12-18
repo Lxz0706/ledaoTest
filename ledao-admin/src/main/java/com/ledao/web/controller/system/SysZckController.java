@@ -1,5 +1,7 @@
 package com.ledao.web.controller.system;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
@@ -42,7 +44,7 @@ public class SysZckController extends BaseController {
     @Autowired
     private ISysZcbService sysZcbService;
 
-    @RequiresPermissions("system:zcb:view")
+    @RequiresPermissions("system:zck:view")
     @GetMapping()
     public String zck() {
         return prefix + "/zck";
@@ -51,16 +53,40 @@ public class SysZckController extends BaseController {
     /**
      * 查询资产信息库列表
      */
-    @RequiresPermissions("system:zcb:list")
+    @RequiresPermissions("system:zck:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysZck sysZck) {
         startPage();
         List<SysZck> list = sysZckService.selectSysZck(sysZck);
+        for (SysZck sysZck1 : list) {
+            SysZck sysZck3 = new SysZck();
+            sysZck3.setId(sysZck1.getId());
+            List<SysZck> list1 = sysZckService.selectSysZckByParentId(sysZck1);
+            for (SysZck sysZck2 : list1) {
+                SysZck sysZck4 = sysZckService.selectSysZckById(sysZck2.getId());
+                if (StringUtils.isEmpty(sysZck4.getCapValue()) || StringUtils.isNull(sysZck4.getCapValue())) {
+                    sysZck4.setCapValue(new BigDecimal(0).toString());
+                } else {
+                    sysZck4.setCapValue(new BigDecimal(sysZck4.getCapValue()).toString());
+                }
+                if (sysZck1.getCapValues() == null) {
+                    sysZck1.setCapValues(new BigDecimal(0));
+                }
+                sysZck1.setCapValues(new BigDecimal(sysZck4.getCapValue()).add(sysZck1.getCapValues()));
+                if (sysZck4.getTotalPrice() == null) {
+                    sysZck4.setTotalPrice(new BigDecimal(0));
+                }
+                if (sysZck1.getTotalPrice1() == null) {
+                    sysZck1.setTotalPrice1(new BigDecimal(0));
+                }
+                sysZck1.setTotalPrice1(sysZck1.getTotalPrice1().add(sysZck4.getTotalPrice()));
+            }
+        }
         return getDataTable(list);
     }
 
-    @RequiresPermissions("system:zcb:list")
+    @RequiresPermissions("system:zck:list")
     @GetMapping({"/zckList/{id}/{zcbId}"})
     public String selectZcbByAssetStatus(@PathVariable("id") Long id, @PathVariable("zcbId") Long zcbId, ModelMap modelMap) {
         modelMap.put("id", id);
@@ -68,7 +94,7 @@ public class SysZckController extends BaseController {
         return "system/zcb/zck/zckList";
     }
 
-    @RequiresPermissions("system:zcb:list")
+    @RequiresPermissions("system:zck:list")
     @PostMapping("/zckList")
     @ResponseBody
     public TableDataInfo zckList(SysZck sysZck) {
@@ -86,7 +112,7 @@ public class SysZckController extends BaseController {
     /**
      * 查询资产信息库列表
      */
-    @RequiresPermissions("system:zcb:list")
+    @RequiresPermissions("system:zck:list")
     @GetMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(SysZck sysZck) {
@@ -98,7 +124,7 @@ public class SysZckController extends BaseController {
     /**
      * 导出资产信息库列表
      */
-    @RequiresPermissions("system:zcb:export")
+    @RequiresPermissions("system:zck:export")
     @Log(title = "资产信息库", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -137,7 +163,7 @@ public class SysZckController extends BaseController {
     /**
      * 导出资产信息库列表
      */
-    @RequiresPermissions("system:zcb:export")
+    @RequiresPermissions("system:zck:export")
     @Log(title = "资产信息库", businessType = BusinessType.EXPORT)
     @PostMapping("/export2")
     @ResponseBody
@@ -175,12 +201,12 @@ public class SysZckController extends BaseController {
     /**
      * 导出资产信息库列表
      */
-    @RequiresPermissions("system:zcb:export")
+    @RequiresPermissions("system:zck:export")
     @Log(title = "资产信息库", businessType = BusinessType.EXPORT)
     @PostMapping("/export1")
     @ResponseBody
     public AjaxResult export1(SysZck sysZck) {
-        String borrower = getRequest().getParameter("borrower");
+        String projectName = getRequest().getParameter("projectName");
         String city = getRequest().getParameter("city");
         String guarantor = getRequest().getParameter("guarantor");
         String mortgageRank = getRequest().getParameter("mortgageRank");
@@ -188,7 +214,7 @@ public class SysZckController extends BaseController {
         String collateType = getRequest().getParameter("collateType");
         List<SysZck> zckList = new ArrayList<>();
         if (StringUtils.isNull(getRequest().getParameter("ids"))) {
-            sysZck.setBorrower(borrower);
+            sysZck.setProjectName(projectName);
             sysZck.setCity(city);
             sysZck.setGuarantor(guarantor);
             sysZck.setMortgageRank(mortgageRank);
@@ -225,7 +251,7 @@ public class SysZckController extends BaseController {
     /**
      * 新增保存资产信息库
      */
-    @RequiresPermissions("system:zcb:add")
+    @RequiresPermissions("system:zck:add")
     @Log(title = "资产信息库", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -234,12 +260,12 @@ public class SysZckController extends BaseController {
         Map<String, Long> map = new HashMap<>();
         Map<String, String> map1 = new HashMap<>();
         for (SysZck sysZck1 : sysZckList) {
-            map.put(sysZck1.getBorrower(), sysZck1.getId());
-            map1.put(sysZck1.getBorrower(), sysZck1.getBorrower());
+            map.put(sysZck1.getProjectName(), sysZck1.getId());
+            map1.put(sysZck1.getProjectName(), sysZck1.getProjectName());
         }
-        if (StringUtils.isNotNull(map1.get(sysZck.getBorrower()))) {
-            if (map1.get(sysZck.getBorrower()).equals(sysZck.getBorrower())) {
-                sysZck.setParentId(map.get(sysZck.getBorrower()));
+        if (StringUtils.isNotNull(map1.get(sysZck.getProjectName()))) {
+            if (map1.get(sysZck.getProjectName()).equals(sysZck.getProjectName())) {
+                sysZck.setParentId(map.get(sysZck.getProjectName()));
             }
         }
 
@@ -260,7 +286,7 @@ public class SysZckController extends BaseController {
     /**
      * 修改保存资产信息库
      */
-    @RequiresPermissions("system:zcb:edit")
+    @RequiresPermissions("system:zck:edit")
     @Log(title = "资产信息库", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -272,7 +298,7 @@ public class SysZckController extends BaseController {
     /**
      * 删除资产信息库
      */
-    @RequiresPermissions("system:zcb:remove")
+    @RequiresPermissions("system:zck:remove")
     @Log(title = "资产信息库", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -294,16 +320,66 @@ public class SysZckController extends BaseController {
     /**
      * 查看详细
      */
-    @RequiresPermissions("system:zcb:detail")
+    @RequiresPermissions("system:zck:detail")
     @Log(title = "资产信息库", businessType = BusinessType.DETAIL)
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
-        mmap.put("sysZck", sysZckService.selectSysZckById(id));
+        DecimalFormat decimalFormat = new DecimalFormat("###,###.00");
+        SysZck sysZck = sysZckService.selectSysZckById(id);
+        if (StringUtils.isNotNull(sysZck.getContractPrincipal())) {
+            sysZck.setContractPrincipals(decimalFormat.format(sysZck.getContractPrincipal()));
+        }
+        if (StringUtils.isNotNull(sysZck.getPrincipalBalance())) {
+            sysZck.setPrincipalBalances(decimalFormat.format(sysZck.getPrincipalBalance()));
+        }
+        if (StringUtils.isNotNull(sysZck.getInterestBalance())) {
+            sysZck.setInterestBalances(decimalFormat.format(sysZck.getInterestBalance()));
+        }
+        if (StringUtils.isNotNull(sysZck.getPrincipalInterestBalance())) {
+            sysZck.setPrincipalInterestBalances(decimalFormat.format(sysZck.getPrincipalInterestBalance()));
+        }
+        if (StringUtils.isNotNull(sysZck.getGuaranteeAmount())) {
+            sysZck.setGuaranteeAmounts(decimalFormat.format(sysZck.getGuaranteeAmount()));
+        }
+        if (StringUtils.isNotNull(sysZck.getMaximumGuaranteeAmount())) {
+            sysZck.setMaximumGuaranteeAmounts(decimalFormat.format(sysZck.getMaximumGuaranteeAmount()));
+        }
+        if (StringUtils.isNotNull(sysZck.getMortgageAmount())) {
+            sysZck.setMortgageAmounts(decimalFormat.format(sysZck.getMortgageAmount()));
+        }
+        if (StringUtils.isNotNull(sysZck.getQxswMortgeageAmount())) {
+            sysZck.setQxswMortgeageAmounts(decimalFormat.format(sysZck.getQxswMortgeageAmount()));
+        }
+        if (StringUtils.isNotNull(sysZck.getLandUnitPrice())) {
+            sysZck.setLandUnitPrices(decimalFormat.format(sysZck.getLandUnitPrice()));
+        }
+        if (StringUtils.isNotNull(sysZck.getLandTotalPrice())) {
+            sysZck.setLandTotalPrices(decimalFormat.format(sysZck.getLandTotalPrice()));
+        }
+        if (StringUtils.isNotNull(sysZck.getOtherCollateralUnitPrice())) {
+            sysZck.setOtherCollateralUnitPrices(decimalFormat.format(sysZck.getOtherCollateralUnitPrice()));
+        }
+        if (StringUtils.isNotNull(sysZck.getOtherCollateralTotalPrice())) {
+            sysZck.setOtherCollateralTotalPrices(decimalFormat.format(sysZck.getOtherCollateralTotalPrice()));
+        }
+        if (StringUtils.isNotNull(sysZck.getTotalPrice())) {
+            sysZck.setTotalPrices(decimalFormat.format(sysZck.getTotalPrice()));
+        }
+        if (StringUtils.isNotNull(sysZck.getMaximumMortgageAmount())) {
+            sysZck.setMaximumMortgageAmounts(decimalFormat.format(sysZck.getMaximumMortgageAmount()));
+        }
+        if (StringUtils.isNotNull(sysZck.getPrice())) {
+            sysZck.setPrices(decimalFormat.format(sysZck.getPrice()));
+        }
+        if (StringUtils.isNotNull(sysZck.getDesposalPrice())) {
+            sysZck.setDesposalPrices(decimalFormat.format(sysZck.getDesposalPrice()));
+        }
+        mmap.put("sysZck", sysZck);
         return prefix + "/detail";
     }
 
     @Log(title = "资产信息库", businessType = BusinessType.IMPORT)
-    @RequiresPermissions("system:zcb:import")
+    @RequiresPermissions("system:zck:import")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport, Long zcbId) throws Exception {
@@ -314,7 +390,7 @@ public class SysZckController extends BaseController {
         return AjaxResult.success(message);
     }
 
-    @RequiresPermissions("system:zcb:view")
+    @RequiresPermissions("system:zck:view")
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate() {
@@ -322,7 +398,7 @@ public class SysZckController extends BaseController {
         return util.importTemplateExcel("资产库");
     }
 
-    @RequiresPermissions("system:zcb:list")
+    @RequiresPermissions("system:zck:list")
     @PostMapping("/listes")
     @ResponseBody
     public TableDataInfo listes(SysZck sysZck) {

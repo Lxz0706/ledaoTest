@@ -1,32 +1,33 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('项目详细')" />
+    <th:block th:include="include :: header('项目详细')"/>
 </head>
 <body class="white-bg">
-	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-		<table class="table table-border">
-			<tr>
-				<td colspan="8" style="text-align: center" class="success"><h3>司法情况</h3></td>
-			</tr>
-			<tr>
-				<td  class="col-sm-1 text-right"><h5>司法状态：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.judicialStatus}"/></td>
-				<td  class="col-sm-1 text-right"><h5>管辖法院：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.competentCourt}"/></td>
-				<td  class="col-sm-1 text-right"><h5>法官及联系方式：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.judgeContact}"/></td>
-				<td  class="col-sm-1 text-right"><h5>律所：</h5></td>
-				<td  class="col-sm-1"><span th:text="${sysProject.lawFirm}"/></td>
-			</tr>
-			<tr>
-				<td  class="col-sm-1 text-right"><h5>律师及联系方式：</h5></td>
-				<td  class="col-sm-1" colspan="7"><span th:text="${sysProject.lawyerContact}"/></td>
-				<!--<td  class="col-sm-1 text-right"><h5>备注：</h5></td>
-				<td  class="col-sm-1" colspan="4"><span th:text="${sysProject.judicialRemarks}"/></td>-->
-			</tr>
-		</table>
-	</div>
-	<th:block th:include="include :: footer" />
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m-t" id="signupForm">
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>司法状态：</h5></label>
+            <div class="form-control-static" th:text="${sysProject.judicialStatus}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>管辖法院：</h5></label>
+            <div class="form-control-static" th:text="${sysProject.competentCourt}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>法官及联系方式：</h5></label>
+            <div class="form-control-static" th:text="${sysProject.judgeContact}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>律所：</h5></label>
+            <div class="form-control-static" th:text="${sysProject.lawFirm}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>律所：</h5></label>
+            <div class="form-control-static" th:text="${sysProject.lawFirm}"></div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
 </body>
 </html>

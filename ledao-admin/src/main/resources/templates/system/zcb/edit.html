@@ -22,6 +22,13 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">负责小组成员：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="hidden" name="teamMembersId" id="teamMembersId" th:field="*{teamMembersId}">
+                    <input class="form-control" type="text" name="teamMembersName" onclick="selectUserTree()" th:field="*{teamMembersName}" id="teamMembersName">
+                </div>
+            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -35,6 +42,40 @@
             if ($.validate.form()) {
                 $.operate.save(prefix + "/edit", $('#form-zcb-edit').serialize());
             }
+        }
+
+        //人员树形选择器
+        function selectUserTree() {
+            var options = {
+                title: '人员选择',
+                width: "750",
+                url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#teamMembersId").val() + "&selectedUserNames=" + $("#teamMembersName").val() + "&multiSelectFlag=true",
+                callBack: doSelect
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSelect(index, layero){
+
+            var body = layer.getChildFrame('body', index);
+
+            var userIds = "";
+            var userNames = "";
+            body.find("#multiselect_to option").each(function(){  //遍历所有option
+                var val = $(this).val();   //获取option值
+                var txt = $(this).text();  //获取option的文本内容
+                if(val!= '' && txt!=''){
+                    userIds = userIds + val + ",";
+                    userNames = userNames + txt + ",";
+                }
+            });
+
+            userIds = userIds.substring(0,userIds.length-1);
+            userNames = userNames.substring(0,userNames.length-1);
+
+            $("#teamMembersId").val(userIds);
+            $("#teamMembersName").val(userNames);
+            layer.close(index);
         }
     </script>
 </body>

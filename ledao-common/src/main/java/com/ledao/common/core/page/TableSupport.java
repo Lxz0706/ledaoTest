@@ -5,16 +5,14 @@ import com.ledao.common.utils.ServletUtils;
 
 /**
  * 表格数据处理
- * 
+ *
  * @author lxz
  */
-public class TableSupport
-{
+public class TableSupport {
     /**
      * 封装分页对象
      */
-    public static PageDao getPagedao()
-    {
+    public static PageDao getPagedao() {
         PageDao pagedao = new PageDao();
         pagedao.setPageNum(ServletUtils.getParameterToInt(Constants.PAGE_NUM));
         pagedao.setPageSize(ServletUtils.getParameterToInt(Constants.PAGE_SIZE));
@@ -23,8 +21,7 @@ public class TableSupport
         return pagedao;
     }
 
-    public static PageDao buildPageRequest()
-    {
+    public static PageDao buildPageRequest() {
         return getPagedao();
     }
 }

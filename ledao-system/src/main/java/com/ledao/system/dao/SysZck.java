@@ -27,7 +27,7 @@ public class SysZck extends BaseEntity {
     /**
      * 资产包名称
      */
-    //@Excel(name = "资产包名称")
+    @Excel(name = "资产包状态")
     private String assetPackageName;
 
     /**
@@ -40,13 +40,13 @@ public class SysZck extends BaseEntity {
      * 序号
      */
     @Excel(name = "序号")
-    private String no;
+    private Long no;
 
     /**
      * 借款人名称
      */
     @Excel(name = "借款人名称")
-    private String borrower;
+    private String projectName;
 
     /**
      * 城市/地区
@@ -60,11 +60,15 @@ public class SysZck extends BaseEntity {
     @Excel(name = "合同本金")
     private BigDecimal contractPrincipal;
 
+    private String contractPrincipals;
+
     /**
      * 本金余额
      */
     @Excel(name = "本金余额")
     private BigDecimal principalBalance;
+
+    private String principalBalances;
 
     /**
      * 利息余额
@@ -72,11 +76,15 @@ public class SysZck extends BaseEntity {
     @Excel(name = "利息余额")
     private BigDecimal interestBalance;
 
+    private String interestBalances;
+
     /**
      * 本息余额
      */
     @Excel(name = "本息余额")
     private BigDecimal principalInterestBalance;
+
+    private String principalInterestBalances;
 
     /**
      * 本息计算基准日
@@ -130,6 +138,8 @@ public class SysZck extends BaseEntity {
     @Excel(name = "保证金额")
     private BigDecimal guaranteeAmount;
 
+    private String guaranteeAmounts;
+
     /**
      * 保证合同编号
      */
@@ -149,6 +159,8 @@ public class SysZck extends BaseEntity {
      */
     @Excel(name = "最高额保证金额")
     private BigDecimal maximumGuaranteeAmount;
+
+    private String maximumGuaranteeAmounts;
 
     /**
      * 最高额保证合同·保函编号
@@ -263,7 +275,7 @@ public class SysZck extends BaseEntity {
     /**
      * 备注
      */
-    @Excel(name = "备注")
+    @Excel(name = "司法备注")
     private String judicialRemark;
 
     /**
@@ -277,6 +289,8 @@ public class SysZck extends BaseEntity {
      */
     @Excel(name = "抵（质）押金额(本金)")
     private BigDecimal mortgageAmount;
+
+    private String mortgageAmounts;
 
     /**
      * 抵（质）押合同编号
@@ -295,6 +309,8 @@ public class SysZck extends BaseEntity {
      */
     @Excel(name = "最高额抵押金额")
     private Long maximumMortgageAmount;
+
+    private String maximumMortgageAmounts;
 
     /**
      * 最高额抵押合同编号
@@ -351,6 +367,8 @@ public class SysZck extends BaseEntity {
      */
     @Excel(name = "前序顺位抵押金额")
     private BigDecimal qxswMortgeageAmount;
+
+    private String qxswMortgeageAmounts;
 
     /**
      * 出租情况
@@ -462,11 +480,15 @@ public class SysZck extends BaseEntity {
     @Excel(name = "土地单价")
     private BigDecimal landUnitPrice;
 
+    private String landUnitPrices;
+
     /**
      * 土地总价
      */
     @Excel(name = "土地总价")
     private BigDecimal landTotalPrice;
+
+    private String landTotalPrices;
 
     /**
      * 其它抵置押物单价
@@ -474,17 +496,24 @@ public class SysZck extends BaseEntity {
     @Excel(name = "其它抵质押物单价")
     private BigDecimal otherCollateralUnitPrice;
 
+    private String otherCollateralUnitPrices;
+
     /**
      * 其它抵置押物总价
      */
     @Excel(name = "其它抵质押物总价")
     private BigDecimal otherCollateralTotalPrice;
 
+    private String otherCollateralTotalPrices;
+
     /**
      * 总价
      */
     @Excel(name = "总价")
     private BigDecimal totalPrice;
+    private BigDecimal totalPrice1;
+
+    private String totalPrices;
 
     /**
      * 估值依据
@@ -497,6 +526,8 @@ public class SysZck extends BaseEntity {
      */
     @Excel(name = "盖帽值")
     private String capValue;
+
+    private BigDecimal capValues;
 
     /**
      * 抵置押物备注
@@ -519,8 +550,14 @@ public class SysZck extends BaseEntity {
     /**
      * 估值建议
      */
+    @Excel(name = "综合能力分析(较好，一般，无)")
+    private String zhhknl;
+
+    /**
+     * 估值建议
+     */
     @Excel(name = "估值建议")
-    private BigDecimal zhhknl;
+    private String gzjy;
 
     /**
      * 备注
@@ -534,6 +571,8 @@ public class SysZck extends BaseEntity {
     @Excel(name = "定价")
     private BigDecimal price;
 
+    private String prices;
+
     /**
      * 处置方式
      */
@@ -545,6 +584,8 @@ public class SysZck extends BaseEntity {
      */
     @Excel(name = "处置价格")
     private BigDecimal desposalPrice;
+
+    private String desposalPrices;
 
     /**
      * 客户
@@ -560,12 +601,12 @@ public class SysZck extends BaseEntity {
 
     /**
      * 资产包状态
-     * */
+     */
     private String zcbStatus;
 
     /**
      * 资产包名称
-     * */
+     */
     private String zcbName;
 
     /**
@@ -599,20 +640,20 @@ public class SysZck extends BaseEntity {
         this.assetStatus = assetStatus;
     }
 
-    public String getNo() {
+    public Long getNo() {
         return no;
     }
 
-    public void setNo(String no) {
+    public void setNo(Long no) {
         this.no = no;
     }
 
-    public String getBorrower() {
-        return borrower;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setBorrower(String borrower) {
-        this.borrower = borrower;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getCity() {
@@ -1223,12 +1264,20 @@ public class SysZck extends BaseEntity {
         this.propertyClues = propertyClues;
     }
 
-    public BigDecimal getZhhknl() {
+    public String getZhhknl() {
         return zhhknl;
     }
 
-    public void setZhhknl(BigDecimal zhhknl) {
+    public void setZhhknl(String zhhknl) {
         this.zhhknl = zhhknl;
+    }
+
+    public String getGzjy() {
+        return gzjy;
+    }
+
+    public void setGzjy(String gzjy) {
+        this.gzjy = gzjy;
     }
 
     public String getJkrgzRemark() {
@@ -1311,6 +1360,150 @@ public class SysZck extends BaseEntity {
         this.parentId = parentId;
     }
 
+    public String getContractPrincipals() {
+        return contractPrincipals;
+    }
+
+    public void setContractPrincipals(String contractPrincipals) {
+        this.contractPrincipals = contractPrincipals;
+    }
+
+    public String getPrincipalBalances() {
+        return principalBalances;
+    }
+
+    public void setPrincipalBalances(String principalBalances) {
+        this.principalBalances = principalBalances;
+    }
+
+    public String getInterestBalances() {
+        return interestBalances;
+    }
+
+    public void setInterestBalances(String interestBalances) {
+        this.interestBalances = interestBalances;
+    }
+
+    public String getPrincipalInterestBalances() {
+        return principalInterestBalances;
+    }
+
+    public void setPrincipalInterestBalances(String principalInterestBalances) {
+        this.principalInterestBalances = principalInterestBalances;
+    }
+
+    public String getGuaranteeAmounts() {
+        return guaranteeAmounts;
+    }
+
+    public void setGuaranteeAmounts(String guaranteeAmounts) {
+        this.guaranteeAmounts = guaranteeAmounts;
+    }
+
+    public String getMaximumGuaranteeAmounts() {
+        return maximumGuaranteeAmounts;
+    }
+
+    public void setMaximumGuaranteeAmounts(String maximumGuaranteeAmounts) {
+        this.maximumGuaranteeAmounts = maximumGuaranteeAmounts;
+    }
+
+    public String getMortgageAmounts() {
+        return mortgageAmounts;
+    }
+
+    public void setMortgageAmounts(String mortgageAmounts) {
+        this.mortgageAmounts = mortgageAmounts;
+    }
+
+    public String getQxswMortgeageAmounts() {
+        return qxswMortgeageAmounts;
+    }
+
+    public void setQxswMortgeageAmounts(String qxswMortgeageAmounts) {
+        this.qxswMortgeageAmounts = qxswMortgeageAmounts;
+    }
+
+    public String getLandUnitPrices() {
+        return landUnitPrices;
+    }
+
+    public void setLandUnitPrices(String landUnitPrices) {
+        this.landUnitPrices = landUnitPrices;
+    }
+
+    public String getLandTotalPrices() {
+        return landTotalPrices;
+    }
+
+    public void setLandTotalPrices(String landTotalPrices) {
+        this.landTotalPrices = landTotalPrices;
+    }
+
+    public String getOtherCollateralUnitPrices() {
+        return otherCollateralUnitPrices;
+    }
+
+    public void setOtherCollateralUnitPrices(String otherCollateralUnitPrices) {
+        this.otherCollateralUnitPrices = otherCollateralUnitPrices;
+    }
+
+    public String getOtherCollateralTotalPrices() {
+        return otherCollateralTotalPrices;
+    }
+
+    public void setOtherCollateralTotalPrices(String otherCollateralTotalPrices) {
+        this.otherCollateralTotalPrices = otherCollateralTotalPrices;
+    }
+
+    public String getTotalPrices() {
+        return totalPrices;
+    }
+
+    public void setTotalPrices(String totalPrices) {
+        this.totalPrices = totalPrices;
+    }
+
+    public String getPrices() {
+        return prices;
+    }
+
+    public void setPrices(String prices) {
+        this.prices = prices;
+    }
+
+    public String getDesposalPrices() {
+        return desposalPrices;
+    }
+
+    public void setDesposalPrices(String desposalPrices) {
+        this.desposalPrices = desposalPrices;
+    }
+
+    public String getMaximumMortgageAmounts() {
+        return maximumMortgageAmounts;
+    }
+
+    public void setMaximumMortgageAmounts(String maximumMortgageAmounts) {
+        this.maximumMortgageAmounts = maximumMortgageAmounts;
+    }
+
+    public BigDecimal getCapValues() {
+        return capValues;
+    }
+
+    public void setCapValues(BigDecimal capValues) {
+        this.capValues = capValues;
+    }
+
+    public BigDecimal getTotalPrice1() {
+        return totalPrice1;
+    }
+
+    public void setTotalPrice1(BigDecimal totalPrice1) {
+        this.totalPrice1 = totalPrice1;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1318,7 +1511,7 @@ public class SysZck extends BaseEntity {
                 .append("assetPackageName", getAssetPackageName())
                 .append("assetStatus", getAssetStatus())
                 .append("no", getNo())
-                .append("borrower", getBorrower())
+                .append("projectName", getProjectName())
                 .append("city", getCity())
                 .append("contractPrincipal", getContractPrincipal())
                 .append("principalBalance", getPrincipalBalance())
@@ -1402,9 +1595,10 @@ public class SysZck extends BaseEntity {
                 .append("desposalPrice", getDesposalPrice())
                 .append("customer", getCustomer())
                 .append("zcbId", getZcbId())
-                .append("delFlag",getDelFlag())
-                .append("parentId",getParentId())
-                .append("zcbStatus",getZcbStatus())
+                .append("delFlag", getDelFlag())
+                .append("parentId", getParentId())
+                .append("zcbStatus", getZcbStatus())
+                .append("gzjy", getGzjy())
                 .toString();
     }
 }

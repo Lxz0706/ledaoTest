@@ -88,4 +88,11 @@ public class SysProjectmanagentServiceImpl implements ISysProjectmanagentService
     public int deleteSysProjectmanagentById(Long projectManagementId) {
         return sysProjectmanagentMapper.deleteSysProjectmanagentById(projectManagementId);
     }
+
+    /**
+     * 根据类型查询
+     * */
+    public List<SysProjectmanagent> selectSysProjectmanagentListByProjectType(){
+        return sysProjectmanagentMapper.selectSysProjectmanagentListByProjectType();
+    }
 }

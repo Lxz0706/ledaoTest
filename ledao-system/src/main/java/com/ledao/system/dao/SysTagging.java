@@ -71,6 +71,11 @@ public class SysTagging extends BaseEntity {
      */
     private Date itemEndTime;
 
+    /**
+     * 项目状态
+     * */
+    private String itemStatus;
+
     public Long getId() {
         return id;
     }
@@ -173,6 +178,14 @@ public class SysTagging extends BaseEntity {
 
     public void setItemEndTime(Date itemEndTime) {
         this.itemEndTime = itemEndTime;
+    }
+
+    public String getItemStatus() {
+        return itemStatus;
+    }
+
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus = itemStatus;
     }
 
     @Override

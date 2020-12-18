@@ -54,6 +54,8 @@ public class SysProjectysyf extends BaseEntity {
 
     private String remarks;
 
+    private String imgUrl;
+
     public Long getId() {
         return id;
     }
@@ -110,6 +112,14 @@ public class SysProjectysyf extends BaseEntity {
         this.remarks = remarks;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -123,7 +133,8 @@ public class SysProjectysyf extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("fundType", getFundType())
-                .append("remarks",getRemarks())
+                .append("remarks", getRemarks())
+                .append("imgUrl", getImgUrl())
                 .toString();
     }
 }

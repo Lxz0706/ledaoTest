@@ -1,9 +1,18 @@
 package com.ledao.common.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 
-import com.ledao.common.constant.Constants;
+import sun.misc.BASE64Encoder;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.util.Objects;
+
 import com.ledao.common.core.text.StrFormatter;
 
 /**
@@ -21,6 +30,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * 下划线
      */
     private static final char SEPARATOR = '_';
+
+    private static String strNetImageToBase64;
+    private static String strLocalImageToBase64;
 
     /**
      * 获取参数不为空值
@@ -306,7 +318,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             // 不含下划线，仅将首字母大写
             return name.substring(0, 1).toUpperCase() + name.substring(1);
         }
-        System.out.println("name:========"+name);
         // 用下划线将原始字符串分割
         String[] camels = name.split("_");
         for (String camel : camels) {
@@ -318,7 +329,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             result.append(camel.substring(0, 1).toUpperCase());
             result.append(camel.substring(1).toLowerCase());
         }
-        System.out.println("result:======"+result);
         return result.toString();
     }
 
@@ -367,5 +377,68 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         /** 删除转义字符 */
         s = s.replaceAll("&.{2,6}?;", "");
         return s;
+    }
+
+    /**
+     * 网络图片转换Base64的方法
+     *
+     * @param netImagePath
+     */
+    public static String NetImageToBase64(String netImagePath) {
+        final ByteArrayOutputStream data = new ByteArrayOutputStream();
+        try {
+            // 创建URL
+            URL url = new URL(netImagePath);
+            final byte[] by = new byte[1024];
+            // 创建链接
+            final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+
+
+            InputStream is = conn.getInputStream();
+            // 将内容读取内存中
+            int len = -1;
+            while ((len = is.read(by)) != -1) {
+                data.write(by, 0, len);
+            }
+            // 对字节数组Base64编码
+            BASE64Encoder encoder = new BASE64Encoder();
+            strNetImageToBase64 = encoder.encode(data.toByteArray());
+            // 关闭流
+            is.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return strNetImageToBase64;
+    }
+
+
+    /**
+     * 本地图片转换Base64的方法
+     *
+     * @param imgPath
+     * @return
+     */
+
+    public static String localImageToBase64(String imgPath) {
+        byte[] data = null;
+        // 读取图片字节数组
+        try {
+            InputStream in = new FileInputStream(imgPath);
+            data = new byte[in.available()];
+            in.read(data);
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 对字节数组Base64编码
+        BASE64Encoder encoder = new BASE64Encoder();
+        // 返回Base64编码过的字节数组字符串
+        strLocalImageToBase64 = encoder.encode(Objects.requireNonNull(data));
+        return strLocalImageToBase64;
     }
 }

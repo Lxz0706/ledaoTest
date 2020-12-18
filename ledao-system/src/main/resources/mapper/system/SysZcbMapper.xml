@@ -13,10 +13,12 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="delFlag" column="del_flag"/>
+        <result property="teamMembersId" column="team_members_id"/>
+        <result property="teamMembersName" column="team_members_name"/>
     </resultMap>
 
     <sql id="selectSysZcbVo">
-        select id, asset_package_name, asset_status, create_by, create_time, update_by, update_time from sys_zcb
+        select id, asset_package_name, asset_status, create_by, create_time, update_by, update_time,team_members_id,team_members_name from sys_zcb
     </sql>
 
     <select id="selectSysZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
@@ -27,6 +29,7 @@
                 #{assetPackageName}, '%')
             </if>
             <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
+            <if test="teamMembersId != null  and teamMembersId != ''">and team_members_id like concat('%',#{teamMembersId},'%')</if>
         </where>
     </select>
 
@@ -43,8 +46,8 @@
             <if test="assetStatus != null">asset_status,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
-            <if test="updateBy != null">update_by,</if>
-            <if test="updateTime != null">update_time,</if>
+            <if test="teamMembersId != null">team_members_id,</if>
+            <if test="teamMembersName != null">team_members_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -52,8 +55,8 @@
             <if test="assetStatus != null">#{assetStatus},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
-            <if test="updateBy != null">#{updateBy},</if>
-            <if test="updateTime != null">#{updateTime},</if>
+            <if test="teamMembersId != null">#{teamMembersId},</if>
+            <if test="teamMembersName != null">#{teamMembersName},</if>
         </trim>
     </insert>
 
@@ -62,8 +65,8 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="assetPackageName != null">asset_package_name = #{assetPackageName},</if>
             <if test="assetStatus != null">asset_status = #{assetStatus},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="teamMembersId != null">team_members_id = #{teamMembersId},</if>
+            <if test="teamMembersName != null">team_members_name = #{teamMembersName},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>

@@ -13,11 +13,11 @@
                             <!--<li>
                                 <label>主表ID：</label>
                                 <input type="text" name="judicialId"/>
-                            </li>-->
+                            </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
+                            </li>-->
                         </ul>
                     </div>
                 </form>
@@ -29,10 +29,10 @@
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:tagging:edit">
                     <i class="fa fa-edit"></i> 修改
-                </a>
+                </a>-->
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:tagging:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>-->
+                </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:tagging:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
@@ -106,6 +106,10 @@
                 {
                     field: 'source',
                     title: '项目来源'
+                },
+                {
+                 field: 'createBy',
+                 title: '创建人'
                 }/*,
                 {
                     title: '操作',

@@ -98,7 +98,7 @@
                 <label class="col-sm-3 control-label">项目经理：</label>
                 <div class="col-sm-8">
                     <input class="form-control" type="hidden" name="projectManagerId" id="projectManagerId">
-                    <input class="form-control" type="text" name="projectManager"  onclick="selectUserTree()" id="projectManager">
+                    <input class="form-control" type="text" name="projectManager"  onclick="selectUserTree1()" id="projectManager">
                 </div>
             </div>
             <div class="form-group">
@@ -305,8 +305,8 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">买家：</label>
                 <div class="col-sm-8">
-                    <input name="buyerId" class="form-control" type="hidden">
-                    <input name="buyer" class="form-control" type="text">
+                    <input name="buyerId" id="buyerId" class="form-control" type="hidden">
+                    <input name="buyer" id="buyer" class="form-control" type="text" onclick="selectUserTree()">
                     <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：个人写买家姓名、企业写全称)</span>
                 </div>
             </div>
@@ -405,13 +405,47 @@
             autoclose: true
         });
 
+        //人员树形选择器
+        function selectUserTree1() {
+            var options = {
+                title: '人员选择',
+                width: "750",
+                url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#projectManagerId").val() + "&selectedUserNames=" + $("#projectManager").val() + "&multiSelectFlag=true",
+                callBack: doSelect1
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSelect1(index, layero){
+
+            var body = layer.getChildFrame('body', index);
+
+            var userIds = "";
+            var userNames = "";
+            body.find("#multiselect_to option").each(function(){  //遍历所有option
+                var val = $(this).val();   //获取option值
+                var txt = $(this).text();  //获取option的文本内容
+                if(val!= '' && txt!=''){
+                    userIds = userIds + val + ",";
+                    userNames = userNames + txt + ",";
+                }
+            });
+
+            userIds = userIds.substring(0,userIds.length-1);
+            userNames = userNames.substring(0,userNames.length-1);
+
+            $("#projectManagerId").val(userIds);
+            $("#projectManager").val(userNames);
+            layer.close(index);
+        }
+
 
         //人员树形选择器
         function selectUserTree() {
             var options = {
                 title: '人员选择',
                 width: "750",
-                url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#projectManagerId").val() + "&selectedUserNames=" + $("#projectManager").val(),
+                url: ctx + "system/customer/selectCustomerTree?selectedCustomerIds=" + $("#buyerId").val() + "&selectedCustomerNames=" + $("#buyer").val() + "&multiSelectFlag=" + true,
                 callBack: doSelect
             };
             $.modal.openOptions(options);
@@ -435,10 +469,11 @@
             userIds = userIds.substring(0,userIds.length-1);
             userNames = userNames.substring(0,userNames.length-1);
 
-            $("#projectManagerId").val(userIds);
-            $("#projectManager").val(userNames);
+            $("#buyerId").val(userIds);
+            $("#buyer").val(userNames);
             layer.close(index);
         }
+
     </script>
 </body>
 </html>

@@ -12,8 +12,9 @@
 <input id="selectedUserIds"   name="selectedUserIds"    type="hidden" th:value="${selectedUserIds}"/>
 <input id="selectedUserNames" name="selectedUserNames"  type="hidden" th:value="${selectedUserNames}"/>
 <input id="multiSelectFlag" name="multiSelectFlag"  type="hidden" th:value="${multiSelectFlag}"/>
+<input id="deptId" name="deptId"  type="hidden" th:value="${deptId}"/>
 
-<!--<div class="row">
+<div class="row">
     <div class="col-xs-10">
         <div class="wrapper">
             <div class="treeShowHideButton" οnclick="$.tree.toggleSearch();">
@@ -26,7 +27,7 @@
             <button class="btn" id="btn" onclick="loadUserList()"> 搜索 </button>
         </div>
     </div>
-</div>-->
+</div>
 <div class="row">
     <div class="col-xs-4">
 
@@ -62,14 +63,19 @@
 <script th:src="@{/ajax/libs/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
 <script th:inline="javascript">
     $(function() {
-
         var url = ctx + "system/dept/treeData";
-        var options = {
-            url: url,
-            expandLevel: 2,
-            onClick : zOnClick
-        };
-        $.tree.init(options);
+        var deptId = $("#deptId").val();
+        if($.common.isEmpty(deptId)){
+            var options = {
+                url: url,
+                expandLevel: 2,
+                onClick : zOnClick
+            };
+            $.tree.init(options);
+        }else{
+            $(".treeExpandCollapse").hide();
+            $("#tree").hide();
+        }
 
         $('input[name="userName"]').on('input propertychange', function() {
             loadUserList();
@@ -132,7 +138,7 @@
 
     //加载人员方法
     function loadUserList(deptId){
-
+        var deptId = $("#deptId").val();
         //清空当前待选择人员框列表
         $("#multiselect").find("option").remove();
 

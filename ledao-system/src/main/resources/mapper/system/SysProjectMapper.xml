@@ -128,6 +128,7 @@
             <if test="lawFirm != null and lawFirm != ''">and law_firm = #{lawFirm}</if>
             <if test="debtStatus !=null and debtStatus !=''"> and debt_status = #{debtStatus}</if>
         </where>
+        ORDER BY no asc 
     </select>
 
     <select id="selectSysProjectById" parameterType="Long" resultMap="SysProjectResult">
@@ -319,7 +320,7 @@
 
     <select id="selectProject" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
-        where parent_id IS NULL AND del_flag='0' AND project_zck_id = #{projectZckId}
+        where parent_id IS NULL AND del_flag='0' AND project_zck_id = #{projectZckId} ORDER BY no asc
     </select>
 
     <select id="selectSysProjectByParentId" parameterType="SysProject" resultMap="SysProjectResult">

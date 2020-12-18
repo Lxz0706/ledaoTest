@@ -118,7 +118,7 @@ public class SysJudicial extends BaseEntity {
     @Excel(name = "项目来源")
     private String itemSource;
 
-    private String tagging;
+    private String taggings;
 
     public Long getId() {
         return id;
@@ -256,12 +256,12 @@ public class SysJudicial extends BaseEntity {
         return itemSource;
     }
 
-    public String getTagging() {
-        return tagging;
+    public String getTaggings() {
+        return taggings;
     }
 
-    public void setTagging(String tagging) {
-        this.tagging = tagging;
+    public void setTaggings(String taggings) {
+        this.taggings = taggings;
     }
 
     @Override
@@ -284,7 +284,6 @@ public class SysJudicial extends BaseEntity {
                 .append("itemCity", getItemCity())
                 .append("itemCounty", getItemCounty())
                 .append("itemSource", getItemSource())
-                .append("tagging", getTagging())
                 .toString();
     }
 }

@@ -1,10 +1,14 @@
 package com.ledao.web.controller.system;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysZck;
 import com.ledao.system.service.ISysDictTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -143,7 +147,7 @@ public class SysBgczzckController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        logger.info("ids:===="+ids);
+        logger.info("ids:====" + ids);
         return toAjax(sysBgczzckService.deleteSysBgczzckByIds(ids));
     }
 
@@ -154,7 +158,50 @@ public class SysBgczzckController extends BaseController {
     @Log(title = "重组并购项目信息库", businessType = BusinessType.DETAIL)
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
-        mmap.put("sysBgczzck", sysBgczzckService.selectSysBgczzckById(id));
+        SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(id);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###.00");
+        if (StringUtils.isNotNull(sysBgczzck.getAcquisitionCost())) {
+            sysBgczzck.setAcquisitionCosts(decimalFormat.format(sysBgczzck.getAcquisitionCost()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getContractPrincipal())) {
+            sysBgczzck.setContractPrincipals(decimalFormat.format(sysBgczzck.getContractPrincipal()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getPrincipalBalance())) {
+            sysBgczzck.setPrincipalBalances(decimalFormat.format(sysBgczzck.getPrincipalBalance()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getInterestBalance())) {
+            sysBgczzck.setInterestBalances(decimalFormat.format(sysBgczzck.getInterestBalance()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getPrincipalInterestBalance())) {
+            sysBgczzck.setPrincipalInterestBalances(decimalFormat.format(sysBgczzck.getPrincipalInterestBalance()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getLandUnitPrice())) {
+            sysBgczzck.setLandUnitPrices(decimalFormat.format(sysBgczzck.getLandUnitPrice()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getLandTotalPrice())) {
+            sysBgczzck.setLandTotalPrices(decimalFormat.format(sysBgczzck.getLandTotalPrice()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getTotalPrice())) {
+            sysBgczzck.setTotalPrices(decimalFormat.format(sysBgczzck.getTotalPrice()));
+        }
+
+        if (StringUtils.isNotNull(sysBgczzck.getContractAmount()) && StringUtils.isNotEmpty(sysBgczzck.getContractAmount())) {
+            sysBgczzck.setContractAmount(decimalFormat.format(new BigDecimal(sysBgczzck.getContractAmount())));
+        }
+        if (StringUtils.isNotNull(sysBgczzck.getBuildValuation()) && StringUtils.isNotEmpty(sysBgczzck.getBuildValuation())) {
+            sysBgczzck.setBuildValuation(decimalFormat.format(new BigDecimal(sysBgczzck.getBuildValuation())));
+        }
+        if (StringUtils.isNotNull(sysBgczzck.getCashBackAmount()) && StringUtils.isNotEmpty(sysBgczzck.getCashBackAmount())) {
+            sysBgczzck.setCashBackAmount(decimalFormat.format(new BigDecimal(sysBgczzck.getCashBackAmount())));
+        }
+        mmap.put("sysBgczzck", sysBgczzck);
         return prefix + "/detail";
     }
 
@@ -180,13 +227,8 @@ public class SysBgczzckController extends BaseController {
 
     @RequiresPermissions("system:bgczzck:list")
     @GetMapping({"/queryAll"})
-    public String queryAll(ModelMap modelMap,SysBgczzck sysBgczzck) {
-        /*modelMap.put("projectYxzName",sysBgczzck.getProjectYxzName());
-        modelMap.put("projectName",sysBgczzck.getProjectName());
-        modelMap.put("agreementName",sysBgczzck.getAgreementName());
-        modelMap.put("beginTime", getRequest().getParameter("params[beginTime]"));
-        modelMap.put("endTime",getRequest().getParameter("params[endTime]"));*/
-        modelMap.put("sysBgczzck",sysBgczzck);
+    public String queryAll(ModelMap modelMap, SysBgczzck sysBgczzck) {
+        modelMap.put("sysBgczzck", sysBgczzck);
         return "system/bgczzck/queryAll";
     }
 
@@ -199,4 +241,16 @@ public class SysBgczzckController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 客户选择器
+     */
+    @GetMapping("/listForTree")
+    @ResponseBody
+    public String listForTree(SysBgczzck sysBgczzck) {
+        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("success", true);
+        jsonObject.put("list", list);
+        return jsonObject.toString();
+    }
 }

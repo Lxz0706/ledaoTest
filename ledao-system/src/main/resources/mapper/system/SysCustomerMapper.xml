@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysCustomerMapper">
+
+    <resultMap type="SysCustomer" id="SysCustomerResult">
+        <result property="customerId" column="customer_id"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="affiliation" column="affiliation"/>
+        <result property="contacts" column="contacts"/>
+        <result property="contactNumber" column="contact_number"/>
+        <result property="duties" column="duties"/>
+        <result property="contactAddress" column="contact_address"/>
+        <result property="resources" column="resources"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="county" column="county"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysCustomerVo">
+        select customer_id, customer_name, affiliation, contacts, contact_number, duties,
+        contact_address, resources, province, city, county, del_flag, create_by, create_time, update_by, update_time from sys_customer
+    </sql>
+
+    <select id="selectSysCustomerList" parameterType="SysCustomer" resultMap="SysCustomerResult">
+        <include refid="selectSysCustomerVo"/>
+        <where>
+            del_flag = '0'
+            <if test="customerName != null  and customerName != ''">and customer_name like concat('%', #{customerName},
+                '%')
+            </if>
+            <if test="affiliation != null  and affiliation != ''">and affiliation = #{affiliation}</if>
+            <if test="contacts != null  and contacts != ''">and contacts = #{contacts}</if>
+            <if test="contactNumber != null  and contactNumber != ''">and contact_number = #{contactNumber}</if>
+            <if test="duties != null  and duties != ''">and duties = #{duties}</if>
+            <if test="contactAddress != null  and contactAddress != ''">and contact_address = #{contactAddress}</if>
+            <if test="resources != null  and resources != ''">and resources = #{resources}</if>
+            <if test="province != null  and province != ''">and province = #{province}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="county != null  and county != ''">and county = #{county}</if>
+        </where>
+    </select>
+
+    <select id="selectSysCustomerById" parameterType="Long" resultMap="SysCustomerResult">
+        <include refid="selectSysCustomerVo"/>
+        where customer_id = #{customerId} and del_flag = '0'
+    </select>
+
+    <insert id="insertSysCustomer" parameterType="SysCustomer" useGeneratedKeys="true" keyProperty="customerId">
+        insert into sys_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerName != null">customer_name,</if>
+            <if test="affiliation != null">affiliation,</if>
+            <if test="contacts != null">contacts,</if>
+            <if test="contactNumber != null">contact_number,</if>
+            <if test="duties != null">duties,</if>
+            <if test="contactAddress != null">contact_address,</if>
+            <if test="resources != null">resources,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="county != null">county,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerName != null">#{customerName},</if>
+            <if test="affiliation != null">#{affiliation},</if>
+            <if test="contacts != null">#{contacts},</if>
+            <if test="contactNumber != null">#{contactNumber},</if>
+            <if test="duties != null">#{duties},</if>
+            <if test="contactAddress != null">#{contactAddress},</if>
+            <if test="resources != null">#{resources},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="county != null">#{county},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysCustomer" parameterType="SysCustomer">
+        update sys_customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="affiliation != null">affiliation = #{affiliation},</if>
+            <if test="contacts != null">contacts = #{contacts},</if>
+            <if test="contactNumber != null">contact_number = #{contactNumber},</if>
+            <if test="duties != null">duties = #{duties},</if>
+            <if test="contactAddress != null">contact_address = #{contactAddress},</if>
+            <if test="resources != null">resources = #{resources},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="county != null">county = #{county},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where customer_id = #{customerId}
+    </update>
+
+    <delete id="deleteSysCustomerById" parameterType="Long">
+        update sys_customer set del_flag = '2' where customer_id = #{customerId}
+    </delete>
+
+    <delete id="deleteSysCustomerByIds" parameterType="String">
+        update sys_customer set del_flag = '2' where customer_id in
+        <foreach item="customerId" collection="array" open="(" separator="," close=")">
+            #{customerId}
+        </foreach>
+    </delete>
+
+</mapper>

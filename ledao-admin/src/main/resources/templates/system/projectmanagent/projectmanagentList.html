@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('项目流转表列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input type="hidden" name="projectType" id="projectType" th:value="*{projectType}"/>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:projectmanagent:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:projectmanagent:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:projectmanagent:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:projectmanagent:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:projectmanagent:remove')}]];
+        var detailFlag = [[${@permission.hasPermi('system:projectmanagent:detail')}]];
+        var prefix = ctx + "system/projectmanagent";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "项目管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'projectManagementId', 
+                    title: '主键ID',
+                    visible: false
+                },
+                {
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                /*{
+                    field: 'projectType',
+                    title: '项目类型'
+                },*/
+                {
+                    field: 'projectManagementName', 
+                    title: '项目名称'
+                },
+                {
+                    field: 'projectLeader', 
+                    title: '项目负责人'
+                },
+                {
+                    field: 'investmentAmount',
+                    title: '投资金额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'investmentDate',
+                    title: '投资日期'
+                },
+                {
+                    field: 'amountPaid',
+                    title: '目标回现金额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'entryAmount',
+                    title: '已回现金额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'serviceFee',
+                    title: '服务费结算方式',
+                    formatter:function(value, row, index){
+                        return $.table.tooltip(value);
+                    }
+                },
+                {
+                    field: 'amountDue',
+                    title: '服务费结算费率',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'amountRecovered',
+                    title: '已结算服务费',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'expectedAmount',
+                    title: '待结算服务费',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    title: '结算情况',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="money3(\'' + row.projectManagementId+'\')">结算情况</a>';
+                    }
+                },
+                {
+                    title: '最新进度情况',
+                    formatter:function(value, row, index){
+                        return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectManagementId+'\')">最新进度情况</a>';
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        function progress(id) {
+            var url = ctx + 'system/progress/progressLists/' + id + "/N";
+            $.modal.openTab("进度情况列表", url);
+        }
+
+        function detail(id) {
+            var url = prefix + '/detail/' + id;
+            $.modal.openTab("项目流转表详情", url);
+        }
+
+        function add(){
+            var projectType=$("#projectType").val();
+            $.operate.add(projectType);
+        }
+
+    </script>
+</body>
+</html>

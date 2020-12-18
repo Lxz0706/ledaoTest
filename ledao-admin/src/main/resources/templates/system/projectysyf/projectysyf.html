@@ -44,7 +44,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:projectysyf:add">
+                <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:projectysyf:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:projectysyf:edit">
@@ -53,7 +53,7 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:projectysyf:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectysyf:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectysyf:export">
                     <i class="fa fa-download"></i> 导出
                 </a>-->
             </div>
@@ -109,6 +109,12 @@
                     title: '备注'
                 },
                 {
+                    title: '附件上传查看',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                    }
+                }/*,
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -117,7 +123,7 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
-                }]
+                }*/]
             };
             $.table.init(options);
         });
@@ -125,6 +131,10 @@
         function add(){
             var projectManagementId=$("#projectManagementId").val();
             $.operate.add(projectManagementId);
+        }
+        function imgUrl(id){
+            var url = prefix + '/imgUrl/'+id;
+            $.modal.opens("附件上传查看", url);
         }
     </script>
 </body>

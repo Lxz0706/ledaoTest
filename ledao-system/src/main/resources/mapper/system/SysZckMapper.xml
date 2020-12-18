@@ -9,7 +9,7 @@
         <result property="assetPackageName" column="asset_package_name"/>
         <result property="assetStatus" column="asset_status"/>
         <result property="no" column="no"/>
-        <result property="borrower" column="borrower"/>
+        <result property="projectName" column="project_name"/>
         <result property="city" column="city"/>
         <result property="contractPrincipal" column="contract_principal"/>
         <result property="principalBalance" column="principal_balance"/>
@@ -99,10 +99,11 @@
         <result property="zcbId" column="zcb_id"/>
         <result property="delFlag" column="del_flag"/>
         <result property="parentId" column="parent_id"/>
+        <result property="gzjy" column="gzjy"/>
     </resultMap>
 
     <sql id="selectSysZckVo">
-        select id, asset_package_name, asset_status, no, borrower, city, contract_principal, principal_balance,
+        select id, asset_package_name, asset_status, no, project_name, city, contract_principal, principal_balance,
         interest_balance, principal_interest_balance, bxjs_date, loan_bank, loan_contract_no, loan_time, guarantor,
         bzr_zrr_number, bzr_fr_number, guarantee_amount, guarantee_contract_no, guarantee_contract_sign_time,
         maximum_guarantee_amount, maximum_guarantee_contract, maximum_guaratntee_sign_time, zzq_date_Time, guarantee_mode,
@@ -113,7 +114,7 @@
         plot_ratio, access, land_area, build_structure, completion_date, floors, collate_type, floorage, land_unit_price,
         land_total_price, other_collateral_unit_price, other_collateral_total_price, total_price, valuation_basis, cap_value,
         dzyw_remark, borrower_wsqk, property_clues, zhhknl, jkrgz_remark, price, desposal_mode, desposal_price, customer, create_by,
-        create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning,zcb_id,parent_id from sys_zck
+        create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning,zcb_id,parent_id,gzjy from sys_zck
     </sql>
 
     <select id="selectSysZckList" parameterType="SysZck" resultMap="SysZckResult">
@@ -133,7 +134,9 @@
                 AND asset_status = #{assetStatus}
             </if>
             <if test="no != null ">and no like concat ('%',#{no },'%')</if>
-            <if test="borrower != null  and borrower != ''">and borrower like concat ('%',#{borrower},'%')</if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat
+                ('%',#{projectName},'%')
+            </if>
             <if test="city != null  and city != ''">and city like concat ('%',#{city},'%')</if>
             <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
             <if test="principalBalance != null and principalBalance !=''">and principal_balance like concat
@@ -246,22 +249,32 @@
             <if test="zcbId !=null and zcbId !=''">and zcb_id=#{zcbId}</if>
             <if test="parentId !=null and parentId !=''">and parent_id=#{parentId}</if>
         </where>
+        ORDER BY no
     </select>
 
     <select id="queryAll" parameterType="SysZck" resultMap="SysZckResult">
-        select z1.id, z1.asset_package_name, z1.asset_status, no, borrower, city, contract_principal, principal_balance,
+        select z1.id, z1.asset_package_name, z1.asset_status, no, project_name, city, contract_principal,
+        principal_balance,
         interest_balance, principal_interest_balance, bxjs_date, loan_bank, loan_contract_no, loan_time, guarantor,
         bzr_zrr_number, bzr_fr_number, guarantee_amount, guarantee_contract_no, guarantee_contract_sign_time,
-        maximum_guarantee_amount, maximum_guarantee_contract, maximum_guaratntee_sign_time, zzq_date_Time, guarantee_mode,
+        maximum_guarantee_amount, maximum_guarantee_contract, maximum_guaratntee_sign_time, zzq_date_Time,
+        guarantee_mode,
         guarantee_period, guarantee_remarks, asset_nature, address, qs_no, area, seal_up, mortgage, other_remark,
-        jkr_industry, soe, operation, court, litigation, judicial_remark, dyw_address, mortgage_amount, mortgage_contract_no,
-        maximum_mortgage_contract_no, zge_contract_time, dbzzq_time, mortgagor, zge_qs_no, tx_qz_no, case_no, mortgage_rank,
-        qxsw_mortgeage_amount, before_or_ater_aarrival, rental_details, juveniles, only_house, tengfang, nature_land, sysynx,
-        plot_ratio, access, land_area, build_structure, completion_date, floors, collate_type, floorage, land_unit_price,
-        land_total_price, other_collateral_unit_price, other_collateral_total_price, total_price, valuation_basis, cap_value,
-        dzyw_remark, borrower_wsqk, property_clues, zhhknl, jkrgz_remark, price, desposal_mode, desposal_price, customer, z1.create_by,
-        z1.create_time, z1.update_by, z1.update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning,zcb_id,parent_id from sys_zck
-         z1 inner  join  sys_zcb z2 on z1.zcb_id=z2.id
+        jkr_industry, soe, operation, court, litigation, judicial_remark, dyw_address, mortgage_amount,
+        mortgage_contract_no,
+        maximum_mortgage_contract_no, zge_contract_time, dbzzq_time, mortgagor, zge_qs_no, tx_qz_no, case_no,
+        mortgage_rank,
+        qxsw_mortgeage_amount, before_or_ater_aarrival, rental_details, juveniles, only_house, tengfang, nature_land,
+        sysynx,
+        plot_ratio, access, land_area, build_structure, completion_date, floors, collate_type, floorage,
+        land_unit_price,
+        land_total_price, other_collateral_unit_price, other_collateral_total_price, total_price, valuation_basis,
+        cap_value,
+        dzyw_remark, borrower_wsqk, property_clues, zhhknl, jkrgz_remark, price, desposal_mode, desposal_price,
+        customer, z1.create_by,
+        z1.create_time, z1.update_by, z1.update_time,dzywqd_time, maximum_mortgage_amount,rental_situation,
+        zoning,zcb_id,parent_id,gzjy from sys_zck
+        z1 inner join sys_zcb z2 on z1.zcb_id=z2.id
         <where>
             z1.del_flag='0'
             <if test="assetPackageName != null  and assetPackageName != ''">and z1.asset_package_name like concat('%',
@@ -271,7 +284,9 @@
                 AND z1.asset_status = #{asset_status}
             </if>
             <if test="no != null ">and z1.no like concat ('%',#{no },'%')</if>
-            <if test="borrower != null  and borrower != ''">and z1.borrower like concat ('%',#{borrower },'%')</if>
+            <if test="projectName != null  and projectName != ''">and z1.project_name like concat
+                ('%',#{projectName},'%')
+            </if>
             <if test="city != null  and city != ''">and z1.city like concat ('%',#{city},'%')</if>
             <if test="contractPrincipal != null ">and z1.contract_principal = #{contractPrincipal}</if>
             <if test="principalBalance != null and principalBalance !=''">and z1.principal_balance like concat
@@ -303,7 +318,8 @@
             </if>
             <if test="zzqDateTime != null  and zzqDateTime != ''">and z1.zzq_date_Time = #{zzqDateTime}</if>
             <if test="guaranteeMode != null  and guaranteeMode != ''">and z1.guarantee_mode = #{guaranteeMode}</if>
-            <if test="guaranteePeriod != null  and guaranteePeriod != ''">and z1.guarantee_period = #{guaranteePeriod}</if>
+            <if test="guaranteePeriod != null  and guaranteePeriod != ''">and z1.guarantee_period = #{guaranteePeriod}
+            </if>
             <if test="guaranteeRemarks != null  and guaranteeRemarks != ''">and z1.guarantee_remarks =
                 #{guaranteeRemarks}
             </if>
@@ -360,7 +376,8 @@
             <if test="floorage != null ">and z1.floorage like concat ('%',#{floorage },'%')</if>
             <if test="landUnitPrice != null ">and z1.land_unit_price = #{landUnitPrice}</if>
             <if test="landTotalPrice != null ">and z1.land_total_price = #{landTotalPrice}</if>
-            <if test="otherCollateralUnitPrice != null ">and z1.other_collateral_unit_price = #{otherCollateralUnitPrice}
+            <if test="otherCollateralUnitPrice != null ">and z1.other_collateral_unit_price =
+                #{otherCollateralUnitPrice}
             </if>
             <if test="otherCollateralTotalPrice != null ">and z1.other_collateral_total_price =
                 #{otherCollateralTotalPrice}
@@ -379,17 +396,19 @@
             <if test="customer != null  and customer != ''">and z1.customer = #{customer}</if>
             <if test="dzywqdTime != null ">and z1.dzywqd_time = #{dzywqdTime}</if>
             <if test="maximumMortgageAmount != null ">and z1.maximum_mortgage_amount = #{maximumMortgageAmount}</if>
-            <if test="rentalSituation != null  and rentalSituation != ''">and z1.rental_situation = #{rentalSituation}</if>
+            <if test="rentalSituation != null  and rentalSituation != ''">and z1.rental_situation = #{rentalSituation}
+            </if>
             <if test="zoning != null  and zoning != ''">and z1.zoning = #{zoning}</if>
             <if test="zcbId !=null and zcbId !=''">and z1.zcb_id=#{zcbId}</if>
             <if test="parentId !=null and parentId !=''">and z1.parent_id=#{parentId}</if>
             <if test="zcbStatus !=null and zcbStatus !=''">and z2.asset_status=#{zcbStatus}</if>
         </where>
+        ORDER BY no
     </select>
 
     <select id="selectSysZckById" parameterType="Long" resultMap="SysZckResult">
         <include refid="selectSysZckVo"/>
-        where id = #{id} and del_flag='0'
+        where id = #{id} and del_flag='0' ORDER BY no
     </select>
 
     <insert id="insertSysZck" parameterType="SysZck" useGeneratedKeys="true" keyProperty="id">
@@ -399,7 +418,7 @@
             <if test="assetPackageName != null and assetPackageName != '' ">asset_package_name,</if>
             <if test="assetStatus != null and assetStatus != '' ">asset_status,</if>
             <if test="no != null and no != '' ">no,</if>
-            <if test="borrower != null and borrower != '' ">borrower,</if>
+            <if test="projectName != null and projectName != '' ">project_name,</if>
             <if test="city != null and city != '' ">city,</if>
             <if test="contractPrincipal != null and contractPrincipal != '' ">contract_principal,</if>
             <if test="principalBalance != null and principalBalance != '' ">principal_balance,</if>
@@ -498,6 +517,7 @@
             <if test="zoning != null">zoning,</if>
             <if test="zcbId !=null and zcbId !=''">zcb_id,</if>
             <if test="parentId !=null and parentId !=''">parent_id,</if>
+            <if test="gzjy !=null and gzjy !=''">gzjy,</if>
             <if test="createBy != null and createBy != '' ">create_by,</if>
             create_time
         </trim>
@@ -506,7 +526,7 @@
             <if test="assetPackageName != null and assetPackageName != ''">#{assetPackageName},</if>
             <if test="assetStatus != null and assetStatus != ''">#{assetStatus},</if>
             <if test="no != null and no != ''">#{no},</if>
-            <if test="borrower != null and borrower != ''">#{borrower},</if>
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
             <if test="city != null and city != ''">#{city},</if>
             <if test="contractPrincipal != null and contractPrincipal != ''">#{contractPrincipal},</if>
             <if test="principalBalance != null and principalBalance != ''">#{principalBalance},</if>
@@ -605,6 +625,7 @@
             <if test="zoning != null">#{zoning},</if>
             <if test="zcbId !=null and zcbId !=''">#{zcbId},</if>
             <if test="parentId !=null and parentId !=''">#{parentId},</if>
+            <if test="gzjy !=null and gzjy !=''">#{gzjy},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             sysdate()
         </trim>
@@ -618,7 +639,7 @@
             </if>
             <if test="assetStatus != null  and assetStatus != ''  ">asset_status = #{assetStatus},</if>
             <if test="no != null  ">no = #{no},</if>
-            <if test="borrower != null  and borrower != ''  ">borrower = #{borrower},</if>
+            <if test="projectName != null  and projectName != ''  ">project_name = #{projectName},</if>
             <if test="city != null  and city != ''  ">city = #{city},</if>
             <if test="contractPrincipal != null  ">contract_principal = #{contractPrincipal},</if>
             <if test="principalBalance != null  ">principal_balance = #{principalBalance},</if>
@@ -720,6 +741,7 @@
             <if test="rentalSituation != null">rental_situation = #{rentalSituation},</if>
             <if test="zoning != null">zoning = #{zoning},</if>
             <if test="parentId !=null">parent_id =#{parentId},</if>
+            <if test="gzjy !=null">gzjy = #{gzjy},</if>
             <if test="updateBy != null  ">update_by = #{updateBy},</if>
             update_time = sysdate()
         </trim>
@@ -739,12 +761,12 @@
 
     <select id="selectSysZckByZcbId" parameterType="Long" resultMap="SysZckResult">
         <include refid="selectSysZckVo"/>
-        where zcb_id = #{id} and del_flag='0'
+        where zcb_id = #{id} and del_flag='0' ORDER BY no
     </select>
 
     <select id="selectSysZck" parameterType="SysZck" resultMap="SysZckResult">
         <include refid="selectSysZckVo"/>
-        where  parent_id IS NULL AND del_flag='0' AND zcb_id=#{zcbId}
+        where parent_id IS NULL AND del_flag='0' AND zcb_id=#{zcbId} order by no
     </select>
 
     <select id="selectSysZckByParentId" parameterType="SysZck" resultMap="SysZckResult">

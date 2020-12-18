@@ -33,19 +33,31 @@
                     <input name="amountMoney" th:field="*{amountMoney}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
+                <label class="col-sm-3 control-label">付款主体：</label>
+                <div class="col-sm-8">
+                    <textarea name="paymentSubject" class="form-control">[[*{paymentSubject}]]</textarea>
+                </div>
+            </div>
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">状态：</label>
                 <div class="col-sm-8">
                     <select name="state" class="form-control m-b" th:with="type=${@dict.getType('sys_project_moneyStatus')}">
-                        <option value="">--请选择一条数据--</option>
+                        <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{state}"></option>
                     </select>
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">
                 <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">
                     <textarea name="remarks" class="form-control">[[*{remarks}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">财务确认意见（此填写栏仅限于财务填写）：</label>
+                <div class="col-sm-8">
+                    <textarea name="finance" class="form-control">[[*{finance}]]</textarea>
                 </div>
             </div>
         </form>

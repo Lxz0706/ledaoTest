@@ -58,4 +58,10 @@ public interface SysProjectmanagentMapper {
      * @return 结果
      */
     public int deleteSysProjectmanagentByIds(String[] projectManagementIds);
+
+    /**
+     * 根据类型分类查询
+     */
+    public List<SysProjectmanagent> selectSysProjectmanagentListByProjectType();
+
 }

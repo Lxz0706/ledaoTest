@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysBusinesscardMapper">
+
+    <resultMap type="SysBusinesscard" id="SysBusinesscardResult">
+        <result property="id" column="id"/>
+        <result property="cardData" column="card_data"/>
+        <result property="cardBase64" column="card_base64"/>
+        <result property="cardImageid" column="card_imageid"/>
+    </resultMap>
+
+    <sql id="selectSysBusinesscardVo">
+        select id, card_data, card_base64, card_imageid from sys_businesscard
+    </sql>
+
+    <select id="selectSysBusinesscardList" parameterType="SysBusinesscard" resultMap="SysBusinesscardResult">
+        <include refid="selectSysBusinesscardVo"/>
+        <where>
+            <if test="cardData != null  and cardData != ''">and card_data = #{cardData}</if>
+            <if test="cardBase64 != null  and cardBase64 != ''">and card_base64 = #{cardBase64}</if>
+            <if test="cardImageid != null  and cardImageid != ''">and card_imageid = #{cardImageid}</if>
+        </where>
+    </select>
+
+    <select id="selectSysBusinesscardById" parameterType="Long" resultMap="SysBusinesscardResult">
+        <include refid="selectSysBusinesscardVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysBusinesscard" parameterType="SysBusinesscard" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_businesscard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cardData != null">card_data,</if>
+            <if test="cardBase64 != null and cardBase64 != ''">card_base64,</if>
+            <if test="cardImageid != null">card_imageid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cardData != null">#{cardData},</if>
+            <if test="cardBase64 != null and cardBase64 != ''">#{cardBase64},</if>
+            <if test="cardImageid != null">#{cardImageid},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysBusinesscard" parameterType="SysBusinesscard">
+        update sys_businesscard
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cardData != null">card_data = #{cardData},</if>
+            <if test="cardBase64 != null and cardBase64 != ''">card_base64 = #{cardBase64},</if>
+            <if test="cardImageid != null">card_imageid = #{cardImageid},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysBusinesscardById" parameterType="Long">
+        delete from sys_businesscard where id = #{id}
+    </delete>
+
+    <delete id="deleteSysBusinesscardByIds" parameterType="String">
+        delete from sys_businesscard where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

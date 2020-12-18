@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysItemMapper">
+
+    <resultMap type="SysItem" id="SysItemResult">
+        <result property="itemId" column="item_id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="customerLable" column="customer_lable"/>
+        <result property="gmv" column="gmv"/>
+        <result property="tradeDate" column="trade_date"/>
+        <result property="remarks" column="remarks"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="projectName" column="project_name"/>
+    </resultMap>
+
+    <sql id="selectSysItemVo">
+        select item_id, customer_id, project_id, customer_lable, gmv, trade_date, remarks, del_flag, create_by, create_time, update_by, update_time,project_name from sys_item
+    </sql>
+
+    <select id="selectSysItemList" parameterType="SysItem" resultMap="SysItemResult">
+        <include refid="selectSysItemVo"/>
+        <where>
+            <if test="customerId != null ">and customer_id = #{customerId}</if>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="customerLable != null  and customerLable != ''">and customer_lable = #{customerLable}</if>
+            <if test="gmv != null ">and gmv = #{gmv}</if>
+            <if test="tradeDate != null ">and trade_date = #{tradeDate}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="projectName != null">and project_name like concat ('%', #{projectName},'%')</if>
+            <if test="createBy != null and createBy != ''">AND create_by like concat('%', #{createBy}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectSysItemById" parameterType="Long" resultMap="SysItemResult">
+        <include refid="selectSysItemVo"/>
+        where item_id = #{itemId}
+    </select>
+
+    <insert id="insertSysItem" parameterType="SysItem" useGeneratedKeys="true" keyProperty="itemId">
+        insert into sys_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="customerLable != null">customer_lable,</if>
+            <if test="gmv != null">gmv,</if>
+            <if test="tradeDate != null">trade_date,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="projectName != null">project_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="customerLable != null">#{customerLable},</if>
+            <if test="gmv != null">#{gmv},</if>
+            <if test="tradeDate != null">#{tradeDate},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="projectName != null">#{projectName},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysItem" parameterType="SysItem">
+        update sys_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="customerLable != null">customer_lable = #{customerLable},</if>
+            <if test="gmv != null">gmv = #{gmv},</if>
+            <if test="tradeDate != null">trade_date = #{tradeDate},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+        </trim>
+        where item_id = #{itemId}
+    </update>
+
+    <delete id="deleteSysItemById" parameterType="Long">
+        delete from sys_item where item_id = #{itemId}
+    </delete>
+
+    <delete id="deleteSysItemByIds" parameterType="String">
+        delete from sys_item where item_id in
+        <foreach item="itemId" collection="array" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </delete>
+
+</mapper>

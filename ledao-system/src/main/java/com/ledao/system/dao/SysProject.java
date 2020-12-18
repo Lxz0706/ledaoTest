@@ -38,7 +38,7 @@ public class SysProject extends BaseEntity {
      * 序号
      */
     @Excel(name = "序号")
-    private String no;
+    private Long no;
 
     /**
      * 借款人名称
@@ -310,6 +310,41 @@ public class SysProject extends BaseEntity {
     @Excel(name = "债权状态")
     private String debtStatus;
 
+    /**
+     * 现金回现
+     */
+    private BigDecimal recapture;
+
+    /**
+     * 合同本金中的总利息
+     */
+    private BigDecimal totalInterest;
+
+    /**
+     * 合同本金格式化
+     */
+    private String contractPrincipals;
+
+    /**
+     * 本金余额
+     */
+    private String principalBalances;
+
+    /**
+     * 利息余额
+     */
+    private String interestBalances;
+
+    /**
+     * 本息余额
+     */
+    private String principalInterestBalances;
+
+    /**
+     * 总本金余额
+     * */
+    private BigDecimal TotalPrincipalBalance;
+
     public Long getProjectId() {
         return projectId;
     }
@@ -334,12 +369,12 @@ public class SysProject extends BaseEntity {
         return assetStatus;
     }
 
-    public void setNo(String no) {
-        this.no = no;
+    public Long getNo() {
+        return no;
     }
 
-    public String getNo() {
-        return no;
+    public void setNo(Long no) {
+        this.no = no;
     }
 
     public void setBorrower(String borrower) {
@@ -716,6 +751,62 @@ public class SysProject extends BaseEntity {
 
     public void setDebtStatus(String debtStatus) {
         this.debtStatus = debtStatus;
+    }
+
+    public BigDecimal getRecapture() {
+        return recapture;
+    }
+
+    public void setRecapture(BigDecimal recapture) {
+        this.recapture = recapture;
+    }
+
+    public BigDecimal getTotalInterest() {
+        return totalInterest;
+    }
+
+    public void setTotalInterest(BigDecimal totalInterest) {
+        this.totalInterest = totalInterest;
+    }
+
+    public String getContractPrincipals() {
+        return contractPrincipals;
+    }
+
+    public void setContractPrincipals(String contractPrincipals) {
+        this.contractPrincipals = contractPrincipals;
+    }
+
+    public String getPrincipalBalances() {
+        return principalBalances;
+    }
+
+    public void setPrincipalBalances(String principalBalances) {
+        this.principalBalances = principalBalances;
+    }
+
+    public String getInterestBalances() {
+        return interestBalances;
+    }
+
+    public void setInterestBalances(String interestBalances) {
+        this.interestBalances = interestBalances;
+    }
+
+    public String getPrincipalInterestBalances() {
+        return principalInterestBalances;
+    }
+
+    public void setPrincipalInterestBalances(String principalInterestBalances) {
+        this.principalInterestBalances = principalInterestBalances;
+    }
+
+    public BigDecimal getTotalPrincipalBalance() {
+        return TotalPrincipalBalance;
+    }
+
+    public void setTotalPrincipalBalance(BigDecimal totalPrincipalBalance) {
+        TotalPrincipalBalance = totalPrincipalBalance;
     }
 
     @Override

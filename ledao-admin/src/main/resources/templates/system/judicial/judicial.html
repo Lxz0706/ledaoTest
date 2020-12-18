@@ -142,11 +142,17 @@
                 },
                 {
                     field: 'itemInitialprice',
-                    title: '项目起拍价'
+                    title: '项目起拍价',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'itemCurrentprice',
-                    title: '当前/成交价'
+                    title: '当前/成交价',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'itemStartTime',
@@ -172,6 +178,7 @@
                     title: '项目来源'
                 },
                 {
+                    field: '',
                     title: '是否加入星标库',
                     formatter: function (value, row, index) {
                         return statusTools(row);
@@ -188,7 +195,7 @@
         });
 
         function statusTools(row){
-            if(row.tagging == 'Y'){
+            if(row.taggings == 'Y'){
                 return '<a href="javascript:void(0)" onclick="detail1(\'' + row.id+'\')">★</a>';
             }else {
                 return '<a href="javascript:void(0)" onclick="detail(\'' + row.id+'\')">☆</a>';
@@ -196,15 +203,15 @@
         }
 
         function detail(id){
-            $.modal.confirm("确认要加入星标库吗？", function () {
-                $.operate.post(prefix + "/addTagging", {"judicialId": id});
-            })
+            $.modal.confirm("确认要将该条数据添加到星标库吗？", function () {
+                $.operate.post(prefix + "/addTagging", {"judicialId": id });
+            });
         }
 
         function detail1(id){
-            $.modal.confirm("确认要从星标库删除该条吗？", function () {
-                $.operate.post(prefix + "/removeTagging", {"judicialId": id});
-            })
+            $.modal.confirm("确认要将该条数据从星标库中删除吗？", function () {
+                $.operate.post(prefix + "/removeTagging", {"judicialId": id });
+            });
         }
     </script>
 </body>

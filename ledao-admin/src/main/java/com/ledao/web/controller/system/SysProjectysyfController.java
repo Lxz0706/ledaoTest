@@ -125,4 +125,13 @@ public class SysProjectysyfController extends BaseController {
         modelMap.put("projectManagementId", projectManagementId);
         return "system/projectysyf/projectysyf";
     }
+
+    /**
+     * 修改头像
+     */
+    @GetMapping("/imgUrl/{id}")
+    public String avatar(@PathVariable("id") String id, ModelMap mmap) {
+        mmap.put("sysProjectysyf", sysProjectysyfService.selectSysProjectysyfById(Long.valueOf(id)));
+        return prefix + "/imgUrl";
+    }
 }

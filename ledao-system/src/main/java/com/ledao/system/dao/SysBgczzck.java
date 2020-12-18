@@ -58,11 +58,15 @@ public class SysBgczzck extends BaseEntity {
     @Excel(name = "取得成本")
     private BigDecimal acquisitionCost;
 
+    private String acquisitionCosts;
+
     /**
      * 合同本金
      */
     @Excel(name = "合同本金")
     private BigDecimal contractPrincipal;
+
+    private String contractPrincipals;
 
     /**
      * 本金余额
@@ -70,17 +74,23 @@ public class SysBgczzck extends BaseEntity {
     @Excel(name = "本金余额")
     private BigDecimal principalBalance;
 
+    private String principalBalances;
+
     /**
      * 利息余额
      */
     @Excel(name = "利息余额")
     private BigDecimal interestBalance;
 
+    private String interestBalances;
+
     /**
      * 本息余额
      */
     @Excel(name = "本息余额")
     private BigDecimal principalInterestBalance;
+
+    private String principalInterestBalances;
 
     /**
      * 本息计算基准日
@@ -234,7 +244,7 @@ public class SysBgczzck extends BaseEntity {
 
     /**
      * 备注
-     * */
+     */
     @Excel(name = "备注")
     private String comment;
 
@@ -308,6 +318,8 @@ public class SysBgczzck extends BaseEntity {
     @Excel(name = "土地单价(元/亩)")
     private BigDecimal landUnitPrice;
 
+    private String landUnitPrices;
+
     /**
      * 建筑估值
      */
@@ -319,6 +331,8 @@ public class SysBgczzck extends BaseEntity {
      */
     @Excel(name = "土地总价")
     private BigDecimal landTotalPrice;
+
+    private String landTotalPrices;
 
     /**
      * 其它附属物
@@ -337,6 +351,8 @@ public class SysBgczzck extends BaseEntity {
      */
     @Excel(name = "总价")
     private BigDecimal totalPrice;
+
+    private String totalPrices;
 
     /**
      * 项目估值备注
@@ -999,6 +1015,70 @@ public class SysBgczzck extends BaseEntity {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getAcquisitionCosts() {
+        return acquisitionCosts;
+    }
+
+    public void setAcquisitionCosts(String acquisitionCosts) {
+        this.acquisitionCosts = acquisitionCosts;
+    }
+
+    public String getContractPrincipals() {
+        return contractPrincipals;
+    }
+
+    public void setContractPrincipals(String contractPrincipals) {
+        this.contractPrincipals = contractPrincipals;
+    }
+
+    public String getPrincipalBalances() {
+        return principalBalances;
+    }
+
+    public void setPrincipalBalances(String principalBalances) {
+        this.principalBalances = principalBalances;
+    }
+
+    public String getInterestBalances() {
+        return interestBalances;
+    }
+
+    public void setInterestBalances(String interestBalances) {
+        this.interestBalances = interestBalances;
+    }
+
+    public String getPrincipalInterestBalances() {
+        return principalInterestBalances;
+    }
+
+    public void setPrincipalInterestBalances(String principalInterestBalances) {
+        this.principalInterestBalances = principalInterestBalances;
+    }
+
+    public String getLandUnitPrices() {
+        return landUnitPrices;
+    }
+
+    public void setLandUnitPrices(String landUnitPrices) {
+        this.landUnitPrices = landUnitPrices;
+    }
+
+    public String getLandTotalPrices() {
+        return landTotalPrices;
+    }
+
+    public void setLandTotalPrices(String landTotalPrices) {
+        this.landTotalPrices = landTotalPrices;
+    }
+
+    public String getTotalPrices() {
+        return totalPrices;
+    }
+
+    public void setTotalPrices(String totalPrices) {
+        this.totalPrices = totalPrices;
     }
 
     @Override

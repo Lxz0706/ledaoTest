@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.annotation.RepeatSubmit;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysTagging;
@@ -53,17 +54,20 @@ public class SysJudicialController extends BaseController {
     @RequiresPermissions("system:judicial:list")
     @PostMapping("/list")
     @ResponseBody
+    @RepeatSubmit
     public TableDataInfo list(SysJudicial sysJudicial) {
         startPage();
         List<SysJudicial> list = sysJudicialService.selectSysJudicialList(sysJudicial);
-        /*for (SysJudicial sysJudicial1 : list) {
-            SysTagging sysTagging = sysTaggingService.selectSysTaggingByJudicialId(sysJudicial1.getId());
-            if (StringUtils.isNotNull(sysTagging)) {
-                sysJudicial1.setTagging("Y");
-            } else {
-                sysJudicial1.setTagging("N");
+        for (SysJudicial sysJudicial1 : list) {
+            SysTagging sysTagging = new SysTagging();
+            sysTagging.setCreateBy(ShiroUtils.getLoginName());
+            sysTagging.setJudicialId(sysJudicial1.getId());
+            List<SysTagging> sysTaggingList = sysTaggingService.selectSysTaggingList(sysTagging);
+            if (sysTaggingList.size() > 0) {
+                sysJudicial1.setTaggings("Y");
             }
-        }*/
+        }
+
         return getDataTable(list);
     }
 
@@ -77,7 +81,7 @@ public class SysJudicialController extends BaseController {
     public AjaxResult export(SysJudicial sysJudicial) {
         List<SysJudicial> list = sysJudicialService.selectSysJudicialList(sysJudicial);
         ExcelUtil<SysJudicial> util = new ExcelUtil<SysJudicial>(SysJudicial.class);
-        return util.exportExcel(list, "judicial");
+        return util.exportExcel(list, "司法拍卖");
     }
 
     /**
@@ -139,15 +143,12 @@ public class SysJudicialController extends BaseController {
     @Log(title = "星标库", businessType = BusinessType.INSERT)
     @PostMapping("/addTagging")
     @ResponseBody
+    @RepeatSubmit
     public AjaxResult addTagging(SysTagging sysTagging) {
-        SysJudicial sysJudicial = new SysJudicial();
-        sysJudicial.setId(sysTagging.getJudicialId());
-        sysJudicial.setTagging("Y");
-        sysJudicial.setUpdateBy(ShiroUtils.getLoginName());
-        sysJudicialService.updateSysJudicial(sysJudicial);
         sysTagging.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysTaggingService.insertSysTagging(sysTagging));
     }
+
 
     /**
      * 删除星标库
@@ -156,13 +157,8 @@ public class SysJudicialController extends BaseController {
     @Log(title = "星标库", businessType = BusinessType.DELETE)
     @PostMapping("/removeTagging")
     @ResponseBody
+    @RepeatSubmit
     public AjaxResult removeTagging(SysTagging sysTagging) {
-        SysJudicial sysJudicial = new SysJudicial();
-        sysJudicial.setId(sysTagging.getJudicialId());
-        sysJudicial.setTagging("");
-        sysJudicial.setUpdateBy(ShiroUtils.getLoginName());
-        sysJudicialService.updateSysJudicial(sysJudicial);
-
         SysTagging sysTagging1 = sysTaggingService.selectSysTaggingByJudicialId(sysTagging.getJudicialId());
         return toAjax(sysTaggingService.deleteSysTaggingById(sysTagging1.getId()));
     }

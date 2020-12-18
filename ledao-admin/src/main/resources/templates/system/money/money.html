@@ -113,23 +113,40 @@
                     }
                 },
                 {
-                    field: 'state', 
-                    title: '状态'
+                    field: 'paymentSubject',
+                    title: '付款主体'
                 },
                 {
                     field: 'remarks',
                     title: '备注'
                 },
                 {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '财务确认',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    title: '财务确认意见',
+                    field: 'finance'
+                },
+                {
+                    title: '附件上传查看',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                    }
+                }/*,
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
-                }]
+                }*/]
             };
             $.table.init(options);
         });
@@ -137,6 +154,34 @@
         function add(){
             var projectManagementId=$("#projectManagementId").val();
             $.operate.add(projectManagementId);
+        }
+
+        /* 用户状态显示 */
+        function statusTools(row) {
+            if (row.state == "否") {
+                return '<i class=\"fa fa-toggle-off\" style="font-size: 200%" onclick="enable(\'' + row.id + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info\" style="font-size: 200%" onclick="disable(\'' + row.id + '\')"></i> ';
+            }
+        }
+
+        /* 财务是否确认-是 */
+        function disable(id) {
+            $.modal.confirm("确认未收到该条款项吗？", function () {
+                $.operate.post(prefix + "/changeStatus", {"id": id, "state": "否"});
+            })
+        }
+
+        /* 财务是否确认-是 */
+        function enable(id) {
+            $.modal.confirm("确认收到该条款项吗？", function () {
+                $.operate.post(prefix + "/changeStatus", {"id": id, "state": "是"});
+            })
+        }
+
+        function imgUrl(id){
+            var url = prefix + '/imgUrl/'+id;
+            $.modal.open("附件上传查看", url);
         }
     </script>
 </body>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysProjectTypeMapper">
+
+    <resultMap type="SysProjectType" id="SysProjectTypeResult">
+        <result property="projectType" column="project_type"/>
+    </resultMap>
+
+    <sql id="selectSysProjectTypeVo">
+        select project_type from sys_project_type
+    </sql>
+
+    <select id="selectSysProjectTypeList" parameterType="SysProjectType" resultMap="SysProjectTypeResult">
+        <include refid="selectSysProjectTypeVo"/>
+        <where>
+            <if test="projectType != null  and projectType != ''">and project_type = #{projectType}</if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectTypeById" parameterType="String" resultMap="SysProjectTypeResult">
+        <include refid="selectSysProjectTypeVo"/>
+        where project_type = #{projectType}
+    </select>
+
+    <insert id="insertSysProjectType" parameterType="SysProjectType">
+        insert into sys_project_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectType != null">project_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectType != null">#{projectType},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectType" parameterType="SysProjectType">
+        update sys_project_type
+        <trim prefix="SET" suffixOverrides=",">
+        </trim>
+        where project_type = #{projectType}
+    </update>
+
+    <delete id="deleteSysProjectTypeById" parameterType="String">
+        delete from sys_project_type where project_type = #{projectType}
+    </delete>
+
+    <delete id="deleteSysProjectTypeByIds" parameterType="String">
+        delete from sys_project_type where project_type in
+        <foreach item="projectType" collection="array" open="(" separator="," close=")">
+            #{projectType}
+        </foreach>
+    </delete>
+
+</mapper>

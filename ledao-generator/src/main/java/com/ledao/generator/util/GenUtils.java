@@ -148,7 +148,6 @@ public class GenUtils {
             tableName = replaceFirst(tableName, searchList);
         }
 
-        System.out.println("表名：======" + tableName);
         return StringUtils.convertToCamelCase(tableName);
     }
 

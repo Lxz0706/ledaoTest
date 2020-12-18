@@ -59,6 +59,21 @@ public class SysProjectUncollectedMoney extends BaseEntity {
 
     private String remarks;
 
+    /**
+     * 财务确认意见
+     */
+    private String finance;
+
+    /**
+     * 付款主体
+     */
+    private String paymentSubject;
+
+    /**
+     * 图片路径
+     */
+    private String imgUrl;
+
     public Long getId() {
         return id;
     }
@@ -123,6 +138,30 @@ public class SysProjectUncollectedMoney extends BaseEntity {
         this.remarks = remarks;
     }
 
+    public String getFinance() {
+        return finance;
+    }
+
+    public void setFinance(String finance) {
+        this.finance = finance;
+    }
+
+    public String getPaymentSubject() {
+        return paymentSubject;
+    }
+
+    public void setPaymentSubject(String paymentSubject) {
+        this.paymentSubject = paymentSubject;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -138,6 +177,9 @@ public class SysProjectUncollectedMoney extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("remarks", getRemarks())
+                .append("finance", getFinance())
+                .append("paymentSubject", getPaymentSubject())
+                .append("imgUrl", getImgUrl())
                 .toString();
     }
 }

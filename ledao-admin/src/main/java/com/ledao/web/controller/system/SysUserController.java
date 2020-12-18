@@ -3,6 +3,7 @@ package com.ledao.web.controller.system;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysDept;
 import com.ledao.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -266,11 +267,17 @@ public class SysUserController extends BaseController {
      * 选择人员树
      */
     @GetMapping("/selectUserTree")
-    public String selectUserTree(String selectedUserIds, String selectedUserNames, Boolean multiSelectFlag, ModelMap mmap) {
+    public String selectUserTree(String selectedUserIds, String selectedUserNames, Boolean multiSelectFlag, ModelMap mmap, Boolean deptId) {
         mmap.put("dept", deptService.selectDeptById((long) 100));
         mmap.put("selectedUserIds", selectedUserIds);
         mmap.put("selectedUserNames", selectedUserNames);
         mmap.put("multiSelectFlag", multiSelectFlag);
+        if (StringUtils.isNotNull(deptId)) {
+            if (deptId == true) {
+                mmap.put("deptId", "201");
+            }
+        }
+
         return prefix + "/tree";
     }
 
@@ -278,7 +285,6 @@ public class SysUserController extends BaseController {
     @GetMapping("/listForTree")
     @ResponseBody
     public String listForTree(SysUser user) {
-        logger.info(user.getDeptId()+"========="+user.getUserName());
         List<SysUser> list = userService.selectUserList(user);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("success", true);

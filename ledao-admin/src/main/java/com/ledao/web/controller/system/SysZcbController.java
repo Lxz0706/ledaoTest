@@ -3,7 +3,10 @@ package com.ledao.web.controller.system;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysUser;
 import com.ledao.system.dao.SysZck;
 import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -68,6 +71,19 @@ public class SysZcbController extends BaseController {
     @ResponseBody
     public TableDataInfo lists(SysZcb sysZcb) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"investmentManager".equals(sysRole.getRoleKey())) {
+                        sysZcb.setTeamMembersId(currentUser.getUserId().toString());
+                    }
+                }
+            }
+        }
         List<SysZcb> list = this.sysZcbService.selectSysZcbList(sysZcb);
         for (SysZcb sysZcb1 : list) {
             List<SysZck> zckList = sysZckService.selectSysZckByZcbId(sysZcb1.getId());
@@ -78,7 +94,36 @@ public class SysZcbController extends BaseController {
                 if (sysZck.getTotalPrice() == null) {
                     sysZck.setTotalPrice(new BigDecimal(0));
                 }
-                sysZcb1.setCollateralTotal(sysZcb1.getCollateralTotal().add(sysZck.getTotalPrice()));
+                if (StringUtils.isNull(sysZck.getCapValue()) || StringUtils.isEmpty(sysZck.getCapValue())) {
+                    sysZck.setCapValue(new BigDecimal(0).toString());
+                } else {
+                    sysZck.setCapValue(new BigDecimal(sysZck.getCapValue()).toString());
+                }
+                sysZck.setCapValues(new BigDecimal(sysZck.getCapValue()));
+                if (sysZcb1.getCapValue() == null) {
+                    sysZcb1.setCapValue(new BigDecimal(0));
+                }
+                if (currentUser != null) {
+                    // 如果是超级管理员，则不过滤数据
+                    if (!currentUser.isAdmin()) {
+                        List<SysRole> getRoles = currentUser.getRoles();
+                        for (SysRole sysRole : getRoles) {
+                            //投资部经理，大型单体经理，高层角色
+                            if ("investmentManager".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
+                                    || "SJXXB".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey())) {
+                                sysZcb1.setCollateralTotal(sysZcb1.getCollateralTotal().add(sysZck.getTotalPrice()));
+                                sysZcb1.setCapValue(sysZck.getCapValues().add(sysZcb1.getCapValue()));
+                            } else {
+                                sysZcb1.setCollateralTotal(new BigDecimal(0));
+                                sysZcb1.setCapValue(new BigDecimal(0));
+                            }
+                        }
+                    } else {
+                        sysZcb1.setCollateralTotal(sysZcb1.getCollateralTotal().add(sysZck.getTotalPrice()));
+                        sysZcb1.setCapValue(sysZck.getCapValues().add(sysZcb1.getCapValue()));
+                    }
+                }
+
             }
         }
         return this.getDataTable(list);
@@ -168,8 +213,8 @@ public class SysZcbController extends BaseController {
 
     @RequiresPermissions("system:zcb:list")
     @GetMapping({"/queryAll"})
-    public String queryAll(ModelMap modelMap,SysZck sysZck) {
-        modelMap.put("sysZck",sysZck);
+    public String queryAll(ModelMap modelMap, SysZck sysZck) {
+        modelMap.put("sysZck", sysZck);
         return "system/zcb/queryAll";
     }
 

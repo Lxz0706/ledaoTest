@@ -108,15 +108,6 @@
         });
 
 
-        $('input[name="price_min"]').on('input propertychange', function() {
-            alert(2)
-        })
-
-        //nput失去焦点后 如果值发生改变后，触发
-        $('input[name="price_min"]').change(function() {
-            alert(1)
-        })
-
         function changeMoney(){
             //本金
             var capital = $("#capital").val();
@@ -146,17 +137,17 @@
             }
 
             //期内利息
-            //本金*（到期日-起始日）/360 *（1+利率）
+            //本金*（到期日-起始日）/360 *（利率）
             var dates1 = getDateDiff(startTime,endTime);
-            var num = capital*dates1/360*(1+interestRate/100);
+            var num = capital*dates1/360*(interestRate/100);
             $("#interest").val(num);
 
             //逾期利息
-            //本金*（到期日-起始日）/360 *（1+利率）/360*1.5
+            //本金*（到期日-起始日）/360 *（利率）*1.5
             var startTime1 = addDate(endTime,1);
             var endTime2 = getNowFormatDate();
             var dates2 = getDateDiff(startTime1,endTime2);
-            var num1 = capital*dates2/360*(1+interestRate/100)*1.5;
+            var num1 = capital*(dates2/360)*(interestRate/100)*1.5;
             $("#overdueInterest").val(num1);
 
             //利息复利

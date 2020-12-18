@@ -1,8 +1,7 @@
 package com.ledao.web.controller.system;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
@@ -65,10 +64,110 @@ public class SysProjectmanagentController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private ISysProjectTypeService sysProjectTypeService;
+
     @RequiresPermissions("system:projectmanagent:view")
     @GetMapping()
     public String projectmanagent() {
         return prefix + "/projectmanagent";
+    }
+
+
+    /**
+     * 查询【请填写功能名称】列表
+     */
+    @RequiresPermissions("system:projectmanagent:list")
+    @PostMapping("/lists")
+    @ResponseBody
+    public TableDataInfo lists() {
+        startPage();
+        SysProjectType sysProjectType = new SysProjectType();
+        List<SysProjectType> list = sysProjectTypeService.selectSysProjectTypeList(sysProjectType);
+        for (SysProjectType sysProjectType1 : list) {
+            SysProjectmanagent sysProjectmanagent = new SysProjectmanagent();
+            sysProjectmanagent.setProjectType(sysProjectType1.getProjectType());
+            List<SysProjectmanagent> sysProjectmanagentList = sysProjectmanagentService.selectSysProjectmanagentList(sysProjectmanagent);
+            for (SysProjectmanagent sysProjectManagent : sysProjectmanagentList) {
+                //投资金额总和
+                if (StringUtils.isNull(sysProjectManagent.getInvestmentAmount())) {
+                    sysProjectManagent.setInvestmentAmount(new BigDecimal(0));
+                }
+                if (StringUtils.isNull(sysProjectType1.getInvestmentAmount())) {
+                    sysProjectType1.setInvestmentAmount(new BigDecimal(0));
+                }
+                sysProjectType1.setInvestmentAmount(sysProjectType1.getInvestmentAmount().add(sysProjectManagent.getInvestmentAmount()));
+
+                if ("自投类项目".equals(sysProjectManagent.getProjectType())) {
+                    //已收金额总和
+                    SysProjectysyf sysProjectysyf = new SysProjectysyf();
+                    sysProjectysyf.setProjectManagementId(sysProjectManagent.getProjectManagementId());
+                    List<SysProjectysyf> sysProjectysyfList = sysProjectysyfService.selectSysProjectysyfList(sysProjectysyf);
+                    if (StringUtils.isNotEmpty(sysProjectysyfList)) {
+                        for (SysProjectysyf sysprojectYsyf : sysProjectysyfList) {
+                            if (sysProjectManagent.getAmountPaid() == null) {
+                                sysProjectManagent.setAmountPaid(new BigDecimal(0));
+                            }
+                            if (sysprojectYsyf.getAmountPaid() == null) {
+                                sysprojectYsyf.setAmountPaid(new BigDecimal(0));
+                            }
+                            sysProjectManagent.setAmountPaid(sysProjectManagent.getAmountPaid().add(sysprojectYsyf.getAmountPaid()));
+                            sysProjectType1.setYzfje(sysProjectManagent.getAmountPaid());
+                        }
+                    }
+
+                    //已回收金额
+                    SysProjectRecovered sysProjectRecovered = new SysProjectRecovered();
+                    sysProjectRecovered.setProjectManagementId(sysProjectManagent.getProjectManagementId());
+                    List<SysProjectRecovered> sysProjectRecoveredList = sysProjectRecoveredService.selectSysProjectRecoveredList(sysProjectRecovered);
+                    if (StringUtils.isNotEmpty(sysProjectRecoveredList)) {
+                        for (SysProjectRecovered SysProjectRecovered1 : sysProjectRecoveredList) {
+                            if (sysProjectManagent.getEntryAmount() == null) {
+                                sysProjectManagent.setEntryAmount(new BigDecimal(0));
+                            }
+                            if (SysProjectRecovered1.getAmountRecovered() == null) {
+                                SysProjectRecovered1.setAmountRecovered(new BigDecimal(0));
+                            }
+                            sysProjectManagent.setEntryAmount(sysProjectManagent.getEntryAmount().add(SysProjectRecovered1.getAmountRecovered()));
+                            sysProjectType1.setYhsje(sysProjectManagent.getEntryAmount());
+                        }
+                    }
+                } else {
+                    if (sysProjectManagent.getAmountPaid() == null) {
+                        sysProjectManagent.setAmountPaid(new BigDecimal(0));
+                    }
+                    if (sysProjectType1.getYzfje() == null) {
+                        sysProjectType1.setYzfje(new BigDecimal(0));
+                    }
+                    sysProjectType1.setYzfje(sysProjectManagent.getAmountPaid().add(sysProjectType1.getYzfje()));
+
+
+                    if (sysProjectManagent.getEntryAmount() == null) {
+                        sysProjectManagent.setEntryAmount(new BigDecimal(0));
+                    }
+                    if (sysProjectType1.getYhsje() == null) {
+                        sysProjectType1.setYhsje(new BigDecimal(0));
+                    }
+                    sysProjectType1.setYhsje(sysProjectManagent.getEntryAmount().add(sysProjectType1.getYhsje()));
+                }
+
+            }
+        }
+        return getDataTable(list);
+    }
+
+    @RequiresPermissions("system:projectmanagent:list")
+    @GetMapping({"/selectSysProjectmanagentListByProjectType/{projectType}"})
+    public String selectSysProjectmanagentListByProjectType(@PathVariable("projectType") String projectType, ModelMap modelMap) {
+        modelMap.put("projectType", projectType);
+        return "system/projectmanagent/projectmanagentList";
+    }
+
+    @RequiresPermissions("system:projectmanagent:list")
+    @GetMapping({"/selectSysProjectmanagentListByProjectTypes/{projectType}"})
+    public String selectSysProjectmanagentListByProjectTypes(@PathVariable("projectType") String projectType, ModelMap modelMap) {
+        modelMap.put("projectType", projectType);
+        return "system/projectmanagent/projectmanagentLists";
     }
 
     /**
@@ -156,10 +255,11 @@ public class SysProjectmanagentController extends BaseController {
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增【请填写功能名称】列表
      */
-    @GetMapping("/add")
-    public String add() {
+    @GetMapping("/add/{projectType}")
+    public String add(@PathVariable("projectType") String projectType, ModelMap mmap) {
+        mmap.put("projectType", projectType);
         return prefix + "/add";
     }
 
@@ -171,15 +271,7 @@ public class SysProjectmanagentController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysProjectmanagent sysProjectmanagent) {
-        SysProjectmanagent sysProjectmanagent1 = new SysProjectmanagent();
-        sysProjectmanagent1.setProjectType(sysProjectmanagent.getProjectType());
-        List<SysProjectmanagent> sysProjectmanagentList = sysProjectmanagentService.selectSysProjectmanagentList(sysProjectmanagent1);
-        if (sysProjectmanagentList.size() > 0) {
-            sysProjectmanagent.setNo(sysProjectmanagentList.get(0).getNo() + 1);
-        } else {
-            sysProjectmanagent.setNo(Long.valueOf(1));
-        }
-
+        logger.info(sysProjectmanagent.getServiceFee());
         return toAjax(sysProjectmanagentService.insertSysProjectmanagent(sysProjectmanagent));
     }
 
@@ -201,14 +293,7 @@ public class SysProjectmanagentController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysProjectmanagent sysProjectmanagent) {
-        SysProjectmanagent sysProjectmanagent1 = new SysProjectmanagent();
-        sysProjectmanagent1.setProjectType(sysProjectmanagent.getProjectType());
-        List<SysProjectmanagent> sysProjectmanagentList = sysProjectmanagentService.selectSysProjectmanagentList(sysProjectmanagent1);
-        if (sysProjectmanagentList.size() > 0) {
-            sysProjectmanagent.setNo(sysProjectmanagentList.get(0).getNo() + 1);
-        } else {
-            sysProjectmanagent.setNo(Long.valueOf(1));
-        }
+        logger.info(sysProjectmanagent.getProjectManagementId() + "======" + sysProjectmanagent.getProjectType() + "-------" + sysProjectmanagent.getInvestmentAmount() + "=====" + sysProjectmanagent.getServiceFee());
         return toAjax(sysProjectmanagentService.updateSysProjectmanagent(sysProjectmanagent));
     }
 

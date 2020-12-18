@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysJudicial;
+import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysJudicialService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,15 @@ public class SysTaggingController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysTagging sysTagging) {
         startPage();
+
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                sysTagging.setCreateBy(ShiroUtils.getLoginName());
+            }
+        }
         List<SysTagging> list = sysTaggingService.selectSysTaggingList(sysTagging);
         for (SysTagging sysTagging1 : list) {
             SysJudicial sysJudicial = sysJudicialService.selectSysJudicialById(sysTagging1.getJudicialId());
@@ -66,6 +76,7 @@ public class SysTaggingController extends BaseController {
             sysTagging1.setItemCurrentprice(sysJudicial.getItemCurrentprice());
             sysTagging1.setItemStartTime(sysJudicial.getItemStartTime());
             sysTagging1.setItemEndTime(sysJudicial.getItemEndTime());
+            sysTagging1.setItemStatus(sysJudicial.getItemStatus());
         }
         return getDataTable(list);
     }

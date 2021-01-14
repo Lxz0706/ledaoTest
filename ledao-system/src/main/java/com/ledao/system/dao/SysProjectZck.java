@@ -5,6 +5,9 @@ import com.ledao.common.core.dao.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * 项目管理资产库对象 sys_project_zck
  *
@@ -35,6 +38,35 @@ public class SysProjectZck extends BaseEntity {
      * 删除标志（0代表存在 2代表删除）
      */
     private String delFlag;
+
+    /**
+     * 处置开始时间
+     */
+    private Date startTime;
+
+    /**
+     * 处置结束时间
+     */
+    private Date endTime;
+
+    /**
+     * 本金余额
+     */
+    private BigDecimal bjye;
+
+    private String bjyes;
+
+    /**
+     * 处置回现金额
+     */
+    private BigDecimal czhx;
+
+    private String czhxs;
+
+    /**
+     * 剩余债权户数
+     */
+    private Long syhs;
 
     public Long getProjectZckId() {
         return projectZckId;
@@ -68,6 +100,62 @@ public class SysProjectZck extends BaseEntity {
         return delFlag;
     }
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public BigDecimal getBjye() {
+        return bjye;
+    }
+
+    public void setBjye(BigDecimal bjye) {
+        this.bjye = bjye;
+    }
+
+    public BigDecimal getCzhx() {
+        return czhx;
+    }
+
+    public void setCzhx(BigDecimal czhx) {
+        this.czhx = czhx;
+    }
+
+    public Long getSyhs() {
+        return syhs;
+    }
+
+    public void setSyhs(Long syhs) {
+        this.syhs = syhs;
+    }
+
+    public String getBjyes() {
+        return bjyes;
+    }
+
+    public void setBjyes(String bjyes) {
+        this.bjyes = bjyes;
+    }
+
+    public String getCzhxs() {
+        return czhxs;
+    }
+
+    public void setCzhxs(String czhxs) {
+        this.czhxs = czhxs;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -79,6 +167,8 @@ public class SysProjectZck extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("startTime", getStartTime())
+                .append("endTime", getEndTime())
                 .toString();
     }
 }

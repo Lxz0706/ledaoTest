@@ -133,7 +133,7 @@
             <if test="assetStatus != null  and assetStatus != ''">
                 AND asset_status = #{assetStatus}
             </if>
-            <if test="no != null ">and no like concat ('%',#{no },'%')</if>
+            <if test="no != null ">and no =#{no }</if>
             <if test="projectName != null  and projectName != ''">and project_name like concat
                 ('%',#{projectName},'%')
             </if>
@@ -766,7 +766,14 @@
 
     <select id="selectSysZck" parameterType="SysZck" resultMap="SysZckResult">
         <include refid="selectSysZckVo"/>
-        where parent_id IS NULL AND del_flag='0' AND zcb_id=#{zcbId} order by no
+        <where>
+            del_flag='0' and parent_id IS NULL
+            <if test="zcbId != null ">and zcb_id = #{zcbId}</if>
+            <if test="no != null ">and no = #{no}</if>
+            <if test="parentId != null ">and parent_id = #{parentId}</if>
+            <if test="createBy != null ">and create_by = #{createBy}</if>
+        </where>
+        order by no
     </select>
 
     <select id="selectSysZckByParentId" parameterType="SysZck" resultMap="SysZckResult">

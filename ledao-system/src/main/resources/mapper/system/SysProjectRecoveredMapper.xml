@@ -16,10 +16,11 @@
         <result property="updateTime" column="update_time"/>
         <result property="remarks" column="remarks"/>
         <result property="imgUrl" column="img_url"/>
+        <result property="finance" column="finance"/>
     </resultMap>
 
     <sql id="selectSysProjectRecoveredVo">
-        select id, project_management_id, amount_recovered, recovered_date, del_flag, create_by, create_time, update_by, update_time,remarks,img_url from sys_project_recovered
+        select id, project_management_id, amount_recovered, recovered_date, del_flag, create_by, create_time, update_by, update_time,remarks,img_url,finance from sys_project_recovered
     </sql>
 
     <select id="selectSysProjectRecoveredList" parameterType="SysProjectRecovered"
@@ -57,6 +58,7 @@
             <if test="updateTime != null">update_time,</if>
             <if test="remarks !=null">remarks,</if>
             <if test="imgUrl !=null">img_url,</if>
+            <if test="finance !=null">finance,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectManagementId != null">#{projectManagementId},</if>
@@ -69,6 +71,7 @@
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remarks !=null">#{remarks},</if>
             <if test="imgUrl !=null">#{imgUrl},</if>
+            <if test="finance != null">#{finance},</if>
         </trim>
     </insert>
 
@@ -85,6 +88,7 @@
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remarks !=null">remarks = #{remarks}</if>
             <if test="imgUrl !=null">img_url = #{imgUrl}</if>
+            <if test="finance !=null">finance = #{finance},</if>
         </trim>
         where id = #{id}
     </update>

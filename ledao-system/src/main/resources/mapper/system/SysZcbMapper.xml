@@ -15,10 +15,11 @@
         <result property="delFlag" column="del_flag"/>
         <result property="teamMembersId" column="team_members_id"/>
         <result property="teamMembersName" column="team_members_name"/>
+        <result property="evaluationTime" column="evaluation_time"/>
     </resultMap>
 
     <sql id="selectSysZcbVo">
-        select id, asset_package_name, asset_status, create_by, create_time, update_by, update_time,team_members_id,team_members_name from sys_zcb
+        select id, asset_package_name, asset_status, create_by, create_time, update_by, update_time,team_members_id,team_members_name,evaluation_time from sys_zcb
     </sql>
 
     <select id="selectSysZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
@@ -29,7 +30,9 @@
                 #{assetPackageName}, '%')
             </if>
             <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
-            <if test="teamMembersId != null  and teamMembersId != ''">and team_members_id like concat('%',#{teamMembersId},'%')</if>
+            <if test="teamMembersId != null  and teamMembersId != ''">and team_members_id like
+                concat('%',#{teamMembersId},'%')
+            </if>
         </where>
     </select>
 
@@ -48,6 +51,7 @@
             <if test="createTime != null">create_time,</if>
             <if test="teamMembersId != null">team_members_id,</if>
             <if test="teamMembersName != null">team_members_name,</if>
+            <if test="evaluationTime != null">evaluation_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -57,6 +61,7 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="teamMembersId != null">#{teamMembersId},</if>
             <if test="teamMembersName != null">#{teamMembersName},</if>
+            <if test="evaluationTime != null">#{evaluationTime},</if>
         </trim>
     </insert>
 
@@ -69,6 +74,7 @@
             <if test="teamMembersName != null">team_members_name = #{teamMembersName},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="evaluationTime != null">evaluation_time = #{evaluationTime},</if>
         </trim>
         where id = #{id}
     </update>

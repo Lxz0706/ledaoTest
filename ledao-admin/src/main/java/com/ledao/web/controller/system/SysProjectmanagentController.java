@@ -1,6 +1,7 @@
 package com.ledao.web.controller.system;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.ledao.common.utils.DateUtils;
@@ -56,16 +57,13 @@ public class SysProjectmanagentController extends BaseController {
     private ISysProjectTargetrecoverService sysProjectTargetrecoverService;
 
     @Autowired
-    private ISysProjectUncollectedMoneyService sysProjectUncollectedMoneyService;
-
-    @Autowired
-    private ISysNoticeService sysNoticeService;
-
-    @Autowired
-    private ISysUserService sysUserService;
-
-    @Autowired
     private ISysProjectTypeService sysProjectTypeService;
+
+    @Autowired
+    private ISysCoverChargeService sysCoverChargeService;
+
+    @Autowired
+    private ISysRecaptureService sysRecaptureService;
 
     @RequiresPermissions("system:projectmanagent:view")
     @GetMapping()
@@ -133,22 +131,29 @@ public class SysProjectmanagentController extends BaseController {
                         }
                     }
                 } else {
-                    if (sysProjectManagent.getAmountPaid() == null) {
-                        sysProjectManagent.setAmountPaid(new BigDecimal(0));
-                    }
-                    if (sysProjectType1.getYzfje() == null) {
-                        sysProjectType1.setYzfje(new BigDecimal(0));
-                    }
-                    sysProjectType1.setYzfje(sysProjectManagent.getAmountPaid().add(sysProjectType1.getYzfje()));
-
-
+                    //总已结算
                     if (sysProjectManagent.getEntryAmount() == null) {
                         sysProjectManagent.setEntryAmount(new BigDecimal(0));
                     }
-                    if (sysProjectType1.getYhsje() == null) {
-                        sysProjectType1.setYhsje(new BigDecimal(0));
+                    if (sysProjectType1.getZyjs() == null) {
+                        sysProjectType1.setZyjs(new BigDecimal(0));
                     }
-                    sysProjectType1.setYhsje(sysProjectManagent.getEntryAmount().add(sysProjectType1.getYhsje()));
+                    sysProjectType1.setZyjs(sysProjectType1.getZyjs().add(sysProjectManagent.getEntryAmount()));
+
+
+                    //总回现金额
+                    List<SysRecapture> sysRecaptureList = sysRecaptureService.selectSysRecaptureByProjectId(sysProjectManagent.getProjectManagementId());
+                    if (sysRecaptureList != null && !sysRecaptureList.isEmpty()) {
+                        for (SysRecapture sysRecature : sysRecaptureList) {
+                            if (sysRecature.getRecapture() == null) {
+                                sysRecature.setRecapture(new BigDecimal(0));
+                            }
+                            if (sysProjectType1.getRecapture() == null) {
+                                sysProjectType1.setRecapture(new BigDecimal(0));
+                            }
+                            sysProjectType1.setRecapture(sysProjectType1.getRecapture().add(sysRecature.getRecapture()));
+                        }
+                    }
                 }
 
             }
@@ -236,6 +241,44 @@ public class SysProjectmanagentController extends BaseController {
                         sysProjectmanagent1.setTargetRecoverDate(sysProjectTargetrecoverList.get(0).getTargetRecoveryDate());
                     }
                 }
+            }
+
+            //已结算服务费
+            SysCoverCharge sysCoverCharge = new SysCoverCharge();
+            sysCoverCharge.setProjectManagementId(sysProjectmanagent1.getProjectManagementId());
+            sysCoverCharge.setFundType("已结算服务费");
+            List<SysCoverCharge> sysCoverChargeList = sysCoverChargeService.selectSysCoverChargeList(sysCoverCharge);
+            for (SysCoverCharge sysCoverCharge1 : sysCoverChargeList) {
+                if (sysCoverCharge1.getAmountPaid() == null) {
+                    sysCoverCharge1.setAmountPaid(new BigDecimal(0));
+                }
+
+                if (sysProjectmanagent1.getAmountRecovered() == null) {
+                    sysProjectmanagent1.setAmountRecovered(new BigDecimal(0));
+                }
+                sysProjectmanagent1.setAmountRecovered(sysProjectmanagent1.getAmountRecovered().add(sysCoverCharge1.getAmountPaid()));
+            }
+
+            //待结算服务费
+            SysCoverCharge sysCoverCharge1 = new SysCoverCharge();
+            sysCoverCharge1.setProjectManagementId(sysProjectmanagent1.getProjectManagementId());
+            sysCoverCharge1.setFundType("待结算服务费");
+            sysCoverCharge1.setState("否");
+            List<SysCoverCharge> sysCoverChargeList1 = sysCoverChargeService.selectSysCoverChargeList(sysCoverCharge1);
+            for (SysCoverCharge sysCoverCharge2 : sysCoverChargeList1) {
+                if (sysCoverCharge2.getAmountPaid() == null) {
+                    sysCoverCharge2.setAmountPaid(new BigDecimal(0));
+                }
+
+                if (sysProjectmanagent1.getExpectedAmount() == null) {
+                    sysProjectmanagent1.setExpectedAmount(new BigDecimal(0));
+                }
+                sysProjectmanagent1.setExpectedAmount(sysProjectmanagent1.getExpectedAmount().add(sysCoverCharge2.getAmountPaid()));
+            }
+            //回现金额
+            List<SysRecapture> sysRecaptureList = sysRecaptureService.selectSysRecaptureByProjectId(sysProjectmanagent1.getProjectManagementId());
+            if (sysRecaptureList != null && !sysRecaptureList.isEmpty()) {
+                sysProjectmanagent1.setRecapture(sysRecaptureList.get(0).getRecapture());
             }
         }
         return getDataTable(list);
@@ -328,8 +371,33 @@ public class SysProjectmanagentController extends BaseController {
     @Log(title = "项目管理", businessType = BusinessType.DETAIL)
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
-        mmap.put("sysProjectManagent", sysProjectmanagentService.selectSysProjectmanagentById(id));
-        return prefix + "/detail";
+        String url = "";
+        SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(id);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###.00");
+        if (StringUtils.isNotNull(sysProjectmanagent.getInvestmentAmount())) {
+            sysProjectmanagent.setInvestmentAmounts(decimalFormat.format(sysProjectmanagent.getInvestmentAmount()));
+        }
+
+        if (StringUtils.isNotNull(sysProjectmanagent.getAmountRecovered())) {
+            sysProjectmanagent.setAmountRecovereds(decimalFormat.format(sysProjectmanagent.getAmountRecovered()));
+        }
+
+        if (StringUtils.isNotNull(sysProjectmanagent.getAmountPaid())) {
+            sysProjectmanagent.setAmountPaids(decimalFormat.format(sysProjectmanagent.getAmountPaid()));
+        }
+
+        if (StringUtils.isNotNull(sysProjectmanagent.getYjzfwf())) {
+            sysProjectmanagent.setYjzfwfs(decimalFormat.format(sysProjectmanagent.getYjzfwf()));
+        }
+
+        if ("自投类项目".equals(sysProjectmanagent.getProjectType())) {
+            url = "/detail";
+        } else {
+            url = "/detail1";
+        }
+        mmap.put("sysProjectManagent", sysProjectmanagent);
+        return prefix + url;
+
     }
 
 }

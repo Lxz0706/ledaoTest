@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,7 +55,7 @@ public class SysRecaptureController extends BaseController {
 
     /**
      * 根据项目id查询列表
-     * */
+     */
     @RequiresPermissions("system:recapture:list")
     @GetMapping("/recaptureList/{projectId}")
     public String select(@PathVariable("projectId") String projectId, ModelMap modelMap) {
@@ -92,6 +93,7 @@ public class SysRecaptureController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysRecapture sysRecapture) {
+        sysRecapture.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysRecaptureService.insertSysRecapture(sysRecapture));
     }
 
@@ -113,6 +115,7 @@ public class SysRecaptureController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysRecapture sysRecapture) {
+        sysRecapture.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(sysRecaptureService.updateSysRecapture(sysRecapture));
     }
 

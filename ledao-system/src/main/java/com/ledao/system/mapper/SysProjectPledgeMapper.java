@@ -66,4 +66,9 @@ public interface SysProjectPledgeMapper {
      * @return 结果
      */
     public List<SysProjectPledge> selectPledgeByProjectId(String[] projectId);
+
+    /**
+     * 根据projectId查询
+     */
+    public List<SysProjectPledge> selectSysPledgeByProjectId(Long projectId);
 }

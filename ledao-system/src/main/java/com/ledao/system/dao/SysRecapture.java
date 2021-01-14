@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 投后项目现金回现对象 sys_recapture
@@ -43,6 +44,11 @@ public class SysRecapture extends BaseEntity {
      * 删除标志
      */
     private String delFlag;
+
+    /**
+     * 回现时间
+     */
+    private Date recaptureTime;
 
     public Long getRecaptureId() {
         return recaptureId;
@@ -84,6 +90,14 @@ public class SysRecapture extends BaseEntity {
         return delFlag;
     }
 
+    public Date getRecaptureTime() {
+        return recaptureTime;
+    }
+
+    public void setRecaptureTime(Date recaptureTime) {
+        this.recaptureTime = recaptureTime;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -96,6 +110,7 @@ public class SysRecapture extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("recaptureTime", getRecaptureTime())
                 .toString();
     }
 }

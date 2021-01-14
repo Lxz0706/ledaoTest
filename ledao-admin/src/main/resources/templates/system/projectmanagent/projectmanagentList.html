@@ -42,6 +42,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                detailUrl: prefix + "/detail/{id}",
                 modalName: "项目管理",
                 columns: [{
                     checkbox: true
@@ -63,7 +64,10 @@
                 },*/
                 {
                     field: 'projectManagementName', 
-                    title: '项目名称'
+                    title: '项目名称',
+                    formatter:function (value,row,index) {
+                        return '<a href="javascript:void(0)" onclick="$.operate.detail(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    }
                 },
                 {
                     field: 'projectLeader', 
@@ -87,11 +91,18 @@
                         return $.operate.numberFormatter(value);
                     }
                 },
-                {
+                /*{
                     field: 'entryAmount',
                     title: '已回现金额',
                     formatter:function (value,row,index) {
                         return $.operate.numberFormatter(value);
+                    }
+                },*/
+                {
+                    field: 'recapture',
+                    title: '已回现金额',
+                    formatter: function(value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(row.recapture) + '</a>';
                     }
                 },
                 {
@@ -105,6 +116,13 @@
                     field: 'amountDue',
                     title: '服务费结算费率',
                     formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value)+"%";
+                    }
+                },
+                {
+                    field: 'yjzfwf',
+                    title: '预计总服务费',
+                    formatter:function (value,row,index) {
                         return $.operate.numberFormatter(value);
                     }
                 },
@@ -112,20 +130,14 @@
                     field: 'amountRecovered',
                     title: '已结算服务费',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return '<a href="javascript:void(0)" onclick="projectType(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value) + '</a>'
                     }
                 },
                 {
                     field: 'expectedAmount',
                     title: '待结算服务费',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
-                    }
-                },
-                {
-                    title: '结算情况',
-                    formatter:function(value, row, index){
-                        return '<a href="javascript:void(0)" onclick="money3(\'' + row.projectManagementId+'\')">结算情况</a>';
+                        return '<a href="javascript:void(0)" onclick="projectType1(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value) + '</a>';
                     }
                 },
                 {
@@ -142,15 +154,28 @@
             $.modal.openTab("进度情况列表", url);
         }
 
-        function detail(id) {
-            var url = prefix + '/detail/' + id;
-            $.modal.openTab("项目流转表详情", url);
-        }
-
         function add(){
             var projectType=$("#projectType").val();
             $.operate.add(projectType);
         }
+
+        function projectType(id){
+            var url = ctx + 'system/charge/chargeList/' + id + "/Y";
+            $.modal.openTab("已结算服务费列表", url);
+        }
+
+        function projectType1(id){
+            var url = ctx + 'system/charge/chargeList/' + id + "/N";
+            $.modal.openTab("待结算服务费列表", url);
+        }
+
+        //现金回现
+        function detail5(projectManagementId){
+            var url = ctx + 'system/recapture/recaptureList/' + projectManagementId ;
+            $.modal.openTab('回现列表',url);
+        }
+
+
 
     </script>
 </body>

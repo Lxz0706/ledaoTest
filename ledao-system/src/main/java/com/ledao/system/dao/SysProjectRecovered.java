@@ -55,6 +55,11 @@ public class SysProjectRecovered extends BaseEntity {
      */
     private String imgUrl;
 
+    /**
+     * 财务确认意见
+     */
+    private String finance;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -111,6 +116,14 @@ public class SysProjectRecovered extends BaseEntity {
         this.imgUrl = imgUrl;
     }
 
+    public String getFinance() {
+        return finance;
+    }
+
+    public void setFinance(String finance) {
+        this.finance = finance;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -125,6 +138,7 @@ public class SysProjectRecovered extends BaseEntity {
                 .append("updateTime", getUpdateTime())
                 .append("remarks", getRemarks())
                 .append("imgUrl", getImgUrl())
+                .append("finance", getFinance())
                 .toString();
     }
 }

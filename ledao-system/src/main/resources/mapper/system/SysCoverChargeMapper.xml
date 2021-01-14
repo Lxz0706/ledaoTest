@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysCoverChargeMapper">
+
+    <resultMap type="SysCoverCharge" id="SysCoverChargeResult">
+        <result property="id" column="id"/>
+        <result property="projectManagementId" column="project_management_id"/>
+        <result property="paidDate" column="paid_date"/>
+        <result property="amountPaid" column="amount_paid"/>
+        <result property="remarks" column="remarks"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="fundType" column="fund_type"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="finance" column="finance"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <sql id="selectSysCoverChargeVo">
+        select id, project_management_id, paid_date, amount_paid, remarks, del_flag, create_by, create_time, update_by, update_time, fund_type, img_url, finance,state from sys_cover_charge
+    </sql>
+
+    <select id="selectSysCoverChargeList" parameterType="SysCoverCharge" resultMap="SysCoverChargeResult">
+        <include refid="selectSysCoverChargeVo"/>
+        <where>
+            del_flag = '0'
+            <if test="projectManagementId != null ">and project_management_id = #{projectManagementId}</if>
+            <if test="paidDate != null ">and paid_date = #{paidDate}</if>
+            <if test="amountPaid != null ">and amount_paid = #{amountPaid}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="fundType != null  and fundType != ''">and fund_type = #{fundType}</if>
+            <if test="imgUrl != null  and imgUrl != ''">and img_url = #{imgUrl}</if>
+            <if test="finance != null  and finance != ''">and finance = #{finance}</if>
+            <if test="state != null  and state != ''">and state = #{state}</if>
+            <if test="id != null">and id = #{id}</if>
+        </where>
+    </select>
+
+    <select id="selectSysCoverChargeById" parameterType="Long" resultMap="SysCoverChargeResult">
+        <include refid="selectSysCoverChargeVo"/>
+        where id = #{id} and del_flag = '0'
+    </select>
+
+    <insert id="insertSysCoverCharge" parameterType="SysCoverCharge" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_cover_charge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectManagementId != null">project_management_id,</if>
+            <if test="paidDate != null">paid_date,</if>
+            <if test="amountPaid != null">amount_paid,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="fundType != null">fund_type,</if>
+            <if test="imgUrl != null">img_url,</if>
+            <if test="finance != null">finance,</if>
+            <if test="state != null">state,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectManagementId != null">#{projectManagementId},</if>
+            <if test="paidDate != null">#{paidDate},</if>
+            <if test="amountPaid != null">#{amountPaid},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="fundType != null">#{fundType},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+            <if test="finance != null">#{finance},</if>
+            <if test="state != null">#{state},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysCoverCharge" parameterType="SysCoverCharge">
+        update sys_cover_charge
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectManagementId != null">project_management_id = #{projectManagementId},</if>
+            <if test="paidDate != null">paid_date = #{paidDate},</if>
+            <if test="amountPaid != null">amount_paid = #{amountPaid},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="fundType != null">fund_type = #{fundType},</if>
+            <if test="imgUrl != null">img_url = #{imgUrl},</if>
+            <if test="finance != null">finance = #{finance},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysCoverChargeById" parameterType="Long">
+        update sys_cover_charge set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteSysCoverChargeByIds" parameterType="String">
+        update sys_cover_charge set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

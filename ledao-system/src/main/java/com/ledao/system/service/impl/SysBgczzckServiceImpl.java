@@ -136,8 +136,15 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
 
     /**
      * 根据项目状态查询项目
-     * */
-    public List<SysBgczzck> selectByProjectStatus(){
+     */
+    public List<SysBgczzck> selectByProjectStatus() {
         return sysBgczzckMapper.selectByProjectStatus();
+    }
+
+    /**
+     * 根据id查询
+     */
+    public List<SysBgczzck> selectByIds(String ids) {
+        return sysBgczzckMapper.selectByIds(Convert.toStrArray(ids));
     }
 }

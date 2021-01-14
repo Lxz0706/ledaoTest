@@ -2,7 +2,9 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysProjectUncollectedMoney;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -125,5 +127,25 @@ public class SysProjectRecoveredController extends BaseController {
     public String selectRecoveredListByProjectId(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
         return "system/recovered/recovered";
+    }
+
+    /**
+     * 修改头像
+     */
+    @GetMapping("/imgUrl/{id}")
+    public String avatar(@PathVariable("id") String id, ModelMap mmap) {
+        mmap.put("sysProjectRecovered", sysProjectRecoveredService.selectSysProjectRecoveredById(Long.valueOf(id)));
+        return prefix + "/imgUrl";
+    }
+
+    @PostMapping("/imgUrlList/{id}")
+    @ResponseBody
+    public AjaxResult imgUrlList(@PathVariable("id") String id) {
+        SysProjectRecovered sysProjectRecovered = sysProjectRecoveredService.selectSysProjectRecoveredById(Long.valueOf(id));
+        if (StringUtils.isNotEmpty(sysProjectRecovered.getImgUrl())) {
+            return AjaxResult.success(sysProjectRecovered.getImgUrl().split(";"));
+        } else {
+            return AjaxResult.success();
+        }
     }
 }

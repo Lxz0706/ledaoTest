@@ -1,479 +1,518 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('新增投后部项目管理')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('新增投后部项目管理')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-project-add">
-            <div class="form-group">
-                <input name="projectZckId" type="hidden" th:value="${projectZckId}"/>
-                <input name="parentId" type="hidden" th:value="${parentId}">
-                <label class="col-sm-3 control-label">项目名称：</label>
-                <div class="col-sm-8">
-                    <input name="projectName" class="form-control" type="text">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-project-add">
+        <div class="form-group">
+            <input name="projectZckId" type="hidden" th:value="${projectZckId}"/>
+            <input name="parentId" type="hidden" th:value="${parentId}">
+            <label class="col-sm-3 control-label">项目名称：</label>
+            <div class="col-sm-8">
+                <input name="projectName" class="form-control" type="text">
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">资产包状态：</label>
+            <div class="col-sm-8">
+                <div class="radio-box">
+                    <input type="radio" name="assetStatus" value="">
+                    <label th:for="assetStatus" th:text="未知"></label>
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">序号：</label>
+            <div class="col-sm-8">
+                <input name="no" class="form-control" type="text">
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">借款人名称：</label>
+            <div class="col-sm-8">
+                <input name="borrower" class="form-control" type="text">
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">城市/地区：</label>
+            <div class="col-sm-8">
+                <input name="city" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">放款银行：</label>
+            <div class="col-sm-8">
+                <input name="loanBank" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">合同本金(元)：</label>
+            <div class="col-sm-8">
+                <input name="contractPrincipal" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">本金余额(元)：</label>
+            <div class="col-sm-8">
+                <input name="principalBalance" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">利息余额(元)：</label>
+            <div class="col-sm-8">
+                <input name="interestBalance" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">本息余额(元)：</label>
+            <div class="col-sm-8">
+                <input name="principalInterestBalance" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">保证人：</label>
+            <div class="col-sm-8">
+                <textarea name="guarantor" class="form-control"></textarea>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：保证人1;保证人2;保证人3</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">抵押物：</label>
+            <div class="col-sm-8">
+                <textarea name="collateral" class="form-control"></textarea>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：抵押物1;抵押物2;抵押物3</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">质押物：</label>
+            <div class="col-sm-8">
+                <textarea name="pledge" class="form-control"></textarea>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：质押物1;质押物2;质押物3</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">项目经理：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="hidden" name="projectManagerId" id="projectManagerId">
+                <input class="form-control" type="text" name="projectManager" onclick="selectUserTree1()"
+                       id="projectManager">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">债权状态：</label>
+            <div class="col-sm-8">
+                <select name="debtStatus" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_project_debtStatus')}">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">司法状态：</label>
+            <div class="col-sm-8">
+                <select name="judicialStatus" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_project_sfzt')}">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">管辖法院：</label>
+            <div class="col-sm-8">
+                <textarea name="competentCourt" class="form-control"></textarea>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：法院名称为全称</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：无锡市梁溪区人民法院</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">法官及联系方式：</label>
+            <div class="col-sm-8">
+                <textarea name="judgeContact" class="form-control"></textarea>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：请写法官全名及手机号</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：张三1385188xxxx</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">律所：</label>
+            <div class="col-sm-8">
+                <input name="lawFirm" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：律所名称为全称</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：江苏阳羡律师事务所</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">律师及联系方式：</label>
+            <div class="col-sm-8">
+                <input name="lawyerContact" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：请写律师全名及手机号</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：张三1385188xxxx</span>
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">司法状态备注：</label>
+            <div class="col-sm-8">
+                <input name="judicialRemarks" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">抵押物/债权：</label>
+            <div class="col-sm-8">
+                <textarea name="collateralClaims" class="form-control"></textarea>
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所属债权合同编号：</label>
+            <div class="col-sm-8">
+                <textarea name="contractNo" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">诉讼时效起算日：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="limitationAction" class="form-control" style="width: 85%" placeholder="yyyy-MM-dd" type="text">
+                    <label class="toggle-switch switch-solid" style="margin-left: 5%" >
+                        <input type="checkbox" id="limitation">
+                        <span></span>
+                    </label>
                 </div>
             </div>
-            <!--<div class="form-group">
-                <label class="col-sm-3 control-label">资产包状态：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box">
-                        <input type="radio" name="assetStatus" value="">
-                        <label th:for="assetStatus" th:text="未知"></label>
-                    </div>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-                </div>
-            </div>-->
-            <div class="form-group">
-                <label class="col-sm-3 control-label">序号：</label>
-                <div class="col-sm-8">
-                    <input name="no" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">查封标的：</label>
+            <div class="col-sm-8">
+                <textarea name="sealUpSubjectMatter" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">查封日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="sealUpDate" class="form-control" style="width: 85%" placeholder="yyyy-MM-dd" type="text">
+                    <label class="toggle-switch switch-solid" style="margin-left: 5%">
+                        <input type="checkbox" id="seizure">
+                        <span></span>
+                    </label>
                 </div>
             </div>
-            <!--<div class="form-group">
-                <label class="col-sm-3 control-label">借款人名称：</label>
-                <div class="col-sm-8">
-                    <input name="borrower" class="form-control" type="text">
-                </div>
-            </div>-->
-            <div class="form-group">
-                <label class="col-sm-3 control-label">城市/地区：</label>
-                <div class="col-sm-8">
-                    <input name="city" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">放款银行：</label>
-                <div class="col-sm-8">
-                    <input name="loanBank" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行时效起算日：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="limitationExecution" class="form-control" style="width: 85%" placeholder="yyyy-MM-dd" type="text">
+                    <label style="margin-left: 5%" class="toggle-switch switch-solid">
+                        <input type="checkbox" id="ageing">
+                        <span></span>
+                    </label>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">合同本金(元)：</label>
-                <div class="col-sm-8">
-                    <input name="contractPrincipal" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">起诉立案日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="dateFiling" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">本金余额(元)：</label>
-                <div class="col-sm-8">
-                    <input name="principalBalance" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">一审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <textarea name="firstInstance" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">二审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <textarea name="secondInstance" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">再审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <textarea name="retrial" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行立案日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="enforcementFilingDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">利息余额(元)：</label>
-                <div class="col-sm-8">
-                    <input name="interestBalance" class="form-control" type="text" readonly>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">出具评估报告日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="appraisalReportDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">本息余额(元)：</label>
-                <div class="col-sm-8">
-                    <input name="principalInterestBalance" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">第一次挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="firstShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">保证人：</label>
-                <div class="col-sm-8">
-                    <textarea name="guarantor" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：保证人1;保证人2;保证人3</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">第二次挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="secondShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">抵押物：</label>
-                <div class="col-sm-8">
-                    <textarea name="collateral" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：抵押物1;抵押物2;抵押物3</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">变卖挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="sellShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">质押物：</label>
-                <div class="col-sm-8">
-                    <textarea name="pledge" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：质押物1;质押物2;质押物3</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">拍卖成交日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="successfulBidderDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">项目经理：</label>
-                <div class="col-sm-8">
-                    <input class="form-control" type="hidden" name="projectManagerId" id="projectManagerId">
-                    <input class="form-control" type="text" name="projectManager"  onclick="selectUserTree1()" id="projectManager">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行款到账日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="paymentReceivedDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">债权状态：</label>
-                <div class="col-sm-8">
-                    <select name="debtStatus" class="form-control m-b" th:with="type=${@dict.getType('sys_project_debtStatus')}">
-                        <option value="">--请选择一条数据--</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">成交类型：</label>
+            <div class="col-sm-8">
+                <select name="transactionType" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_project_cjlx')}">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">司法状态：</label>
-                <div class="col-sm-8">
-                    <select name="judicialStatus" class="form-control m-b" th:with="type=${@dict.getType('sys_project_sfzt')}">
-                        <option value="">--请选择一条数据--</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">管辖法院：</label>
-                <div class="col-sm-8">
-                    <textarea name="competentCourt" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：法院名称为全称</span>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：无锡市梁溪区人民法院</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">法官及联系方式：</label>
-                <div class="col-sm-8">
-                    <textarea name="judgeContact" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：请写法官全名及手机号</span>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：张三1385188xxxx</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">律所：</label>
-                <div class="col-sm-8">
-                    <input name="lawFirm" class="form-control" type="text">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：律所名称为全称</span>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：江苏阳羡律师事务所</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">律师及联系方式：</label>
-                <div class="col-sm-8">
-                    <input name="lawyerContact" class="form-control" type="text">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>提示：请写律师全名及手机号</span>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：张三1385188xxxx</span>
-                </div>
-            </div>
-            <!--<div class="form-group">
-                <label class="col-sm-3 control-label">司法状态备注：</label>
-                <div class="col-sm-8">
-                    <input name="judicialRemarks" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">抵押物/债权：</label>
-                <div class="col-sm-8">
-                    <textarea name="collateralClaims" class="form-control"></textarea>
-                </div>
-            </div>-->
-            <div class="form-group">
-                <label class="col-sm-3 control-label">所属债权合同编号：</label>
-                <div class="col-sm-8">
-                    <textarea name="contractNo" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">诉讼时效起算日：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="limitationAction" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">查封标的：</label>
-                <div class="col-sm-8">
-                    <textarea name="sealUpSubjectMatter" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">查封日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="sealUpDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">执行时效起算日：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="limitationExecution" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">起诉立案日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="dateFiling" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">一审判决案号及日期：</label>
-                <div class="col-sm-8">
-                    <textarea name="firstInstance" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">二审判决案号及日期：</label>
-                <div class="col-sm-8">
-                    <textarea name="secondInstance" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">再审判决案号及日期：</label>
-                <div class="col-sm-8">
-                    <textarea name="retrial" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">执行立案日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="enforcementFilingDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">出具评估报告日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="appraisalReportDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">第一次挂拍日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="firstShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">第二次挂拍日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="secondShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">变卖挂拍日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="sellShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">拍卖成交日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="successfulBidderDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">执行款到账日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="paymentReceivedDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">成交类型：</label>
-                <div class="col-sm-8">
-                    <select name="transactionType" class="form-control m-b" th:with="type=${@dict.getType('sys_project_cjlx')}">
-                        <option value="">--请选择一条数据--</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">买家：</label>
+            <div class="col-sm-8">
+                <input name="buyerId" id="buyerId" class="form-control" type="hidden">
+                <input name="buyer" id="buyer" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：个人写买家姓名、企业写全称)</span>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">买家：</label>
-                <div class="col-sm-8">
-                    <input name="buyerId" id="buyerId" class="form-control" type="hidden">
-                    <input name="buyer" id="buyer" class="form-control" type="text" onclick="selectUserTree()">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：个人写买家姓名、企业写全称)</span>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">买家来源：</label>
+            <div class="col-sm-8">
+                <textarea name="buyerSources" class="form-control"></textarea>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">买家来源：</label>
-                <div class="col-sm-8">
-                    <textarea name="buyerSources" class="form-control"></textarea>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">买家联系方式：</label>
+            <div class="col-sm-8">
+                <textarea name="buyerContact" class="form-control"></textarea>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：买家手机号码)</span>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">买家联系方式：</label>
-                <div class="col-sm-8">
-                    <textarea name="buyerContact" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：买家手机号码)</span>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">成交客户：</label>
+            <div class="col-sm-8">
+                <input name="dealCustomerId" id="dealCustomerId" class="form-control" type="hidden">
+                <input name="dealCustomerName" id="dealCustomerName" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：张三18#########;李四15#########)</span>
             </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "system/project"
-        $("#form-project-add").validate({
-            focusCleanup: true
-        });
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">意向客户：</label>
+            <div class="col-sm-8">
+                <input name="potentialCustomersId" id="potentialCustomersId" class="form-control" type="hidden">
+                <input name="potentialCustomers" id="potentialCustomers" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：张三18#########;李四15#########)</span>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script>
+    var prefix = ctx + "system/project"
+    $("#form-project-add").validate({
+        focusCleanup: true
+    });
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-project-add').serialize());
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = $('#form-project-add').serializeArray();
+            var seizure = $("input[id='seizure']").is(':checked') == true ? 0 : 1;
+            var ageing = $("input[id='ageing']").is(':checked') == true ? 0 : 1;
+            var limitation = $("input[id='limitation']").is(':checked') == true ? 0 : 1;
+            data.push({"name": "seizure", "value": seizure});
+            data.push({"name": "ageing", "value": ageing});
+            data.push({"name": "limitation", "value": limitation});
+            $.operate.save(prefix + "/add", data);
+        }
+    }
+
+    $("input[name='sealUpDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='dateFiling']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='enforcementFilingDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='appraisalReportDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='firstShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='secondShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='sellShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='successfulBidderDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='paymentReceivedDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='limitationAction']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='limitationExecution']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    //人员树形选择器
+    function selectUserTree1() {
+        var options = {
+            title: '人员选择',
+            width: "750",
+            url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#projectManagerId").val() + "&selectedUserNames=" + $("#projectManager").val() + "&multiSelectFlag=true",
+            callBack: doSelect1
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSelect1(index, layero) {
+
+        var body = layer.getChildFrame('body', index);
+
+        var userIds = "";
+        var userNames = "";
+        body.find("#multiselect_to option").each(function () {  //遍历所有option
+            var val = $(this).val();   //获取option值
+            var txt = $(this).text();  //获取option的文本内容
+            if (val != '' && txt != '') {
+                userIds = userIds + val + ",";
+                userNames = userNames + txt + ",";
             }
-        }
-
-        $("input[name='sealUpDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
         });
 
-        $("input[name='dateFiling']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
+        userIds = userIds.substring(0, userIds.length - 1);
+        userNames = userNames.substring(0, userNames.length - 1);
+
+        $("#projectManagerId").val(userIds);
+        $("#projectManager").val(userNames);
+        layer.close(index);
+    }
+
+
+    //人员树形选择器
+    function selectUserTree() {
+        var options = {
+            title: '人员选择',
+            width: "750",
+            url: ctx + "system/customer/selectCustomerTree?selectedCustomerIds=" + $("#buyerId").val() + "&selectedCustomerNames=" + $("#buyer").val() + "&multiSelectFlag=" + true,
+            callBack: doSelect
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSelect(index, layero) {
+
+        var body = layer.getChildFrame('body', index);
+
+        var userIds = "";
+        var userNames = "";
+        body.find("#multiselect_to option").each(function () {  //遍历所有option
+            var val = $(this).val();   //获取option值
+            var txt = $(this).text();  //获取option的文本内容
+            if (val != '' && txt != '') {
+                userIds = userIds + val + ",";
+                userNames = userNames + txt + ",";
+            }
         });
 
-        $("input[name='enforcementFilingDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+        userIds = userIds.substring(0, userIds.length - 1);
+        userNames = userNames.substring(0, userNames.length - 1);
 
-        $("input[name='appraisalReportDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+        $("#buyerId").val(userIds);
+        $("#buyer").val(userNames);
+        layer.close(index);
+    }
 
-        $("input[name='firstShotDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='secondShotDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='sellShotDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='successfulBidderDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='paymentReceivedDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='limitationAction']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='limitationExecution']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        //人员树形选择器
-        function selectUserTree1() {
-            var options = {
-                title: '人员选择',
-                width: "750",
-                url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#projectManagerId").val() + "&selectedUserNames=" + $("#projectManager").val() + "&multiSelectFlag=true",
-                callBack: doSelect1
-            };
-            $.modal.openOptions(options);
-        }
-
-        function doSelect1(index, layero){
-
-            var body = layer.getChildFrame('body', index);
-
-            var userIds = "";
-            var userNames = "";
-            body.find("#multiselect_to option").each(function(){  //遍历所有option
-                var val = $(this).val();   //获取option值
-                var txt = $(this).text();  //获取option的文本内容
-                if(val!= '' && txt!=''){
-                    userIds = userIds + val + ",";
-                    userNames = userNames + txt + ",";
-                }
-            });
-
-            userIds = userIds.substring(0,userIds.length-1);
-            userNames = userNames.substring(0,userNames.length-1);
-
-            $("#projectManagerId").val(userIds);
-            $("#projectManager").val(userNames);
-            layer.close(index);
-        }
-
-
-        //人员树形选择器
-        function selectUserTree() {
-            var options = {
-                title: '人员选择',
-                width: "750",
-                url: ctx + "system/customer/selectCustomerTree?selectedCustomerIds=" + $("#buyerId").val() + "&selectedCustomerNames=" + $("#buyer").val() + "&multiSelectFlag=" + true,
-                callBack: doSelect
-            };
-            $.modal.openOptions(options);
-        }
-
-        function doSelect(index, layero){
-
-            var body = layer.getChildFrame('body', index);
-
-            var userIds = "";
-            var userNames = "";
-            body.find("#multiselect_to option").each(function(){  //遍历所有option
-                var val = $(this).val();   //获取option值
-                var txt = $(this).text();  //获取option的文本内容
-                if(val!= '' && txt!=''){
-                    userIds = userIds + val + ",";
-                    userNames = userNames + txt + ",";
-                }
-            });
-
-            userIds = userIds.substring(0,userIds.length-1);
-            userNames = userNames.substring(0,userNames.length-1);
-
-            $("#buyerId").val(userIds);
-            $("#buyer").val(userNames);
-            layer.close(index);
-        }
-
-    </script>
+</script>
 </body>
 </html>

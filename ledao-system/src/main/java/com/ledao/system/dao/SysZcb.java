@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 资产包对象 sys_zcb
@@ -51,6 +52,11 @@ public class SysZcb extends BaseEntity {
     private String delFlag;
 
     private BigDecimal capValue;
+
+    /**
+     * 评估时间
+     */
+    private Date evaluationTime;
 
     public Long getId() {
         return id;
@@ -116,6 +122,14 @@ public class SysZcb extends BaseEntity {
         this.teamMembersName = teamMembersName;
     }
 
+    public Date getEvaluationTime() {
+        return evaluationTime;
+    }
+
+    public void setEvaluationTime(Date evaluationTime) {
+        this.evaluationTime = evaluationTime;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -125,6 +139,7 @@ public class SysZcb extends BaseEntity {
                 .append("delFlag", getDelFlag())
                 .append("teamMembersId", getTeamMembersId())
                 .append("teamMembersName", getTeamMembersName())
+                .append("evaluationTime", getEvaluationTime())
                 .toString();
     }
 }

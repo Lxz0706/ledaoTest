@@ -58,6 +58,13 @@
         <result property="lawFirm" column="law_firm"/>
         <result property="lawyerContact" column="lawyer_contact"/>
         <result property="debtStatus" column="debt_status"/>
+        <result property="potentialCustomers" column="potential_customers"/>
+        <result property="potentialCustomersId" column="potential_customers_id"/>
+        <result property="seizure" column="seizure"/>
+        <result property="ageing" column="ageing"/>
+        <result property="limitation" column="limitation"/>
+        <result property="dealCustomerId" column="deal_customer_id"/>
+        <result property="dealCustomerName" column="deal_customer_name"/>
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -67,7 +74,8 @@
         buyer_sources, buyer_contact, contract_no, limitation_action, seal_up_subject_matter, seal_up_date, limitation_execution,
         date_filing, first_instance, second_instance, retrial, enforcement_filing_date, appraisal_report_date, first_shot_date,
         second_shot_date, sell_shot_date, successful_bidder_date, payment_received_date, del_flag, parent_id, create_by, create_time,
-        update_by, update_time,project_zck_id,law_firm,lawyer_contact,debt_status from sys_project
+        update_by, update_time,project_zck_id,law_firm,lawyer_contact,debt_status, potential_customers, potential_customers_id, seizure, ageing, limitation
+         ,deal_customer_id,deal_customer_name from sys_project
     </sql>
 
     <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
@@ -126,9 +134,9 @@
             <if test="projectZckId != null and projectZckId != ''">and project_zck_id = #{projectZckId}</if>
             <if test="lawyerContact != null and lawyerContact != ''">and lawyer_contact = #{lawyerContact}</if>
             <if test="lawFirm != null and lawFirm != ''">and law_firm = #{lawFirm}</if>
-            <if test="debtStatus !=null and debtStatus !=''"> and debt_status = #{debtStatus}</if>
+            <if test="debtStatus !=null and debtStatus !=''">and debt_status = #{debtStatus}</if>
         </where>
-        ORDER BY no asc 
+        ORDER BY no asc
     </select>
 
     <select id="selectSysProjectById" parameterType="Long" resultMap="SysProjectResult">
@@ -190,7 +198,14 @@
             <if test="projectZckId != null">project_zck_id,</if>
             <if test="lawyerContact != null">lawyer_contact,</if>
             <if test="lawFirm != null">law_firm,</if>
-            <if test="debtStatus !=null">debt_status</if>
+            <if test="debtStatus !=null">debt_status,</if>
+            <if test="potentialCustomers != null">potential_customers,</if>
+            <if test="potentialCustomersId != null">potential_customers_id,</if>
+            <if test="seizure != null">seizure,</if>
+            <if test="ageing != null">ageing,</if>
+            <if test="limitation != null">limitation,</if>
+            <if test="dealCustomerId != null">deal_customer_id,</if>
+            <if test="dealCustomerName != null">deal_customer_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
@@ -244,7 +259,14 @@
             <if test="projectZckId != null">#{projectZckId},</if>
             <if test="lawyerContact != null">#{lawyerContact},</if>
             <if test="lawFirm != null">#{lawFirm},</if>
-            <if test="debtStatus !=null">#{debtStatus}</if>
+            <if test="debtStatus !=null">#{debtStatus},</if>
+            <if test="potentialCustomers != null">#{potentialCustomers},</if>
+            <if test="potentialCustomersId != null">#{potentialCustomersId},</if>
+            <if test="seizure != null">#{seizure},</if>
+            <if test="ageing != null">#{ageing},</if>
+            <if test="limitation != null">#{limitation},</if>
+            <if test="dealCustomerId != null">#{dealCustomerId},</if>
+            <if test="dealCustomerName != null">#{dealCustomerName},</if>
         </trim>
     </insert>
 
@@ -302,7 +324,14 @@
             <if test="projectZckId !=null">project_zck_id = #{projectZckId},</if>
             <if test="lawFirm !=null">law_firm = #{lawFirm},</if>
             <if test="lawyerContact !=null">lawyer_contact = #{lawyerContact},</if>
-            <if test="debtStatus !=null">debt_status = #{debtStatus}</if>
+            <if test="debtStatus !=null">debt_status = #{debtStatus},</if>
+            <if test="potentialCustomers != null">potential_customers = #{potentialCustomers},</if>
+            <if test="potentialCustomersId != null">potential_customers_id = #{potentialCustomersId},</if>
+            <if test="seizure != null">seizure = #{seizure},</if>
+            <if test="ageing != null">ageing = #{ageing},</if>
+            <if test="limitation != null">limitation = #{limitation},</if>
+            <if test="dealCustomerId != null">deal_customer_id = #{dealCustomerId},</if>
+            <if test="dealCustomerName != null">deal_customer_name = #{dealCustomerName},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -320,7 +349,13 @@
 
     <select id="selectProject" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
-        where parent_id IS NULL AND del_flag='0' AND project_zck_id = #{projectZckId} ORDER BY no asc
+        <where>
+            del_flag='0' and parent_id IS NULL
+            <if test="projectZckId != null ">and project_zck_id = #{projectZckId}</if>
+            <if test="debtStatus != null ">and debt_status = #{debtStatus}</if>
+            <if test="projectName != null ">and project_name like concat ('%', #{projectName},'%')</if>
+        </where>
+        order by no asc
     </select>
 
     <select id="selectSysProjectByParentId" parameterType="SysProject" resultMap="SysProjectResult">

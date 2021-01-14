@@ -112,7 +112,7 @@
     </update>
 
     <delete id="deleteSysProjectPledgeById" parameterType="Long">
-        update sys_project_pledge set del_flag = '2' sys_project_pledge where pledge_id = #{pledgeId}
+        update sys_project_pledge set del_flag = '2'  where pledge_id = #{pledgeId}
     </delete>
 
     <delete id="deleteSysProjectPledgeByIds" parameterType="String">
@@ -128,6 +128,11 @@
             #{projectId}
         </foreach>
         and del_flag = '0'
+    </select>
+
+    <select id="selectSysPledgeByProjectId" parameterType="Long" resultMap="SysProjectPledgeResult">
+        <include refid="selectSysProjectPledgeVo"/>
+         where project_id = #{projectId} and del_flag = '0'
     </select>
 
 </mapper>

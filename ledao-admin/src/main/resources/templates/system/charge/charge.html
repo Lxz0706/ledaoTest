@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('流转服务费列表')"/>
+    <th:block th:include="include :: bootstrap-editable-css"/>
+    <style>
+        .input-sm {
+            width: 500px !important;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" name="projectManagementId" id="projectManagementId"
+                               th:value="*{projectManagementId}"/>
+                        <input type="hidden" name="fundType" id="fundType" th:value="*{fundType}"/>
+                        <input type="hidden" id="isCharge" th:value="*{isCharge}"/>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:charge:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:charge:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:charge:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:charge:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:charge:remove')}]];
+    var prefix = ctx + "system/charge";
+
+    $(function () {
+        var isCharge = $("#isCharge").val();
+        if ($.common.isNotEmpty(isCharge)) {
+            if ("Y" == isCharge) {
+                $("#toolbar").hide();
+            }
+        }
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "流转服务费",
+            onEditableSave: onEditableSave,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'projectManagementId',
+                    title: '主表ID',
+                    visible: false
+                },
+                {
+                    field: 'fundType',
+                    title: '资金类型'
+                },
+                {
+                    field: 'amountPaid',
+                    title: '金额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'paidDate',
+                    title: '时间'
+                },
+                {
+                    field: 'remarks',
+                    title: '备注'
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '财务确认',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field: 'finance',
+                    title: '财务确认意见',
+                    editable: {
+                        type: 'text',
+                        title: '财务确认意见'
+                    }
+                },
+                {
+                    title: '附件上传',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function add() {
+        var projectManagementId = $("#projectManagementId").val();
+        $.operate.add(projectManagementId);
+    }
+
+    function imgUrl(id) {
+        var isCharge = $("#isCharge").val();
+        var url = prefix + '/imgUrl/' + id + "/" + isCharge;
+        $.modal.opens("附件上传查看", url);
+    }
+
+    function statusTools(row) {
+        if (row.state == "否") {
+            return '<i class=\"fa fa-toggle-off\" style="font-size: 200%" onclick="enable(\'' + row.id + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info\" style="font-size: 200%" onclick="disable(\'' + row.id + '\')"></i> ';
+        }
+    }
+
+    /* 财务是否确认-是 */
+    function disable(id) {
+        $.modal.confirm("确认未收到该条款项吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"id": id, "state": "否"});
+        })
+    }
+
+    /* 财务是否确认-是 */
+    function enable(id) {
+        $.modal.confirm("确认收到该条款项吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"id": id, "state": "是"});
+        })
+    }
+
+    function onEditableSave(field, row, oldValue, $el) {
+        $.ajax({
+            type: "post",
+            url: prefix + "/edit",
+            data: row,
+            dataType: 'JSON',
+            success: function (result) {
+                $.operate.ajaxSuccess(result);
+                $.table.refresh();
+            }
+        });
+    }
+</script>
+</body>
+</html>

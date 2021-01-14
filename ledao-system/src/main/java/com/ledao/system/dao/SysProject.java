@@ -88,16 +88,22 @@ public class SysProject extends BaseEntity {
     @Excel(name = "保证人")
     private String guarantor;
 
+    private String guarantors;
+
     /**
      * 抵押物
      */
     @Excel(name = "抵押物")
     private String collateral;
 
+    private String collaterals;
+
     /**
      * 质押物
      */
     private String pledge;
+
+    private String pledges;
 
     /**
      * 项目经理ID
@@ -300,6 +306,11 @@ public class SysProject extends BaseEntity {
      */
     private Long projectZckId;
 
+    /**
+     * 资产包名称
+     */
+    private String projectZckName;
+
     private BigDecimal totalPrice;
 
     private BigDecimal totalInterestBalance;
@@ -342,8 +353,52 @@ public class SysProject extends BaseEntity {
 
     /**
      * 总本金余额
-     * */
+     */
     private BigDecimal TotalPrincipalBalance;
+
+    /**
+     * 意向客户
+     */
+    @Excel(name = "意向客户")
+    private String potentialCustomers;
+
+    /**
+     * 意向客户ID
+     */
+    // @Excel(name = "意向客户ID")
+    private String potentialCustomersId;
+
+    /**
+     * 查封日期提醒
+     */
+    //@Excel(name = "查封日期提醒")
+    private String seizure;
+
+    /**
+     * 执行时效提醒
+     */
+    //@Excel(name = "执行时效提醒")
+    private String ageing;
+
+    /**
+     * 诉讼时效提醒
+     */
+    //@Excel(name = "诉讼时效提醒")
+    private String limitation;
+
+    /**
+     * 成交客户id
+     */
+    //@Excel(name = "成交客户id")
+    private String dealCustomerId;
+
+    /**
+     * 成交客户名称
+     */
+    @Excel(name = "成交客户名称")
+    private String dealCustomerName;
+
+    private String isCreate;
 
     public Long getProjectId() {
         return projectId;
@@ -809,6 +864,102 @@ public class SysProject extends BaseEntity {
         TotalPrincipalBalance = totalPrincipalBalance;
     }
 
+    public String getGuarantors() {
+        return guarantors;
+    }
+
+    public void setGuarantors(String guarantors) {
+        this.guarantors = guarantors;
+    }
+
+    public String getCollaterals() {
+        return collaterals;
+    }
+
+    public void setCollaterals(String collaterals) {
+        this.collaterals = collaterals;
+    }
+
+    public String getPledges() {
+        return pledges;
+    }
+
+    public void setPledges(String pledges) {
+        this.pledges = pledges;
+    }
+
+    public String getPotentialCustomers() {
+        return potentialCustomers;
+    }
+
+    public void setPotentialCustomers(String potentialCustomers) {
+        this.potentialCustomers = potentialCustomers;
+    }
+
+    public String getPotentialCustomersId() {
+        return potentialCustomersId;
+    }
+
+    public void setPotentialCustomersId(String potentialCustomersId) {
+        this.potentialCustomersId = potentialCustomersId;
+    }
+
+    public String getSeizure() {
+        return seizure;
+    }
+
+    public void setSeizure(String seizure) {
+        this.seizure = seizure;
+    }
+
+    public String getAgeing() {
+        return ageing;
+    }
+
+    public void setAgeing(String ageing) {
+        this.ageing = ageing;
+    }
+
+    public String getLimitation() {
+        return limitation;
+    }
+
+    public void setLimitation(String limitation) {
+        this.limitation = limitation;
+    }
+
+    public String getDealCustomerId() {
+        return dealCustomerId;
+    }
+
+    public void setDealCustomerId(String dealCustomerId) {
+        this.dealCustomerId = dealCustomerId;
+    }
+
+    public String getDealCustomerName() {
+        return dealCustomerName;
+    }
+
+    public void setDealCustomerName(String dealCustomerName) {
+        this.dealCustomerName = dealCustomerName;
+    }
+
+    public String getIsCreate() {
+        return isCreate;
+    }
+
+    public void setIsCreate(String isCreate) {
+        this.isCreate = isCreate;
+    }
+
+    public String getProjectZckName() {
+        return projectZckName;
+    }
+
+    public void setProjectZckName(String projectZckName) {
+        this.projectZckName = projectZckName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -865,6 +1016,13 @@ public class SysProject extends BaseEntity {
                 .append("lawFirm", getLawFirm())
                 .append("lawyerContact", getLawyerContact())
                 .append("debtStatus", getDebtStatus())
+                .append("potentialCustomers", getPotentialCustomers())
+                .append("potentialCustomersId", getPotentialCustomersId())
+                .append("seizure", getSeizure())
+                .append("ageing", getAgeing())
+                .append("limitation", getLimitation())
+                .append("dealCustomerId", getDealCustomerId())
+                .append("dealCustomerName", getDealCustomerName())
                 .toString();
     }
 }

@@ -56,6 +56,8 @@ public class SysProjectysyf extends BaseEntity {
 
     private String imgUrl;
 
+    private String finance;
+
     public Long getId() {
         return id;
     }
@@ -120,6 +122,14 @@ public class SysProjectysyf extends BaseEntity {
         this.imgUrl = imgUrl;
     }
 
+    public String getFinance() {
+        return finance;
+    }
+
+    public void setFinance(String finance) {
+        this.finance = finance;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -135,6 +145,7 @@ public class SysProjectysyf extends BaseEntity {
                 .append("fundType", getFundType())
                 .append("remarks", getRemarks())
                 .append("imgUrl", getImgUrl())
+                .append("finance", getFinance())
                 .toString();
     }
 }

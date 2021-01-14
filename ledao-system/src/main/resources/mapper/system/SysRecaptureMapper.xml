@@ -14,10 +14,11 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="recaptureTime" column="recapture_time"/>
     </resultMap>
 
     <sql id="selectSysRecaptureVo">
-        select recapture_id, project_id, recapture, remarks, del_flag, create_by, create_time, update_by, update_time from sys_recapture
+        select recapture_id, project_id, recapture, remarks, del_flag, create_by, create_time, update_by, update_time,recapture_time from sys_recapture
     </sql>
 
     <select id="selectSysRecaptureList" parameterType="SysRecapture" resultMap="SysRecaptureResult">
@@ -28,6 +29,7 @@
             <if test="recapture != null ">and recapture = #{recapture}</if>
             <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
         </where>
+        order by create_time desc
     </select>
 
     <select id="selectSysRecaptureById" parameterType="Long" resultMap="SysRecaptureResult">
@@ -42,6 +44,7 @@
             <if test="recapture != null">recapture,</if>
             <if test="remarks != null">remarks,</if>
             <if test="delFlag != null">del_flag,</if>
+            <if test="recaptureTime != null">recapture_time,</if>
             <if test="createBy != null">create_by,</if>
             create_time
         </trim>
@@ -50,6 +53,7 @@
             <if test="recapture != null">#{recapture},</if>
             <if test="remarks != null">#{remarks},</if>
             <if test="delFlag != null">#{delFlag},</if>
+            <if test="recaptureTime !=null">#{recaptureTime},</if>
             <if test="createBy != null">#{createBy},</if>
             sysdate()
         </trim>
@@ -62,6 +66,7 @@
             <if test="recapture != null">recapture = #{recapture},</if>
             <if test="remarks != null">remarks = #{remarks},</if>
             <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="recaptureTime !=null">recapture_time = #{recaptureTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             update_time = sysdate()
         </trim>
@@ -81,6 +86,6 @@
 
     <select id="selectSysRecaptureByProjectId" parameterType="Long" resultMap="SysRecaptureResult">
         <include refid="selectSysRecaptureVo"/>
-        where project_id = #{projectId} and del_flag = '0'
+        where project_id = #{projectId} and del_flag = '0' order  by create_time desc
     </select>
 </mapper>

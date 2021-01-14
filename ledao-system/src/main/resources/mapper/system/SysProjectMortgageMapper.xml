@@ -138,7 +138,8 @@
     </delete>
 
     <select id="selectSysProjectMortgageByProjectId" parameterType="String" resultMap="SysProjectMortgageResult">
-        <include refid="selectSysProjectMortgageVo"/> where project_id in
+        <include refid="selectSysProjectMortgageVo"/>
+        where project_id in
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
         </foreach>
@@ -146,6 +147,11 @@
     </select>
 
     <select id="selectProjectMortgageByProjectId" parameterType="Long" resultMap="SysProjectMortgageResult">
+        <include refid="selectSysProjectMortgageVo"/>
+        where project_id = #{projectId} and del_flag='0'
+    </select>
+
+    <select id="selectProjectMortgageByProjectIds" parameterType="Long" resultMap="SysProjectMortgageResult">
         <include refid="selectSysProjectMortgageVo"/>
         where project_id = #{projectId} and del_flag='0'
     </select>

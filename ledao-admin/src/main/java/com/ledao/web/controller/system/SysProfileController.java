@@ -104,8 +104,8 @@ public class SysProfileController extends BaseController {
     @GetMapping("/avatar")
     public String avatar(ModelMap mmap) {
         SysUser user = ShiroUtils.getSysUser();
-        SysUser sysUser=userService.selectUserById(user.getUserId());
-        log.info(":======"+sysUser.getAvatar());
+        SysUser sysUser = userService.selectUserById(user.getUserId());
+        log.info(":======" + sysUser.getAvatar());
         mmap.put("user", userService.selectUserById(user.getUserId()));
         return prefix + "/avatar";
     }
@@ -139,7 +139,7 @@ public class SysProfileController extends BaseController {
         SysUser currentUser = ShiroUtils.getSysUser();
         try {
             if (!file.isEmpty()) {
-                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file);
+                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file, true);
                 currentUser.setAvatar(avatar);
                 if (userService.updateUserInfo(currentUser) > 0) {
                     ShiroUtils.setSysUser(userService.selectUserById(currentUser.getUserId()));

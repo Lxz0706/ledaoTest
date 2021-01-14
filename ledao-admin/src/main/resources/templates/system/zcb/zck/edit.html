@@ -7,7 +7,9 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-zck-edit" th:object="${sysZck}">
-        <input name="id" th:field="*{id}" type="hidden">
+        <input name="id" id="id" th:field="*{id}" type="hidden">
+        <input name="zcbId" id="zcbId" type="hidden" th:value="${zcbId}">
+        <input name="parentId" id="parentId" type="hidden" th:value="${parentId}">
         <!--<div class="form-group">
             <label class="col-sm-3 control-label">资产包名称：</label>
             <div class="col-sm-8">
@@ -608,6 +610,34 @@
 <script type="text/javascript">
     var prefix = ctx + "system/zcb/zck";
     $("#form-zck-edit").validate({
+        rules: {
+            no: {
+                remote: {
+                    url: prefix + "/checkNoUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "no": function () {
+                            return $.common.trim($("#no").val());
+                        },
+                        "zcbId": function () {
+                            return $.common.trim($("#zcbId").val());
+                        },
+                        "parentId": function () {
+                            return $.common.trim($("#parentId").val());
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+        },
+        messages: {
+            "no": {
+                remote: "序号已经存在"
+            }
+        },
         focusCleanup: true
     });
 

@@ -75,4 +75,12 @@ public interface ISysProjectMortgageService {
      * @return 结果
      */
     public SysProjectMortgage selectProjectMortgageByProjectId(Long projectId);
+
+    /**
+     * 根据projectId查询
+     *
+     * @param projectId
+     * @return 结果
+     */
+    public List<SysProjectMortgage> selectProjectMortgageByProjectIds(Long projectId);
 }

@@ -155,12 +155,21 @@ public class SysProjectBailController extends BaseController {
     public AjaxResult remove(String ids) {
         for (String string1 : ids.split(",")) {
             SysProjectBail sysProjectBail = sysProjectBailService.selectSysProjectBailById(Long.valueOf(string1));
-            if (StringUtils.isNotNull(sysProjectBail.getProjectId())) {
-                SysProject sysProject = sysProjectService.selectSysProjectById(sysProjectBail.getProjectId());
-                sysProject.setGuarantor("");
-                sysProject.setUpdateBy(ShiroUtils.getLoginName());
-                sysProjectService.updateSysProject(sysProject);
+            sysProjectBailService.deleteSysProjectBailById(Long.valueOf(string1));
+            List<SysProjectBail> sysProjectBailList = sysProjectBailService.selectProjectBailListByProjectId(sysProjectBail.getProjectId());
+            StringBuffer sb = new StringBuffer();
+            for (SysProjectBail sysProjectBail1 : sysProjectBailList) {
+                if (StringUtils.isNotNull(sysProjectBail1.getBail())) {
+                    sb.append(sysProjectBail1.getBail()).append(";");
+                }
             }
+            SysProject sysProject = new SysProject();
+            sysProject.setProjectId(sysProjectBail.getProjectId());
+            if (StringUtils.isNotNull(sb.toString()) && StringUtils.isNotEmpty(sb.toString())) {
+                sysProject.setGuarantor(sb.deleteCharAt(sb.length() - 1).toString());
+            }
+            sysProject.setUpdateBy(ShiroUtils.getLoginName());
+            sysProjectService.updateSysProject(sysProject);
         }
         return toAjax(sysProjectBailService.deleteSysProjectBailByIds(ids));
     }

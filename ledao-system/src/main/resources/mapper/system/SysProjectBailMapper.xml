@@ -126,4 +126,9 @@
         where project_id = #{projectId} and del_flag='0'
     </select>
 
+    <select id="selectProjectBailListByProjectId" parameterType="Long" resultMap="SysProjectBailResult">
+        <include refid="selectSysProjectBailVo"/>
+        where project_id = #{projectId} and del_flag='0'
+    </select>
+
 </mapper>

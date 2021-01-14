@@ -63,4 +63,9 @@ public interface SysBgczzckMapper {
      * 根据项目状态查询项目
      */
     public List<SysBgczzck> selectByProjectStatus();
+
+    /**
+     * 根据id查询
+     */
+    public List<SysBgczzck> selectByIds(String[] ids);
 }

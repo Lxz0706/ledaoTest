@@ -823,7 +823,7 @@ var table = {
                     btn: ['关闭'],
                     // 弹层外区域关闭
                     shadeClose: true,
-                    yes: function(index, layero){
+                    yes: function (index, layero) {
                         //事件
                         layer.close(index);
                     }
@@ -968,8 +968,8 @@ var table = {
                 $.operate.submit(url, "get", "json", "", callback);
             },
             // get请求传输
-            gets: function (url,data,title, callback) {
-                $.modal.openTab(title,url+"?"+data);
+            gets: function (url, data, title, callback) {
+                $.modal.openTab(title, url + "?" + data);
             },
             // 详细信息
             detail: function (id, width, height) {
@@ -1105,9 +1105,9 @@ var table = {
                 return url1;
             },
             // 详细信息
-            details: function (id, width, height,ids) {
+            details: function (id, width, height, ids) {
                 table.set();
-                var _url = $.operate.detailUrls(id,ids);
+                var _url = $.operate.detailUrls(id, ids);
                 var _width = $.common.isEmpty(width) ? "800" : width;
                 var _height = $.common.isEmpty(height) ? ($(window).height() - 50) : height;
                 //如果是移动端，就使用自适应大小弹窗
@@ -1129,11 +1129,11 @@ var table = {
                 $.modal.openOptions(options);
             },
             // 详细访问地址
-            detailUrls: function (id,ids) {
+            detailUrls: function (id, ids) {
                 var url = "/404.html";
                 if ($.common.isNotEmpty(id) && $.common.isNotEmpty(ids)) {
                     url = table.options.detailUrl.replace("{id}", id);
-                    url = table.options.detailUrl.replace("{ids}",ids);
+                    url = table.options.detailUrl.replace("{ids}", ids);
                 } else {
                     var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
                     if (id.length == 0) {
@@ -1141,7 +1141,7 @@ var table = {
                         return;
                     }
                     url = table.options.detailUrl.replace("{id}", id);
-                    url = table.options.detailUrl.replace("{ids}",ids);
+                    url = table.options.detailUrl.replace("{ids}", ids);
                 }
                 return url;
             },
@@ -1345,11 +1345,11 @@ var table = {
                 var b = false;
                 if (value == null || value == "") return "0";
                 value = value.toString();
-                if(value.indexOf('-') != -1){
-                    b= true;
-                    value = value.substring(1,value.length);
+                if (value.indexOf('-') != -1) {
+                    b = true;
+                    value = value.substring(1, value.length);
                 }
-                if (/^\-?[0-9]+(.[0-9]+)?$/.test(value)){
+                if (/^\-?[0-9]+(.[0-9]+)?$/.test(value)) {
                     value = value.toString().replace(/^(\d*)$/, "$1.");
                     value = (value + "00").replace(/(\d*\.\d\d)\d*/, "$1");
                     value = value.replace(".", ",");
@@ -1358,8 +1358,8 @@ var table = {
                         value = value.replace(re, "$1,$2");
                     value = value.replace(/,(\d\d)$/, ".$1");
                 }
-                if(b){
-                    value = "-"+value;
+                if (b) {
+                    value = "-" + value;
                 }
                 return value;
             },
@@ -1381,7 +1381,7 @@ var table = {
                         $.operate.successCallback(result);
                     }
                 };
-                $.modal.openTab("查询结果",url);
+                $.modal.openTab("查询结果", url);
             }
         },
         // 校验封装处理
@@ -1718,6 +1718,36 @@ var table = {
             // 判断移动端
             isMobile: function () {
                 return navigator.userAgent.match(/(Android|iPhone|SymbianOS|Windows Phone|iPad|iPod)/i);
+            },
+            /*格式化日期格式*/
+            //yyyy
+            changeDateFormatToYear: function (cellval) {
+                if (cellval != null) {
+                    var date = new Date(cellval);
+                    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                    return date.getFullYear();
+                }
+            },
+            /*格式化日期格式*/
+            //yyyy-mm
+            changeDateFormatToMonth: function (cellval) {
+                if (cellval != null) {
+                    var date = new Date(cellval);
+                    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                    return date.getFullYear() + "-" + month;
+                }
+            },
+            /*格式化日期格式*/
+            //yyyy-MM-dd
+            changeDateFormat: function (cellval) {
+                if (cellval != null) {
+                    var date = new Date(cellval);
+                    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                    return date.getFullYear() + "-" + month + "-" + currentDate;
+                }
             },
         }
     });

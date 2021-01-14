@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.ledao.common.json.JSONObject;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.dao.SysZcb;
 import com.ledao.system.dao.SysZck;
@@ -58,6 +59,19 @@ public class SysZckController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysZck sysZck) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"investmentManager2".equals(sysRole.getRoleKey())) {
+                        sysZck.setCreateBy(currentUser.getLoginName());
+                    }
+                }
+            }
+        }
         List<SysZck> list = sysZckService.selectSysZck(sysZck);
         for (SysZck sysZck1 : list) {
             SysZck sysZck3 = new SysZck();
@@ -268,6 +282,8 @@ public class SysZckController extends BaseController {
                 sysZck.setParentId(map.get(sysZck.getProjectName()));
             }
         }
+        SysZcb sysZcb = sysZcbService.selectSysZcbById(sysZck.getZcbId());
+        sysZck.setAssetPackageName(sysZcb.getAssetStatus());
 
         sysZck.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysZckService.insertSysZck(sysZck));
@@ -374,6 +390,10 @@ public class SysZckController extends BaseController {
         if (StringUtils.isNotNull(sysZck.getDesposalPrice())) {
             sysZck.setDesposalPrices(decimalFormat.format(sysZck.getDesposalPrice()));
         }
+
+        if (StringUtils.isNotNull(sysZck.getCapValue())) {
+            sysZck.setCapValue(decimalFormat.format(new BigDecimal(sysZck.getCapValue())));
+        }
         mmap.put("sysZck", sysZck);
         return prefix + "/detail";
     }
@@ -412,5 +432,17 @@ public class SysZckController extends BaseController {
         return getDataTable(list);
     }
 
+
+    //判断序号是否唯一
+    @PostMapping("/checkNoUnique")
+    @ResponseBody
+    public String checkNoUnique(SysZck sysZck) {
+        List<SysZck> sysZckList = sysZckService.selectSysZck(sysZck);
+        if (sysZckList.size() > 0) {
+            return "1";
+        } else {
+            return "0";
+        }
+    }
 
 }

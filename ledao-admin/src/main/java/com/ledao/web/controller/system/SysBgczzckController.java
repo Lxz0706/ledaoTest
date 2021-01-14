@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
@@ -92,7 +93,17 @@ public class SysBgczzckController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysBgczzck sysBgczzck) {
-        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        String id = getRequest().getParameter("ids");
+        String projectStatus = getRequest().getParameter("projectStatus");
+        sysBgczzck.setProjectStatus(projectStatus);
+        logger.info(sysBgczzck.getProjectStatus());
+        List<SysBgczzck> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(id) && StringUtils.isNotNull(id)) {
+            list = sysBgczzckService.selectByIds(id);
+        } else {
+            list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        }
+
         ExcelUtil<SysBgczzck> util = new ExcelUtil<SysBgczzck>(SysBgczzck.class);
         return util.exportExcel(list, "大型单体项目");
     }

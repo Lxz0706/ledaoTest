@@ -110,6 +110,7 @@ public class SysZckServiceImpl implements ISysZckService {
      */
     @Override
     public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName, Long zcbId) {
+        log.info("进来了！！！！！！=");
         if (StringUtils.isNull(zckList) || zckList.size() == 0) {
             throw new BusinessException("导入数据不能为空！");
         }
@@ -129,14 +130,20 @@ public class SysZckServiceImpl implements ISysZckService {
                     if (zckList2.size() > 0) {
                         zck.setParentId(zckList2.get(0).getId());
                     }
-
+                    sysZck1.setNo(zck.getNo());
+                    List<SysZck> sysZckList = this.selectSysZckList(sysZck1);
                     zck.setCreateBy(operName);
                     zck.setZcbId(zcbId);
-                    this.insertSysZck(zck);
+                    if (sysZckList.size() > 0) {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 序号或借款人已存在,请核对数据之后再上传");
+                    } else {
+                        this.insertSysZck(zck);
+                        successNum++;
+                        successMsg.append("<br/>" + successNum + "、借款人名称 " + zck.getProjectName() + " 导入成功");
+                    }
                 }
 
-                successNum++;
-                successMsg.append("<br/>" + successNum + "、借款人名称 " + zck.getProjectName() + " 导入成功");
             } catch (Exception e) {
                 failureNum++;
                 String msg = "<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 导入失败：";

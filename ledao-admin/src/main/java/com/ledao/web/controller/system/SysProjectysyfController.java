@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,5 +134,16 @@ public class SysProjectysyfController extends BaseController {
     public String avatar(@PathVariable("id") String id, ModelMap mmap) {
         mmap.put("sysProjectysyf", sysProjectysyfService.selectSysProjectysyfById(Long.valueOf(id)));
         return prefix + "/imgUrl";
+    }
+
+    @PostMapping("/imgUrlList/{id}")
+    @ResponseBody
+    public AjaxResult imgUrlList(@PathVariable("id") String id) {
+        SysProjectysyf sysProjectysyf = sysProjectysyfService.selectSysProjectysyfById(Long.valueOf(id));
+        if (StringUtils.isNotEmpty(sysProjectysyf.getImgUrl())) {
+            return AjaxResult.success(sysProjectysyf.getImgUrl().split(";"));
+        } else {
+            return AjaxResult.success();
+        }
     }
 }

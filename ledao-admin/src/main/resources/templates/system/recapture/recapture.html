@@ -62,12 +62,19 @@
                 },
                 {
                     field: 'recapture',
-                    title: '处置回现'
+                    title: '处置回现',
+                    formatter:function (value,row,index) {
+                        return  $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    field: 'recaptureTime',
+                    title: '回现时间'
                 },
                 {
                     field: 'remarks',
                     title: '备注'
-                },
+                }/*,
                 {
                     title: '操作',
                     align: 'center',
@@ -77,7 +84,7 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.recaptureId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
-                }]
+                }*/]
         };
         $.table.init(options);
     });

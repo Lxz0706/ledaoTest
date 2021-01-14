@@ -41,10 +41,13 @@ public class TimedTask {
     @Autowired
     private ISysProjectContractService sysProjectContractService;
 
+    @Autowired
+    private ISysCoverChargeService sysCoverChargeService;
+
     public void timeTask() {
         //应收应付未收服务费消息提醒
         projectUncollectedMoney();
-        //目标回收金额消息提醒
+        //待结算服务费消息提醒
         projectTargetRecover();
 
         //投后项目消息提醒
@@ -59,10 +62,11 @@ public class TimedTask {
         SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
         //应收应付未收服务费消息提醒
         SysProjectUncollectedMoney sysProjectUncollectedMoney = new SysProjectUncollectedMoney();
+        sysProjectUncollectedMoney.setState("否");
         List<SysProjectUncollectedMoney> sysProjectUncollectedMoneyList = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyList(sysProjectUncollectedMoney);
         for (SysProjectUncollectedMoney projectUncollectedMoney : sysProjectUncollectedMoneyList) {
             if (StringUtils.isNotNull(projectUncollectedMoney.getTime())) {
-                if (DateUtils.timeDifference(new Date(), projectUncollectedMoney.getTime(), 90)) {
+                if (DateUtils.timeDifference(new Date(), projectUncollectedMoney.getTime(), 30)) {
                     if (StringUtils.isNotNull(projectUncollectedMoney.getProjectManagementId())) {
                         SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectUncollectedMoney.getProjectManagementId());
                         if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
@@ -90,23 +94,24 @@ public class TimedTask {
         //查询出接收人名称和ID
         SysUser sysUser = sysUserService.selectUserByLoginName("wangziyuan");
         //目标回收金额消息提醒
-        SysProjectTargetrecover sysProjectTargetrecover = new SysProjectTargetrecover();
-        List<SysProjectTargetrecover> sysProjectTargetrecoverList = sysProjectTargetrecoverService.selectSysProjectTargetrecoverList(sysProjectTargetrecover);
-        for (SysProjectTargetrecover projectTargetrecover : sysProjectTargetrecoverList) {
-            if (StringUtils.isNotNull(projectTargetrecover)) {
-                if (StringUtils.isNotNull(projectTargetrecover.getTargetRecoveryDate())) {
-                    if (DateUtils.timeDifference(new Date(), projectTargetrecover.getTargetRecoveryDate(), 90)) {
-                        if (StringUtils.isNotNull(projectTargetrecover.getProjectManagementId())) {
-                            SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectTargetrecover.getProjectManagementId());
+        SysCoverCharge sysCoverCharge = new SysCoverCharge();
+        sysCoverCharge.setState("否");
+        List<SysCoverCharge> sysCoverChargeList = sysCoverChargeService.selectSysCoverChargeList(sysCoverCharge);
+        for (SysCoverCharge sysCoverCharge1 : sysCoverChargeList) {
+            if (StringUtils.isNotNull(sysCoverCharge1)) {
+                if (StringUtils.isNotNull(sysCoverCharge1.getPaidDate())) {
+                    if (DateUtils.timeDifference(new Date(), sysCoverCharge1.getPaidDate(), 30)) {
+                        if (StringUtils.isNotNull(sysCoverCharge1.getProjectManagementId())) {
+                            SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(sysCoverCharge1.getProjectManagementId());
                             if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
                                 SysNotice sysNotice = new SysNotice();
-                                sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectTargetrecover.getTargetRecoveryDate())
-                                        + "有一笔：目标回收金额，金额为：" + projectTargetrecover.getTargetRecoveryAmount()
-                                        + "，距离天数为：" + DateUtils.differentDays(new Date(), projectTargetrecover.getTargetRecoveryDate()));
+                                sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
+                                        + "有一笔：目标回收金额，金额为：" + sysCoverCharge1.getAmountPaid()
+                                        + "，距离天数为：" + DateUtils.differentDays(new Date(), sysCoverCharge1.getPaidDate()));
                                 sysNotice.setNoticeType("3");
-                                sysNotice.setNoticeContent(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectTargetrecover.getTargetRecoveryDate())
-                                        + "有一笔：目标回收金额，金额为：" + projectTargetrecover.getTargetRecoveryAmount()
-                                        + "，距离天数为：" + DateUtils.differentDays(new Date(), projectTargetrecover.getTargetRecoveryDate()));
+                                sysNotice.setNoticeContent(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
+                                        + "有一笔：目标回收金额，金额为：" + sysCoverCharge1.getAmountPaid()
+                                        + "，距离天数为：" + DateUtils.differentDays(new Date(), sysCoverCharge1.getPaidDate()));
                                 sysNotice.setStatus("0");
                                 sysNotice.setReceiverId(sysUser.getUserId().toString());
                                 sysNotice.setReceiver(sysUser.getUserName());
@@ -131,82 +136,87 @@ public class TimedTask {
         if (StringUtils.isNotNull(sysProject)) {
             for (SysProject sysProject1 : sysProjectList) {
                 if ("处置中".equals(sysProject1.getDebtStatus())) {
-                    //诉讼时效提醒
-                    if (StringUtils.isNotNull(sysProject1.getLimitationAction())) {
-                        Date limitationAction = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 30)));
-                        if (DateUtils.timeDifference(new Date(), limitationAction, 0)) {
-                            if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
-                                SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
-                                SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
-                                SysNotice sysNotice = new SysNotice();
-                                sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "诉讼时效为" + DateUtils.dateTime(sysProject1.getLimitationAction()) + "的消息提醒");
-                                sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "诉讼时效为" + DateUtils.dateTime(sysProject1.getLimitationAction()) + "的消息提醒");
-                                if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
-                                    sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
-                                    sysNotice.setReceiver(sysProject1.getProjectManager());
-                                } else {
-                                    sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
-                                    sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
-                                }
-                                sysNotice.setStatus("0");
-                                sysNotice.setNoticeType("3");
-                                sysNotice.setCreateBy(sysUser.getLoginName());
-                                sysNoticeService.insertNotice(sysNotice);
+                    if ("0".equals(sysProject1.getLimitation())) {
+                        //诉讼时效提醒
+                        if (StringUtils.isNotNull(sysProject1.getLimitationAction())) {
+                            Date limitationAction = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 30)));
+                            if (DateUtils.timeDifference(new Date(), limitationAction, 0)) {
+                                if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
+                                    SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
+                                    SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+                                    SysNotice sysNotice = new SysNotice();
+                                    sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "诉讼时效为" + DateUtils.dateTime(sysProject1.getLimitationAction()) + "的消息提醒");
+                                    sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "诉讼时效为" + DateUtils.dateTime(sysProject1.getLimitationAction()) + "的消息提醒");
+                                    if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
+                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
+                                        sysNotice.setReceiver(sysProject1.getProjectManager());
+                                    } else {
+                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
+                                        sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                                    }
+                                    sysNotice.setStatus("0");
+                                    sysNotice.setNoticeType("3");
+                                    sysNotice.setCreateBy(sysUser.getLoginName());
+                                    sysNoticeService.insertNotice(sysNotice);
 
+                                }
                             }
                         }
                     }
 
-                    //查封日期提醒
-                    if (StringUtils.isNotNull(sysProject1.getSealUpDate())) {
-                        Date sealUpDate = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 30)));
-                        if (DateUtils.timeDifference(new Date(), sealUpDate, 0)) {
-                            if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
-                                SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
-                                SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
-                                SysNotice sysNotice = new SysNotice();
-                                sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
-                                sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
-                                sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
-                                sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
-                                if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
-                                    sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
-                                    sysNotice.setReceiver(sysProject1.getProjectManager());
-                                } else {
-                                    sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId() + "," + sysUser2.getUserId());
-                                    sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName() + "," + sysUser2.getUserName());
-                                }
-                                sysNotice.setStatus("0");
-                                sysNotice.setNoticeType("3");
-                                sysNotice.setCreateBy(sysUser.getLoginName());
-                                sysNoticeService.insertNotice(sysNotice);
+                    if ("0".equals(sysProject1.getSeizure())) {
+                        //查封日期提醒
+                        if (StringUtils.isNotNull(sysProject1.getSealUpDate())) {
+                            Date sealUpDate = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 30)));
+                            if (DateUtils.timeDifference(new Date(), sealUpDate, 0)) {
+                                if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
+                                    SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
+                                    SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+                                    SysNotice sysNotice = new SysNotice();
+                                    sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
+                                    sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
+                                    sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
+                                    sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                                    if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
+                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
+                                        sysNotice.setReceiver(sysProject1.getProjectManager());
+                                    } else {
+                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId() + "," + sysUser2.getUserId());
+                                        sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName() + "," + sysUser2.getUserName());
+                                    }
+                                    sysNotice.setStatus("0");
+                                    sysNotice.setNoticeType("3");
+                                    sysNotice.setCreateBy(sysUser.getLoginName());
+                                    sysNoticeService.insertNotice(sysNotice);
 
+                                }
                             }
                         }
                     }
+                    if ("0".equals(sysProject1.getAgeing())) {
+                        //执行时效提醒
+                        if (StringUtils.isNotNull(sysProject1.getLimitationExecution())) {
+                            Date limitationExecution = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 18)));
+                            if (DateUtils.timeDifference(new Date(), limitationExecution, 0)) {
+                                if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
+                                    SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
+                                    SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+                                    SysNotice sysNotice = new SysNotice();
+                                    sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
+                                    sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
+                                    if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
+                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
+                                        sysNotice.setReceiver(sysProject1.getProjectManager());
+                                    } else {
+                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
+                                        sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                                    }
+                                    sysNotice.setStatus("0");
+                                    sysNotice.setNoticeType("3");
+                                    sysNotice.setCreateBy(sysUser.getLoginName());
+                                    sysNoticeService.insertNotice(sysNotice);
 
-                    //执行时效提醒
-                    if (StringUtils.isNotNull(sysProject1.getLimitationExecution())) {
-                        Date limitationExecution = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 18)));
-                        if (DateUtils.timeDifference(new Date(), limitationExecution, 0)) {
-                            if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
-                                SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
-                                SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
-                                SysNotice sysNotice = new SysNotice();
-                                sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
-                                sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
-                                if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
-                                    sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
-                                    sysNotice.setReceiver(sysProject1.getProjectManager());
-                                } else {
-                                    sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
-                                    sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
                                 }
-                                sysNotice.setStatus("0");
-                                sysNotice.setNoticeType("3");
-                                sysNotice.setCreateBy(sysUser.getLoginName());
-                                sysNoticeService.insertNotice(sysNotice);
-
                             }
                         }
                     }

@@ -42,6 +42,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                detailUrl: prefix + "/detail/{id}",
                 modalName: "项目管理",
                 columns: [{
                     checkbox: true
@@ -63,7 +64,10 @@
                 },*/
                 {
                     field: 'projectManagementName', 
-                    title: '项目名称'
+                    title: '项目名称',
+                    formatter:function (value,row,index) {
+                        return '<a href="javascript:void(0)" onclick="$.operate.detail(\'' + row.projectManagementId+'\')">' + value + '</a>';
+                    }
                 },
                 {
                     field: 'projectLeader', 

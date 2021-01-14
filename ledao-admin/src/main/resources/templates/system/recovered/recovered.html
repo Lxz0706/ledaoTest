@@ -90,6 +90,16 @@
                 {
                     field: 'remarks',
                     title: '备注'
+                },
+                {
+                    field: 'finance',
+                    title: '财务确认意见'
+                },
+                {
+                    title: '附件上传查看',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                    }
                 }/*,
                 {
                     title: '操作',
@@ -108,6 +118,11 @@
         function add(){
             var projectManagementId=$("#projectManagementId").val();
             $.operate.add(projectManagementId);
+        }
+
+        function imgUrl(id){
+            var url = prefix + '/imgUrl/'+id;
+            $.modal.opens("附件上传查看", url);
         }
     </script>
 </body>

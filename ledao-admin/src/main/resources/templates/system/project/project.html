@@ -233,24 +233,24 @@
                     }
                 },
                 {
-                    field: 'guarantor',
+                    field: 'guarantors',
                     title: '保证人',
                     formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail1(\'' + row.projectId+"',\'" + row.guarantor + '\')">' + strLength(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail1(\'' + row.projectId+"',\'" + row.guarantors + '\')">' + strLength(row.guarantors) + '</a>';
                     }
                 },
                 {
-                    field: 'collateral',
+                    field: 'collaterals',
                     title: '抵押物',
                     formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail2(\'' + row.projectId+"',\'" + row.collateral + '\')">' + strLength(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail2(\'' + row.projectId+"',\'" + row.collaterals + '\')">' + strLength(row.collaterals) + '</a>';
                     }
                 },
                 {
-                    field: 'pledge',
+                    field: 'pledges',
                     title: '质押物',
                     formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail4(\'' + row.projectId+"',\'" + row.pledge + '\')">' + strLength(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail4(\'' + row.projectId+"',\'" + row.pledges + '\')">' + strLength(row.pledges) + '</a>';
                     }
                 },
                 {
@@ -281,8 +281,8 @@
         //控制显示的字数
         function strLength(value){
             var str=$.common.nullToStr(value);
-            if(str.length>20){
-                str=str.substring(0,20)+'...';
+            if(str.length>10){
+                str=str.substring(0,10)+'...';
             }
             return str;
         }

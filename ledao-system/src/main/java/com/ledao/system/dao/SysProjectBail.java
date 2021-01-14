@@ -1,5 +1,6 @@
 package com.ledao.system.dao;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ledao.common.annotation.Excel;
@@ -49,7 +50,7 @@ public class SysProjectBail extends BaseEntity {
      * 担保金额(元)
      */
     @Excel(name = "担保金额(元)")
-    private Double amountGuaranteed;
+    private BigDecimal amountGuaranteed;
 
     /**
      * 起始日
@@ -116,12 +117,12 @@ public class SysProjectBail extends BaseEntity {
         return bail;
     }
 
-    public void setAmountGuaranteed(Double amountGuaranteed) {
-        this.amountGuaranteed = amountGuaranteed;
+    public BigDecimal getAmountGuaranteed() {
+        return amountGuaranteed;
     }
 
-    public Double getAmountGuaranteed() {
-        return amountGuaranteed;
+    public void setAmountGuaranteed(BigDecimal amountGuaranteed) {
+        this.amountGuaranteed = amountGuaranteed;
     }
 
     public void setStartTime(Date startTime) {

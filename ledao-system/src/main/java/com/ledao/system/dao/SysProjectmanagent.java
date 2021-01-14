@@ -65,6 +65,12 @@ public class SysProjectmanagent extends BaseEntity {
     private BigDecimal investmentAmount;
 
     /**
+     * 投资金额字符串
+     */
+    private String investmentAmounts;
+
+
+    /**
      * 收支结算方式
      */
     @Excel(name = "收支结算方式")
@@ -81,6 +87,11 @@ public class SysProjectmanagent extends BaseEntity {
      */
     @Excel(name = "已付金额")
     private BigDecimal amountPaid;
+
+    /**
+     * 已付金额字符串
+     */
+    private String amountPaids;
 
     /**
      * 应（未）付日期
@@ -131,6 +142,11 @@ public class SysProjectmanagent extends BaseEntity {
     private BigDecimal amountRecovered;
 
     /**
+     * 清收任务回收金额字符串
+     */
+    private String amountRecovereds;
+
+    /**
      * 清收任务日期
      */
     @Excel(name = "清收任务日期", width = 30, dateFormat = "yyyy-MM-dd")
@@ -148,6 +164,10 @@ public class SysProjectmanagent extends BaseEntity {
      */
     @Excel(name = "已收服务费入账金额")
     private BigDecimal entryAmount;
+    /**
+     * 已收服务费入账金额字符串
+     */
+    private String entryAmounts;
 
     /**
      * 已收服务费入账日期
@@ -191,6 +211,38 @@ public class SysProjectmanagent extends BaseEntity {
      * 项目类型
      */
     private String projectType;
+
+    /**
+     * 预计总服务费
+     */
+    private BigDecimal yjzfwf;
+
+
+    /**
+     * 预计总服务费字符串
+     */
+    private String yjzfwfs;
+
+    /**
+     * 回现金额
+     */
+    private BigDecimal recapture;
+
+    public String getAmountPaids() {
+        return amountPaids;
+    }
+
+    public void setAmountPaids(String amountPaids) {
+        this.amountPaids = amountPaids;
+    }
+
+    public String getYjzfwfs() {
+        return yjzfwfs;
+    }
+
+    public void setYjzfwfs(String yjzfwfs) {
+        this.yjzfwfs = yjzfwfs;
+    }
 
     public Long getProjectManagementId() {
         return projectManagementId;
@@ -432,6 +484,46 @@ public class SysProjectmanagent extends BaseEntity {
         this.projectType = projectType;
     }
 
+    public BigDecimal getYjzfwf() {
+        return yjzfwf;
+    }
+
+    public void setYjzfwf(BigDecimal yjzfwf) {
+        this.yjzfwf = yjzfwf;
+    }
+
+    public BigDecimal getRecapture() {
+        return recapture;
+    }
+
+    public void setRecapture(BigDecimal recapture) {
+        this.recapture = recapture;
+    }
+
+    public String getInvestmentAmounts() {
+        return investmentAmounts;
+    }
+
+    public void setInvestmentAmounts(String investmentAmounts) {
+        this.investmentAmounts = investmentAmounts;
+    }
+
+    public String getAmountRecovereds() {
+        return amountRecovereds;
+    }
+
+    public void setAmountRecovereds(String amountRecovereds) {
+        this.amountRecovereds = amountRecovereds;
+    }
+
+    public String getEntryAmounts() {
+        return entryAmounts;
+    }
+
+    public void setEntryAmounts(String entryAmounts) {
+        this.entryAmounts = entryAmounts;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -466,6 +558,7 @@ public class SysProjectmanagent extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("projectType", getProjectType())
+                .append("yjzfwf", getYjzfwf())
                 .toString();
     }
 }

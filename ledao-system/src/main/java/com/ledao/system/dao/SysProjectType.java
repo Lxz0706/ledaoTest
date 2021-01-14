@@ -40,6 +40,16 @@ public class SysProjectType {
      */
     private BigDecimal yhsje;
 
+    /**
+     * 回现金额
+     */
+    private BigDecimal recapture;
+
+    /**
+     * 总已结算
+     */
+    private BigDecimal zyjs;
+
     public void setProjectType(String projectType) {
         this.projectType = projectType;
     }
@@ -70,6 +80,22 @@ public class SysProjectType {
 
     public void setYhsje(BigDecimal yhsje) {
         this.yhsje = yhsje;
+    }
+
+    public BigDecimal getRecapture() {
+        return recapture;
+    }
+
+    public void setRecapture(BigDecimal recapture) {
+        this.recapture = recapture;
+    }
+
+    public BigDecimal getZyjs() {
+        return zyjs;
+    }
+
+    public void setZyjs(BigDecimal zyjs) {
+        this.zyjs = zyjs;
     }
 
     @Override

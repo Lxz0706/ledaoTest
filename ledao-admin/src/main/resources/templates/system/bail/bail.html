@@ -50,9 +50,9 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:bail:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:bail:export">
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:bail:export">
                     <i class="fa fa-download"></i> 导出
-                </a>
+                </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -100,7 +100,10 @@
                 },
                 {
                     field: 'amountGuaranteed', 
-                    title: '担保金额(元)'
+                    title: '担保金额(元)',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 },
                 {
                     field: 'startTime', 
@@ -112,8 +115,11 @@
                 },
                 {
                     field: 'amountCompensated', 
-                    title: '已代偿金额(元)'
-                },
+                    title: '已代偿金额(元)',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                }/*,
                 {
                     title: '操作',
                     align: 'center',
@@ -123,7 +129,7 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.bailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
-                }]
+                }*/]
             };
             $.table.init(options);
         });

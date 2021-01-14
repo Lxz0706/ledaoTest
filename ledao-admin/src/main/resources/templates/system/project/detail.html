@@ -6,6 +6,7 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <table class="table table-border">
+        <input id="createBy" th:field="${sysProject.isCreate}" type="hidden">
         <tr>
             <td colspan="8" style="text-align: center" class="success"><h3>债权情况</h3></td>
         </tr>
@@ -120,9 +121,24 @@
             <td class="col-sm-1 text-right"><h5>买家联系方式：</h5></td>
             <td class="col-sm-1" colspan="7"><span th:text="${sysProject.buyerContact}"/></td>
         </tr>
+        <tr id="create">
+            <td class="col-sm-1 text-right"><h5>成交客户：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.dealCustomerName}"/></td>
+            <td class="col-sm-1 text-right"><h5>意向客户：</h5></td>
+            <td class="col-sm-1" colspan="5"><span th:text="${sysProject.potentialCustomers}"/></td>
+        </tr>
     </table>
 </div>
 <th:block th:include="include :: footer"/>
-
+<script>
+    $(function () {
+        var createBy = $("#createBy").val();
+        if ("true" == createBy) {
+            $("#create").show();
+        } else {
+            $("#create").hide();
+        }
+    })
+</script>
 </body>
 </html>

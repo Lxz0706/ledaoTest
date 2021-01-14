@@ -13,10 +13,12 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
     </resultMap>
 
     <sql id="selectSysProjectZckVo">
-        select project_zck_id, zck_name, zck_status, del_flag, create_by, create_time, update_by, update_time from sys_project_zck
+        select project_zck_id, zck_name, zck_status, del_flag, create_by, create_time, update_by, update_time,start_time,end_time from sys_project_zck
     </sql>
 
     <select id="selectSysProjectZckList" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
@@ -43,6 +45,8 @@
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="startTime !=null">start_time,</if>
+            <if test="endTime !=null">end_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="zckName != null">#{zckName},</if>
@@ -52,6 +56,8 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="startTime !=null">#{startTime},</if>
+            <if test="endTime !=null">#{endTime},</if>
         </trim>
     </insert>
 
@@ -65,6 +71,8 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="startTime !=null">start_time = #{startTime},</if>
+            <if test="endTime !=null">end_time = #{endTime},</if>
         </trim>
         where project_zck_id = #{projectZckId}
     </update>

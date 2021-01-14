@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysProject;
-import com.ledao.system.dao.SysProjectContract;
-import com.ledao.system.dao.SysProjectMortgage;
+import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysProjectService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.dao.SysProjectPledge;
 import com.ledao.system.service.ISysProjectPledgeService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
@@ -153,12 +150,21 @@ public class SysProjectPledgeController extends BaseController {
     public AjaxResult remove(String ids) {
         for (String string1 : ids.split(",")) {
             SysProjectPledge sysProjectPledge = sysProjectPledgeService.selectSysProjectPledgeById(Long.valueOf(string1));
-            if (StringUtils.isNotNull(sysProjectPledge.getProjectId())) {
-                SysProject sysProject = sysProjectService.selectSysProjectById(sysProjectPledge.getProjectId());
-                sysProject.setPledge("");
-                sysProject.setUpdateBy(ShiroUtils.getLoginName());
-                sysProjectService.updateSysProject(sysProject);
+            sysProjectPledgeService.deleteSysProjectPledgeById(Long.valueOf(string1));
+            List<SysProjectPledge> sysProjectPledgeList = sysProjectPledgeService.selectSysPledgeByProjectId(sysProjectPledge.getProjectId());
+            StringBuffer sb = new StringBuffer();
+            for (SysProjectPledge sysProjectPledge1 : sysProjectPledgeList) {
+                if (StringUtils.isNotNull(sysProjectPledge1.getPledgor())) {
+                    sb.append(sysProjectPledge1.getPledgor()).append(";");
+                }
             }
+            SysProject sysProject = new SysProject();
+            sysProject.setProjectId(sysProjectPledge.getProjectId());
+            if (StringUtils.isNotNull(sb.toString()) && StringUtils.isNotEmpty(sb.toString())) {
+                sysProject.setPledge(sb.deleteCharAt(sb.length() - 1).toString());
+            }
+            sysProject.setUpdateBy(ShiroUtils.getLoginName());
+            sysProjectService.updateSysProject(sysProject);
         }
         return toAjax(sysProjectPledgeService.deleteSysProjectPledgeByIds(ids));
     }

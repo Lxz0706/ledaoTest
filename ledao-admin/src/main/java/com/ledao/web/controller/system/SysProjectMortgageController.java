@@ -6,6 +6,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectBail;
+import com.ledao.system.dao.SysProjectPledge;
 import com.ledao.system.service.ISysProjectService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,12 +155,21 @@ public class SysProjectMortgageController extends BaseController {
     public AjaxResult remove(String ids) {
         for (String string1 : ids.split(",")) {
             SysProjectMortgage sysProjectMortgage = sysProjectMortgageService.selectSysProjectMortgageById(Long.valueOf(string1));
-            if (StringUtils.isNotNull(sysProjectMortgage.getProjectId())) {
-                SysProject sysProject = sysProjectService.selectSysProjectById(sysProjectMortgage.getProjectId());
-                sysProject.setCollateral("");
-                sysProject.setUpdateBy(ShiroUtils.getLoginName());
-                sysProjectService.updateSysProject(sysProject);
+            sysProjectMortgageService.deleteSysProjectMortgageById(Long.valueOf(string1));
+            List<SysProjectMortgage> sysProjectMortgageList = sysProjectMortgageService.selectProjectMortgageByProjectIds(sysProjectMortgage.getProjectId());
+            StringBuffer sb = new StringBuffer();
+            for (SysProjectMortgage sysProjectMortgage1 : sysProjectMortgageList) {
+                if (StringUtils.isNotNull(sysProjectMortgage1.getMortgagor())) {
+                    sb.append(sysProjectMortgage1.getMortgagor()).append(";");
+                }
             }
+            SysProject sysProject = new SysProject();
+            sysProject.setProjectId(sysProjectMortgage.getProjectId());
+            if (StringUtils.isNotNull(sb.toString()) && StringUtils.isNotEmpty(sb.toString())) {
+                sysProject.setCollateral(sb.deleteCharAt(sb.length() - 1).toString());
+            }
+            sysProject.setUpdateBy(ShiroUtils.getLoginName());
+            sysProjectService.updateSysProject(sysProject);
         }
         return toAjax(sysProjectMortgageService.deleteSysProjectMortgageByIds(ids));
     }

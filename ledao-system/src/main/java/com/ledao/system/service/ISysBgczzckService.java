@@ -75,4 +75,9 @@ public interface ISysBgczzckService {
      */
     public List<SysBgczzck> selectByProjectStatus();
 
+
+    /**
+     * 根据id查询
+     */
+    public List<SysBgczzck> selectByIds(String ids);
 }

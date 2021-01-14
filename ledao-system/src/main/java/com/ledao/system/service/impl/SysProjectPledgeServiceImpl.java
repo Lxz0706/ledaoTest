@@ -99,4 +99,11 @@ public class SysProjectPledgeServiceImpl implements ISysProjectPledgeService {
     public List<SysProjectPledge> selectPledgeByProjectId(String projectId) {
         return sysProjectPledgeMapper.selectPledgeByProjectId(Convert.toStrArray(projectId));
     }
+
+    /**
+     * 根据projectId查询
+     */
+    public List<SysProjectPledge> selectSysPledgeByProjectId(Long projectId) {
+        return sysProjectPledgeMapper.selectSysPledgeByProjectId(projectId);
+    }
 }

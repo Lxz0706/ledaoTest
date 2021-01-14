@@ -36,6 +36,7 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="projectType" column="project_type"/>
+        <result property="yjzfwf" column="yjzfwf"/>
     </resultMap>
 
     <sql id="selectSysProjectmanagentVo">
@@ -44,7 +45,7 @@
         expenses_receipts, paid_date, amount_paid, due_date, amount_due, received_date,
         amount_received, receivable_date, amount_receivable, investment_instituions, amount_recovered,
         recovery_date, service_fee, entry_amount, entry_date, expected_amount, expected_date, del_flag,
-        create_by, create_time, update_by, update_time,project_type from sys_projectmanagent
+        create_by, create_time, update_by, update_time,project_type,yjzfwf from sys_projectmanagent
     </sql>
 
     <select id="selectSysProjectmanagentList" parameterType="SysProjectmanagent" resultMap="SysProjectmanagentResult">
@@ -122,7 +123,8 @@
             <if test="delFlag != null">del_flag,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
-            <if test="projectType != null">project_type</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="yjzfwf != null">yjzfwf,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectManagementName != null">#{projectManagementName},</if>
@@ -152,7 +154,8 @@
             <if test="delFlag != null">#{delFlag},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
-            <if test="projectType != null">#{projectType}</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="yjzfwf != null">#{yjzfwf},</if>
         </trim>
     </insert>
 
@@ -189,6 +192,7 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="projectType != null">yjzfwf = #{yjzfwf},</if>
         </trim>
         where project_management_id = #{projectManagementId}
     </update>

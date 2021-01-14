@@ -74,6 +74,8 @@ public class SysProjectUncollectedMoney extends BaseEntity {
      */
     private String imgUrl;
 
+    private String cw;
+
     public Long getId() {
         return id;
     }
@@ -160,6 +162,14 @@ public class SysProjectUncollectedMoney extends BaseEntity {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getCw() {
+        return cw;
+    }
+
+    public void setCw(String cw) {
+        this.cw = cw;
     }
 
     @Override

@@ -218,4 +218,13 @@ public class SysZcbController extends BaseController {
         return "system/zcb/queryAll";
     }
 
+    @RequiresPermissions("system:zcb:list")
+    @PostMapping("/treeList")
+    @ResponseBody
+    public TableDataInfo selectSysZcbList(SysZcb sysZcb) {
+        startPage();
+        List<SysZcb> sysZcbList =sysZcbService.selectSysZcbList(sysZcb);
+        return getDataTable(sysZcbList);
+    }
+
 }

@@ -132,13 +132,29 @@ public class SysProjectmanagentController extends BaseController {
                     }
                 } else {
                     //总已结算
-                    if (sysProjectManagent.getEntryAmount() == null) {
+
+                    SysCoverCharge sysCoverCharge = new SysCoverCharge();
+                    sysCoverCharge.setProjectManagementId(sysProjectManagent.getProjectManagementId());
+                    sysCoverCharge.setFundType("已结算服务费");
+                    List<SysCoverCharge> sysCoverChargeList = sysCoverChargeService.selectSysCoverChargeList(sysCoverCharge);
+                    for (SysCoverCharge sysCoverCharge1 : sysCoverChargeList) {
+                        if (sysCoverCharge1.getAmountPaid() == null) {
+                            sysCoverCharge1.setAmountPaid(new BigDecimal(0));
+                        }
+
+                        if (sysProjectmanagent.getAmountRecovered() == null) {
+                            sysProjectmanagent.setAmountRecovered(new BigDecimal(0));
+                        }
+                        sysProjectmanagent.setAmountRecovered(sysProjectmanagent.getAmountRecovered().add(sysCoverCharge1.getAmountPaid()));
+                        sysProjectType1.setZyjs(sysProjectmanagent.getAmountRecovered());
+                    }
+                    /*if (sysProjectManagent.getEntryAmount() == null) {
                         sysProjectManagent.setEntryAmount(new BigDecimal(0));
                     }
                     if (sysProjectType1.getZyjs() == null) {
                         sysProjectType1.setZyjs(new BigDecimal(0));
-                    }
-                    sysProjectType1.setZyjs(sysProjectType1.getZyjs().add(sysProjectManagent.getEntryAmount()));
+                    }*/
+                    //sysProjectType1.setZyjs(sysProjectType1.getZyjs().add(sysProjectManagent.getEntryAmount()));
 
 
                     //总回现金额

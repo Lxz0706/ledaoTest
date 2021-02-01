@@ -58,4 +58,20 @@ public interface ISysCustomerService {
      * @return 结果
      */
     public int deleteSysCustomerById(Long customerId);
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param sysCustomer 用户信息
+     * @return 结果
+     */
+    public String checkPhoneUnique(SysCustomer sysCustomer);
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param sysCustomer 用户信息
+     * @return 结果
+     */
+    public String checkWeChatNumberUnique(SysCustomer sysCustomer);
 }

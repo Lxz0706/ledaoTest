@@ -84,6 +84,45 @@ public class SysCustomer extends BaseEntity {
      */
     private String delFlag;
 
+    /*
+     * 关联项目
+     * */
+    private String projectName;
+
+    /**
+     * 所属部门ID
+     */
+    //@Excel(name = "所属部门ID")
+    private Long deptId;
+
+    /**
+     * 所属部门
+     */
+    //@Excel(name = "所属部门")
+    private String deptName;
+
+    /**
+     * 是否添加微信
+     */
+    //@Excel(name = "是否添加微信")
+    private String wechatFlag;
+
+    /**
+     * 原因
+     */
+    //@Excel(name = "原因")
+    private String reason;
+
+
+    /**
+     * 微信号
+     */
+    //@Excel(name = "微信号")
+    private String weChatNumber;
+
+    //客户标签
+    private String customerLable;
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -180,6 +219,62 @@ public class SysCustomer extends BaseEntity {
         return delFlag;
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public String getWechatFlag() {
+        return wechatFlag;
+    }
+
+    public void setWechatFlag(String wechatFlag) {
+        this.wechatFlag = wechatFlag;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public void setWeChatNumber(String weChatNumber) {
+        this.weChatNumber = weChatNumber;
+    }
+
+    public String getWeChatNumber() {
+        return weChatNumber;
+    }
+
+    public String getCustomerLable() {
+        return customerLable;
+    }
+
+    public void setCustomerLable(String customerLable) {
+        this.customerLable = customerLable;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -199,6 +294,11 @@ public class SysCustomer extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("deptId", getDeptId())
+                .append("deptName", getDeptName())
+                .append("wechatFlag", getWechatFlag())
+                .append("reason", getReason())
+                .append("weChatNumber", getWeChatNumber())
                 .toString();
     }
 }

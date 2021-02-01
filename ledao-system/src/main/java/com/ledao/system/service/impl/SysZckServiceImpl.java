@@ -1,5 +1,6 @@
 package com.ledao.system.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,7 +111,6 @@ public class SysZckServiceImpl implements ISysZckService {
      */
     @Override
     public String importZck(List<SysZck> zckList, Boolean isUpdateSupport, String operName, Long zcbId) {
-        log.info("进来了！！！！！！=");
         if (StringUtils.isNull(zckList) || zckList.size() == 0) {
             throw new BusinessException("导入数据不能为空！");
         }
@@ -119,25 +119,43 @@ public class SysZckServiceImpl implements ISysZckService {
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
         SysZck sysZck1 = new SysZck();
+        SysZck sysZck2 = new SysZck();
+        List<SysZck> sysZckList = new ArrayList<>();
+        List<SysZck> sysZckList1 = new ArrayList<>();
         for (SysZck zck : zckList) {
             try {
                 if (StringUtils.isNotNull(zck.getProjectName()) && StringUtils.isNotEmpty(zck.getProjectName())
-                        && StringUtils.isNotNull(zck.getAssetPackageName()) && StringUtils.isNotEmpty(zck.getAssetPackageName())) {
+                        && StringUtils.isNotNull(zck.getAssetPackageName()) && StringUtils.isNotEmpty(zck.getAssetPackageName()) && StringUtils.isNotNull(zck.getNo())) {
+                    //父级判断序号是否重复
+                    sysZck2.setAssetPackageName(zck.getAssetPackageName());
+                    sysZck2.setZcbId(zcbId);
+                    sysZck2.setNo(zck.getNo());
+                    sysZckList1 = this.selectSysZckList(sysZck2);
+
+                    //获取父级id
                     sysZck1.setAssetPackageName(zck.getAssetPackageName());
-                    sysZck1.setProjectName(zck.getProjectName().trim());
                     sysZck1.setZcbId(zcbId);
+                    sysZck1.setProjectName(zck.getProjectName().trim());
                     List<SysZck> zckList2 = this.selectSysZckList(sysZck1);
                     if (zckList2.size() > 0) {
                         zck.setParentId(zckList2.get(0).getId());
                     }
+                    if (StringUtils.isNotNull(zck.getNo())) {
+                        sysZck1.setParentId(zck.getParentId());
+                    }
                     sysZck1.setNo(zck.getNo());
-                    List<SysZck> sysZckList = this.selectSysZckList(sysZck1);
+                    sysZckList = this.selectSysZckList(sysZck1);
                     zck.setCreateBy(operName);
                     zck.setZcbId(zcbId);
+
                     if (sysZckList.size() > 0) {
                         failureNum++;
                         failureMsg.append("<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 序号或借款人已存在,请核对数据之后再上传");
-                    } else {
+                    } /*else if (sysZckList1.size() > 0) {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 序号已存在,请核对数据之后再上传");
+                        //return failureMsg.toString();
+                    }*/ else {
                         this.insertSysZck(zck);
                         successNum++;
                         successMsg.append("<br/>" + successNum + "、借款人名称 " + zck.getProjectName() + " 导入成功");

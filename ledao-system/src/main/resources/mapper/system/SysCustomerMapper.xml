@@ -21,11 +21,17 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="wechatFlag" column="weChat_flag"/>
+        <result property="reason" column="reason"/>
+        <result property="weChatNumber" column="we_chat_number"/>
     </resultMap>
 
     <sql id="selectSysCustomerVo">
         select customer_id, customer_name, affiliation, contacts, contact_number, duties,
-        contact_address, resources, province, city, county, del_flag, create_by, create_time, update_by, update_time from sys_customer
+        contact_address, resources, province, city, county, del_flag, create_by, create_time, update_by, update_time, dept_id, dept_name,
+        weChat_flag,reason, we_chat_number from sys_customer
     </sql>
 
     <select id="selectSysCustomerList" parameterType="SysCustomer" resultMap="SysCustomerResult">
@@ -44,6 +50,12 @@
             <if test="province != null  and province != ''">and province = #{province}</if>
             <if test="city != null  and city != ''">and city = #{city}</if>
             <if test="county != null  and county != ''">and county = #{county}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+            <if test="deptName != null  and deptName != ''">and dept_name like concat('%',#{deptName}, '%')</if>
+            <if test="wechatFlag != null  and wechatFlag != ''">and weChat_flag = #{wechatFlag}</if>
+            <if test="reason != null  and reason != ''">and reason = #{reason}</if>
+            <if test="createBy != null">and create_by = #{createBy}</if>
+            <if test="weChatNumber != null  and weChatNumber != ''">and we_chat_number = #{weChatNumber}</if>
         </where>
     </select>
 
@@ -70,6 +82,11 @@
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="deptName != null">dept_name,</if>
+            <if test="wechatFlag != null">weChat_flag,</if>
+            <if test="reason != null">reason,</if>
+            <if test="weChatNumber != null">we_chat_number,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerName != null">#{customerName},</if>
@@ -87,6 +104,11 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="deptName != null">#{deptName},</if>
+            <if test="wechatFlag != null">#{wechatFlag},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="weChatNumber != null">#{weChatNumber},</if>
         </trim>
     </insert>
 
@@ -108,6 +130,11 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="deptName != null">dept_name = #{deptName},</if>
+            <if test="wechatFlag != null">weChat_flag = #{wechatFlag},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="weChatNumber != null">we_chat_number = #{weChatNumber},</if>
         </trim>
         where customer_id = #{customerId}
     </update>
@@ -122,5 +149,13 @@
             #{customerId}
         </foreach>
     </delete>
+
+    <select id="checkPhoneUnique" parameterType="String" resultMap="SysCustomerResult">
+		select customer_id, contact_number from sys_customer where contact_number=#{contactNumber} and  del_flag = '0'
+	</select>
+
+    <select id="checkWeChatNumberUnique" parameterType="String" resultMap="SysCustomerResult">
+		select customer_id, we_chat_number from sys_customer where we_chat_number=#{weChatNumber} and  del_flag = '0'
+	</select>
 
 </mapper>

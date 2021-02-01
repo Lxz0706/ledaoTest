@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('司法拍卖项目列表')" />
+    <style type="text/css">
+        .select-table table{table-layout:fixed;}.select-table .table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .form-control{padding:3px 6px 4px;height:30px;}.icheckbox-blue{top:0px;left:6px;}
+        .form-control.select2-hidden-accessible{position:static!important;}.select-table table label.error{position: inherit;}select + label.error{z-index:1;right:40px;}
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>标题：</label>
+                                <input type="text" name="itemTitle"/>
+                            </li>
+                            <li>
+                                <label>所有人：</label>
+                                <input type="text" name="itemOwner"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:suspected:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:suspected:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:suspected:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:suspected:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:suspected:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:suspected:remove')}]];
+        var prefix = ctx + "system/suspected";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "司法拍卖项目",
+                columns: [
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                    {
+                        field: 'itemTitle',
+                        title: '标题'
+                    },
+                    {
+                        field: 'itemOwner',
+                        title: '所有人'
+                    },
+                    {
+                        field: 'itemType',
+                        title: '拍品类型'
+                    },
+                    {
+                        field: 'itemInitialprice',
+                        title: '项目起拍价',
+                        formatter:function (value,row,index) {
+                            return $.operate.numberFormatter(value);
+                        }
+                    },
+                    {
+                        field: 'itemCurrentprice',
+                        title: '当前/成交价',
+                        formatter:function (value,row,index) {
+                            return $.operate.numberFormatter(value);
+                        }
+                    },
+                    {
+                        field: 'itemStartTime',
+                        title: '开始时间'
+                    },
+                    {
+                        field: 'itemEndTime',
+                        title: '结束时间'
+                    },
+                    {
+                        field: 'itemStatus',
+                        title: '状态'
+                    },
+                    {
+                        field: 'itemLink',
+                        title: '网站链接',
+                        formatter: function(value, row, index) {
+                            return '<a href="'+row.itemLink+'" target="_blank">' + value + '</a>';
+                        }
+                    },
+                    {
+                        field: 'itemSource',
+                        title: '项目来源'
+                    },
+                    {
+                        field: '',
+                        title: '是否加入星标库',
+                        formatter: function (value, row, index) {
+                            return statusTools(row);
+                        }
+                    }]
+            };
+            $.table.init(options);
+        });
+
+        function statusTools(row){
+            if(row.taggings == 'Y'){
+                return '<a href="javascript:void(0)" onclick="detail1(\'' + row.itemId+'\')">★</a>';
+            }else {
+                return '<a href="javascript:void(0)" onclick="detail(\'' + row.itemId+'\')">☆</a>';
+            }
+        }
+
+        function detail(id){
+            $.modal.confirm("确认要将该条数据添加到星标库吗？", function () {
+                $.operate.post(prefix + "/addTagging", {"itemId": id ,"judicial":"N"});
+            });
+        }
+
+        function detail1(id){
+            $.modal.confirm("确认要将该条数据从星标库中删除吗？", function () {
+                $.operate.post(prefix + "/removeTagging", {"itemId": id ,"judicial":"N"});
+            });
+        }
+    </script>
+</body>
+</html>

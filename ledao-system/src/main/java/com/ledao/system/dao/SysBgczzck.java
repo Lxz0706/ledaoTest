@@ -448,6 +448,17 @@ public class SysBgczzck extends BaseEntity {
 
     private String endTime;
 
+    /**
+     * 客户id
+     */
+    private Long customerId;
+
+    /**
+     * 客户名称
+     */
+    private String customer;
+
+
     public Long getId() {
         return id;
     }
@@ -1081,6 +1092,22 @@ public class SysBgczzck extends BaseEntity {
         this.totalPrices = totalPrices;
     }
 
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1151,6 +1178,8 @@ public class SysBgczzck extends BaseEntity {
                 .append("areaMeasure", getAreaMeasure())
                 .append("soe", getSoe())
                 .append("zoing", getZoing())
+                .append("customer", getCustomer())
+                .append("customerId", getCustomerId())
                 .toString();
     }
 }

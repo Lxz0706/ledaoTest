@@ -106,26 +106,32 @@
             <td class="col-sm-1 text-right"><h5>执行款到账日期：</h5></td>
             <td class="col-sm-1"><span th:text="${#dates.format(sysProject.paymentReceivedDate, 'yyyy-MM-dd')}"/></td>
         </tr>
-        <tr>
+        <tr id="create1">
             <td colspan="8" style="text-align: center" class="success"><h3>成交信息</h3></td>
         </tr>
-        <tr>
-            <!--<td  class="col-sm-1 text-right"><h5>抵押物/债权：</h5></td>
-            <td  class="col-sm-1"><span th:text="${sysProject.collateralClaims}"/></td>-->
-            <td class="col-sm-1 text-right"><h5>成交类型：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysProject.transactionType}"/></td>
-            <td class="col-sm-1 text-right"><h5>买家：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysProject.buyer}"/></td>
-            <td class="col-sm-1 text-right"><h5>买家来源：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysProject.buyerSources}"/></td>
-            <td class="col-sm-1 text-right"><h5>买家联系方式：</h5></td>
-            <td class="col-sm-1" colspan="7"><span th:text="${sysProject.buyerContact}"/></td>
+        <tr id="create2">
+            <td class="col-sm-1 text-right"><h5>资产供应方：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.assetSupplierName}"/></td>
+            <td class="col-sm-1 text-right"><h5>资金供应方：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.fundingProviderName}"/></td>
+            <td class="col-sm-1 text-right"><h5>律师：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.lawyerName}"/></td>
+            <td class="col-sm-1 text-right"><h5>中介方：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.intermediaryName}"/></td>
         </tr>
-        <tr id="create">
-            <td class="col-sm-1 text-right"><h5>成交客户：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysProject.dealCustomerName}"/></td>
-            <td class="col-sm-1 text-right"><h5>意向客户：</h5></td>
-            <td class="col-sm-1" colspan="5"><span th:text="${sysProject.potentialCustomers}"/></td>
+        <tr id="create3">
+            <td class="col-sm-1 text-right"><h5>物权意向客户：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.wqyxCustomerName}"/></td>
+            <td class="col-sm-1 text-right"><h5>物权成交客户：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.wqcjCustomerName}"/></td>
+            <td class="col-sm-1 text-right"><h5>债权意向客户：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.zqyxCustomerName}"/></td>
+            <td class="col-sm-1 text-right"><h5>债权成交客户：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.zqcjCustomerName}"/></td>
+        </tr>
+        <tr id="create4">
+            <td class="col-sm-1 text-right"><h5>其他：</h5></td>
+            <td class="col-sm-1" colspan="7"><span th:text="${sysProject.otherName}"/></td>
         </tr>
     </table>
 </div>
@@ -134,9 +140,15 @@
     $(function () {
         var createBy = $("#createBy").val();
         if ("true" == createBy) {
-            $("#create").show();
+            $("#create1").show();
+            $("#create2").show();
+            $("#create3").show();
+            $("#create4").show();
         } else {
-            $("#create").hide();
+            $("#create1").hide();
+            $("#create2").hide();
+            $("#create3").hide();
+            $("#create4").hide();
         }
     })
 </script>

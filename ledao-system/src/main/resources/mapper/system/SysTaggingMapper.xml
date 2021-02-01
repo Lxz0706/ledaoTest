@@ -11,17 +11,20 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="judicial" column="judicial"/>
+        <result property="itemId" column="item_id"/>
     </resultMap>
 
     <sql id="selectSysTaggingVo">
-        select id, judicial_id, create_by, create_time, update_by, update_time from sys_tagging
+        select id, judicial_id, create_by, create_time, update_by, update_time,judicial,item_id from sys_tagging
     </sql>
 
     <select id="selectSysTaggingList" parameterType="SysTagging" resultMap="SysTaggingResult">
         <include refid="selectSysTaggingVo"/>
         <where>
             <if test="judicialId != null ">and judicial_id = #{judicialId}</if>
-            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="itemId != null ">and item_id = #{itemId}</if>
+            <if test="createBy != null and createBy != ''">and create_by = #{createBy}</if>
         </where>
     </select>
 
@@ -34,11 +37,15 @@
         insert into sys_tagging
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="judicialId != null">judicial_id,</if>
+            <if test="judicial !=null">judicial,</if>
+            <if test="itemId !=null">item_id,</if>
             <if test="createBy != null">create_by,</if>
             create_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="judicialId != null">#{judicialId},</if>
+            <if test="judicial !=null">#{judicial},</if>
+            <if test="itemId !=null">#{itemId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             sysdate()
@@ -49,8 +56,8 @@
         update sys_tagging
         <trim prefix="SET" suffixOverrides=",">
             <if test="judicialId != null">judicial_id = #{judicialId},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="judicial !=null">judicial = #{judicial},</if>
+            <if test="itemId !=null">item_id = #{itemId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
@@ -71,6 +78,11 @@
     <select id="selectSysTaggingByJudicialId" parameterType="Long" resultMap="SysTaggingResult">
         <include refid="selectSysTaggingVo"/>
         where judicial_id = #{judicialId}
+    </select>
+
+    <select id="selectSysTaggingByItemId" parameterType="String" resultMap="SysTaggingResult">
+        <include refid="selectSysTaggingVo"/>
+        where item_id = #{itemId}
     </select>
 
 </mapper>

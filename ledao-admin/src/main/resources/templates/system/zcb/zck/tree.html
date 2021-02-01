@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('导入表结构')"/>
+    <th:block th:include="include :: header('资产包列表')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -13,7 +13,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            借款人名称：<input type="text" name="projectName"/>
+                            资产包名称：<input type="text" name="assetPackageName"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -25,7 +25,6 @@
                 </div>
             </form>
         </div>
-
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
         </div>
@@ -33,11 +32,11 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script type="text/javascript">
-    var prefix = ctx + "system/project";
+    var prefix = ctx + "system/zcb";
 
     $(function () {
         var options = {
-            url: prefix + "/lists",
+            url: prefix + "/treeList",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
@@ -45,72 +44,52 @@
             clickToSelect: true,
             rememberSelected: true,
             singleSelect: true,
+            modalName: "资产信息库",
             columns: [{
                 checkbox: true,
                 formatter: function (value, row, index) {
-                    if ($("#selectedProjectIds").val() == row.projectId) {
+                    if ($("#selectedProjectIds").val() == row.id) {
                         return checked = true;
                     }
                 }
             },
-                {
-                    field: 'projectId',
-                    title: '项目ID',
-                    visible: false
+            {
+                field: 'id',
+                title: 'ID',
+                visible: false
+            },
+            {
+                title: "序号",
+                formatter: function (value, row, index) {
+                    return $.table.serialNumber(index);
+                }
+            },
+            {
+                field: 'assetPackageName',
+                title: '资产包名称',
+                formatter: function (value, row, index) {
+                    return $.table.tooltip(value,20);
                 },
-                {
-                    field: 'no',
-                    title: '序号'
-                },
-                {
-                    field: 'projectZckName',
-                    title: '资产包名称'
-                },
-                {
-                    field: 'projectName',
-                    title: '借款人名称'
-                }]
+                sortable: true
+            }]
         };
         $.table.init(options);
     });
 
-
-    //控制显示的字数
-    function strLength(value) {
-        var str = $.common.nullToStr(value);
-        if (str.length > 10) {
-            str = str.substring(0, 10) + '...';
-        }
-        return str;
-    }
-
-    function progress(id) {
-        var url = ctx + 'system/progress/progressLists/' + id + "/Y";
-        $.modal.openTab("进度情况列表", url);
-    }
-
-    /*债权情况-详细*/
-    function detail(id, index) {
-        var url = prefix + '/detail/' + id + "/" + index;
-        var title = "";
-        if (1 == index) {
-            title = "债权情况详细";
-        } else if (2 == index) {
-            title = "司法情况详细";
-        } else if (3 == index) {
-            title = "成交信息详细";
-        } else if (4 == index) {
-            title = "诉讼及执行进展详细";
+    /*资产库列表-详细*/
+    function detail(id, projectName) {
+        var url = prefix + '/detail/' + id;
+        if (projectName == '' || projectName == null) {
+            $.modal.opens("资产库详情", url);
         } else {
-            title = "项目详情";
+            $.modal.opens(projectName, url);
         }
-        $.modal.opens(title, url);
     }
 
     /* 导入表结构-选择表结构-提交 */
     function submitHandler() {
         var row = selectRows();
-        window.parent.getProjectRows(row);
+        window.parent.getTzbRows(row);
     }
 
     function selectRows() {

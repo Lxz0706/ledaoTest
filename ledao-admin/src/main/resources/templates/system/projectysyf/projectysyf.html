@@ -106,11 +106,17 @@
                 },
                 {
                     field: 'remarks',
-                    title: '备注'
+                    title: '备注',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value,20);
+                    }
                 },
                 {
                     field: 'finance',
-                    title: '财务确认意见'
+                    title: '财务确认意见',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value,20);
+                    }
                 },
                 {
                     title: '附件上传查看',

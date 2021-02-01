@@ -88,6 +88,7 @@
         <result property="desposalMode" column="desposal_mode"/>
         <result property="desposalPrice" column="desposal_price"/>
         <result property="customer" column="customer"/>
+        <result property="customerId" column="customer_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
@@ -114,7 +115,7 @@
         plot_ratio, access, land_area, build_structure, completion_date, floors, collate_type, floorage, land_unit_price,
         land_total_price, other_collateral_unit_price, other_collateral_total_price, total_price, valuation_basis, cap_value,
         dzyw_remark, borrower_wsqk, property_clues, zhhknl, jkrgz_remark, price, desposal_mode, desposal_price, customer, create_by,
-        create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning,zcb_id,parent_id,gzjy from sys_zck
+        create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning,zcb_id,parent_id,gzjy,customer_id from sys_zck
     </sql>
 
     <select id="selectSysZckList" parameterType="SysZck" resultMap="SysZckResult">
@@ -241,6 +242,7 @@
             <if test="price != null ">and price = #{price}</if>
             <if test="desposalMode != null  and desposalMode != ''">and desposal_mode = #{desposalMode}</if>
             <if test="desposalPrice != null ">and desposal_price = #{desposalPrice}</if>
+            <if test="customerId != null ">and customer_id = #{customerId}</if>
             <if test="customer != null  and customer != ''">and customer = #{customer}</if>
             <if test="dzywqdTime != null ">and dzywqd_time = #{dzywqdTime}</if>
             <if test="maximumMortgageAmount != null ">and maximum_mortgage_amount = #{maximumMortgageAmount}</if>
@@ -273,7 +275,7 @@
         dzyw_remark, borrower_wsqk, property_clues, zhhknl, jkrgz_remark, price, desposal_mode, desposal_price,
         customer, z1.create_by,
         z1.create_time, z1.update_by, z1.update_time,dzywqd_time, maximum_mortgage_amount,rental_situation,
-        zoning,zcb_id,parent_id,gzjy from sys_zck
+        zoning,zcb_id,parent_id,gzjy,customer_id from sys_zck
         z1 inner join sys_zcb z2 on z1.zcb_id=z2.id
         <where>
             z1.del_flag='0'
@@ -393,6 +395,7 @@
             <if test="price != null ">and z1.price = #{price}</if>
             <if test="desposalMode != null  and desposalMode != ''">and z1.desposal_mode = #{desposalMode}</if>
             <if test="desposalPrice != null ">and z1.desposal_price = #{desposalPrice}</if>
+            <if test="customerId != null ">and z1.customer_id = #{customerId}</if>
             <if test="customer != null  and customer != ''">and z1.customer = #{customer}</if>
             <if test="dzywqdTime != null ">and z1.dzywqd_time = #{dzywqdTime}</if>
             <if test="maximumMortgageAmount != null ">and z1.maximum_mortgage_amount = #{maximumMortgageAmount}</if>
@@ -510,6 +513,7 @@
             <if test="price != null and price != '' ">price,</if>
             <if test="desposalMode != null and desposalMode != '' ">desposal_mode,</if>
             <if test="desposalPrice != null and desposalPrice != '' ">desposal_price,</if>
+            <if test="customerId != null ">customer_id,</if>
             <if test="customer != null and customer != '' ">customer,</if>
             <if test="dzywqdTime != null">dzywqd_time,</if>
             <if test="maximumMortgageAmount != null">maximum_mortgage_amount,</if>
@@ -618,6 +622,7 @@
             <if test="price != null and price != ''">#{price},</if>
             <if test="desposalMode != null and desposalMode != ''">#{desposalMode},</if>
             <if test="desposalPrice != null and desposalPrice != ''">#{desposalPrice},</if>
+            <if test="customerId != null ">#{customerId},</if>
             <if test="customer != null and customer != ''">#{customer},</if>
             <if test="dzywqdTime != null">#{dzywqdTime},</if>
             <if test="maximumMortgageAmount != null">#{maximumMortgageAmount},</if>
@@ -735,6 +740,7 @@
             <if test="price != null  ">price = #{price},</if>
             <if test="desposalMode != null  and desposalMode != ''  ">desposal_mode = #{desposalMode},</if>
             <if test="desposalPrice != null  ">desposal_price = #{desposalPrice},</if>
+            <if test="customerId != null ">customer_id = #{customerId},</if>
             <if test="customer != null  and customer != ''  ">customer = #{customer},</if>
             <if test="dzywqdTime != null">dzywqd_time = #{dzywqdTime},</if>
             <if test="maximumMortgageAmount != null">maximum_mortgage_amount = #{maximumMortgageAmount},</if>

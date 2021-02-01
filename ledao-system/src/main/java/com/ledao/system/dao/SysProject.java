@@ -179,8 +179,8 @@ public class SysProject extends BaseEntity {
     /**
      * 买家ID
      */
-    @Excel(name = "买家ID")
-    private Long buyerId;
+    //@Excel(name = "买家ID")
+    private String buyerId;
 
     /**
      * 买家来源
@@ -395,10 +395,124 @@ public class SysProject extends BaseEntity {
     /**
      * 成交客户名称
      */
-    @Excel(name = "成交客户名称")
+    @Excel(name = "客户名称")
     private String dealCustomerName;
 
     private String isCreate;
+
+    /**
+     * 客户标签
+     */
+    //@Excel(name = "客户标签")
+    private String customerLable;
+
+    /**
+     * 资产供应方id
+     */
+    //@Excel(name = "资产供应方id")
+    private String assetSupplierId;
+
+    /**
+     * 资产供应方名称
+     */
+    // @Excel(name = "资产供应方名称")
+    private String assetSupplierName;
+
+    /**
+     * 资金供应方id
+     */
+    //@Excel(name = "资金供应方id")
+    private String fundingProviderId;
+
+    /**
+     * 资金供应发名称
+     */
+    // @Excel(name = "资金供应发名称")
+    private String fundingProviderName;
+
+    /**
+     * 律师id
+     */
+    //@Excel(name = "律师id")
+    private String lawyerId;
+
+    /**
+     * 律师名称
+     */
+    //@Excel(name = "律师名称")
+    private String lawyerName;
+
+    /**
+     * 中介方id
+     */
+    @Excel(name = "律师id")
+    private String intermediaryId;
+
+    /**
+     * 中介方名称
+     */
+    //@Excel(name = "律师名称")
+    private String intermediaryName;
+
+    /**
+     * 物权意向客户id
+     */
+    //@Excel(name = "物权意向客户id")
+    private String wqyxCustomerId;
+
+    /**
+     * 物权意向客户名称
+     */
+    //@Excel(name = "物权意向客户名称")
+    private String wqyxCustomerName;
+
+    /**
+     * 物权成交客户id
+     */
+    //@Excel(name = "物权成交客户id")
+    private String wqcjCustomerId;
+
+    /**
+     * 物权成交客户名称
+     */
+    //@Excel(name = "物权成交客户名称")
+    private String wqcjCustomerName;
+
+    /**
+     * 债权意向客户id
+     */
+    //@Excel(name = "债权意向客户id")
+    private String zqyxCustomerId;
+
+    /**
+     * 债券意向客户名称
+     */
+    //@Excel(name = "债券意向客户名称")
+    private String zqyxCustomerName;
+
+    /**
+     * 债权成交客户id
+     */
+    //@Excel(name = "债权成交客户id")
+    private String zqcjCustomerId;
+
+    /**
+     * 债权成交客户名称
+     */
+    //@Excel(name = "债权成交客户名称")
+    private String zqcjCustomerName;
+
+    /**
+     * 其他id
+     */
+    //@Excel(name = "其他id")
+    private String otherId;
+
+    /**
+     * 其他名称
+     */
+    //@Excel(name = "其他名称")
+    private String otherName;
 
     public Long getProjectId() {
         return projectId;
@@ -592,11 +706,11 @@ public class SysProject extends BaseEntity {
         return buyer;
     }
 
-    public Long getBuyerId() {
+    public String getBuyerId() {
         return buyerId;
     }
 
-    public void setBuyerId(Long buyerId) {
+    public void setBuyerId(String buyerId) {
         this.buyerId = buyerId;
     }
 
@@ -960,6 +1074,158 @@ public class SysProject extends BaseEntity {
         this.projectZckName = projectZckName;
     }
 
+    public String getCustomerLable() {
+        return customerLable;
+    }
+
+    public void setCustomerLable(String customerLable) {
+        this.customerLable = customerLable;
+    }
+
+    public String getAssetSupplierId() {
+        return assetSupplierId;
+    }
+
+    public void setAssetSupplierId(String assetSupplierId) {
+        this.assetSupplierId = assetSupplierId;
+    }
+
+    public String getAssetSupplierName() {
+        return assetSupplierName;
+    }
+
+    public void setAssetSupplierName(String assetSupplierName) {
+        this.assetSupplierName = assetSupplierName;
+    }
+
+    public String getFundingProviderId() {
+        return fundingProviderId;
+    }
+
+    public void setFundingProviderId(String fundingProviderId) {
+        this.fundingProviderId = fundingProviderId;
+    }
+
+    public String getFundingProviderName() {
+        return fundingProviderName;
+    }
+
+    public void setFundingProviderName(String fundingProviderName) {
+        this.fundingProviderName = fundingProviderName;
+    }
+
+    public String getLawyerId() {
+        return lawyerId;
+    }
+
+    public void setLawyerId(String lawyerId) {
+        this.lawyerId = lawyerId;
+    }
+
+    public String getLawyerName() {
+        return lawyerName;
+    }
+
+    public void setLawyerName(String lawyerName) {
+        this.lawyerName = lawyerName;
+    }
+
+    public String getIntermediaryId() {
+        return intermediaryId;
+    }
+
+    public void setIntermediaryId(String intermediaryId) {
+        this.intermediaryId = intermediaryId;
+    }
+
+    public String getIntermediaryName() {
+        return intermediaryName;
+    }
+
+    public void setIntermediaryName(String intermediaryName) {
+        this.intermediaryName = intermediaryName;
+    }
+
+    public String getWqyxCustomerId() {
+        return wqyxCustomerId;
+    }
+
+    public void setWqyxCustomerId(String wqyxCustomerId) {
+        this.wqyxCustomerId = wqyxCustomerId;
+    }
+
+    public String getWqyxCustomerName() {
+        return wqyxCustomerName;
+    }
+
+    public void setWqyxCustomerName(String wqyxCustomerName) {
+        this.wqyxCustomerName = wqyxCustomerName;
+    }
+
+    public String getWqcjCustomerId() {
+        return wqcjCustomerId;
+    }
+
+    public void setWqcjCustomerId(String wqcjCustomerId) {
+        this.wqcjCustomerId = wqcjCustomerId;
+    }
+
+    public String getWqcjCustomerName() {
+        return wqcjCustomerName;
+    }
+
+    public void setWqcjCustomerName(String wqcjCustomerName) {
+        this.wqcjCustomerName = wqcjCustomerName;
+    }
+
+    public String getZqyxCustomerId() {
+        return zqyxCustomerId;
+    }
+
+    public void setZqyxCustomerId(String zqyxCustomerId) {
+        this.zqyxCustomerId = zqyxCustomerId;
+    }
+
+    public String getZqyxCustomerName() {
+        return zqyxCustomerName;
+    }
+
+    public void setZqyxCustomerName(String zqyxCustomerName) {
+        this.zqyxCustomerName = zqyxCustomerName;
+    }
+
+    public String getZqcjCustomerId() {
+        return zqcjCustomerId;
+    }
+
+    public void setZqcjCustomerId(String zqcjCustomerId) {
+        this.zqcjCustomerId = zqcjCustomerId;
+    }
+
+    public String getZqcjCustomerName() {
+        return zqcjCustomerName;
+    }
+
+    public void setZqcjCustomerName(String zqcjCustomerName) {
+        this.zqcjCustomerName = zqcjCustomerName;
+    }
+
+    public String getOtherId() {
+        return otherId;
+    }
+
+    public void setOtherId(String otherId) {
+        this.otherId = otherId;
+    }
+
+    public String getOtherName() {
+        return otherName;
+    }
+
+    public void setOtherName(String otherName) {
+        this.otherName = otherName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -975,8 +1241,8 @@ public class SysProject extends BaseEntity {
                 .append("interestBalance", getInterestBalance())
                 .append("principalInterestBalance", getPrincipalInterestBalance())
                 .append("guarantor", getGuarantor())
-                .append("pledge", getPledge())
                 .append("collateral", getCollateral())
+                .append("pledge", getPledge())
                 .append("projectManagerId", getProjectManagerId())
                 .append("projectManager", getProjectManager())
                 .append("userId", getUserId())
@@ -1007,12 +1273,12 @@ public class SysProject extends BaseEntity {
                 .append("successfulBidderDate", getSuccessfulBidderDate())
                 .append("paymentReceivedDate", getPaymentReceivedDate())
                 .append("delFlag", getDelFlag())
+                .append("projectZckId", getProjectZckId())
                 .append("parentId", getParentId())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
-                .append("projectZckId", getProjectZckId())
                 .append("lawFirm", getLawFirm())
                 .append("lawyerContact", getLawyerContact())
                 .append("debtStatus", getDebtStatus())
@@ -1023,6 +1289,25 @@ public class SysProject extends BaseEntity {
                 .append("limitation", getLimitation())
                 .append("dealCustomerId", getDealCustomerId())
                 .append("dealCustomerName", getDealCustomerName())
+                .append("customerLable", getCustomerLable())
+                .append("assetSupplierId", getAssetSupplierId())
+                .append("assetSupplierName", getAssetSupplierName())
+                .append("fundingProviderId", getFundingProviderId())
+                .append("fundingProviderName", getFundingProviderName())
+                .append("lawyerId", getLawyerId())
+                .append("lawyerName", getLawyerName())
+                .append("intermediaryId", getIntermediaryId())
+                .append("intermediaryName", getIntermediaryName())
+                .append("wqyxCustomerId", getWqyxCustomerId())
+                .append("wqyxCustomerName", getWqyxCustomerName())
+                .append("wqcjCustomerId", getWqcjCustomerId())
+                .append("wqcjCustomerName", getWqcjCustomerName())
+                .append("zqyxCustomerId", getZqyxCustomerId())
+                .append("zqyxCustomerName", getZqyxCustomerName())
+                .append("zqcjCustomerId", getZqcjCustomerId())
+                .append("zqcjCustomerName", getZqcjCustomerName())
+                .append("otherId", getOtherId())
+                .append("otherName", getOtherName())
                 .toString();
     }
 }

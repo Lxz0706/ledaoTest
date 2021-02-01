@@ -148,6 +148,7 @@ public class SysCoverChargeController extends BaseController {
             }
         }
         sysCoverCharge.setUpdateBy(ShiroUtils.getLoginName());
+        sysCoverCharge.setImgUrl(sysCoverCharge1.getImgUrl());
         return toAjax(sysCoverChargeService.updateSysCoverCharge(sysCoverCharge));
     }
 
@@ -232,21 +233,17 @@ public class SysCoverChargeController extends BaseController {
         try {
             if (StringUtils.isNotNull(file)) {
                 String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file, false);
-                for (String string1 : sysCoverCharge.getImgUrl().split(";")) {
-                    String fileName = StringUtils.substringAfterLast(string1, "/");
-                    if (!fileName.equals(file.getOriginalFilename())) {
-                        if (StringUtils.isNotEmpty(sysCoverCharge.getImgUrl())) {
-                            sysCoverCharge.setImgUrl(sysCoverCharge.getImgUrl() + ";" + avatar);
-                        } else {
-                            sysCoverCharge.setImgUrl(avatar);
-                        }
-
-                        sysCoverChargeService.updateSysCoverCharge(sysCoverCharge);
-                        return success();
+                if (StringUtils.isNotNull(sysCoverCharge.getImgUrl())) {
+                    if (!sysCoverCharge.getImgUrl().contains(file.getOriginalFilename())) {
+                        sysCoverCharge.setImgUrl(avatar + ";" + sysCoverCharge.getImgUrl());
                     } else {
-                        return error(file.getOriginalFilename() + "已经存在");
+                        return error(file.getOriginalFilename() + "上传失败");
                     }
+                } else {
+                    sysCoverCharge.setImgUrl(avatar);
                 }
+                sysCoverChargeService.updateSysCoverCharge(sysCoverCharge);
+                return success();
             }
             return error(file.getOriginalFilename() + "上传失败");
         } catch (Exception e) {
@@ -282,8 +279,8 @@ public class SysCoverChargeController extends BaseController {
             }
             logger.info(sb.toString());
             //if (StringUtils.isNotEmpty(sb)) {
-                sysCoverCharge.setImgUrl(sb.toString());
-                sysCoverChargeService.updateSysCoverCharge(sysCoverCharge);
+            sysCoverCharge.setImgUrl(sb.toString());
+            sysCoverChargeService.updateSysCoverCharge(sysCoverCharge);
             //}
         }
         return success();
@@ -293,7 +290,7 @@ public class SysCoverChargeController extends BaseController {
     @ResponseBody
     public AjaxResult imgUrlList(@PathVariable("id") String id) {
         SysCoverCharge sysCoverCharge = sysCoverChargeService.selectSysCoverChargeById(Long.valueOf(id));
-        if (StringUtils.isNotEmpty(sysCoverCharge.getImgUrl())) {
+        if (StringUtils.isNotNull(sysCoverCharge.getImgUrl())) {
             return AjaxResult.success(sysCoverCharge.getImgUrl().split(";"));
         } else {
             return AjaxResult.success();
@@ -333,6 +330,7 @@ public class SysCoverChargeController extends BaseController {
                         sysCoverCharge1.setRemarks(sysCoverCharge2.getRemarks());
                         sysCoverCharge1.setImgUrl(sysCoverCharge2.getImgUrl());
                         sysCoverCharge1.setFinance(sysCoverCharge2.getFinance());
+                        sysCoverCharge1.setState(sysCoverCharge.getState());
                         sysCoverChargeService.insertSysCoverCharge(sysCoverCharge1);
                         sysCoverChargeService.deleteSysCoverChargeById(sysCoverCharge.getId());
                     }

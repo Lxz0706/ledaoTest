@@ -3,29 +3,6 @@
 <head>
     <th:block th:include="include :: header('【请填写功能名称】列表')"/>
     <th:block th:include="include :: bootstrap-editable-css"/>
-    <style type="text/css">
-        .select-table table {
-            table-layout: fixed;
-        }
-
-        .select-table .table td {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .select-table table label.error {
-            position: inherit;
-        }
-
-        select + label.error {
-            z-index: 1;
-            right: 40px;
-        }
-        .input-sm{
-             width: 500px!important;
-         }
-    </style>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -144,7 +121,10 @@
                 },
                 {
                     field: 'remarks',
-                    title: '备注'
+                    title: '备注',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 20);
+                    }
                 },
                 {
                     visible: editFlag == 'hidden' ? false : true,
@@ -163,6 +143,7 @@
                     }
                 },
                 {
+                    field: 'imgUrl',
                     title: '附件上传查看',
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
@@ -221,7 +202,7 @@
             url: prefix + "/edit",
             data: row,
             dataType: 'JSON',
-            success: function(result) {
+            success: function (result) {
                 $.operate.ajaxSuccess(result);
                 $.table.refresh();
             }

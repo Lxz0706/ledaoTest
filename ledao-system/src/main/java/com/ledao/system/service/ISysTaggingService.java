@@ -66,4 +66,12 @@ public interface ISysTaggingService {
      * @return 结果
      */
     public SysTagging selectSysTaggingByJudicialId(Long judicialId);
+
+    /**
+     * 根据爬虫表主键查询
+     *
+     * @param itemId
+     * @return 结果
+     */
+    public SysTagging selectSysTaggingByItemId(String itemId);
 }

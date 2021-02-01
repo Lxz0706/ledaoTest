@@ -88,4 +88,14 @@ public class SysItemServiceImpl implements ISysItemService {
     public int deleteSysItemById(Long itemId) {
         return sysItemMapper.deleteSysItemById(itemId);
     }
+
+    /**
+     * 根据customerId查询
+     *
+     * @param customerId
+     * @return 结果
+     */
+    public List<SysItem> selectItemByCustomerId(Long customerId) {
+        return sysItemMapper.selectItemByCustomerId(customerId);
+    }
 }

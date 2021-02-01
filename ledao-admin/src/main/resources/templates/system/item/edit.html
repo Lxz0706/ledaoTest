@@ -1,70 +1,116 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改项目选择')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('修改项目选择')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-item-edit" th:object="${sysItem}">
-            <input name="itemId" th:field="*{itemId}" type="hidden">
-            <div class="form-group">
-                <label class="col-sm-3 control-label">项目id：</label>
-                <div class="col-sm-8">
-                    <input name="projectId" th:field="*{projectId}" class="form-control" type="text">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input id="role" type="hidden" th:value="*{role}">
+    <form class="form-horizontal m" id="form-item-edit" th:object="${sysItem}">
+        <input name="itemId" th:field="*{itemId}" type="hidden">
+        <input name="customerId" th:field="*{customerId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">合作项目：</label>
+            <div class="col-sm-8">
+                <input name="projectId" id="projectId" th:field="*{projectId}" class="form-control" type="hidden">
+                <input name="projectName" id="projectName" th:field="*{projectName}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户标签：</label>
+            <div class="col-sm-8">
+                <input name="customerLable" th:field="*{customerLable}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">成交金额：</label>
+            <div class="col-sm-8">
+                <input name="gmv" th:field="*{gmv}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">成交日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="tradeDate" th:value="${#dates.format(sysItem.tradeDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户标签：</label>
-                <div class="col-sm-8">
-                    <select name="customerLable" class="form-control m-b" th:with="type=${@dict.getType('sys_customer_label')}">
-                        <option value="">--请选择一条数据--</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{customerLable}"></option>
-                    </select>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="remarks" th:field="*{remarks}" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">成交金额：</label>
-                <div class="col-sm-8">
-                    <input name="gmv" th:field="*{gmv}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">成交日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="tradeDate" th:value="${#dates.format(sysItem.tradeDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">备注：</label>
-                <div class="col-sm-8">
-                    <input name="remarks" th:field="*{remarks}" class="form-control" type="text">
-                </div>
-            </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "system/item";
-        $("#form-item-edit").validate({
-            focusCleanup: true
-        });
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/item";
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-item-edit').serialize());
+    //人员树形选择器
+    function selectProjectTree() {
+        var role = $("#role").val();
+        var url = "";
+        if ($.common.isNotEmpty(role)) {
+            if ("tzb" == role) {
+                url = ctx + "system/zcb/zck/selectProjectTree?selectedProjectIds=" + $("#projectId").val() + "&selectedProjectNames=" + $("#projectName").val();
+            } else if ("bgcz" == role) {
+                url = ctx + "system/bgczzck/selectProjectTree?selectedProjectIds=" + $("#projectId").val() + "&selectedProjectNames=" + $("#projectName").val();
+            } else if ("thb" == role) {
+                url = ctx + "system/project/selectProjectTree?selectedProjectIds=" + $("#projectId").val() + "&selectedProjectNames=" + $("#projectName").val();
             }
+            $.modal.openFull("项目选择", url, '750', '600');
         }
+    }
 
-        $("input[name='tradeDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-    </script>
+    //投资项目
+    function getTzbRows(row) {
+        var projectIds = "";
+        var projectNames = "";
+        for (var i = 0; i < row.length; i++) {
+            projectIds = row[i].id + "," + projectIds;
+            projectNames = row[i].projectName + "," + projectNames;
+        }
+        $("#projectId").val(projectIds.substr(0, projectIds.length - 1));
+        $("#projectName").val(projectNames.substr(0, projectNames.length - 1));
+        layer.close(layer.index);
+    }
+
+
+    //投后项目
+    function getProjectRows(row) {
+        var projectIds = "";
+        var projectNames = "";
+        for (var i = 0; i < row.length; i++) {
+            projectIds = row[i].projectId + "," + projectIds;
+            projectNames = row[i].projectName + "," + projectNames;
+        }
+        $("#projectId").val(projectIds.substr(0, projectIds.length - 1));
+        $("#projectName").val(projectNames.substr(0, projectNames.length - 1));
+        layer.close(layer.index);
+    }
+
+
+    $("#form-item-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-item-edit').serialize());
+        }
+    }
+
+    $("input[name='tradeDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
 </body>
 </html>

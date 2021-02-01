@@ -79,6 +79,8 @@
         <result property="delFlag" column="del_flag"/>
         <result property="remarks" column="remarks"/>
         <result property="comment" column="comment"/>
+        <result property="customer" column="customer"/>
+        <result property="customerId" column="customer_id"/>
     </resultMap>
 
     <sql id="selectSysBgczzckVo">
@@ -91,7 +93,7 @@
         build_valuation, land_total_price, other_appurtenance, valuation_basis, total_price, project_valuation_remarks, cash_back,
         cash_back_amount, repayment_capacity, later_project, later_project_remark, guarantor, guarantee, guarantee_period,
         guarantee_document_no, nature_assets, address, ower_certificate_no, area_measure, soe, zoing, create_by, create_time,
-        update_by, update_time,remarks,comment from sys_bgczzck
+        update_by, update_time,remarks,comment,customer_id,customer from sys_bgczzck
     </sql>
 
     <select id="selectSysBgczzckList" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
@@ -208,6 +210,8 @@
             <if test="zoing != null  and zoing != ''">and zoing = #{zoing}</if>
             <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
             <if test="comment != null  and comment != ''">and comment = #{comment}</if>
+            <if test="customerId != null ">and customer_id = #{customerId}</if>
+            <if test="customer != null  and customer != ''">and customer = #{customer}</if>
         </where>
     </select>
 
@@ -287,6 +291,8 @@
             <if test="zoing != null">zoing,</if>
             <if test="remarks != null">remarks,</if>
             <if test="comment != null">comment,</if>
+            <if test="customerId != null ">customer_id,</if>
+            <if test="customer != null and customer != '' ">customer,</if>
             <if test="createBy != null and createBy != '' ">create_by,</if>
             create_time
         </trim>
@@ -359,6 +365,8 @@
             <if test="zoing != null">#{zoing},</if>
             <if test="remarks != null">#{remarks},</if>
             <if test="comment != null">#{comment},</if>
+            <if test="customerId != null ">#{customerId},</if>
+            <if test="customer != null and customer != ''">#{customer},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             sysdate()
         </trim>
@@ -436,6 +444,8 @@
             <if test="zoing != null">zoing = #{zoing},</if>
             <if test="remarks != null">remarks = #{remarks},</if>
             <if test="comment != null">comment = #{comment},</if>
+            <if test="customerId != null ">customer_id = #{customerId},</if>
+            <if test="customer != null  and customer != ''  ">customer = #{customer},</if>
             <if test="updateBy != null  ">update_by = #{updateBy},</if>
             update_time = sysdate()
         </trim>

@@ -160,7 +160,6 @@
         },
 
         getList: function (data) {
-            console.log(data);
             var list = [];
 
             $.each(data, function (i, n) {

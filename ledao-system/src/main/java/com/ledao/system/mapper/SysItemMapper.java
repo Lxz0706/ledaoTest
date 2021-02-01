@@ -58,4 +58,12 @@ public interface SysItemMapper {
      * @return 结果
      */
     public int deleteSysItemByIds(String[] itemIds);
+
+    /**
+     * 根据customerId查询
+     *
+     * @param customerId
+     * @return 结果
+     */
+    public List<SysItem> selectItemByCustomerId(Long customerId);
 }

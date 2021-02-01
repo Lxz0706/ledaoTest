@@ -3,6 +3,7 @@ package com.ledao.system.mapper;
 import java.util.List;
 
 import com.ledao.system.dao.SysCustomer;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 客户库Mapper接口
@@ -58,4 +59,20 @@ public interface SysCustomerMapper {
      * @return 结果
      */
     public int deleteSysCustomerByIds(String[] customerIds);
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param phonenumber 手机号码
+     * @return 结果
+     */
+    public SysCustomer checkPhoneUnique(String phonenumber);
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param weChatNumber 微信号
+     * @return 结果
+     */
+    public SysCustomer checkWeChatNumberUnique(String weChatNumber);
 }

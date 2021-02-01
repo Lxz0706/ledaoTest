@@ -246,6 +246,7 @@ public class SysProjectUncollectedMoneyController extends BaseController {
             }
         }
         sysProjectUncollectedMoney.setUpdateBy(ShiroUtils.getLoginName());
+        sysProjectUncollectedMoney.setImgUrl(sysProjectUncollectedMoney1.getImgUrl());
         return toAjax(sysProjectUncollectedMoneyService.updateSysProjectUncollectedMoney(sysProjectUncollectedMoney));
     }
 
@@ -324,21 +325,17 @@ public class SysProjectUncollectedMoneyController extends BaseController {
         try {
             if (StringUtils.isNotNull(file)) {
                 String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file, false);
-                for (String string1 : sysProjectUncollectedMoney.getImgUrl().split(";")) {
-                    String fileName = StringUtils.substringAfterLast(string1, "/");
-                    if (!fileName.equals(file.getOriginalFilename())) {
-                        if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getImgUrl())) {
-                            sysProjectUncollectedMoney.setImgUrl(sysProjectUncollectedMoney.getImgUrl() + ";" + avatar);
-                        } else {
-                            sysProjectUncollectedMoney.setImgUrl(avatar);
-                        }
-
-                        sysProjectUncollectedMoneyService.updateSysProjectUncollectedMoney(sysProjectUncollectedMoney);
-                        return success();
+                if (StringUtils.isNotNull(sysProjectUncollectedMoney.getImgUrl())) {
+                    if (!sysProjectUncollectedMoney.getImgUrl().contains(file.getOriginalFilename())) {
+                        sysProjectUncollectedMoney.setImgUrl(avatar + ";" + sysProjectUncollectedMoney.getImgUrl());
                     } else {
-                        return error(file.getOriginalFilename() + "已经存在");
+                        return error(file.getOriginalFilename() + "上传失败");
                     }
+                } else {
+                    sysProjectUncollectedMoney.setImgUrl(avatar);
                 }
+                sysProjectUncollectedMoneyService.updateSysProjectUncollectedMoney(sysProjectUncollectedMoney);
+                return success();
             }
             return error(file.getOriginalFilename() + "上传失败");
         } catch (Exception e) {
@@ -371,11 +368,8 @@ public class SysProjectUncollectedMoneyController extends BaseController {
                     }
                 }
             }
-            logger.info(sb.toString());
-            //if (StringUtils.isNotEmpty(sb)) {
             sysProjectUncollectedMoney.setImgUrl(sb.toString());
             sysProjectUncollectedMoneyService.updateSysProjectUncollectedMoney(sysProjectUncollectedMoney);
-            //}
         }
         return success();
     }

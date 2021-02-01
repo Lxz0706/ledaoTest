@@ -2,7 +2,10 @@ package com.ledao.system.service.impl;
 
 import java.util.List;
 
+import com.ledao.common.constant.UserConstants;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysCustomerMapper;
@@ -87,5 +90,37 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     @Override
     public int deleteSysCustomerById(Long customerId) {
         return sysCustomerMapper.deleteSysCustomerById(customerId);
+    }
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param sysCustomer 用户信息
+     * @return
+     */
+    @Override
+    public String checkPhoneUnique(SysCustomer sysCustomer) {
+        Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
+        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer.getContactNumber());
+        if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
+            return UserConstants.USER_PHONE_NOT_UNIQUE;
+        }
+        return UserConstants.USER_PHONE_UNIQUE;
+    }
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param sysCustomer 用户信息
+     * @return
+     */
+    @Override
+    public String checkWeChatNumberUnique(SysCustomer sysCustomer) {
+        Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
+        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer.getWeChatNumber());
+        if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
+            return UserConstants.USER_WECHATNUMBER_NOT_UNIQUE;
+        }
+        return UserConstants.USER_WECHATNUMBER_UNIQUE;
     }
 }

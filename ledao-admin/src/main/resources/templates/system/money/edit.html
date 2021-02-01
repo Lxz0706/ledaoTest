@@ -9,6 +9,7 @@
         <form class="form-horizontal m" id="form-money-edit" th:object="${sysProjectUncollectedMoney}">
             <input name="id" th:field="*{id}" type="hidden">
             <input type="hidden" id="cw" name="cw" th:field="*{cw}">
+            <input name="imgUrl" th:field="*{imgUrl}" type="hidden">
             <input name="projectManagementId" type="hidden" th:value="*{projectManagementId}">
             <div class="form-group">
                 <label class="col-sm-3 control-label">资金类型：</label>

@@ -7,23 +7,23 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m-t" id="signupForm">
         <input id="createBy" th:field="${sysProject.isCreate}" type="hidden">
-        <div class="form-group">
-            <label class="col-sm-2 control-label"><h5>成交类型：</h5></label>
-            <div class="form-control-static" th:text="${sysProject.transactionType}"></div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"><h5>买家：</h5></label>
-            <div class="form-control-static" th:text="${sysProject.buyer}"></div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"><h5>买家来源：</h5></label>
-            <div class="form-control-static" th:text="${sysProject.buyerSources}"></div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"><h5>买家联系方式：</h5></label>
-            <div class="form-control-static" th:text="${sysProject.buyerContact}"></div>
-        </div>
         <div id="create">
+            <!--<div class="form-group">
+                <label class="col-sm-2 control-label"><h5>成交类型：</h5></label>
+                <div class="form-control-static" th:text="${sysProject.customerLable}"></div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><h5><div class="form-control-static" th:text="${sysProject.customerLable}"></div>客户：</h5></label>
+                <div class="form-control-static" th:text="${sysProject.dealCustomerName}"></div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-2 control-label"><h5>买家来源：</h5></label>
+                <div class="form-control-static" th:text="${sysProject.buyerSources}"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><h5>买家联系方式：</h5></label>
+                <div class="form-control-static" th:text="${sysProject.buyerContact}"></div>
+            </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label"><h5>成交客户：</h5></label>
                 <div class="form-control-static" th:text="${sysProject.dealCustomerName}"></div>
@@ -31,7 +31,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label"><h5>意向客户：</h5></label>
                 <div class="form-control-static" th:text="${sysProject.potentialCustomers}"></div>
-            </div>
+            </div>-->
         </div>
     </form>
 </div>

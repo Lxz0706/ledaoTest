@@ -7,16 +7,13 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
-            <input th:value="*{customerIds}" id="customerIds" type="text">
-            <input th:value="*{customerNames}" id="customerNames" type="hidden">
+            <input th:value="*{selectedProjectIds}" id="selectedProjectIds" type="hidden">
+            <input th:value="*{selectedProjectNames}" id="selectedProjectNames" type="hidden">
             <form id="gen-form">
                 <div class="select-list">
                     <ul>
                         <li>
-                            表名称：<input type="text" name="tableName"/>
-                        </li>
-                        <li>
-                            表描述：<input type="text" name="tableComment"/>
+                            项目名称：<input type="text" name="projectName"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -36,106 +33,73 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script type="text/javascript">
-    var prefix = ctx + "system/customer";
+    var prefix = ctx + "system/bgczzck";
 
     $(function () {
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/listes",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
             showColumns: false,
             clickToSelect: true,
             rememberSelected: true,
-            //singleSelect: true,
-            modalName: "客户库",
+            singleSelect: true,
+            modalName: "重组并购项目信息库",
             columns: [{
                 checkbox: true,
                 formatter: function (value, row, index) {
-                    var ids = $("#customerIds").val().split(",");
-                    for (var i = 0; i < ids.length; i++) {
-                        if (ids[i] == row.customerId) {
-                            return checked = true;
-                        }
+                    if ($("#selectedProjectIds").val() == row.id) {
+                        return checked = true;
                     }
-
                 }
             },
                 {
-                    field: 'customerId',
-                    title: '客户id',
+                    field: 'id',
+                    title: 'ID',
                     visible: false
                 },
                 {
-                    field: 'customerName',
-                    title: '客户名称'
-                },
-                {
-                    field: 'affiliation',
-                    title: '所属机构'
-                },
-                {
-                    field: 'contacts',
-                    title: '联系人'
-                },
-                {
-                    field: 'contactNumber',
-                    title: '联系电话'
-                },
-                {
-                    field: 'duties',
-                    title: '职务'
-                },
-                {
-                    field: 'contactAddress',
-                    title: '联系地址'
-                },
-                {
-                    field: 'resources',
-                    title: '资源优势'
-                },
-                {
-                    field: 'province',
-                    title: '省份'
-                },
-                {
-                    field: 'city',
-                    title: '市'
-                },
-                {
-                    field: 'county',
-                    title: '县/区'
+                    field: 'no',
+                    title: '序号'
                 },
                 {
                     field: 'projectName',
-                    title: '合作项目',
-                    formatter: function (value, row, index) {
-                        return $.table.tooltip(value, 20)
-                    }
+                    title: '项目名称',
+                    sortable: true
+                },
+                {
+                    field: 'projectStatus',
+                    title: '项目状态'
+                },
+                {
+                    field: 'spvName',
+                    title: 'SPV名称'
                 }]
         };
         $.table.init(options);
     });
 
-
-    //控制显示的字数
-    function strLength(value) {
-        var str = $.common.nullToStr(value);
-        if (str.length > 10) {
-            str = str.substring(0, 10) + '...';
+    /*资产库列表-详细*/
+    function detail(id, projectName) {
+        var url = prefix + '/detail/' + id;
+        if (projectName == '' || projectName == null) {
+            $.modal.opens("重组并购项目信息库详情", url);
+        } else {
+            $.modal.opens(projectName, url);
         }
-        return str;
+
     }
 
     /* 导入表结构-选择表结构-提交 */
     function submitHandler() {
         var row = selectRows();
-        window.parent.getDeviceBasics(row);
+        window.parent.getBgczRows(row);
     }
 
     function selectRows() {
         //获取当前选中的值
-        let row = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
             return row;
         });
         //如果设置了记住选中数据
@@ -148,15 +112,15 @@
             }
         }
         //去重
-        return uniqueFnByRows(row);
+        return uniqueFnByRows(rows);
     }
 
     function uniqueFnByRows(array) {
         var result = [];
         var hashObj = {};
         for (var i = 0; i < array.length; i++) {
-            if (!hashObj[array[i].customerId]) {//参数id为主键，请根据自己的情况进行修改
-                hashObj[array[i].customerId] = true;
+            if (!hashObj[array[i].id]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i].id] = true;
                 result.push(array[i]);
             }
         }

@@ -280,10 +280,10 @@ var table = {
                 return pageSize * (pageNumber - 1) + index + 1;
             },
             // 列超出指定长度浮动提示 target（copy单击复制文本 open弹窗打开文本）
-            tooltip: function (value, length, target) {
+            tooltip: function (value, length, target,str) {
                 var _length = $.common.isEmpty(length) ? 20 : length;
                 var _text = "";
-                var _value = $.common.nullToStr(value);
+                var _value = $.common.nullToStr(value,str);
                 var _target = $.common.isEmpty(target) ? 'copy' : target;
                 if (_value.length > _length) {
                     _text = _value.substr(0, _length) + "...";
@@ -532,6 +532,40 @@ var table = {
             hideAllColumns: function (tableId) {
                 var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
                 $("#" + currentId).bootstrapTable('hideAllColumns');
+            },
+            //获取选中行的整行数据
+            selectRows: function () {
+                //获取当前选中的值
+                let rows = $.map($("#" + table.options.id).bootstrapTable('getSelections'), function (row) {
+                    return row;
+                });
+                //如果设置了记住选中数据
+                if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+                    let selectedRows = table.rememberSelecteds[table.options.id];
+                    if ($.common.isNotEmpty(selectedRows)) {
+                        rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                            return row;
+                        });
+                    }
+                }
+                //去重
+                return $.common.uniqueFnByRows(rows);
+            },
+            //获取选中行的整行数据
+            selectRow: function () {
+                //获取当前选中的值
+                let rows = $.map($("#" + table.options.id).bootstrapTable('getSelections'), function (row) {
+                    return row;
+                });
+                //如果设置了记住选中数据
+                if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+                    let selectedRows = table.rememberSelecteds[table.options.id];
+                    if ($.common.isNotEmpty(selectedRows)) {
+                        rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                            return row;
+                        });
+                    }
+                }
             }
         },
         // 表格树封装处理
@@ -1339,7 +1373,7 @@ var table = {
                 }
                 $.modal.closeLoading();
             },
-            // 修改访问地址
+            // 格式化数字、金额
             numberFormatter: function (value) {
                 //格式化金额的小数点
                 var b = false;
@@ -1599,9 +1633,13 @@ var table = {
                 return !$.common.isEmpty(value);
             },
             // 空对象转字符串
-            nullToStr: function (value) {
+            nullToStr: function (value,str) {
                 if ($.common.isEmpty(value)) {
-                    return "-";
+                    if($.common.isEmpty(str)){
+                        return "-";
+                    }else{
+                        return str;
+                    }
                 }
                 return value;
             },
@@ -1749,6 +1787,18 @@ var table = {
                     return date.getFullYear() + "-" + month + "-" + currentDate;
                 }
             },
+            //重写去重方法
+            uniqueFnByRows: function (array) {
+                var result = [];
+                var hashObj = {};
+                for (var i = 0; i < array.length; i++) {
+                    if (!hashObj[array[i].id]) {//参数id为主键，请根据自己的情况进行修改
+                        hashObj[array[i].id] = true;
+                        result.push(array[i]);
+                    }
+                }
+                return result;
+            }
         }
     });
 })(jQuery);

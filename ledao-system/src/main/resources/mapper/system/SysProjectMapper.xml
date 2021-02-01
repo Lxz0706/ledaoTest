@@ -65,6 +65,25 @@
         <result property="limitation" column="limitation"/>
         <result property="dealCustomerId" column="deal_customer_id"/>
         <result property="dealCustomerName" column="deal_customer_name"/>
+        <result property="customerLable" column="customer_lable"/>
+        <result property="assetSupplierId" column="asset_supplier_id"/>
+        <result property="assetSupplierName" column="asset_supplier_name"/>
+        <result property="fundingProviderId" column="funding_provider_id"/>
+        <result property="fundingProviderName" column="funding_provider_name"/>
+        <result property="lawyerId" column="lawyer_id"/>
+        <result property="lawyerName" column="lawyer_name"/>
+        <result property="intermediaryId" column="intermediary_id"/>
+        <result property="intermediaryName" column="intermediary_name"/>
+        <result property="wqyxCustomerId" column="wqyx_customer_id"/>
+        <result property="wqyxCustomerName" column="wqyx_customer_name"/>
+        <result property="wqcjCustomerId" column="wqcj_customer_id"/>
+        <result property="wqcjCustomerName" column="wqcj_customer_name"/>
+        <result property="zqyxCustomerId" column="zqyx_customer_id"/>
+        <result property="zqyxCustomerName" column="zqyx_customer_name"/>
+        <result property="zqcjCustomerId" column="zqcj_customer_id"/>
+        <result property="zqcjCustomerName" column="zqcj_customer_name"/>
+        <result property="otherId" column="other_id"/>
+        <result property="otherName" column="other_name"/>
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -75,7 +94,9 @@
         date_filing, first_instance, second_instance, retrial, enforcement_filing_date, appraisal_report_date, first_shot_date,
         second_shot_date, sell_shot_date, successful_bidder_date, payment_received_date, del_flag, parent_id, create_by, create_time,
         update_by, update_time,project_zck_id,law_firm,lawyer_contact,debt_status, potential_customers, potential_customers_id, seizure, ageing, limitation
-         ,deal_customer_id,deal_customer_name from sys_project
+         ,deal_customer_id,deal_customer_name,customer_lable, asset_supplier_id, asset_supplier_name, funding_provider_id, funding_provider_name,
+          lawyer_id, lawyer_name, intermediary_id, intermediary_name, wqyx_customer_id, wqyx_customer_name, wqcj_customer_id, wqcj_customer_name,
+          zqyx_customer_id, zqyx_customer_name, zqcj_customer_id, zqcj_customer_name, other_id, other_name  from sys_project
     </sql>
 
     <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
@@ -135,6 +156,43 @@
             <if test="lawyerContact != null and lawyerContact != ''">and lawyer_contact = #{lawyerContact}</if>
             <if test="lawFirm != null and lawFirm != ''">and law_firm = #{lawFirm}</if>
             <if test="debtStatus !=null and debtStatus !=''">and debt_status = #{debtStatus}</if>
+            <if test="customerLable != null  and customerLable != ''">and customer_lable = #{customerLable}</if>
+            <if test="assetSupplierId != null  and assetSupplierId != ''">and asset_supplier_id = #{assetSupplierId}
+            </if>
+            <if test="assetSupplierName != null  and assetSupplierName != ''">and asset_supplier_name like concat('%',
+                #{assetSupplierName}, '%')
+            </if>
+            <if test="fundingProviderId != null  and fundingProviderId != ''">and funding_provider_id =
+                #{fundingProviderId}
+            </if>
+            <if test="fundingProviderName != null  and fundingProviderName != ''">and funding_provider_name like
+                concat('%', #{fundingProviderName}, '%')
+            </if>
+            <if test="lawyerId != null  and lawyerId != ''">and lawyer_id = #{lawyerId}</if>
+            <if test="lawyerName != null  and lawyerName != ''">and lawyer_name like concat('%', #{lawyerName}, '%')
+            </if>
+            <if test="intermediaryId != null  and intermediaryId != ''">and intermediary_id = #{intermediaryId}</if>
+            <if test="intermediaryName != null  and intermediaryName != ''">and intermediary_name like concat('%',
+                #{intermediaryName}, '%')
+            </if>
+            <if test="wqyxCustomerId != null  and wqyxCustomerId != ''">and wqyx_customer_id = #{wqyxCustomerId}</if>
+            <if test="wqyxCustomerName != null  and wqyxCustomerName != ''">and wqyx_customer_name like concat('%',
+                #{wqyxCustomerName}, '%')
+            </if>
+            <if test="wqcjCustomerId != null  and wqcjCustomerId != ''">and wqcj_customer_id = #{wqcjCustomerId}</if>
+            <if test="wqcjCustomerName != null  and wqcjCustomerName != ''">and wqcj_customer_name like concat('%',
+                #{wqcjCustomerName}, '%')
+            </if>
+            <if test="zqyxCustomerId != null  and zqyxCustomerId != ''">and zqyx_customer_id = #{zqyxCustomerId}</if>
+            <if test="zqyxCustomerName != null  and zqyxCustomerName != ''">and zqyx_customer_name like concat('%',
+                #{zqyxCustomerName}, '%')
+            </if>
+            <if test="zqcjCustomerId != null  and zqcjCustomerId != ''">and zqcj_customer_id = #{zqcjCustomerId}</if>
+            <if test="zqcjCustomerName != null  and zqcjCustomerName != ''">and zqcj_customer_name like concat('%',
+                #{zqcjCustomerName}, '%')
+            </if>
+            <if test="otherId != null  and otherId != ''">and other_id = #{otherId}</if>
+            <if test="otherName != null  and otherName != ''">and other_name like concat('%', #{otherName}, '%')</if>
         </where>
         ORDER BY no asc
     </select>
@@ -206,6 +264,25 @@
             <if test="limitation != null">limitation,</if>
             <if test="dealCustomerId != null">deal_customer_id,</if>
             <if test="dealCustomerName != null">deal_customer_name,</if>
+            <if test="customerLable != null">customer_lable,</if>
+            <if test="assetSupplierId != null">asset_supplier_id,</if>
+            <if test="assetSupplierName != null">asset_supplier_name,</if>
+            <if test="fundingProviderId != null">funding_provider_id,</if>
+            <if test="fundingProviderName != null">funding_provider_name,</if>
+            <if test="lawyerId != null">lawyer_id,</if>
+            <if test="lawyerName != null">lawyer_name,</if>
+            <if test="intermediaryId != null">intermediary_id,</if>
+            <if test="intermediaryName != null">intermediary_name,</if>
+            <if test="wqyxCustomerId != null">wqyx_customer_id,</if>
+            <if test="wqyxCustomerName != null">wqyx_customer_name,</if>
+            <if test="wqcjCustomerId != null">wqcj_customer_id,</if>
+            <if test="wqcjCustomerName != null">wqcj_customer_name,</if>
+            <if test="zqyxCustomerId != null">zqyx_customer_id,</if>
+            <if test="zqyxCustomerName != null">zqyx_customer_name,</if>
+            <if test="zqcjCustomerId != null">zqcj_customer_id,</if>
+            <if test="zqcjCustomerName != null">zqcj_customer_name,</if>
+            <if test="otherId != null">other_id,</if>
+            <if test="otherName != null">other_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
@@ -267,6 +344,25 @@
             <if test="limitation != null">#{limitation},</if>
             <if test="dealCustomerId != null">#{dealCustomerId},</if>
             <if test="dealCustomerName != null">#{dealCustomerName},</if>
+            <if test="customerLable != null">#{customerLable},</if>
+            <if test="assetSupplierId != null">#{assetSupplierId},</if>
+            <if test="assetSupplierName != null">#{assetSupplierName},</if>
+            <if test="fundingProviderId != null">#{fundingProviderId},</if>
+            <if test="fundingProviderName != null">#{fundingProviderName},</if>
+            <if test="lawyerId != null">#{lawyerId},</if>
+            <if test="lawyerName != null">#{lawyerName},</if>
+            <if test="intermediaryId != null">#{intermediaryId},</if>
+            <if test="intermediaryName != null">#{intermediaryName},</if>
+            <if test="wqyxCustomerId != null">#{wqyxCustomerId},</if>
+            <if test="wqyxCustomerName != null">#{wqyxCustomerName},</if>
+            <if test="wqcjCustomerId != null">#{wqcjCustomerId},</if>
+            <if test="wqcjCustomerName != null">#{wqcjCustomerName},</if>
+            <if test="zqyxCustomerId != null">#{zqyxCustomerId},</if>
+            <if test="zqyxCustomerName != null">#{zqyxCustomerName},</if>
+            <if test="zqcjCustomerId != null">#{zqcjCustomerId},</if>
+            <if test="zqcjCustomerName != null">#{zqcjCustomerName},</if>
+            <if test="otherId != null">#{otherId},</if>
+            <if test="otherName != null">#{otherName},</if>
         </trim>
     </insert>
 
@@ -332,6 +428,25 @@
             <if test="limitation != null">limitation = #{limitation},</if>
             <if test="dealCustomerId != null">deal_customer_id = #{dealCustomerId},</if>
             <if test="dealCustomerName != null">deal_customer_name = #{dealCustomerName},</if>
+            <if test="customerLable != null">customer_lable = #{customerLable},</if>
+            <if test="assetSupplierId != null">asset_supplier_id = #{assetSupplierId},</if>
+            <if test="assetSupplierName != null">asset_supplier_name = #{assetSupplierName},</if>
+            <if test="fundingProviderId != null">funding_provider_id = #{fundingProviderId},</if>
+            <if test="fundingProviderName != null">funding_provider_name = #{fundingProviderName},</if>
+            <if test="lawyerId != null">lawyer_id = #{lawyerId},</if>
+            <if test="lawyerName != null">lawyer_name = #{lawyerName},</if>
+            <if test="intermediaryId != null">intermediary_id = #{intermediaryId},</if>
+            <if test="intermediaryName != null">intermediary_name = #{intermediaryName},</if>
+            <if test="wqyxCustomerId != null">wqyx_customer_id = #{wqyxCustomerId},</if>
+            <if test="wqyxCustomerName != null">wqyx_customer_name = #{wqyxCustomerName},</if>
+            <if test="wqcjCustomerId != null">wqcj_customer_id = #{wqcjCustomerId},</if>
+            <if test="wqcjCustomerName != null">wqcj_customer_name = #{wqcjCustomerName},</if>
+            <if test="zqyxCustomerId != null">zqyx_customer_id = #{zqyxCustomerId},</if>
+            <if test="zqyxCustomerName != null">zqyx_customer_name = #{zqyxCustomerName},</if>
+            <if test="zqcjCustomerId != null">zqcj_customer_id = #{zqcjCustomerId},</if>
+            <if test="zqcjCustomerName != null">zqcj_customer_name = #{zqcjCustomerName},</if>
+            <if test="otherId != null">other_id = #{otherId},</if>
+            <if test="otherName != null">other_name = #{otherName},</if>
         </trim>
         where project_id = #{projectId}
     </update>

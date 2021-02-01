@@ -2,10 +2,13 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysJudicial;
+import com.ledao.system.dao.SysJudicialSuspected;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysJudicialService;
+import com.ledao.system.service.ISysJudicialSuspectedService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +44,9 @@ public class SysTaggingController extends BaseController {
     @Autowired
     private ISysJudicialService sysJudicialService;
 
+    @Autowired
+    private ISysJudicialSuspectedService sysJudicialSuspectedService;
+
     @RequiresPermissions("system:tagging:view")
     @GetMapping()
     public String tagging() {
@@ -66,17 +72,36 @@ public class SysTaggingController extends BaseController {
         }
         List<SysTagging> list = sysTaggingService.selectSysTaggingList(sysTagging);
         for (SysTagging sysTagging1 : list) {
-            SysJudicial sysJudicial = sysJudicialService.selectSysJudicialById(sysTagging1.getJudicialId());
-            sysTagging1.setTitle(sysJudicial.getItemTitle());
-            sysTagging1.setName(sysJudicial.getItemOwner());
-            sysTagging1.setLink(sysJudicial.getItemLink());
-            sysTagging1.setSource(sysJudicial.getItemSource());
-            sysTagging1.setItemType(sysJudicial.getItemType());
-            sysTagging1.setItemInitialprice(sysJudicial.getItemInitialprice());
-            sysTagging1.setItemCurrentprice(sysJudicial.getItemCurrentprice());
-            sysTagging1.setItemStartTime(sysJudicial.getItemStartTime());
-            sysTagging1.setItemEndTime(sysJudicial.getItemEndTime());
-            sysTagging1.setItemStatus(sysJudicial.getItemStatus());
+            if ("Y".equals(sysTagging1.getJudicial())) {
+                SysJudicial sysJudicial = sysJudicialService.selectSysJudicialById(sysTagging1.getJudicialId());
+                if (StringUtils.isNotNull(sysJudicial)) {
+                    sysTagging1.setTitle(sysJudicial.getItemTitle());
+                    sysTagging1.setName(sysJudicial.getItemOwner());
+                    sysTagging1.setLink(sysJudicial.getItemLink());
+                    sysTagging1.setSource(sysJudicial.getItemSource());
+                    sysTagging1.setItemType(sysJudicial.getItemType());
+                    sysTagging1.setItemInitialprice(sysJudicial.getItemInitialprice());
+                    sysTagging1.setItemCurrentprice(sysJudicial.getItemCurrentprice());
+                    sysTagging1.setItemStartTime(sysJudicial.getItemStartTime());
+                    sysTagging1.setItemEndTime(sysJudicial.getItemEndTime());
+                    sysTagging1.setItemStatus(sysJudicial.getItemStatus());
+                }
+            } else if ("N".equals(sysTagging1.getJudicial())) {
+                SysJudicialSuspected sysJudicialSuspected = sysJudicialSuspectedService.selectByItemId(sysTagging1.getItemId());
+                if (StringUtils.isNotNull(sysJudicialSuspected)) {
+                    sysTagging1.setTitle(sysJudicialSuspected.getItemTitle());
+                    sysTagging1.setName(sysJudicialSuspected.getItemOwner());
+                    sysTagging1.setLink(sysJudicialSuspected.getItemLink());
+                    sysTagging1.setSource(sysJudicialSuspected.getItemSource());
+                    sysTagging1.setItemType(sysJudicialSuspected.getItemType());
+                    sysTagging1.setItemInitialprice(sysJudicialSuspected.getItemInitialprice());
+                    sysTagging1.setItemCurrentprice(sysJudicialSuspected.getItemCurrentprice());
+                    sysTagging1.setItemStartTime(sysJudicialSuspected.getItemStartTime());
+                    sysTagging1.setItemEndTime(sysJudicialSuspected.getItemEndTime());
+                    sysTagging1.setItemStatus(sysJudicialSuspected.getItemStatus());
+                }
+            }
+
         }
         return getDataTable(list);
     }

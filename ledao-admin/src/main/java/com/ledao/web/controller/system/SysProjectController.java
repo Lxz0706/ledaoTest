@@ -2,10 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
@@ -59,6 +56,12 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private ISysProjectZckService sysProjectZckService;
+
+    @Autowired
+    private ISysItemService sysItemService;
+
+    @Autowired
+    private ISysCustomerService sysCustomerService;
 
     @RequiresPermissions("system:project:view")
     @GetMapping()
@@ -293,6 +296,33 @@ public class SysProjectController extends BaseController {
             sysProjectContractService.insertSysProjectContract(sysProjectContract);
         }
 
+        //关联项目
+/*        if (StringUtils.isNotNull(sysProject.getBuyerId()) && StringUtils.isNotNull(sysProject.getBuyer())) {
+            SysItem sysItem = new SysItem();
+            for (String string1 : sysProject.getBuyerId().split(",")) {
+                sysItem.setCustomerId(Long.valueOf(string1));
+                sysItem.setProjectId(sysProject.getProjectId());
+                sysItem.setProjectName(sysProject.getProjectName());
+                List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
+                if (sysItemList.size() > 0) {
+                    return error("该客户已关联此项目");
+                } else {
+                    sysItemService.insertSysItem(sysItem);
+                }
+            }
+        }*/
+        if (StringUtils.isNotNull(sysProject.getBuyer())) {
+            for (String string1 : sysProject.getBuyer().split(",")) {
+                SysCustomer sysCustomer = new SysCustomer();
+                sysCustomer.setCustomerName(string1);
+                sysCustomer.setCreateBy(ShiroUtils.getLoginName());
+                List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerList(sysCustomer);
+                if (sysCustomerList.size() < 0) {
+                    sysCustomerService.insertSysCustomer(sysCustomer);
+                }
+            }
+        }
+
         return toAjax(Integer.parseInt(String.valueOf(sysProject.getProjectId())));
     }
 
@@ -436,6 +466,19 @@ public class SysProjectController extends BaseController {
             sysProjectContractService.insertSysProjectContract(sysProjectContract);
         }
 
+        //关联项目
+        if (StringUtils.isNotNull(sysProject.getBuyer())) {
+            for (String string1 : sysProject.getBuyer().split(",")) {
+                SysCustomer sysCustomer = new SysCustomer();
+                sysCustomer.setCustomerName(string1);
+                sysCustomer.setCreateBy(ShiroUtils.getLoginName());
+                List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerList(sysCustomer);
+                if (sysCustomerList.size() < 0) {
+                    sysCustomerService.insertSysCustomer(sysCustomer);
+                }
+            }
+        }
+
         return toAjax(sysProjectService.updateSysProject(sysProject));
     }
 
@@ -523,12 +566,12 @@ public class SysProjectController extends BaseController {
     @PostMapping("/projectList")
     @ResponseBody
     public TableDataInfo projectList(SysProject sysProject) {
-        startPage();
         StringBuffer sb = new StringBuffer();
         List<SysProject> sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject);
         for (SysProject sysProject1 : sysProjectsList) {
             sb.append(sysProject1.getProjectId()).append(",");
         }
+        startPage();
         String projectIds = sb.deleteCharAt(sb.length() - 1).toString();
         List<SysProject> list = sysProjectService.selectSysProjectByProjectId(projectIds);
         return getDataTable(list);
@@ -577,7 +620,6 @@ public class SysProjectController extends BaseController {
                 sysProject.setIsCreate("true");
             }
         }
-
         mmap.put("sysProject", sysProject);
 
         if (1 == ids) {
@@ -600,7 +642,6 @@ public class SysProjectController extends BaseController {
     @RequiresPermissions("system:project:list")
     @GetMapping({"/queryAll"})
     public String queryAll(ModelMap modelMap, SysProject sysProject) {
-        logger.info("查询的项目名称：=======" + sysProject.getProjectName());
         modelMap.put("sysProject", sysProject);
         return "system/project/queryAll";
     }
@@ -745,38 +786,13 @@ public class SysProjectController extends BaseController {
         return getDataTable(list);
     }
 
-
     /**
      * 选择项目树
      */
     @GetMapping("/selectProjectTree")
-    public String selectCustomerTree(String selectedProjectIds, String selectedProjectNames, Boolean multiSelectFlag, ModelMap mmap) {
+    public String selectCustomerTree(String selectedProjectIds, String selectedProjectNames, ModelMap mmap) {
         mmap.put("selectedProjectIds", selectedProjectIds);
         mmap.put("selectedProjectNames", selectedProjectNames);
-        mmap.put("multiSelectFlag", multiSelectFlag);
-        List<SysRole> sysRoleList = ShiroUtils.getSysUser().getRoles();
-        for (SysRole sysRole : sysRoleList) {
-            if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey())) {
-                mmap.put("role", "thb");
-            } else if ("bgczManager".equals(sysRole.getRoleKey()) || "bgczCommon".equals(sysRole.getRoleKey())) {
-                mmap.put("role", "tzb");
-            } else if ("investmentManager".equals(sysRole.getRoleKey()) || "investmentCommon".equals(sysRole.getRoleKey())) {
-                mmap.put("role", "bgcz");
-            }
-        }
         return prefix + "/tree";
-    }
-
-    /**
-     * 客户选择器
-     */
-    @GetMapping("/listForTree")
-    @ResponseBody
-    public String listForTree(SysProject sysProject) {
-        List<SysProject> sysProjectList = sysProjectService.selectSysProjectList(sysProject);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("success", true);
-        jsonObject.put("sysProjectList", sysProjectList);
-        return jsonObject.toString();
     }
 }

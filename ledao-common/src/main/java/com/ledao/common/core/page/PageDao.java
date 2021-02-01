@@ -30,7 +30,8 @@ public class PageDao {
         if (StringUtils.isEmpty(orderByColumn)) {
             return "";
         }
-        return "convert("+StringUtils.toUnderScoreCase(orderByColumn) + " " +"using " + " " + Constants.GBK + ")" + " " + isAsc;
+        return "convert(" + StringUtils.toUnderScoreCase(orderByColumn) + " " + "using " + " " + Constants.GBK + ")" + " " + isAsc;
+        //return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 
     public Integer getPageNum() {

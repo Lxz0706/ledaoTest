@@ -253,15 +253,12 @@ public class SysBgczzckController extends BaseController {
     }
 
     /**
-     * 客户选择器
+     * 选择项目树
      */
-    @GetMapping("/listForTree")
-    @ResponseBody
-    public String listForTree(SysBgczzck sysBgczzck) {
-        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("success", true);
-        jsonObject.put("list", list);
-        return jsonObject.toString();
+    @GetMapping("/selectProjectTree")
+    public String selectCustomerTree(String selectedProjectIds, String selectedProjectNames, ModelMap mmap) {
+        mmap.put("selectedProjectIds", selectedProjectIds);
+        mmap.put("selectedProjectNames", selectedProjectNames);
+        return prefix + "/tree";
     }
 }

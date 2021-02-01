@@ -58,4 +58,12 @@ public interface ISysItemService {
      * @return 结果
      */
     public int deleteSysItemById(Long itemId);
+
+    /**
+     * 根据customerId查询
+     *
+     * @param customerId
+     * @return 结果
+     */
+    public List<SysItem> selectItemByCustomerId(Long customerId);
 }

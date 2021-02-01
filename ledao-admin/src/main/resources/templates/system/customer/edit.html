@@ -1,130 +1,184 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改客户库')" />
+    <th:block th:include="include :: header('修改客户库')"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-customer-edit" th:object="${sysCustomer}">
-            <input name="customerId" th:field="*{customerId}" type="hidden">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户名称：</label>
-                <div class="col-sm-8">
-                    <input name="customerName" th:field="*{customerName}" class="form-control" type="text">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input th:value="*{isAdmin}" type="hidden" id="isAdmin">
+    <form class="form-horizontal m" id="form-customer-edit" th:object="${sysCustomer}">
+        <input name="customerId" th:field="*{customerId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所属机构：</label>
+            <div class="col-sm-8">
+                <input name="customerName" th:field="*{customerName}" class="form-control" type="text" required>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写机构全称</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>例如：江苏乐道胡巴投资管理有限公司或江苏苏湖律师事务所</span>
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">所属机构：</label>
+            <div class="col-sm-8">
+                <input name="affiliation" th:field="*{affiliation}" class="form-control" type="text">
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">联系人：</label>
+            <div class="col-sm-8">
+                <input name="contacts" th:field="*{contacts}" class="form-control" type="text" required readonly="readonly">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写个人全名，如无全名则写职务。如：钟总</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">联系电话：</label>
+            <div class="col-sm-8">
+                <input name="contactNumber" th:field="*{contactNumber}" class="form-control" type="text" readonly="readonly">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限手机号，多个手机号之间用“/”分隔</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">微信号：</label>
+            <div class="col-sm-8">
+                <input name="weChatNumber" id="weChatNumber" th:field="*{weChatNumber}" class="form-control" type="text" readonly="readonly">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：请填写正确的微信号</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">职务：</label>
+            <div class="col-sm-8">
+                <input name="duties" th:field="*{duties}" class="form-control" type="text">
+            </div>
+        </div>
+        <input type="hidden" th:value="${sysCustomer.province}" id="province1"/>
+        <input type="hidden" th:value="${sysCustomer.city}" id="city1"/>
+        <input type="hidden" th:value="${sysCustomer.county}" id="county1"/>
+        <div class="form-group" data-toggle="distpicker">
+            <label class="control-label col-sm-3">所在地区：</label>
+            <div class="col-sm-8" id="address">
+                <div class="col-sm-4">
+                    <select class="form-control" name="province" id="province" required></select>
+                </div>
+                <div class="col-sm-4">
+                    <select class="form-control" name="city" id="city" required></select>
+                </div>
+                <div class="col-sm-4">
+                    <select class="form-control" name="county" id="county" required></select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">所属机构：</label>
-                <div class="col-sm-8">
-                    <input name="affiliation" th:field="*{affiliation}" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">详细地址：</label>
+            <div class="col-sm-8">
+                <input name="contactAddress" th:field="*{contactAddress}" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系人：</label>
-                <div class="col-sm-8">
-                    <input name="contacts" th:field="*{contacts}" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">资源优势：</label>
+            <div class="col-sm-8">
+                <input name="resources" th:field="*{resources}" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系电话：</label>
-                <div class="col-sm-8">
-                    <input name="contactNumber" th:field="*{contactNumber}" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group" id="selectDept">
+            <label class="col-sm-3 control-label">所属部门：</label>
+            <div class="col-sm-8">
+                <input name="deptId" th:field="*{deptId}" class="form-control" type="hidden">
+                <input name="deptName" th:field="*{deptName}" class="form-control" type="text"
+                       onclick="selectDeptTree()">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">职务：</label>
-                <div class="col-sm-8">
-                    <input name="duties" th:field="*{duties}" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group" id="selectWeChat">
+            <label class="col-sm-3 control-label">是否添加到公司号：</label>
+            <div class="col-sm-8">
+                <select name="wechatFlag" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_project_moneyStatus')}" id="wechatFlag"
+                        onchange="weChatChange()">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:field="*{wechatFlag}"
+                            th:value="${dict.dictValue}"></option>
+                </select>
             </div>
-            <input type="hidden" th:value="${sysCustomer.province}" id="province1"/>
-            <input type="hidden" th:value="${sysCustomer.city}" id="city1"/>
-            <input type="hidden" th:value="${sysCustomer.county}" id="county1"/>
-            <div class="form-group" data-toggle="distpicker">
-                <label class="control-label col-sm-3">所在地址</label>
-                <div class="col-sm-8" id="address">
-                    <div class="col-sm-4">
-                        <select class="form-control" name="province" id="province"></select>
-                    </div>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="city" id="city"></select>
-                    </div>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="county" id="county"></select>
-                    </div>
-                </div>
+        </div>
+        <div class="form-group" style="display: none" id="resons">
+            <label class="col-sm-3 control-label">原因：</label>
+            <div class="col-sm-8">
+                <input name="reason" class="form-control" th:field="*{reason}" id="reason" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系地址：</label>
-                <div class="col-sm-8">
-                    <input name="contactAddress" th:field="*{contactAddress}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">资源优势：</label>
-                <div class="col-sm-8">
-                    <input name="resources" th:field="*{resources}" class="form-control" type="text">
-                </div>
-            </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <script src="/js/plugins/distpicker/distpicker.data.js"></script>
-    <script src="/js/plugins/distpicker/distpicker.js"></script>
-    <script type="text/javascript">
-        $(function(){
-            var option = {
-                autoSelect: true,
-                placeholder: true,
-                province: $("#province1").val(),
-                city: $("#city1").val(),
-                district: $("#county1").val()
-            }
-            $("#address").distpicker(option);
-        })
-
-        var prefix = ctx + "system/customer";
-        $("#form-customer-edit").validate({
-            focusCleanup: true
-        });
-
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-customer-edit').serialize());
-            }
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script src="/js/plugins/distpicker/distpicker.data.js"></script>
+<script src="/js/plugins/distpicker/distpicker.js"></script>
+<script type="text/javascript">
+    var isAdmin = $("#isAdmin").val();
+    if ($.common.isNotEmpty(isAdmin)) {
+        if ("true" == isAdmin) {
+            $("#selectDept").show();
+            $("#selectWeChat").show();
+        } else {
+            $("#selectDept").hide();
+            $("#selectWeChat").hide();
         }
+    }
+    $(function () {
+        weChatChange();
+    })
 
-        //人员树形选择器
-        function selectUserTree() {
-            var options = {
-                title: '人员选择',
-                width: "750",
-                url: ctx + "system/customer/selectCustomerTree?selectedCustomerIds=" + $("#buyerId").val() + "&selectedCustomerNames=" + $("#buyer").val() + "&multiSelectFlag=" + true,
-                callBack: doSelect
-            };
-            $.modal.openOptions(options);
+    function weChatChange() {
+        var wechatFlag = $("#wechatFlag").val();
+        if (wechatFlag == "否") {
+            $("#resons").show();
+        } else {
+            $("#reason").val("");
+            $("#resons").hide();
         }
+    }
 
-        function doSelect(index, layero){
+    /*用户管理-新增-选择部门树*/
+    function selectDeptTree() {
+        var deptId = $("#deptId").val();
+        var deptId = $.common.isEmpty(deptId) ? "100" : $("#deptId").val();
+        var url = ctx + "system/dept/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
             var body = layer.getChildFrame('body', index);
-            var userIds = "";
-            var userNames = "";
-            body.find("#multiselect_to option").each(function(){  //遍历所有option
-                var val = $(this).val();   //获取option值
-                var txt = $(this).text();  //获取option的文本内容
-                if(val!= '' && txt!=''){
-                    userIds = userIds + val + ",";
-                    userNames = userNames + txt + ",";
-                }
-            });
-
-            userIds = userIds.substring(0,userIds.length-1);
-            userNames = userNames.substring(0,userNames.length-1);
-
-            $("#buyerId").val(userIds);
-            $("#buyer").val(userNames);
+            $("#deptId").val(body.find('#treeId').val());
+            $("#deptName").val(body.find('#treeName').val());
             layer.close(index);
         }
-    </script>
+    }
+
+    $(function () {
+        var option = {
+            autoSelect: true,
+            placeholder: true,
+            province: $("#province1").val(),
+            city: $("#city1").val(),
+            district: $("#county1").val()
+        }
+        $("#address").distpicker(option);
+    })
+
+    var prefix = ctx + "system/customer";
+    $("#form-customer-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-customer-edit').serialize());
+        }
+    }
+</script>
 </body>
 </html>

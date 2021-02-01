@@ -204,13 +204,13 @@
 
         function detail(id){
             $.modal.confirm("确认要将该条数据添加到星标库吗？", function () {
-                $.operate.post(prefix + "/addTagging", {"judicialId": id });
+                $.operate.post(prefix + "/addTagging", {"judicialId": id,"judicial":"Y" });
             });
         }
 
         function detail1(id){
             $.modal.confirm("确认要将该条数据从星标库中删除吗？", function () {
-                $.operate.post(prefix + "/removeTagging", {"judicialId": id });
+                $.operate.post(prefix + "/removeTagging", {"judicialId": id,"judicial":"Y" });
             });
         }
     </script>

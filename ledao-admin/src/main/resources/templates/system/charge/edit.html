@@ -8,6 +8,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-charge-edit" th:object="${sysCoverCharge}">
         <input name="id" th:field="*{id}" type="hidden">
+        <input name="imgUrl" th:field="*{imgUrl}" type="hidden">
         <input type="hidden" id="cw" name="cw" th:field="*{cw}">
         <div class="form-group">
             <label class="col-sm-3 control-label">资金类型：</label>

@@ -6,13 +6,11 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.ledao.common.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysUser;
-import com.ledao.system.dao.SysZcb;
-import com.ledao.system.dao.SysZck;
+import com.ledao.system.dao.*;
+import com.ledao.system.service.ISysItemService;
 import com.ledao.system.service.ISysZcbService;
 import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -44,6 +42,9 @@ public class SysZckController extends BaseController {
 
     @Autowired
     private ISysZcbService sysZcbService;
+
+    @Autowired
+    private ISysItemService sysItemService;
 
     @RequiresPermissions("system:zck:view")
     @GetMapping()
@@ -112,12 +113,12 @@ public class SysZckController extends BaseController {
     @PostMapping("/zckList")
     @ResponseBody
     public TableDataInfo zckList(SysZck sysZck) {
-        startPage();
         StringBuffer sb = new StringBuffer();
         List<SysZck> list = sysZckService.selectSysZckByParentId(sysZck);
         for (SysZck syszck : list) {
             sb.append(syszck.getId()).append(",");
         }
+        startPage();
         String ids = sb.deleteCharAt(sb.length() - 1).toString();
         List<SysZck> zckList = sysZckService.selectSysZckByZckId(ids);
         return getDataTable(zckList);
@@ -284,9 +285,24 @@ public class SysZckController extends BaseController {
         }
         SysZcb sysZcb = sysZcbService.selectSysZcbById(sysZck.getZcbId());
         sysZck.setAssetPackageName(sysZcb.getAssetStatus());
-
         sysZck.setCreateBy(ShiroUtils.getLoginName());
-        return toAjax(sysZckService.insertSysZck(sysZck));
+        sysZckService.insertSysZck(sysZck);
+
+        //关联项目
+        if (StringUtils.isNotNull(sysZck.getCustomerId()) && StringUtils.isNotNull(sysZck.getCustomer())) {
+            SysItem sysItem = new SysItem();
+            sysItem.setCustomerId(sysZck.getCustomerId());
+            sysItem.setProjectName(sysZck.getCustomer());
+            sysItem.setProjectId(sysZck.getId());
+            List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
+            if (sysItemList.size() > 0) {
+                return error("该客户已关联此项目");
+            } else {
+                sysItemService.insertSysItem(sysItem);
+            }
+        }
+
+        return toAjax(Integer.parseInt(String.valueOf(sysZck.getId())));
     }
 
     /**
@@ -307,6 +323,19 @@ public class SysZckController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysZck sysZck) {
+        //关联项目
+        if (StringUtils.isNotNull(sysZck.getCustomerId()) && StringUtils.isNotNull(sysZck.getCustomer())) {
+            SysItem sysItem = new SysItem();
+            sysItem.setCustomerId(sysZck.getCustomerId());
+            sysItem.setProjectName(sysZck.getCustomer());
+            sysItem.setProjectId(sysZck.getId());
+            List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
+            if (sysItemList.size() > 0) {
+                return error("该客户已关联此项目");
+            } else {
+                sysItemService.insertSysItem(sysItem);
+            }
+        }
         sysZck.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(sysZckService.updateSysZck(sysZck));
     }
@@ -443,6 +472,16 @@ public class SysZckController extends BaseController {
         } else {
             return "0";
         }
+    }
+
+    /**
+     * 选择项目树
+     */
+    @GetMapping("/selectProjectTree")
+    public String selectCustomerTree(String selectedProjectIds, String selectedProjectNames, ModelMap mmap) {
+        mmap.put("selectedProjectIds", selectedProjectIds);
+        mmap.put("selectedProjectNames", selectedProjectNames);
+        return prefix + "/tree";
     }
 
 }

@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysCustomer;
 import com.ledao.system.dao.SysDept;
-import com.ledao.system.service.ISysDeptService;
+import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,9 +29,6 @@ import com.ledao.framework.shiro.service.SysPasswordService;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.dao.SysUserRole;
-import com.ledao.system.service.ISysPostService;
-import com.ledao.system.service.ISysRoleService;
-import com.ledao.system.service.ISysUserService;
 
 /**
  * 用户信息
@@ -56,6 +54,9 @@ public class SysUserController extends BaseController {
 
     @Autowired
     private ISysDeptService deptService;
+
+    @Autowired
+    private ISysCustomerService sysCustomerService;
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
@@ -157,6 +158,14 @@ public class SysUserController extends BaseController {
             return error("修改用户'" + user.getLoginName() + "'失败，手机号码已存在");
         } else if (UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user))) {
             return error("修改用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
+        }
+        SysCustomer sysCustomer = new SysCustomer();
+        sysCustomer.setCreateBy(user.getLoginName());
+        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerList(sysCustomer);
+        for (SysCustomer sysCustomer1 : sysCustomerList) {
+            sysCustomer1.setDeptId(user.getDeptId());
+            sysCustomer1.setDeptName(user.getDept().getDeptName());
+            sysCustomerService.updateSysCustomer(sysCustomer1);
         }
         user.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(userService.updateUser(user));

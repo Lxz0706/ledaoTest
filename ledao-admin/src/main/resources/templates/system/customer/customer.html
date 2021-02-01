@@ -1,159 +1,183 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('客户库列表')" />
+    <th:block th:include="include :: header('客户库列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>所属机构：</label>
+                            <input type="text" name="customerName"/>
+                        </li>
+                        <!--<li>
+                            <label>所属机构：</label>
+                            <input type="text" name="affiliation"/>
+                        </li>-->
+                        <li>
+                            <label>联系人：</label>
+                            <input type="text" name="contacts"/>
+                        </li>
+                        <li>
+                            <label>联系地址：</label>
+                            <input type="text" name="contactAddress"/>
+                        </li>
+                        <div data-toggle="distpicker" id="distpicker">
                             <li>
-                                <label>客户名称：</label>
-                                <input type="text" name="customerName"/>
+                                省：<select name="province" id="province" data-province="---请选择省---"></select>
                             </li>
                             <li>
-                                <label>所属机构：</label>
-                                <input type="text" name="affiliation"/>
+                                市：<select name="city" id="city" data-city="---请选择市---"></select>
                             </li>
                             <li>
-                                <label>联系人：</label>
-                                <input type="text" name="contacts"/>
+                                县/区：<select name="county" id="county" data-district="---请选择区----"></select>
                             </li>
-                            <li>
-                                <label>联系地址：</label>
-                                <input type="text" name="contactAddress"/>
-                            </li>
-                            <div data-toggle="distpicker">
-                                <li>
-                                    省：<select name="province" id="province"></select>
-                                </li>
-                                <li>
-                                    市：<select name="city" id="city"></select>
-                                </li>
-                                <li>
-                                    县/区：<select name="county" id="county"></select>
-                                </li>
-                            </div>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+                        </div>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:customer:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:customer:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:customer:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:customer:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:customer:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:customer:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:customer:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <!-- <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:customer:export">
+                 <i class="fa fa-download"></i> 导出
+             </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-     <script src="/js/plugins/distpicker/distpicker.data.js"></script>
-     <script src="/js/plugins/distpicker/distpicker.js"></script>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:customer:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:customer:remove')}]];
-        var prefix = ctx + "system/customer";
+</div>
+<th:block th:include="include :: footer"/>
+<script src="/js/plugins/distpicker/distpicker.data.js"></script>
+<script src="/js/plugins/distpicker/distpicker.js"></script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:customer:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:customer:remove')}]];
+    var prefix = ctx + "system/customer";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "客户库",
-                columns: [{
-                    checkbox: true
-                },
+    $('#distpicker').distpicker({
+        autoSelect: false
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            clickToSelect: true,
+            modalName: "客户库",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field: 'customerId', 
+                    field: 'customerId',
                     title: '客户id',
                     visible: false
                 },
                 {
-                    field: 'customerName', 
-                    title: '客户名称'
-                },
-                {
-                    field: 'affiliation', 
+                    field: 'customerName',
                     title: '所属机构'
                 },
+                /*{
+                    field: 'affiliation', 
+                    title: '所属机构'
+                },*/
                 {
-                    field: 'contacts', 
+                    field: 'contacts',
                     title: '联系人'
                 },
                 {
-                    field: 'contactNumber', 
+                    field: 'contactNumber',
                     title: '联系电话'
                 },
                 {
-                    field: 'duties', 
+                    field: 'duties',
                     title: '职务'
                 },
                 {
-                    field: 'contactAddress', 
+                    field: 'contactAddress',
                     title: '联系地址'
                 },
                 {
-                    field: 'resources', 
+                    field: 'resources',
                     title: '资源优势'
                 },
                 {
-                    field: 'province', 
+                    field: 'province',
                     title: '省份'
                 },
                 {
-                    field: 'city', 
+                    field: 'city',
                     title: '市'
                 },
                 {
-                    field: 'county', 
+                    field: 'county',
                     title: '县/区'
                 },
                 {
-                    field: '',
+                    field: 'projectName',
                     title: '合作项目',
-                    formatter:function(value, row, index){
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.customerId + '\')">' + value + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.customerId + '\')">' + strLength(value) + '</a>';
                     }
                 },
                 {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.customerId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.customerId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
+                    field: 'createBy',
+                    title: '创建人'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'deptName',
+                    title: '所属部门'
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        function detail(customerId){
-            var url = ctx + 'system/item/itemList/' + customerId;
-            $.modal.openTab("合作项目列表", url);
+    //控制显示的字数
+    function strLength(value) {
+        var str = "";
+        if ($.common.isNotEmpty(value)) {
+            if (value.length > 10) {
+                str = value.substring(0, 10) + '...';
+            }
+        } else {
+            str = "暂无合作项目";
         }
-    </script>
+        return str;
+    }
+
+    function detail(customerId) {
+        var url = ctx + 'system/item/itemList/' + customerId;
+        $.modal.openTab("合作项目列表", url);
+    }
+</script>
 </body>
 </html>

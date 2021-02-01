@@ -6,6 +6,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
+import org.apache.commons.beanutils.converters.LongConverter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -586,6 +587,11 @@ public class SysZck extends BaseEntity {
     private BigDecimal desposalPrice;
 
     private String desposalPrices;
+
+    /**
+     * 客户id
+     */
+    private Long customerId;
 
     /**
      * 客户
@@ -1504,6 +1510,14 @@ public class SysZck extends BaseEntity {
         this.totalPrice1 = totalPrice1;
     }
 
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1594,6 +1608,7 @@ public class SysZck extends BaseEntity {
                 .append("desposalMode", getDesposalMode())
                 .append("desposalPrice", getDesposalPrice())
                 .append("customer", getCustomer())
+                .append("customerId", getCustomerId())
                 .append("zcbId", getZcbId())
                 .append("delFlag", getDelFlag())
                 .append("parentId", getParentId())

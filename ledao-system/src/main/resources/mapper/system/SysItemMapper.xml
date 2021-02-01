@@ -27,6 +27,7 @@
     <select id="selectSysItemList" parameterType="SysItem" resultMap="SysItemResult">
         <include refid="selectSysItemVo"/>
         <where>
+            del_flag = '0'
             <if test="customerId != null ">and customer_id = #{customerId}</if>
             <if test="projectId != null ">and project_id = #{projectId}</if>
             <if test="customerLable != null  and customerLable != ''">and customer_lable = #{customerLable}</if>
@@ -34,13 +35,13 @@
             <if test="tradeDate != null ">and trade_date = #{tradeDate}</if>
             <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
             <if test="projectName != null">and project_name like concat ('%', #{projectName},'%')</if>
-            <if test="createBy != null and createBy != ''">AND create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createBy != null and createBy != ''">AND create_by = #{createBy}</if>
         </where>
     </select>
 
     <select id="selectSysItemById" parameterType="Long" resultMap="SysItemResult">
         <include refid="selectSysItemVo"/>
-        where item_id = #{itemId}
+        where item_id = #{itemId} and del_flag = '0'
     </select>
 
     <insert id="insertSysItem" parameterType="SysItem" useGeneratedKeys="true" keyProperty="itemId">
@@ -91,14 +92,24 @@
     </update>
 
     <delete id="deleteSysItemById" parameterType="Long">
-        delete from sys_item where item_id = #{itemId}
+        update sys_item set del_flag = '2' where item_id = #{itemId}
     </delete>
 
     <delete id="deleteSysItemByIds" parameterType="String">
-        delete from sys_item where item_id in
+        update sys_item set del_flag = '2' where item_id in
         <foreach item="itemId" collection="array" open="(" separator="," close=")">
             #{itemId}
         </foreach>
     </delete>
+
+    <select id="selectItemByCustomerId" parameterType="Long" resultMap="SysItemResult">
+        <include refid="selectSysItemVo"/>
+        where customer_id = #{customerId} and del_flag = '0'
+    </select>
+
+    <select id="selectItemByProjectId" parameterType="Long" resultMap="SysItemResult">
+        <include refid="selectSysItemVo"/>
+        where project_id = #{projectId} and del_flag = '0'
+    </select>
 
 </mapper>

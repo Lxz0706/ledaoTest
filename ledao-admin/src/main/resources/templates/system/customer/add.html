@@ -1,83 +1,259 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('新增客户库')" />
+    <th:block th:include="include :: header('新增客户库')"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-customer-add">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">客户名称：</label>
-                <div class="col-sm-8">
-                    <input name="customerName" class="form-control" type="text">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input th:value="*{isAdmin}" type="hidden" id="isAdmin">
+    <form class="form-horizontal m" id="form-customer-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所属机构：</label>
+            <div class="col-sm-8">
+                <input name="customerName" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写机构全称</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>例如：江苏乐道胡巴投资管理有限公司或江苏苏湖律师事务所</span>
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">所属机构：</label>
+            <div class="col-sm-8">
+                <input name="affiliation" class="form-control" type="text">
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">联系人：</label>
+            <div class="col-sm-8">
+                <input name="contacts" class="form-control" type="text" required>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写个人全名，如无全名则写职务。如：钟总</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">联系电话：</label>
+            <div class="col-sm-8">
+                <input name="contactNumber" id="contactNumber" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限手机号，多个手机号之间用“/”分隔</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">微信号：</label>
+            <div class="col-sm-8">
+                <input name="weChatNumber" id="weChatNumber" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：请填写正确的微信号</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">职务：</label>
+            <div class="col-sm-8">
+                <input name="duties" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">所在地区：</label>
+            <div class="col-sm-8" data-toggle="distpicker" id="distpicker">
+                <div class="col-sm-4">
+                    <select class="form-control" name="province" id="province" data-province="---请选择省---"
+                            required></select>
+                </div>
+                <div class="col-sm-4">
+                    <select class="form-control" name="city" id="city" data-city="---请选择市---" required></select>
+                </div>
+                <div class="col-sm-4">
+                    <select class="form-control" name="county" id="county" data-district="---请选择区----"
+                            required></select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">所属机构：</label>
-                <div class="col-sm-8">
-                    <input name="affiliation" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">详细地址：</label>
+            <div class="col-sm-8">
+                <input name="contactAddress" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系人：</label>
-                <div class="col-sm-8">
-                    <input name="contacts" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">资源优势：</label>
+            <div class="col-sm-8">
+                <input name="resources" class="form-control" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系电话：</label>
-                <div class="col-sm-8">
-                    <input name="contactNumber" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group" id="selectDept">
+            <label class="col-sm-3 control-label">所属部门：</label>
+            <div class="col-sm-8">
+                <input name="deptId" id="deptId" class="form-control" type="hidden">
+                <input name="deptName" id="deptName" class="form-control" type="text" onclick="selectDeptTree()">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">职务：</label>
-                <div class="col-sm-8">
-                    <input name="duties" class="form-control" type="text">
-                </div>
+        </div>
+        <div class="form-group" id="selectWeChat">
+            <label class="col-sm-3 control-label">是否添加到公司微号：</label>
+            <div class="col-sm-8">
+                <select name="wechatFlag" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_project_moneyStatus')}" id="wechatFlag"
+                        onchange="weChatChange()">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-3">所在地址</label>
-                <div class="col-sm-8" data-toggle="distpicker">
-                    <div class="col-sm-4">
-                        <select class="form-control" name="province" id="province"></select>
-                    </div>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="city" id="city"></select>
-                    </div>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="county" id="county"></select>
-                    </div>
-                </div>
+        </div>
+        <div class="form-group" style="display: none" id="resons">
+            <label class="col-sm-3 control-label">原因：</label>
+            <div class="col-sm-8">
+                <input name="reason" class="form-control" id="reason" type="text">
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系地址：</label>
-                <div class="col-sm-8">
-                    <input name="contactAddress" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">资源优势：</label>
-                <div class="col-sm-8">
-                    <input name="resources" class="form-control" type="text">
-                </div>
-            </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <script src="/js/plugins/distpicker/distpicker.data.js"></script>
-    <script src="/js/plugins/distpicker/distpicker.js"></script>
-    <script type="text/javascript">
-        var prefix = ctx + "system/customer"
-        $("#form-customer-add").validate({
-            focusCleanup: true
-        });
-
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-customer-add').serialize());
-            }
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script src="/js/plugins/distpicker/distpicker.data.js"></script>
+<script src="/js/plugins/distpicker/distpicker.js"></script>
+<script type="text/javascript">
+    var prefix = ctx + "system/customer"
+    var isAdmin = $("#isAdmin").val();
+    if ($.common.isNotEmpty(isAdmin)) {
+        if ("true" == isAdmin) {
+            $("#selectDept").show();
+            $("#selectWeChat").show();
+        } else {
+            $("#selectDept").hide();
+            $("#selectWeChat").hide();
         }
-    </script>
+    }
+
+    function weChatChange() {
+        var wechatFlag = $("#wechatFlag").val();
+        if (wechatFlag == "否") {
+            $("#resons").show();
+        } else {
+            $("#reason").val("");
+            $("#resons").hide();
+        }
+    }
+
+    /*用户管理-新增-选择部门树*/
+    function selectDeptTree() {
+        var deptId = $("#deptId").val();
+        var deptId = $.common.isEmpty(deptId) ? "100" : $("#deptId").val();
+        var url = ctx + "system/dept/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#deptId").val(body.find('#treeId').val());
+            $("#deptName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+    }
+
+    $('#distpicker').distpicker({
+        autoSelect: false
+    });
+
+    //联系电话验证
+    jQuery.validator.addMethod("contactNumber", function (value, element) {
+        if ($.common.isNotEmpty(value)) {
+            var str = "";
+            $.ajax({
+                url: prefix + "/checkPhoneUnique",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    "contactNumber": function () {
+                        return $.common.trim($("#contactNumber").val());
+                    }
+                },
+                success: function (data) {
+                    str = data;
+                }
+            });
+            return $.validate.unique(str);
+        } else if ($.common.isNotEmpty($("#weChatNumber").val())) {
+            var str = "";
+            $.ajax({
+                url: prefix + "/checkWeChatNumberUnique",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    "weChatNumber": function () {
+                        return $.common.trim($("#weChatNumber").val());
+                    }
+                },
+                success: function (data) {
+                    str = data;
+                }
+            });
+            return $.validate.unique(str);
+        }
+    }, "手机号码已存在");
+
+    //微信号验证
+    jQuery.validator.addMethod("weChatNumber", function (value, element) {
+        if ($.common.isNotEmpty(value)) {
+            var str = "";
+            $.ajax({
+                url: prefix + "/checkWeChatNumberUnique",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    "weChatNumber": function () {
+                        return $.common.trim($("#weChatNumber").val());
+                    }
+                },
+                success: function (data) {
+                    str = data;
+                }
+            });
+            return $.validate.unique(str);
+        } else if ($.common.isNotEmpty($("#contactNumber").val())) {
+            var str = "";
+            $.ajax({
+                url: prefix + "/checkPhoneUnique",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    "contactNumber": function () {
+                        return $.common.trim($("#contactNumber").val());
+                    }
+                },
+                success: function (data) {
+                    str = data;
+                }
+            });
+            return $.validate.unique(str);
+        }
+    }, "微信号码已存在");
+
+    $("#form-customer-add").validate({
+        onkeyup: false,
+        rules: {
+            contactNumber: {
+                //required: true,
+                contactNumber: true
+            },
+            weChatNumber: {
+                // required: true,
+                weChatNumber: true
+            }
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-customer-add').serialize());
+        }
+    }
+</script>
 </body>
 </html>

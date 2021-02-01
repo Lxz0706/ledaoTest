@@ -73,8 +73,15 @@ public class SysTagging extends BaseEntity {
 
     /**
      * 项目状态
-     * */
+     */
     private String itemStatus;
+
+    private String judicial;
+
+    /*
+     * 爬虫唯一ID
+     * */
+    private String itemId;
 
     public Long getId() {
         return id;
@@ -188,11 +195,29 @@ public class SysTagging extends BaseEntity {
         this.itemStatus = itemStatus;
     }
 
+    public String getJudicial() {
+        return judicial;
+    }
+
+    public void setJudicial(String judicial) {
+        this.judicial = judicial;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("id", getId())
                 .append("judicialId", getJudicialId())
+                .append("judicial", getJudicial())
+                .append("itemId", getItemId())
                 .toString();
     }
 }

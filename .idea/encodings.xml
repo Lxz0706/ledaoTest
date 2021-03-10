@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/ledao-activiti/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-activiti/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-framework/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-generator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-quartz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-quartz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ledao-system/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

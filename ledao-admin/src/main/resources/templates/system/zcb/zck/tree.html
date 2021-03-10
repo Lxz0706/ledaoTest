@@ -48,30 +48,30 @@
             columns: [{
                 checkbox: true,
                 formatter: function (value, row, index) {
-                    if ($("#selectedProjectIds").val() == row.id) {
+                    if ($.common.equals($("#selectedProjectIds").val(), row.id)) {
                         return checked = true;
                     }
                 }
             },
-            {
-                field: 'id',
-                title: 'ID',
-                visible: false
-            },
-            {
-                title: "序号",
-                formatter: function (value, row, index) {
-                    return $.table.serialNumber(index);
-                }
-            },
-            {
-                field: 'assetPackageName',
-                title: '资产包名称',
-                formatter: function (value, row, index) {
-                    return $.table.tooltip(value,20);
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
                 },
-                sortable: true
-            }]
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'assetPackageName',
+                    title: '资产包名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 20);
+                    },
+                    sortable: true
+                }]
         };
         $.table.init(options);
     });

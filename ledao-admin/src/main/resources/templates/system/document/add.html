@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增文件管理')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-document-add" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">文件名称：</label>
+            <div class="col-sm-8">
+                <!--<textarea name="fileName" class="form-control"></textarea>-->
+                <input name="file" id="file" type="file" multiple="multiple">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">文件用途：</label>
+            <div class="col-sm-8">
+                <select name="documentType" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_document_type')}">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">是否可下载：</label>
+            <div class="col-sm-8">
+                <select name="downloadableFlag" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_document_down')}">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">共享部门：</label>
+            <div class="col-sm-8">
+                <input name="shareDeptId" class="form-control" type="hidden" id="shareDeptId">
+                <input name="shareDeptName" class="form-control" type="text" id="shareDeptName"
+                       onclick="selectDeptTree()">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">共享人：</label>
+            <div class="col-sm-8">
+                <input name="shareUserId" class="form-control" type="hidden" id="shareUserId">
+                <input name="shareUserName" class="form-control" type="text" onclick="selectUserTree()"
+                       id="shareUserName">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/document"
+    $("#form-document-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        var obj = document.getElementById("file");
+        var form = document.getElementById("form-document-add"),//先获到表单的JQ对象
+            formData = new FormData(form);
+        formData.append("file", obj);
+        $.ajax({
+            url: prefix + "/add",
+            type: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                $.operate.successCallback(result);
+            }
+        })
+    }
+
+    //人员树形选择器
+    function selectUserTree() {
+        var options = {
+            title: '人员选择',
+            width: "750",
+            url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#shareUserId").val() + "&selectedUserNames=" + $("#shar").val() + "&multiSelectFlag=true",
+            callBack: doSelect
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSelect(index, layero) {
+        var body = layer.getChildFrame('body', index);
+        var userIds = "";
+        var userNames = "";
+        body.find("#multiselect_to option").each(function () {  //遍历所有option
+            var val = $(this).val();   //获取option值
+            var txt = $(this).text();  //获取option的文本内容
+            if (val != '' && txt != '') {
+                userIds = userIds + val + ",";
+                userNames = userNames + txt + ",";
+            }
+        });
+
+        userIds = userIds.substring(0, userIds.length - 1);
+        userNames = userNames.substring(0, userNames.length - 1);
+
+        $("#shareUserId").val(userIds);
+        $("#shareUserName").val(userNames);
+        layer.close(index);
+    }
+
+    /*用户管理-新增-选择部门树*/
+    function selectDeptTree() {
+        var shareDeptId = $("#shareDeptId").val();
+        var shareDeptId = $.common.isEmpty(shareDeptId) ? "100" : $("#shareDeptId").val();
+        var url = ctx + "system/dept/selectDeptTree/" + shareDeptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#shareDeptId").val(body.find('#treeId').val());
+            $("#shareDeptName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+    }
+</script>
+</body>
+</html>

@@ -28,7 +28,7 @@ public class SysZck extends BaseEntity {
     /**
      * 资产包名称
      */
-    @Excel(name = "资产包状态")
+    @Excel(name = "资产包状态", combo = {"已收购", "收购中", "未收购"})
     private String assetPackageName;
 
     /**

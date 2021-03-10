@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysDictType;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -108,5 +109,17 @@ public class SysDictDataController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(dictDataService.deleteDictDataByIds(ids));
+    }
+
+    /**
+     * 根据类型查找
+     */
+    @PostMapping("/selectDictByType")
+    @ResponseBody
+    public List<SysDictData> selectDictByType(SysDictData sysDictData) {
+        sysDictData.setStatus(getRequest().getParameter("status"));
+        sysDictData.setDictType(getRequest().getParameter("type"));
+        List<SysDictData> list = dictDataService.selectDictDataList(sysDictData);
+        return list;
     }
 }

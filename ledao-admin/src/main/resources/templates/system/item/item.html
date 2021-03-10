@@ -103,7 +103,10 @@
                 },
                 {
                     field: 'tradeDate', 
-                    title: '成交日期'
+                    title: '成交日期',
+                    formatter: function (value, row, index) {
+                        return $.table.dateTimeFormatter(value);
+                    }
                 },
                 {
                     field: 'remarks', 

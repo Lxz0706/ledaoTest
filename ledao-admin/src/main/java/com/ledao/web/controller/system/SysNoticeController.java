@@ -2,6 +2,8 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.github.pagehelper.PageHelper;
+import com.ledao.common.core.page.PageDao;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysUserService;
@@ -170,5 +172,29 @@ public class SysNoticeController extends BaseController {
         }
         mmap.put("notice", sysNotice);
         return prefix + "/detail";
+    }
+
+    /**
+     * 系统提醒
+     */
+    @RequiresPermissions("system:notice:list")
+    @PostMapping("/mainNoticeList")
+    @ResponseBody
+    public AjaxResult mainNoticeList() {
+        PageHelper.startPage(0, 10);
+        SysNotice sysNotice = new SysNotice();
+        sysNotice.setNoticeType(getRequest().getParameter("type"));
+        logger.info(getRequest().getParameter("type") + "====" + sysNotice.getNoticeType());
+        //sysNotice.setReadFlag("未读");
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
+            }
+        }
+        List<SysNotice> list = noticeService.selectNoticeList(sysNotice);
+        return AjaxResult.success(list);
     }
 }

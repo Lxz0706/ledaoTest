@@ -1,11 +1,13 @@
 package com.ledao.common.utils;
 
 import java.lang.management.ManagementFactory;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -28,7 +30,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     private static String[] parsePatterns = {
             "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
             "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM",
-            "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM"};
+            "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM","yyyy-MM-dd'T'HH:mm:ssX"};
 
     /**
      * 获取当前Date型日期
@@ -96,6 +98,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * 日期型字符串转化为日期 格式
      */
     public static Date parseDate(Object str) {
+        if (str == null) {
+            return null;
+        }
+        try {
+            return parseDate(str.toString(), parsePatterns);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 日期型字符串转化为日期 格式
+     */
+    public static Date parseToDate(Object str) {
         if (str == null) {
             return null;
         }
@@ -279,5 +295,31 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         long time = System.currentTimeMillis();
         String t = String.valueOf(time / 1000);
         return t;
+    }
+
+
+    public static Date covnDate(String dateTime) {
+        DateFormat df2 = null;
+        Date date1 = null;
+        try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = df.parse(dateTime);
+            SimpleDateFormat df1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
+            date1 = df1.parse(date.toString());
+            df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date1;
+    }
+
+    public static Date strToDate(String date) throws ParseException {
+        if (date == null) {
+            return null;
+        }
+        DateFormat dft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d = dft.parse(date);
+        return d;
     }
 }

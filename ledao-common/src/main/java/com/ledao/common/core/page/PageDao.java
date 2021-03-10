@@ -30,7 +30,13 @@ public class PageDao {
         if (StringUtils.isEmpty(orderByColumn)) {
             return "";
         }
-        return "convert(" + StringUtils.toUnderScoreCase(orderByColumn) + " " + "using " + " " + Constants.GBK + ")" + " " + isAsc;
+        if ("floorage".equals(orderByColumn) || "landArea".equals(orderByColumn)
+                || "totalPrice".equals(orderByColumn) || "capValue".equals(orderByColumn)) {
+            return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
+        } else {
+            return "convert(" + StringUtils.toUnderScoreCase(orderByColumn) + " " + "using " + " " + Constants.GBK + ")" + " COLLATE gbk_chinese_ci  " + isAsc;
+        }
+
         //return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 

@@ -467,6 +467,7 @@
         <where>
             del_flag='0' and parent_id IS NULL
             <if test="projectZckId != null ">and project_zck_id = #{projectZckId}</if>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
             <if test="debtStatus != null ">and debt_status = #{debtStatus}</if>
             <if test="projectName != null ">and project_name like concat ('%', #{projectName},'%')</if>
         </where>

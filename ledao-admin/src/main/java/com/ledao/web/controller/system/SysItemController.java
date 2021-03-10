@@ -49,6 +49,9 @@ public class SysItemController extends BaseController {
     @Autowired
     private ISysCustomerService sysCustomerService;
 
+    @Autowired
+    private ISysPcustomerService sysPcustomerService;
+
     @RequiresPermissions("system:item:view")
     @GetMapping()
     public String item() {
@@ -71,7 +74,10 @@ public class SysItemController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey())) {
-                        sysItem.setCreateBy(ShiroUtils.getLoginName());
+                        if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
+                                && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
+                            sysItem.setCreateBy(ShiroUtils.getLoginName());
+                        }
                     }
                 }
             }
@@ -115,8 +121,11 @@ public class SysItemController extends BaseController {
                 }
             }
         }
+
         modelMap.put("role", role);
         modelMap.put("customerId", customerId);
+        //客户标签
+        modelMap.put("type", sysCustomerService.selectSysCustomerById(Long.valueOf(customerId)).getCustomerLable().split(","));
         return prefix + "/add";
     }
 
@@ -129,6 +138,8 @@ public class SysItemController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(SysItem sysItem) {
         SysCustomer sysCustomer = sysCustomerService.selectSysCustomerById(sysItem.getCustomerId());
+        sysItem.setCreateBy(ShiroUtils.getLoginName());
+        int row = sysItemService.insertSysItem(sysItem);
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
@@ -137,207 +148,48 @@ public class SysItemController extends BaseController {
                 if (StringUtils.isNotNull(sysItem.getProjectName()) && StringUtils.isNotNull(sysItem.getProjectId())) {
                     for (SysRole sysRole : getRoles) {
                         if ("investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
-                            SysZck sysZck = sysZckService.selectSysZckById(sysItem.getProjectId());
-                            if (StringUtils.isNotNull(sysZck)) {
-                                if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                    sysZck.setCustomerId(sysItem.getCustomerId());
-                                }
-                                if (StringUtils.isNotNull(sysCustomer.getCustomerName())) {
-                                    sysZck.setCustomer(sysCustomer.getCustomerName());
-                                }
+                            for (String string : sysItem.getProjectId().split(",")) {
+                                SysPcustomer sysPcustomer = new SysPcustomer();
+                                sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());
+                                sysPcustomer.setCustomerName(sysCustomer.getContacts());
+                                sysPcustomer.setCustomerLable(sysItem.getCustomerLable());
+                                sysPcustomer.setItemId(sysItem.getItemId());
+                                sysPcustomer.setDeptType("tzb");
+                                sysPcustomer.setProjectId(Long.valueOf(string));
+                                sysPcustomer.setCreateBy(ShiroUtils.getLoginName());
+                                sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
-                            sysZckService.updateSysZck(sysZck);
                         } else if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey())) {
-                            SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(sysItem.getProjectId());
-                            if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                sysBgczzck.setCustomerId(sysItem.getCustomerId());
+                            for (String string : sysItem.getProjectId().split(",")) {
+                                SysPcustomer sysPcustomer = new SysPcustomer();
+                                sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());
+                                sysPcustomer.setCustomerName(sysCustomer.getContacts());
+                                sysPcustomer.setCustomerLable(sysItem.getCustomerLable());
+                                sysPcustomer.setItemId(sysItem.getItemId());
+                                sysPcustomer.setDeptType("bgcz");
+                                sysPcustomer.setProjectId(Long.valueOf(string));
+                                sysPcustomer.setCreateBy(ShiroUtils.getLoginName());
+                                sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
-                            if (StringUtils.isNotNull(sysCustomer.getCustomerName())) {
-                                sysBgczzck.setCustomer(sysCustomer.getCustomerName());
-                            }
-                            sysBgczzckService.updateSysBgczzck(sysBgczzck);
                         } else if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
-                            SysProject sysProject = sysProjectService.selectSysProjectById(sysItem.getProjectId());
-                            if ("资产供应方".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getAssetSupplierId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setAssetSupplierId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setAssetSupplierId(sysItem.getCustomerId() + "," + sysProject.getAssetSupplierId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getAssetSupplierName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setAssetSupplierName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setAssetSupplierName(sysCustomer.getContacts() + "," + sysProject.getAssetSupplierName());
-                                    }
-                                }
-                            } else if ("资金供应方".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getFundingProviderId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setFundingProviderId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setFundingProviderId(sysItem.getCustomerId() + "," + sysProject.getFundingProviderId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getFundingProviderName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setFundingProviderName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setFundingProviderName(sysCustomer.getContacts() + "," + sysProject.getFundingProviderName());
-                                    }
-                                }
-                            } else if ("律师".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getLawyerId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setLawyerId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setLawyerId(sysItem.getCustomerId() + "," + sysProject.getLawyerId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getLawyerName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setLawyerName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setLawyerName(sysCustomer.getContacts() + "," + sysProject.getLawyerName());
-                                    }
-                                }
-                            } else if ("中介方".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getIntermediaryId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setIntermediaryId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setIntermediaryId(sysItem.getCustomerId() + "," + sysProject.getIntermediaryId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getIntermediaryName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setIntermediaryName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setIntermediaryName(sysCustomer.getContacts() + "," + sysProject.getIntermediaryName());
-                                    }
-                                }
-                            } else if ("债权意向客户".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getZqyxCustomerId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setZqyxCustomerId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setZqyxCustomerId(sysItem.getCustomerId() + "," + sysProject.getZqyxCustomerId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getZqyxCustomerName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setZqyxCustomerName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setZqyxCustomerName(sysCustomer.getContacts() + "," + sysProject.getZqyxCustomerName());
-                                    }
-                                }
-                            } else if ("债权成交客户".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getZqcjCustomerId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setZqcjCustomerId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setZqcjCustomerId(sysItem.getCustomerId() + "," + sysProject.getZqcjCustomerId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getZqcjCustomerName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setZqcjCustomerName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setZqcjCustomerName(sysCustomer.getContacts() + "," + sysProject.getZqcjCustomerName());
-                                    }
-                                }
-                            } else if ("物权意向客户".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getWqyxCustomerId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setWqyxCustomerId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setWqyxCustomerId(sysItem.getCustomerId() + "," + sysProject.getWqyxCustomerId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getWqyxCustomerName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setWqyxCustomerName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setWqyxCustomerName(sysCustomer.getContacts() + "," + sysProject.getWqyxCustomerName());
-                                    }
-                                }
-                            } else if ("物权成交客户".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getWqcjCustomerId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setWqcjCustomerId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setWqcjCustomerId(sysItem.getCustomerId() + "," + sysProject.getWqcjCustomerId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getWqcjCustomerName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setWqcjCustomerName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setWqcjCustomerName(sysCustomer.getContacts() + "," + sysProject.getWqcjCustomerName());
-                                    }
-                                }
-                            } else if ("其他".equals(sysItem.getCustomerLable())) {
-                                if (StringUtils.isNull(sysProject.getOtherId())) {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setOtherId(sysItem.getCustomerId().toString());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysItem.getCustomerId())) {
-                                        sysProject.setOtherId(sysItem.getCustomerId() + "," + sysProject.getOtherId());
-                                    }
-                                }
-                                if (StringUtils.isNull(sysProject.getOtherName())) {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setOtherName(sysCustomer.getContacts());
-                                    }
-                                } else {
-                                    if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-                                        sysProject.setOtherName(sysCustomer.getContacts() + "," + sysProject.getOtherName());
-                                    }
-                                }
+                            for (String string : sysItem.getProjectId().split(",")) {
+                                SysPcustomer sysPcustomer = new SysPcustomer();
+                                sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());
+                                sysPcustomer.setCustomerName(sysCustomer.getContacts());
+                                sysPcustomer.setCustomerLable(sysItem.getCustomerLable());
+                                sysPcustomer.setItemId(sysItem.getItemId());
+                                sysPcustomer.setDeptType("thb");
+                                sysPcustomer.setProjectId(Long.valueOf(string));
+                                sysPcustomer.setCreateBy(ShiroUtils.getLoginName());
+                                sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
-                            sysProjectService.updateSysProject(sysProject);
+
                         }
                     }
                 }
             }
         }
-        sysItem.setCreateBy(ShiroUtils.getLoginName());
-        return toAjax(sysItemService.insertSysItem(sysItem));
+        return toAjax(row);
     }
 
     /**
@@ -590,86 +442,17 @@ public class SysItemController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        int row = 0;
-        for (String string1 : ids.split(",")) {
-            SysItem sysItem = sysItemService.selectSysItemById(Long.valueOf(string1));
-            row = sysItemService.deleteSysItemById(Long.valueOf(string1));
-            SysItem sysItem1 = new SysItem();
-            sysItem1.setCustomerLable(sysItem.getCustomerLable());
-            sysItem1.setProjectId(sysItem.getProjectId());
-            List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem1);
-            SysProject sysProject = sysProjectService.selectSysProjectById(sysItem1.getProjectId());
-            if (sysItemList.size() > 0) {
-                for (SysItem sysItem2 : sysItemList) {
-                    StringBuffer sb = new StringBuffer();
-                    StringBuffer sb1 = new StringBuffer();
-                    SysCustomer sysCustomer = sysCustomerService.selectSysCustomerById(sysItem2.getCustomerId());
-                    sb.append(sysItem2.getCustomerId()).append(",");
-                    sb1.append(sysCustomer.getContacts()).append(",");
-                    if ("资产供应方".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setAssetSupplierId(sb.toString());
-                        sysProject.setAssetSupplierName(sb1.toString());
-                    } else if ("资金供应方".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setFundingProviderId(sb.toString());
-                        sysProject.setFundingProviderName(sb1.toString());
-                    } else if ("律师".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setLawyerId(sb.toString());
-                        sysProject.setLawyerName(sb1.toString());
-                    } else if ("中介方".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setIntermediaryId(sb.toString());
-                        sysProject.setIntermediaryName(sb1.toString());
-                    } else if ("债权意向客户".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setZqyxCustomerId(sb.toString());
-                        sysProject.setZqyxCustomerName(sb1.toString());
-                    } else if ("债权成交客户".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setZqcjCustomerId(sb.toString());
-                        sysProject.setZqcjCustomerName(sb1.toString());
-                    } else if ("物权意向客户".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setWqyxCustomerId(sb.toString());
-                        sysProject.setWqyxCustomerName(sb1.toString());
-                    } else if ("物权成交客户".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setWqcjCustomerId(sb.toString());
-                        sysProject.setWqcjCustomerName(sb1.toString());
-                    } else if ("其他".equals(sysItem2.getCustomerLable())) {
-                        sysProject.setOtherId(sb.toString());
-                        sysProject.setOtherName(sb1.toString());
-                    }
-                    sysProjectService.updateSysProject(sysProject);
-                }
-            }else{
-                if ("资产供应方".equals(sysItem1.getCustomerLable())) {
-                    sysProject.setAssetSupplierId("");
-                    sysProject.setAssetSupplierName("");
-                } else if ("资金供应方".equals(sysItem.getCustomerLable())) {
-                    sysProject.setFundingProviderId("");
-                    sysProject.setFundingProviderName("");
-                } else if ("律师".equals(sysItem.getCustomerLable())) {
-                    sysProject.setLawyerId("");
-                    sysProject.setLawyerName("");
-                } else if ("中介方".equals(sysItem.getCustomerLable())) {
-                    sysProject.setIntermediaryId("");
-                    sysProject.setIntermediaryName("");
-                } else if ("债权意向客户".equals(sysItem.getCustomerLable())) {
-                    sysProject.setZqyxCustomerId("");
-                    sysProject.setZqyxCustomerName("");
-                } else if ("债权成交客户".equals(sysItem.getCustomerLable())) {
-                    sysProject.setZqcjCustomerId("");
-                    sysProject.setZqcjCustomerName("");
-                } else if ("物权意向客户".equals(sysItem.getCustomerLable())) {
-                    sysProject.setWqyxCustomerId("");
-                    sysProject.setWqyxCustomerName("");
-                } else if ("物权成交客户".equals(sysItem.getCustomerLable())) {
-                    sysProject.setWqcjCustomerId("");
-                    sysProject.setWqcjCustomerName("");
-                } else if ("其他".equals(sysItem.getCustomerLable())) {
-                    sysProject.setOtherId("");
-                    sysProject.setOtherName("");
-                }
-                sysProjectService.updateSysProject(sysProject);
+        StringBuffer stringBuffer = new StringBuffer();
+        for (String string : ids.split(",")) {
+            SysPcustomer sysPcustomer = new SysPcustomer();
+            sysPcustomer.setItemId(Long.valueOf(string));
+            List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectSysPcustomerList(sysPcustomer);
+            for (SysPcustomer sysPcustomer1 : sysPcustomerList) {
+                stringBuffer.append(sysPcustomer1.getDealCustomerId()).append(",");
             }
-
         }
-        return toAjax(row);
+        sysPcustomerService.deleteSysPcustomerByIds(stringBuffer.toString());
+        return toAjax(sysItemService.deleteSysItemByIds(ids));
     }
 
     @RequiresPermissions("system:item:list")

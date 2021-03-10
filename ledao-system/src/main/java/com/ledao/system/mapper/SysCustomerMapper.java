@@ -63,16 +63,25 @@ public interface SysCustomerMapper {
     /**
      * 校验手机号码是否唯一
      *
-     * @param phonenumber 手机号码
+     * @param sysCustomer
      * @return 结果
      */
-    public SysCustomer checkPhoneUnique(String phonenumber);
+    public SysCustomer checkPhoneUnique(SysCustomer sysCustomer);
 
     /**
      * 校验手机号码是否唯一
      *
-     * @param weChatNumber 微信号
+     * @param sysCustomer 微信号
      * @return 结果
      */
-    public SysCustomer checkWeChatNumberUnique(String weChatNumber);
+    public SysCustomer checkWeChatNumberUnique(SysCustomer sysCustomer);
+
+
+    /**
+     * 数据查询
+     *
+     * @param sysCustomer
+     * @return 查询结果
+     */
+    public List<SysCustomer> queryAll(SysCustomer sysCustomer);
 }

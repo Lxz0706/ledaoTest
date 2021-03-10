@@ -2,6 +2,13 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('客户库列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: bootstrap-editable-css"/>
+    <style>
+        .editable-empty, .editable-empty:hover, .editable-empty:focus {
+            color: #2f2f2f;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -12,7 +19,7 @@
                     <ul>
                         <li>
                             <label>所属机构：</label>
-                            <input type="text" name="customerName"/>
+                            <input type="text" name="customerName" placeholder="请输入所属机构"/>
                         </li>
                         <!--<li>
                             <label>所属机构：</label>
@@ -20,26 +27,80 @@
                         </li>-->
                         <li>
                             <label>联系人：</label>
-                            <input type="text" name="contacts"/>
+                            <input type="text" name="contacts" placeholder="请输入联系人"/>
                         </li>
                         <li>
-                            <label>联系地址：</label>
-                            <input type="text" name="contactAddress"/>
+                            <label>联系电话：</label>
+                            <input type="text" name="contactNumber" placeholder="请输入联系电话"/>
                         </li>
+                        <li>
+                            <label>微信号：</label>
+                            <input type="text" name="weChatNumber" placeholder="请输入微信号"/>
+                        </li>
+                        <!-- <li>
+                             <label>联系地址：</label>
+                             <input type="text" name="contactAddress" placeholder="请输入联系地址"/>
+                         </li>-->
                         <div data-toggle="distpicker" id="distpicker">
                             <li>
-                                省：<select name="province" id="province" data-province="---请选择省---"></select>
+                                <label>省：</label><select name="province" id="province"
+                                                         data-province="---请选择省---"></select>
+                                <!--市：<select name="city" id="city" data-city="-&#45;&#45;请选择市-&#45;&#45;"></select>
+                                县/区：<select name="county" id="county" data-district="-&#45;&#45;请选择区&#45;&#45;&#45;&#45;"></select>-->
                             </li>
                             <li>
-                                市：<select name="city" id="city" data-city="---请选择市---"></select>
+                                <label>市：</label>
+                                <select name="city" id="city" data-city="---请选择市---"></select>
                             </li>
                             <li>
-                                县/区：<select name="county" id="county" data-district="---请选择区----"></select>
+                                <label>区/县：</label>
+                                <select name="county" id="county" data-district="---请选择区----"></select>
                             </li>
                         </div>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <label>客户标签：</label><select id="customerLable" name="customerLable"
+                                                        th:with="type=${@dict.getType('sys_customer_label')}"
+                                                        data-none-selected-text="请选择">
+                            <option value="">--请选择数据--</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                            <!--<select id="customerLables" name="customerLables" th:with="type=${@dict.getType('sys_customer_label')}" class="selectpicker" data-none-selected-text="请选择" multiple>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+                        </select>
+                        </li>
+                        <div id="sd" style="display: none">
+                            <li>
+                                <label>创建人：</label>
+                                <input name="creator" type="text" placeholder="请输入创建人"/>
+                            </li>
+                            <li class="select-time">
+                                <label>创建时间：</label><input type="text" class="time-input" id="startTime"
+                                                           placeholder="开始时间" name="beginTime"/>
+                                <span>-</span><input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                                     name="endTime"/>
+                            </li>
+                            <li>
+                                <label>所属部门：</label>
+                                <input name="deptName" type="text" placeholder="请输入所属部门"/>
+                            </li>
+                            <li>
+                                <label>资源优势：</label>
+                                <input name="resources" type="text" placeholder="请输入资源优势"/>
+                            </li>
+                            <li>
+                                <label>是否添加到公司号：</label>
+                                <select id="wechatFlag" name="wechatFlag"
+                                        th:with="type=${@dict.getType('sys_project_moneyStatus')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">--请选择数据--</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                        </div>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="jump()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
@@ -49,7 +110,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:customer:add">
+            <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:customer:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
             <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
@@ -60,9 +121,6 @@
                shiro:hasPermission="system:customer:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
-            <!-- <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:customer:export">
-                 <i class="fa fa-download"></i> 导出
-             </a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -72,10 +130,30 @@
 <th:block th:include="include :: footer"/>
 <script src="/js/plugins/distpicker/distpicker.data.js"></script>
 <script src="/js/plugins/distpicker/distpicker.js"></script>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:customer:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:customer:remove')}]];
     var prefix = ctx + "system/customer";
+
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    if ("admin" == loginName) {
+        $("#sd").show();
+    } else {
+        for (var i = 0; i < roles.length; i++) {
+            if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
+                $("#sd").show();
+            }
+        }
+    }
+    for (var i = 0; i < roles.length; i++) {
+        if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
+            $("#sd").show();
+        }
+    }
+
 
     $('#distpicker').distpicker({
         autoSelect: false
@@ -90,6 +168,8 @@
             exportUrl: prefix + "/export",
             clickToSelect: true,
             modalName: "客户库",
+            onLoadSuccess: onLoadSuccess,
+            onEditableSave: onEditableSave,
             columns: [{
                 checkbox: true
             },
@@ -97,10 +177,6 @@
                     field: 'customerId',
                     title: '客户id',
                     visible: false
-                },
-                {
-                    field: 'customerName',
-                    title: '所属机构'
                 },
                 /*{
                     field: 'affiliation', 
@@ -115,16 +191,22 @@
                     title: '联系电话'
                 },
                 {
+                    field: 'customerName',
+                    title: '所属机构',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, '10');
+                    }
+                },
+                {
                     field: 'duties',
                     title: '职务'
                 },
                 {
-                    field: 'contactAddress',
-                    title: '联系地址'
-                },
-                {
-                    field: 'resources',
-                    title: '资源优势'
+                    field: 'customerLable',
+                    title: '客户标签',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 5);
+                    }
                 },
                 {
                     field: 'province',
@@ -139,6 +221,20 @@
                     title: '县/区'
                 },
                 {
+                    field: 'contactAddress',
+                    title: '详细地址',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, '10');
+                    }
+                },
+                {
+                    field: 'resources',
+                    title: '资源优势',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, '10');
+                    }
+                },
+                {
                     field: 'projectName',
                     title: '合作项目',
                     formatter: function (value, row, index) {
@@ -146,38 +242,102 @@
                     }
                 },
                 {
-                    field: 'createBy',
+                    field: 'creator',
                     title: '创建人'
                 },
                 {
                     field: 'createTime',
-                    title: '创建时间'
+                    title: '创建时间',
+                    formatter: function (value, row, index) {
+                        return $.table.dateTimeFormatter(value);
+                    }
                 },
                 {
                     field: 'deptName',
                     title: '所属部门'
+                },
+                {
+                    field: 'wechatFlag',
+                    title: '是否添加到公司号',
+                    editable: {
+                        type: 'select',
+                        title: "是否添加到公司号", // 编辑框的标题
+                        disabled: false, // 是否禁用编辑
+                        emptytext: "空文本", // 空值的默认文本
+                        source: [{value: "否", text: "否"}, {value: "是", text: "是"}], //动态形成下拉框
+                        value: "",//1代表你需要选中的value值
+                        mode: "inline" // 编辑框的模式：支持popup和inline两种模式，默认是popup
+                    }
+                },
+                {
+                    field: 'reason',
+                    title: '原因',
+                    editable: {
+                        type: 'text',
+                        title: '原因'
+                    }
                 }]
         };
         $.table.init(options);
     });
 
+    function onEditableSave(field, row, oldValue, $el) {
+        $.ajax({
+            type: "post",
+            url: prefix + "/edit",
+            data: row,
+            dataType: 'JSON',
+            success: function (result) {
+                $.operate.ajaxSuccess(result);
+                $.table.refresh();
+            }
+        });
+    }
+
+    function onLoadSuccess(data) {
+        for (var i in data.rows) {
+            if ("Y" == data.rows[i].isAdmin) {
+                $.table.showColumn("creator");
+                $.table.showColumn("deptName");
+                $.table.showColumn("wechatFlag");
+                $.table.showColumn("reason");
+            } else {
+                $.table.hideColumn("creator");
+                $.table.hideColumn("deptName");
+                $.table.hideColumn("wechatFlag");
+                $.table.hideColumn("reason");
+            }
+        }
+    }
+
     //控制显示的字数
     function strLength(value) {
         var str = "";
-        if ($.common.isNotEmpty(value)) {
-            if (value.length > 10) {
-                str = value.substring(0, 10) + '...';
-            }
-        } else {
+        if ($.common.isEmpty(value)) {
             str = "暂无合作项目";
+        } else {
+            str = $.table.beautySub(value, 10);
         }
         return str;
     }
+
 
     function detail(customerId) {
         var url = ctx + 'system/item/itemList/' + customerId;
         $.modal.openTab("合作项目列表", url);
     }
+
+    function jump() {
+        var data = $("#formId").serialize();
+        $.operate.gets(prefix + "/queryAll", data, "查询界面");
+    }
+
+    function resetPre() {
+        $("#formId")[0].reset();
+        $("#customerLables").selectpicker('refresh');
+        $.table.search('formId', 'bootstrap-table');
+    }
+
 </script>
 </body>
 </html>

@@ -178,6 +178,8 @@ public class ShiroConfig {
         manager.setSessionDAO(sessionDAO());
         // 自定义sessionFactory
         manager.setSessionFactory(sessionFactory());
+        // 自定义 Cookie
+        manager.setSessionIdCookie(new SimpleCookie("ledao"));
         return manager;
     }
 
@@ -241,6 +243,15 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/register", "anon,captchaValidate");
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
+
+        /*filterChainDefinitionMap.put("/modeler/**", "anon");
+        filterChainDefinitionMap.put("/repository/**", "anon");
+        filterChainDefinitionMap.put("/runtime/**", "anon");*/
+        // activiti modeler 放行
+        filterChainDefinitionMap.put("/modeler/**", "anon");
+        filterChainDefinitionMap.put("/repository/**", "anon");
+        filterChainDefinitionMap.put("/runtime/**", "anon");
+        filterChainDefinitionMap.put("/management/**", "anon");
 
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("onlineSession", onlineSessionFilter());

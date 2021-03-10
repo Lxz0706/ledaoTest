@@ -2,6 +2,7 @@ package com.ledao.common.utils.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -212,5 +213,32 @@ public class FileUploadUtils {
             extension = MimeTypeUtils.getExtension(file.getContentType());
         }
         return extension;
+    }
+
+    /**
+     * 字节转换
+     *
+     * @param size 字节长度
+     */
+    public static String getNetFileSizeDescription(long size) {
+        StringBuffer bytes = new StringBuffer();
+        DecimalFormat format = new DecimalFormat("###.0");
+        if (size >= 1024 * 1024 * 1024) {
+            double i = (size / (1024.0 * 1024.0 * 1024.0));
+            bytes.append(format.format(i)).append("GB");
+        } else if (size >= 1024 * 1024) {
+            double i = (size / (1024.0 * 1024.0));
+            bytes.append(format.format(i)).append("MB");
+        } else if (size >= 1024) {
+            double i = (size / (1024.0));
+            bytes.append(format.format(i)).append("KB");
+        } else if (size < 1024) {
+            if (size <= 0) {
+                bytes.append("0B");
+            } else {
+                bytes.append((int) size).append("B");
+            }
+        }
+        return bytes.toString();
     }
 }

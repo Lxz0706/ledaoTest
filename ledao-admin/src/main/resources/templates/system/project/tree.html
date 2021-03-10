@@ -11,6 +11,7 @@
             <input th:value="*{selectedProjectNames}" id="selectedProjectNames" type="hidden">
             <form id="gen-form">
                 <div class="select-list">
+                    <input type="hidden" name="projectId" id="projectId" th:value="*{projectId}"/>
                     <ul>
                         <li>
                             借款人名称：<input type="text" name="projectName"/>
@@ -34,10 +35,13 @@
 <th:block th:include="include :: footer"/>
 <script type="text/javascript">
     var prefix = ctx + "system/project";
-
+    var flag = true;
     $(function () {
+        var projectId = $("#projectId").val();
         var options = {
-            url: prefix + "/lists",
+            id: "bootstrap-table",
+            toolbar: "toolbar",
+            url: prefix + "/treeList",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
@@ -45,11 +49,15 @@
             clickToSelect: true,
             rememberSelected: true,
             singleSelect: true,
+            uniqueId: 'projectId',
             columns: [{
                 checkbox: true,
                 formatter: function (value, row, index) {
-                    if ($("#selectedProjectIds").val() == row.projectId) {
-                        return checked = true;
+                    var ids = $("#selectedProjectIds").val().split(",");
+                    for (var i = 0; i < ids.length; i++) {
+                        if ($.common.equals(ids[i], row.projectId)) {
+                            return checked = true;
+                        }
                     }
                 }
             },
@@ -68,7 +76,17 @@
                 },
                 {
                     field: 'projectName',
-                    title: '借款人名称'
+                    title: '借款人名称',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + '\')">' + strLength(value) + '</a>';
+                    }
+                },
+                {
+                    field: 'totalPrice',
+                    title: '合同本金',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value);
+                    }
                 }]
         };
         $.table.init(options);
@@ -89,54 +107,74 @@
         $.modal.openTab("进度情况列表", url);
     }
 
-    /*债权情况-详细*/
-    function detail(id, index) {
-        var url = prefix + '/detail/' + id + "/" + index;
-        var title = "";
-        if (1 == index) {
-            title = "债权情况详细";
-        } else if (2 == index) {
-            title = "司法情况详细";
-        } else if (3 == index) {
-            title = "成交信息详细";
-        } else if (4 == index) {
-            title = "诉讼及执行进展详细";
-        } else {
-            title = "项目详情";
-        }
-        $.modal.opens(title, url);
+    function detail(id) {
+        $('#bootstrap-table').bootstrapTable('destroy');
+        $("#projectId").val(id);
+        var options = {
+            url: prefix + "/treeList",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            clickToSelect: true,
+            rememberSelected: true,
+            singleSelect: false,
+            uniqueId: 'projectId',
+            columns: [{
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    var ids = $("#selectedProjectIds").val().split(",");
+                    for (var i = 0; i < ids.length; i++) {
+                        if ($.common.equals(ids[i], row.projectId)) {
+                            return checked = true;
+                        }
+                    }
+                }
+            },
+                {
+                    field: 'projectId',
+                    title: '项目ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectZckName',
+                    title: '资产包名称'
+                },
+                {
+                    field: 'projectName',
+                    title: '借款人名称',
+                    formatter: function (value, row, index) {
+                        return strLength(value);
+                    }
+                },
+                {
+                    field: 'totalPrice',
+                    title: '合同本金',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                }]
+        };
+        $.table.init(options);
     }
 
     /* 导入表结构-选择表结构-提交 */
     function submitHandler() {
-        var row = selectRows();
+        var row = $.table.selectRows();
         window.parent.getProjectRows(row);
     }
 
-    function selectRows() {
-        //获取当前选中的值
-        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
-            return row;
-        });
-        //如果设置了记住选中数据
-        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
-            let selectedRows = table.rememberSelecteds[table.options.id];
-            if ($.common.isNotEmpty(selectedRows)) {
-                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
-                    return row;
-                });
-            }
-        }
-        //去重
-        return uniqueFnByRows(rows);
-    }
 
     function uniqueFnByRows(array) {
         var result = [];
         var hashObj = {};
         for (var i = 0; i < array.length; i++) {
-            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
-                hashObj[array[i]] = true;
+            if (!hashObj[array[i].projectName]) {
+                hashObj[array[i].projectName] = true;
                 result.push(array[i]);
             }
         }

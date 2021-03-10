@@ -245,12 +245,14 @@
         <tr>
             <td class="col-sm-1 text-right"><h5>总价：</h5></td>
             <td class="col-sm-1"><span th:text="${sysZck.totalPrices}"/></td>
-            <td class="col-sm-1 text-right"><h5>估值依据：</h5></td>
-            <td class="col-sm-1" style="width: 10px!important;"><span th:text="${sysZck.valuationBasis}"/></td>
             <td class="col-sm-1 text-right"><h5>盖帽值：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysZck.capValue}"/></td>
+            <td class="col-sm-1" colspan="5"><span th:text="${sysZck.capValue}"/></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>估值依据：</h5></td>
+            <td class="col-sm-1" colspan="3"><span th:text="${sysZck.valuationBasis}"/></td>
             <td class="col-sm-1 text-right"><h5>抵质押物备注：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysZck.dzywRemark}"/></td>
+            <td class="col-sm-1" colspan="3"><span th:text="${sysZck.dzywRemark}"/></td>
         </tr>
         <tr>
             <td colspan="8" style="text-align: center" class="success"><h3>借款人保证人网搜估值</h3></td>

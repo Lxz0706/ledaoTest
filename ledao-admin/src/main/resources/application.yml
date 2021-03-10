@@ -27,12 +27,12 @@ server:
     max-threads: 800
     # Tomcat启动初始化的线程数，默认值25
     min-spare-threads: 30
- 
+
 # 日志配置
 logging:
   level:
     com.ledao: info
-    org.springframework: warn
+    org.springframework: ERROR
 
 # 用户配置
 user:
@@ -55,36 +55,45 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd
-  profiles: 
+  profiles:
     active: druid
   # 文件上传
   servlet:
-     multipart:
-       # 单个文件大小
-       max-file-size:  10MB
-       # 设置总上传的文件大小
-       max-request-size:  20MB
+    multipart:
+      # 单个文件大小
+      max-file-size:  10MB
+      # 设置总上传的文件大小
+      max-request-size:  20MB
   # 服务模块
   devtools:
     restart:
       # 热部署开关
       enabled: true
+        # activiti 模块
+        # 解决启动报错：class path resource [processes/] cannot be resolved to URL because it does not exist
+  activiti:
+    check-process-definitions: true
+    # 检测身份信息表是否存在
+    db-identity-used: false
 
 # MyBatis
 mybatis:
-    # 搜索指定包别名
-    typeAliasesPackage: com.ledao.**.dao
-    # 配置mapper的扫描，找到所有的mapper.xml映射文件
-    mapperLocations: classpath*:mapper/**/*Mapper.xml
-    # 加载全局的配置文件
-    configLocation: classpath:mybatis/mybatis-config.xml
+  # 搜索指定包别名
+  typeAliasesPackage: com.ledao.**.dao
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 加载全局的配置文件
+  configLocation: classpath:mybatis/mybatis-config.xml
+  #打印sql语句
+  #configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # PageHelper分页插件
-pagehelper: 
+pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
-  params: count=countSql 
+  params: count=countSql
 
 # Shiro
 shiro:
@@ -121,7 +130,7 @@ shiro:
     kickoutAfter: false
 
 # 防止XSS攻击
-xss: 
+xss:
   # 过滤开关
   enabled: true
   # 排除链接（多个用逗号分隔）

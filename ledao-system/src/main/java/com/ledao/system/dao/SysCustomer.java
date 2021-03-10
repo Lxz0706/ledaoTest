@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class SysCustomer extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+
     /**
      * 客户id
      */
@@ -122,6 +123,44 @@ public class SysCustomer extends BaseEntity {
 
     //客户标签
     private String customerLable;
+
+    private String[] customerLables;
+
+    private String[] deptIds;
+
+    /**
+     * 创建者
+     */
+    @Excel(name = "创建者")
+    private String creator;
+
+    /**
+     * 修改者
+     */
+    // @Excel(name = "修改者")
+    private String reviser;
+
+    private String beginTime;
+
+    private String endTime;
+
+    private String isAdmin;
+
+
+    /**
+     * 代理人ID
+     */
+    private String agentId;
+
+    /**
+     * 代理人
+     */
+    private String agent;
+
+    /**
+     * 是否匹配
+     */
+    private Boolean flag = false;
 
     public Long getCustomerId() {
         return customerId;
@@ -275,6 +314,86 @@ public class SysCustomer extends BaseEntity {
         this.customerLable = customerLable;
     }
 
+    public String[] getCustomerLables() {
+        return customerLables;
+    }
+
+    public void setCustomerLables(String[] customerLables) {
+        this.customerLables = customerLables;
+    }
+
+    public String[] getDeptIds() {
+        return deptIds;
+    }
+
+    public void setDeptIds(String[] deptIds) {
+        this.deptIds = deptIds;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setReviser(String reviser) {
+        this.reviser = reviser;
+    }
+
+    public String getReviser() {
+        return reviser;
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
+
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
+    }
+
+    public Boolean getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Boolean flag) {
+        this.flag = flag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -299,6 +418,13 @@ public class SysCustomer extends BaseEntity {
                 .append("wechatFlag", getWechatFlag())
                 .append("reason", getReason())
                 .append("weChatNumber", getWeChatNumber())
+                .append("customerLables", getCustomerLables())
+                .append("customerLable", getCustomerLable())
+                .append("creator", getCreator())
+                .append("reviser", getReviser())
+                .append("agent", getAgent())
+                .append("agentId", getAgentId())
+                .append("customerLable", getCustomerLable())
                 .toString();
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.ledao.common.config.Global;
@@ -18,6 +19,11 @@ import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * 通用请求处理
@@ -40,6 +46,7 @@ public class CommonController {
     @GetMapping("common/download")
     public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request) {
         try {
+            System.out.println(fileName);
             if (!FileUtils.isValidFilename(fileName)) {
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
@@ -98,4 +105,134 @@ public class CommonController {
                 "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, downloadName));
         FileUtils.writeBytes(downloadPath, response.getOutputStream());
     }
+
+    /**
+     * @param filePath 文件将要保存的目录
+     * @param method   请求方法，包括POST和GET
+     * @param url      请求的路径
+     * @return
+     * @功能 下载临时素材接口
+     */
+
+    public static File saveUrlAs(String url, String filePath, String method) {
+        //System.out.println("fileName---->"+filePath);
+        //创建不同的文件夹目录
+        File file = new File(filePath);
+        //判断文件夹是否存在
+        if (!file.exists()) {
+            //如果文件夹不存在，则创建新的的文件夹
+            file.mkdirs();
+        }
+        FileOutputStream fileOut = null;
+        HttpURLConnection conn = null;
+        InputStream inputStream = null;
+        try {
+            // 建立链接
+            URL httpUrl = new URL(url);
+            conn = (HttpURLConnection) httpUrl.openConnection();
+            //以Post方式提交表单，默认get方式
+            conn.setRequestMethod(method);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            // post方式不能使用缓存
+            conn.setUseCaches(false);
+            //连接指定的资源
+            conn.connect();
+            //获取网络输入流
+            inputStream = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(inputStream);
+            //判断文件的保存路径后面是否以/结尾
+            if (!filePath.endsWith("/")) {
+
+                filePath += "/";
+
+            }
+            //写入到文件（注意文件保存路径的后面一定要加上文件的名称）
+            fileOut = new FileOutputStream(filePath + "123.png");
+            BufferedOutputStream bos = new BufferedOutputStream(fileOut);
+
+            byte[] buf = new byte[4096];
+            int length = bis.read(buf);
+            //保存文件
+            while (length != -1) {
+                bos.write(buf, 0, length);
+                length = bis.read(buf);
+            }
+            bos.close();
+            bis.close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("抛出异常！！");
+        }
+        return file;
+    }
+
+    @GetMapping("/common/download/getFileByUrl")
+    public void getImage(String filePath, HttpServletRequest request, HttpServletResponse response) {
+        // 从服务器端获得文件流，并输出到页面
+        InputStream inputStream = this.getInputStream(filePath);
+        this.writeFile(response, inputStream);
+    }
+
+
+    /**
+     * @return
+     * @description: 从服务器获得一个输入流
+     */
+    public static InputStream getInputStream(String urlPath) {
+        InputStream inputStream = null;
+        HttpURLConnection httpURLConnection = null;
+        try {
+            URL url = new URL(urlPath);
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            // 设置网络连接超时时间
+            httpURLConnection.setConnectTimeout(3000);
+            // 设置应用程序要从网络连接读取数据
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.setRequestMethod("GET");
+            int responseCode = httpURLConnection.getResponseCode();
+            System.out.println("responseCode is:" + responseCode);
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // 从服务器返回一个输入流
+                inputStream = httpURLConnection.getInputStream();
+            } else {
+                inputStream = httpURLConnection.getErrorStream();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return inputStream;
+    }
+
+    /**
+     * @param resp
+     * @param inputStream
+     * @description: 将输入流输出到页面
+     */
+    public static void writeFile(HttpServletResponse resp, InputStream inputStream) {
+        OutputStream out = null;
+        try {
+            out = resp.getOutputStream();
+            int len = 0;
+            byte[] b = new byte[1024];
+            while ((len = inputStream.read(b)) != -1) {
+                out.write(b, 0, len);
+            }
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

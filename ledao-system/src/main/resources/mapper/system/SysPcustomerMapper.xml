@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysPcustomerMapper">
+    <resultMap type="SysPcustomer" id="SysPcustomerResult">
+        <result property="dealCustomerId" column="deal_customer_id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="customerLable" column="customer_lable"/>
+        <result property="deptType" column="dept_type"/>
+        <result property="projectId" column="project_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="itemId" column="item_id"/>
+    </resultMap>
+
+    <sql id="selectSysPcustomerVo">
+        select deal_customer_id, customer_id, customer_name, customer_lable, dept_type, project_id, del_flag, create_by, create_time, update_by, update_time, item_id from sys_pcustomer
+    </sql>
+
+    <select id="selectSysPcustomerList" parameterType="SysPcustomer" resultMap="SysPcustomerResult">
+        <include refid="selectSysPcustomerVo"/>
+        <where>
+            <if test="customerId != null ">and customer_id = #{customerId}</if>
+            <if test="customerName != null  and customerName != ''">and customer_name like concat('%', #{customerName},
+                '%')
+            </if>
+            <if test="customerLable != null  and customerLable != ''">and customer_lable = #{customerLable}</if>
+            <if test="deptType != null  and deptType != ''">and dept_type = #{deptType}</if>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="itemId != null ">and item_id = #{itemId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysPcustomerById" parameterType="Long" resultMap="SysPcustomerResult">
+        <include refid="selectSysPcustomerVo"/>
+        where deal_customer_id = #{dealCustomerId}
+    </select>
+
+    <insert id="insertSysPcustomer" parameterType="SysPcustomer" useGeneratedKeys="true" keyProperty="dealCustomerId">
+        insert into sys_pcustomer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="customerName != null">customer_name,</if>
+            <if test="customerLable != null">customer_lable,</if>
+            <if test="deptType != null">dept_type,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="itemId != null">item_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="customerLable != null">#{customerLable},</if>
+            <if test="deptType != null">#{deptType},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="itemId != null">#{itemId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysPcustomer" parameterType="SysPcustomer">
+        update sys_pcustomer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="customerLable != null">customer_lable = #{customerLable},</if>
+            <if test="deptType != null">dept_type = #{deptType},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+        </trim>
+        where deal_customer_id = #{dealCustomerId}
+    </update>
+
+    <delete id="deleteSysPcustomerById" parameterType="Long">
+        delete from sys_pcustomer where deal_customer_id = #{dealCustomerId}
+    </delete>
+
+    <delete id="deleteSysPcustomerByIds" parameterType="String">
+        delete from sys_pcustomer where deal_customer_id in
+        <foreach item="dealCustomerId" collection="array" open="(" separator="," close=")">
+            #{dealCustomerId}
+        </foreach>
+    </delete>
+
+    <select id="selectPCustomerByProjectId" parameterType="Long" resultMap="SysPcustomerResult">
+        SELECT create_by,customer_lable,GROUP_CONCAT(customer_name SEPARATOR ';') customer_name FROM sys_pcustomer
+        WHERE project_id =#{projectId} GROUP BY customer_lable,create_by
+    </select>
+
+</mapper>

@@ -280,10 +280,10 @@ var table = {
                 return pageSize * (pageNumber - 1) + index + 1;
             },
             // 列超出指定长度浮动提示 target（copy单击复制文本 open弹窗打开文本）
-            tooltip: function (value, length, target,str) {
+            tooltip: function (value, length, target, str) {
                 var _length = $.common.isEmpty(length) ? 20 : length;
                 var _text = "";
-                var _value = $.common.nullToStr(value,str);
+                var _value = $.common.nullToStr(value, str);
                 var _target = $.common.isEmpty(target) ? 'copy' : target;
                 if (_value.length > _length) {
                     _text = _value.substr(0, _length) + "...";
@@ -551,21 +551,34 @@ var table = {
                 //去重
                 return $.common.uniqueFnByRows(rows);
             },
-            //获取选中行的整行数据
-            selectRow: function () {
-                //获取当前选中的值
-                let rows = $.map($("#" + table.options.id).bootstrapTable('getSelections'), function (row) {
-                    return row;
-                });
-                //如果设置了记住选中数据
-                if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
-                    let selectedRows = table.rememberSelecteds[table.options.id];
-                    if ($.common.isNotEmpty(selectedRows)) {
-                        rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
-                            return row;
-                        });
-                    }
+            beautySub: function (str, len) {
+                var reg = /[\u4e00-\u9fa5]/g,    //专业匹配中文
+                    slice = str.substring(0, len),
+                    chineseCharNum = (~~(slice.match(reg) && slice.match(reg).length)),
+                    realen = slice.length * 2 - chineseCharNum;
+                return str.substr(0, realen) + (realen < str.length ? "..." : "");
+            },
+            dateTimeFormatter: function (value) {
+                if (value == '' || value == undefined) {
+                    return value;
                 }
+                var myDate = new Date(value);
+                //获取当前年
+                var year = myDate.getFullYear();
+                //获取当前月
+                var month = myDate.getMonth() + 1;
+                month = month < 10 ? "0" + month : month;
+                //获取当前日
+                var date = myDate.getDate();
+                date = date < 10 ? "0" + date : date;
+                var h = myDate.getHours();       //获取当前小时数(0-23)
+                h = h < 10 ? "0" + h : h;
+                var m = myDate.getMinutes();     //获取当前分钟数(0-59)
+                m = m < 10 ? "0" + m : m;
+                var s = myDate.getSeconds();
+                s = s < 10 ? "0" + s : s;
+                var time = year + '-' + month + "-" + date;
+                return time;
             }
         },
         // 表格树封装处理
@@ -1633,11 +1646,11 @@ var table = {
                 return !$.common.isEmpty(value);
             },
             // 空对象转字符串
-            nullToStr: function (value,str) {
+            nullToStr: function (value, str) {
                 if ($.common.isEmpty(value)) {
-                    if($.common.isEmpty(str)){
+                    if ($.common.isEmpty(str)) {
                         return "-";
-                    }else{
+                    } else {
                         return str;
                     }
                 }
@@ -1724,6 +1737,17 @@ var table = {
                 }
                 return result;
             },
+            uniqueFnByRows: function (row) {
+                var result = [];
+                var hashObj = {};
+                for (var i = 0; i < row.length; i++) {
+                    if (!hashObj[row[i].projectId]) {
+                        hashObj[row[i].projectId] = true;
+                        result.push(row[i]);
+                    }
+                }
+                return result;
+            },
             // 数组中的所有元素放入一个字符串
             join: function (array, separator) {
                 if ($.common.isEmpty(array)) {
@@ -1787,17 +1811,19 @@ var table = {
                     return date.getFullYear() + "-" + month + "-" + currentDate;
                 }
             },
-            //重写去重方法
-            uniqueFnByRows: function (array) {
-                var result = [];
-                var hashObj = {};
-                for (var i = 0; i < array.length; i++) {
-                    if (!hashObj[array[i].id]) {//参数id为主键，请根据自己的情况进行修改
-                        hashObj[array[i].id] = true;
-                        result.push(array[i]);
-                    }
-                }
-                return result;
+
+            strToTimeToDate: function (str) {
+                var time = new Date(new Date(str).getTime());
+                var y = time.getFullYear();
+                var m = time.getMonth() + 1;
+                var d = time.getDate();
+                var h = time.getHours();
+                var mm = time.getMinutes();
+                var s = time.getSeconds();
+                return y + '-' + this.repair(m) + '-' + this.repair(d) + ' ' + this.repair(h) + ':' + this.repair(mm) + ':' + this.repair(s);
+            },
+            repair: function (m) {
+                return m < 10 ? '0' + m : m
             }
         }
     });

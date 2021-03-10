@@ -27,32 +27,32 @@ public class DataScopeAspect {
     /**
      * 全部数据权限
      */
-    public static final String DATA_SCOPE_ALL = "1" ;
+    public static final String DATA_SCOPE_ALL = "1";
 
     /**
      * 自定数据权限
      */
-    public static final String DATA_SCOPE_CUSTOM = "2" ;
+    public static final String DATA_SCOPE_CUSTOM = "2";
 
     /**
      * 部门数据权限
      */
-    public static final String DATA_SCOPE_DEPT = "3" ;
+    public static final String DATA_SCOPE_DEPT = "3";
 
     /**
      * 部门及以下数据权限
      */
-    public static final String DATA_SCOPE_DEPT_AND_CHILD = "4" ;
+    public static final String DATA_SCOPE_DEPT_AND_CHILD = "4";
 
     /**
      * 仅本人数据权限
      */
-    public static final String DATA_SCOPE_SELF = "5" ;
+    public static final String DATA_SCOPE_SELF = "5";
 
     /**
      * 数据权限过滤关键字
      */
-    public static final String DATA_SCOPE = "dataScope" ;
+    public static final String DATA_SCOPE = "dataScope";
 
     // 配置织入点
     @Pointcut("@annotation(com.ledao.common.annotation.DataScope)")

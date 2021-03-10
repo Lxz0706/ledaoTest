@@ -10,52 +10,89 @@
     <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
     <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
     <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+    <link href="../static/ajax/libs/fullCalendar/main.css"
+          th:href="@{/ajax/libs/fullCalendar/main.css}" rel="stylesheet"/>
+    <style>
+        .fc .fc-toolbar-title {
+            font-size: 1.1em;
+        }
+
+        p {
+            height: 1%;
+            text-align: center;
+        }
+
+        body {
+            background-image: url("ledao.png");
+        }
+
+        .white-bg {
+            color: white;
+            background-color: rgba(220, 38, 38, 0);
+        }
+
+    </style>
 </head>
 
-<body class="gray-bg">
+<body class="gray-bg" style="height:100%;background: url('../img/login.png') no-repeat;">
 <div class="row border-bottom white-bg dashboard-header">
     <div class="col-sm-12">
         <div th:align="center">
-            <h2>乐道后台管理框架</h2>
+            <h1>乐道后台管理框架</h1>
         </div>
-        <br>
-        <div th:align="center">
+        <!--<br>-->
+        <!--<div th:align="center">
             <span id="dateTime" style="font-size: 30px"><font color="#373737"></font></span>&nbsp;&nbsp;
-        </div>
+        </div>-->
         <br>
     </div>
 </div>
-<div class="row border-bottom white-bg dashboard-header" style="height:100%;background: url('../img/test.png') no-repeat;">
-   <!-- <div class="col-sm-4">
-        <h2>乐道后台管理框架</h2>
-        <br>
-        <span id="dateTimes" style="font-size: 30px"><font color="#373737"></font></span>&nbsp;&nbsp;
-        <br>
-    </div>-->
-    <div class="col-sm-5" th:align="center">
-        <h4>工作日志</h4>
-        <ol>
-            <li></li>
-        </ol>
+<div>
+    <div class="col-sm-4">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <ul class="nav nav-tabs" id="noticeTab"></ul>
+                <!-- <span style="font-weight: bold;float: left">通知公告</span>-->
+                <!--<span style="float: right">更多>></span>-->
+            </div>
+            <div class="ibox-content">
+                <div class="tab-content" id="noticeTabContent"></div>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-2" th:align="center">
-        <h4>待办事宜</h4>
-        <ol>
-            <!--<li>核心框架：Spring Boot。</li>
-            <li>安全框架：Apache Shiro。</li>
-            <li>模板引擎：Thymeleaf。</li>
-            <li>持久层框架：MyBatis。</li>
-            <li>定时任务:Quartz。</li>
-            <li>数据库连接池：Druid。</li>
-            <li>工具类：Fastjson。</li>
-            <li>更多……</li>-->
-        </ol>
+    <div class="col-sm-5">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>下载区域</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs" id="myTab"></ul>
+                    <div class="tab-content" id="myTabContent"></div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="col-sm-3">
+        <div class="ibox float-e-ma rgins">
+            <div class="ibox-title">
+                <h5>日历备忘录</h5>
+            </div>
+            <div class="ibox-content">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
 <script th:src="@{/ledao/js/ry-ui.js}"></script>
+<script th:src="@{/ledao/js/common.js}"></script>
+<script th:src="@{/ajax/libs/fullCalendar/main.js}"></script>
+<script th:src="@{/ajax/libs/fullCalendar/zh-cn.js}"></script>
+<script th:src="@{/ajax/libs/fullCalendar/cnCalendar.js}"></script>
 <script type="text/javascript">
 
     function showLocale(objD) {
@@ -107,11 +144,14 @@
         });
     });
     $(function () {
-        notice();
-        tick();
+        noticeList();
+        //tick();
+        // mainNoticeList();
+        selectType();
+        selectNoticeType();
     });
 
-    function notice() {
+    function noticeList() {
         $.ajax({
             type: 'post',
             url: '/system/notice/noticeList',
@@ -124,6 +164,458 @@
             }
         });
     }
+
+    //获取通知公告类型
+    function selectNoticeType() {
+        $.ajax({
+            url: '/system/dict/data/selectDictByType',
+            data: {'type': 'sys_notice_type', 'status': '0'},
+            dataType: 'json',
+            type: "post",
+            success: function (result) {
+                var str = "";
+                var ul = document.getElementById("noticeTab");
+                for (var i = 0; i < result.length; i++) {
+                    var newLi = document.createElement("li");
+                    if (i == 0) {
+                        newLi.className = "active";
+                    }
+                    newLi.innerHTML = '<a data-toggle="tab" href="#' + result[i].dictValue + '">' + result[i].dictLabel + '</a>';
+                    ul.append(newLi);
+                    str += result[i].dictValue + ",";
+                    selectNoticeByType(result[i].dictValue, i);
+                }
+            }
+        });
+    }
+
+    //根据通知公告类型查询数据
+    function selectNoticeByType(noticeType, j) {
+        $.ajax({
+            type: 'post',
+            url: '/system/notice/mainNoticeList',
+            data: {"type": noticeType},
+            dataType: "JSON",
+            success: function (result) {
+                console.log(result.data);
+                var array = result.data;
+                var str = "";
+                var div = document.getElementById("noticeTabContent");
+                var div1 = document.createElement("div");
+                if (j == 0) {
+                    div1.className = "tab-pane active";
+                } else {
+                    div1.className = "tab-pane";
+                }
+                str += "<ul>";
+                for (var i = 0; i < array.length; i++) {
+                    str += '<li>' + array[i].noticeTitle + '</li>';
+                }
+                str += '</ul>';
+                div1.innerHTML = str;
+                div1.id = noticeType;
+                div.appendChild(div1);
+            }
+        });
+    }
+
+    //获取下载区标签
+    function selectType() {
+        $.ajax({
+            url: '/system/dict/data/selectDictByType',
+            data: {'type': 'sys_document_type', 'status': '0'},
+            dataType: 'json',
+            type: "post",
+            success: function (result) {
+                var str = "";
+                var ul = document.getElementById("myTab");
+                for (var i = 0; i < result.length; i++) {
+                    var newLi = document.createElement("li");
+                    if (i == 0) {
+                        newLi.className = "active";
+                    }
+                    newLi.innerHTML = '<a data-toggle="tab" href="#' + result[i].dictValue + '">' + result[i].dictLabel + '</a>';
+                    ul.append(newLi);
+                    str += result[i].dictValue + ",";
+                    documentByType(result[i].dictValue, i);
+                }
+            }
+        });
+    };
+
+    //根据类型查询出文件
+    function documentByType(type, j) {
+        $.ajax({
+            url: '/system/document/selectDocumentByType',
+            type: 'post',
+            data: {'type': type},
+            dataType: 'json',
+            success: function (result) {
+                var str = "";
+                var div = document.getElementById("myTabContent");
+                var div1 = document.createElement("div");
+                if (j == 0) {
+                    div1.className = "tab-pane active";
+                } else {
+                    div1.className = "tab-pane";
+                }
+                for (var i = 0; i < result.length; i++) {
+                    str += '<p style="text-align: left"><span>' + result[i].fileName + '.' + result[i].fileType + '</span><span style="float: right"><a href="#" onclick="downLoad(\'' + result[i].fileUrl + '\')">下载</a></span></p>';
+                }
+                div1.innerHTML = str;
+                div1.id = type;
+                div.appendChild(div1);
+            }
+        });
+    };
+
+    //下载文件
+    function downLoad(fileName) {
+        window.location.href = "/common/download/resource?resource=C:" + fileName + "&delete=" + true;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            timeZone: 'local',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,listMonth'
+            },
+            /*views: {
+                dayGridMonth: { //转农历
+                    dayCellContent(item) {
+                        let _date = new Date(item.date).toLocaleDateString().split('/');
+                        let _dateF = solar2lunar(_date[0], _date[1], _date[2]);
+                        if ("初一" == _dateF.IDayCn) {
+                            return {
+                                html: `<div class="cnDiv"><p><label>${_dateF.cDay}</label></p><p>${_dateF.IMonthCn}</p></div>`
+                            }
+                        } else {
+                            return {
+                                html: `<div class="cnDiv"><p><label>${_dateF.cDay}</label></p><p>${_dateF.IDayCn}</p></div>`
+                            }
+                        }
+                    }
+                }
+            },*/
+            // initialView: 'dayGridMonth', //此处使用这个就是为了不显示时间，因为当前我的场景不需要展示时间
+            allDaySlot: true,
+            initialDate: new Date(),
+            navLinks: true, // can click day/week names to navigate views
+            businessHours: true, // 工作时间
+            locale: 'zh-cn',
+            editable: true,//是否可以修改
+            selectable: true,//是否可以选择
+            dayMaxEvents: true, //超出部分折叠
+            nowIndicator: true,
+            //height:500,
+            aspectRatio: 1.1,//设置日历单元格宽度与高度的比例。
+            eventDurationEditable: true,
+
+            //点击事件的回调
+            eventClick: function (info) {
+                edit(info.event.id, info.event.startEditable);
+            },
+            //点击没有事件单元格的回调，当前是点击后添加一个计划
+            dateClick: function (info) {
+                add(info.dateStr);
+            },
+
+            //拖动时间的回调，当前是拖动调整计划使用，需要明确function里面info相关属性
+            eventDrop: function (info) {
+                //询问框
+                layer.alert('确认要调整计划?', {
+                    btn: ['确定', '取消'] //按钮
+                    , icon: 6    // icon
+                    , yes: function (index) {
+                        updatePlan(info); //事件拖动并且事件改变时触发
+                        layer.close(index);
+                    }
+                    , btn2: function (index) {
+                        info.revert();          //点击取消按钮后还原
+                        layer.close(index);
+                    }
+                });
+            },
+            events: function (arg, callback) {  //此处的arg里面的参数也可以参照上面的那个info输出后进行研究，要把参数都明确什么意思
+                $.ajax({
+                    url: "/system/memorandum/selectForByMain",
+                    type: "POST",
+                    //下面的startDate必须用单引号，不能用双引号
+                    data: {'startDate': formatDate(arg.startStr), 'endDate': formatDate(arg.endStr)},
+                    //contentType:"application/json;charset:utf-8",
+                    cache: false,
+                    dataType: "json",
+                    success: function (result) {
+                        var events = [];
+                        var data = result.data;
+                        var editable = false;
+                        for (var i in data) {
+                            /*if ($.common.isEmpty(data[i].endTime)) {
+                                allDay = true;
+                            } else {
+                                if (Datetab(data[i].endTime, new Date())) {
+                                    editable = true;
+                                } else {
+                                    editable = false;
+                                }
+                            }*/
+                            events.push({
+                                id: data[i].memorandumId,
+                                title: data[i].matter,
+                                start: data[i].startTime,
+                                end: data[i].endTime,
+                                background: 'none',//背景颜色。
+                                color: '#337ab7',// 背景和边框颜色。
+                                textColor: '#01A8F7',// 文本颜色。
+                                //status: result.code,
+                                editable: editable //事件可编辑
+                            });
+                        }
+                        callback(events);
+                    },
+
+                });
+            },
+            //html内容前置条件，如果没有这一句，自定义的html不生效，必须
+            eventContent: function (arg, createElement) {
+                var italicEl = document.createElement('span');
+                italicEl.innerHTML = arg.event._def.title
+                var arrayOfDomNodes = [italicEl]
+                return {
+                    domNodes: arrayOfDomNodes
+                }
+            }
+        });
+        calendar.render();
+    });
+
+    function getTitle(matter) {
+        var title = '<span class= "lable">' + matter + '</span>'
+        return title;
+    }
+
+    //时间比较
+    //date1结束时间
+    //date2今日时间
+    function Datetab(date1, date2) {
+        var flag = false;
+        var oDate1 = new Date(date1);
+        var oDate2 = new Date(date2);
+        if (oDate1.getTime() > oDate2.getTime()) {
+            flag = false;
+        } else {
+            flag = true;
+        }
+        return flag;
+    }
+
+    //格式化日期函数
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+        return [year, month, day].join('-');
+    }
+
+    //编辑计划
+    function updatePlan(info) {   //更新计划函数，info.event表示拖动后的事件
+        $.ajax({
+            url: "/system/memorandum/updatePlan/" + info.event.id + "/" + formatDate(info.event.start) + "/" + formatDate(info.event.end),
+            type: "POST",
+            //下面的startDate必须用单引号，不能用双引号
+            data: {},
+            //contentType:"application/json;charset:utf-8",
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                if (data.code > 0) {
+                    layer.msg(data.msg);
+                    info.revert();  //拖动调整计划失败返回
+                }
+            },
+
+        });
+    }
+
+    //新增事件
+    function add(today) {
+        /*layer.open({
+            type: 2,
+            title: '增加',
+            maxmin: true,
+            shadeClose: false, // 点击遮罩关闭层
+            area: ['800px', '400px'],
+            content: '/system/memorandum/add' // iframe的url
+        });*/
+        var url = '/system/memorandum/add';
+        $.modal.open('增加', url);
+    }
+
+    //编辑事件
+    function edit(memorandumId, editable) {
+        //if (editable == true) {
+        /*layer.open({
+            type: 2,
+            title: '编辑',
+            maxmin: true,
+            shadeClose: false, // 点击遮罩关闭层
+            area: ['800px', '400px'],
+            content: '/maintenance/spinningMaintenanceRecord/edit/' + maintenanceId // iframe的url
+        });*/
+        var url = '/system/memorandum/edit/' + memorandumId;
+        $.modal.open('修改', url);
+        // } else {
+        //  alert("该事件已结束，不能修改");
+        //  }
+    }
+
+
+    //农历转换
+    function solar2lunar(y, m, d) { //参数区间1900.1.31~2100.12.31
+        //年份限定、上限recordHidden
+        if (y < 1900 || y > 2100) {
+            return -1;// undefined转换为数字变为NaN
+        }
+        //公历传参最下限
+        if (y == 1900 && m == 1 && d < 31) {
+            return -1;
+        }
+        //未传参  获得当天
+        if (!y) {
+            var objDate = new Date();
+        } else {
+            var objDate = new Date(y, parseInt(m) - 1, d)
+        }
+        var i, leap = 0, temp = 0;
+        //修正ymd参数
+        var y = objDate.getFullYear(),
+            m = objDate.getMonth() + 1,
+            d = objDate.getDate();
+        var offset = (Date.UTC(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()) - Date.UTC(1900, 0, 31)) / 86400000;
+        for (i = 1900; i < 2101 && offset > 0; i++) {
+            temp = calendar.lYearDays(i);
+            offset -= temp;
+        }
+        if (offset < 0) {
+            offset += temp;
+            i--;
+        }
+
+        //是否今天
+        var isTodayObj = new Date(),
+            isToday = false;
+        if (isTodayObj.getFullYear() == y && isTodayObj.getMonth() + 1 == m && isTodayObj.getDate() == d) {
+            isToday = true;
+        }
+        //星期几
+        var nWeek = objDate.getDay(),
+            cWeek = calendar.nStr1[nWeek];
+        //数字表示周几顺应天朝周一开始的惯例
+        if (nWeek == 0) {
+            nWeek = 7;
+        }
+        //农历年
+        var year = i;
+        var leap = calendar.leapMonth(i); //闰哪个月
+        var isLeap = false;
+
+        //效验闰月
+        for (i = 1; i < 13 && offset > 0; i++) {
+            //闰月
+            if (leap > 0 && i == (leap + 1) && isLeap == false) {
+                --i;
+                isLeap = true;
+                temp = calendar.leapDays(year); //计算农历闰月天数
+            } else {
+                temp = calendar.monthDays(year, i);//计算农历普通月天数
+            }
+            //解除闰月
+            if (isLeap == true && i == (leap + 1)) {
+                isLeap = false;
+            }
+            offset -= temp;
+        }
+        // 闰月导致数组下标重叠取反
+        if (offset == 0 && leap > 0 && i == leap + 1) {
+            if (isLeap) {
+                isLeap = false;
+            } else {
+                isLeap = true;
+                --i;
+            }
+        }
+        if (offset < 0) {
+            offset += temp;
+            --i;
+        }
+        //农历月
+        var month = i;
+        //农历日
+        var day = offset + 1;
+        //天干地支处理
+        var sm = m - 1;
+        var gzY = calendar.toGanZhiYear(year);
+
+        // 当月的两个节气
+        // bugfix-2017-7-24 11:03:38 use lunar Year Param `y` Not `year`
+        var firstNode = calendar.getTerm(y, (m * 2 - 1));//返回当月「节」为几日开始
+        var secondNode = calendar.getTerm(y, (m * 2));//返回当月「节」为几日开始
+
+        // 依据12节气修正干支月
+        var gzM = calendar.toGanZhi((y - 1900) * 12 + m + 11);
+        if (d >= firstNode) {
+            gzM = calendar.toGanZhi((y - 1900) * 12 + m + 12);
+        }
+
+        //传入的日期的节气与否
+        var isTerm = false;
+        var Term = null;
+        if (firstNode == d) {
+            isTerm = true;
+            Term = calendar.solarTerm[m * 2 - 2];
+        }
+        if (secondNode == d) {
+            isTerm = true;
+            Term = calendar.solarTerm[m * 2 - 1];
+        }
+        //日柱 当月一日与 1900/1/1 相差天数
+        var dayCyclical = Date.UTC(y, sm, 1, 0, 0, 0, 0) / 86400000 + 25567 + 10;
+        var gzD = calendar.toGanZhi(dayCyclical + d - 1);
+        //该日期所属的星座
+        var astro = calendar.toAstro(m, d);
+
+        return {
+            'lYear': year,
+            'lMonth': month,
+            'lDay': day,
+            'Animal': calendar.getAnimal(year),
+            'IMonthCn': (isLeap ? "\u95f0" : '') + calendar.toChinaMonth(month),
+            'IDayCn': calendar.toChinaDay(day),
+            'cYear': y,
+            'cMonth': m,
+            'cDay': d,
+            'gzYear': gzY,
+            'gzMonth': gzM,
+            'gzDay': gzD,
+            'isToday': isToday,
+            'isLeap': isLeap,
+            'nWeek': nWeek,
+            'ncWeek': "\u661f\u671f" + cWeek,
+            'isTerm': isTerm,
+            'Term': Term,
+            'astro': astro
+        };
+    };
+
+
 </script>
 </body>
 </html>

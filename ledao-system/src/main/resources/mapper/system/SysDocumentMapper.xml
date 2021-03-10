@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysDocumentMapper">
+
+    <resultMap type="SysDocument" id="SysDocumentResult">
+        <result property="fileId" column="file_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileType" column="file_type"/>
+        <result property="documentType" column="document_type"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="fileVersion" column="file_version"/>
+        <result property="downloadableFlag" column="downloadable_flag"/>
+        <result property="shareDeptId" column="share_dept_id"/>
+        <result property="shareDeptName" column="share_dept_name"/>
+        <result property="shareUserId" column="share_user_id"/>
+        <result property="shareUserName" column="share_user_name"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createor" column="createor"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateor" column="updateor"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysDocumentVo">
+        select file_id, parent_id, file_name, file_type, document_type, file_size, file_version, downloadable_flag, share_dept_id, share_dept_name, share_user_id, share_user_name, file_url, create_by, createor, create_time, update_by, updateor, update_time from sys_document
+    </sql>
+
+    <select id="selectSysDocumentList" parameterType="SysDocument" resultMap="SysDocumentResult">
+        <include refid="selectSysDocumentVo"/>
+        <where>
+            <if test="parentId != null ">and parent_id = #{parentId}</if>
+            <if test="fileName != null  and fileName != ''">and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''">and file_type = #{fileType}</if>
+            <if test="documentType != null  and documentType != ''">and document_type = #{documentType}</if>
+            <if test="fileSize != null ">and file_size = #{fileSize}</if>
+            <if test="fileVersion != null  and fileVersion != ''">and file_version = #{fileVersion}</if>
+            <if test="downloadableFlag != null  and downloadableFlag != ''">and downloadable_flag =
+                #{downloadableFlag}
+            </if>
+            <if test="shareDeptId != null  and shareDeptId != ''">and share_dept_id = #{shareDeptId}</if>
+            <if test="shareDeptName != null  and shareDeptName != ''">and share_dept_name like concat('%',
+                #{shareDeptName}, '%')
+            </if>
+            <if test="shareUserId != null  and shareUserId != ''">and share_user_id = #{shareUserId}</if>
+            <if test="shareUserName != null  and shareUserName != ''">and share_user_name like concat('%',
+                #{shareUserName}, '%')
+            </if>
+            <if test="fileUrl != null  and fileUrl != ''">and file_url = #{fileUrl}</if>
+            <if test="createor != null  and createor != ''">and createor = #{createor}</if>
+            <if test="updateor != null  and updateor != ''">and updateor = #{updateor}</if>
+        </where>
+    </select>
+
+    <select id="selectSysDocumentById" parameterType="Long" resultMap="SysDocumentResult">
+        <include refid="selectSysDocumentVo"/>
+        where file_id = #{fileId}
+    </select>
+
+    <insert id="insertSysDocument" parameterType="SysDocument" useGeneratedKeys="true" keyProperty="fileId">
+        insert into sys_document
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">parent_id,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="documentType != null">document_type,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="fileVersion != null">file_version,</if>
+            <if test="downloadableFlag != null">downloadable_flag,</if>
+            <if test="shareDeptId != null">share_dept_id,</if>
+            <if test="shareDeptName != null">share_dept_name,</if>
+            <if test="shareUserId != null">share_user_id,</if>
+            <if test="shareUserName != null">share_user_name,</if>
+            <if test="fileUrl != null">file_url,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createor != null">createor,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateor != null">updateor,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">#{parentId},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="documentType != null">#{documentType},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="fileVersion != null">#{fileVersion},</if>
+            <if test="downloadableFlag != null">#{downloadableFlag},</if>
+            <if test="shareDeptId != null">#{shareDeptId},</if>
+            <if test="shareDeptName != null">#{shareDeptName},</if>
+            <if test="shareUserId != null">#{shareUserId},</if>
+            <if test="shareUserName != null">#{shareUserName},</if>
+            <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createor != null">#{createor},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateor != null">#{updateor},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysDocument" parameterType="SysDocument">
+        update sys_document
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="documentType != null">document_type = #{documentType},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="fileVersion != null">file_version = #{fileVersion},</if>
+            <if test="downloadableFlag != null">downloadable_flag = #{downloadableFlag},</if>
+            <if test="shareDeptId != null">share_dept_id = #{shareDeptId},</if>
+            <if test="shareDeptName != null">share_dept_name = #{shareDeptName},</if>
+            <if test="shareUserId != null">share_user_id = #{shareUserId},</if>
+            <if test="shareUserName != null">share_user_name = #{shareUserName},</if>
+            <if test="fileUrl != null">file_url = #{fileUrl},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createor != null">createor = #{createor},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateor != null">updateor = #{updateor},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteSysDocumentById" parameterType="Long">
+        delete from sys_document where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteSysDocumentByIds" parameterType="String">
+        delete from sys_document where file_id in
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+
+</mapper>

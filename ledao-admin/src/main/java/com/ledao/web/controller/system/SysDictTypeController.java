@@ -170,4 +170,5 @@ public class SysDictTypeController extends BaseController {
         List<Ztree> ztrees = dictTypeService.selectDictTree(new SysDictType());
         return ztrees;
     }
+
 }

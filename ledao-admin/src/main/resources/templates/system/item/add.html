@@ -20,11 +20,14 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">客户标签：</label>
             <div class="col-sm-8">
-                <select name="customerLable" id="customerLable" class="form-control m-b"
+                <!--<select name="customerLable" id="customerLable" class="form-control m-b"
                         th:with="type=${@dict.getType('sys_customer_label')}" onchange="selectCustometLable()">
-                    <option value="">--请选择一条数据--</option>
+                    <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                </select>
+                </select>-->
+                <label th:each="type:${type}" class="radio-inline">
+                    <input name="customerLable" type="radio" th:value="${type}" th:text="${type}">
+                </label>
             </div>
         </div>
         <div id="zcgyf">
@@ -59,17 +62,6 @@
     $("#form-item-add").validate({
         focusCleanup: true
     });
-/*
-    function selectCustometLable() {
-        var customerLable = $("#customerLable").val();
-        if ("资产供应方" == customerLable) {
-
-        } else if ("" == customerLable) {
-
-        } else if ("" == customerLable) {
-
-        }
-    }*/
 
     function submitHandler() {
         if ($.validate.form()) {
@@ -134,32 +126,20 @@
             projectIds = row[i].projectId + "," + projectIds;
             projectNames = row[i].projectName + "," + projectNames;
         }
-        $("#projectId").val(projectIds.substr(0, projectIds.length - 1));
-        $("#projectName").val(projectNames.substr(0, projectNames.length - 1));
-        layer.close(layer.index);
-    }
-
-    function doSelect(index, layero) {
-
-        var body = layer.getChildFrame('body', index);
-
-        var projectIds = "";
-        var projectNames = "";
-        body.find("#multiselect_to option").each(function () {  //遍历所有option
-            var val = $(this).val();   //获取option值
-            var txt = $(this).text();  //获取option的文本内容
-            if (val != '' && txt != '') {
-                projectIds = projectIds + val + ",";
-                projectNames = projectNames + txt + ",";
+        $.ajax({
+            url: ctx + 'system/project/treeListByProjectId',
+            data: {'projectId': projectIds},
+            dataType: "JSON",
+            type: 'post',
+            success: function (result) {
+                var ids = result.projectIds;
+                $("#projectId").val(ids.substr(0, ids.length - 1));
             }
         });
 
-        projectIds = projectIds.substring(0, projectIds.length - 1);
-        projectNames = projectNames.substring(0, projectNames.length - 1);
-
-        $("#projectId").val(projectIds);
-        $("#projectName").val(projectNames);
-        layer.close(index);
+        //$("#projectId").val(projectIds.substr(0, projectIds.length - 1));
+        $("#projectName").val(projectNames.substr(0, projectNames.length - 1));
+        layer.close(layer.index);
     }
 </script>
 </body>

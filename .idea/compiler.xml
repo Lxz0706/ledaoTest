@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ledao-admin" />
+        <module name="ledao-common" />
+        <module name="ledao-quartz" />
+        <module name="ledao-activiti" />
+        <module name="ledao-generator" />
+        <module name="ledao-system" />
+        <module name="ledao-framework" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ledao-process" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

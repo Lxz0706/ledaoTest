@@ -49,7 +49,7 @@
             columns: [{
                 checkbox: true,
                 formatter: function (value, row, index) {
-                    if ($("#selectedProjectIds").val() == row.id) {
+                    if ($.common.equals($("#selectedProjectIds").val(), row.id)) {
                         return checked = true;
                     }
                 }

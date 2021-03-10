@@ -7,7 +7,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
-            <input th:value="*{customerIds}" id="customerIds" type="text">
+            <input th:value="*{customerIds}" id="customerIds" type="hidden">
             <input th:value="*{customerNames}" id="customerNames" type="hidden">
             <form id="gen-form">
                 <div class="select-list">
@@ -72,7 +72,10 @@
                 },
                 {
                     field: 'affiliation',
-                    title: '所属机构'
+                    title: '所属机构',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,'10');
+                    }
                 },
                 {
                     field: 'contacts',
@@ -88,11 +91,17 @@
                 },
                 {
                     field: 'contactAddress',
-                    title: '联系地址'
+                    title: '联系地址',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,'10');
+                    }
                 },
                 {
                     field: 'resources',
-                    title: '资源优势'
+                    title: '资源优势',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,'10');
+                    }
                 },
                 {
                     field: 'province',

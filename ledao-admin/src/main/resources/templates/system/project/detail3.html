@@ -7,15 +7,17 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m-t" id="signupForm">
         <input id="createBy" th:field="${sysProject.isCreate}" type="hidden">
+        <input id="projectId" th:field="${sysProject.projectId}" type="hidden">
         <div id="create">
             <!--<div class="form-group">
                 <label class="col-sm-2 control-label"><h5>成交类型：</h5></label>
                 <div class="form-control-static" th:text="${sysProject.customerLable}"></div>
             </div>-->
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label class="col-sm-2 control-label"><h5><div class="form-control-static" th:text="${sysProject.customerLable}"></div>客户：</h5></label>
                 <div class="form-control-static" th:text="${sysProject.dealCustomerName}"></div>
-            </div>
+            </div>-->
+            <div class="form-group" id="create2"></div>
             <!--<div class="form-group">
                 <label class="col-sm-2 control-label"><h5>买家来源：</h5></label>
                 <div class="form-control-static" th:text="${sysProject.buyerSources}"></div>
@@ -39,11 +41,61 @@
 <script>
     $(function () {
         var createBy = $("#createBy").val();
-        if ("true" == createBy) {
+        var projectId = $("#projectId").val();
+        /*if ("true" == createBy) {
             $("#create").show();
+            $.ajax({
+                type: 'post',
+                url: ctx + 'system/project/selectPCustomerByProjectId',
+                data: {'projectId': projectId},
+                dataType: "JSON",
+                success: function (result) {
+                    var arr = result.sysPcustomerList;
+                    var str = "";
+                    for (var i = 0; i < result.sysPcustomerList.length; i++) {
+                        str += '<div class="form-group">';
+                        str += '<label class="col-sm-2 control-label">';
+                        str += "<h5>";
+                        str += arr[i].customerLable;
+                        str += "：</h5></label>";
+                        str += "<td class=\"col-sm-1\">"
+                        str += "<divclass=\"form-control-static\">"
+                        str += arr[i].customerName;
+                        str += '</div>';
+                        str += '</div>';
+                    }
+                    $("#create").append(str);
+                }
+            });
         } else {
             $("#create").hide();
-        }
+            $("#create2").hide();
+        }*/
+        $("#create").show();
+        $.ajax({
+            type: 'post',
+            url: ctx + 'system/project/selectPCustomerByProjectId',
+            data: {'projectId': projectId},
+            dataType: "JSON",
+            success: function (result) {
+                var arr = result.sysPcustomerList;
+                var str = "";
+                for (var i = 0; i < result.sysPcustomerList.length; i++) {
+                    str += '<div class="form-group">';
+                    str += '<label class="col-sm-2 control-label">';
+                    str += "<h5>";
+                    str += arr[i].customerLable;
+                    str += "：</h5></label>";
+                    str += "<td class=\"col-sm-1\">"
+                    str += "<divclass=\"form-control-static\">"
+                    str += arr[i].customerName;
+                    str += '</div>';
+                    str += '</div>';
+                }
+                $("#create").append(str);
+            }
+        });
+
     })
 </script>
 </body>

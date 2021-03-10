@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('导入表结构')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input th:value="*{selectedProjectIds}" id="selectedProjectIds" type="hidden">
+            <input th:value="*{selectedProjectNames}" id="selectedProjectNames" type="hidden">
+            <form id="gen-form">
+                <div class="select-list">
+                    <input type="text" name="projectId" id="projectId" th:value="*{projectId}"/>
+                    <ul>
+                        <li>
+                            借款人名称：<input type="text" name="projectName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/project";
+
+    $(function () {
+        var options = {
+            url: prefix + "/treeListes",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            clickToSelect: true,
+            rememberSelected: true,
+            singleSelect: false,
+            columns: [{
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if ($("#selectedProjectIds").val() == row.projectId) {
+                        return checked = true;
+                    }
+                }
+            },
+                {
+                    field: 'projectId',
+                    title: '项目ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectZckName',
+                    title: '资产包名称'
+                },
+                {
+                    field: 'projectName',
+                    title: '借款人名称',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
+                    },
+                    sortable: true
+                },
+                {
+                    field: 'totalPrice',
+                    title: '合同本金',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value);
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    //控制显示的字数
+    function strLength(value) {
+        var str = $.common.nullToStr(value);
+        if (str.length > 10) {
+            str = str.substring(0, 10) + '...';
+        }
+        return str;
+    }
+
+    function progress(id) {
+        var url = ctx + 'system/progress/progressLists/' + id + "/Y";
+        $.modal.openTab("进度情况列表", url);
+    }
+
+    function detail(id, projectName) {
+        var url = prefix + '/projectList/' + id;
+        $.modal.openTab(projectName + "列表", url);
+    }
+
+    /* 导入表结构-选择表结构-提交 */
+    function submitHandler() {
+        var row = selectRows();
+        window.parent.getProjectRows(row);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //如果设置了记住选中数据
+        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+            let selectedRows = table.rememberSelecteds[table.options.id];
+            if ($.common.isNotEmpty(selectedRows)) {
+                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    return row;
+                });
+            }
+        }
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i].projectId]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i].projectId] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+</script>
+</body>
+</html>

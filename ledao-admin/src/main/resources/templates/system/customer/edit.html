@@ -8,14 +8,6 @@
     <input th:value="*{isAdmin}" type="hidden" id="isAdmin">
     <form class="form-horizontal m" id="form-customer-edit" th:object="${sysCustomer}">
         <input name="customerId" th:field="*{customerId}" type="hidden">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">所属机构：</label>
-            <div class="col-sm-8">
-                <input name="customerName" th:field="*{customerName}" class="form-control" type="text" required>
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写机构全称</span>
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>例如：江苏乐道胡巴投资管理有限公司或江苏苏湖律师事务所</span>
-            </div>
-        </div>
         <!--<div class="form-group">
             <label class="col-sm-3 control-label">所属机构：</label>
             <div class="col-sm-8">
@@ -44,9 +36,28 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">所属机构：</label>
+            <div class="col-sm-8">
+                <input name="customerName" th:field="*{customerName}" class="form-control" type="text">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写机构全称</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>例如：江苏乐道胡巴投资管理有限公司或江苏苏湖律师事务所</span>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">职务：</label>
             <div class="col-sm-8">
                 <input name="duties" th:field="*{duties}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户标签：</label>
+            <div class="col-sm-8">
+                <label th:each="role:${roles}" class="check-box">
+                    <input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}" th:checked="${role.flag}" th:disabled="${role.status == '1'}">
+                </label>
+                <label th:each="type:${types}" class="check-box">
+                    <input name="customerLable" type="checkbox" th:value="${type.dictValue}" th:text="${type.dictValue}" th:checked="${type.flag}" th:disabled="${type.status == '1'}">
+                </label>
             </div>
         </div>
         <input type="hidden" th:value="${sysCustomer.province}" id="province1"/>
@@ -78,14 +89,14 @@
                 <input name="resources" th:field="*{resources}" class="form-control" type="text">
             </div>
         </div>
-        <div class="form-group" id="selectDept">
+        <!--<div class="form-group" id="selectDept">
             <label class="col-sm-3 control-label">所属部门：</label>
             <div class="col-sm-8">
                 <input name="deptId" th:field="*{deptId}" class="form-control" type="hidden">
                 <input name="deptName" th:field="*{deptName}" class="form-control" type="text"
                        onclick="selectDeptTree()">
             </div>
-        </div>
+        </div>-->
         <div class="form-group" id="selectWeChat">
             <label class="col-sm-3 control-label">是否添加到公司号：</label>
             <div class="col-sm-8">
@@ -104,6 +115,13 @@
                 <input name="reason" class="form-control" th:field="*{reason}" id="reason" type="text">
             </div>
         </div>
+        <div class="form-group" id="agentUser">
+            <label class="col-sm-3 control-label">提交者：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="hidden" name="createBy" id="createBy" th:field="*{createBy}">
+                <input class="form-control" type="text" name="creator" onclick="selectUser()" id="creator" th:field="*{creator}">
+            </div>
+        </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
@@ -115,9 +133,11 @@
         if ("true" == isAdmin) {
             $("#selectDept").show();
             $("#selectWeChat").show();
+            $("#agentUser").show();
         } else {
             $("#selectDept").hide();
             $("#selectWeChat").hide();
+            $("#agentUser").hide();
         }
     }
     $(function () {
@@ -178,6 +198,25 @@
         if ($.validate.form()) {
             $.operate.save(prefix + "/edit", $('#form-customer-edit').serialize());
         }
+    }
+
+
+    //人员树形选择器
+    function selectUser() {
+        var url = ctx + "system/customer/selectUser?loginName=" + $("#createBy").val() + "&userName=" + $("#creator").val();
+        $.modal.open("人员选择", url, '750', '600');
+    }
+
+    function getDeviceBasics(row) {
+        var userNames = "";
+        var loginNames = "";
+        for (var i = 0; i < row.length; i++) {
+            userNames = row[i].userName + "," + userNames;
+            loginNames = row[i].loginName + "," + loginNames;
+        }
+        $("#createBy").val(loginNames.substr(0, loginNames.length - 1));
+        $("#creator").val(userNames.substr(0, userNames.length - 1));
+        layer.close(layer.index);
     }
 </script>
 </body>

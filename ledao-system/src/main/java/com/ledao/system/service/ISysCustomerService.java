@@ -74,4 +74,12 @@ public interface ISysCustomerService {
      * @return 结果
      */
     public String checkWeChatNumberUnique(SysCustomer sysCustomer);
+
+    /**
+     * 数据查询
+     *
+     * @param sysCustomer
+     * @return 查询结果
+     */
+    public List<SysCustomer> queryAll(SysCustomer sysCustomer);
 }

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户库列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" name="customerName" th:value="${sysCustomer.customerName}"/>
+                <input type="hidden" name="contacts" th:value="${sysCustomer.contacts}"/>
+                <input type="hidden" name="contactAddress" th:value="${sysCustomer.contactAddress}"/>
+                <input type="hidden" name="contactNumber" th:value="${sysCustomer.contactNumber}"/>
+                <input type="hidden" name="weChatNumber" th:value="${sysCustomer.weChatNumber}"/>
+                <input type="hidden" name="province" th:value="${sysCustomer.province}"/>
+                <input type="hidden" name="city" th:value="${sysCustomer.city}"/>
+                <input type="hidden" name="county" th:value="${sysCustomer.county}"/>
+                <input type="hidden" name="customerLable" th:value="${sysCustomer.customerLable}"/>
+                <input type="hidden" name="params[beginTime]" id="beginDate" th:value="${sysCustomer.beginTime}"/>
+                <input type="hidden" name="params[endTime]" id="endDate" th:value="${sysCustomer.endTime}"/>
+                <input type="hidden" name="creator" th:value="${sysCustomer.creator}"/>
+                <input type="hidden" name="deptName" th:value="${sysCustomer.deptName}"/>
+                <input type="hidden" name="resources" th:value="${sysCustomer.resources}"/>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script src="/js/plugins/distpicker/distpicker.data.js"></script>
+<script src="/js/plugins/distpicker/distpicker.js"></script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:customer:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:customer:remove')}]];
+    var prefix = ctx + "system/customer";
+
+    $('#distpicker').distpicker({
+        autoSelect: false
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/queryAllList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            clickToSelect: true,
+            modalName: "客户库",
+            onLoadSuccess: onLoadSuccess,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'customerId',
+                    title: '客户id',
+                    visible: false
+                },
+                {
+                    field: 'customerName',
+                    title: '所属机构',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,'10');
+                    }
+                },
+                /*{
+                    field: 'affiliation', 
+                    title: '所属机构'
+                },*/
+                {
+                    field: 'contacts',
+                    title: '联系人'
+                },
+                {
+                    field: 'contactNumber',
+                    title: '联系电话'
+                },
+                {
+                    field: 'duties',
+                    title: '职务'
+                },
+                {
+                    field: 'customerLable',
+                    title: '客户标签'
+                },
+                {
+                    field: 'province',
+                    title: '省份'
+                },
+                {
+                    field: 'city',
+                    title: '市'
+                },
+                {
+                    field: 'county',
+                    title: '县/区'
+                },
+                {
+                    field: 'contactAddress',
+                    title: '联系地址',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,'15');
+                    }
+                },
+                {
+                    field: 'resources',
+                    title: '资源优势',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,'10');
+                    }
+                },
+                {
+                    field: 'projectName',
+                    title: '合作项目',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.customerId + '\')">' + strLength(value) + '</a>';
+                    }
+                },
+                {
+                    field: 'creator',
+                    title: '创建人'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'deptName',
+                    title: '所属部门'
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function onLoadSuccess(data) {
+        for (var i in data.rows) {
+            if ("Y" == data.rows[i].isAdmin) {
+                $.table.showColumn("creator");
+                $.table.showColumn("deptName");
+                $.table.showColumn("wechatFlag");
+                $.table.showColumn("reason");
+            } else {
+                $.table.hideColumn("creator");
+                $.table.hideColumn("deptName");
+                $.table.hideColumn("wechatFlag");
+                $.table.hideColumn("reason");
+            }
+        }
+    }
+
+    //控制显示的字数
+    function strLength(value) {
+        var str = "";
+        if ($.common.isNotEmpty(value)) {
+            if (value.length > 10) {
+                str = value.substring(0, 10) + '...';
+            }
+        } else {
+            str = "暂无合作项目";
+        }
+        return str;
+    }
+
+    function detail(customerId) {
+        var url = ctx + 'system/item/itemList/' + customerId;
+        $.modal.openTab("合作项目列表", url);
+    }
+
+    function jump() {
+        var data = $("#formId").serialize();
+        $.operate.gets(prefix + "/queryAll", data, "查询界面");
+    }
+</script>
+</body>
+</html>

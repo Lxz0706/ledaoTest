@@ -101,7 +101,7 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     @Override
     public String checkPhoneUnique(SysCustomer sysCustomer) {
         Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
-        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer.getContactNumber());
+        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer);
         if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
             return UserConstants.USER_PHONE_NOT_UNIQUE;
         }
@@ -117,10 +117,21 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     @Override
     public String checkWeChatNumberUnique(SysCustomer sysCustomer) {
         Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
-        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer.getWeChatNumber());
+        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer);
         if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
             return UserConstants.USER_WECHATNUMBER_NOT_UNIQUE;
         }
         return UserConstants.USER_WECHATNUMBER_UNIQUE;
+    }
+
+
+    /**
+     * 数据查询
+     *
+     * @param sysCustomer
+     * @return 查询结果
+     */
+    public List<SysCustomer> queryAll(SysCustomer sysCustomer) {
+        return sysCustomerMapper.queryAll(sysCustomer);
     }
 }

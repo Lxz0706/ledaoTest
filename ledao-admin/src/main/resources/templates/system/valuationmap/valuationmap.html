@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')"/>
+    <!--引用百度地图API-->
+    <style type="text/css">
+        body,
+        html,
+        #map {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        .info {
+            z-index: 999;
+            width: auto;
+            min-width: 22rem;
+            padding: .75rem 1.25rem;
+            margin-left: 1.25rem;
+            position: fixed;
+            top: 1rem;
+            background-color: #fff;
+            border-radius: .25rem;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+        }
+    </style>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=1.1&ak=qpeLGoMvRGNry7x5h7bf6IBfWOkIOmL1"></script>
+</head>
+<body class="gray-bg">
+<div>
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <!-- <ul>
+                         <li>
+                             <label>项目id：</label>
+                             <input type="text" name="itemId"/>
+                         </li>
+                         <li>
+                             <label>项目title：</label>
+                             <input type="text" name="itemTitle"/>
+                         </li>
+                         <li>
+                             <label>项目面积，单位平方米：</label>
+                             <input type="text" name="itemAreameasure"/>
+                         </li>
+                         <li>
+                             <label>项目类型：</label>
+                             <select name="itemType">
+                                 <option value="">所有</option>
+                                 <option value="-1">代码生成请选择字典属性</option>
+                             </select>
+                         </li>
+                         <li>
+                             <label>项目状态：</label>
+                             <select name="itemStatus">
+                                 <option value="">所有</option>
+                                 <option value="-1">代码生成请选择字典属性</option>
+                             </select>
+                         </li>
+                         <li>
+                             <label>项目起拍价：</label>
+                             <input type="text" name="itemInitialprice"/>
+                         </li>
+                         <li>
+                             <label>项目评估价：</label>
+                             <input type="text" name="itemConsultprice"/>
+                         </li>
+                         <li>
+                             <label>项目市场价：</label>
+                             <input type="text" name="itemMarketprice"/>
+                         </li>
+                         <li>
+                             <label>项目成交价格：</label>
+                             <input type="text" name="itemFinalprice"/>
+                         </li>
+                         <li class="select-time">
+                             <label>项目开始时间：</label>
+                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                    name="params[beginItemStartTime]"/>
+                             <span>-</span>
+                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                    name="params[endItemStartTime]"/>
+                         </li>
+                         <li class="select-time">
+                             <label>项目结束时间：</label>
+                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                    name="params[beginItemEndTime]"/>
+                             <span>-</span>
+                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                    name="params[endItemEndTime]"/>
+                         </li>
+                         <li>
+                             <label>项目所在省：</label>
+                             <input type="text" name="itemProvince"/>
+                         </li>
+                         <li>
+                             <label>项目所在市：</label>
+                             <input type="text" name="itemCity"/>
+                         </li>
+                         <li>
+                             <label>项目所在区(县)：</label>
+                             <input type="text" name="itemCounty"/>
+                         </li>
+                         <li>
+                             <label>项目来源：</label>
+                             <input type="text" name="itemSource"/>
+                         </li>
+                         <li>
+                             <label>项目x坐标：</label>
+                             <input type="text" name="itemX"/>
+                         </li>
+                         <li>
+                             <label>项目y坐标：</label>
+                             <input type="text" name="itemY"/>
+                         </li>
+                         <li>
+                             <label>项目网址：</label>
+                             <input type="text" name="itemLink"/>
+                         </li>
+                         <li>
+                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                     class="fa fa-search"></i>&nbsp;搜索</a>
+                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                     class="fa fa-refresh"></i>&nbsp;重置</a>
+                         </li>
+                     </ul>-->
+                </div>
+            </form>
+        </div>
+
+        <!--<div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:valuationmap:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:valuationmap:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:valuationmap:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+
+        </div>-->
+        <!--<div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>-->
+    </div>
+
+</div>
+
+<div id="map"></div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:valuationmap:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:valuationmap:remove')}]];
+    var prefix = ctx + "system/valuationmap";
+    //使用ajax从后台获取数据
+/*
+    $(function(){
+        $.ajax({
+            async:false,// 获取返回值的问题
+            url: prefix+'/list',
+            type:'Post',
+            data : "",
+            dataType:'json',
+            success: function (result) {
+                getlonandlat(result.data);
+            }//成功后执行的方法
+        })
+
+    })*/
+
+
+    map = new BMap.Map("map");//加var的是局部变量，不加 的是全局变量
+    //初始化地图
+    function inint_map(){
+        //传递数据库中心。
+        map.centerAndZoom(new BMap.Point(112.928197,28.173547), 5);//分享足迹
+        map.enableScrollWheelZoom(true);    //启用滚轮放大缩小，默认禁用
+        map.enableContinuousZoom(true);    //启用地图惯性拖拽，默认禁用
+        //
+        var test = {type:BMAP_NAVIGATION_CONTROL_ZOOM } // 添加平移缩放控件(个性化)
+        map.addControl(new BMap.NavigationControl(test));// 添加平移缩放控件(个性化)
+        map.addControl(new BMap.OverviewMapControl()); //添加默认缩略地图控件
+
+        var mapType1 = new BMap.MapTypeControl({mapTypes: [BMAP_SATELLITE_MAP,BMAP_NORMAL_MAP]});//
+        var mapType2 = new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT});
+        var overView = new BMap.OverviewMapControl();
+        //var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
+        init_point();//初始化标注
+    }
+
+
+
+
+    //从ajax中传入数据 ,动态获取数据
+    function getlonandlat(tt){//返回执行的参数额json格式的参数
+        var json1 = eval(tt); //数组
+
+        $.each(json1, function (index, item) {
+            //循环获取数据
+            var lat = json1[index].itemX;
+            var lon = json1[index].itemY;
+
+            var p=new BMap.Point(lon,lat)//?这个数据从哪里来
+            var marker = new BMap.Marker(p); // 创建标注，为要查询的地方对应的经纬度
+            map.addOverlay(marker);
+           // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+            var point = new BMap.Point(lon,lat);//从超级链接获取数据
+
+            var opts = "<div  style='background-color: #CCE8CF;margin: 0px;padding: 0px'><h4 style='margin:0 0 5px 0;padding:0.2em 0'>"+ json1[index].itemTitle+"</h4>"
+                + "<img style='float:right;margin:4px' id='imgDemo'  src='"+ json1[index].img +"'  width='200' height='200' title='图片太美无法显示'/>"
+                + "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>分享内容："+ json1[index].itemAreameasure+"</p>"/*
+                + "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>分享日期："+ json1[index].sharedate+"</p>"
+                + "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>好友："+ json1[index].username+"</p>"*/
+                + "</div>";
+            var infoWindow = new BMap.InfoWindow(opts);  // 创建信息窗口对象
+            marker.addEventListener("click",function(){
+                map.openInfoWindow(infoWindow,point);//打开信息窗口
+            });
+        })
+
+    }
+
+
+    //初始化标注
+    //结合session中的值
+    function init_point(){
+        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        var point = new BMap.Point(112.93239,28.173148);//从超级链接获取数据
+        var opts = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>汨罗</h4>"
+            + "<img style='float:right;margin:4px' id='imgDemo' src='img/1.jpg' width='100' height='200' title='汉韵阁'/>"
+            + "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>循环经济园区</p>"
+            + "</div>";
+        var infoWindow = new BMap.InfoWindow(opts);  // 创建信息窗口对象
+        marker.addEventListener("click",function(){
+            map.openInfoWindow(infoWindow,point);//打开信息窗口
+        });
+    }
+
+    //添加地图类型和缩略图
+    function add_control(){
+        inint_map();
+        init_point();//初始化标注
+        map.addControl(mapType1);          //2D图，卫星图
+        map.addControl(overView);          //添加默认缩略地图控件
+        map.addControl(overViewOpen);      //右下角，打开
+    }
+    add_control();
+
+</script>
+</body>
+</html>

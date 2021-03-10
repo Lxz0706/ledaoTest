@@ -158,7 +158,6 @@ public class SysBgczzckController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        logger.info("ids:====" + ids);
         return toAjax(sysBgczzckService.deleteSysBgczzckByIds(ids));
     }
 

@@ -29,7 +29,7 @@ public class SysItem extends BaseEntity {
     /**
      * 项目id
      */
-    private Long projectId;
+    private String projectId;
 
     /**
      * 项目名称
@@ -81,12 +81,12 @@ public class SysItem extends BaseEntity {
         return customerId;
     }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public Long getProjectId() {
-        return projectId;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
     public void setCustomerLable(String customerLable) {

@@ -79,9 +79,28 @@
             <artifactId>ledao-generator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ledao</groupId>
+            <artifactId>ledao-activiti</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <!--文件上传工具类 -->
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
+        <!--把项目打包成jar包的插件-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

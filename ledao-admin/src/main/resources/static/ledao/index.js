@@ -460,7 +460,7 @@ $(function() {
     $('.tabFullScreen').on('click', fullScreenTab);
 
     // 双击选项卡全屏显示
-    $('.menuTabs').on('dblclick', '.menuTab', activeTabMax);
+   // $('.menuTabs').on('dblclick', '.menuTab', activeTabMax);
 
     // 左移按扭
     $('.tabLeft').on('click', scrollTabLeft);

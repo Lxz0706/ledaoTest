@@ -490,4 +490,14 @@
         </where>
     </select>
 
+    <select id="selectSysProjectByProjectZckId" parameterType="String" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            project_zck_id in
+            <foreach item="projectZckId" collection="array" open="(" separator="," close=")">
+                #{projectZckId}
+            </foreach>
+        </where>
+    </select>
+
 </mapper>

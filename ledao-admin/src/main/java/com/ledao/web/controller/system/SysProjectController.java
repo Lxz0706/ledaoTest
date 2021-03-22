@@ -643,6 +643,7 @@ public class SysProjectController extends BaseController {
     @PostMapping("/selectPCustomerByProjectId")
     @ResponseBody
     public Map<String, Object> selectPCustomerByProjectId(String projectId) {
+        logger.info("" + projectId);
         Map<String, Object> map = new HashMap<String, Object>();
         List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(Long.valueOf(projectId));
         for (SysPcustomer sysPcustomer : sysPcustomerList) {
@@ -650,6 +651,9 @@ public class SysProjectController extends BaseController {
             if (currentUser != null) {
                 // 如果是超级管理员，则不过滤数据
                 if (!currentUser.isAdmin()) {
+                    if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy())) {
+                        map.put("isCreateBy", true);
+                    }
                     List<SysRole> getRoles = currentUser.getRoles();
                     for (SysRole sysRole : getRoles) {
                         if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
@@ -662,6 +666,7 @@ public class SysProjectController extends BaseController {
                         }
                     }
                 } else {
+                    map.put("isCreateBy", true);
                     map.put("sysPcustomerList", sysPcustomerList);
                 }
             }
@@ -1136,5 +1141,199 @@ public class SysProjectController extends BaseController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("projectIds", sb.toString());
         return map;
+    }
+
+    //主页数据分析
+    @PostMapping("/mainList")
+    @ResponseBody
+    public AjaxResult mainList() {
+        SysProjectZck sysProjectZck = new SysProjectZck();
+        Map<Long, Long> map = new HashMap<>();
+        StringBuffer sb = new StringBuffer();
+
+        //查询出状态是处置中的数据
+        sysProjectZck.setZckStatus("处置中");
+        //List<SysProjectZck> sysProjectZckList = sysProjectZckService.selectSysProjectZckList(sysProjectZck);
+        String ids = "10,12,13,24";
+        List<SysProjectZck> sysProjectZckList = sysProjectZckService.selectSysProjectZckByIds(ids);
+        for (SysProjectZck sysProjectZck1 : sysProjectZckList) {
+            map.put(sysProjectZck1.getProjectZckId(), sysProjectZck1.getProjectZckId());
+            sb.append(sysProjectZck1.getProjectZckId()).append(",");
+            SysProject sysProject = new SysProject();
+            sysProject.setProjectZckId(sysProjectZck1.getProjectZckId());
+            List<SysProject> sysProjectList = sysProjectService.selectProject(sysProject);
+           /* for (SysProject sysProject1 : sysProjectList) {
+                //根据父级ID查询出子集
+                List<SysProject> sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject1);
+                for (SysProject sysProject2 : sysProjectsList) {
+                    //合同本金
+                    List<SysProjectContract> sysProjectContractList = sysProjectContractService.selectSysProjectContractByProjectId(sysProject2.getProjectId().toString());
+                    for (SysProjectContract sysProjectContract : sysProjectContractList) {
+                        if (sysProject1.getTotalPrice() == null) {
+                            sysProject1.setTotalPrice(new BigDecimal(0));
+                        }
+                        if (sysProjectContract.getCapital() == null) {
+                            sysProjectContract.setCapital(new BigDecimal(0));
+                        }
+                        sysProject1.setTotalPrice(sysProject1.getTotalPrice().add(sysProjectContract.getCapital()));
+                    }
+                    SysProject sysProject3 = sysProjectService.selectSysProjectById(sysProject2.getProjectId());
+                    //本金余额相加
+                    if (sysProject1.getTotalPrincipalBalance() == null) {
+                        sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
+                    }
+                    if (sysProject3.getPrincipalBalance() == null) {
+                        sysProject3.setPrincipalBalance(new BigDecimal(0));
+                    }
+                    sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().add(sysProject3.getPrincipalBalance()));
+                }
+
+                //现金回现
+                List<SysRecapture> sysRecaptureList = sysRecaptureService.selectSysRecaptureByProjectId(sysProject1.getProjectId());
+                for (SysRecapture sysRecapture : sysRecaptureList) {
+                    if (sysProject1.getRecapture() == null) {
+                        sysProject1.setRecapture(new BigDecimal(0));
+                    }
+                    if (sysRecapture.getRecapture() == null) {
+                        sysRecapture.setRecapture(new BigDecimal(0));
+                    }
+                    sysProject1.setRecapture(sysProject1.getRecapture().add(sysRecapture.getRecapture()));
+                }
+
+                if (StringUtils.isNotNull(sysProject1.getRecapture()) && StringUtils.isNotNull(sysProject1.getTotalPrincipalBalance())) {
+                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) > -1) {
+                        //当回现>=总本金余额，本金余额=0，利息余额=利息-（回现-总本金余额）
+                        //利息
+                        if (sysProject1.getTotalInterest() == null) {
+                            sysProject1.setTotalInterest(new BigDecimal(0));
+                        }
+                        if (sysProject1.getTotalInterestBalance() == null) {
+                            sysProject1.setTotalInterestBalance(new BigDecimal(0));
+                        }
+                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest().subtract(sysProject1.getRecapture().subtract(sysProject1.getTotalPrincipalBalance())));
+                        sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
+                    }
+                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) == -1) {
+                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest());
+                        sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().subtract(sysProject1.getRecapture()));
+                    }
+                }
+
+                if (StringUtils.isNull(sysProjectZck1.getTotalCzhx())) {
+                    sysProjectZck1.setTotalCzhx(new BigDecimal(0));
+                }
+                if (StringUtils.isNull(sysProject1.getRecapture())) {
+                    sysProject1.setRecapture(new BigDecimal(0));
+                }
+                sysProjectZck1.setTotalCzhx(sysProjectZck1.getTotalCzhx().add(sysProject1.getRecapture()));
+                if (StringUtils.isNull(sysProjectZck1.getTotalBjye())) {
+                    sysProjectZck1.setTotalBjye(new BigDecimal(0));
+                }
+                if (StringUtils.isNull(sysProject1.getTotalPrincipalBalance())) {
+                    sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
+                }
+                sysProjectZck1.setTotalBjye(sysProjectZck1.getTotalBjye().add(sysProject1.getTotalPrincipalBalance()));
+            }*/
+
+            sysProjectZck1.setTotalCount(Long.valueOf(sysProjectList.size()));
+
+            sysProject.setDebtStatus("处置中");
+            List<SysProject> sysProjectList1 = sysProjectService.selectProject(sysProject);
+            sysProjectZck1.setSyhs(Long.valueOf(sysProjectList1.size()));
+            if (StringUtils.isNotNull(sysProjectZck1.getSyhs()) && StringUtils.isNotNull(sysProjectZck1.getTotalCount())) {
+                //剩余百分比
+                sysProjectZck1.setSurplus(new BigDecimal(sysProjectZck1.getSyhs()).divide(new BigDecimal(sysProjectZck1.getTotalCount()), 2, BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).longValue());
+                //已结束百分比
+                sysProjectZck1.setCompleted(new BigDecimal(100).subtract(new BigDecimal(sysProjectZck1.getSyhs()).divide(new BigDecimal(sysProjectZck1.getTotalCount()), 2, BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100))).longValue());
+            }
+
+            for (SysProject sysProject1 : sysProjectList) {
+                //根据父级ID查询出子集
+                List<SysProject> sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject1);
+                for (SysProject sysProject2 : sysProjectsList) {
+                    //合同本金
+                    List<SysProjectContract> sysProjectContractList = sysProjectContractService.selectSysProjectContractByProjectId(sysProject2.getProjectId().toString());
+                    for (SysProjectContract sysProjectContract : sysProjectContractList) {
+                        if (sysProject1.getTotalPrice() == null) {
+                            sysProject1.setTotalPrice(new BigDecimal(0));
+                        }
+                        if (sysProjectContract.getCapital() == null) {
+                            sysProjectContract.setCapital(new BigDecimal(0));
+                        }
+                        sysProject1.setTotalPrice(sysProject1.getTotalPrice().add(sysProjectContract.getCapital()));
+                    }
+                    SysProject sysProject3 = sysProjectService.selectSysProjectById(sysProject2.getProjectId());
+                    //本金余额相加
+                    if (sysProject1.getTotalPrincipalBalance() == null) {
+                        sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
+                    }
+                    if (sysProject3.getPrincipalBalance() == null) {
+                        sysProject3.setPrincipalBalance(new BigDecimal(0));
+                    }
+                    sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().add(sysProject3.getPrincipalBalance()));
+                }
+
+                //现金回现
+                List<SysRecapture> sysRecaptureList = sysRecaptureService.selectSysRecaptureByProjectId(sysProject1.getProjectId());
+                for (SysRecapture sysRecapture : sysRecaptureList) {
+                    if (sysProject1.getRecapture() == null) {
+                        sysProject1.setRecapture(new BigDecimal(0));
+                    }
+                    if (sysRecapture.getRecapture() == null) {
+                        sysRecapture.setRecapture(new BigDecimal(0));
+                    }
+                    sysProject1.setRecapture(sysProject1.getRecapture().add(sysRecapture.getRecapture()));
+                }
+
+                if (StringUtils.isNotNull(sysProject1.getRecapture()) && StringUtils.isNotNull(sysProject1.getTotalPrincipalBalance())) {
+                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) > -1) {
+                        //当回现>=总本金余额，本金余额=0，利息余额=利息-（回现-总本金余额）
+                        //利息
+                        if (sysProject1.getTotalInterest() == null) {
+                            sysProject1.setTotalInterest(new BigDecimal(0));
+                        }
+                        if (sysProject1.getTotalInterestBalance() == null) {
+                            sysProject1.setTotalInterestBalance(new BigDecimal(0));
+                        }
+                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest().subtract(sysProject1.getRecapture().subtract(sysProject1.getTotalPrincipalBalance())));
+                        sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
+                    }
+                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) == -1) {
+                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest());
+                        sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().subtract(sysProject1.getRecapture()));
+                    }
+                }
+
+                if (StringUtils.isNull(sysProjectZck1.getTotalCzhx())) {
+                    sysProjectZck1.setTotalCzhx(new BigDecimal(0));
+                }
+                if (StringUtils.isNull(sysProject1.getRecapture())) {
+                    sysProject1.setRecapture(new BigDecimal(0));
+                }
+                sysProjectZck1.setTotalCzhx(sysProjectZck1.getTotalCzhx().add(sysProject1.getRecapture()));
+                if (StringUtils.isNull(sysProjectZck1.getTotalBjye())) {
+                    sysProjectZck1.setTotalBjye(new BigDecimal(0));
+                }
+                if (StringUtils.isNull(sysProject1.getTotalPrincipalBalance())) {
+                    sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
+                }
+                sysProjectZck1.setTotalBjye(sysProjectZck1.getTotalBjye().add(sysProject1.getTotalPrincipalBalance()));
+
+
+                if ("处置中".equals(sysProject1.getDebtStatus())) {
+                    if (StringUtils.isNull(sysProjectZck1.getCzhx())) {
+                        sysProjectZck1.setCzhx(new BigDecimal(0));
+                    }
+                    sysProjectZck1.setCzhx(sysProjectZck1.getCzhx().add(sysProject1.getRecapture()));
+                    if (StringUtils.isNull(sysProjectZck1.getBjye())) {
+                        sysProjectZck1.setBjye(new BigDecimal(0));
+                    }
+                    sysProjectZck1.setBjye(sysProjectZck1.getBjye().add(sysProject1.getTotalPrincipalBalance()));
+                }
+            }
+
+        }
+
+        return AjaxResult.success(sysProjectZckList);
     }
 }

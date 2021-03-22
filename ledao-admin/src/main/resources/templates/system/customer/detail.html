@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('客户详细')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input th:value="${isAdmin}" type="hidden" id="isAdmin">
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>联系人：</h5></label>
+        <div class="form-control-static" th:text="${sysCustomer.contacts}"></div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>联系电话：</h5></label>
+        <div class="form-control-static" th:text="${sysCustomer.contactNumber}"></div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>微信号：</h5></label>
+        <div class="form-control-static" th:text="${sysCustomer.weChatNumber}"></div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>所属机构：</h5></label>
+        <div class="form-control-static" th:text="${sysCustomer.customerName}"></div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>职务：</h5></label>
+        <div class="form-control-static" th:text="${sysCustomer.duties}"></div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>客户标签：</h5></label>
+        <div class="form-control-static">
+            <label th:each="role:${roles}" class="check-box">
+                <input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}"
+                       th:checked="${role.flag}" th:disabled="${role.status == '1'}" onclick="return false;">
+            </label>
+            <label th:each="type:${types}" class="check-box">
+                <input name="customerLable" type="checkbox" th:value="${type.dictValue}" th:text="${type.dictValue}"
+                       th:checked="${type.flag}" th:disabled="${type.status == '1'}" onclick="return false;">
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>所在地区：</h5></label>
+        <div class="form-control-static"><span th:text="${sysCustomer.province}"></span><span
+                th:text="${sysCustomer.city}"></span><span th:text="${sysCustomer.county}"></span></div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>详细地址：</h5></label>
+        <div class="form-control-static" th:text="${sysCustomer.contactAddress}"></div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"><h5>资源优势：</h5></label>
+        <div class="form-control-static"><span th:text="${sysCustomer.resources}"/></div>
+    </div>
+    <div class="form-group" id="selectWeChat">
+        <label class="col-sm-3 control-label"><h5>是否添加到公司号：</h5></label>
+        <div class="form-control-static"><span th:text="${sysCustomer.wechatFlag}"/></div>
+    </div>
+    <div class="form-group" style="display: none" id="resons">
+        <label class="col-sm-3 control-label"><h5>原因：</h5></label>
+        <div class="form-control-static"><span th:text="${sysCustomer.reason}"/></div>
+    </div>
+    <div class="form-group" id="agentUser">
+        <label class="col-sm-3 control-label"><h5>提交者：</h5></label>
+        <div class="form-control-static"><span th:text="${sysCustomer.creator}"/></div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script>
+    var isAdmin = $("#isAdmin").val();
+    if ($.common.isNotEmpty(isAdmin)) {
+        if ('true' == isAdmin) {
+            $("#selectDept").show();
+            $("#selectWeChat").show();
+            $("#agentUser").show();
+        } else {
+            $("#selectDept").hide();
+            $("#selectWeChat").hide();
+            $("#agentUser").hide();
+        }
+    }
+</script>
+</body>
+</html>

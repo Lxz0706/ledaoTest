@@ -46,7 +46,7 @@
             <if test="shareDeptName != null  and shareDeptName != ''">and share_dept_name like concat('%',
                 #{shareDeptName}, '%')
             </if>
-            <if test="shareUserId != null  and shareUserId != ''">and share_user_id = #{shareUserId}</if>
+            <if test="shareUserId != null  and shareUserId != ''">and share_user_id like concat('%', #{shareUserId},'%')</if>
             <if test="shareUserName != null  and shareUserName != ''">and share_user_name like concat('%',
                 #{shareUserName}, '%')
             </if>

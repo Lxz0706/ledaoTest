@@ -439,7 +439,7 @@ public class SysUserServiceImpl implements ISysUserService {
                 }
             } catch (Exception e) {
                 failureNum++;
-                String msg = "<br/>" + failureNum + "、账号 " + user.getLoginName() + " 导入失败：" ;
+                String msg = "<br/>" + failureNum + "、账号 " + user.getLoginName() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());
                 log.error(msg, e);
             }
@@ -462,5 +462,17 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public int changeStatus(SysUser user) {
         return userMapper.updateUser(user);
+    }
+
+    /**
+     * 根据条件分页查询用户列表
+     *
+     * @param user 用户信息
+     * @return 用户信息集合信息
+     */
+    @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
+    public List<SysUser> selectUserListForDocument(SysUser user) {
+        return userMapper.selectUserListForDocument(user);
     }
 }

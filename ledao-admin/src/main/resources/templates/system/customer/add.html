@@ -97,7 +97,6 @@
                 <select name="wechatFlag" class="form-control m-b"
                         th:with="type=${@dict.getType('sys_project_moneyStatus')}" id="wechatFlag"
                         onchange="weChatChange()">
-                    <option value="">--请选择一条数据--</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>

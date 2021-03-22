@@ -16,7 +16,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">文件用途：</label>
             <div class="col-sm-8">
-                <select name="documentType" class="form-control m-b"
+                <select name="documentType" id="documentType" class="form-control m-b"
                         th:with="type=${@dict.getType('sys_document_type')}">
                     <option value="">--请选择一条数据--</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
@@ -53,6 +53,12 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script type="text/javascript">
+    $(function () {
+        var documentType = '[[${documentType}]]';
+        if ($.common.isNotEmpty(documentType)) {
+            $("#documentType").val(documentType);
+        }
+    })
     var prefix = ctx + "system/document"
     $("#form-document-add").validate({
         focusCleanup: true
@@ -63,6 +69,9 @@
         var form = document.getElementById("form-document-add"),//先获到表单的JQ对象
             formData = new FormData(form);
         formData.append("file", obj);
+        $.modal.loading("正在提交数据数据，请稍后...");
+        // 禁用按钮
+        $.modal.disable();
         $.ajax({
             url: prefix + "/add",
             type: "post",
@@ -70,6 +79,7 @@
             processData: false,
             contentType: false,
             success: function (result) {
+                $.modal.closeLoading();
                 $.operate.successCallback(result);
             }
         })
@@ -110,26 +120,22 @@
     /*用户管理-新增-选择部门树*/
     function selectDeptTree() {
         var shareDeptId = $("#shareDeptId").val();
-        var shareDeptId = $.common.isEmpty(shareDeptId) ? "100" : $("#shareDeptId").val();
-        var url = ctx + "system/dept/selectDeptTree/" + shareDeptId;
-        var options = {
-            title: '选择部门',
-            width: "380",
-            url: url,
-            callBack: doSubmit
-        };
-        $.modal.openOptions(options);
+        var url = ctx + "system/dept/selectDeptTreeForDocument?" + shareDeptId + "&shareDeptIds=" + $("#shareDeptId").val();
+        $.modal.open("选择部门树", url, 380, 500);
     }
 
-    function doSubmit(index, layero) {
-        var tree = layero.find("iframe")[0].contentWindow.$._tree;
-        if ($.tree.notAllowParents(tree)) {
-            var body = layer.getChildFrame('body', index);
-            $("#shareDeptId").val(body.find('#treeId').val());
-            $("#shareDeptName").val(body.find('#treeName').val());
-            layer.close(index);
+    function getProjectRows(nodes) {
+        var ids = "";
+        var names = "";
+        for (var i = 0; i < nodes.length; i++) {
+            ids = nodes[i].id + "," + ids;
+            names = nodes[i].name + "," + names;
         }
+        $("#shareDeptId").val(ids.substr(0, ids.length - 1));
+        $("#shareDeptName").val(names.substr(0, names.length - 1));
+        layer.close(layer.index);
     }
+
 </script>
 </body>
 </html>

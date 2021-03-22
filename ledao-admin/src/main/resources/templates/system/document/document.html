@@ -9,60 +9,22 @@
         <div class="col-sm-12 search-collapse">
             <form id="formId">
                 <div class="select-list">
-                    <ul>
-                        <!--<li>
-                            <label>文件类型：</label>
-                            <select name="fileType">
-                                <option value="">所有</option>
-                                <option value="-1">代码生成请选择字典属性</option>
-                            </select>
-                        </li>-->
-                        <li>
-                            <label>文件用途：</label>
-                            <select name="documentType">
-                                <option value="">所有</option>
-                                <option value="-1">代码生成请选择字典属性</option>
-                            </select>
-                        </li>
+                    <!--<ul>
                         <li>
                             <label>文件大小：</label>
                             <input type="text" name="fileSize"/>
-                        </li>
-                        <li>
-                            <label>文件版本：</label>
-                            <input type="text" name="fileVersion"/>
                         </li>
                         <li>
                             <label>是否可下载：</label>
                             <input type="text" name="downloadableFlag"/>
                         </li>
                         <li>
-                            <label>共享部门id：</label>
-                            <input type="text" name="shareDeptId"/>
-                        </li>
-                        <li>
                             <label>共享部门名称：</label>
                             <input type="text" name="shareDeptName"/>
                         </li>
                         <li>
-                            <label>共享人id：</label>
-                            <input type="text" name="shareUserId"/>
-                        </li>
-                        <li>
                             <label>共享人名称：</label>
                             <input type="text" name="shareUserName"/>
-                        </li>
-                        <li>
-                            <label>文件路径：</label>
-                            <input type="text" name="fileUrl"/>
-                        </li>
-                        <li>
-                            <label>创建人名称：</label>
-                            <input type="text" name="createor"/>
-                        </li>
-                        <li>
-                            <label>修改人名称：</label>
-                            <input type="text" name="updateor"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -70,7 +32,7 @@
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
-                    </ul>
+                    </ul>-->
                 </div>
             </form>
         </div>
@@ -79,16 +41,9 @@
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:document:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:document:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-info" id="expandAllBtn">
-                <i class="fa fa-exchange"></i> 展开/折叠
-            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-tree-table"></table>
+            <table id="bootstrap-table"></table>
         </div>
     </div>
 </div>
@@ -96,67 +51,28 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:document:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:document:remove')}]];
-    var downLoadFlag = [[${@permission.hasPermi('system:document:download')}]]
     var prefix = ctx + "system/document";
 
     $(function () {
         var options = {
-            code: "fileId",
-            parentCode: "parentId",
-            uniqueId: "fileId",
             url: prefix + "/list",
             createUrl: prefix + "/add",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove/{id}",
-            exportUrl: prefix + "/export",
             modalName: "文件管理",
-            columns: [{
-                field: 'fileName',
-                title: '文件名称',
-                formatter: function (value, row, index) {
-                    return $.table.tooltip(value, 10);
-                }
-            },
-                /*{
-                    field: 'fileType',
-                    title: '文件类型'
-                },*/
+            columns: [
                 {
-                    field: 'fileSize',
-                    title: '文件大小'
-                },
-                {
-                    field: 'fileVersion',
-                    title: '文件版本'
-                },
-                {
-                    field: 'shareDeptName',
-                    title: '共享部门名称'
-                },
-                {
-                    field: 'shareUserName',
-                    title: '共享人名称'
-                },
-                {
-                    field: 'createor',
-                    title: '创建人名称'
-                },
-                {
-                    title: '操作',
-                    align: 'left',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileUrl + '\')"><i class="fa fa-trash"></i>下载</a>');
-                        return actions.join('');
+                    field: 'dictLabel',
+                    title: '文件类型',
+                    formatter: function (value,row) {
+                        return '<a onclick="toDocumentByType(\'' + row.dictValue+"',\'" + value + '\')">' + value + '</a>';
                     }
                 }]
         };
-        $.treeTable.init(options);
+        $.table.init(options);
     });
 
-    function downLoad(fileName) {
-        window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+    function toDocumentByType(type,value) {
+        var url = prefix + "/toDocumentByType/" + type;
+        $.modal.openTab(value + "列表", url);
     }
 
 </script>

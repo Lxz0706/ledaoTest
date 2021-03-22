@@ -121,4 +121,14 @@ public class SysProjectServiceImpl implements ISysProjectService {
     public List<SysProject> selectProject(SysProject sysProject) {
         return sysProjectMapper.selectProject(sysProject);
     }
+
+    /**
+     * 根据资产库id查询数据
+     *
+     * @param zckId
+     * @return 结果
+     */
+    public List<SysProject> selectSysProjectByProjectZckId(String zckId) {
+        return sysProjectMapper.selectSysProjectByProjectZckId(Convert.toStrArray(zckId));
+    }
 }

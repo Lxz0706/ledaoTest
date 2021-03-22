@@ -101,8 +101,8 @@
     </delete>
 
     <select id="selectPCustomerByProjectId" parameterType="Long" resultMap="SysPcustomerResult">
-        SELECT create_by,customer_lable,GROUP_CONCAT(customer_name SEPARATOR ';') customer_name FROM sys_pcustomer
-        WHERE project_id =#{projectId} GROUP BY customer_lable,create_by
+        SELECT customer_id,create_by,customer_lable,GROUP_CONCAT(customer_name SEPARATOR ';') customer_name FROM sys_pcustomer
+        WHERE project_id =#{projectId} GROUP BY customer_id,customer_lable,create_by
     </select>
 
 </mapper>

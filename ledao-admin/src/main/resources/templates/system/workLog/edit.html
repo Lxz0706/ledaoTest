@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改工作日志')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-workLog-edit" th:object="${sysWorkLog}">
+            <input name="workLogId" th:field="*{workLogId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">日志类型：</label>
+                <div class="col-sm-8">
+                    <select name="workLogType" class="form-control m-b" th:with="type=${@dict.getType('sys_work_type')}" required>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{workLogType}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">今日完成工作：</label>
+                <div class="col-sm-8">
+                    <textarea name="finishedWorkToday" class="form-control" required>[[*{finishedWorkToday}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">今日未完成工作：</label>
+                <div class="col-sm-8">
+                    <textarea name="unfinishedWorkToday" class="form-control">[[*{unfinishedWorkToday}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">需协调工作：</label>
+                <div class="col-sm-8">
+                    <textarea name="coordinationWork" class="form-control">[[*{coordinationWork}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">明日计划：</label>
+                <div class="col-sm-8">
+                    <textarea name="tomorrowPlanWork" class="form-control" required>[[*{tomorrowPlanWork}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remarks" class="form-control">[[*{remarks}]]</textarea>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">附件：</label>
+                <div class="col-sm-8">
+                    <input name="enclosure" th:field="*{enclosure}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">附件地址：</label>
+                <div class="col-sm-8">
+                    <input name="enclosureUrl" th:field="*{enclosureUrl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">图片：</label>
+                <div class="col-sm-8">
+                    <input name="picture" th:field="*{picture}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">图片地址：</label>
+                <div class="col-sm-8">
+                    <input name="pictureUrl" th:field="*{pictureUrl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分享人id：</label>
+                <div class="col-sm-8">
+                    <input name="shareUserId" th:field="*{shareUserId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发送到人：</label>
+                <div class="col-sm-8">
+                    <input name="shareUserName" th:field="*{shareUserName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分享群id：</label>
+                <div class="col-sm-8">
+                    <input name="shareGroupId" th:field="*{shareGroupId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发送到群：</label>
+                <div class="col-sm-8">
+                    <input name="shareGroupName" th:field="*{shareGroupName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">仅接收人可见，不可转发：</label>
+                <div class="col-sm-8">
+                    <input name="forwardFlag" th:field="*{forwardFlag}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="startTime" th:value="${#dates.format(sysWorkLog.startTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="endTime" th:value="${#dates.format(sysWorkLog.endTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/workLog";
+        $("#form-workLog-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-workLog-edit').serialize());
+            }
+        }
+
+        $("input[name='startTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='endTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

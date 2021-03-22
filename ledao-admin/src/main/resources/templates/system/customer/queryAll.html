@@ -17,11 +17,13 @@
                 <input type="hidden" name="city" th:value="${sysCustomer.city}"/>
                 <input type="hidden" name="county" th:value="${sysCustomer.county}"/>
                 <input type="hidden" name="customerLable" th:value="${sysCustomer.customerLable}"/>
+                <input type="hidden" name="creator" th:value="${sysCustomer.creator}"/>
                 <input type="hidden" name="params[beginTime]" id="beginDate" th:value="${sysCustomer.beginTime}"/>
                 <input type="hidden" name="params[endTime]" id="endDate" th:value="${sysCustomer.endTime}"/>
-                <input type="hidden" name="creator" th:value="${sysCustomer.creator}"/>
+
                 <input type="hidden" name="deptName" th:value="${sysCustomer.deptName}"/>
                 <input type="hidden" name="resources" th:value="${sysCustomer.resources}"/>
+                <input type="hidden" name="wechatFlag" th:value="${sysCustomer.wechatFlag}"/>
             </form>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -63,7 +65,7 @@
                     field: 'customerName',
                     title: '所属机构',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,'10');
+                        return $.table.tooltip(value, '10');
                     }
                 },
                 /*{
@@ -102,14 +104,14 @@
                     field: 'contactAddress',
                     title: '联系地址',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,'15');
+                        return $.table.tooltip(value, '15');
                     }
                 },
                 {
                     field: 'resources',
                     title: '资源优势',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,'10');
+                        return $.table.tooltip(value, '10');
                     }
                 },
                 {

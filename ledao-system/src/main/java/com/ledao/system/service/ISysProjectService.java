@@ -3,6 +3,7 @@ package com.ledao.system.service;
 import java.util.List;
 
 import com.ledao.system.dao.SysProject;
+import com.ledao.system.dao.SysProjectZck;
 
 /**
  * 投后部项目管理Service接口
@@ -82,4 +83,12 @@ public interface ISysProjectService {
      * @return 结果
      */
     public List<SysProject> selectProject(SysProject sysProject);
+
+    /**
+     * 根据资产库id查询数据
+     *
+     * @param zckId
+     * @return 结果
+     */
+    public List<SysProject> selectSysProjectByProjectZckId(String zckId);
 }

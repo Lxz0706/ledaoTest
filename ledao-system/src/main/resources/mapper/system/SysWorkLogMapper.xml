@@ -5,119 +5,187 @@
 <mapper namespace="com.ledao.system.mapper.SysWorkLogMapper">
 
     <resultMap type="SysWorkLog" id="SysWorkLogResult">
-        <result property="id" column="id"/>
-        <result property="dateStarted" column="date_started"/>
-        <result property="dateEnd" column="date_end"/>
-        <result property="tomorrowWorkPlan" column="Tomorrow_work_plan"/>
-        <result property="todayWorkSummar" column="today_work_summar"/>
+        <result property="workLogId" column="work_log_id"/>
+        <result property="workLogType" column="work_log_type"/>
+        <result property="finishedWorkToday" column="finished_work_today"/>
+        <result property="unfinishedWorkToday" column="unfinished_work_today"/>
+        <result property="coordinationWork" column="coordination_work"/>
+        <result property="tomorrowPlanWork" column="tomorrow_plan_work"/>
+        <result property="remarks" column="remarks"/>
+        <result property="enclosure" column="enclosure"/>
+        <result property="enclosureUrl" column="enclosure_url"/>
+        <result property="picture" column="picture"/>
+        <result property="pictureUrl" column="picture_url"/>
+        <result property="shareUserId" column="share_user_id"/>
+        <result property="shareUserName" column="share_user_name"/>
+        <result property="shareGroupId" column="share_group_id"/>
+        <result property="shareGroupName" column="share_group_name"/>
+        <result property="forwardFlag" column="forward_flag"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
         <result property="createBy" column="create_by"/>
+        <result property="creator" column="creator"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="userId" column="user_id"/>
-        <association property="dept" column="dept_id" javaType="SysDept" resultMap="deptResult"/>
-        <association property="role" column="role_id" javaType="SysRole" resultMap="roleResult"/>
-    </resultMap>
-
-    <resultMap id="deptResult" type="SysDept">
-        <id property="deptId" column="dept_id"/>
-        <result property="parentId" column="parent_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="deptId" column="dept_id"/>
         <result property="deptName" column="dept_name"/>
-        <result property="orderNum" column="order_num"/>
-        <result property="status" column="dept_status"/>
     </resultMap>
-
-    <resultMap id="roleResult" type="SysRole">
-        <id property="roleId" column="role_id"/>
-        <result property="roleName" column="role_name"/>
-        <result property="roleKey" column="role_key"/>
-        <result property="status" column="status"/>
-        <result property="roleSort" column="role_sort"/>
-    </resultMap>
-
 
     <sql id="selectSysWorkLogVo">
-        select id, date_started, date_end, Tomorrow_work_plan, today_work_summar, create_by, create_time, update_by, update_time, dept_id, role_id, user_id from sys_work_log
+        select work_log_id, work_log_type, finished_work_today, unfinished_work_today, coordination_work, tomorrow_plan_work, remarks,
+        enclosure, enclosure_url, picture, picture_url, share_user_id, share_user_name, share_group_id, share_group_name, forward_flag,
+        start_time, end_time, create_by, creator, create_time, update_by, update_time, del_flag, dept_id, dept_name from sys_work_log
     </sql>
 
     <select id="selectSysWorkLogList" parameterType="SysWorkLog" resultMap="SysWorkLogResult">
-        select workLog.id, workLog.date_started, workLog.date_end, workLog.Tomorrow_work_plan,
-        workLog.today_work_summar, workLog.create_by, workLog.create_time, workLog.update_by,
-        workLog.update_time, workLog.dept_id, workLog.role_id,dept.dept_name,role.role_name,workLog.user_id from
-        sys_work_log workLog
-        left join sys_dept dept on workLog.dept_id=dept.dept_id
-        left join sys_role role on workLog.role_id=role.role_id
+        <include refid="selectSysWorkLogVo"/>
         <where>
-            <if test="dateStarted != null ">and date_started = #{dateStarted}</if>
-            <if test="dateEnd != null ">and date_end = #{dateEnd}</if>
-            <if test="tomorrowWorkPlan != null  and tomorrowWorkPlan != ''">and Tomorrow_work_plan =
-                #{tomorrowWorkPlan}
+            <if test="workLogType != null  and workLogType != ''">and work_log_type = #{workLogType}</if>
+            <if test="finishedWorkToday != null  and finishedWorkToday != ''">and finished_work_today =
+                #{finishedWorkToday}
             </if>
-            <if test="todayWorkSummar != null  and todayWorkSummar != ''">and today_work_summar = #{todayWorkSummar}
+            <if test="unfinishedWorkToday != null  and unfinishedWorkToday != ''">and unfinished_work_today =
+                #{unfinishedWorkToday}
+            </if>
+            <if test="coordinationWork != null  and coordinationWork != ''">and coordination_work =
+                #{coordinationWork}
+            </if>
+            <if test="tomorrowPlanWork != null  and tomorrowPlanWork != ''">and tomorrow_plan_work =
+                #{tomorrowPlanWork}
+            </if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="enclosure != null  and enclosure != ''">and enclosure = #{enclosure}</if>
+            <if test="enclosureUrl != null  and enclosureUrl != ''">and enclosure_url = #{enclosureUrl}</if>
+            <if test="picture != null  and picture != ''">and picture = #{picture}</if>
+            <if test="pictureUrl != null  and pictureUrl != ''">and picture_url = #{pictureUrl}</if>
+            <if test="shareUserId != null  and shareUserId != ''">and share_user_id = #{shareUserId}</if>
+            <if test="shareUserName != null  and shareUserName != ''">and share_user_name like concat('%',
+                #{shareUserName}, '%')
+            </if>
+            <if test="shareGroupId != null  and shareGroupId != ''">and share_group_id = #{shareGroupId}</if>
+            <if test="shareGroupName != null  and shareGroupName != ''">and share_group_name like concat('%',
+                #{shareGroupName}, '%')
+            </if>
+            <if test="forwardFlag != null  and forwardFlag != ''">and forward_flag = #{forwardFlag}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="creator != null  and creator != ''">and creator = #{creator}</if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by like concat('%', #{createBy}, '%')
+                <if test="shareUserName != null and shareUserName !=''">
+                    or share_user_name like concat('%',#{shareUserName},'%')
+                </if>
             </if>
             <if test="deptId != null ">and dept_id = #{deptId}</if>
-            <if test="roleId != null  and roleId != ''">and role_id = #{roleId}</if>
-            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="deptName != null  and deptName != ''">and dept_name like concat('%', #{deptName}, '%')</if>
         </where>
     </select>
 
     <select id="selectSysWorkLogById" parameterType="Long" resultMap="SysWorkLogResult">
         <include refid="selectSysWorkLogVo"/>
-        where id = #{id}
+        where work_log_id = #{workLogId}
     </select>
 
-    <insert id="insertSysWorkLog" parameterType="SysWorkLog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSysWorkLog" parameterType="SysWorkLog" useGeneratedKeys="true" keyProperty="workLogId">
         insert into sys_work_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="dateStarted != null">date_started,</if>
-            <if test="dateEnd != null">date_end,</if>
-            <if test="tomorrowWorkPlan != null">Tomorrow_work_plan,</if>
-            <if test="todayWorkSummar != null">today_work_summar,</if>
-            <if test="createBy != null and createBy != '' ">create_by,</if>
-            <if test="deptId != null and deptId != '' ">dept_id,</if>
-            <if test="roleId != null and roleId != '' ">role_id,</if>
-            <if test="userId != null and userId != '' ">user_id,</if>
-            create_time
+            <if test="workLogType != null">work_log_type,</if>
+            <if test="finishedWorkToday != null">finished_work_today,</if>
+            <if test="unfinishedWorkToday != null">unfinished_work_today,</if>
+            <if test="coordinationWork != null">coordination_work,</if>
+            <if test="tomorrowPlanWork != null">tomorrow_plan_work,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="enclosure != null">enclosure,</if>
+            <if test="enclosureUrl != null">enclosure_url,</if>
+            <if test="picture != null">picture,</if>
+            <if test="pictureUrl != null">picture_url,</if>
+            <if test="shareUserId != null">share_user_id,</if>
+            <if test="shareUserName != null">share_user_name,</if>
+            <if test="shareGroupId != null">share_group_id,</if>
+            <if test="shareGroupName != null">share_group_name,</if>
+            <if test="forwardFlag != null">forward_flag,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="deptName != null">dept_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="dateStarted != null">#{dateStarted},</if>
-            <if test="dateEnd != null">#{dateEnd},</if>
-            <if test="tomorrowWorkPlan != null">#{tomorrowWorkPlan},</if>
-            <if test="todayWorkSummar != null">#{todayWorkSummar},</if>
-            <if test="createBy != null and createBy != ''">#{createBy},</if>
-            <if test="deptId != null and deptId != ''">#{deptId},</if>
-            <if test="roleId != null and roleId != ''">#{roleId},</if>
-            <if test="userId != null and userId != ''">#{userId},</if>
-            sysdate()
+            <if test="workLogType != null">#{workLogType},</if>
+            <if test="finishedWorkToday != null">#{finishedWorkToday},</if>
+            <if test="unfinishedWorkToday != null">#{unfinishedWorkToday},</if>
+            <if test="coordinationWork != null">#{coordinationWork},</if>
+            <if test="tomorrowPlanWork != null">#{tomorrowPlanWork},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="enclosure != null">#{enclosure},</if>
+            <if test="enclosureUrl != null">#{enclosureUrl},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="pictureUrl != null">#{pictureUrl},</if>
+            <if test="shareUserId != null">#{shareUserId},</if>
+            <if test="shareUserName != null">#{shareUserName},</if>
+            <if test="shareGroupId != null">#{shareGroupId},</if>
+            <if test="shareGroupName != null">#{shareGroupName},</if>
+            <if test="forwardFlag != null">#{forwardFlag},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="deptName != null">#{deptName},</if>
         </trim>
     </insert>
 
     <update id="updateSysWorkLog" parameterType="SysWorkLog">
         update sys_work_log
         <trim prefix="SET" suffixOverrides=",">
-            <if test="dateStarted != null  ">date_started = #{dateStarted},</if>
-            <if test="dateEnd != null  ">date_end = #{dateEnd},</if>
-            <if test="tomorrowWorkPlan != null  and tomorrowWorkPlan != ''  ">Tomorrow_work_plan =
-                #{tomorrowWorkPlan},
-            </if>
-            <if test="todayWorkSummar != null  and todayWorkSummar != ''  ">today_work_summar = #{todayWorkSummar},</if>
-            <if test="updateBy != null  ">update_by = #{updateBy},</if>
-            <if test="deptId != null  ">dept_id = #{deptId},</if>
-            <if test="roleId != null  ">role_id = #{roleId},</if>
-            <if test="userId !=null">user_id=#{userId},</if>
-            update_time = sysdate()
+            <if test="workLogType != null">work_log_type = #{workLogType},</if>
+            <if test="finishedWorkToday != null">finished_work_today = #{finishedWorkToday},</if>
+            <if test="unfinishedWorkToday != null">unfinished_work_today = #{unfinishedWorkToday},</if>
+            <if test="coordinationWork != null">coordination_work = #{coordinationWork},</if>
+            <if test="tomorrowPlanWork != null">tomorrow_plan_work = #{tomorrowPlanWork},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="enclosure != null">enclosure = #{enclosure},</if>
+            <if test="enclosureUrl != null">enclosure_url = #{enclosureUrl},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="pictureUrl != null">picture_url = #{pictureUrl},</if>
+            <if test="shareUserId != null">share_user_id = #{shareUserId},</if>
+            <if test="shareUserName != null">share_user_name = #{shareUserName},</if>
+            <if test="shareGroupId != null">share_group_id = #{shareGroupId},</if>
+            <if test="shareGroupName != null">share_group_name = #{shareGroupName},</if>
+            <if test="forwardFlag != null">forward_flag = #{forwardFlag},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="deptName != null">dept_name = #{deptName},</if>
         </trim>
-        where id = #{id}
+        where work_log_id = #{workLogId}
     </update>
 
     <delete id="deleteSysWorkLogById" parameterType="Long">
-        delete from sys_work_log where id = #{id}
+        update sys_work_log set del_flag = '2' where work_log_id = #{workLogId}
     </delete>
 
     <delete id="deleteSysWorkLogByIds" parameterType="String">
-        delete from sys_work_log where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
+        update sys_work_log set del_flag = '2' where work_log_id in
+        <foreach item="workLogId" collection="array" open="(" separator="," close=")">
+            #{workLogId}
         </foreach>
     </delete>
 

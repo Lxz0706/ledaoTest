@@ -68,6 +68,28 @@ public class SysProjectZck extends BaseEntity {
      */
     private Long syhs;
 
+    /**
+     * 总户数
+     */
+    private Long totalCount;
+
+    /**
+     * 剩余百分比
+     */
+    private Long surplus;
+
+    /**
+     * 已完成
+     */
+    private Long completed;
+
+    /*
+     * 总本金余额
+     * */
+    private BigDecimal totalBjye;
+
+    private BigDecimal totalCzhx;
+
     public Long getProjectZckId() {
         return projectZckId;
     }
@@ -154,6 +176,46 @@ public class SysProjectZck extends BaseEntity {
 
     public void setCzhxs(String czhxs) {
         this.czhxs = czhxs;
+    }
+
+    public Long getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Long totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public Long getSurplus() {
+        return surplus;
+    }
+
+    public void setSurplus(Long surplus) {
+        this.surplus = surplus;
+    }
+
+    public Long getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Long completed) {
+        this.completed = completed;
+    }
+
+    public BigDecimal getTotalBjye() {
+        return totalBjye;
+    }
+
+    public void setTotalBjye(BigDecimal totalBjye) {
+        this.totalBjye = totalBjye;
+    }
+
+    public BigDecimal getTotalCzhx() {
+        return totalCzhx;
+    }
+
+    public void setTotalCzhx(BigDecimal totalCzhx) {
+        this.totalCzhx = totalCzhx;
     }
 
     @Override

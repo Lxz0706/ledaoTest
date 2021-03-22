@@ -514,6 +514,16 @@ public class SysProject extends BaseEntity {
     //@Excel(name = "其他名称")
     private String otherName;
 
+    /*
+     * 剩余户数
+     * */
+    private Long syhs;
+
+    /**
+     * 项目总数
+     */
+    private Long projectTotalCount;
+
     public Long getProjectId() {
         return projectId;
     }
@@ -1224,6 +1234,22 @@ public class SysProject extends BaseEntity {
 
     public void setOtherName(String otherName) {
         this.otherName = otherName;
+    }
+
+    public Long getSyhs() {
+        return syhs;
+    }
+
+    public void setSyhs(Long syhs) {
+        this.syhs = syhs;
+    }
+
+    public Long getProjectTotalCount() {
+        return projectTotalCount;
+    }
+
+    public void setProjectTotalCount(Long projectTotalCount) {
+        this.projectTotalCount = projectTotalCount;
     }
 
     @Override

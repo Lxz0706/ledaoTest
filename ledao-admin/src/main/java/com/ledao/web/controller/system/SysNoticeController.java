@@ -5,9 +5,12 @@ import java.util.List;
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.core.page.PageDao;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysDictData;
 import com.ledao.system.dao.SysUser;
+import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.xpath.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,6 +44,9 @@ public class SysNoticeController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private ISysDictDataService sysDictDataService;
+
     @RequiresPermissions("system:notice:view")
     @GetMapping()
     public String notice() {
@@ -48,12 +54,29 @@ public class SysNoticeController extends BaseController {
     }
 
     /**
-     * 查询公告列表
+     * 查询文件类型进行分类
      */
     @RequiresPermissions("system:notice:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysNotice notice) {
+    public TableDataInfo list() {
+        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType("sys_notice_type");
+        return getDataTable(sysDictDataList);
+    }
+
+    @GetMapping("/toDocumentByType/{type}")
+    public String toDocumentByType(@PathVariable("type") String type, ModelMap modelMap) {
+        modelMap.put("type", type);
+        return prefix + "/noticeByType";
+    }
+
+    /**
+     * 查询公告列表
+     */
+    @RequiresPermissions("system:notice:list")
+    @PostMapping("/listByType")
+    @ResponseBody
+    public TableDataInfo listByType(SysNotice notice) {
         startPage();
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
@@ -72,8 +95,9 @@ public class SysNoticeController extends BaseController {
     /**
      * 新增公告
      */
-    @GetMapping("/add")
-    public String add() {
+    @GetMapping(value = {"/add", "/add/{type}"})
+    public String add(@PathVariable(value = "type", required = false) String type, ModelMap modelMap) {
+        modelMap.put("noticeType", type);
         return prefix + "/add";
     }
 
@@ -87,6 +111,18 @@ public class SysNoticeController extends BaseController {
     public AjaxResult addSave(SysNotice notice) {
         notice.setReadFlag("未读");
         notice.setCreateBy(ShiroUtils.getLoginName());
+        if (StringUtils.isNotEmpty(notice.getReceiver())) {
+            StringBuffer userIds = new StringBuffer();
+            StringBuffer userNames = new StringBuffer();
+            SysUser sysUser = new SysUser();
+            List<SysUser> sysUserList = sysUserService.selectUserList(sysUser);
+            for (SysUser sysUser1 : sysUserList) {
+                userIds.append(sysUser1.getUserId()).append(",");
+                userNames.append(sysUser1.getUserName()).append(",");
+            }
+            notice.setReceiverId(userIds.toString());
+            notice.setReceiver(userNames.toString());
+        }
         return toAjax(noticeService.insertNotice(notice));
     }
 
@@ -184,7 +220,6 @@ public class SysNoticeController extends BaseController {
         PageHelper.startPage(0, 10);
         SysNotice sysNotice = new SysNotice();
         sysNotice.setNoticeType(getRequest().getParameter("type"));
-        logger.info(getRequest().getParameter("type") + "====" + sysNotice.getNoticeType());
         //sysNotice.setReadFlag("未读");
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
@@ -196,5 +231,11 @@ public class SysNoticeController extends BaseController {
         }
         List<SysNotice> list = noticeService.selectNoticeList(sysNotice);
         return AjaxResult.success(list);
+    }
+
+    @GetMapping("/toListByType/{type}")
+    public String toListByType(@PathVariable("type") String type, ModelMap modelMap) {
+        modelMap.put("noticeType", type);
+        return prefix + "/noticeByType";
     }
 }

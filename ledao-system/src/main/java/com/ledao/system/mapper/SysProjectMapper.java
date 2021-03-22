@@ -83,4 +83,12 @@ public interface SysProjectMapper {
      * @return 结果
      */
     public List<SysProject> selectProject(SysProject sysProject);
+
+    /**
+     * 根据资产库id查询数据
+     *
+     * @param zckId
+     * @return 结果
+     */
+    public List<SysProject> selectSysProjectByProjectZckId(String[] zckId);
 }

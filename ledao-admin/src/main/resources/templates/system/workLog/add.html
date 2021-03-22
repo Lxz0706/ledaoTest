@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增工作日志')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-workLog-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">日志类型：</label>
+            <div class="col-sm-8">
+                <select name="workLogType" class="form-control m-b" th:with="type=${@dict.getType('sys_work_type')}"
+                        required>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">今日完成工作：</label>
+            <div class="col-sm-8">
+                <textarea name="finishedWorkToday" class="form-control" required></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">今日未完成工作：</label>
+            <div class="col-sm-8">
+                <textarea name="unfinishedWorkToday" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">需协调工作：</label>
+            <div class="col-sm-8">
+                <textarea name="coordinationWork" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">明日计划：</label>
+            <div class="col-sm-8">
+                <textarea name="tomorrowPlanWork" class="form-control" required></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea name="remarks" class="form-control"></textarea>
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">附件：</label>
+            <div class="col-sm-8">
+                <input name="enclosure" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">图片：</label>
+            <div class="col-sm-8">
+                <input name="picture" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">发送到人：</label>
+            <div class="col-sm-8">
+                <input name="shareUserId" class="form-control" type="hidden">
+                <input name="shareUserName" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">发送到群：</label>
+            <div class="col-sm-8">
+                <input name="shareGroupId" class="form-control" type="hidden">
+                <input name="shareGroupName" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">仅接收人可见，不可转发：</label>
+            <div class="col-sm-8">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="forwardFlag" checked>
+                    <span></span>
+                </label>
+            </div>
+        </div>-->
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/workLog"
+    $("#form-workLog-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = $("#form-workLog-add").serializeArray();
+            var status = $("input[id='forwardFlag']").is(':checked') == true ? 0 : 1;
+            data.push({"name": "forwardFlag", "value": status});
+            $.operate.save(prefix + "/add", data);
+        }
+    }
+
+    $("input[name='startTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='endTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
+</body>
+</html>

@@ -36,7 +36,7 @@
     <sql id="selectSysCustomerVo">
         select customer_id, customer_name, affiliation, contacts, contact_number, duties,
         contact_address, resources, province, city, county, del_flag, create_by, create_time, update_by, update_time, dept_id, dept_name,
-        weChat_flag,reason, we_chat_number,creator,reviser,agent_id,agent, customer_lable from sys_customer
+        weChat_flag,reason, we_chat_number,creator,reviser,agent_id,agent,customer_lable from sys_customer
     </sql>
 
     <select id="selectSysCustomerList" parameterType="SysCustomer" resultMap="SysCustomerResult">
@@ -46,16 +46,11 @@
             <if test="customerName != null  and customerName != ''">and customer_name like concat('%', #{customerName},
                 '%')
             </if>
-            <if test="affiliation != null  and affiliation != ''">and affiliation = #{affiliation}</if>
             <if test="contacts != null  and contacts != ''">and contacts = #{contacts}</if>
             <if test="contactNumber != null  and contactNumber != ''">and contact_number = #{contactNumber}</if>
-            <if test="duties != null  and duties != ''">and duties = #{duties}</if>
-            <if test="contactAddress != null  and contactAddress != ''">and contact_address = #{contactAddress}</if>
-            <if test="resources != null  and resources != ''">and resources = #{resources}</if>
             <if test="province != null  and province != ''">and province = #{province}</if>
             <if test="city != null  and city != ''">and city = #{city}</if>
             <if test="county != null  and county != ''">and county = #{county}</if>
-            <if test="deptId != null ">and dept_id = #{deptId}</if>
             <if test="deptIds != null and deptIds.length > 0">
                 AND dept_id in
                 <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
@@ -200,7 +195,8 @@
         SELECT t1.customer_id, t1.customer_name, t1.affiliation, t1.contacts, t1.contact_number, t1.duties,
         t1.contact_address, t1.resources, t1.province, t1.city, t1.county, t1.del_flag, t1.create_by, t1.create_time,
         t1.update_by, t1.update_time, t1.dept_id, t1.dept_name,
-        t1.weChat_flag,t1.reason, t1.we_chat_number,t1.creator,t1.reviser,t1.agent_id,t1.agent,t1.customer_lable FROM sys_customer t1
+        t1.weChat_flag,t1.reason, t1.we_chat_number,t1.creator,t1.reviser,t1.agent_id,t1.agent,t1.customer_lable FROM
+        sys_customer t1
         <where>
             t1.del_flag = '0'
             <if test="customerName != null  and customerName != ''">and t1.customer_name like concat('%',
@@ -247,7 +243,9 @@
                 </foreach>
             </if>
             <if test="agent != null  and agent != ''">and t1.agent like concat('%', #{agent}, '%')</if>
-            <if test="customerLable != null  and customerLable != ''">and t1.customer_lable like concat('%',  #{customerLable}, '%')</if>
+            <if test="customerLable != null  and customerLable != ''">and t1.customer_lable like concat('%',
+                #{customerLable}, '%')
+            </if>
         </where>
         GROUP BY customer_id
     </select>

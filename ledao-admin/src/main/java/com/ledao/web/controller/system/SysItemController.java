@@ -52,6 +52,9 @@ public class SysItemController extends BaseController {
     @Autowired
     private ISysPcustomerService sysPcustomerService;
 
+    @Autowired
+    private ISysUserService sysUserService;
+
     @RequiresPermissions("system:item:view")
     @GetMapping()
     public String item() {
@@ -111,21 +114,65 @@ public class SysItemController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey())) {
-                        role = "thb";
-                    } else if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey())) {
-                        role = "bgcz";
-                    } else if ("investmentCommon".equals(sysRole.getRoleKey()) || "investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
-                        role = "tzb";
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey())) {
+                        if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey())) {
+                            role = "thb";
+                        } else if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey())) {
+                            role = "bgcz";
+                        } else if ("investmentCommon".equals(sysRole.getRoleKey()) || "investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
+                            role = "tzb";
+                        }
+                    } else {
+                        SysCustomer sysCustomer = sysCustomerService.selectSysCustomerById(Long.valueOf(customerId));
+                        SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
+                        modelMap.put("createBy", sysCustomer.getCreateBy());
+                        if (StringUtils.isNotEmpty(sysUser.getRoles())) {
+                            for (SysRole sysRole1 : sysUser.getRoles()) {
+                                if ("SJXXB".equals(sysRole1.getRoleKey()) || "seniorRoles".equals(sysRole1.getRoleKey()) || "admin".equals(sysRole1.getRoleKey())) {
+                                    role = "thb";
+                                } else if ("thbManager".equals(sysRole1.getRoleKey()) || "thbCommon".equals(sysRole1.getRoleKey())) {
+                                    role = "thb";
+                                } else if ("bgczCommon".equals(sysRole1.getRoleKey()) || "bgczManager".equals(sysRole1.getRoleKey())) {
+                                    role = "bgcz";
+                                } else if ("investmentCommon".equals(sysRole1.getRoleKey()) || "investmentManager2".equals(sysRole1.getRoleKey()) || "investmentManager".equals(sysRole1.getRoleKey())) {
+                                    role = "tzb";
+                                }
+                            }
+                        } else {
+                            role = "thb";
+                        }
+
                     }
                 }
+            } else {
+                SysCustomer sysCustomer = sysCustomerService.selectSysCustomerById(Long.valueOf(customerId));
+                SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
+                modelMap.put("createBy", sysCustomer.getCreateBy());
+                if (StringUtils.isNotEmpty(sysUser.getRoles())) {
+                    for (SysRole sysRole1 : sysUser.getRoles()) {
+                        if ("SJXXB".equals(sysRole1.getRoleKey()) || "seniorRoles".equals(sysRole1.getRoleKey()) || "admin".equals(sysRole1.getRoleKey())) {
+                            role = "thb";
+                        } else if ("thbManager".equals(sysRole1.getRoleKey()) || "thbCommon".equals(sysRole1.getRoleKey())) {
+                            role = "thb";
+                        } else if ("bgczCommon".equals(sysRole1.getRoleKey()) || "bgczManager".equals(sysRole1.getRoleKey())) {
+                            role = "bgcz";
+                        } else if ("investmentCommon".equals(sysRole1.getRoleKey()) || "investmentManager2".equals(sysRole1.getRoleKey()) || "investmentManager".equals(sysRole1.getRoleKey())) {
+                            role = "tzb";
+                        }
+                    }
+                } else {
+                    role = "thb";
+                }
+
             }
         }
-
         modelMap.put("role", role);
         modelMap.put("customerId", customerId);
         //客户标签
-        modelMap.put("type", sysCustomerService.selectSysCustomerById(Long.valueOf(customerId)).getCustomerLable().split(","));
+        if (StringUtils.isNotEmpty(sysCustomerService.selectSysCustomerById(Long.valueOf(customerId)).getCustomerLable())) {
+            modelMap.put("type", sysCustomerService.selectSysCustomerById(Long.valueOf(customerId)).getCustomerLable().split(","));
+        }
+
         return prefix + "/add";
     }
 
@@ -137,10 +184,13 @@ public class SysItemController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysItem sysItem) {
+        logger.info("创建人：======" + sysItem.getCreateBy());
         SysCustomer sysCustomer = sysCustomerService.selectSysCustomerById(sysItem.getCustomerId());
-        sysItem.setCreateBy(ShiroUtils.getLoginName());
+        if (StringUtils.isEmpty(sysItem.getCreateBy())) {
+            sysItem.setCreateBy(ShiroUtils.getLoginName());
+        }
         int row = sysItemService.insertSysItem(sysItem);
-        SysUser currentUser = ShiroUtils.getSysUser();
+        SysUser currentUser = sysUserService.selectUserByLoginName(sysItem.getCreateBy());
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
@@ -156,7 +206,7 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setItemId(sysItem.getItemId());
                                 sysPcustomer.setDeptType("tzb");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
-                                sysPcustomer.setCreateBy(ShiroUtils.getLoginName());
+                                sysPcustomer.setCreateBy(sysItem.getCreateBy());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
                         } else if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey())) {
@@ -168,11 +218,12 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setItemId(sysItem.getItemId());
                                 sysPcustomer.setDeptType("bgcz");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
-                                sysPcustomer.setCreateBy(ShiroUtils.getLoginName());
+                                sysPcustomer.setCreateBy(sysItem.getCreateBy());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
                         } else if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
                             for (String string : sysItem.getProjectId().split(",")) {
+                                logger.info("string:=====" + string);
                                 SysPcustomer sysPcustomer = new SysPcustomer();
                                 sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());
                                 sysPcustomer.setCustomerName(sysCustomer.getContacts());
@@ -180,7 +231,7 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setItemId(sysItem.getItemId());
                                 sysPcustomer.setDeptType("thb");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
-                                sysPcustomer.setCreateBy(ShiroUtils.getLoginName());
+                                sysPcustomer.setCreateBy(sysItem.getCreateBy());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
 

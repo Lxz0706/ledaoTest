@@ -2,6 +2,8 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.core.page.PageDao;
+import com.ledao.common.core.page.TableSupport;
 import com.ledao.system.dao.SysDictType;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,10 +118,8 @@ public class SysDictDataController extends BaseController {
      */
     @PostMapping("/selectDictByType")
     @ResponseBody
-    public List<SysDictData> selectDictByType(SysDictData sysDictData) {
-        sysDictData.setStatus(getRequest().getParameter("status"));
-        sysDictData.setDictType(getRequest().getParameter("type"));
-        List<SysDictData> list = dictDataService.selectDictDataList(sysDictData);
+    public List<SysDictData> selectDictByType() {
+        List<SysDictData> list = dictDataService.selectDictDataByType(getRequest().getParameter("type"));
         return list;
     }
 }

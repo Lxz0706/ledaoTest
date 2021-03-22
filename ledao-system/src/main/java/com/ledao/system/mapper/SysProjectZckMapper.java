@@ -58,4 +58,12 @@ public interface SysProjectZckMapper {
      * @return 结果
      */
     public int deleteSysProjectZckByIds(String[] projectZckIds);
+
+    /**
+     * 根据id数组查询
+     *
+     * @param ids 数组
+     * @return 结果
+     */
+    public List<SysProjectZck> selectSysProjectZckByIds(String[] ids);
 }

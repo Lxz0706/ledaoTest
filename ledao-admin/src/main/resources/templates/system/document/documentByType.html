@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('文件管理列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input name="documentType" id="documentType" type="hidden" th:value="*{type}">
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:document:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <!--<a class="btn btn-primary" onclick="$.operate.edit()"
+               shiro:hasPermission="system:document:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-info" id="expandAllBtn">
+                <i class="fa fa-exchange"></i> 展开/折叠
+            </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:document:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:document:remove')}]];
+    var downLoadFlag = [[${@permission.hasPermi('system:document:download')}]]
+    var prefix = ctx + "system/document";
+
+    $(function () {
+        var options = {
+            url: prefix + "/listByType",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove/{id}",
+            exportUrl: prefix + "/export",
+            onLoadSuccess: onLoadSuccess,
+            modalName: "文件管理",
+            columns: [
+                {
+                    field: 'fileName',
+                    title: '文件名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 20);
+                    }
+                },
+                {
+                    field: 'fileSize',
+                    title: '文件大小'
+                },
+                {
+                    field: 'shareDeptName',
+                    title: '共享部门名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,15);
+                    }
+                },
+                {
+                    field: 'shareUserName',
+                    title: '共享人名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value,15);
+                    }
+                },
+                {
+                    field: 'createor',
+                    title: '创建人名称'
+                },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if ("Y" == row.isAdmin) {
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileUrl + '\')"><i class="fa fa-trash"></i>下载</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function downLoad(fileName) {
+        window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+    }
+
+    function add() {
+        var type = $("#documentType").val();
+        $.operate.add(type);
+    }
+
+    function onLoadSuccess(data) {
+        for (var i in data.rows) {
+            console.log(data.rows[i].isAdmin);
+            if ("Y" == data.rows[i].isAdmin) {
+                $.table.showColumn("shareDeptName");
+                $.table.showColumn("shareUserName");
+            } else {
+                $.table.hideColumn("shareDeptName");
+                $.table.hideColumn("shareUserName");
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

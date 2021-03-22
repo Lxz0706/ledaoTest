@@ -1484,12 +1484,15 @@ var table = {
                     callback: {
                         onClick: options.onClick,                      // 用于捕获节点被点击的事件回调函数
                         onCheck: options.onCheck,                      // 用于捕获 checkbox / radio 被勾选 或 取消勾选的事件回调函数
-                        onDblClick: options.onDblClick                 // 用于捕获鼠标双击之后的事件回调函数
+                        onDblClick: options.onDblClick,                // 用于捕获鼠标双击之后的事件回调函数
+                        onAsyncSuccess: options.onAsyncSuccess
                     },
                     check: options.check,
                     view: options.view,
-                    data: options.data
+                    data: options.data,
+                    selectById: options.selectById
                 };
+
                 $.get(options.url, function (data) {
                     var treeId = $("#treeId").val();
                     tree = $.fn.zTree.init($("#" + options.id), setting, data);
@@ -1500,8 +1503,17 @@ var table = {
                             tree.expandNode(nodes[j], true, false, false);
                         }
                     }
-                    var node = tree.getNodesByParam("id", treeId, null)[0];
-                    $.tree.selectByIdName(treeId, node);
+                    if(treeId){
+                        var treeIds = treeId.split(",");
+                        for (var i = 0; i < treeIds.length; i++) {
+                            var node = tree.getNodesByParam("id", treeId, null);
+                        }
+                        if (true == options.selectById) {
+                            $.tree.selectById(treeId, node);
+                        } else {
+                            $.tree.selectByIdName(treeId, node);
+                        }
+                    }
                 });
             },
             // 搜索节点
@@ -1522,6 +1534,11 @@ var table = {
                 $.tree.hideAllNode(nodes);
                 // 根据搜索值模糊匹配
                 $.tree.updateNodes($._tree.getNodesByParamFuzzy("name", value));
+            },
+            selectById: function (id, node) {
+                if ($.common.isNotEmpty(id) && $.common.isNotEmpty(node)) {
+                    $._tree.checkNode(node, true, false);
+                }
             },
             // 根据Id和Name选中指定节点
             selectByIdName: function (treeId, node) {

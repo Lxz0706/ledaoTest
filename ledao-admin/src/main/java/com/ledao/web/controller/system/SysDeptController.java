@@ -149,6 +149,23 @@ public class SysDeptController extends BaseController {
     }
 
     /**
+     * 选择部门树
+     *
+     * @param deptId    部门ID
+     * @param excludeId 排除ID
+     */
+    @GetMapping(value = {"/selectDeptTreeForDocument", "/selectDeptTreeForDocument/{excludeId}"})
+    public String selectDeptTreeForDocument(String deptId,
+                                            @PathVariable(value = "excludeId", required = false) String excludeId, String shareDeptIds, ModelMap mmap) {
+        if(StringUtils.isNotEmpty(deptId)){
+            mmap.put("dept", deptService.selectDeptById(Long.valueOf(deptId)));
+        }
+        mmap.put("excludeId", excludeId);
+        mmap.put("shareDeptIds", shareDeptIds);
+        return prefix + "/documentTree";
+    }
+
+    /**
      * 加载部门列表树
      */
     @GetMapping("/treeData")

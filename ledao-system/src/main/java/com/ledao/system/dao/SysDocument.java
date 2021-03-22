@@ -101,6 +101,8 @@ public class SysDocument extends BaseEntity {
      */
     private String updateor;
 
+    private String isAdmin;
+
     public void setFileId(Long fileId) {
         this.fileId = fileId;
     }
@@ -219,6 +221,14 @@ public class SysDocument extends BaseEntity {
 
     public String getUpdateor() {
         return updateor;
+    }
+
+    public String getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     @Override

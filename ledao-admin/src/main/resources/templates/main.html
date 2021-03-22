@@ -13,17 +13,8 @@
     <link href="../static/ajax/libs/fullCalendar/main.css"
           th:href="@{/ajax/libs/fullCalendar/main.css}" rel="stylesheet"/>
     <style>
-        .fc .fc-toolbar-title {
-            font-size: 1.1em;
-        }
-
-        p {
-            height: 1%;
-            text-align: center;
-        }
-
-        body {
-            background-image: url("ledao.png");
+        .fc-daygrid-day-number {
+            font-size: 0.1em;
         }
 
         .white-bg {
@@ -31,10 +22,21 @@
             background-color: rgba(220, 38, 38, 0);
         }
 
+        /*canvas {
+            width: 75%!important;
+            height: 75%!important;
+            position: relative;
+            right: 10% !important;
+            buttom: -90px !important;
+        }*/
+
+        .ibox {
+            height: 50% !important;
+        }
     </style>
 </head>
 
-<body class="gray-bg" style="height:100%;background: url('../img/login.png') no-repeat;">
+<body class="gray-bg" style="height:100%;background: url('../img/background.png') no-repeat;">
 <div class="row border-bottom white-bg dashboard-header">
     <div class="col-sm-12">
         <div th:align="center">
@@ -51,11 +53,10 @@
     <div class="col-sm-4">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <ul class="nav nav-tabs" id="noticeTab"></ul>
-                <!-- <span style="font-weight: bold;float: left">通知公告</span>-->
-                <!--<span style="float: right">更多>></span>-->
+                <h5>公告消息</h5>
             </div>
             <div class="ibox-content">
+                <ul class="nav nav-tabs" id="noticeTab"></ul>
                 <div class="tab-content" id="noticeTabContent"></div>
             </div>
         </div>
@@ -63,7 +64,7 @@
     <div class="col-sm-5">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>下载区域</h5>
+                <h5>文档管理</h5>
             </div>
             <div class="ibox-content">
                 <div class="nav-tabs-custom">
@@ -84,6 +85,24 @@
         </div>
     </div>
 </div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="ibox float-e-margins">
+                <div id="container"></div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox-title">
+                <h5>日志</h5>
+            </div>
+            <div class="ibox-content">
+                <div id="mainWorkLog"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 </div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
@@ -93,7 +112,132 @@
 <script th:src="@{/ajax/libs/fullCalendar/main.js}"></script>
 <script th:src="@{/ajax/libs/fullCalendar/zh-cn.js}"></script>
 <script th:src="@{/ajax/libs/fullCalendar/cnCalendar.js}"></script>
+<script src="https://gw.alipayobjects.com/os/lib/antv/g2/4.1.12/dist/g2.min.js"></script>
 <script type="text/javascript">
+
+    $(function () {
+        noticeList();
+        //tick();
+        // mainNoticeList();
+        selectType();
+        selectNoticeType();
+        tb();
+        mainWorkLogList();
+    });
+
+    function tb() {
+        $.ajax({
+            url: '/system/project/mainList',
+            type: 'post',
+            data: '',
+            dataType: "JSON",
+            success: function (result) {
+                var list = result.data;
+                for (var i in list) {
+                    const data = [];
+                    const syhs = Number(list[i].syhs);
+                    const totalCount = Number(list[i].totalCount);
+                    var div = document.getElementById("container")
+                    var div1 = document.createElement("div");
+                    div1.id = list[i].zckName + i;
+                    div1.style = 'width:25%!important;float:left;heigth:100%;background-color:#fff;height:50%!important'
+                    div.appendChild(div1);
+                    data.push({
+                        name: $.common.nullToStr(list[i].zckName),
+                        type: $.common.nullToStr(list[i].zckName) + '剩余' + syhs + '户数',
+                        value: $.common.nullToStr(syhs),
+                        values: $.common.nullToStr(list[i].surplus),
+                        startTime: $.common.nullToStr(list[i].startTime),
+                        endTime: $.common.nullToStr(list[i].endTime),
+                        bjye: $.common.nullToStr(list[i].bjye),
+                        czhx: $.common.nullToStr(list[i].czhx),
+                        totalBjye: $.common.nullToStr(list[i].totalBjye),
+                        totalCzhx: $.common.nullToStr(list[i].totalCzhx)
+                    });
+                    const chart = new G2.Chart({
+                        container: document.getElementById(list[i].zckName + i),
+                        autoFit: true,
+                        height: 300
+                    });
+                    chart.data(data);
+                    chart.legend(false);
+                    chart.tooltip({
+                        showTitle: true,
+                        containerTpl: '<div class="g2-tooltip">' + '<h5><p class="g2-tooltip-title"></p></h5>' + '<ul class="g2-tooltip-list"></ul>' + '</div>',
+                        itemTpl: '<li><h5>开始时间: {startTime}</h5><h5>结束时间: {endTime}</h5><h5>本金余额: {bjye}</h5><h5>处置回现总额: {czhx}</h5></li>',//定义标头
+                        follow: true,
+                        offset: 0,
+                        position: 'right',
+                        inPlot: false, //不用tooltip一直在图表视图内,以便最末尾tooltip位置乱跑
+                    });
+                    chart.facet('rect', {
+                        fields: ['name'],
+                        padding: 20,
+                        showTitle: false,
+                        eachView: (view, facet) => {
+                            const data = facet.data;
+                            data.push({
+                                name: $.common.nullToStr(list[i].zckName),
+                                type: $.common.nullToStr(list[i].zckName) + '已完成' + $.common.nullToStr(totalCount - syhs) + '户',
+                                value: $.common.nullToStr(totalCount - syhs),
+                                startTime: $.common.nullToStr(list[i].startTime),
+                                endTime: $.common.nullToStr(list[i].endTime),
+                                bjye: $.common.nullToStr(list[i].totalBjye - list[i].bjye),
+                                czhx: $.common.nullToStr(list[i].totalCzhx - list[i].czhx)
+                            });
+                            view.data(data);
+                            view.coordinate('theta', {
+                                radius: 0.9,
+                                innerRadius: 0.8//加上则为环形图
+                            });
+                            view.interval()
+                                .adjust('stack')
+                                .position('value')
+                                .color('type')
+                                .style({opacity: 1})
+                                .tooltip('type*startTime*endTime*bjye*czhx', function (type, startTime, endTime, bjye, czhx) { // 单个点tooltip
+                                    return {
+                                        name: type,
+                                        startTime: startTime,
+                                        endTime: endTime,
+                                        bjye: $.operate.numberFormatter(bjye),
+                                        czhx: $.operate.numberFormatter(czhx)
+                                    }
+                                })
+                            view.annotation().text({
+                                position: ['50%', '50%'],
+                                content: data[0].name,
+                                style: {
+                                    fontSize: 12,
+                                    fill: '#8c8c8c',
+                                    fontWeight: 300,
+                                    textBaseline: 'bottom',
+                                    textAlign: 'center'
+                                },
+                                offsetY: -12,
+                            });
+
+                            //加上显示中间的数值
+                            view.annotation().text({
+                                position: ['50%', '50%'],
+                                content: 100 - data[0].values + '%',
+                                style: {
+                                    fontSize: 12,
+                                    fill: '#000',
+                                    fontWeight: 500,
+                                    textAlign: 'center'
+                                },
+                                offsetY: 10,
+                            });
+
+                            view.interaction('element-active');
+                        }
+                    });
+                    chart.render();
+                }
+            }
+        });
+    }
 
     function showLocale(objD) {
         var str, colorhead, colorfoot;
@@ -143,13 +287,6 @@
             content: html
         });
     });
-    $(function () {
-        noticeList();
-        //tick();
-        // mainNoticeList();
-        selectType();
-        selectNoticeType();
-    });
 
     function noticeList() {
         $.ajax({
@@ -183,21 +320,20 @@
                     newLi.innerHTML = '<a data-toggle="tab" href="#' + result[i].dictValue + '">' + result[i].dictLabel + '</a>';
                     ul.append(newLi);
                     str += result[i].dictValue + ",";
-                    selectNoticeByType(result[i].dictValue, i);
+                    selectNoticeByType(result[i].dictValue, i, result[i].dictLabel);
                 }
             }
         });
     }
 
     //根据通知公告类型查询数据
-    function selectNoticeByType(noticeType, j) {
+    function selectNoticeByType(noticeType, j, label) {
         $.ajax({
             type: 'post',
             url: '/system/notice/mainNoticeList',
             data: {"type": noticeType},
             dataType: "JSON",
             success: function (result) {
-                console.log(result.data);
                 var array = result.data;
                 var str = "";
                 var div = document.getElementById("noticeTabContent");
@@ -209,14 +345,55 @@
                 }
                 str += "<ul>";
                 for (var i = 0; i < array.length; i++) {
-                    str += '<li>' + array[i].noticeTitle + '</li>';
+                    str += '<li style="margin: 1%"><span><a onclick="datailForNotice(' + array[i].noticeId + ')">' + strLength(array[i].noticeTitle) + '</a></span>' +
+                        '<span style="float: right">' + array[i].createTime + '</span></li>';
                 }
+                str += '<p style="float: right"><a onclick="toListByType(\'' + noticeType + "',\'" + label + '\')">更多>></a></p>';
                 str += '</ul>';
                 div1.innerHTML = str;
                 div1.id = noticeType;
                 div.appendChild(div1);
             }
         });
+    }
+    function dateFormat(fmt, date) {
+        let ret;
+        const opt = {
+            "Y+": date.getFullYear().toString(),        // 年
+            "m+": (date.getMonth() + 1).toString(),     // 月
+            "d+": date.getDate().toString(),            // 日
+            "H+": date.getHours().toString(),           // 时
+            "M+": date.getMinutes().toString(),         // 分
+            "S+": date.getSeconds().toString()          // 秒
+            // 有其他格式化字符需求可以继续添加，必须转化成字符串
+        };
+        for (let k in opt) {
+            ret = new RegExp("(" + k + ")").exec(fmt);
+            if (ret) {
+                fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+            };
+        };
+        return fmt;
+    }
+
+
+    //控制显示的字数
+    function strLength(value) {
+        var str = $.common.nullToStr(value);
+        if (str.length > 10) {
+            str = str.substring(0, 10) + '...';
+        }
+        return str;
+    }
+
+    function datailForNotice(id) {
+        var url = "/system/notice/detail/" + id;
+        $.modal.opens("公告消息详情", url);
+    }
+
+    function toListByType(type, label) {
+        var url = "/system/notice/toListByType/" + type;
+        $.modal.openTab(label + "列表", url);
     }
 
     //获取下载区标签
@@ -237,14 +414,14 @@
                     newLi.innerHTML = '<a data-toggle="tab" href="#' + result[i].dictValue + '">' + result[i].dictLabel + '</a>';
                     ul.append(newLi);
                     str += result[i].dictValue + ",";
-                    documentByType(result[i].dictValue, i);
+                    documentByType(result[i].dictValue, i, result[i].dictLabel);
                 }
             }
         });
     };
 
     //根据类型查询出文件
-    function documentByType(type, j) {
+    function documentByType(type, j, label) {
         $.ajax({
             url: '/system/document/selectDocumentByType',
             type: 'post',
@@ -262,12 +439,18 @@
                 for (var i = 0; i < result.length; i++) {
                     str += '<p style="text-align: left"><span>' + result[i].fileName + '.' + result[i].fileType + '</span><span style="float: right"><a href="#" onclick="downLoad(\'' + result[i].fileUrl + '\')">下载</a></span></p>';
                 }
+                str += '<p style=\'float: right\'><a onclick="toDocumentByType(\'' + type + "',\'" + label + '\')">更多>></a></p>';
                 div1.innerHTML = str;
                 div1.id = type;
                 div.appendChild(div1);
             }
         });
     };
+
+    function toDocumentByType(type, label) {
+        var url = "/system/document/toDocumentByType/" + type;
+        $.modal.openTab(label + "列表", url);
+    }
 
     //下载文件
     function downLoad(fileName) {
@@ -447,34 +630,14 @@
 
     //新增事件
     function add(today) {
-        /*layer.open({
-            type: 2,
-            title: '增加',
-            maxmin: true,
-            shadeClose: false, // 点击遮罩关闭层
-            area: ['800px', '400px'],
-            content: '/system/memorandum/add' // iframe的url
-        });*/
         var url = '/system/memorandum/add';
         $.modal.open('增加', url);
     }
 
     //编辑事件
     function edit(memorandumId, editable) {
-        //if (editable == true) {
-        /*layer.open({
-            type: 2,
-            title: '编辑',
-            maxmin: true,
-            shadeClose: false, // 点击遮罩关闭层
-            area: ['800px', '400px'],
-            content: '/maintenance/spinningMaintenanceRecord/edit/' + maintenanceId // iframe的url
-        });*/
         var url = '/system/memorandum/edit/' + memorandumId;
         $.modal.open('修改', url);
-        // } else {
-        //  alert("该事件已结束，不能修改");
-        //  }
     }
 
 
@@ -614,6 +777,33 @@
             'astro': astro
         };
     };
+
+    function mainWorkLogList() {
+        $.ajax({
+            url: "/system/workLog/mainWorkLogList",
+            type: 'post',
+            dataType: "JSON",
+            success: function (result) {
+                var str = "";
+                var data = result.data;
+                if (data.length > 0) {
+                    str += "<ul>"
+                    for (var i in data) {
+                        str += "<li>";
+                        str += "<p><span style='float: left'><a onclick='toWorkLogList(" + data[i].workLogId + ")'>" + data[i].workLogTitle + "</a></span><span style='float: right'>" + data[i].createTime + "</span></p>";
+                        str += "</li>";
+                    }
+                    str += "</ul>";
+                }
+                $("#mainWorkLog").append(str);
+            }
+        })
+    }
+
+    function toWorkLogList(id) {
+        var url = "/system/workLog/detail/" + id;
+        $.modal.openTab("工作日志", url);
+    }
 
 
 </script>

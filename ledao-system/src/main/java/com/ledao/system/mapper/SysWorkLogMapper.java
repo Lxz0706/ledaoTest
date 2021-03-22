@@ -8,16 +8,16 @@ import com.ledao.system.dao.SysWorkLog;
  * 工作日志Mapper接口
  *
  * @author lxz
- * @date 2020-06-09
+ * @date 2021-03-17
  */
 public interface SysWorkLogMapper {
     /**
      * 查询工作日志
      *
-     * @param id 工作日志ID
+     * @param workLogId 工作日志ID
      * @return 工作日志
      */
-    public SysWorkLog selectSysWorkLogById(Long id);
+    public SysWorkLog selectSysWorkLogById(Long workLogId);
 
     /**
      * 查询工作日志列表
@@ -46,16 +46,16 @@ public interface SysWorkLogMapper {
     /**
      * 删除工作日志
      *
-     * @param id 工作日志ID
+     * @param workLogId 工作日志ID
      * @return 结果
      */
-    public int deleteSysWorkLogById(Long id);
+    public int deleteSysWorkLogById(Long workLogId);
 
     /**
      * 批量删除工作日志
      *
-     * @param ids 需要删除的数据ID
+     * @param workLogIds 需要删除的数据ID
      * @return 结果
      */
-    public int deleteSysWorkLogByIds(String[] ids);
+    public int deleteSysWorkLogByIds(String[] workLogIds);
 }

@@ -88,4 +88,12 @@
         </foreach>
     </delete>
 
+    <select id="selectSysProjectZckByIds" parameterType="String" resultMap="SysProjectZckResult">
+        <include refid="selectSysProjectZckVo"/>
+        where project_zck_id in
+        <foreach item="projectZckId" collection="array" open="(" separator="," close=")">
+            #{projectZckId}
+        </foreach>
+    </select>
+
 </mapper>

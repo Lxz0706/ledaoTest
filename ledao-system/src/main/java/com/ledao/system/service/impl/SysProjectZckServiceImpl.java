@@ -88,4 +88,14 @@ public class SysProjectZckServiceImpl implements ISysProjectZckService {
     public int deleteSysProjectZckById(Long projectZckId) {
         return sysProjectZckMapper.deleteSysProjectZckById(projectZckId);
     }
+
+    /**
+     * 根据id数组查询
+     *
+     * @param ids 数组
+     * @return 结果
+     */
+    public List<SysProjectZck> selectSysProjectZckByIds(String ids) {
+        return sysProjectZckMapper.selectSysProjectZckByIds(Convert.toStrArray(ids));
+    }
 }

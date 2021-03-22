@@ -21,10 +21,6 @@
                             <label>所属机构：</label>
                             <input type="text" name="customerName" placeholder="请输入所属机构"/>
                         </li>
-                        <!--<li>
-                            <label>所属机构：</label>
-                            <input type="text" name="affiliation"/>
-                        </li>-->
                         <li>
                             <label>联系人：</label>
                             <input type="text" name="contacts" placeholder="请输入联系人"/>
@@ -37,16 +33,10 @@
                             <label>微信号：</label>
                             <input type="text" name="weChatNumber" placeholder="请输入微信号"/>
                         </li>
-                        <!-- <li>
-                             <label>联系地址：</label>
-                             <input type="text" name="contactAddress" placeholder="请输入联系地址"/>
-                         </li>-->
                         <div data-toggle="distpicker" id="distpicker">
                             <li>
                                 <label>省：</label><select name="province" id="province"
                                                          data-province="---请选择省---"></select>
-                                <!--市：<select name="city" id="city" data-city="-&#45;&#45;请选择市-&#45;&#45;"></select>
-                                县/区：<select name="county" id="county" data-district="-&#45;&#45;请选择区&#45;&#45;&#45;&#45;"></select>-->
                             </li>
                             <li>
                                 <label>市：</label>
@@ -64,8 +54,6 @@
                             <option value="">--请选择数据--</option>
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                     th:value="${dict.dictValue}"></option>
-                            <!--<select id="customerLables" name="customerLables" th:with="type=${@dict.getType('sys_customer_label')}" class="selectpicker" data-none-selected-text="请选择" multiple>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
                         </select>
                         </li>
                         <div id="sd" style="display: none">
@@ -135,11 +123,12 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:customer:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:customer:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:customer:list')}]];
     var prefix = ctx + "system/customer";
 
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
-    if ("admin" == loginName) {
+    /*if ("admin" == loginName) {
         $("#sd").show();
     } else {
         for (var i = 0; i < roles.length; i++) {
@@ -152,7 +141,7 @@
         if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
             $("#sd").show();
         }
-    }
+    }*/
 
 
     $('#distpicker').distpicker({
@@ -166,6 +155,9 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            sortName: 'createTime',
+            sortOrder: 'desc',
             clickToSelect: true,
             modalName: "客户库",
             onLoadSuccess: onLoadSuccess,
@@ -178,17 +170,9 @@
                     title: '客户id',
                     visible: false
                 },
-                /*{
-                    field: 'affiliation', 
-                    title: '所属机构'
-                },*/
                 {
-                    field: 'contacts',
-                    title: '联系人'
-                },
-                {
-                    field: 'contactNumber',
-                    title: '联系电话'
+                    field: 'city',
+                    title: '市'
                 },
                 {
                     field: 'customerName',
@@ -198,40 +182,22 @@
                     }
                 },
                 {
-                    field: 'duties',
-                    title: '职务'
+                    field: 'contacts',
+                    title: '联系人'
+                },
+                {
+                    field: 'contactNumber',
+                    title: '联系电话'
+                },
+                {
+                    field: 'weChatNumber',
+                    title: '微信号'
                 },
                 {
                     field: 'customerLable',
                     title: '客户标签',
                     formatter: function (value, row, index) {
                         return $.table.tooltip(value, 5);
-                    }
-                },
-                {
-                    field: 'province',
-                    title: '省份'
-                },
-                {
-                    field: 'city',
-                    title: '市'
-                },
-                {
-                    field: 'county',
-                    title: '县/区'
-                },
-                {
-                    field: 'contactAddress',
-                    title: '详细地址',
-                    formatter: function (value, row, index) {
-                        return $.table.tooltip(value, '10');
-                    }
-                },
-                {
-                    field: 'resources',
-                    title: '资源优势',
-                    formatter: function (value, row, index) {
-                        return $.table.tooltip(value, '10');
                     }
                 },
                 {
@@ -256,7 +222,7 @@
                     field: 'deptName',
                     title: '所属部门'
                 },
-                {
+                /*{
                     field: 'wechatFlag',
                     title: '是否添加到公司号',
                     editable: {
@@ -268,6 +234,14 @@
                         value: "",//1代表你需要选中的value值
                         mode: "inline" // 编辑框的模式：支持popup和inline两种模式，默认是popup
                     }
+                },*/
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '是否添加到公司号',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
                 },
                 {
                     field: 'reason',
@@ -276,10 +250,42 @@
                         type: 'text',
                         title: '原因'
                     }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push("<a class='btn btn-default btn-xs " + detailFlag + "' href='javascript:void(0)' onclick='$.operate.detail(" + row.customerId + ")'><i class='fa fa-search'></i>详细</a> ");
+                        return actions.join('');
+                    }
                 }]
         };
         $.table.init(options);
     });
+
+    function statusTools(row) {
+        if (row.wechatFlag == "是") {
+            return '<i class=\"fa fa-toggle-on text-info\" style="font-size: 200%" onclick="enable(\'' + row.customerId + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-off\" style="font-size: 200%" onclick="disable(\'' + row.customerId + '\')"></i> ';
+        }
+    }
+
+    /* 是否添加到公司微信-是 */
+    function disable(id) {
+        $.modal.confirm("确认添加到公司微信吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"customerId": id, "wechatFlag": "是"});
+        })
+    }
+
+    /* 是否添加到公司微信-否 */
+    function enable(id) {
+        $.modal.confirm("确认未添加到公司微信吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"customerId": id, "wechatFlag": "否"});
+        })
+    }
+
 
     function onEditableSave(field, row, oldValue, $el) {
         $.ajax({

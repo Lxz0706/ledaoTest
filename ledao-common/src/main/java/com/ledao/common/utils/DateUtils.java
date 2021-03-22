@@ -30,7 +30,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     private static String[] parsePatterns = {
             "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
             "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM",
-            "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM","yyyy-MM-dd'T'HH:mm:ssX"};
+            "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM", "yyyy-MM-dd'T'HH:mm:ssX"};
 
     /**
      * 获取当前Date型日期
@@ -321,5 +321,49 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         DateFormat dft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d = dft.parse(date);
         return d;
+    }
+
+    /**
+     * 获取系统当前时间
+     */
+    public static String strTime() {
+        Calendar c = Calendar.getInstance();//可以对每个时间域单独修改
+
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int date = c.get(Calendar.DATE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        int second = c.get(Calendar.SECOND);
+        return hour + ":" + minute + ":" + second;
+    }
+
+    /**
+     * @param startDate 当前日期
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     * @throws ParseException
+     */
+    public static boolean isInTime(String startDate, String startTime, String endTime) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (sdf.format(new Date()).equals(startDate)) {
+            sdf = new SimpleDateFormat("HH:mm");
+            if (startTime.equals("00:00")) {
+                startTime = "24:00";
+            }
+            if (endTime.equals("00:00")) {
+                endTime = "24:00";
+            }
+            long current = sdf.parse(sdf.format(new Date())).getTime();  //当前时间
+            long start = sdf.parse(startTime).getTime();                 //开始时间
+            long end = sdf.parse(endTime).getTime();                     //结束时间
+            if (current >= start && current < end) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }

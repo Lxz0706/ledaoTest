@@ -58,6 +58,11 @@ public class SysZcb extends BaseEntity {
      */
     private Date evaluationTime;
 
+    /**
+     * 客户名称
+     */
+    private String customer;
+
     public Long getId() {
         return id;
     }
@@ -128,6 +133,14 @@ public class SysZcb extends BaseEntity {
 
     public void setEvaluationTime(Date evaluationTime) {
         this.evaluationTime = evaluationTime;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 
     @Override

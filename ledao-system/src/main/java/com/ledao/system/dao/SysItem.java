@@ -65,6 +65,16 @@ public class SysItem extends BaseEntity {
      */
     private String delFlag;
 
+    /**
+     * 共享人
+     */
+    private String shareUserId;
+
+    /**
+     * 共享人名称
+     */
+    private String shareUserName;
+
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
@@ -137,6 +147,22 @@ public class SysItem extends BaseEntity {
         this.projectName = projectName;
     }
 
+    public String getShareUserId() {
+        return shareUserId;
+    }
+
+    public void setShareUserId(String shareUserId) {
+        this.shareUserId = shareUserId;
+    }
+
+    public String getShareUserName() {
+        return shareUserName;
+    }
+
+    public void setShareUserName(String shareUserName) {
+        this.shareUserName = shareUserName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -153,6 +179,8 @@ public class SysItem extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("projectName", getProjectName())
+                .append("shareUserId", getShareUserId())
+                .append("shareUserName", getShareUserName())
                 .toString();
     }
 }

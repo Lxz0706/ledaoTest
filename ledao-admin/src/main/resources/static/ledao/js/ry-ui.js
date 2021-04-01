@@ -1758,8 +1758,8 @@ var table = {
                 var result = [];
                 var hashObj = {};
                 for (var i = 0; i < row.length; i++) {
-                    if (!hashObj[row[i].projectId]) {
-                        hashObj[row[i].projectId] = true;
+                    if (!hashObj[row[i]]) {
+                        hashObj[row[i]] = true;
                         result.push(row[i]);
                     }
                 }

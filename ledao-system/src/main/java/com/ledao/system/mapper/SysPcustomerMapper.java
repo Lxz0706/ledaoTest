@@ -62,8 +62,8 @@ public interface SysPcustomerMapper {
     /**
      * 根据项目id查询
      *
-     * @param projectId
+     * @param sysPcustomer
      * @return 数据结果
      */
-    public List<SysPcustomer> selectPCustomerByProjectId(Long projectId);
+    public List<SysPcustomer> selectPCustomerByProjectId(SysPcustomer sysPcustomer);
 }

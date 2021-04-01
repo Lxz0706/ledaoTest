@@ -180,4 +180,9 @@ public class SysWorkLogController extends BaseController {
         modelMap.put("sysWorkLog", sysWorkLogService.selectSysWorkLogById(id));
         return prefix + "/detail";
     }
+
+    @GetMapping("/toList")
+    public String toList() {
+        return prefix + "/workLog";
+    }
 }

@@ -45,6 +45,9 @@
                shiro:hasPermission="system:notice:read">
                 <i class="fa fa-remove"></i> 标记为已读
             </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:document:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -78,10 +81,11 @@
             columns: [{
                 checkbox: true
             },
-                /*{
+                {
                     field: 'noticeId',
-                    title: '序号'
-                },*/
+                    title: '序号',
+                    visible: false
+                },
                 {
                     field: 'noticeTitle',
                     title: '公告标题'
@@ -96,7 +100,10 @@
                 },
                 {
                     field: 'receiver',
-                    title: '接收者'
+                    title: '接收者',
+                    formatter: function (value) {
+                        return $.table.tooltip(value, 15);
+                    }
                 },
                 {
                     field: 'createBy',
@@ -146,6 +153,11 @@
     function add() {
         var noticeType = $("#noticeType").val();
         $.operate.add(noticeType);
+    }
+
+    function back() {
+        var url = prefix + "/toList";
+        $.modal.parentTab("公告消息", url);
     }
 </script>
 </body>

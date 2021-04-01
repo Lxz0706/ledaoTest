@@ -16,10 +16,13 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="itemId" column="item_id"/>
+        <result property="shareUserId" column="share_user_id"/>
+        <result property="shareUserName" column="share_user_name"/>
     </resultMap>
 
     <sql id="selectSysPcustomerVo">
-        select deal_customer_id, customer_id, customer_name, customer_lable, dept_type, project_id, del_flag, create_by, create_time, update_by, update_time, item_id from sys_pcustomer
+        select deal_customer_id, customer_id, customer_name, customer_lable, dept_type, project_id, del_flag, create_by, create_time, update_by,
+         update_time, item_id,share_user_id, share_user_name from sys_pcustomer
     </sql>
 
     <select id="selectSysPcustomerList" parameterType="SysPcustomer" resultMap="SysPcustomerResult">
@@ -33,6 +36,13 @@
             <if test="deptType != null  and deptType != ''">and dept_type = #{deptType}</if>
             <if test="projectId != null ">and project_id = #{projectId}</if>
             <if test="itemId != null ">and item_id = #{itemId}</if>
+            <if test="createBy != null">
+                and (create_by = #{createBy}
+                <if test="shareUserId != null  and shareUserId != ''">
+                    or share_user_id like concat('%',#{shareUserId},'%')
+                </if>
+                )
+            </if>
         </where>
     </select>
 
@@ -55,6 +65,8 @@
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="itemId != null">item_id,</if>
+            <if test="shareUserId != null">share_user_id,</if>
+            <if test="shareUserName != null">share_user_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerId != null">#{customerId},</if>
@@ -68,6 +80,8 @@
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="itemId != null">#{itemId},</if>
+            <if test="shareUserId != null">#{shareUserId},</if>
+            <if test="shareUserName != null">#{shareUserName},</if>
         </trim>
     </insert>
 
@@ -85,6 +99,8 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="shareUserId != null">share_user_id = #{shareUserId},</if>
+            <if test="shareUserName != null">share_user_name = #{shareUserName},</if>
         </trim>
         where deal_customer_id = #{dealCustomerId}
     </update>
@@ -100,9 +116,9 @@
         </foreach>
     </delete>
 
-    <select id="selectPCustomerByProjectId" parameterType="Long" resultMap="SysPcustomerResult">
-        SELECT customer_id,create_by,customer_lable,GROUP_CONCAT(customer_name SEPARATOR ';') customer_name FROM sys_pcustomer
-        WHERE project_id =#{projectId} GROUP BY customer_id,customer_lable,create_by
+    <select id="selectPCustomerByProjectId" parameterType="SysPcustomer" resultMap="SysPcustomerResult">
+        SELECT customer_id,create_by,customer_lable,share_user_id,GROUP_CONCAT(customer_name SEPARATOR ';') customer_name FROM sys_pcustomer
+        WHERE project_id =#{projectId} AND dept_type = #{deptType} GROUP BY customer_id,customer_lable,create_by,share_user_id
     </select>
 
 </mapper>

@@ -42,10 +42,10 @@
                                 <label>市：</label>
                                 <select name="city" id="city" data-city="---请选择市---"></select>
                             </li>
-                            <li>
+                            <!--<li>
                                 <label>区/县：</label>
-                                <select name="county" id="county" data-district="---请选择区----"></select>
-                            </li>
+                                <select name="county" id="county" data-district="-&#45;&#45;请选择区&#45;&#45;&#45;&#45;"></select>
+                            </li>-->
                         </div>
                         <li>
                             <label>客户标签：</label><select id="customerLable" name="customerLable"
@@ -116,8 +116,7 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
-<script src="/js/plugins/distpicker/distpicker.data.js"></script>
-<script src="/js/plugins/distpicker/distpicker.js"></script>
+<th:block th:include="include :: distpicker-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <th:block th:include="include :: bootstrap-table-editable-js"/>
 <script th:inline="javascript">
@@ -128,7 +127,7 @@
 
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
-    /*if ("admin" == loginName) {
+    if ("admin" == loginName) {
         $("#sd").show();
     } else {
         for (var i = 0; i < roles.length; i++) {
@@ -141,7 +140,7 @@
         if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
             $("#sd").show();
         }
-    }*/
+    }
 
 
     $('#distpicker').distpicker({
@@ -171,14 +170,20 @@
                     visible: false
                 },
                 {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
                     field: 'city',
-                    title: '市'
+                    title: '所属城市'
                 },
                 {
                     field: 'customerName',
                     title: '所属机构',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value, '10');
+                        return $.table.tooltip(value, 15);
                     }
                 },
                 {
@@ -191,13 +196,16 @@
                 },
                 {
                     field: 'weChatNumber',
-                    title: '微信号'
+                    title: '微信号',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 11);
+                    }
                 },
                 {
                     field: 'customerLable',
                     title: '客户标签',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value, 5);
+                        return $.table.tooltip(value, 15);
                     }
                 },
                 {
@@ -237,7 +245,8 @@
                 },*/
                 {
                     visible: editFlag == 'hidden' ? false : true,
-                    title: '是否添加到公司号',
+                    field: 'wechatFlag',
+                    title: '已加公司号',
                     align: 'center',
                     formatter: function (value, row, index) {
                         return statusTools(row);
@@ -302,12 +311,7 @@
 
     function onLoadSuccess(data) {
         for (var i in data.rows) {
-            if ("Y" == data.rows[i].isAdmin) {
-                $.table.showColumn("creator");
-                $.table.showColumn("deptName");
-                $.table.showColumn("wechatFlag");
-                $.table.showColumn("reason");
-            } else {
+            if ("N" == data.rows[i].isAdmin) {
                 $.table.hideColumn("creator");
                 $.table.hideColumn("deptName");
                 $.table.hideColumn("wechatFlag");
@@ -319,10 +323,14 @@
     //控制显示的字数
     function strLength(value) {
         var str = "";
-        if ($.common.isEmpty(value)) {
-            str = "暂无合作项目";
+        if ($.common.isNotEmpty(value)) {
+            if (value.length > 10) {
+                str = value.substring(0, 10) + '...';
+            } else {
+                str = value;
+            }
         } else {
-            str = $.table.beautySub(value, 10);
+            str = "暂无合作项目";
         }
         return str;
     }
@@ -336,12 +344,6 @@
     function jump() {
         var data = $("#formId").serialize();
         $.operate.gets(prefix + "/queryAll", data, "查询界面");
-    }
-
-    function resetPre() {
-        $("#formId")[0].reset();
-        $("#customerLables").selectpicker('refresh');
-        $.table.search('formId', 'bootstrap-table');
     }
 
 </script>

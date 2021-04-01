@@ -31,12 +31,14 @@
         <result property="agentId" column="agent_id"/>
         <result property="agent" column="agent"/>
         <result property="customerLable" column="customer_lable"/>
+        <result property="shareUserId" column="share_user_id"/>
+        <result property="shareUserName" column="share_user_name"/>
     </resultMap>
 
     <sql id="selectSysCustomerVo">
         select customer_id, customer_name, affiliation, contacts, contact_number, duties,
         contact_address, resources, province, city, county, del_flag, create_by, create_time, update_by, update_time, dept_id, dept_name,
-        weChat_flag,reason, we_chat_number,creator,reviser,agent_id,agent,customer_lable from sys_customer
+        weChat_flag,reason, we_chat_number,creator,reviser,agent_id,agent,customer_lable,share_user_id, share_user_name from sys_customer
     </sql>
 
     <select id="selectSysCustomerList" parameterType="SysCustomer" resultMap="SysCustomerResult">
@@ -46,8 +48,9 @@
             <if test="customerName != null  and customerName != ''">and customer_name like concat('%', #{customerName},
                 '%')
             </if>
-            <if test="contacts != null  and contacts != ''">and contacts = #{contacts}</if>
-            <if test="contactNumber != null  and contactNumber != ''">and contact_number = #{contactNumber}</if>
+            <if test="contacts != null  and contacts != ''">and contacts like concat('%',#{contacts}, '%')</if>
+            <if test="contactNumber != null  and contactNumber != ''">and contact_number like concat('%',
+                #{contactNumber}, '%')</if>
             <if test="province != null  and province != ''">and province = #{province}</if>
             <if test="city != null  and city != ''">and city = #{city}</if>
             <if test="county != null  and county != ''">and county = #{county}</if>
@@ -59,9 +62,16 @@
             </if>
             <if test="deptName != null  and deptName != ''">and dept_name like concat('%',#{deptName}, '%')</if>
             <if test="wechatFlag != null  and wechatFlag != ''">and weChat_flag = #{wechatFlag}</if>
-            <if test="reason != null  and reason != ''">and reason = #{reason}</if>
-            <if test="createBy != null">and create_by = #{createBy}</if>
-            <if test="weChatNumber != null  and weChatNumber != ''">and we_chat_number = #{weChatNumber}</if>
+            <if test="reason != null  and reason != ''">and reason like concat('%', #{reason, '%')</if>
+            <if test="createBy != null">
+                    and (create_by = #{createBy}
+                <if test="shareUserId != null  and shareUserId != ''">
+                    or share_user_id like concat('%',#{shareUserId},'%')
+                </if>
+                )
+            </if>
+            <if test="weChatNumber != null  and weChatNumber != ''">and we_chat_number like
+                concat('%',#{weChatNumber}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -72,6 +82,8 @@
             <if test="reviser != null  and reviser != ''">and reviser like concat('%', #{reviser}, '%')</if>
             <if test="agent != null  and agent != ''">and agent like concat('%', #{agent}, '%')</if>
             <if test="customerLable != null  and customerLable != ''">and customer_lable = #{customerLable}</if>
+            <if test="shareUserName != null  and shareUserName != ''">and share_user_name like concat('%',#{shareUserName}, '%')
+            </if>
         </where>
     </select>
 
@@ -108,6 +120,8 @@
             <if test="agentId != null">agent_id,</if>
             <if test="agent != null">agent,</if>
             <if test="customerLable != null">customer_lable,</if>
+            <if test="shareUserId != null">share_user_id,</if>
+            <if test="shareUserName != null">share_user_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerName != null">#{customerName},</if>
@@ -135,6 +149,8 @@
             <if test="agentId != null">#{agentId},</if>
             <if test="agent != null">#{agent},</if>
             <if test="customerLable != null">#{customerLable},</if>
+            <if test="shareUserId != null">#{shareUserId},</if>
+            <if test="shareUserName != null">#{shareUserName},</if>
         </trim>
     </insert>
 
@@ -166,6 +182,8 @@
             <if test="agent != null">agent = #{agent},</if>
             <if test="agentId != null">agent_id = #{agentId},</if>
             <if test="customerLable != null">customer_lable = #{customerLable},</if>
+            <if test="shareUserId != null">share_user_id = #{shareUserId},</if>
+            <if test="shareUserName != null">share_user_name = #{shareUserName},</if>
         </trim>
         where customer_id = #{customerId}
     </update>
@@ -192,11 +210,7 @@
     </select>
 
     <select id="queryAll" parameterType="SysCustomer" resultMap="SysCustomerResult">
-        SELECT t1.customer_id, t1.customer_name, t1.affiliation, t1.contacts, t1.contact_number, t1.duties,
-        t1.contact_address, t1.resources, t1.province, t1.city, t1.county, t1.del_flag, t1.create_by, t1.create_time,
-        t1.update_by, t1.update_time, t1.dept_id, t1.dept_name,
-        t1.weChat_flag,t1.reason, t1.we_chat_number,t1.creator,t1.reviser,t1.agent_id,t1.agent,t1.customer_lable FROM
-        sys_customer t1
+        <include refid="selectSysCustomerVo"/> t1
         <where>
             t1.del_flag = '0'
             <if test="customerName != null  and customerName != ''">and t1.customer_name like concat('%',

@@ -78,7 +78,7 @@
                     <select class="form-control" name="city" id="city" required></select>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" name="county" id="county" required></select>
+                    <select class="form-control" name="county" id="county"></select>
                 </div>
             </div>
         </div>
@@ -92,6 +92,15 @@
             <label class="col-sm-3 control-label">资源优势：</label>
             <div class="col-sm-8">
                 <input name="resources" th:field="*{resources}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">共享人：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="hidden" name="shareUserId" th:field="*{shareUserId}" id="shareUserId">
+                <input class="form-control" type="text" name="shareUserName" th:field="*{shareUserName}"
+                       onclick="selectShareUser()"
+                       id="shareUserName">
             </div>
         </div>
         <!--<div class="form-group" id="selectDept">
@@ -140,23 +149,24 @@
             $("#selectDept").show();
             $("#selectWeChat").show();
             $("#agentUser").show();
+            $("#resons").show();
         } else {
             $("#selectDept").hide();
             $("#selectWeChat").hide();
             $("#agentUser").hide();
+            $("#resons").hide();
         }
     }
-    $(function () {
-        weChatChange();
-    })
 
     function weChatChange() {
         var wechatFlag = $("#wechatFlag").val();
-        if (wechatFlag == "否") {
-            $("#resons").show();
-        } else {
-            $("#reason").val("");
-            $("#resons").hide();
+        if ($.common.isNotEmpty(wechatFlag)) {
+            if (wechatFlag == "否") {
+                $("#resons").show();
+            } else if (wechatFlag == "是") {
+                $("#reason").val("");
+                $("#resons").hide();
+            }
         }
     }
 
@@ -224,6 +234,26 @@
         $("#creator").val(userNames.substr(0, userNames.length - 1));
         layer.close(layer.index);
     }
+
+
+    //人员树形选择器
+    function selectShareUser() {
+        var url = ctx + "system/customer/selectShareUser?userId=" + $("#shareUserId").val() + "&userName=" + $("#shareUserName").val();
+        $.modal.open("人员选择", url, '850', '600');
+    }
+
+    function getParentUser(row) {
+        var userNames = "";
+        var userIds = "";
+        for (var i = 0; i < row.length; i++) {
+            userNames = row[i].userName + "," + userNames;
+            userIds = row[i].userId + "," + userIds;
+        }
+        $("#shareUserId").val(userIds.substr(0, userIds.length - 1));
+        $("#shareUserName").val(userNames.substr(0, userNames.length - 1));
+        layer.close(layer.index);
+    }
+
 </script>
 </body>
 </html>

@@ -82,6 +82,9 @@
             AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET
             (#{deptId},ancestors) ))
         </if>
+        <if test="userName != null and userName != ''">
+            AND u.user_name like concat('%', #{userName}, '%')
+        </if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>

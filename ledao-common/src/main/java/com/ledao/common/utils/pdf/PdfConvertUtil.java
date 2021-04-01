@@ -118,7 +118,7 @@ public class PdfConvertUtil {
     }
 
     public static void main(String[] args) {
-        PdfConvertUtil convert=new PdfConvertUtil();
+        PdfConvertUtil convert = new PdfConvertUtil();
         convert.convertText("F:\\5f7f26fc43836.pdf");
     }
 }

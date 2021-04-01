@@ -33,30 +33,63 @@
         .ibox {
             height: 50% !important;
         }
+
+        .ld {
+            letter-spacing: 0.5em;
+            font-weight: 400;
+            font-size: 4em;
+            position: relative;
+            display: -moz-box; /*兼容Firefox*/
+                display: -webkit-box; /*兼容FSafari、Chrome*/
+                -moz-box-align: center; /*兼容Firefox*/
+                -webkit-box-align: center; /*兼容FSafari、Chrome */
+                -moz-box-pack: center; /*兼容Firefox*/
+                -webkit-box-pack: center; /*兼容FSafari、Chrome */
+            text-align: center;
+        }
+
+        .wv-lt-refresh {
+            display: none;
+        }
+
+        .div1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150em;
+            height: 10em;
+        }
+
+        .div2 {
+            width: 20em;
+            font-size: 4em;
+            letter-spacing: 0.9em;
+            font-weight: 400;
+            text-align: center;
+            line-height: 5em;
+        }
+
     </style>
 </head>
 
 <body class="gray-bg" style="height:100%;background: url('../img/background.png') no-repeat;">
 <div class="row border-bottom white-bg dashboard-header">
-    <div class="col-sm-12">
-        <div th:align="center">
-            <h1>乐道后台管理框架</h1>
+    <div class="div1" style="display: flex;">
+        <div class="div2">乐道后台管理系统</div>
+        <div>
+            <iframe width="100%" scrolling="no" height="30" frameborder="0" allowtransparency="true" src="https://i.tianqi.com?c=code&id=34&color=%230070C0&icon=1&site=17"></iframe>
         </div>
-        <!--<br>-->
-        <!--<div th:align="center">
-            <span id="dateTime" style="font-size: 30px"><font color="#373737"></font></span>&nbsp;&nbsp;
-        </div>-->
-        <br>
     </div>
 </div>
 <div>
     <div class="col-sm-4">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>公告消息</h5>
+                <h5><a onclick="noticeToList()">公告消息</a></h5>
             </div>
             <div class="ibox-content">
                 <ul class="nav nav-tabs" id="noticeTab"></ul>
+                <p></p>
                 <div class="tab-content" id="noticeTabContent"></div>
             </div>
         </div>
@@ -64,13 +97,12 @@
     <div class="col-sm-5">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>文档管理</h5>
+                <h5><a onclick="documentToList()">文档管理</a></h5>
             </div>
             <div class="ibox-content">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs" id="myTab"></ul>
-                    <div class="tab-content" id="myTabContent"></div>
-                </div>
+                <ul class="nav nav-tabs" id="myTab"></ul>
+                <p></p>
+                <div class="tab-content" id="myTabContent"></div>
             </div>
         </div>
     </div>
@@ -94,7 +126,7 @@
         </div>
         <div class="col-sm-3">
             <div class="ibox-title">
-                <h5>日志</h5>
+                <h5><a onclick="workLogToList()">日志</a></h5>
             </div>
             <div class="ibox-content">
                 <div id="mainWorkLog"></div>
@@ -124,6 +156,21 @@
         tb();
         mainWorkLogList();
     });
+
+    function noticeToList() {
+        var url = '/system/notice/toList';
+        $.modal.openTab("公告消息", url);
+    }
+
+    function documentToList() {
+        var url = '/system/document/toList';
+        $.modal.openTab("文档管理", url);
+    }
+
+    function workLogToList() {
+        var url = '/system/workLog/toList';
+        $.modal.openTab("工作日志", url);
+    }
 
     function tb() {
         $.ajax({
@@ -345,7 +392,7 @@
                 }
                 str += "<ul>";
                 for (var i = 0; i < array.length; i++) {
-                    str += '<li style="margin: 1%"><span><a onclick="datailForNotice(' + array[i].noticeId + ')">' + strLength(array[i].noticeTitle) + '</a></span>' +
+                    str += '<li style="margin-bottom: 1.1em"><span><a onclick="datailForNotice(' + array[i].noticeId + ')">' + strLength(array[i].noticeTitle) + '</a></span>' +
                         '<span style="float: right">' + array[i].createTime + '</span></li>';
                 }
                 str += '<p style="float: right"><a onclick="toListByType(\'' + noticeType + "',\'" + label + '\')">更多>></a></p>';
@@ -356,6 +403,7 @@
             }
         });
     }
+
     function dateFormat(fmt, date) {
         let ret;
         const opt = {
@@ -371,8 +419,10 @@
             ret = new RegExp("(" + k + ")").exec(fmt);
             if (ret) {
                 fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-            };
-        };
+            }
+            ;
+        }
+        ;
         return fmt;
     }
 
@@ -381,7 +431,7 @@
     function strLength(value) {
         var str = $.common.nullToStr(value);
         if (str.length > 10) {
-            str = str.substring(0, 10) + '...';
+            str = str.substring(0, 20) + '...';
         }
         return str;
     }
@@ -437,7 +487,7 @@
                     div1.className = "tab-pane";
                 }
                 for (var i = 0; i < result.length; i++) {
-                    str += '<p style="text-align: left"><span>' + result[i].fileName + '.' + result[i].fileType + '</span><span style="float: right"><a href="#" onclick="downLoad(\'' + result[i].fileUrl + '\')">下载</a></span></p>';
+                    str += '<p style="text-align: left;margin-bottom: 1.1em"><span>' + result[i].fileName + '.' + result[i].fileType + '</span><span style="float: right"><a href="#" onclick="downLoad(\'' + result[i].fileUrl + '\')">下载</a></span></p>';
                 }
                 str += '<p style=\'float: right\'><a onclick="toDocumentByType(\'' + type + "',\'" + label + '\')">更多>></a></p>';
                 div1.innerHTML = str;
@@ -536,15 +586,6 @@
                         var data = result.data;
                         var editable = false;
                         for (var i in data) {
-                            /*if ($.common.isEmpty(data[i].endTime)) {
-                                allDay = true;
-                            } else {
-                                if (Datetab(data[i].endTime, new Date())) {
-                                    editable = true;
-                                } else {
-                                    editable = false;
-                                }
-                            }*/
                             events.push({
                                 id: data[i].memorandumId,
                                 title: data[i].matter,
@@ -804,8 +845,6 @@
         var url = "/system/workLog/detail/" + id;
         $.modal.openTab("工作日志", url);
     }
-
-
 </script>
 </body>
 </html>

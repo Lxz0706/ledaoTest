@@ -33,7 +33,7 @@ server:
 # 日志配置
 logging:
   level:
-    com.ledao: info
+    com.ledao: error
     org.springframework: ERROR
 
 # 用户配置

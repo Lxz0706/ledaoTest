@@ -92,10 +92,10 @@ public class SysPcustomerServiceImpl implements ISysPcustomerService {
     /**
      * 根据项目id查询
      *
-     * @param projectId
+     * @param sysPcustomer
      * @return 数据结果
      */
-    public List<SysPcustomer> selectPCustomerByProjectId(Long projectId) {
-        return sysPcustomerMapper.selectPCustomerByProjectId(projectId);
+    public List<SysPcustomer> selectPCustomerByProjectId(SysPcustomer sysPcustomer) {
+        return sysPcustomerMapper.selectPCustomerByProjectId(sysPcustomer);
     }
 }

@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.ledao.common.core.page.PageDao;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysDictData;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
@@ -111,7 +112,7 @@ public class SysNoticeController extends BaseController {
     public AjaxResult addSave(SysNotice notice) {
         notice.setReadFlag("未读");
         notice.setCreateBy(ShiroUtils.getLoginName());
-        if (StringUtils.isNotEmpty(notice.getReceiver())) {
+        if (StringUtils.isEmpty(notice.getReceiver())) {
             StringBuffer userIds = new StringBuffer();
             StringBuffer userNames = new StringBuffer();
             SysUser sysUser = new SysUser();
@@ -226,7 +227,13 @@ public class SysNoticeController extends BaseController {
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
-                sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                        sysNotice.setCreateBy(ShiroUtils.getLoginName());
+                        sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
+                    }
+                }
             }
         }
         List<SysNotice> list = noticeService.selectNoticeList(sysNotice);
@@ -237,5 +244,10 @@ public class SysNoticeController extends BaseController {
     public String toListByType(@PathVariable("type") String type, ModelMap modelMap) {
         modelMap.put("noticeType", type);
         return prefix + "/noticeByType";
+    }
+
+    @GetMapping("/toList")
+    public String toList() {
+        return prefix + "/notice";
     }
 }

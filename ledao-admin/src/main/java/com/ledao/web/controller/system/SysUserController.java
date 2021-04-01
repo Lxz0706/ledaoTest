@@ -1,6 +1,8 @@
 package com.ledao.web.controller.system;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
@@ -9,6 +11,7 @@ import com.ledao.system.dao.SysDept;
 import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
@@ -64,7 +67,7 @@ public class SysUserController extends BaseController {
         return prefix + "/user";
     }
 
-    @RequiresPermissions("system:user:list")
+    //    @RequiresPermissions("system:user:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysUser user) {
@@ -290,6 +293,24 @@ public class SysUserController extends BaseController {
         return prefix + "/tree";
     }
 
+    /**
+     * 选择人员树
+     */
+    @GetMapping("/selectUserTreeList")
+    public String selectUserTreeList(String selectedUserIds, String selectedUserNames, Boolean multiSelectFlag, ModelMap mmap, Boolean deptId) {
+        mmap.put("dept", deptService.selectDeptById((long) 100));
+        mmap.put("selectedUserIds", selectedUserIds);
+        mmap.put("selectedUserNames", selectedUserNames);
+        mmap.put("multiSelectFlag", multiSelectFlag);
+        if (StringUtils.isNotNull(deptId)) {
+            if (deptId == true) {
+                mmap.put("deptId", "201");
+            }
+        }
+
+        return prefix + "/userTree";
+    }
+
 
     @GetMapping("/listForTree")
     @ResponseBody
@@ -299,5 +320,16 @@ public class SysUserController extends BaseController {
         jsonObject.put("success", true);
         jsonObject.put("userList", list);
         return jsonObject.toString();
+    }
+
+    @PostMapping("/selectUserByIds")
+    @ResponseBody
+    public AjaxResult selectUserByIds(String ids) {
+        Map<String, Object> map = new HashMap<>();
+        for (String string : ids.split(",")) {
+            SysUser sysUser = userService.selectUserById(Long.valueOf(string));
+            map.put("user", sysUser);
+        }
+        return AjaxResult.success(map);
     }
 }

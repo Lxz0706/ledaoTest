@@ -59,6 +59,16 @@ public class SysPcustomer extends BaseEntity {
     @Excel(name = "合作项目id")
     private Long itemId;
 
+    /**
+     * 共享人
+     */
+    private String shareUserId;
+
+    /**
+     * 共享人名称
+     */
+    private String shareUserName;
+
     public Long getDealCustomerId() {
         return dealCustomerId;
     }
@@ -123,6 +133,22 @@ public class SysPcustomer extends BaseEntity {
         this.itemId = itemId;
     }
 
+    public String getShareUserId() {
+        return shareUserId;
+    }
+
+    public void setShareUserId(String shareUserId) {
+        this.shareUserId = shareUserId;
+    }
+
+    public String getShareUserName() {
+        return shareUserName;
+    }
+
+    public void setShareUserName(String shareUserName) {
+        this.shareUserName = shareUserName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -138,6 +164,8 @@ public class SysPcustomer extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("itemId", getItemId())
+                .append("shareUserId", getShareUserId())
+                .append("shareUserName", getShareUserName())
                 .toString();
     }
 }

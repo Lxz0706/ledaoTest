@@ -40,19 +40,20 @@
                 AND notice_type = #{noticeType}
             </if>
             <if test="createBy != null and createBy != ''">
-                AND create_by like concat('%', #{createBy}, '%')
+                AND ( create_by like concat('%', #{createBy}, '%')
                 <if test="receiver != null and receiver !=''">
-                    or receiver  like concat('%',#{receiver},'%')
+                    or receiver like concat('%',#{receiver},'%')
                 </if>
+                )
             </if>
-           <!-- <if test="receiver != null and receiver !=''">
-                <if test="createBy != null and createBy != ''">
-                    AND create_by like concat('%', #{createBy}, '%')
-                    or receiver  like concat('%',#{receiver},'%')
-                </if>
-            </if>-->
+            <!-- <if test="receiver != null and receiver !=''">
+                 <if test="createBy != null and createBy != ''">
+                     AND create_by like concat('%', #{createBy}, '%')
+                     or receiver  like concat('%',#{receiver},'%')
+                 </if>
+             </if>-->
             <if test="readFlag != null and readFlag !=''">
-                and read_flag  = #{readFlag}
+                and read_flag = #{readFlag}
             </if>
         </where>
     </select>
@@ -67,10 +68,10 @@
                 AND notice_type = #{noticeType}
             </if>
             <if test="receiver != null and receiver !=''">
-                and receiver  like concat('%',#{receiver},'%')
+                and receiver like concat('%',#{receiver},'%')
             </if>
             <if test="readFlag != null and readFlag !=''">
-                and read_flag  = #{readFlag}
+                and read_flag = #{readFlag}
             </if>
         </where>
     </select>

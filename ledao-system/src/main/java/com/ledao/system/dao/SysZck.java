@@ -23,6 +23,7 @@ public class SysZck extends BaseEntity {
     /**
      * ID
      */
+
     private Long id;
 
     /**

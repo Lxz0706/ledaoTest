@@ -64,7 +64,7 @@ public class SysCustomerController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysCustomer sysCustomer) {
         startPage();
-        /*SysUser currentUser = ShiroUtils.getSysUser();
+        SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
@@ -76,14 +76,15 @@ public class SysCustomerController extends BaseController {
                             String ids = "201,207,208,209";
                             sysCustomer.setDeptIds(ids.split(","));
                         } else {
+                            sysCustomer.setShareUserId(ShiroUtils.getUserId().toString());
                             sysCustomer.setCreateBy(ShiroUtils.getLoginName());
                         }
                     }
                 }
             }
-        }*/
+        }
         List<SysCustomer> list = sysCustomerService.selectSysCustomerList(sysCustomer);
-        /*for (SysCustomer sysCustomer1 : list) {
+        for (SysCustomer sysCustomer1 : list) {
             StringBuffer sb = new StringBuffer();
             SysItem sysItem = new SysItem();
             SysUser currentUser1 = ShiroUtils.getSysUser();
@@ -95,7 +96,7 @@ public class SysCustomerController extends BaseController {
                         if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
                             if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
                                     && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
-                                sysItem.setCreateBy(ShiroUtils.getLoginName());
+                                //  sysItem.setCreateBy(ShiroUtils.getLoginName());
                                 sysCustomer1.setIsAdmin("N");
                             } else {
                                 sysCustomer1.setIsAdmin("N");
@@ -110,13 +111,14 @@ public class SysCustomerController extends BaseController {
             }
             sysItem.setCustomerId(sysCustomer1.getCustomerId());
             List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
+            System.out.print("项目数量：======="+sysItemList.size());
             for (SysItem sysItem1 : sysItemList) {
                 if (StringUtils.isNotNull(sysItem1.getProjectName())) {
                     sb.append(sysItem1.getProjectName()).append(";");
                 }
             }
             sysCustomer1.setProjectName(sb.toString());
-        }*/
+        }
         return getDataTable(list);
     }
 
@@ -134,6 +136,7 @@ public class SysCustomerController extends BaseController {
     }
 
     /**
+     * z
      * 新增客户库
      */
     @GetMapping("/add")
@@ -186,12 +189,12 @@ public class SysCustomerController extends BaseController {
                         sysCustomer.setAgentId(ShiroUtils.getLoginName());
                         sysCustomer.setAgent(ShiroUtils.getSysUser().getUserName());
                         if (StringUtils.isNotEmpty(sysCustomer.getCreateBy())) {
-                            logger.info(sysCustomer.getCreateBy());
                             SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
                             sysCustomer.setDeptId(sysUser.getDeptId());
                             sysCustomer.setDeptName(sysUser.getDept().getDeptName());
                         } else {
                             sysCustomer.setCreateBy(ShiroUtils.getLoginName());
+                            sysCustomer.setCreator(ShiroUtils.getSysUser().getUserName());
                             sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
                             sysCustomer.setDeptName(ShiroUtils.getSysUser().getDept().getDeptName());
                         }
@@ -282,20 +285,20 @@ public class SysCustomerController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysCustomer sysCustomer) {
-        /*SysCustomer sysCustomer1 = sysCustomerService.selectSysCustomerById(sysCustomer.getCustomerId());
-        if (StringUtils.isNotNull(sysCustomer.getContacts()) && StringUtils.isNotNull(sysCustomer.getContactNumber())) {
-            if (sysCustomer.getContacts().equals(sysCustomer1.getContacts()) && sysCustomer.getContactNumber().equals(sysCustomer1.getContactNumber())) {
-
-            }
+        List<SysItem> sysItemList = sysItemService.selectItemByCustomerId(sysCustomer.getCustomerId());
+        for (SysItem sysItem : sysItemList) {
+            sysItem.setShareUserId(sysCustomer.getShareUserId());
+            sysItem.setShareUserName(sysCustomer.getShareUserName());
+            sysItemService.updateSysItem(sysItem);
         }
-        SysCustomer sysCustomer2 = new SysCustomer();
-        if (StringUtils.isNotNull(sysCustomer.getContacts())) {
-            sysCustomer2.setContacts(sysCustomer.getContacts());
+        SysPcustomer sysPcustomer = new SysPcustomer();
+        sysPcustomer.setCustomerId(sysCustomer.getCustomerId().toString());
+        List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectSysPcustomerList(sysPcustomer);
+        for (SysPcustomer sysPcustomer1 : sysPcustomerList) {
+            sysPcustomer1.setShareUserId(sysCustomer.getShareUserId());
+            sysPcustomer1.setShareUserName(sysCustomer.getShareUserName());
+            sysPcustomerService.updateSysPcustomer(sysPcustomer1);
         }
-        if (StringUtils.isNotNull(sysCustomer.getContactNumber())) {
-            sysCustomer2.setContactNumber(sysCustomer.getContactNumber());
-        }
-        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerList(sysCustomer2);*/
 
         sysCustomer.setUpdateBy(ShiroUtils.getLoginName());
         sysCustomer.setReviser(ShiroUtils.getSysUser().getUserName());
@@ -436,15 +439,6 @@ public class SysCustomerController extends BaseController {
         for (SysCustomer sysCustomer1 : list) {
             StringBuffer sb = new StringBuffer();
             SysItem sysItem = new SysItem();
-            sysItem.setCustomerId(sysCustomer1.getCustomerId());
-            List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
-            for (SysItem sysItem1 : sysItemList) {
-                if (StringUtils.isNotNull(sysItem1.getProjectName())) {
-                    sb.append(sysItem1.getProjectName()).append(";");
-                }
-            }
-            sysCustomer1.setProjectName(sb.toString());
-
             SysUser currentUser1 = ShiroUtils.getSysUser();
             if (currentUser1 != null) {
                 // 如果是超级管理员，则不过滤数据
@@ -454,6 +448,7 @@ public class SysCustomerController extends BaseController {
                         if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
                             if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
                                     && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
+                                //  sysItem.setCreateBy(ShiroUtils.getLoginName());
                                 sysCustomer1.setIsAdmin("N");
                             } else {
                                 sysCustomer1.setIsAdmin("N");
@@ -466,6 +461,14 @@ public class SysCustomerController extends BaseController {
                     sysCustomer1.setIsAdmin("Y");
                 }
             }
+            sysItem.setCustomerId(sysCustomer1.getCustomerId());
+            List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
+            for (SysItem sysItem1 : sysItemList) {
+                if (StringUtils.isNotNull(sysItem1.getProjectName())) {
+                    sb.append(sysItem1.getProjectName()).append(";");
+                }
+            }
+            sysCustomer1.setProjectName(sb.toString().trim());
         }
         return getDataTable(list);
     }
@@ -481,7 +484,38 @@ public class SysCustomerController extends BaseController {
     }
 
     /**
-     *
+     * 选择人员
+     */
+    @GetMapping("/selectShareUser")
+    public String selectShareUser(String userId, String userName, ModelMap mmap) {
+        mmap.put("userId", userId);
+        mmap.put("userName", userName);
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                        if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
+                                && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
+                            mmap.put("deptId", 202);
+                        }
+                    }
+                }
+            }
+        }
+
+        return prefix + "/selectShareUser";
+    }
+
+    /*
+     * 详情信息
+     * @Description:
+     * @param: customerId
+     * @param: mmap
+     * @return java.lang.String
+     * @author lxz
+     * @date 2021/3/26 14:29
      */
     @GetMapping("/detail/{customerId}")
     public String detail(@PathVariable("customerId") Long customerId, ModelMap mmap) {

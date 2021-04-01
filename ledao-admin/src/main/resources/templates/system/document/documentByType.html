@@ -16,6 +16,9 @@
             <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:document:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:document:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
             <!--<a class="btn btn-primary" onclick="$.operate.edit()"
                shiro:hasPermission="system:document:edit">
                 <i class="fa fa-edit"></i> 修改
@@ -43,32 +46,41 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove/{id}",
             exportUrl: prefix + "/export",
+            backParentUrl: prefix + "/list",
+            sortName: "createTime",
+            sortOrder: "desc",
             onLoadSuccess: onLoadSuccess,
             modalName: "文件管理",
             columns: [
                 {
-                    field: 'fileName',
-                    title: '文件名称',
+                    title: "序号",
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value, 20);
+                        return $.table.serialNumber(index);
                     }
                 },
                 {
-                    field: 'fileSize',
-                    title: '文件大小'
+                    field: 'fileName',
+                    title: '文件名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 30);
+                    }
+                },
+                {
+                    field: 'fileType',
+                    title: '文件类型'
                 },
                 {
                     field: 'shareDeptName',
                     title: '共享部门名称',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,15);
+                        return $.table.tooltip(value, 15);
                     }
                 },
                 {
                     field: 'shareUserName',
                     title: '共享人名称',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,15);
+                        return $.table.tooltip(value, 15);
                     }
                 },
                 {
@@ -102,15 +114,16 @@
 
     function onLoadSuccess(data) {
         for (var i in data.rows) {
-            console.log(data.rows[i].isAdmin);
-            if ("Y" == data.rows[i].isAdmin) {
-                $.table.showColumn("shareDeptName");
-                $.table.showColumn("shareUserName");
-            } else {
+            if ("N" == data.rows[i].isAdmin) {
                 $.table.hideColumn("shareDeptName");
                 $.table.hideColumn("shareUserName");
             }
         }
+    }
+
+    function back() {
+        var url = prefix + "/toList";
+        $.modal.parentTab("文档管理", url);
     }
 
 </script>

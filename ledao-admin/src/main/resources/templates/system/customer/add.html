@@ -52,7 +52,8 @@
             <label class="col-sm-3 control-label">客户标签：</label>
             <div class="col-sm-8">
                 <label th:each="type:${types}" class="check-box">
-                    <input name="customerLable" type="checkbox" th:value="${type.dictValue}" th:text="${type.dictValue}" th:disabled="${type.status == '1'}">
+                    <input name="customerLable" type="checkbox" th:value="${type.dictValue}" th:text="${type.dictValue}"
+                           th:disabled="${type.status == '1'}">
                 </label>
             </div>
         </div>
@@ -67,8 +68,7 @@
                     <select class="form-control" name="city" id="city" data-city="---请选择市---" required></select>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" name="county" id="county" data-district="---请选择区----"
-                            required></select>
+                    <select class="form-control" name="county" id="county" data-district="---请选择区----"></select>
                 </div>
             </div>
         </div>
@@ -82,6 +82,14 @@
             <label class="col-sm-3 control-label">资源优势：</label>
             <div class="col-sm-8">
                 <input name="resources" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">共享人：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="hidden" name="shareUserId" id="shareUserId">
+                <input class="form-control" type="text" name="shareUserName" onclick="selectShareUser()"
+                       id="shareUserName">
             </div>
         </div>
         <!--<div class="form-group" id="selectDept">
@@ -141,30 +149,6 @@
         } else {
             $("#reason").val("");
             $("#resons").hide();
-        }
-    }
-
-    /*用户管理-新增-选择部门树*/
-    function selectDeptTree() {
-        var deptId = $("#deptId").val();
-        var deptId = $.common.isEmpty(deptId) ? "100" : $("#deptId").val();
-        var url = ctx + "system/dept/selectDeptTree/" + deptId;
-        var options = {
-            title: '选择部门',
-            width: "380",
-            url: url,
-            callBack: doSubmit
-        };
-        $.modal.openOptions(options);
-    }
-
-    function doSubmit(index, layero) {
-        var tree = layero.find("iframe")[0].contentWindow.$._tree;
-        if ($.tree.notAllowParents(tree)) {
-            var body = layer.getChildFrame('body', index);
-            $("#deptId").val(body.find('#treeId').val());
-            $("#deptName").val(body.find('#treeName').val());
-            layer.close(index);
         }
     }
 
@@ -274,7 +258,7 @@
     //人员树形选择器
     function selectUser() {
         var url = ctx + "system/customer/selectUser?loginName=" + $("#createBy").val() + "&userName=" + $("#creator").val();
-        $.modal.open("人员选择", url, '750', '600');
+        $.modal.open("人员选择", url, '850', '600');
     }
 
     function getDeviceBasics(row) {
@@ -288,6 +272,25 @@
         $("#creator").val(userNames.substr(0, userNames.length - 1));
         layer.close(layer.index);
     }
+
+    //人员树形选择器
+    function selectShareUser() {
+        var url = ctx + "system/customer/selectShareUser?loginName=" + $("#shareUserId").val() + "&userName=" + $("#shareUserName").val();
+        $.modal.open("人员选择", url, '850', '600');
+    }
+
+    function getParentUser(row) {
+        var userNames = "";
+        var userIds = "";
+        for (var i = 0; i < row.length; i++) {
+            userNames = row[i].userName + "," + userNames;
+            userIds = row[i].userId + "," + userIds;
+        }
+        $("#shareUserId").val(userIds.substr(0, userIds.length - 1));
+        $("#shareUserName").val(userNames.substr(0, userNames.length - 1));
+        layer.close(layer.index);
+    }
+
 </script>
 </body>
 </html>

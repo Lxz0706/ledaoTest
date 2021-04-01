@@ -18,8 +18,7 @@
 <input id="selectedUserIds" name="selectedUserIds" type="hidden" th:value="${selectedUserIds}"/>
 <input id="selectedUserNames" name="selectedUserNames" type="hidden" th:value="${selectedUserNames}"/>
 <input id="multiSelectFlag" name="multiSelectFlag" type="hidden" th:value="${multiSelectFlag}"/>
-<input id="deptId" name="deptId" type="text" th:value="${deptId}"/>
-<!--
+<input id="deptId" name="deptId" type="hidden" th:value="${deptId}"/>
 <div class="row">
     <div class="col-xs-10">
         <div class="wrapper">
@@ -33,78 +32,36 @@
             <button class="btn" id="btn" onclick="loadUserList()"> 搜索</button>
         </div>
     </div>
-</div>-->
-<div class="row">
-    <div class="ibox float-e-margins">
-        <div class="ibox-title ibox-title-gray dashboard-header">
-            <h5>人员选择器</h5>
-        </div>
-        <div class="col-xs-10">
-            <!--<div class="wrapper">
-                <div class="treeShowHideButton" οnclick="$.tree.toggleSearch();">
-                    <label id="btnShow" title="显示搜索" style="display:none;">︾</label>
-                    <label id="btnHide" title="隐藏搜索">︽</label>
-                </div>
-            </div>-->
-            <div class="treeSearchInput" id="search">
-                <label>姓名：</label><input type="text" class="empty" id="userName" name="userName" maxlength="50"/>
-                <button class="btn" id="btn" onclick="loadUserList()"> 搜索</button>
-            </div>
-        </div>
-        <div class="ibox-content col-xs-5">
-            <div class="nav-tabs-custom">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#company" data-toggle="tab" aria-expanded="true">公司架构</a></li>
-                    <li><a href="#myGroup" data-toggle="tab" aria-expanded="false">我的小组</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="company">
-                        <div class="treeExpandCollapse">
-                            <a href="#" onclick="$.tree.expand()">展开</a> /
-                            <a href="#" onclick="$.tree.collapse()">折叠</a>
-                        </div>
-                        <div id="tree" class="ztree treeselect"></div>
-                    </div>
-                    <div class="tab-pane" id="myGroup">
-                        <p style="float: right"><a class="btn" onclick="addGroup()"><i class="fa fa-plus"></i> 新增小组</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-5">
-            <div class="col-xs-5" style="padding-top: 10px;">
-                <h4>待选人员</h4>
-                <select name="from" id="multiselect" class="js-multiselect form-control" size="15" multiple="multiple">
-                </select>
-            </div>
+</div>
+<div class="col-xs-4">
 
-            <div class="col-xs-1" style="padding-top: 40px;">
-                <button type="button" id="multiselect_rightAll" class="btn btn-block"><i
-                        class="glyphicon glyphicon-forward"></i></button>
-                <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i
-                        class="glyphicon glyphicon-chevron-right"></i></button>
-                <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i
-                        class="glyphicon glyphicon-chevron-left"></i></button>
-                <button type="button" id="multiselect_leftAll" class="btn btn-block"><i
-                        class="glyphicon glyphicon-backward"></i></button>
-            </div>
-
-            <div class="col-xs-5" style="padding-top: 10px;">
-                <h4>已选人员</h4>
-                <select name="to" id="multiselect_to" class="form-control" size="15" multiple="multiple"></select>
-            </div>
-        </div>
+    <div class="treeExpandCollapse">
+        <a href="#" onclick="$.tree.expand()">展开</a> /
+        <a href="#" onclick="$.tree.collapse()">折叠</a>
     </div>
-    <!--    <div class="col-xs-4">
+    <div id="tree" class="ztree treeselect"></div>
+</div>
+    <div class="col-xs-3" style="padding-top: 10px;">
+        <h4>待选人员</h4>
+        <select name="from" id="multiselect" class="js-multiselect form-control" size="15" multiple="multiple">
+        </select>
+    </div>
 
-            <div class="treeExpandCollapse">
-                <a href="#" onclick="$.tree.expand()">展开</a> /
-                <a href="#" onclick="$.tree.collapse()">折叠</a>
-            </div>
-            <div id="tree" class="ztree treeselect"></div>
-        </div>-->
+    <div class="col-xs-1" style="padding-top: 40px;">
+        <button type="button" id="multiselect_rightAll" class="btn btn-block"><i
+                class="glyphicon glyphicon-forward"></i></button>
+        <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i
+                class="glyphicon glyphicon-chevron-right"></i></button>
+        <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i
+                class="glyphicon glyphicon-chevron-left"></i></button>
+        <button type="button" id="multiselect_leftAll" class="btn btn-block"><i
+                class="glyphicon glyphicon-backward"></i></button>
+    </div>
 
+    <div class="col-xs-3" style="padding-top: 10px;">
+        <h4>已选人员</h4>
+        <select name="to" id="multiselect_to" class="form-control" size="15" multiple="multiple"></select>
+    </div>
 </div>
 
 <div th:include="include::footer"></div>
@@ -175,14 +132,13 @@
         loadUserList();
 
         //4、获取我的小组
-        //loadGroupList();
+        loadGroupList();
 
     });
 
     function loadGroupList() {
         //清空当前待选择人员框列表
         // $("#multiselect").find("option").remove();
-
 
         $.ajax({
             type: "get",
@@ -192,40 +148,16 @@
             data: {},
             success: function (result) {
                 var data = result.subgroupList;
-                var str = "<ol>";
-                //  str += '<li style="float: left" class="btn" onclick="addGroup()"><i class="fa fa-plus"></i> 新增小组</li>';
+                var str = "";
                 for (var i in data) {
-                    str += '<li><span><a onclick="datailForGroup(\'' + data[i].subgroupUserId + '\')">' + data[i].subgroupName + '</a>';
-                    str += '<a class="btn btn-danger" onclick="removeAll(' + data[i].subgroupId + ')" <i class="fa fa-remove"></i> 删除</a>';
-                    str += '</li>';
+                    str += '<a onclick="datailForGroup(' + data[i].subgroupId + ')">' + data[i].subgroupName + '</a>';
                 }
-                str += '</ol>';
                 $("#myGroup").append(str);
             }
         })
     }
-
-    function datailForGroup(ids) {
+    function datailForGroup(id) {
         $("#multiselect").find("option").remove();
-        // $("#multiselect_to").append("<option value='" + idsArray[i] + "'>" + namesArray[i] + "</option>");
-        var array = ids.split(",");
-        for (var i = 0; i < array.length; i++) {
-            $("#multiselect_to").append("<option value='" + array[i] + "'>" + selectUserByIds(array[i]) + "</option>");
-        }
-
-    }
-
-    function selectUserByIds(id) {
-        $.ajax({
-            url: ctx + 'system/user/selectUserByIds',
-            data: {"ids": id},
-            dataType: 'json',
-            type: 'post',
-            success: function (result) {
-                // var data = result.data;
-                return result.data.user.userName;
-            }
-        })
     }
 
     //点击部门树事件
@@ -287,23 +219,6 @@
                 }
             }
         });
-    }
-
-    function addGroup() {
-        var url = ctx + 'system/subgroup/add';
-        $.modal.open('新增小组', url);
-    }
-
-    function removeAll(id) {
-        $.ajax({
-            url: ctx + 'system/subgroup/remove',
-            data: {'ids': id},
-            dataType: "json",
-            type: 'post',
-            success: function (result) {
-                window.location.reload();
-            }
-        })
     }
 </script>
 </body>

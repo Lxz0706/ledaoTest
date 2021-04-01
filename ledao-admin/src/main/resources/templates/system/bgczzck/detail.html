@@ -1,204 +1,255 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('用户详细')" />
+    <th:block th:include="include :: header('用户详细')"/>
 </head>
 <body class="white-bg">
-	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-		<form class="form-horizontal m" id="form-bgczzck-edit">
-			<table class="table table-border">
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>资产包情况</h3></td>
-				</tr>
-				<tr>
-					<td  class="col-sm-1 text-right"><h5>项目名称：</h5></td>
-					<td  class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectName}"/></td>
-					<td  class="col-sm-1 text-right"><h5>项目状态：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_dxdtxm_project_status', sysBgczzck.projectStatus)}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>融资基本情况</h3></td>
-				</tr>
-				<tr>
-					<td  class="col-sm-1 text-right"><h5>序号：</h5></td>
-					<td  class="col-sm-1"><span th:text="${sysBgczzck.no}"/></td>
-					<td  class="col-sm-1 text-right"><h5>SPV名称：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.spvName}"/></td>
-					<td  class="col-sm-1 text-right"><h5>城市/地区：</h5></td>
-					<td  class="col-sm-1"><span th:text="${sysBgczzck.city}"/></td>
-					<td  class="col-sm-1 text-right"><h5>取得成本：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.acquisitionCosts}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>合同本金：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.contractPrincipals}"/></td>
-					<td class="col-sm-1 text-right"><h5>本金余额：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.principalBalances}"/></td>
-					<td class="col-sm-1 text-right"><h5>利息余额：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.interestBalances}"/></td>
-					<td class="col-sm-1 text-right"><h5>本息余额：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.principalInterestBalances}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>本息计算基准日：</h5></td>
-					<td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.bxjsDate, 'yyyy-MM-dd')}"/></td>
-					<td class="col-sm-1 text-right"><h5>付息周期：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentCycle}"/></td>
-					<td class="col-sm-1 text-right"><h5>付息日：</h5></td>
-					<td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.interestPaymentDate, 'yyyy-MM-dd')}"/></td>
-					<td class="col-sm-1 text-right"><h5>付息备注：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentDateRemark}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>融资人名称：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.finalParty}"/></td>
-					<td class="col-sm-1 text-right"><h5>融资协议编号：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.finalAgreementNo}"/></td>
-					<td class="col-sm-1 text-right"><h5>融资期限：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.finalTerm}"/></td>
-					<td class="col-sm-1 text-right"><h5>协议名称：</h5></td>
-					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>投前签署协议</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>协议名称：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
-					<td class="col-sm-1 text-right"><h5>投前签署协议编号：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.agreementNo}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>投资人情况</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>投资人名称：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.investorName}"/></td>
-					<td class="col-sm-1 text-right"><h5>经营情况：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.operation}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>项目状态</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>法律进度：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.legalProgress}"/></td>
-					<td class="col-sm-1 text-right"><h5>项目进度：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.xgsxbljd}"/></td>
-					<td class="col-sm-1 text-right"><h5>项目状态备注：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectStatusComments}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>项目取得证照信息</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>已取得证照类型：</h5></td>
-					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_bgzc_zzlx', sysBgczzck.licenseType)}"/></td>
-					<td class="col-sm-1 text-right"><h5>已取得证照编号：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.licenseNo}"/></td>
-					<td class="col-sm-1 text-right"><h5>取得时间：</h5></td>
-					<td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.acquisitionTime, 'yyyy-MM-dd')}"/></td>
-					<td class="col-sm-1 text-right"><h5>证照信息：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.licenseInformation}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
-					<td class="col-sm-1" colspan="7"><span th:text="${sysBgczzck.projectRemark}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>土地基本信息</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>土地性质：</h5></td>
-					<td class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_tdxz', sysBgczzck.natureLand)}"/></td>
-					<td class="col-sm-1 text-right"><h5>土地性质：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.zoing}"/></td>
-					<td class="col-sm-1 text-right"><h5>剩余使用年限：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.sysynx}"/></td>
-					<td class="col-sm-1 text-right"><h5>土地基本信息容积率：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.tdPlotRatio}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>获得方式：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_zcb_hdfs', sysBgczzck.access)}"/></td>
-					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.comment}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>项目运行中协议签署情况</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>合同概要：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.contractSummary}"/></td>
-					<td class="col-sm-1 text-right"><h5>合同金额：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.contractAmount}"/></td>
-					<td class="col-sm-1 text-right"><h5>签署协议名称：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.projectYxzName}"/></td>
-					<td class="col-sm-1 text-right"><h5>签署协议编号：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.projectYxzNo}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>规划信息</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>土地面积/㎡：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.landArea}"/></td>
-					<td class="col-sm-1 text-right"><h5>规划信息容积率：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.ghPlotRatio}"/></td>
-					<td class="col-sm-1 text-right"><h5>建筑密度：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.buildDensity}"/></td>
-					<td class="col-sm-1 text-right"><h5>绿化面积：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.afforestedArea}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>商业占比：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.businessShare}"/></td>
-					<td class="col-sm-1 text-right"><h5>规划建筑面积：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.planBuildArea}"/></td>
-					<td class="col-sm-1 text-right"><h5>规划建筑面积：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.remarks}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>项目估值</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>土地单价(元/亩)：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.landUnitPrices}"/></td>
-					<td class="col-sm-1 text-right"><h5>建筑估值：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.buildValuation}"/></td>
-					<td class="col-sm-1 text-right"><h5>土地总价：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.landTotalPrices}"/></td>
-					<td class="col-sm-1 text-right"><h5>其它附属物：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.otherAppurtenance}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>估值依据：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.valuationBasis}"/></td>
-					<td class="col-sm-1 text-right"><h5>总价：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.totalPrices}"/></td>
-					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.projectValuationRemarks}"/></td>
-				</tr>
-				<tr>
-					<td colspan="8" style="text-align: center" class="success"><h3>退出计划</h3></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>回现资金或退出资金进度：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.cashBack}"/></td>
-					<td class="col-sm-1 text-right"><h5>回现金额：</h5></td>
-					<td class="col-sm-1"><span th:text="${sysBgczzck.cashBackAmount}"/></td>
-					<td class="col-sm-1 text-right"><h5>还款能力分析：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_bgcz_hknl', sysBgczzck.repaymentCapacity)}"/></td>
-				</tr>
-				<tr>
-					<td class="col-sm-1 text-right"><h5>后期项目建议：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.laterProject}"/></td>
-					<td class="col-sm-1 text-right"><h5>备注：</h5></td>
-					<td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.laterProjectRemark}"/></td>
-				</tr>
-			</table>
-		</form>
-	</div>
-	<th:block th:include="include :: footer" />
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-bgczzck-edit">
+        <table class="table table-border">
+            <input id="projectId" th:field="${sysBgczzck.id}" type="hidden">
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>资产包情况</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>项目名称：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectName}"/></td>
+                <td class="col-sm-1 text-right"><h5>项目状态：</h5></td>
+                <td class="col-sm-1" colspan="3"><span
+                        th:text="${@dict.getLabel('sys_dxdtxm_project_status', sysBgczzck.projectStatus)}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>融资基本情况</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>序号：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.no}"/></td>
+                <td class="col-sm-1 text-right"><h5>SPV名称：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.spvName}"/></td>
+                <td class="col-sm-1 text-right"><h5>城市/地区：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.city}"/></td>
+                <td class="col-sm-1 text-right"><h5>取得成本：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.acquisitionCosts}"/></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>合同本金：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.contractPrincipals}"/></td>
+                <td class="col-sm-1 text-right"><h5>本金余额：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.principalBalances}"/></td>
+                <td class="col-sm-1 text-right"><h5>利息余额：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.interestBalances}"/></td>
+                <td class="col-sm-1 text-right"><h5>本息余额：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.principalInterestBalances}"/></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>本息计算基准日：</h5></td>
+                <td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.bxjsDate, 'yyyy-MM-dd')}"/></td>
+                <td class="col-sm-1 text-right"><h5>付息周期：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentCycle}"/></td>
+                <td class="col-sm-1 text-right"><h5>付息日：</h5></td>
+                <td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.interestPaymentDate, 'yyyy-MM-dd')}"/>
+                </td>
+                <td class="col-sm-1 text-right"><h5>付息备注：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.interestPaymentDateRemark}"/></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>融资人名称：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.finalParty}"/></td>
+                <td class="col-sm-1 text-right"><h5>融资协议编号：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.finalAgreementNo}"/></td>
+                <td class="col-sm-1 text-right"><h5>融资期限：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.finalTerm}"/></td>
+                <td class="col-sm-1 text-right"><h5>协议名称：</h5></td>
+                <td class="col-sm-1"><span th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>投前签署协议</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>协议名称：</h5></td>
+                <td class="col-sm-1" colspan="3"><span
+                        th:text="${@dict.getLabel('sys_bgzc_xymc', sysBgczzck.agreementName)}"/></td>
+                <td class="col-sm-1 text-right"><h5>投前签署协议编号：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.agreementNo}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>投资人情况</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>投资人名称：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.investorName}"/></td>
+                <td class="col-sm-1 text-right"><h5>经营情况：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.operation}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>项目状态</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>法律进度：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.legalProgress}"/></td>
+                <td class="col-sm-1 text-right"><h5>项目进度：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.xgsxbljd}"/></td>
+                <td class="col-sm-1 text-right"><h5>项目状态备注：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.projectStatusComments}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>项目取得证照信息</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>已取得证照类型：</h5></td>
+                <td class="col-sm-1"><span th:text="${@dict.getLabel('sys_bgzc_zzlx', sysBgczzck.licenseType)}"/></td>
+                <td class="col-sm-1 text-right"><h5>已取得证照编号：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.licenseNo}"/></td>
+                <td class="col-sm-1 text-right"><h5>取得时间：</h5></td>
+                <td class="col-sm-1"><span th:text="${#dates.format(sysBgczzck.acquisitionTime, 'yyyy-MM-dd')}"/></td>
+                <td class="col-sm-1 text-right"><h5>证照信息：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.licenseInformation}"/></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>备注：</h5></td>
+                <td class="col-sm-1" colspan="7"><span th:text="${sysBgczzck.projectRemark}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>土地基本信息</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>土地性质：</h5></td>
+                <td class="col-sm-1"><span th:text="${@dict.getLabel('sys_zcb_tdxz', sysBgczzck.natureLand)}"/></td>
+                <td class="col-sm-1 text-right"><h5>土地性质：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.zoing}"/></td>
+                <td class="col-sm-1 text-right"><h5>剩余使用年限：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.sysynx}"/></td>
+                <td class="col-sm-1 text-right"><h5>土地基本信息容积率：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.tdPlotRatio}"/></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>获得方式：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${@dict.getLabel('sys_zcb_hdfs', sysBgczzck.access)}"/>
+                </td>
+                <td class="col-sm-1 text-right"><h5>备注：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.comment}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>项目运行中协议签署情况</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>合同概要：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.contractSummary}"/></td>
+                <td class="col-sm-1 text-right"><h5>合同金额：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.contractAmount}"/></td>
+                <td class="col-sm-1 text-right"><h5>签署协议名称：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.projectYxzName}"/></td>
+                <td class="col-sm-1 text-right"><h5>签署协议编号：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.projectYxzNo}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>规划信息</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>土地面积/㎡：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.landArea}"/></td>
+                <td class="col-sm-1 text-right"><h5>规划信息容积率：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.ghPlotRatio}"/></td>
+                <td class="col-sm-1 text-right"><h5>建筑密度：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.buildDensity}"/></td>
+                <td class="col-sm-1 text-right"><h5>绿化面积：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.afforestedArea}"/></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>商业占比：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.businessShare}"/></td>
+                <td class="col-sm-1 text-right"><h5>规划建筑面积：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.planBuildArea}"/></td>
+                <td class="col-sm-1 text-right"><h5>规划建筑面积：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.remarks}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>项目估值</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>土地单价(元/亩)：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.landUnitPrices}"/></td>
+                <td class="col-sm-1 text-right"><h5>建筑估值：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.buildValuation}"/></td>
+                <td class="col-sm-1 text-right"><h5>土地总价：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.landTotalPrices}"/></td>
+                <td class="col-sm-1 text-right"><h5>其它附属物：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.otherAppurtenance}"/></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>估值依据：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.valuationBasis}"/></td>
+                <td class="col-sm-1 text-right"><h5>总价：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.totalPrices}"/></td>
+                <td class="col-sm-1 text-right"><h5>备注：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.projectValuationRemarks}"/></td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align: center" class="success"><h3>退出计划</h3></td>
+            </tr>
+            <tr>
+                <td class="col-sm-1 text-right"><h5>回现资金或退出资金进度：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.cashBack}"/></td>
+                <td class="col-sm-1 text-right"><h5>回现金额：</h5></td>
+                <td class="col-sm-1"><span th:text="${sysBgczzck.cashBackAmount}"/></td>
+                <td class="col-sm-1 text-right"><h5>还款能力分析：</h5></td>
+                <td class="col-sm-1" colspan="3"><span
+                        th:text="${@dict.getLabel('sys_bgcz_hknl', sysBgczzck.repaymentCapacity)}"/></td>
+            </tr>
+            <tr id="create1">
+                <td class="col-sm-1 text-right"><h5>后期项目建议：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.laterProject}"/></td>
+                <td class="col-sm-1 text-right"><h5>备注：</h5></td>
+                <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.laterProjectRemark}"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+
+<script>
+    $(function () {
+        var projectId = $("#projectId").val();
+        $.ajax({
+            type: 'post',
+            url: ctx + 'system/bgczzck/selectPCustomerById',
+            data: {'id': projectId},
+            dataType: "JSON",
+            success: function (result) {
+                var arr = result.sysPcustomerList;
+                var str = "<tr><td colspan=\"8\" style=\"text-align: center\" class=\"success\"><h3>客户信息</h3></td></tr>";
+                var num = 0;
+                for (var i = 0; i < result.sysPcustomerList.length; i++) {
+                    if ((num % 4) == 0) {
+                        str += '<tr>';
+                    }
+                    str += '<td class=\"col-sm-1 text-right\">';
+                    str += "<h5>";
+                    str += arr[i].customerLable;
+                    str += "：</h5></td>";
+                    str += "<td class=\"col-sm-1\">"
+                    if (true == result.isCreateBy) {
+                        str += "<a href='#' onclick='toCustomer(" + arr[i].customerId + ")'>";
+                    }
+                    str += arr[i].customerName;
+                    if (true == result.isCreateBy) {
+                        str += "</a>";
+                    }
+                    str += "</td>";
+                    num++;
+                    if ((num % 4) == 0) {
+                        str += '</tr>';
+                    }
+                }
+                $("#create1").after(str);
+            }
+        });
+    })
+
+    function toCustomer(customerId) {
+        var url = ctx + 'system/customer/detail/' + customerId;
+        $.modal.opens('客户详情', url);
+    }
+</script>
 </body>
 </html>

@@ -18,10 +18,12 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="projectName" column="project_name"/>
+        <result property="shareUserId" column="share_user_id"/>
+        <result property="shareUserName" column="share_user_name"/>
     </resultMap>
 
     <sql id="selectSysItemVo">
-        select item_id, customer_id, project_id, customer_lable, gmv, trade_date, remarks, del_flag, create_by, create_time, update_by, update_time,project_name from sys_item
+        select item_id, customer_id, project_id, customer_lable, gmv, trade_date, remarks, del_flag, create_by, create_time, update_by, update_time,project_name,share_user_id, share_user_name from sys_item
     </sql>
 
     <select id="selectSysItemList" parameterType="SysItem" resultMap="SysItemResult">
@@ -35,7 +37,11 @@
             <if test="tradeDate != null ">and trade_date = #{tradeDate}</if>
             <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
             <if test="projectName != null">and project_name like concat ('%', #{projectName},'%')</if>
-            <if test="createBy != null and createBy != ''">AND create_by = #{createBy}</if>
+            <if test="createBy != null and createBy != ''">AND ( create_by = #{createBy}
+                <if test="shareUserId != null  and shareUserId != ''">
+                    or share_user_id like concat('%',#{shareUserId},'%') )
+                </if>
+            </if>
         </where>
     </select>
 
@@ -57,6 +63,8 @@
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="projectName != null">project_name,</if>
+            <if test="shareUserId != null">share_user_id,</if>
+            <if test="shareUserName != null">share_user_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerId != null">#{customerId},</if>
@@ -69,6 +77,8 @@
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="projectName != null">#{projectName},</if>
+            <if test="shareUserId != null">#{shareUserId},</if>
+            <if test="shareUserName != null">#{shareUserName},</if>
         </trim>
     </insert>
 
@@ -87,6 +97,8 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="shareUserId != null">share_user_id = #{shareUserId},</if>
+            <if test="shareUserName != null">share_user_name = #{shareUserName},</if>
         </trim>
         where item_id = #{itemId}
     </update>

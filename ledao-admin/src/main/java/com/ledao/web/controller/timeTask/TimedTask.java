@@ -44,6 +44,9 @@ public class TimedTask {
     @Autowired
     private ISysCoverChargeService sysCoverChargeService;
 
+    @Autowired
+    private ISysCustomerService sysCustomerService;
+
     public void timeTask() {
         //应收应付未收服务费消息提醒
         projectUncollectedMoney();
@@ -55,6 +58,18 @@ public class TimedTask {
 
         //投后项目利息自动计算
         updateInterest();
+        //ss();
+    }
+
+
+    public void ss() {
+        SysCustomer sysCustomer = new SysCustomer();
+        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerList(sysCustomer);
+        for (SysCustomer sysCustomer1 : sysCustomerList) {
+            SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer1.getCreateBy());
+            sysCustomer1.setCreator(sysUser.getUserName());
+            sysCustomerService.updateSysCustomer(sysCustomer1);
+        }
     }
 
     public void projectUncollectedMoney() {

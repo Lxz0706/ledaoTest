@@ -441,4 +441,19 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         strLocalImageToBase64 = encoder.encode(Objects.requireNonNull(data));
         return strLocalImageToBase64;
     }
+
+    /**
+     * String 逗号切割
+     *
+     * @param value
+     * @return string
+     */
+    public static String strValue(String value) {
+        String[] strs = value.split(",");
+        StringBuilder sb = new StringBuilder();
+        for (String str : strs) {
+            sb.append(str).append(",");
+        }
+        return strs.length > 0 ? sb.deleteCharAt(sb.length() - 1).toString() : "";
+    }
 }

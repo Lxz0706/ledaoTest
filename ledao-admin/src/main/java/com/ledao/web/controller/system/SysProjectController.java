@@ -643,15 +643,19 @@ public class SysProjectController extends BaseController {
     @PostMapping("/selectPCustomerByProjectId")
     @ResponseBody
     public Map<String, Object> selectPCustomerByProjectId(String projectId) {
-        logger.info("" + projectId);
         Map<String, Object> map = new HashMap<String, Object>();
-        List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(Long.valueOf(projectId));
+        SysPcustomer sysPcustomer1 = new SysPcustomer();
+        sysPcustomer1.setDeptType("thb");
+        sysPcustomer1.setProjectId(Long.valueOf(projectId));
+        // sysPcustomer1.setCreateBy(ShiroUtils.getLoginName());
+        //sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
+        List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(sysPcustomer1);
         for (SysPcustomer sysPcustomer : sysPcustomerList) {
             SysUser currentUser = ShiroUtils.getSysUser();
             if (currentUser != null) {
                 // 如果是超级管理员，则不过滤数据
                 if (!currentUser.isAdmin()) {
-                    if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy())) {
+                    if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy()) || ShiroUtils.getUserId().toString().contains(sysPcustomer.getShareUserId())) {
                         map.put("isCreateBy", true);
                     }
                     List<SysRole> getRoles = currentUser.getRoles();
@@ -660,7 +664,7 @@ public class SysProjectController extends BaseController {
                                 /*|| ShiroUtils.getLoginName().equals(sysProject.getCreateBy())*/ || "admin".equals(sysRole.getRoleKey())) {
                             map.put("sysPcustomerList", sysPcustomerList);
                         } else {
-                            if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy())) {
+                            if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy()) || ShiroUtils.getUserId().toString().contains(sysPcustomer.getShareUserId())) {
                                 map.put("sysPcustomerList", sysPcustomerList);
                             }
                         }

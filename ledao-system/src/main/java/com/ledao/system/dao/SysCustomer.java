@@ -162,6 +162,17 @@ public class SysCustomer extends BaseEntity {
      */
     private Boolean flag = false;
 
+    /**
+     * 共享人
+     */
+    private String shareUserId;
+
+    /**
+     * 共享人名称
+     */
+    private String shareUserName;
+
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -394,6 +405,22 @@ public class SysCustomer extends BaseEntity {
         this.flag = flag;
     }
 
+    public String getShareUserId() {
+        return shareUserId;
+    }
+
+    public void setShareUserId(String shareUserId) {
+        this.shareUserId = shareUserId;
+    }
+
+    public String getShareUserName() {
+        return shareUserName;
+    }
+
+    public void setShareUserName(String shareUserName) {
+        this.shareUserName = shareUserName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -425,6 +452,8 @@ public class SysCustomer extends BaseEntity {
                 .append("agent", getAgent())
                 .append("agentId", getAgentId())
                 .append("customerLable", getCustomerLable())
+                .append("shareUserId", getShareUserId())
+                .append("shareUserName", getShareUserName())
                 .toString();
     }
 }

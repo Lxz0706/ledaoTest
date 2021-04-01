@@ -5,9 +5,8 @@ import java.util.List;
 
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysUser;
-import com.ledao.system.dao.SysZck;
+import com.ledao.system.dao.*;
+import com.ledao.system.service.ISysPcustomerService;
 import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.dao.SysZcb;
 import com.ledao.system.service.ISysZcbService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
@@ -43,6 +41,9 @@ public class SysZcbController extends BaseController {
 
     @Autowired
     private ISysZckService sysZckService;
+
+    @Autowired
+    private ISysPcustomerService sysPcustomerService;
 
     @RequiresPermissions("system:zcb:view")
     @GetMapping()
@@ -86,6 +87,7 @@ public class SysZcbController extends BaseController {
         }
         List<SysZcb> list = this.sysZcbService.selectSysZcbList(sysZcb);
         for (SysZcb sysZcb1 : list) {
+            StringBuffer customerSb = new StringBuffer();
             List<SysZck> zckList = sysZckService.selectSysZckByZcbId(sysZcb1.getId());
             for (SysZck sysZck : zckList) {
                 if (sysZcb1.getCollateralTotal() == null) {
@@ -123,8 +125,17 @@ public class SysZcbController extends BaseController {
                         sysZcb1.setCapValue(sysZck.getCapValues().add(sysZcb1.getCapValue()));
                     }
                 }
-
             }
+            SysPcustomer sysPcustomer1 = new SysPcustomer();
+            sysPcustomer1.setProjectId(sysZcb1.getId());
+            sysPcustomer1.setDeptType("tzb");
+            List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(sysPcustomer1);
+            for (SysPcustomer sysPcustomer : sysPcustomerList) {
+                if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy())) {
+                    customerSb.append(sysPcustomer.getCustomerName()).append(",");
+                }
+            }
+            sysZcb1.setCustomer(StringUtils.strValue(customerSb.toString()));
         }
         return this.getDataTable(list);
     }
@@ -223,7 +234,7 @@ public class SysZcbController extends BaseController {
     @ResponseBody
     public TableDataInfo selectSysZcbList(SysZcb sysZcb) {
         startPage();
-        List<SysZcb> sysZcbList =sysZcbService.selectSysZcbList(sysZcb);
+        List<SysZcb> sysZcbList = sysZcbService.selectSysZcbList(sysZcb);
         return getDataTable(sysZcbList);
     }
 

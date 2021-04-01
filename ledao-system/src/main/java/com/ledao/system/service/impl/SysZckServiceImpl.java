@@ -1,9 +1,7 @@
 package com.ledao.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
@@ -119,18 +117,10 @@ public class SysZckServiceImpl implements ISysZckService {
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
         SysZck sysZck1 = new SysZck();
-        SysZck sysZck2 = new SysZck();
-        List<SysZck> sysZckList = new ArrayList<>();
-        List<SysZck> sysZckList1 = new ArrayList<>();
         for (SysZck zck : zckList) {
             try {
                 if (StringUtils.isNotNull(zck.getProjectName()) && StringUtils.isNotEmpty(zck.getProjectName())
                         && StringUtils.isNotNull(zck.getAssetPackageName()) && StringUtils.isNotEmpty(zck.getAssetPackageName()) && StringUtils.isNotNull(zck.getNo())) {
-                    //父级判断序号是否重复
-                    sysZck2.setAssetPackageName(zck.getAssetPackageName());
-                    sysZck2.setZcbId(zcbId);
-                    sysZck2.setNo(zck.getNo());
-                    sysZckList1 = this.selectSysZckList(sysZck2);
 
                     //获取父级id
                     sysZck1.setAssetPackageName(zck.getAssetPackageName());
@@ -140,25 +130,17 @@ public class SysZckServiceImpl implements ISysZckService {
                     if (zckList2.size() > 0) {
                         zck.setParentId(zckList2.get(0).getId());
                     }
-                    if (StringUtils.isNotNull(zck.getNo())) {
-                        sysZck1.setParentId(zck.getParentId());
-                    }
-                    sysZck1.setNo(zck.getNo());
-                    sysZckList = this.selectSysZckList(sysZck1);
                     zck.setCreateBy(operName);
                     zck.setZcbId(zcbId);
 
-                    if (sysZckList.size() > 0) {
-                        failureNum++;
-                        failureMsg.append("<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 序号或借款人已存在,请核对数据之后再上传");
-                    } /*else if (sysZckList1.size() > 0) {
-                        failureNum++;
-                        failureMsg.append("<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 序号已存在,请核对数据之后再上传");
-                        //return failureMsg.toString();
-                    }*/ else {
+                    boolean flag = nameOrNo(zcbId, zck.getProjectName(), zck.getNo());
+                    if (flag) {
                         this.insertSysZck(zck);
                         successNum++;
                         successMsg.append("<br/>" + successNum + "、借款人名称 " + zck.getProjectName() + " 导入成功");
+                    } else {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + "、借款人名称 " + zck.getProjectName() + " 序号重复,请核对数据之后再上传");
                     }
                 }
 
@@ -170,6 +152,10 @@ public class SysZckServiceImpl implements ISysZckService {
             }
         }
         if (failureNum > 0) {
+            List<SysZck> sysZckList = this.selectSysZckByZcbId(zcbId);
+            for (SysZck sysZck : sysZckList) {
+                deleteSysZckById(sysZck.getId());
+            }
             failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
             throw new BusinessException(failureMsg.toString());
         } else {
@@ -177,6 +163,20 @@ public class SysZckServiceImpl implements ISysZckService {
         }
         return successMsg.toString();
     }
+
+    public Boolean nameOrNo(Long zcbId, String name, Long no) {
+        List<SysZck> list = selectSysZckByZcbId(zcbId);
+        boolean flag = true;
+        if (StringUtils.isNotNull(list) && list.size() > 0) {
+            for (SysZck sysZck : list) {
+                if (!name.equals(sysZck.getProjectName()) && no.equals(sysZck.getNo())) {
+                    flag = false;
+                }
+            }
+        }
+        return flag;
+    }
+
 
     /**
      * 根据资产包ID查询资产库信息

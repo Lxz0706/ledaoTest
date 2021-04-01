@@ -79,6 +79,7 @@ public class SysItemController extends BaseController {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey())) {
                         if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
                                 && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
+                            sysItem.setShareUserId(ShiroUtils.getUserId().toString());
                             sysItem.setCreateBy(ShiroUtils.getLoginName());
                         }
                     }
@@ -184,11 +185,12 @@ public class SysItemController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysItem sysItem) {
-        logger.info("创建人：======" + sysItem.getCreateBy());
         SysCustomer sysCustomer = sysCustomerService.selectSysCustomerById(sysItem.getCustomerId());
         if (StringUtils.isEmpty(sysItem.getCreateBy())) {
             sysItem.setCreateBy(ShiroUtils.getLoginName());
         }
+        sysItem.setShareUserId(sysCustomer.getShareUserId());
+        sysItem.setShareUserName(sysCustomer.getShareUserName());
         int row = sysItemService.insertSysItem(sysItem);
         SysUser currentUser = sysUserService.selectUserByLoginName(sysItem.getCreateBy());
         if (currentUser != null) {
@@ -197,7 +199,7 @@ public class SysItemController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 if (StringUtils.isNotNull(sysItem.getProjectName()) && StringUtils.isNotNull(sysItem.getProjectId())) {
                     for (SysRole sysRole : getRoles) {
-                        if ("investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
+                        if ("investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey()) || "investmentCommon".equals(sysRole.getRoleKey())) {
                             for (String string : sysItem.getProjectId().split(",")) {
                                 SysPcustomer sysPcustomer = new SysPcustomer();
                                 sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());
@@ -207,6 +209,8 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setDeptType("tzb");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
                                 sysPcustomer.setCreateBy(sysItem.getCreateBy());
+                                sysPcustomer.setShareUserId(sysCustomer.getShareUserId());
+                                sysPcustomer.setShareUserName(sysCustomer.getShareUserName());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
                         } else if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey())) {
@@ -219,11 +223,12 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setDeptType("bgcz");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
                                 sysPcustomer.setCreateBy(sysItem.getCreateBy());
+                                sysPcustomer.setShareUserId(sysCustomer.getShareUserId());
+                                sysPcustomer.setShareUserName(sysCustomer.getShareUserName());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
                         } else if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
                             for (String string : sysItem.getProjectId().split(",")) {
-                                logger.info("string:=====" + string);
                                 SysPcustomer sysPcustomer = new SysPcustomer();
                                 sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());
                                 sysPcustomer.setCustomerName(sysCustomer.getContacts());
@@ -232,6 +237,8 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setDeptType("thb");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
                                 sysPcustomer.setCreateBy(sysItem.getCreateBy());
+                                sysPcustomer.setShareUserId(sysCustomer.getShareUserId());
+                                sysPcustomer.setShareUserName(sysCustomer.getShareUserName());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
 

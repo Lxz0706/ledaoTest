@@ -80,6 +80,7 @@ public class SysDocumentController extends BaseController {
     @PostMapping("/listByType")
     @ResponseBody
     public TableDataInfo listByType(SysDocument sysDocument) {
+        startPage();
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
@@ -94,7 +95,7 @@ public class SysDocumentController extends BaseController {
             }
         }
         List<SysDocument> list = sysDocumentService.selectSysDocumentList(sysDocument);
-        for(SysDocument sysDocument1:list){
+        for (SysDocument sysDocument1 : list) {
             SysUser currentUser1 = ShiroUtils.getSysUser();
             if (currentUser1 != null) {
                 // 如果是超级管理员，则不过滤数据
@@ -226,5 +227,10 @@ public class SysDocumentController extends BaseController {
         sysDocument.setDocumentType(getRequest().getParameter("type"));
         List<SysDocument> list = sysDocumentService.selectSysDocumentList(sysDocument);
         return list;
+    }
+
+    @GetMapping("/toList")
+    public String toList() {
+        return prefix + "/document";
     }
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysSubgroupMapper">
+
+    <resultMap type="SysSubgroup" id="SysSubgroupResult">
+        <result property="subgroupId" column="subgroup_id"/>
+        <result property="subgroupName" column="subgroup_name"/>
+        <result property="subgroupUserId" column="subgroup_user_id"/>
+        <result property="subgroupUserName" column="subgroup_user_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysSubgroupVo">
+        select subgroup_id, subgroup_name, subgroup_user_id, subgroup_user_name, create_by, create_time, update_by, update_time from sys_subgroup
+    </sql>
+
+    <select id="selectSysSubgroupList" parameterType="SysSubgroup" resultMap="SysSubgroupResult">
+        <include refid="selectSysSubgroupVo"/>
+        <where>
+            <if test="subgroupName != null  and subgroupName != ''">and subgroup_name = #{subgroupName}</if>
+            <if test="subgroupUserId != null  and subgroupUserId != ''">and subgroup_user_id like concat('%',
+                #{subgroupUserId}, '%')
+            </if>
+            <if test="subgroupUserName != null  and subgroupUserName != ''">and subgroup_user_name like concat('%',
+                #{subgroupUserName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSysSubgroupById" parameterType="Long" resultMap="SysSubgroupResult">
+        <include refid="selectSysSubgroupVo"/>
+        where subgroup_id = #{subgroupId}
+    </select>
+
+    <insert id="insertSysSubgroup" parameterType="SysSubgroup" useGeneratedKeys="true" keyProperty="subgroupId">
+        insert into sys_subgroup
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subgroupName != null">subgroup_name,</if>
+            <if test="subgroupUserId != null">subgroup_user_id,</if>
+            <if test="subgroupUserName != null">subgroup_user_name,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subgroupName != null">#{subgroupName},</if>
+            <if test="subgroupUserId != null">#{subgroupUserId},</if>
+            <if test="subgroupUserName != null">#{subgroupUserName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysSubgroup" parameterType="SysSubgroup">
+        update sys_subgroup
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="subgroupName != null">subgroup_name = #{subgroupName},</if>
+            <if test="subgroupUserId != null">subgroup_user_id = #{subgroupUserId},</if>
+            <if test="subgroupUserName != null">subgroup_user_name = #{subgroupUserName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where subgroup_id = #{subgroupId}
+    </update>
+
+    <delete id="deleteSysSubgroupById" parameterType="Long">
+        delete from sys_subgroup where subgroup_id = #{subgroupId}
+    </delete>
+
+    <delete id="deleteSysSubgroupByIds" parameterType="String">
+        delete from sys_subgroup where subgroup_id in
+        <foreach item="subgroupId" collection="array" open="(" separator="," close=")">
+            #{subgroupId}
+        </foreach>
+    </delete>
+
+</mapper>

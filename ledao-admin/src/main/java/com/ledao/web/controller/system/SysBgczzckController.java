@@ -3,15 +3,17 @@ package com.ledao.web.controller.system;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysProject;
-import com.ledao.system.dao.SysZck;
+import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysDictTypeService;
+import com.ledao.system.service.ISysPcustomerService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.dao.SysBgczzck;
 import com.ledao.system.service.ISysBgczzckService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
@@ -46,7 +47,7 @@ public class SysBgczzckController extends BaseController {
     private ISysBgczzckService sysBgczzckService;
 
     @Autowired
-    private ISysDictTypeService dictTypeService;
+    private ISysPcustomerService sysPcustomerService;
 
     @RequiresPermissions("system:bgczzck:view")
     @GetMapping()
@@ -259,5 +260,41 @@ public class SysBgczzckController extends BaseController {
         mmap.put("selectedProjectIds", selectedProjectIds);
         mmap.put("selectedProjectNames", selectedProjectNames);
         return prefix + "/tree";
+    }
+
+    @PostMapping("/selectPCustomerById")
+    @ResponseBody
+    public Map<String, Object> selectPCustomerById(String id) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        SysPcustomer sysPcustomer1 = new SysPcustomer();
+        sysPcustomer1.setDeptType("bgcz");
+        sysPcustomer1.setProjectId(Long.valueOf(id));
+        List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(sysPcustomer1);
+        for (SysPcustomer sysPcustomer : sysPcustomerList) {
+            SysUser currentUser = ShiroUtils.getSysUser();
+            if (currentUser != null) {
+                // 如果是超级管理员，则不过滤数据
+                if (!currentUser.isAdmin()) {
+                    if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy())) {
+                        map.put("isCreateBy", true);
+                    }
+                    List<SysRole> getRoles = currentUser.getRoles();
+                    for (SysRole sysRole : getRoles) {
+                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
+                                /*|| ShiroUtils.getLoginName().equals(sysProject.getCreateBy())*/ || "admin".equals(sysRole.getRoleKey())) {
+                            map.put("sysPcustomerList", sysPcustomerList);
+                        } else {
+                            if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy())) {
+                                map.put("sysPcustomerList", sysPcustomerList);
+                            }
+                        }
+                    }
+                } else {
+                    map.put("isCreateBy", true);
+                    map.put("sysPcustomerList", sysPcustomerList);
+                }
+            }
+        }
+        return map;
     }
 }

@@ -10,8 +10,10 @@
         <div class="col-sm-12 search-collapse">
             <form id="role-form">
                 <div class="select-list">
-                    <input th:value="*{loginName}" id="loginName" type="hidden">
+                    <input th:value="*{userId}" id="userId" type="hidden">
                     <input th:value="*{userName}" id="userName" type="hidden">
+                    <input name="deptId" th:value="*{deptId}" id="deptId" type="hidden">
+                    <input name="status" value="0" id="status" type="hidden">
                     <ul>
                         <li>
                             登录名称：<input type="text" name="loginName"/>
@@ -44,22 +46,20 @@
         var options = {
             url: prefix + "/list",
             modalName: "用户",
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
             clickToSelect: true,
+            singleSelect: false,
             rememberSelected: true,
             columns: [{
+                field: 'detail',
                 checkbox: true,
                 formatter: function (value, row, index) {
-                    var loginName = $("#loginName").val().split(",");
-                    for (var i = 0; i < loginName.length; i++) {
-                        if (loginName[i] == row.loginName) {
+                    var userId = $("#userId").val().split(",");
+                    console.log("userId:======" + userId);
+                    for (var i = 0; i < userId.length; i++) {
+                        if (userId[i] == row.userId) {
                             return checked = true;
                         }
                     }
-
                 }
             },
                 {
@@ -102,7 +102,9 @@
 
     function submitHandler() {
         var row = selectRows();
-        window.parent.getDeviceBasics(row);
+        var rows = $.table.selectColumns('userId');
+        console.log("rows.length:=========" + rows.length);
+        window.parent.getParentUser(row);
     }
 
     function selectRows() {
@@ -115,10 +117,12 @@
             let selectedRows = table.rememberSelecteds[table.options.id];
             if ($.common.isNotEmpty(selectedRows)) {
                 rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    console.log("rows:=======" + rows.length)
                     return row;
                 });
             }
         }
+        console.log("得到的数量qeqweqweqw：=======" + rows.length);
         //去重
         return uniqueFnByRows(rows);
     }
@@ -127,8 +131,8 @@
         var result = [];
         var hashObj = {};
         for (var i = 0; i < array.length; i++) {
-            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
-                hashObj[array[i]] = true;
+            if (!hashObj[array[i].userId]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i].userId] = true;
                 result.push(array[i]);
             }
         }

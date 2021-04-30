@@ -1,25 +1,35 @@
 package com.ledao.web.controller.system;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.page.PageDao;
 import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
+import com.ledao.common.utils.ListUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
+import com.mysql.cj.xdevapi.JsonArray;
+import org.apache.fop.fo.FObj;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import oshi.util.platform.mac.SysctlUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 客户库Controller
@@ -50,6 +60,9 @@ public class SysCustomerController extends BaseController {
     @Autowired
     private ISysDictDataService sysDictDataService;
 
+    @Autowired
+    private ISysDeptService sysDeptService;
+
     @RequiresPermissions("system:customer:view")
     @GetMapping()
     public String customer() {
@@ -70,15 +83,19 @@ public class SysCustomerController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
-                        if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey()) || "investmentCommon".equals(sysRole.getRoleKey())
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey())) {
+                        /*if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey()) || "investmentCommon".equals(sysRole.getRoleKey())
                                 || "investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
                             String ids = "201,207,208,209";
                             sysCustomer.setDeptIds(ids.split(","));
                         } else {
                             sysCustomer.setShareUserId(ShiroUtils.getUserId().toString());
                             sysCustomer.setCreateBy(ShiroUtils.getLoginName());
-                        }
+                        }*/
+                        sysCustomer.setCreateBy(ShiroUtils.getLoginName());
+                        sysCustomer.setShareUserId(ShiroUtils.getUserId().toString());
+                        sysCustomer.setDeptIds(ShiroUtils.getSysUser().getDeptId().toString().split(","));
                     }
                 }
             }
@@ -109,9 +126,14 @@ public class SysCustomerController extends BaseController {
                     sysCustomer1.setIsAdmin("Y");
                 }
             }
+
+            //将手机号中的，替换成/
+            if (StringUtils.isNotEmpty(sysCustomer1.getContactNumber())) {
+                sysCustomer1.setContactNumber(sysCustomer1.getContactNumber().replace(",", "/"));
+            }
+
             sysItem.setCustomerId(sysCustomer1.getCustomerId());
             List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
-            System.out.print("项目数量：======="+sysItemList.size());
             for (SysItem sysItem1 : sysItemList) {
                 if (StringUtils.isNotNull(sysItem1.getProjectName())) {
                     sb.append(sysItem1.getProjectName()).append(";");
@@ -173,6 +195,9 @@ public class SysCustomerController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysCustomer sysCustomer) {
+        if (StringUtils.isNotEmpty(sysCustomer.getContactNumber())) {
+            sysCustomer.setContactNumber(sysCustomer.getContactNumber().replace(",", "/"));
+        }
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
@@ -215,20 +240,29 @@ public class SysCustomerController extends BaseController {
                 }
             }
         }
-        SysCustomer sysCustomer1 = new SysCustomer();
+        /*SysCustomer sysCustomer1 = new SysCustomer();
         sysCustomer1.setCreator(sysCustomer.getCreator());
         sysCustomer1.setContactNumber(sysCustomer.getContactNumber());
-        sysCustomer1.setWeChatNumber(sysCustomer.getWeChatNumber());
+        sysCustomer1.setWeChatNumber(sysCustomer.getWeChatNumber());*/
         if (StringUtils.isNull(sysCustomer.getDeptId()) && StringUtils.isEmpty(sysCustomer.getDeptName())) {
             sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
             sysCustomer.setDeptName(ShiroUtils.getSysUser().getDept().getDeptName());
         }
-        sysCustomer1.setDeptId(ShiroUtils.getSysUser().getDeptId());
+        if (202 == sysCustomer.getDeptId()) {
+            sysCustomer.setDeptType("投后部");
+        } else if (201 == sysCustomer.getDeptId()) {
+            sysCustomer.setDeptType("投资部");
+        } else {
+            sysCustomer.setDeptType(selectDeptTypeById(sysCustomer.getDeptId()));
+        }
+
+        /*sysCustomer1.setDeptId(ShiroUtils.getSysUser().getDeptId());
         sysCustomer1.setCreateBy(sysCustomer.getCreateBy());
+
         List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerList(sysCustomer1);
         if (sysCustomerList.size() > 0) {
             return error("该用户已存在！");
-        }
+        }*/
         return toAjax(sysCustomerService.insertSysCustomer(sysCustomer));
     }
 
@@ -257,6 +291,10 @@ public class SysCustomerController extends BaseController {
         }
         SysCustomer sysCustomer = sysCustomerService.selectSysCustomerById(customerId);
         mmap.put("sysCustomer", sysCustomer);
+        if (StringUtils.isNotEmpty(sysCustomer.getContactNumber())) {
+            sysCustomer.setContactNumber(sysCustomer.getContactNumber().replace(",", "/"));
+        }
+        mmap.put("nums", sysCustomer.getContactNumber());
         SysDictData sysDictData = new SysDictData();
         sysDictData.setDictType("sys_customer_label");
         Map<String, String> map = new HashMap<>();
@@ -285,6 +323,9 @@ public class SysCustomerController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysCustomer sysCustomer) {
+        if (StringUtils.isNotEmpty(sysCustomer.getContactNumber())) {
+            sysCustomer.setContactNumber(sysCustomer.getContactNumber().replace(",", "/"));
+        }
         List<SysItem> sysItemList = sysItemService.selectItemByCustomerId(sysCustomer.getCustomerId());
         for (SysItem sysItem : sysItemList) {
             sysItem.setShareUserId(sysCustomer.getShareUserId());
@@ -361,8 +402,15 @@ public class SysCustomerController extends BaseController {
     @PostMapping("/checkPhoneUnique")
     @ResponseBody
     public String checkPhoneUnique(SysCustomer sysCustomer) {
-        SysUser currentUser = ShiroUtils.getSysUser();
-        if (currentUser != null) {
+        StringBuffer tzbSb = new StringBuffer();
+        List<SysDept> tzbList = sysDeptService.selectDeptByParentId(201L);
+        for (SysDept sysDept : tzbList) {
+            tzbSb.append(sysDept.getDeptId()).append(",");
+        }
+        if (tzbSb.toString().contains(ShiroUtils.getSysUser().getDeptId().toString())) {
+            sysCustomer.setDeptIds(tzbSb.toString().split(","));
+        }
+        /*if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
@@ -372,8 +420,8 @@ public class SysCustomerController extends BaseController {
                     }
                 }
             }
-        }
-
+        }*/
+        //sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
         return sysCustomerService.checkPhoneUnique(sysCustomer);
     }
 
@@ -383,8 +431,16 @@ public class SysCustomerController extends BaseController {
     @PostMapping("/checkWeChatNumberUnique")
     @ResponseBody
     public String checkWeChatNumberUnique(SysCustomer sysCustomer) {
-        SysUser currentUser = ShiroUtils.getSysUser();
-        if (currentUser != null) {
+        StringBuffer tzbSb = new StringBuffer();
+
+        List<SysDept> tzbList = sysDeptService.selectDeptByParentId(201L);
+        for (SysDept sysDept : tzbList) {
+            tzbSb.append(sysDept.getDeptId()).append(",");
+        }
+        if (tzbSb.toString().contains(ShiroUtils.getSysUser().getDeptId().toString())) {
+            sysCustomer.setDeptIds(tzbSb.toString().split(","));
+        }
+        /*if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
@@ -396,7 +452,8 @@ public class SysCustomerController extends BaseController {
                     }
                 }
             }
-        }
+        }*/
+        //sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
         return sysCustomerService.checkWeChatNumberUnique(sysCustomer);
     }
 
@@ -566,4 +623,141 @@ public class SysCustomerController extends BaseController {
         return toAjax(sysCustomerService.updateSysCustomer(sysCustomer));
     }
 
+    /**
+     * 客户库分析（地区）
+     */
+    @PostMapping("/selectCustomerByCity")
+    @ResponseBody
+    public String selectCustomerByCity(SysCustomer sysCustomer) {
+        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "city");
+        JSONArray jsonArray = new JSONArray();
+        for (SysCustomer sysCustomer1 : sysCustomerList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", sysCustomer1.getCity());
+            jsonObject.put("value", sysCustomer1.getCityCount());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray.toJSONString();
+    }
+
+    /**
+     * 客户库分析（客户标签）
+     */
+    @PostMapping("/selectSysCustomerByCustomerLable")
+    @ResponseBody
+    public String selectSysCustomerByCustomerLable(SysCustomer sysCustomer) {
+        JSONArray jsonArray = new JSONArray();
+        //查询所有数据
+        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "customerLable");
+
+        for (SysCustomer sysCustomer1 : sysCustomerList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", sysCustomer1.getShareholder());
+            jsonObject.put("value", sysCustomer1.getCustomerLableCount());
+            jsonArray.add(jsonObject);
+        }
+        jsonArray.sort(Comparator.comparing(obj -> ((JSONObject) obj).getBigInteger("value")).reversed());
+        return jsonArray.toJSONString();
+    }
+
+    /**
+     * 客户库分析（部门）
+     */
+    @PostMapping("/selectSysCustomerByDept")
+    @ResponseBody
+    public String selectSysCustomerByDept(SysCustomer sysCustomer) {
+        JSONArray jsonArray = new JSONArray();
+        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "deptType");
+        for (SysCustomer sysCustomer1 : sysCustomerList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", sysCustomer1.getDeptType());
+            jsonObject.put("value", sysCustomer1.getCustomerLableCount());
+            jsonArray.add(jsonObject);
+        }
+
+        jsonArray.sort(Comparator.comparing(obj -> ((JSONObject) obj).getString("type")));
+
+        return jsonArray.toJSONString();
+    }
+
+    public String selectDeptTypeById(Long deptId) {
+        String deptType = "";
+        StringBuffer tzbSb = new StringBuffer();
+        StringBuffer thbSb = new StringBuffer();
+        List<SysDept> tzbList = sysDeptService.selectDeptByParentId(201L);
+        List<SysDept> thbList = sysDeptService.selectDeptByParentId(202L);
+
+        for (SysDept sysDept : tzbList) {
+            tzbSb.append(sysDept.getDeptId()).append(",");
+        }
+
+        for (SysDept sysDept : thbList) {
+            thbSb.append(sysDept.getDeptId()).append(",");
+        }
+        if (tzbSb.toString().contains(deptId.toString())) {
+            deptType = "投资部";
+        } else if (thbSb.toString().contains(deptId.toString())) {
+            deptType = "投后部";
+        } else {
+            deptType = "其他部门";
+        }
+        return deptType;
+    }
+
+    /**
+     * 根据部门id查询部门下人员的数据
+     */
+    @PostMapping("/selectSysCustomerByDeptId")
+    @ResponseBody
+    public String selectSysCustomerByDeptId(SysCustomer sysCustomer) {
+        JSONArray jsonArray = new JSONArray();
+        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "dept");
+
+        for (SysCustomer sysCustomer1 : sysCustomerList) {
+            sysCustomer1.setWechatFlag("是");
+            sysCustomer1.setDeptName(sysCustomer1.getDeptName());
+            List<SysCustomer> weChatList = sysCustomerService.selectSysCustomerList(sysCustomer1);
+            List<SysCustomer> customerLableList = sysCustomerService.selectSysCustomerByParam(sysCustomer1, "customerLable");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", sysCustomer1.getDeptType());
+            jsonObject.put("type", sysCustomer1.getDeptName());
+            jsonObject.put("value", sysCustomer1.getCustomerLableCount());
+            jsonObject.put("weChatNum", weChatList.size());
+            Collections.sort(customerLableList, new Comparator<SysCustomer>() {
+                public int compare(SysCustomer o1, SysCustomer o2) {
+                    // 按照学生的年龄进行降序排列
+                    if (o1.getCustomerLableCount() > o2.getCustomerLableCount()) {
+                        return -1;
+                    }
+                    if (o1.getCustomerLableCount() == o2.getCustomerLableCount()) {
+                        return 0;
+                    }
+                    return 1;
+                }
+            });
+            jsonObject.put("list", customerLableList);
+            jsonArray.add(jsonObject);
+        }
+        jsonArray.sort(Comparator.comparing(obj -> ((JSONObject) obj).getString("name")));
+
+        return jsonArray.toString();
+    }
+
+    @PostMapping("/delContactNumber")
+    @ResponseBody
+    public AjaxResult delContactNumber(SysCustomer sysCustomer) {
+        StringBuffer sb = new StringBuffer();
+        SysCustomer sysCustomer1 = sysCustomerService.selectSysCustomerById(sysCustomer.getCustomerId());
+        sysCustomer1.setContactNumber(sysCustomer1.getContactNumber().replace(",", "/"));
+        for (String string : sysCustomer1.getContactNumber().split("/")) {
+            if (!string.equals(sysCustomer.getContactNumber())) {
+                sb.append(string).append(",");
+            }
+        }
+        if (StringUtils.isNotEmpty(sb.toString())) {
+            sysCustomer1.setContactNumber(sb.deleteCharAt(sb.length() - 1).toString());
+        }
+        sysCustomerService.updateSysCustomer(sysCustomer1);
+        return AjaxResult.success();
+    }
 }

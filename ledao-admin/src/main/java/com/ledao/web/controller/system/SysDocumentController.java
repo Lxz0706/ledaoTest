@@ -8,6 +8,7 @@ import com.ledao.common.config.Global;
 import com.ledao.common.core.page.PageDao;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysDeptService;
@@ -222,7 +223,8 @@ public class SysDocumentController extends BaseController {
     @PostMapping("/selectDocumentByType")
     @ResponseBody
     public List<SysDocument> selectDocumentByType() {
-        PageHelper.startPage(0, 10);
+        String orderBy = SqlUtil.escapeOrderBySql(StringUtils.toUnderScoreCase("createTime") + " desc");
+        PageHelper.startPage(0, 10, orderBy);
         SysDocument sysDocument = new SysDocument();
         sysDocument.setDocumentType(getRequest().getParameter("type"));
         List<SysDocument> list = sysDocumentService.selectSysDocumentList(sysDocument);

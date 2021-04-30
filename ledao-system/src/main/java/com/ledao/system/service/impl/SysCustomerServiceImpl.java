@@ -2,6 +2,7 @@ package com.ledao.system.service.impl;
 
 import java.util.List;
 
+import com.ledao.common.annotation.DataScope;
 import com.ledao.common.constant.UserConstants;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
@@ -42,6 +43,7 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
      * @return 客户库
      */
     @Override
+    @DataScope(deptAlias = "t2", userAlias = "t2")
     public List<SysCustomer> selectSysCustomerList(SysCustomer sysCustomer) {
         return sysCustomerMapper.selectSysCustomerList(sysCustomer);
     }
@@ -100,10 +102,15 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
      */
     @Override
     public String checkPhoneUnique(SysCustomer sysCustomer) {
-        Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
-        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer);
-        if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
-            return UserConstants.USER_PHONE_NOT_UNIQUE;
+        for (String string : sysCustomer.getContactNumber().split(",")) {
+            Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
+            SysCustomer sysCustomer1 = new SysCustomer();
+            sysCustomer1.setContactNumber(string);
+            SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer1);
+            if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
+                return UserConstants.USER_PHONE_NOT_UNIQUE;
+            }
+
         }
         return UserConstants.USER_PHONE_UNIQUE;
     }
@@ -117,7 +124,7 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     @Override
     public String checkWeChatNumberUnique(SysCustomer sysCustomer) {
         Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
-        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer);
+        SysCustomer info = sysCustomerMapper.checkWeChatNumberUnique(sysCustomer);
         if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
             return UserConstants.USER_WECHATNUMBER_NOT_UNIQUE;
         }
@@ -133,5 +140,20 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
      */
     public List<SysCustomer> queryAll(SysCustomer sysCustomer) {
         return sysCustomerMapper.queryAll(sysCustomer);
+    }
+
+    /**
+     * 根据传递来的数据进行分组查询
+     */
+    public List<SysCustomer> selectSysCustomerByParam(SysCustomer sysCustomer, String param) {
+        if ("city".equals(param)) {
+            return sysCustomerMapper.selectSysCustomerByCity(sysCustomer);
+        } else if ("customerLable".equals(param)) {
+            return sysCustomerMapper.selectSysCustomerByCustomerLable(sysCustomer);
+        } else if ("deptType".equals(param)) {
+            return sysCustomerMapper.selectSysCustomerByDeptType(sysCustomer);
+        } else {
+            return sysCustomerMapper.selectSysCustomerByDeptId(sysCustomer);
+        }
     }
 }

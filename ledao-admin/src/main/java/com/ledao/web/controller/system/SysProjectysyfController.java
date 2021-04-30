@@ -51,6 +51,11 @@ public class SysProjectysyfController extends BaseController {
     public TableDataInfo list(SysProjectysyf sysProjectysyf) {
         startPage();
         List<SysProjectysyf> list = sysProjectysyfService.selectSysProjectysyfList(sysProjectysyf);
+        for (SysProjectysyf sysProjectysyf1 : list) {
+            if (StringUtils.isNotEmpty(sysProjectysyf1.getImgUrl())) {
+                sysProjectysyf1.setImgFlag(true);
+            }
+        }
         return getDataTable(list);
     }
 

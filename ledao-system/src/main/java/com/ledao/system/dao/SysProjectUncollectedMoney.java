@@ -76,6 +76,11 @@ public class SysProjectUncollectedMoney extends BaseEntity {
 
     private String cw;
 
+    /**
+     * 是否上传附件
+     */
+    private boolean imgFlag = false;
+
     public Long getId() {
         return id;
     }
@@ -170,6 +175,14 @@ public class SysProjectUncollectedMoney extends BaseEntity {
 
     public void setCw(String cw) {
         this.cw = cw;
+    }
+
+    public boolean isImgFlag() {
+        return imgFlag;
+    }
+
+    public void setImgFlag(boolean imgFlag) {
+        this.imgFlag = imgFlag;
     }
 
     @Override

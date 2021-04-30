@@ -76,6 +76,11 @@ public class SysCoverCharge extends BaseEntity {
     private String path;
     private String fileImgName;
 
+    /**
+     * 是否上传附件
+     */
+    private boolean imgFlag = false;
+
     public Long getId() {
         return id;
     }
@@ -178,6 +183,14 @@ public class SysCoverCharge extends BaseEntity {
 
     public void setFileImgName(String fileImgName) {
         this.fileImgName = fileImgName;
+    }
+
+    public boolean isImgFlag() {
+        return imgFlag;
+    }
+
+    public void setImgFlag(boolean imgFlag) {
+        this.imgFlag = imgFlag;
     }
 
     @Override

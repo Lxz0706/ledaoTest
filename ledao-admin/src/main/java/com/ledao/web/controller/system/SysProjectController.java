@@ -855,7 +855,10 @@ public class SysProjectController extends BaseController {
             list = sysProjectService.selectSysProjectByProjectId(projectIds);
             for (SysProject sysProject1 : list) {
                 SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
-                sysProject1.setProjectZckName(sysProjectZck.getZckName());
+                if(StringUtils.isNotEmpty(sysProjectZck.getZckName())){
+                    sysProject1.setProjectZckName(sysProjectZck.getZckName());
+                }
+
 
                 //合同本金
                 List<SysProjectContract> sysProjectContractList = sysProjectContractService.selectSysProjectContractByProjectId(sysProject1.getProjectId().toString());
@@ -1166,78 +1169,6 @@ public class SysProjectController extends BaseController {
             SysProject sysProject = new SysProject();
             sysProject.setProjectZckId(sysProjectZck1.getProjectZckId());
             List<SysProject> sysProjectList = sysProjectService.selectProject(sysProject);
-           /* for (SysProject sysProject1 : sysProjectList) {
-                //根据父级ID查询出子集
-                List<SysProject> sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject1);
-                for (SysProject sysProject2 : sysProjectsList) {
-                    //合同本金
-                    List<SysProjectContract> sysProjectContractList = sysProjectContractService.selectSysProjectContractByProjectId(sysProject2.getProjectId().toString());
-                    for (SysProjectContract sysProjectContract : sysProjectContractList) {
-                        if (sysProject1.getTotalPrice() == null) {
-                            sysProject1.setTotalPrice(new BigDecimal(0));
-                        }
-                        if (sysProjectContract.getCapital() == null) {
-                            sysProjectContract.setCapital(new BigDecimal(0));
-                        }
-                        sysProject1.setTotalPrice(sysProject1.getTotalPrice().add(sysProjectContract.getCapital()));
-                    }
-                    SysProject sysProject3 = sysProjectService.selectSysProjectById(sysProject2.getProjectId());
-                    //本金余额相加
-                    if (sysProject1.getTotalPrincipalBalance() == null) {
-                        sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
-                    }
-                    if (sysProject3.getPrincipalBalance() == null) {
-                        sysProject3.setPrincipalBalance(new BigDecimal(0));
-                    }
-                    sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().add(sysProject3.getPrincipalBalance()));
-                }
-
-                //现金回现
-                List<SysRecapture> sysRecaptureList = sysRecaptureService.selectSysRecaptureByProjectId(sysProject1.getProjectId());
-                for (SysRecapture sysRecapture : sysRecaptureList) {
-                    if (sysProject1.getRecapture() == null) {
-                        sysProject1.setRecapture(new BigDecimal(0));
-                    }
-                    if (sysRecapture.getRecapture() == null) {
-                        sysRecapture.setRecapture(new BigDecimal(0));
-                    }
-                    sysProject1.setRecapture(sysProject1.getRecapture().add(sysRecapture.getRecapture()));
-                }
-
-                if (StringUtils.isNotNull(sysProject1.getRecapture()) && StringUtils.isNotNull(sysProject1.getTotalPrincipalBalance())) {
-                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) > -1) {
-                        //当回现>=总本金余额，本金余额=0，利息余额=利息-（回现-总本金余额）
-                        //利息
-                        if (sysProject1.getTotalInterest() == null) {
-                            sysProject1.setTotalInterest(new BigDecimal(0));
-                        }
-                        if (sysProject1.getTotalInterestBalance() == null) {
-                            sysProject1.setTotalInterestBalance(new BigDecimal(0));
-                        }
-                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest().subtract(sysProject1.getRecapture().subtract(sysProject1.getTotalPrincipalBalance())));
-                        sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
-                    }
-                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) == -1) {
-                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest());
-                        sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().subtract(sysProject1.getRecapture()));
-                    }
-                }
-
-                if (StringUtils.isNull(sysProjectZck1.getTotalCzhx())) {
-                    sysProjectZck1.setTotalCzhx(new BigDecimal(0));
-                }
-                if (StringUtils.isNull(sysProject1.getRecapture())) {
-                    sysProject1.setRecapture(new BigDecimal(0));
-                }
-                sysProjectZck1.setTotalCzhx(sysProjectZck1.getTotalCzhx().add(sysProject1.getRecapture()));
-                if (StringUtils.isNull(sysProjectZck1.getTotalBjye())) {
-                    sysProjectZck1.setTotalBjye(new BigDecimal(0));
-                }
-                if (StringUtils.isNull(sysProject1.getTotalPrincipalBalance())) {
-                    sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
-                }
-                sysProjectZck1.setTotalBjye(sysProjectZck1.getTotalBjye().add(sysProject1.getTotalPrincipalBalance()));
-            }*/
 
             sysProjectZck1.setTotalCount(Long.valueOf(sysProjectList.size()));
 

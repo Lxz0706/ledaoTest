@@ -33,7 +33,7 @@ server:
 # 日志配置
 logging:
   level:
-    com.ledao: error
+    com.ledao.system.mapper: ERROR
     org.springframework: ERROR
 
 # 用户配置
@@ -71,12 +71,18 @@ spring:
     restart:
       # 热部署开关
       enabled: true
-        # activiti 模块
+      # activiti 模块
       # 解决启动报错：class path resource [processes/] cannot be resolved to URL because it does not exist
   activiti:
     check-process-definitions: true
     # 检测身份信息表是否存在
     db-identity-used: false
+
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
 
 # MyBatis
 mybatis:
@@ -86,8 +92,8 @@ mybatis:
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 加载全局的配置文件
   configLocation: classpath:mybatis/mybatis-config.xml
-    #打印sql语句
-    #configuration:
+  #打印sql语句
+  #configuration:
   #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # PageHelper分页插件

@@ -1,91 +1,133 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('流转已收已付列表')" />
+    <th:block th:include="include :: header('流转已收已付列表')"/>
     <style type="text/css">
-        .select-table table{table-layout:fixed;}.select-table .table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-        .form-control{padding:3px 6px 4px;height:30px;}.icheckbox-blue{top:0px;left:6px;}
-        .form-control.select2-hidden-accessible{position:static!important;}.select-table table label.error{position: inherit;}select + label.error{z-index:1;right:40px;}
+        .select-table table {
+            table-layout: fixed;
+        }
+
+        .select-table .table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .form-control {
+            padding: 3px 6px 4px;
+            height: 30px;
+        }
+
+        .icheckbox-blue {
+            top: 0px;
+            left: 6px;
+        }
+
+        .form-control.select2-hidden-accessible {
+            position: static !important;
+        }
+
+        .select-table table label.error {
+            position: inherit;
+        }
+
+        select + label.error {
+            z-index: 1;
+            right: 40px;
+        }
     </style>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <input type="hidden" name="projectManagementId" id="projectManagementId" th:value="*{projectManagementId}"/>
-                            <li class="select-time">
-                                <label>已付时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPaidDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endPaidDate]"/>
-                            </li>
-                            <li>
-                                <label>已付金额：</label>
-                                <input type="text" name="amountPaid"/>
-                            </li>
-                            <li>
-                                <label>资金类型：</label>
-                                <select name="fundType" th:with="type=${@dict.getType('sys_project_ysyf')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" name="projectManagementId" id="projectManagementId"
+                               th:value="*{projectManagementId}"/>
+                        <li class="select-time">
+                            <label>已付时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginPaidDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endPaidDate]"/>
+                        </li>
+                        <li>
+                            <label>已付金额：</label>
+                            <input type="text" name="amountPaid"/>
+                        </li>
+                        <li>
+                            <label>资金类型：</label>
+                            <select name="fundType" th:with="type=${@dict.getType('sys_project_ysyf')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:projectysyf:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:projectysyf:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:projectysyf:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectysyf:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>-->
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:projectysyf:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:projectysyf:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:projectysyf:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectysyf:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:projectysyf:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:projectysyf:remove')}]];
-        var prefix = ctx + "system/projectysyf";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:projectysyf:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:projectysyf:remove')}]];
+    var prefix = ctx + "system/projectysyf";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "流转已收已付",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "流转已收已付",
+            sortName: 'paidDate',
+            sortOrder: 'desc',
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field: 'id', 
+                    field: 'id',
                     title: 'id',
                     visible: false
                 },
                 {
-                    field: 'projectManagementId', 
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'projectManagementId',
                     title: '主表ID',
                     visible: false
                 },
@@ -94,48 +136,58 @@
                     title: '资金类型'
                 },
                 {
-                    field: 'paidDate', 
+                    field: 'paidDate',
                     title: '已付时间'
                 },
                 {
-                    field: 'amountPaid', 
+                    field: 'amountPaid',
                     title: '已付金额',
-                    formatter:function (value,row,index) {
+                    formatter: function (value, row, index) {
                         return $.operate.numberFormatter(value);
+                    }
+                },
+                {
+                    title: '附件上传情况',
+                    formatter: function (value, row, index) {
+                        return imgFlag(row);
+                        //return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
                     }
                 },
                 {
                     field: 'remarks',
                     title: '备注',
-                    formatter: function(value, row, index) {
-                        return $.table.tooltip(value,20);
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 20);
                     }
                 },
                 {
                     field: 'finance',
                     title: '财务确认意见',
-                    formatter: function(value, row, index) {
-                        return $.table.tooltip(value,20);
-                    }
-                },
-                {
-                    title: '附件上传查看',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                        return $.table.tooltip(value, 20);
                     }
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        function add(){
-            var projectManagementId=$("#projectManagementId").val();
-            $.operate.add(projectManagementId);
+    function imgFlag(row) {
+        if (true == row.imgFlag) {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">已上传附件</a>';
+        } else {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">未上传附件</a>';
         }
-        function imgUrl(id){
-            var url = prefix + '/imgUrl/'+id;
-            $.modal.opens("附件上传查看", url);
-        }
-    </script>
+    }
+
+    function add() {
+        var projectManagementId = $("#projectManagementId").val();
+        $.operate.add(projectManagementId);
+    }
+
+    function imgUrl(id) {
+        var url = prefix + '/imgUrl/' + id;
+        $.modal.opens("附件上传情况查看", url);
+    }
+</script>
 </body>
 </html>

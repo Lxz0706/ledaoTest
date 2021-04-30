@@ -81,15 +81,15 @@
                     title: '项目负责人'
                 },
                 {
+                    field: 'investmentDate',
+                    title: '投资日期'
+                },
+                {
                     field: 'investmentAmount',
                     title: '投资金额',
                     formatter: function (value, row, index) {
                         return $.operate.numberFormatter(value);
                     }
-                },
-                {
-                    field: 'investmentDate',
-                    title: '投资日期'
                 },
                 {
                     field: 'amountPaid',
@@ -107,12 +107,12 @@
                 },*/
                 {
                     field: 'recapture',
-                    title: '已回现金额',
+                    title: '最新回现总额',
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(row.recapture) + '</a>';
                     }
                 },
-                {
+                /*{
                     field: 'serviceFee',
                     title: '服务费结算方式',
                     formatter: function (value, row, index) {
@@ -132,6 +132,13 @@
                     formatter: function (value, row, index) {
                         return $.operate.numberFormatter(value);
                     }
+                },*/
+                {
+                    field: 'expectedAmount',
+                    title: '待结算服务费',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="projectType1(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value) + '</a>';
+                    }
                 },
                 {
                     field: 'amountRecovered',
@@ -149,13 +156,6 @@
                         }
                         return count;
                     }*/
-                },
-                {
-                    field: 'expectedAmount',
-                    title: '待结算服务费',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="projectType1(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value) + '</a>';
-                    }
                 },
                 {
                     title: '最新进度情况',

@@ -1,75 +1,86 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('已回收列表')" />
+    <th:block th:include="include :: header('已回收列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <input type="hidden" name="projectManagementId" id="projectManagementId" th:value="*{projectManagementId}"/>
-                            <li>
-                                <label>已回收金额：</label>
-                                <input type="text" name="amountRecovered"/>
-                            </li>
-                            <li class="select-time">
-                                <label>已回收日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginRecoveredDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endRecoveredDate]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" name="projectManagementId" id="projectManagementId"
+                               th:value="*{projectManagementId}"/>
+                        <li>
+                            <label>已回收金额：</label>
+                            <input type="text" name="amountRecovered"/>
+                        </li>
+                        <li class="select-time">
+                            <label>已回收日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginRecoveredDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endRecoveredDate]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <!--<div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:recovered:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:recovered:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:recovered:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:recovered:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>-->
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <!--<div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:recovered:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:recovered:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:recovered:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:recovered:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>-->
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:recovered:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:recovered:remove')}]];
-        var prefix = ctx + "system/recovered";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:recovered:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:recovered:remove')}]];
+    var prefix = ctx + "system/recovered";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "已回收",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "已回收",
+            columns: [{
+                checkbox: true
+            },
                 {
                     field: 'id',
                     title: 'id',
                     visible: false
+                },
+                {
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'projectManagementId',
@@ -79,7 +90,7 @@
                 {
                     field: 'amountRecovered',
                     title: '已回收金额',
-                    formatter:function (value,row,index) {
+                    formatter: function (value, row, index) {
                         return $.operate.numberFormatter(value);
                     }
                 },
@@ -92,14 +103,15 @@
                     title: '备注'
                 },
                 {
-                    field: 'finance',
-                    title: '财务确认意见'
+                    title: '附件上传情况',
+                    formatter: function (value, row, index) {
+                        return imgFlag(row);
+                        //return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                    }
                 },
                 {
-                    title: '附件上传查看',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
-                    }
+                    field: 'finance',
+                    title: '财务确认意见'
                 }/*,
                 {
                     title: '操作',
@@ -111,19 +123,27 @@
                         return actions.join('');
                     }
                 }*/]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        function add(){
-            var projectManagementId=$("#projectManagementId").val();
-            $.operate.add(projectManagementId);
+    function imgFlag(row) {
+        if (true == row.imgFlag) {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">已上传附件</a>';
+        } else {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">未上传附件</a>';
         }
+    }
 
-        function imgUrl(id){
-            var url = prefix + '/imgUrl/'+id;
-            $.modal.opens("附件上传查看", url);
-        }
-    </script>
+    function add() {
+        var projectManagementId = $("#projectManagementId").val();
+        $.operate.add(projectManagementId);
+    }
+
+    function imgUrl(id) {
+        var url = prefix + '/imgUrl/' + id;
+        $.modal.opens("附件上传情况查看", url);
+    }
+</script>
 </body>
 </html>

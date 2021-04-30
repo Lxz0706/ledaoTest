@@ -42,8 +42,8 @@ public class SysAspect {
         if (StringUtils.isNotNull(attributes)) {
             if (StringUtils.isNotNull(attributes.getRequest())) {
                 HttpServletRequest request = attributes.getRequest();
-                logger.info("Aspect_URL:" + request.getRequestURL().toString());
-                logger.info("Aspect_Method:" + request.getMethod());
+               // logger.info("Aspect_URL:" + request.getRequestURL().toString());
+                //logger.info("Aspect_Method:" + request.getMethod());
             }
         }
         //HttpServletRequest request = attributes.getRequest();
@@ -57,6 +57,6 @@ public class SysAspect {
     public void doAfterReturning(Object ret) {
         //处理完请求后，返回内容
         //System.out.println("方法返回值:" + JSON.toJSONString(ret) + ",方法执行时间:" + (System.currentTimeMillis() - startTime.get()));
-        logger.info("方法返回值:" + JSON.toJSONString(ret) + ",方法执行时间:" + (System.currentTimeMillis() - startTime.get()));
+       // logger.info("方法返回值:" + JSON.toJSONString(ret) + ",方法执行时间:" + (System.currentTimeMillis() - startTime.get()));
     }
 }

@@ -2,32 +2,25 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('项目流转表列表')"/>
+    <style>
+        .border {
+            border: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 <div class="container-div">
-    <div class="row">
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectmanagent:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>-->
-        </div>
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table" class="table table-condensed">
-                <!--<thead>
-                <tr>
-                    <th>项目类型</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><a href="javascript:void(0)" onclick="projectType('自投类项目')">自投类项目</a></td>
-                </tr>
-                <tr>
-                    <td><a href="javascript:void(0)" onclick="projectType('服务类项目')">服务类项目</a></td>
-                </tr>
-                </tbody>-->
-            </table>
-        </div>
+    <!-- <div class="row">
+         <div class="btn-group-sm" id="toolbar" role="group">
+             &lt;!&ndash;<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectmanagent:add">
+                 <i class="fa fa-plus"></i> 添加
+             </a>&ndash;&gt;
+         </div>
+         <div class="col-sm-12 select-table table-striped">
+             <table id="bootstrap-table" class="table table-condensed"></table>
+         </div>
+     </div>-->
+    <div class="row" id="showList">
     </div>
 </div>
 <th:block th:include="include :: footer"/>
@@ -38,6 +31,7 @@
     var prefix = ctx + "system/projectmanagent";
 
     $(function () {
+        showList();
         var options = {
             url: prefix + "/lists",
             createUrl: prefix + "/add",
@@ -85,7 +79,8 @@
                     field: 'recapture',
                     title: '总已回现金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);o
+                        return $.operate.numberFormatter(value);
+                        o
                     }
                 },
                 {
@@ -98,6 +93,42 @@
         };
         $.table.init(options);
     });
+
+    function showList() {
+        $.ajax({
+            url: prefix + '/lists',
+            data: {},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var str = '';
+                var row = result.rows;
+                for (const i in row) {
+                    str += "<div class='border col-sm-12' style='height: 32em'>";
+                    if ($.common.isNotEmpty(row[i].projectType)) {
+                        str += '<div class="col-sm-8" style="text-align: center;position: relative;top:10em;"><a href="#" onclick="projectType(\'' + row[i].projectType + '\')" style="font-size: xx-large">' + row[i].projectType + '</a></div>';
+                    }
+                    if ($.common.isNotEmpty(row[i].investmentAmount)) {
+                        str += "<div class='col-sm-4' style='text-align: left;position: relative;top:4.2em;right:13em;line-height: 5.8em;'><lable style='font-weight: bold;font-size: 20px'>总投资金额：" + $.operate.numberFormatter(row[i].investmentAmount) + "</lable><br/>";
+                    }
+                    if ($.common.isNotEmpty(row[i].yzfje)) {
+                        str += "<lable style='font-weight: bold;font-size: 20px'>总已支付金额：" + $.operate.numberFormatter(row[i].yzfje) + "</label><br/>";
+                    }
+                    if ($.common.isNotEmpty(row[i].yhsje)) {
+                        str += "<lable style='font-weight: bold;font-size: 20px'>总已回收金额：" + $.operate.numberFormatter(row[i].yhsje) + "</lable><br/>";
+                    }
+                    if ($.common.isNotEmpty(row[i].recapture)) {
+                        str += "<lable style='font-weight: bold;font-size: 20px'>总已回现金额：" + $.operate.numberFormatter(row[i].recapture) + "</lable><br/>";
+                    }
+                    if ($.common.isNotEmpty(row[i].zyjs)) {
+                        str += "<lable style='font-weight: bold;font-size: 20px'>总已结算金额：" + $.operate.numberFormatter(row[i].zyjs) + "</lable>";
+                    }
+                    str += "</div></div>";
+                }
+                $("#showList").html(str);
+            }
+        })
+    }
 
     function projectType(value) {
         var url = "";

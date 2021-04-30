@@ -34,9 +34,10 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">投资金额（金额必须纯数字，不能有分隔符）：</label>
+                <label class="col-sm-3 control-label">投资金额：</label>
                 <div class="col-sm-8">
                     <input name="investmentAmount" th:field="*{investmentAmount}" class="form-control" type="text">
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>仅限于填写纯数字，不能有分隔符</span>
                 </div>
             </div>
             <div class="form-group">
@@ -64,12 +65,6 @@
                 </div>
             </div>-->
             <div class="form-group">
-                <label class="col-sm-3 control-label">清收金额：</label>
-                <div class="col-sm-8">
-                    <input name="amountRecovered" th:field="*{amountRecovered}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="col-sm-3 control-label">清收日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
@@ -78,6 +73,12 @@
                                th:value="${#dates.format(sysProjectmanagent.recoveryDate, 'yyyy-MM-dd')}"
                                class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">清收金额：</label>
+                <div class="col-sm-8">
+                    <input name="amountRecovered" th:field="*{amountRecovered}" class="form-control" type="text">
                 </div>
             </div>
             <!--<div class="form-group">
@@ -105,12 +106,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">投资金额（金额必须纯数字，不能有分隔符）：</label>
-                <div class="col-sm-8">
-                    <input name="investmentAmount" th:field="*{investmentAmount}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="col-sm-3 control-label">投资日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
@@ -122,9 +117,17 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">目标回现金额（金额必须纯数字，不能有分隔符）：</label>
+                <label class="col-sm-3 control-label">投资金额：</label>
+                <div class="col-sm-8">
+                    <input name="investmentAmount" th:field="*{investmentAmount}" class="form-control" type="text">
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>仅限于填写纯数字，不能有分隔符</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">目标回现金额：</label>
                 <div class="col-sm-8">
                     <input name="amountPaid" class="form-control" type="text" th:field="*{amountPaid}">
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>仅限于填写纯数字，不能有分隔符</span>
                 </div>
             </div>
             <!--<div class="form-group">
@@ -143,6 +146,7 @@
                 <label class="col-sm-3 control-label">服务费结算费率：</label>
                 <div class="col-sm-8">
                     <input name="amountDue" class="form-control" type="text" th:field="*{amountDue}">
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>仅限于填写纯数字，不能有%</span>
                 </div>
             </div>
             <div class="form-group">

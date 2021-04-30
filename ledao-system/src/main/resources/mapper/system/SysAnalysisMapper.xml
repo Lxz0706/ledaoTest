@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysAnalysisMapper">
+
+    <resultMap type="SysAnalysis" id="SysAnalysisResult">
+        <result property="analysisId" column="analysis_id"/>
+        <result property="analysisName" column="analysis_name"/>
+        <result property="remarks" column="remarks"/>
+        <result property="showFlag" column="show_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSysAnalysisVo">
+        select analysis_id, analysis_name, remarks, show_flag, create_by, create_time, update_by, update_time from sys_analysis
+    </sql>
+
+    <select id="selectSysAnalysisList" parameterType="SysAnalysis" resultMap="SysAnalysisResult">
+        <include refid="selectSysAnalysisVo"/>
+        <where>
+            <if test="analysisName != null  and analysisName != ''">and analysis_name = #{analysisName}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="showFlag != null  and showFlag != ''">and show_flag = #{showFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectSysAnalysisById" parameterType="Long" resultMap="SysAnalysisResult">
+        <include refid="selectSysAnalysisVo"/>
+        where analysis_id = #{analysisId}
+    </select>
+
+    <insert id="insertSysAnalysis" parameterType="SysAnalysis" useGeneratedKeys="true" keyProperty="analysisId">
+        insert into sys_analysis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="analysisName != null">analysis_name,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="showFlag != null">show_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="analysisName != null">#{analysisName},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="showFlag != null">#{showFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysAnalysis" parameterType="SysAnalysis">
+        update sys_analysis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="analysisName != null">analysis_name = #{analysisName},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="showFlag != null">show_flag = #{showFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where analysis_id = #{analysisId}
+    </update>
+
+    <delete id="deleteSysAnalysisById" parameterType="Long">
+        delete from sys_analysis where analysis_id = #{analysisId}
+    </delete>
+
+    <delete id="deleteSysAnalysisByIds" parameterType="String">
+        delete from sys_analysis where analysis_id in
+        <foreach item="analysisId" collection="array" open="(" separator="," close=")">
+            #{analysisId}
+        </foreach>
+    </delete>
+
+</mapper>

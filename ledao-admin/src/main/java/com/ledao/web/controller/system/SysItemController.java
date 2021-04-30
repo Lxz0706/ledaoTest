@@ -189,8 +189,9 @@ public class SysItemController extends BaseController {
         if (StringUtils.isEmpty(sysItem.getCreateBy())) {
             sysItem.setCreateBy(ShiroUtils.getLoginName());
         }
-        sysItem.setShareUserId(sysCustomer.getShareUserId());
-        sysItem.setShareUserName(sysCustomer.getShareUserName());
+        SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
+        sysItem.setShareUserId(sysCustomer.getShareUserId() + "," + sysUser.getUserId());
+        sysItem.setShareUserName(sysCustomer.getShareUserName() + "," + sysCustomer.getCreator());
         int row = sysItemService.insertSysItem(sysItem);
         SysUser currentUser = sysUserService.selectUserByLoginName(sysItem.getCreateBy());
         if (currentUser != null) {
@@ -209,8 +210,8 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setDeptType("tzb");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
                                 sysPcustomer.setCreateBy(sysItem.getCreateBy());
-                                sysPcustomer.setShareUserId(sysCustomer.getShareUserId());
-                                sysPcustomer.setShareUserName(sysCustomer.getShareUserName());
+                                sysPcustomer.setShareUserId(sysItem.getShareUserId());
+                                sysPcustomer.setShareUserName(sysItem.getShareUserName());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
                         } else if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey())) {
@@ -223,11 +224,11 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setDeptType("bgcz");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
                                 sysPcustomer.setCreateBy(sysItem.getCreateBy());
-                                sysPcustomer.setShareUserId(sysCustomer.getShareUserId());
-                                sysPcustomer.setShareUserName(sysCustomer.getShareUserName());
+                                sysPcustomer.setShareUserId(sysItem.getShareUserId());
+                                sysPcustomer.setShareUserName(sysItem.getShareUserName());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
-                        } else if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
+                        } else if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey()) || "SJXXB".equals(sysRole.getRoleKey())) {
                             for (String string : sysItem.getProjectId().split(",")) {
                                 SysPcustomer sysPcustomer = new SysPcustomer();
                                 sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());
@@ -237,11 +238,10 @@ public class SysItemController extends BaseController {
                                 sysPcustomer.setDeptType("thb");
                                 sysPcustomer.setProjectId(Long.valueOf(string));
                                 sysPcustomer.setCreateBy(sysItem.getCreateBy());
-                                sysPcustomer.setShareUserId(sysCustomer.getShareUserId());
-                                sysPcustomer.setShareUserName(sysCustomer.getShareUserName());
+                                sysPcustomer.setShareUserId(sysItem.getShareUserId());
+                                sysPcustomer.setShareUserName(sysItem.getShareUserName());
                                 sysPcustomerService.insertSysPcustomer(sysPcustomer);
                             }
-
                         }
                     }
                 }

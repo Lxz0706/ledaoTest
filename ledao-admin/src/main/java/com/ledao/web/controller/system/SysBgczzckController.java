@@ -73,6 +73,7 @@ public class SysBgczzckController extends BaseController {
     @RequiresPermissions("system:bgczzck:list")
     @GetMapping({"/selectByProjectStatus/{projectStatus}"})
     public String selectZcbByAssetStatus(@PathVariable("projectStatus") String projectStatus, ModelMap modelMap) {
+        logger.info("状态：========"+projectStatus);
         modelMap.put("projectStatus", projectStatus);
         return "system/bgczzck/bgczzckList";
     }

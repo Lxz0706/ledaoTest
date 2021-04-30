@@ -265,6 +265,7 @@ var closeItem = function (dataId) {
 
 /** 创建选项卡 */
 function createMenuItem(dataUrl, menuName) {
+    console.log(dataUrl);
     var panelUrl = window.frameElement.getAttribute('data-id');
     dataIndex = $.common.random(1, 100),
         flag = true;
@@ -290,13 +291,12 @@ function createMenuItem(dataUrl, menuName) {
     });
     // 选项卡菜单不存在
     if (flag) {
-        var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '" data-panel="' + panelUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+        var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '" data-panel="' + panelUrl + '" methods="post">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
         $('.menuTab', topWindow).removeClass('active');
 
         // 添加选项卡对应的iframe
-        var str1 = '<iframe class="LeDao_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" data-panel="' + panelUrl + '" seamless></iframe>';
+        var str1 = '<iframe class="LeDao_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" data-panel="' + panelUrl + '" seamless method="post"></iframe>';
         $('.mainContent', topWindow).find('iframe.LeDao_iframe').hide().parents('.mainContent').append(str1);
-
         window.parent.$.modal.loading("数据加载中，请稍后...");
         $('.mainContent iframe:visible', topWindow).load(function () {
             window.parent.$.modal.closeLoading();
@@ -357,5 +357,5 @@ $.ajaxSetup({
 
 function replaceHtml(str) {
     var reTag = /<[^>]+>/g;
-    return str.replace(reTag,'').replace(/&nbsp;/ig, '');
+    return str.replace(reTag, '').replace(/&nbsp;/ig, '');
 }

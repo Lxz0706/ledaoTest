@@ -59,6 +59,8 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "流转服务费",
+            sortName: 'paidDate',
+            sortOrder: 'desc',
             onEditableSave: onEditableSave,
             columns: [{
                 checkbox: true
@@ -67,6 +69,12 @@
                     field: 'id',
                     title: 'id',
                     visible: false
+                },
+                {
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'projectManagementId',
@@ -92,7 +100,15 @@
                     field: 'remarks',
                     title: '备注',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,20);
+                        return $.table.tooltip(value, 20);
+                    }
+                },
+                {
+                    field: 'imgUrl',
+                    title: '附件上传情况',
+                    formatter: function (value, row, index) {
+                        return imgFlag(row);
+                        //return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
                     }
                 },
                 {
@@ -110,17 +126,18 @@
                         type: 'text',
                         title: '财务确认意见'
                     }
-                },
-                {
-                    field: 'imgUrl',
-                    title: '附件上传',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
-                    }
                 }]
         };
         $.table.init(options);
     });
+
+    function imgFlag(row) {
+        if (true == row.imgFlag) {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">已上传附件</a>';
+        } else {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">未上传附件</a>';
+        }
+    }
 
     function add() {
         var projectManagementId = $("#projectManagementId").val();
@@ -130,7 +147,7 @@
     function imgUrl(id) {
         var isCharge = $("#isCharge").val();
         var url = prefix + '/imgUrl/' + id + "/" + isCharge;
-        $.modal.opens("附件上传查看", url);
+        $.modal.opens("附件上传情况查看", url);
     }
 
     function statusTools(row) {

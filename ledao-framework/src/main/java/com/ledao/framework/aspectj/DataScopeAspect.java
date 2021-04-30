@@ -45,9 +45,14 @@ public class DataScopeAspect {
     public static final String DATA_SCOPE_DEPT_AND_CHILD = "4";
 
     /**
+     * 仅本人或者包含本人数据权限
+     */
+    public static final String DATA_SCOPE_SELFORSHARESELF = "5";
+
+    /**
      * 仅本人数据权限
      */
-    public static final String DATA_SCOPE_SELF = "5";
+    public static final String DATA_SCOPE_SELF = "6";
 
     /**
      * 数据权限过滤关键字
@@ -107,6 +112,13 @@ public class DataScopeAspect {
                 sqlString.append(StringUtils.format(
                         " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) )",
                         deptAlias, user.getDeptId(), user.getDeptId()));
+            } else if (DATA_SCOPE_SELFORSHARESELF.equals(dataScope)) {
+                if (StringUtils.isNotBlank(userAlias)) {
+                    sqlString.append(StringUtils.format(" OR {}.create_by ='{}' or {}.user_id like '%{}%' ", userAlias, user.getLoginName(), userAlias, user.getUserId()));
+                } else {
+                    // 数据权限为仅本人且没有userAlias别名不查询任何数据
+                    sqlString.append(" OR 1=0 ");
+                }
             } else if (DATA_SCOPE_SELF.equals(dataScope)) {
                 if (StringUtils.isNotBlank(userAlias)) {
                     sqlString.append(StringUtils.format(" OR {}.user_id = {} ", userAlias, user.getUserId()));
@@ -116,10 +128,9 @@ public class DataScopeAspect {
                 }
             }
         }
-
         if (StringUtils.isNotBlank(sqlString.toString())) {
             BaseEntity baseEntity = (BaseEntity) joinPoint.getArgs()[0];
-            baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
+            baseEntity.getParams().put(DATA_SCOPE, " And (" + sqlString.substring(4) + ")");
         }
     }
 

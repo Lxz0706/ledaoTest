@@ -6,6 +6,8 @@ import java.util.List;
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
@@ -152,7 +154,8 @@ public class SysWorkLogController extends BaseController {
     @PostMapping("/mainWorkLogList")
     @ResponseBody
     public AjaxResult mainWorkLogList() {
-        PageHelper.startPage(0, 10);
+        String orderBy = SqlUtil.escapeOrderBySql(StringUtils.toUnderScoreCase("createTime") + " desc");
+        PageHelper.startPage(0, 10, orderBy);
         SysWorkLog sysWorkLog = new SysWorkLog();
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {

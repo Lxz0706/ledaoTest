@@ -1,6 +1,6 @@
 /**
  * 基于bootstrapTreeTable/bootstrap-table-treegrid修改
- * Copyright (c) 2019 ledao
+ * Copyright (c) 2019 ruoyi
  */
 (function($) {
     "use strict";
@@ -70,7 +70,7 @@
             var $rightToolbar = $('<div class="btn-group tool-right">');
             $toolbar.append($rightToolbar);
             target.parent().before($toolbar);
-            // ledao 是否显示检索信息
+            // ruoyi 是否显示检索信息
             if (options.showSearch) {
                 var $searchBtn = $('<button class="btn btn-default btn-outline" type="button" aria-label="search" title="搜索"><i class="glyphicon glyphicon-search"></i></button>');
                 $rightToolbar.append($searchBtn);
@@ -128,12 +128,12 @@
                     target.hasSelectItem = true;
                     $th = $('<th style="width:36px"></th>');
                 } else {
-                    $th = $('<th style="' + ((column.width) ? ('width:' + column.width) : '') + '" class="' + column.field + '_cls"></th>');
+                    $th = $('<th style="' + ((column.width) ? ('width:' + column.width + ((column.widthUnit) ? column.widthUnit : 'px')) : '') + '" class="' + column.field + '_cls"></th>');
                 }
                 if((!target.isFixWidth)&& column.width){
                     target.isFixWidth = column.width.indexOf("px")>-1?true:false;
                 }
-                $th.text(column.title);
+                $th.html(column.title);
                 $thr.append($th);
             });
             var $thead = $('<thead class="treetable-thead"></thead>');
@@ -334,7 +334,7 @@
                 } else {
                     var $td = $('<td name="' + column.field + '" class="' + column.field + '_cls"></td>');
                     if(column.width){
-                        $td.css("width",column.width);
+                        $td.css("width",column.width + (column.widthUnit ? column.widthUnit : 'px'));
                     }
                     if(column.align){
                         $td.css("text-align",column.align);
@@ -604,7 +604,7 @@
                 $input.prop("checked", '');
             }
         }
-        // ledao 解析数据，支持多层级访问
+        // ruoyi 解析数据，支持多层级访问
         var getItemField = function (item, field) {
             var value = item;
 
@@ -617,7 +617,7 @@
             }
             return value;
         };
-        // ledao 发起对目标(target)函数的调用
+        // ruoyi 发起对目标(target)函数的调用
         var calculateObjectValue = function (self, name, args, defaultValue) {
             var func = name;
 

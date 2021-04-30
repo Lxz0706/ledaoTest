@@ -90,6 +90,8 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "流转服务费",
+            sortName: 'paidDate',
+            sortOrder: 'desc',
             columns: [{
                 checkbox: true
             },
@@ -97,6 +99,12 @@
                     field: 'id',
                     title: 'id',
                     visible: false
+                },
+                {
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'projectManagementId',
@@ -110,8 +118,8 @@
                 {
                     field: 'amountPaid',
                     title: '金额',
-                    formatter:function (value,row,index) {
-                        return  $.operate.numberFormatter(value);
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value);
                     }
                 },
                 {
@@ -119,28 +127,37 @@
                     title: '时间'
                 },
                 {
+                    title: '附件上传情况',
+                    formatter: function (value, row, index) {
+                        return imgFlag(row);
+                        // return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                    }
+                },
+                {
                     field: 'remarks',
                     title: '备注',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,20);
+                        return $.table.tooltip(value, 20);
                     }
                 },
                 {
                     field: 'finance',
                     title: '财务确认意见',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(value,20);
-                    }
-                },
-                {
-                    title: '附件上传查看',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
+                        return $.table.tooltip(value, 20);
                     }
                 }]
         };
         $.table.init(options);
     });
+
+    function imgFlag(row) {
+        if (true == row.imgFlag) {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">已上传附件</a>';
+        } else {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">未上传附件</a>';
+        }
+    }
 
     function add() {
         var projectManagementId = $("#projectManagementId").val();
@@ -150,7 +167,7 @@
     function imgUrl(id) {
         var isCharge = $("#isCharge").val();
         var url = prefix + '/imgUrl1/' + id + "/" + isCharge;
-        $.modal.opens("附件上传查看", url);
+        $.modal.opens("附件上传情况查看", url);
     }
 
     function statusTools(row) {

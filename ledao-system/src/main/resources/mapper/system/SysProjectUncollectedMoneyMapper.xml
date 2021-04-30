@@ -44,7 +44,7 @@
             <if test="state != null  and state != ''">and state = #{state}</if>
             <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
         </where>
-        ORDER BY state
+        ORDER BY state,time DESC
     </select>
 
     <select id="selectSysProjectUncollectedMoneyById" parameterType="Long"

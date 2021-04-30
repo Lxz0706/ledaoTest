@@ -52,6 +52,11 @@ public class SysProjectRecoveredController extends BaseController {
     public TableDataInfo list(SysProjectRecovered sysProjectRecovered) {
         startPage();
         List<SysProjectRecovered> list = sysProjectRecoveredService.selectSysProjectRecoveredList(sysProjectRecovered);
+        for (SysProjectRecovered sysProjectRecovered1 : list) {
+            if (StringUtils.isNotEmpty(sysProjectRecovered1.getImgUrl())) {
+                sysProjectRecovered1.setImgFlag(true);
+            }
+        }
         return getDataTable(list);
     }
 

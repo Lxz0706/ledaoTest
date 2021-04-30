@@ -51,6 +51,12 @@ public class SysSubgroupController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysSubgroup sysSubgroup) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                sysSubgroup.setCreateBy(ShiroUtils.getLoginName());
+            }
+        }
         List<SysSubgroup> list = sysSubgroupService.selectSysSubgroupList(sysSubgroup);
         return getDataTable(list);
     }
@@ -124,6 +130,12 @@ public class SysSubgroupController extends BaseController {
     @GetMapping("/groupList")
     @ResponseBody
     public String groupList(SysSubgroup sysSubgroup) {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                sysSubgroup.setCreateBy(ShiroUtils.getLoginName());
+            }
+        }
         List<SysSubgroup> list = sysSubgroupService.selectSysSubgroupList(sysSubgroup);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("success", true);

@@ -57,7 +57,11 @@
             <td><span th:text="${sysCustomer.resources}"/></td>
         </tr>
         <tr>
-            <td><h5>分享人：</h5></td>
+            <td><h5>备注：</h5></td>
+            <td><span th:text="${sysCustomer.remarks}"/></td>
+        </tr>
+        <tr>
+            <td><h5>共享人：</h5></td>
             <td><span th:text="${sysCustomer.shareUserName}"/></td>
         </tr>
         <tr id="selectWeChat">
@@ -69,7 +73,7 @@
             <td class="col-sm-3" colspan="5"><span th:text="${sysCustomer.reason}"/></td>
         </tr>
         <tr id="creator">
-            <td class="col-sm-3"><h5>提交者：</h5></td>
+            <td class="col-sm-3"><h5>实际提交者：</h5></td>
             <td class="col-sm-3"><span th:text="${sysCustomer.creator}"/></td>
         </tr>
     </table>

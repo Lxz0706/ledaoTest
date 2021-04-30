@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户库列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: bootstrap-editable-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>创建时间：</label><input type="text" class="time-input" id="startTime"
+                                                       placeholder="开始时间" name="beginTime"/>
+                            <span>-</span><input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                                 name="endTime"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="jump()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-6">
+                <div class="ibox-title">
+                    <h5>客户标签分布情况</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="customerLableAnalysis"></div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox-title">
+                    <h5>地区分布情况</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="cityAnalysis"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12" id="parent">
+            <div class="col-xs-6">
+                <div class="ibox-title">
+                    <h5>部门分布情况</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="deptAnalysis"></div>
+                </div>
+            </div>
+            <div class="col-xs-6" id="person">
+                <div class="ibox-title">
+                    <h5>人员分布情况</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="personAnalysis"></div>
+                    <div id="other"></div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col-sm-6">
+            <div class="ibox-content" id="container"></div>
+        </div>-->
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script src="https://unpkg.com/@antv/data-set"></script>
+<script src="https://gw.alipayobjects.com/os/lib/antv/g2/4.1.12/dist/g2.min.js"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "system/customer";
+    $(function () {
+        cityAnalysis();
+        customerLableAnalysis();
+        deptAnalysis();
+        customerForPersonByDeptId();
+        //other();
+    });
+
+
+    function jump() {
+        const startTime = $("#startTime").val();
+        const endTime = $("#endTime").val();
+        var data = {'params[beginTime]': startTime, 'params[endTime]': endTime};
+        $("#cityAnalysis").html("");
+        $("#customerLableAnalysis").html("");
+        $("#deptAnalysis").html("");
+        $("#personAnalysis").html("");
+        cityAnalysis(data);
+        customerLableAnalysis(data);
+        deptAnalysis(data);
+        customerForPersonByDeptId(data);
+    }
+
+    function maxNum(result) {
+        var list = new Array();
+        for (var i in result) {
+            list.push(result[i].value);
+        }
+        list.sort(function (num1, num2) {
+            return num1 - num2;
+        })
+        var maxcnt = eval(list[list.length - 1]);
+        return maxcnt;
+    }
+
+    //根据所属地区分析
+    function cityAnalysis(data) {
+        $.ajax({
+            url: ctx + 'system/customer/selectCustomerByCity',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var list = new Array();
+                for (var i in result) {
+                    list.push(result[i].value);
+                }
+                list.sort(function (num1, num2) {
+                    return num1 - num2;
+                })
+                var maxcnt = eval(list[list.length - 1]);
+
+                const chart = new G2.Chart({
+                    container: 'cityAnalysis',
+                    autoFit: true,
+                    height: 500,
+                });
+
+                chart.data(result);
+                chart.scale({
+                    value: {
+                        max: maxcnt + 50,
+                        min: 0,
+                        alias: '总数'
+                    },
+                });
+                chart.axis('type', {
+                    title: null,
+                    tickLine: null,
+                    line: null,
+                });
+
+                chart.axis('value', {
+                    label: null,
+                    title: {
+                        offset: 5,
+                        style: {
+                            fontSize: 13,
+                        },
+                    },
+                });
+                chart.legend(false);
+                chart.coordinate().transpose();
+                chart.interval().position('type*value').size(15).color('value', '#76C893')
+                    .label('value', {
+                        style: {
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                        },
+                        offset: 10,
+                    });
+                chart.interaction('element-active');
+                chart.render();
+
+            }
+        });
+    }
+
+    //根据客户标签分析
+    function customerLableAnalysis(data) {
+        $.ajax({
+            url: ctx + 'system/customer/selectSysCustomerByCustomerLable',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                const chart = new G2.Chart({
+                    container: 'customerLableAnalysis',
+                    autoFit: true,
+                    height: 500,
+                });
+
+                chart.data(result);
+                chart.scale('value', {
+                    alias: '位',
+                    nice: true
+                });
+
+                chart.axis('type', {
+                    tickLine: {
+                        alignTick: false,
+                    }, label: {
+                        style: {
+                            fontSize: 13,
+                        }
+                    }
+                });
+                chart.axis('value', false);
+
+                chart.tooltip({
+                    showMarkers: true,
+                });
+
+                chart.interaction('element-active');
+
+                chart.legend(false);
+
+                chart.interval().position('type*value').color('value', '#34A0A4').size(25);
+                chart.interaction('active-region');
+
+                // 添加文本标注
+                result.forEach((item) => {
+                    chart
+                        .annotation()
+                        .text({
+                            position: [item.type, item.value],
+                            content: item.value,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: 13,
+                                textAlign: 'center',
+                            },
+                            offsetY: -30,
+                        })
+                        .text({
+                            position: [item.type, item.value],
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: 13,
+                                textAlign: 'center',
+                            },
+                            offsetY: -12,
+                        });
+                });
+                chart.render();
+            }
+        })
+    }
+
+    //根据所在部门分析
+    function deptAnalysis(data) {
+        $.ajax({
+            url: ctx + 'system/customer/selectSysCustomerByDept',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                const colorMap = {
+                    其他部门: '#34A0A4',
+                    投资部: '#52B69A',
+                    投后部: '#76C893',
+                };
+
+                const ds = new DataSet();
+                const dv = ds.createView();
+                dv.source(result).transform({
+                    type: 'percent',
+                    field: 'value',
+                    dimension: 'type',
+                    as: 'percent',
+                });
+
+                const chart = new G2.Chart({
+                    container: 'deptAnalysis',
+                    autoFit: true,
+                    height: 478,
+                });
+                chart.data(dv.rows);
+                chart.legend('type', {
+                    style: {
+                        fontSize: 13,
+                        fill: '#8d8d8d',
+                    }
+                });
+                chart.coordinate('theta', {
+                    // radius: 0.9,
+                    // innerRadius: 0.3, //添加可以显示中间的圆环 数值大小可以控制中间圆环的大小
+                });
+                chart.tooltip({
+                    showMarkers: false
+                });
+                chart
+                    .interval()
+                    .adjust('stack')
+                    .position('value')
+                    .color('type', (val) => colorMap[val])
+                    //.style({opacity: 0.4})
+                    .label('type', {
+                        offset: -5,
+                        style: {
+                            fontFamily: 'Roboto-Bold',
+                            fill: 'white',
+                        },
+                        content: (obj) => {
+                            return obj.type + '：' + obj.value + '人';
+                        },
+                    })
+                    .tooltip('type*value', function (type, value) {
+                        return {
+                            name: type,
+                            value: value + " 人"
+                        }
+                    });
+
+                chart.on('interval:click', ev => {
+                    const data = ev.data;
+                    if (data) {
+                        const startTime = $("#startTime").val();
+                        const endTime = $("#endTime").val();
+                        var data1 = {
+                            'params[beginTime]': startTime,
+                            'params[endTime]': endTime,
+                            'deptType': data.data.type
+                        };
+                        $("#personAnalysis").html("");
+                        customerForPersonByDeptId(data1);
+                    }
+                });
+                chart.interaction('element-active')
+                chart.render();
+            }
+        })
+    }
+
+    //每个部门分析
+    function customerForPersonByDeptId(data) {
+        $.ajax({
+            url: ctx + 'system/customer/selectSysCustomerByDeptId',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                const colorMap = ['#184E77',
+                    '#D9ED92', '#B5E48C',
+                    '#99D98C', '#76C893',
+                    '#52B69A', '#168AAD',
+                    '#1A759F', '#34A0A4'];//投后部经理，数据信息部
+                //result.sort((a, b) => b.name.localeCompare(a.name, 'zh')); //z~a 排序
+
+                /* this.tableData = res.sort(function (a, b) {
+                     if (a.name === b.name) {
+                         return a.type.localeCompare(b.type, 'zh')//循环如果a,b客户名称相同，则比较这2个产品名称
+                     }
+                 })*/
+
+                const chart = new G2.Chart({
+                    container: 'personAnalysis',
+                    autoFit: true,
+                    height: 478,
+                });
+                chart.data(result);
+                chart.legend('type', {
+                    style: {
+                        fontSize: 13,
+                        fill: '#8d8d8d',
+                    }
+                });
+                chart.coordinate('theta', {
+                    // radius: 0.9,
+                    // innerRadius: 0.3, //添加可以显示中间的圆环 数值大小可以控制中间圆环的大小
+                });
+                chart.tooltip({
+                    showTitle: false,
+                    containerTpl: '<div class="g2-tooltip"><div class="g2-tooltip-title">{name}</div>' + '<ul class="g2-tooltip-list"></ul>' + '</div>',
+                    itemTpl: '<li class="g2-tooltip-list-item">{name}'
+                        + '<span class="g2-tooltip-marker" style="width:0px;height:0px;border-radius:50%;display:inline-block;margin-right:8px;"></span>'
+                        + '{value}'
+                        + '<span class="g2-tooltip-value"></span>'
+                        + '</li>',
+                });
+                chart.interval().adjust('stack')
+                    .position('value')
+                    .color('type', colorMap)
+                    .label('type', {
+                        offset: -5,
+                        style: {
+                            fontFamily: 'Roboto-Bold',
+                            fill: 'white',
+                        },
+                        content: (obj) => {
+                            return obj.type + '：' + obj.value + '人';
+                        },
+                    })
+                    .tooltip('type*list*weChatNum', function (type, list, weChatNum) {
+                        var str = "";
+                        for (var i in list) {
+                            str += '<div><h5>' + list[i].shareholder + ":" + list[i].customerLableCount + "人</h5></div>";
+                        }
+                        return {
+                            name: '<div><h4>' + type + '客户构成<h5></div>',
+                            value: str + '<h5>已添加到公司微信：' + weChatNum + '人</h5>'
+                        }
+                    })
+
+                chart.interaction('element-active')
+                chart.render();
+            }
+        })
+    }
+</script>
+</body>
+</html>

@@ -172,6 +172,28 @@ public class SysCustomer extends BaseEntity {
      */
     private String shareUserName;
 
+    /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
+     * 地区总数
+     */
+    private Long cityCount;
+
+    /**
+     * 客户标签总数
+     */
+    private Long customerLableCount;
+
+    private String parentDeptName;
+
+    private String deptType;
+
+    private Long weChatNum;
+
+    private String shareholder;
 
     public Long getCustomerId() {
         return customerId;
@@ -421,6 +443,62 @@ public class SysCustomer extends BaseEntity {
         this.shareUserName = shareUserName;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public Long getCityCount() {
+        return cityCount;
+    }
+
+    public void setCityCount(Long cityCount) {
+        this.cityCount = cityCount;
+    }
+
+    public Long getCustomerLableCount() {
+        return customerLableCount;
+    }
+
+    public void setCustomerLableCount(Long customerLableCount) {
+        this.customerLableCount = customerLableCount;
+    }
+
+    public String getParentDeptName() {
+        return parentDeptName;
+    }
+
+    public void setParentDeptName(String parentDeptName) {
+        this.parentDeptName = parentDeptName;
+    }
+
+    public String getDeptType() {
+        return deptType;
+    }
+
+    public void setDeptType(String deptType) {
+        this.deptType = deptType;
+    }
+
+    public Long getWeChatNum() {
+        return weChatNum;
+    }
+
+    public void setWeChatNum(Long weChatNum) {
+        this.weChatNum = weChatNum;
+    }
+
+    public String getShareholder() {
+        return shareholder;
+    }
+
+    public void setShareholder(String shareholder) {
+        this.shareholder = shareholder;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -454,6 +532,10 @@ public class SysCustomer extends BaseEntity {
                 .append("customerLable", getCustomerLable())
                 .append("shareUserId", getShareUserId())
                 .append("shareUserName", getShareUserName())
+                .append("remarks", getRemarks())
+                .append("cityCount", getCityCount())
+                .append("customerLableCount", getCustomerLableCount())
+                .append("deptType", getDeptType())
                 .toString();
     }
 }

@@ -6,6 +6,7 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <input th:value="*{isAdmin}" type="hidden" id="isAdmin">
+    <input th:value="*{nums}" id="nums" type="hidden">
     <form class="form-horizontal m" id="form-customer-edit" th:object="${sysCustomer}">
         <input name="customerId" th:field="*{customerId}" type="hidden">
         <!--<div class="form-group">
@@ -17,17 +18,15 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">联系人：</label>
             <div class="col-sm-8">
-                <input name="contacts" th:field="*{contacts}" class="form-control" type="text" required
-                       readonly="readonly">
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写个人全名，如无全名则写职务。如：钟总</span>
+                <input name="contacts" th:field="*{contacts}" class="form-control" type="text" required>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>仅限填写个人全名，如无则写职务/先生。如：钟总/先生</span>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">联系电话：</label>
-            <div class="col-sm-8">
-                <input name="contactNumber" th:field="*{contactNumber}" class="form-control" type="text"
-                       readonly="readonly">
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限手机号，多个手机号之间用“/”分隔</span>
+            <div class="col-sm-8" id="addNum">
+                <!--<input name="contactNumber" th:field="*{contactNumber}" class="form-control" type="text">-->
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>仅限手机号，多个手机号之间用“/”分隔</span>
             </div>
         </div>
         <div class="form-group">
@@ -35,14 +34,14 @@
             <div class="col-sm-8">
                 <input name="weChatNumber" id="weChatNumber" th:field="*{weChatNumber}" class="form-control" type="text"
                        readonly="readonly">
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：请填写正确的微信号</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>请填写正确的微信号</span>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">所属机构：</label>
             <div class="col-sm-8">
                 <input name="customerName" th:field="*{customerName}" class="form-control" type="text">
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>备注：仅限填写机构全称</span>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>仅限填写机构全称</span>
                 <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>例如：江苏乐道胡巴投资管理有限公司或江苏苏湖律师事务所</span>
             </div>
         </div>
@@ -55,13 +54,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">客户标签：</label>
             <div class="col-sm-8">
-                <label th:each="role:${roles}" class="check-box">
+                <label th:each="role:${roles}" class="checkbox">
                     <input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}"
                            th:checked="${role.flag}" th:disabled="${role.status == '1'}">
                 </label>
-                <label th:each="type:${types}" class="check-box">
+                <label th:each="type:${types}" class="checkbox">
                     <input name="customerLable" type="checkbox" th:value="${type.dictValue}" th:text="${type.dictValue}"
-                           th:checked="${type.flag}" th:disabled="${type.status == '1'}">
+                           th:checked="${type.flag}" th:disabled="${type.status == '1'}" required>
                 </label>
             </div>
         </div>
@@ -92,6 +91,12 @@
             <label class="col-sm-3 control-label">资源优势：</label>
             <div class="col-sm-8">
                 <input name="resources" th:field="*{resources}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="remarks" th:field="*{remarks}" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
@@ -130,7 +135,7 @@
             </div>
         </div>
         <div class="form-group" id="agentUser">
-            <label class="col-sm-3 control-label">提交者：</label>
+            <label class="col-sm-3 control-label">实际提交者：</label>
             <div class="col-sm-8">
                 <input class="form-control" type="hidden" name="createBy" id="createBy" th:field="*{createBy}">
                 <input class="form-control" type="text" name="creator" onclick="selectUser()" id="creator"
@@ -139,6 +144,14 @@
         </div>
     </form>
 </div>
+<!--<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+    </div>
+</div>-->
 <th:block th:include="include :: footer"/>
 <script src="/js/plugins/distpicker/distpicker.data.js"></script>
 <script src="/js/plugins/distpicker/distpicker.js"></script>
@@ -170,30 +183,6 @@
         }
     }
 
-    /*用户管理-新增-选择部门树*/
-    function selectDeptTree() {
-        var deptId = $("#deptId").val();
-        var deptId = $.common.isEmpty(deptId) ? "100" : $("#deptId").val();
-        var url = ctx + "system/dept/selectDeptTree/" + deptId;
-        var options = {
-            title: '选择部门',
-            width: "380",
-            url: url,
-            callBack: doSubmit
-        };
-        $.modal.openOptions(options);
-    }
-
-    function doSubmit(index, layero) {
-        var tree = layero.find("iframe")[0].contentWindow.$._tree;
-        if ($.tree.notAllowParents(tree)) {
-            var body = layer.getChildFrame('body', index);
-            $("#deptId").val(body.find('#treeId').val());
-            $("#deptName").val(body.find('#treeName').val());
-            layer.close(index);
-        }
-    }
-
     $(function () {
         var option = {
             autoSelect: true,
@@ -203,18 +192,187 @@
             district: $("#county1").val()
         }
         $("#address").distpicker(option);
+        var nums = $("#nums").val();
+        var sts = nums.split("/");
+        var str = "";
+        for (i = 0; i < sts.length; i++) {
+            if ($.common.isNotEmpty(sts[i])) {
+                str += '<p><input name="contactNumber" value="' + sts[i] + '" class="form-control" type="text" readonly>' +
+                    '<button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delControlNumber" onclick="delete(this)"><span class="glyphicon glyphicon-minus"></span></button></p>';
+
+            }
+        }
+        str += '<button class="btn btn-info" type="button" title="新增" id="addSaltIpGrpBtn" onclick="addSaltIpGrp(this)">' +
+            '                    <span class="glyphicon glyphicon-plus"></span></button>';
+        $("#addNum").html(str);
+    });
+
+    function addSaltIpGrp(obj) {
+        html = '<p><input name="contactNumber" id="contactNumber" class="form-control" type="text">' +
+            '<button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delControlNumber" onclick="delete(this)"><span class="glyphicon glyphicon-minus"></span></button></p>';
+        obj.insertAdjacentHTML('beforebegin', html)
+    };
+    $(document).on('click', '#delControlNumber', function () {
+        var id = $("#customerId").val();
+        var contactNumber = $(this).prev().val();
+        var data = {'customerId': id, 'contactNumber': contactNumber};
+        $.modal.confirm("确认要删除该条手机号吗?", function () {
+            $.ajax({
+                url: prefix + '/delContactNumber',
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    $.modal.msgSuccess("删除成功");
+                    $(this).parent().remove();
+                    location.reload();
+                    window.parent.$.table.refresh();
+                }
+            })
+        });
     })
 
     var prefix = ctx + "system/customer";
-    $("#form-customer-edit").validate({
-        focusCleanup: true
-    });
 
     function submitHandler() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/edit", $('#form-customer-edit').serialize());
         }
     }
+
+    $("#form-customer-edit").validate({
+        onkeyup: false,
+        rules: {
+            contactNumber: {
+                //required: true,
+                phone: []
+            },
+            customerLable: {
+                required: true
+            },
+        },
+        focusCleanup: true,
+        messages: {
+            customerLable: {
+                required: "请至少勾选一项！"
+            },
+        },
+        errorPlacement: function (error, element) {  //指定错误信息位置
+            if (element.is(':radio') || element.is(':checkbox')) {  //如果是radio或checkbox
+                var eid = element.attr('name');  //获取元素的name属性
+                error.appendTo(element.parent());  //将错误信息添加当前元素的父结点后面
+            } else if (error.text() == 'ignore') {
+                return;
+            } else {
+                error.insertAfter(element);
+            }
+
+        }
+
+    });
+
+    jQuery.validator.addMethod("phone", function (value, element) {
+        var customerId = $("#customerId").val();
+        var str = "";
+        $("input[name='contactNumber']").each(function () {
+            str += $(this).val() + ",";
+        });
+        var contactNumber = str.slice(0, -1);
+        var weChatNumber = $("#weChatNumber").val();
+        var mobileRule = /^1[3|4|5|8|9][0-9]\d{4,8}$/;
+        //都没填
+        if ($.common.isEmpty(contactNumber) && $.common.isEmpty(weChatNumber)) {
+            $(element).data('error-msg', '请填写固定电话或手机号码');
+            return false;
+        }
+
+        var phonePass = false;
+        var weChatPass = false;
+        //手机号填写，微信没填写
+        if ($.common.isNotEmpty(contactNumber) && $.common.isEmpty(weChatNumber)) {
+            var strs = contactNumber.split(",");
+            for (i = 0; i < strs.length; i++) {
+                var str = "";
+                $.ajax({
+                    url: prefix + "/checkPhoneUnique",
+                    type: "post",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        "customerId": customerId,
+                        "contactNumber": strs[i]
+                    },
+                    success: function (data) {
+                        str = data;
+                    }
+                });
+                return phonePass = $.validate.unique(str);
+            }
+
+        }
+
+        //手机号填写，微信填写
+        if ($.common.isNotEmpty(contactNumber) && $.common.isNotEmpty(weChatNumber)) {
+            var str = "";
+            $.ajax({
+                url: prefix + "/checkWeChatNumberUnique",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    "customerId": customerId,
+                    "weChatNumber": weChatNumber
+                },
+                success: function (data) {
+                    str = data;
+                }
+            });
+            weChatPass = $.validate.unique(str);
+
+            var str = "";
+            $.ajax({
+                url: prefix + "/checkPhoneUnique",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    "customerId": customerId,
+                    "contactNumber": contactNumber
+                },
+                success: function (data) {
+                    str = data;
+                }
+            });
+            return phonePass = $.validate.unique(str);
+        }
+
+        //手机号没填写，微信填写
+        if ($.common.isEmpty(contactNumber) && $.common.isNotEmpty(weChatNumber)) {
+            var str = "";
+            $.ajax({
+                url: prefix + "/checkWeChatNumberUnique",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    "customerId": customerId,
+                    "weChatNumber": weChatNumber
+                },
+                success: function (data) {
+                    str = data;
+                }
+            });
+            return weChatPass = $.validate.unique(str);
+        }
+        if (phonePass || weChatPass || phonePass && weChatPass) {
+            //自定义成功提示
+            //$("#receivingTelephone_tip").removeClass("errorHint").addClass("successHint").text('');
+            return true;
+        } else {
+            return false;
+        }
+
+    }, 'ignore');
 
 
     //人员树形选择器

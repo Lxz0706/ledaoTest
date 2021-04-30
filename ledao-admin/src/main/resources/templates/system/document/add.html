@@ -90,7 +90,7 @@
         var options = {
             title: '人员选择',
             width: "750",
-            url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#shareUserId").val() + "&selectedUserNames=" + $("#shar").val() + "&multiSelectFlag=true",
+            url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#shareUserId").val() + "&selectedUserNames=" + $("#shareUserName").val() + "&multiSelectFlag=true",
             callBack: doSelect
         };
         $.modal.openOptions(options);
@@ -100,6 +100,8 @@
         var body = layer.getChildFrame('body', index);
         var userIds = "";
         var userNames = "";
+        //console.log(body.find("#groupId").val());
+        //console.log(body.find("#deptIds").val());
         body.find("#multiselect_to option").each(function () {  //遍历所有option
             var val = $(this).val();   //获取option值
             var txt = $(this).text();  //获取option的文本内容

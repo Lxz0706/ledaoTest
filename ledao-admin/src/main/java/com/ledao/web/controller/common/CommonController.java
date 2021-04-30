@@ -46,7 +46,6 @@ public class CommonController {
     @GetMapping("common/download")
     public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request) {
         try {
-            System.out.println(fileName);
             if (!FileUtils.isValidFilename(fileName)) {
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }

@@ -31,60 +31,64 @@
         <result property="agentId" column="agent_id"/>
         <result property="agent" column="agent"/>
         <result property="customerLable" column="customer_lable"/>
-        <result property="shareUserId" column="share_user_id"/>
+        <result property="shareUserId" column="user_id"/>
         <result property="shareUserName" column="share_user_name"/>
+        <result property="remarks" column="remarks"/>
+        <result property="deptType" column="dept_type"/>
     </resultMap>
 
     <sql id="selectSysCustomerVo">
         select customer_id, customer_name, affiliation, contacts, contact_number, duties,
         contact_address, resources, province, city, county, del_flag, create_by, create_time, update_by, update_time, dept_id, dept_name,
-        weChat_flag,reason, we_chat_number,creator,reviser,agent_id,agent,customer_lable,share_user_id, share_user_name from sys_customer
+        weChat_flag,reason, we_chat_number,creator,reviser,agent_id,agent,customer_lable,user_id, share_user_name,remarks,dept_type from sys_customer
     </sql>
 
     <select id="selectSysCustomerList" parameterType="SysCustomer" resultMap="SysCustomerResult">
         <include refid="selectSysCustomerVo"/>
-        <where>
-            del_flag = '0'
-            <if test="customerName != null  and customerName != ''">and customer_name like concat('%', #{customerName},
-                '%')
-            </if>
-            <if test="contacts != null  and contacts != ''">and contacts like concat('%',#{contacts}, '%')</if>
-            <if test="contactNumber != null  and contactNumber != ''">and contact_number like concat('%',
-                #{contactNumber}, '%')</if>
-            <if test="province != null  and province != ''">and province = #{province}</if>
-            <if test="city != null  and city != ''">and city = #{city}</if>
-            <if test="county != null  and county != ''">and county = #{county}</if>
-            <if test="deptIds != null and deptIds.length > 0">
-                AND dept_id in
-                <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
-                    #{deptId}
-                </foreach>
-            </if>
-            <if test="deptName != null  and deptName != ''">and dept_name like concat('%',#{deptName}, '%')</if>
-            <if test="wechatFlag != null  and wechatFlag != ''">and weChat_flag = #{wechatFlag}</if>
-            <if test="reason != null  and reason != ''">and reason like concat('%', #{reason, '%')</if>
-            <if test="createBy != null">
-                    and (create_by = #{createBy}
-                <if test="shareUserId != null  and shareUserId != ''">
-                    or share_user_id like concat('%',#{shareUserId},'%')
-                </if>
-                )
-            </if>
-            <if test="weChatNumber != null  and weChatNumber != ''">and we_chat_number like
-                concat('%',#{weChatNumber}, '%')</if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-            </if>
-            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-            </if>
-            <if test="creator != null  and creator != ''">and creator like concat('%', #{creator}, '%')</if>
-            <if test="reviser != null  and reviser != ''">and reviser like concat('%', #{reviser}, '%')</if>
-            <if test="agent != null  and agent != ''">and agent like concat('%', #{agent}, '%')</if>
-            <if test="customerLable != null  and customerLable != ''">and customer_lable = #{customerLable}</if>
-            <if test="shareUserName != null  and shareUserName != ''">and share_user_name like concat('%',#{shareUserName}, '%')
-            </if>
-        </where>
+        t2
+        where del_flag = '0'
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        <!--<if test="deptIds != null and deptIds.length > 0">
+            or dept_id in
+            <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+                #{deptId}
+            </foreach>
+        </if>-->
+        <if test="customerName != null  and customerName != ''">and customer_name like concat('%', #{customerName},
+            '%')
+        </if>
+        <if test="contacts != null  and contacts != ''">and contacts like concat('%',#{contacts}, '%')</if>
+        <if test="contactNumber != null  and contactNumber != ''">and contact_number like concat('%',
+            #{contactNumber}, '%')
+        </if>
+        <if test="province != null  and province != ''">and province = #{province}</if>
+        <if test="city != null  and city != ''">and city = #{city}</if>
+        <if test="county != null  and county != ''">and county = #{county}</if>
+        <!--<if test="deptId != null  and deptId != ''">
+            and t2.dept_id = #{deptId}
+        </if>-->
+        <if test="deptName != null  and deptName != ''">and dept_name like concat('%',#{deptName}, '%')</if>
+        <if test="wechatFlag != null  and wechatFlag != ''">and weChat_flag = #{wechatFlag}</if>
+        <if test="reason != null  and reason != ''">and reason like concat('%', #{reason, '%')</if>
+        <if test="weChatNumber != null  and weChatNumber != ''">and we_chat_number like
+            concat('%',#{weChatNumber}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        <if test="creator != null  and creator != ''">and creator like concat('%', #{creator}, '%')</if>
+        <if test="reviser != null  and reviser != ''">and reviser like concat('%', #{reviser}, '%')</if>
+        <if test="agent != null  and agent != ''">and agent like concat('%', #{agent}, '%')</if>
+        <if test="customerLable != null  and customerLable != ''">and customer_lable like concat('%',
+            #{customerLable}, '%')
+        </if>
+        <if test="shareUserName != null  and shareUserName != ''">and share_user_name like
+            concat('%',#{shareUserName}, '%')
+        </if>
     </select>
 
     <select id="selectSysCustomerById" parameterType="Long" resultMap="SysCustomerResult">
@@ -120,8 +124,10 @@
             <if test="agentId != null">agent_id,</if>
             <if test="agent != null">agent,</if>
             <if test="customerLable != null">customer_lable,</if>
-            <if test="shareUserId != null">share_user_id,</if>
+            <if test="shareUserId != null">user_id,</if>
             <if test="shareUserName != null">share_user_name,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="deptType !=null">dept_type,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerName != null">#{customerName},</if>
@@ -151,6 +157,8 @@
             <if test="customerLable != null">#{customerLable},</if>
             <if test="shareUserId != null">#{shareUserId},</if>
             <if test="shareUserName != null">#{shareUserName},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="deptType !=null">#{deptType},</if>
         </trim>
     </insert>
 
@@ -182,8 +190,10 @@
             <if test="agent != null">agent = #{agent},</if>
             <if test="agentId != null">agent_id = #{agentId},</if>
             <if test="customerLable != null">customer_lable = #{customerLable},</if>
-            <if test="shareUserId != null">share_user_id = #{shareUserId},</if>
+            <if test="shareUserId != null">user_id = #{shareUserId},</if>
             <if test="shareUserName != null">share_user_name = #{shareUserName},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="deptType !=null">dept_type = #{deptType},</if>
         </trim>
         where customer_id = #{customerId}
     </update>
@@ -200,17 +210,32 @@
     </delete>
 
     <select id="checkPhoneUnique" parameterType="SysCustomer" resultMap="SysCustomerResult">
-        select customer_id, contact_number from sys_customer where contact_number=#{contactNumber} and del_flag = '0'
-        <if test="deptId != null ">and dept_id = #{deptId}</if>
+        select customer_id, contact_number from sys_customer where contact_number like concat('%', #{contactNumber},
+        '%') and del_flag = '0'
+        <if test="customerId !=null">
+            and customer_id =#{customerId}
+        </if>
+        <if test="deptIds != null and deptIds.length > 0">
+            and dept_id in
+            <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+                #{deptId}
+            </foreach>
+        </if>
     </select>
 
     <select id="checkWeChatNumberUnique" parameterType="SysCustomer" resultMap="SysCustomerResult">
         select customer_id, we_chat_number from sys_customer where we_chat_number=#{weChatNumber} and del_flag = '0'
-        <if test="deptId != null ">and dept_id = #{deptId}</if>
+        <if test="deptIds != null and deptIds.length > 0">
+            and dept_id in
+            <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+                #{deptId}
+            </foreach>
+        </if>
     </select>
 
     <select id="queryAll" parameterType="SysCustomer" resultMap="SysCustomerResult">
-        <include refid="selectSysCustomerVo"/> t1
+        <include refid="selectSysCustomerVo"/>
+        t1
         <where>
             t1.del_flag = '0'
             <if test="customerName != null  and customerName != ''">and t1.customer_name like concat('%',
@@ -260,8 +285,70 @@
             <if test="customerLable != null  and customerLable != ''">and t1.customer_lable like concat('%',
                 #{customerLable}, '%')
             </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by like concat('%', #{createBy}, '%')
+            </if>
         </where>
         GROUP BY customer_id
     </select>
+
+    <select id="selectSysCustomerByCity" parameterType="SysCustomer" resultMap="SysCustomerResult">
+        SELECT COUNT(customer_id) as cityCount,city FROM sys_customer WHERE del_flag = '0'
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        GROUP BY city ORDER BY cityCount asc
+    </select>
+
+    <select id="selectSysCustomerByCustomerLable" parameterType="SysCustomer" resultMap="SysCustomerResult">
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t1.customer_lable,',',t2. help_topic_id+1),',',-1) AS shareholder
+        ,count(*) AS customerLableCount FROM lxztest.sys_customer t1 JOIN mysql.help_topic t2
+        on t2. help_topic_id &lt;LENGTH(t1.customer_lable)-LENGTH(REPLACE(t1.customer_lable,',',''))+1 WHERE
+        t1.del_flag='0' AND customer_lable !=''
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        <if test="deptName != null  and deptName != ''">and t1.dept_name like concat('%',#{deptName}, '%')</if>
+        GROUP BY shareholder ORDER BY customerLableCount desc
+    </select>
+
+    <select id="selectSysCustomerByDeptType" parameterType="SysCustomer" resultMap="SysCustomerResult">
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t1.dept_type,',',t2. help_topic_id+1),',',-1) AS dept_type
+        ,count(*) AS customerLableCount FROM lxztest.sys_customer t1 JOIN mysql.help_topic t2
+        on t2. help_topic_id &lt; LENGTH(t1.dept_type)-LENGTH(REPLACE(t1.dept_type,',',''))+1 WHERE
+        t1.del_flag='0'
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        GROUP BY dept_type ORDER BY customerLableCount desc;
+    </select>
+
+    <select id="selectSysCustomerByDeptId" parameterType="SysCustomer" resultMap="SysCustomerResult">
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t1.dept_name,',',t2. help_topic_id+1),',',-1) AS dept_name
+        ,count(*) AS customerLableCount,GROUP_CONCAT(customer_lable) AS customerLable,dept_type FROM
+        lxztest.sys_customer t1 JOIN mysql.help_topic t2
+        on t2. help_topic_id &lt; LENGTH(t1.dept_name)-LENGTH(REPLACE(t1.dept_name,',',''))+1 WHERE
+        t1.del_flag='0'
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        <if test="deptType !=null">
+            and dept_type =#{deptType}
+        </if>
+        GROUP BY dept_name ORDER BY customerLableCount desc;
+    </select>
+
 
 </mapper>

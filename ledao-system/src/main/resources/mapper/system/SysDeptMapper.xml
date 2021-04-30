@@ -155,4 +155,13 @@
         where dept_id in (${ancestors})
     </update>
 
+    <select id="selectDeptByParentId" parameterType="Long" resultMap="SysDeptResult">
+        SELECT * FROM(
+            SELECT * FROM sys_dept where parent_id > 0 GROUP BY dept_id
+             ORDER BY parent_id, dept_id DESC
+         ) realname_sorted,
+          (SELECT @pv := #{parentId}) initialisation
+          WHERE (FIND_IN_SET(parent_id,@pv)>0 And @pv := concat(@pv, ',', dept_id)) AND del_flag='0' AND `status`='0' GROUP BY dept_id
+    </select>
+
 </mapper> 

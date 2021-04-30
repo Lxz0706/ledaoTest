@@ -74,6 +74,11 @@ public class SysProjectUncollectedMoneyController extends BaseController {
     public TableDataInfo list(SysProjectUncollectedMoney sysProjectUncollectedMoney) {
         startPage();
         List<SysProjectUncollectedMoney> list = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyList(sysProjectUncollectedMoney);
+        for (SysProjectUncollectedMoney sysProjectUncollectedMoney1 : list) {
+            if (StringUtils.isNotEmpty(sysProjectUncollectedMoney1.getImgUrl())) {
+                sysProjectUncollectedMoney1.setImgFlag(true);
+            }
+        }
         return getDataTable(list);
     }
 
@@ -303,13 +308,14 @@ public class SysProjectUncollectedMoneyController extends BaseController {
         return prefix + "/imgUrl1";
     }
 
-    /**
-     * 保存头像
-     */
-    @Log(title = "个人信息", businessType = BusinessType.UPDATE)
-    @PostMapping("/updateImgUrl/{id}")
+    @PostMapping("/updateImgUrl")
     @ResponseBody
-    public AjaxResult updateAvatar(MultipartFile file, @PathVariable("id") String id) {
+    public AjaxResult uploadTest(@RequestParam("file") MultipartFile[] files, String id) throws IOException {
+        String msg = "";
+        int status = 0;
+        //返回前端的json
+        Map<String, Object> map = new HashMap<>();
+
         SysProjectUncollectedMoney sysProjectUncollectedMoney = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyById(Long.valueOf(id));
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
@@ -317,31 +323,37 @@ public class SysProjectUncollectedMoneyController extends BaseController {
             if (!currentUser.isAdmin()) {
                 if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getCreateBy())) {
                     if (!currentUser.getLoginName().equals(sysProjectUncollectedMoney.getCreateBy()) && !currentUser.getLoginName().equals("wangziyuan")) {
-                        return error("当前用户没有修改权限，请联系管理员或者创建人进行修改！");
+                        msg = "当前用户没有修改权限，请联系管理员或者创建人进行修改！";
+                        return new AjaxResult(AjaxResult.Type.ERROR, msg);
                     }
                 }
             }
         }
-        try {
-            if (StringUtils.isNotNull(file)) {
-                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file, false);
-                if (StringUtils.isNotNull(sysProjectUncollectedMoney.getImgUrl())) {
-                    if (!sysProjectUncollectedMoney.getImgUrl().contains(file.getOriginalFilename())) {
-                        sysProjectUncollectedMoney.setImgUrl(avatar + ";" + sysProjectUncollectedMoney.getImgUrl());
-                    } else {
-                        return error(file.getOriginalFilename() + "上传失败");
-                    }
-                } else {
-                    sysProjectUncollectedMoney.setImgUrl(avatar);
-                }
-                sysProjectUncollectedMoneyService.updateSysProjectUncollectedMoney(sysProjectUncollectedMoney);
-                return success();
+        for (MultipartFile file : files) {
+            boolean flag = fileNameForurl(Long.valueOf(id), file);
+            if (flag) {
+                msg = "上传成功";
             }
-            return error(file.getOriginalFilename() + "上传失败");
-        } catch (Exception e) {
-            logger.error("上传失败！", e);
-            return error(e.getMessage());
         }
+
+        return new AjaxResult(AjaxResult.Type.SUCCESS, msg);
+    }
+
+    public boolean fileNameForurl(Long id, MultipartFile file) throws IOException {
+        boolean flag = false;
+        String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file, false);
+        SysProjectUncollectedMoney sysProjectUncollectedMoney = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyById(id);
+        if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getImgUrl())) {
+            if (!sysProjectUncollectedMoney.getImgUrl().contains(file.getOriginalFilename())) {
+                flag = true;
+                sysProjectUncollectedMoney.setImgUrl(avatar + ";" + sysProjectUncollectedMoney.getImgUrl());
+            }
+        } else {
+            flag = true;
+            sysProjectUncollectedMoney.setImgUrl(avatar);
+        }
+        sysProjectUncollectedMoneyService.updateSysProjectUncollectedMoney(sysProjectUncollectedMoney);
+        return flag;
     }
 
     @PostMapping("/removeImg/{id}/{fileName}")

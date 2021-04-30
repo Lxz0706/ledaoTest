@@ -8,15 +8,16 @@
             width: 213px;
             height: 100%;
         }
-        .file-preview-image{
-            max-height:90%;
+
+        .file-preview-image {
+            max-height: 90%;
             max-width: 90%;
         }
     </style>
 </head>
 <body class="white-bg">
 <div class="container" align="center">
-    <input id="input-id" type="file" data-show-caption="true" disabled="true">
+    <input id="input-id" type="file" data-show-caption="true">
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-fileinput-js"/>
@@ -81,23 +82,12 @@
         $('#input-id').fileinput({
             language: 'zh', //设置语言
             allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
-            validateInitialCount: false,
             initialPreview: previewJson,
-            initialPreviewConfig: preConfigList,
-            allowedPreviewTypes: ['images'],
-            //uploadUrl: ctx + "system/charge/updateImgUrl/" + id, //上传的地址
-            uploadAsync: false, //默认异步上传
+            allowedPreviewTypes: ['image'],
             showUpload: false, //是否显示上传按钮
             showRemove: false, //显示移除按钮
             showPreview: true, //是否显示预览
             showCaption: true,//是否显示标题
-            autoReplace: false,
-            browseClass: "btn btn-primary", //按钮样式
-            maxFileSize: 10240,//单位为kb，如果为0表示不限制文件大小
-            maxFileCount: 5, //表示允许同时上传的最大文件个数
-            enctype: 'multipart/form-data',
-            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
             previewFileIconSettings: {
                 'docx': '<i class="fa fa-file-word-o text-primary"></i>',
                 'xlsx': '<i class="fa fa-file-excel-o text-success"></i>',
@@ -105,6 +95,13 @@
                 'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
                 'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
                 'sql': '<i class="fa fa-file-word-o text-primary"></i>',
+            },
+            initialPreviewConfig: preConfigList,
+            layoutTemplates: {
+                actionDelete: '', //去除上传预览的缩略图中的删除图标
+                actionUpload: '',//去除上传预览缩略图中的上传图片；
+                // actionZoom:'',   //去除上传预览缩略图详情的图标
+                actionDownload: '' //去除上传预览缩略图中的下载图标
             }
         });
     };

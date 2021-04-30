@@ -68,7 +68,7 @@ public interface ISysCustomerService {
     public String checkPhoneUnique(SysCustomer sysCustomer);
 
     /**
-     * 校验手机号码是否唯一
+     * 校验微信号码是否唯一
      *
      * @param sysCustomer 用户信息
      * @return 结果
@@ -82,4 +82,9 @@ public interface ISysCustomerService {
      * @return 查询结果
      */
     public List<SysCustomer> queryAll(SysCustomer sysCustomer);
+
+    /**
+     * 根据传递来的数据进行分组查询
+     */
+    public List<SysCustomer> selectSysCustomerByParam(SysCustomer sysCustomer, String param);
 }

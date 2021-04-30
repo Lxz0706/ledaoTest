@@ -58,6 +58,11 @@ public class SysProjectysyf extends BaseEntity {
 
     private String finance;
 
+    /**
+     * 是否上传附件
+     */
+    private boolean imgFlag = false;
+
     public Long getId() {
         return id;
     }
@@ -128,6 +133,14 @@ public class SysProjectysyf extends BaseEntity {
 
     public void setFinance(String finance) {
         this.finance = finance;
+    }
+
+    public boolean isImgFlag() {
+        return imgFlag;
+    }
+
+    public void setImgFlag(boolean imgFlag) {
+        this.imgFlag = imgFlag;
     }
 
     @Override

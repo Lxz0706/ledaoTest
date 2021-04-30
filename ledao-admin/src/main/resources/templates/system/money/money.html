@@ -95,6 +95,12 @@
                     visible: false
                 },
                 {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
                     field: 'projectManagementId',
                     title: '流转表ID',
                     visible: false
@@ -127,6 +133,14 @@
                     }
                 },
                 {
+                    field: 'imgUrl',
+                    title: '附件上传情况',
+                    formatter: function (value, row, index) {
+                        return imgFlag(row);
+                        /* return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';*/
+                    }
+                },
+                {
                     visible: editFlag == 'hidden' ? false : true,
                     title: '财务确认',
                     align: 'center',
@@ -141,13 +155,6 @@
                         type: 'text',
                         title: '财务确认意见'
                     }
-                },
-                {
-                    field: 'imgUrl',
-                    title: '附件上传查看',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">附件上传查看</a>';
-                    }
                 }/*,
                 {
                     title: '操作',
@@ -161,6 +168,14 @@
         };
         $.table.init(options);
     });
+
+    function imgFlag(row) {
+        if (true == row.imgFlag) {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">已上传附件</a>';
+        } else {
+            return '<a href="javascript:void(0)" onclick="imgUrl(\'' + row.id + '\')">未上传附件</a>';
+        }
+    }
 
     function add() {
         var projectManagementId = $("#projectManagementId").val();
@@ -192,7 +207,7 @@
 
     function imgUrl(id) {
         var url = prefix + '/imgUrl/' + id;
-        $.modal.opens("附件上传查看", url);
+        $.modal.opens("附件上传情况查看", url);
     }
 
 

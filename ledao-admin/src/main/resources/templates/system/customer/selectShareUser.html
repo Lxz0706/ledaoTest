@@ -15,9 +15,9 @@
                     <input name="deptId" th:value="*{deptId}" id="deptId" type="hidden">
                     <input name="status" value="0" id="status" type="hidden">
                     <ul>
-                        <li>
+                    <!--    <li>
                             登录名称：<input type="text" name="loginName"/>
-                        </li>
+                        </li>-->
                         <li>
                             用户名称：<input type="text" name="userName"/>
                         </li>
@@ -54,7 +54,6 @@
                 checkbox: true,
                 formatter: function (value, row, index) {
                     var userId = $("#userId").val().split(",");
-                    console.log("userId:======" + userId);
                     for (var i = 0; i < userId.length; i++) {
                         if (userId[i] == row.userId) {
                             return checked = true;
@@ -103,7 +102,6 @@
     function submitHandler() {
         var row = selectRows();
         var rows = $.table.selectColumns('userId');
-        console.log("rows.length:=========" + rows.length);
         window.parent.getParentUser(row);
     }
 
@@ -117,12 +115,10 @@
             let selectedRows = table.rememberSelecteds[table.options.id];
             if ($.common.isNotEmpty(selectedRows)) {
                 rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
-                    console.log("rows:=======" + rows.length)
                     return row;
                 });
             }
         }
-        console.log("得到的数量qeqweqweqw：=======" + rows.length);
         //去重
         return uniqueFnByRows(rows);
     }

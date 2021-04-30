@@ -91,7 +91,7 @@
         /*资产库列表-详细*/
         function detail(projectStatus) {
             var url = prefix + '/selectByProjectStatus/' + projectStatus;
-            $.modal.openTab(projectStatus+"列表", url);
+            $.modal.openTab(projectStatus+"列表", decodeURI(url));
         }
 
         //查询

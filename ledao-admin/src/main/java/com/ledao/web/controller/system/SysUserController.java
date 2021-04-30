@@ -164,8 +164,9 @@ public class SysUserController extends BaseController {
         }
         SysCustomer sysCustomer = new SysCustomer();
         sysCustomer.setCreateBy(user.getLoginName());
-        List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerList(sysCustomer);
+        List<SysCustomer> sysCustomerList = sysCustomerService.queryAll(sysCustomer);
         for (SysCustomer sysCustomer1 : sysCustomerList) {
+            sysCustomer1.setUpdateBy(sysCustomer1.getCreateBy());
             sysCustomer1.setDeptId(user.getDeptId());
             sysCustomer1.setDeptName(user.getDept().getDeptName());
             sysCustomerService.updateSysCustomer(sysCustomer1);
@@ -328,7 +329,7 @@ public class SysUserController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         for (String string : ids.split(",")) {
             SysUser sysUser = userService.selectUserById(Long.valueOf(string));
-            map.put("user", sysUser);
+            map.put("user", sysUser.getUserName());
         }
         return AjaxResult.success(map);
     }

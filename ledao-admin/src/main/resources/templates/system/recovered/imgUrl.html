@@ -8,15 +8,16 @@
             width: 213px;
             height: 100%;
         }
-        .file-preview-image{
-            max-height:90%;
+
+        .file-preview-image {
+            max-height: 90%;
             max-width: 90%;
         }
     </style>
 </head>
 <body class="white-bg">
 <div class="container" align="center">
-    <input id="input-id" type="file" data-show-caption="true" disabled="true">
+    <input id="input-id" type="file" data-show-caption="true">
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-fileinput-js"/>
@@ -105,7 +106,13 @@
                 'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
                 'sql': '<i class="fa fa-file-word-o text-primary"></i>',
             },
-            initialPreviewConfig: preConfigList
+            initialPreviewConfig: preConfigList,
+            layoutTemplates: {
+                actionDelete: '', //去除上传预览的缩略图中的删除图标
+                actionUpload: '',//去除上传预览缩略图中的上传图片；
+                // actionZoom:'',   //去除上传预览缩略图详情的图标
+                actionDownload: '' //去除上传预览缩略图中的下载图标
+            }
         });
     };
 </script>

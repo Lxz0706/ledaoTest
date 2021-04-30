@@ -3,7 +3,7 @@ package com.ledao.framework.web.dao.server;
 /**
  * 系统相关信息
  * 
- * @author lxz
+ * @author ruoyi
  */
 public class Sys
 {

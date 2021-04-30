@@ -34,10 +34,8 @@ public class PdfConvertUtil {
             PDDocument document = PDDocument.load(bytes);
             PDFDomTree pdfDomTree = new PDFDomTree();
             pdfDomTree.writeText(document, out);
-            System.out.println("dasdqwasd");
         } catch (Exception e) {
 //            e.printStackTrace();
-            System.out.println("haha");
         }
     }
 

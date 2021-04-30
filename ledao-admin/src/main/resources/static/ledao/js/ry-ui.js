@@ -1503,7 +1503,7 @@ var table = {
                             tree.expandNode(nodes[j], true, false, false);
                         }
                     }
-                    if(treeId){
+                    if (treeId) {
                         var treeIds = treeId.split(",");
                         for (var i = 0; i < treeIds.length; i++) {
                             var node = tree.getNodesByParam("id", treeId, null);
@@ -1615,10 +1615,10 @@ var table = {
                         $.modal.msgError("不能选择根节点（" + nodes[i].name + "）");
                         return false;
                     }
-                    if (nodes[i].isParent) {
+                    /*if (nodes[i].isParent) {
                         $.modal.msgError("不能选择父节点（" + nodes[i].name + "）");
                         return false;
-                    }
+                    }*/
                 }
                 return true;
             },
@@ -1653,7 +1653,7 @@ var table = {
         common: {
             // 判断字符串是否为空
             isEmpty: function (value) {
-                if (value == null || this.trim(value) == "") {
+                if (value == null || this.trim(value) == "" || "undefined" == value) {
                     return true;
                 }
                 return false;

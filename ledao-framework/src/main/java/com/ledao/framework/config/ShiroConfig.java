@@ -235,6 +235,13 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/ledao/**", "anon");
         filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
+        filterChainDefinitionMap.put("/system/subgroup/**", "anon");
+        // activiti modeler 放行
+        filterChainDefinitionMap.put("/modeler/**", "anon");
+        filterChainDefinitionMap.put("/repository/**", "anon");
+        filterChainDefinitionMap.put("/runtime/**", "anon");
+        filterChainDefinitionMap.put("/management/**", "anon");
+
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
@@ -243,15 +250,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/register", "anon,captchaValidate");
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
-
-        /*filterChainDefinitionMap.put("/modeler/**", "anon");
-        filterChainDefinitionMap.put("/repository/**", "anon");
-        filterChainDefinitionMap.put("/runtime/**", "anon");*/
-        // activiti modeler 放行
-        filterChainDefinitionMap.put("/modeler/**", "anon");
-        filterChainDefinitionMap.put("/repository/**", "anon");
-        filterChainDefinitionMap.put("/runtime/**", "anon");
-        filterChainDefinitionMap.put("/management/**", "anon");
 
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("onlineSession", onlineSessionFilter());

@@ -84,4 +84,24 @@ public interface SysCustomerMapper {
      * @return 查询结果
      */
     public List<SysCustomer> queryAll(SysCustomer sysCustomer);
+
+    /**
+     * 根据地区分组查询
+     */
+    public List<SysCustomer> selectSysCustomerByCity(SysCustomer sysCustomer);
+
+    /**
+     * 根据客户标签分组查询
+     */
+    public List<SysCustomer> selectSysCustomerByCustomerLable(SysCustomer sysCustomer);
+
+    /**
+     * 根据部门类型分组查询
+     */
+    public List<SysCustomer> selectSysCustomerByDeptType(SysCustomer sysCustomer);
+
+    /**
+     * 根据部门分组查询
+     */
+    public List<SysCustomer> selectSysCustomerByDeptId(SysCustomer sysCustomer);
 }

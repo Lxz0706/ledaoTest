@@ -4,42 +4,37 @@
     <th:block th:include="include :: header('客户库列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
     <th:block th:include="include :: bootstrap-editable-css"/>
-    <style>
+    <!--<style>
         .editable-empty, .editable-empty:hover, .editable-empty:focus {
             color: #2f2f2f;
         }
-    </style>
+    </style>-->
 </head>
 <body class="gray-bg">
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
-            <form id="formId">
+            <form id="user-form">
                 <div class="select-list">
                     <ul>
+                        <li>所属机构：<input type="text" name="customerName" placeholder="请输入所属机构"/></li>
                         <li>
-                            <label>所属机构：</label>
-                            <input type="text" name="customerName" placeholder="请输入所属机构"/>
+                            联系人：<input type="text" name="contacts" placeholder="请输入联系人"/>
                         </li>
                         <li>
-                            <label>联系人：</label>
-                            <input type="text" name="contacts" placeholder="请输入联系人"/>
-                        </li>
-                        <li>
-                            <label>联系电话：</label>
+                            联系电话：
                             <input type="text" name="contactNumber" placeholder="请输入联系电话"/>
                         </li>
                         <li>
-                            <label>微信号：</label>
+                            微信号：
                             <input type="text" name="weChatNumber" placeholder="请输入微信号"/>
                         </li>
                         <div data-toggle="distpicker" id="distpicker">
                             <li>
-                                <label>省：</label><select name="province" id="province"
-                                                         data-province="---请选择省---"></select>
+                                省：<select name="province" id="province" data-province="---请选择省---"></select>
                             </li>
                             <li>
-                                <label>市：</label>
+                                市：
                                 <select name="city" id="city" data-city="---请选择市---"></select>
                             </li>
                             <!--<li>
@@ -48,49 +43,43 @@
                             </li>-->
                         </div>
                         <li>
-                            <label>客户标签：</label><select id="customerLable" name="customerLable"
-                                                        th:with="type=${@dict.getType('sys_customer_label')}"
-                                                        data-none-selected-text="请选择">
+                            客户标签：
+                            <select id="customerLable" name="customerLable" th:with="type=${@dict.getType('sys_customer_label')}" data-none-selected-text="请选择">
                             <option value="">--请选择数据--</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                    th:value="${dict.dictValue}"></option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                         </select>
                         </li>
                         <div id="sd" style="display: none">
                             <li>
-                                <label>创建人：</label>
+                                实际提交者：
                                 <input name="creator" type="text" placeholder="请输入创建人"/>
                             </li>
                             <li class="select-time">
-                                <label>创建时间：</label><input type="text" class="time-input" id="startTime"
-                                                           placeholder="开始时间" name="beginTime"/>
-                                <span>-</span><input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                                     name="endTime"/>
+                                <label>创建时间： </label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
                             </li>
                             <li>
-                                <label>所属部门：</label>
+                                所属部门：
                                 <input name="deptName" type="text" placeholder="请输入所属部门"/>
                             </li>
                             <li>
-                                <label>资源优势：</label>
+                                资源优势：
                                 <input name="resources" type="text" placeholder="请输入资源优势"/>
                             </li>
                             <li>
-                                <label>是否添加到公司号：</label>
-                                <select id="wechatFlag" name="wechatFlag"
-                                        th:with="type=${@dict.getType('sys_project_moneyStatus')}"
-                                        data-none-selected-text="请选择">
+                                是否添加到公司号：
+                                <select id="wechatFlag" name="wechatFlag" th:with="type=${@dict.getType('sys_project_moneyStatus')}" data-none-selected-text="请选择">
                                     <option value="">--请选择数据--</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                         </div>
 
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="jump()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
                 </div>
@@ -140,6 +129,10 @@
         if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
             $("#sd").show();
         }
+    }
+
+    function fenxi(){
+
     }
 
 
@@ -217,7 +210,7 @@
                 },
                 {
                     field: 'creator',
-                    title: '创建人'
+                    title: '实际提交者'
                 },
                 {
                     field: 'createTime',
@@ -313,7 +306,6 @@
         for (var i in data.rows) {
             if ("N" == data.rows[i].isAdmin) {
                 $.table.hideColumn("creator");
-                $.table.hideColumn("deptName");
                 $.table.hideColumn("wechatFlag");
                 $.table.hideColumn("reason");
             }

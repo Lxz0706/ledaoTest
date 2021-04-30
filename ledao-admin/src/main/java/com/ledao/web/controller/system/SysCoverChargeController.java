@@ -23,6 +23,11 @@ import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 流转服务费Controller
@@ -53,6 +58,11 @@ public class SysCoverChargeController extends BaseController {
     public TableDataInfo list(SysCoverCharge sysCoverCharge) {
         startPage();
         List<SysCoverCharge> list = sysCoverChargeService.selectSysCoverChargeList(sysCoverCharge);
+        for (SysCoverCharge sysCoverCharge1 : list) {
+            if (StringUtils.isNotEmpty(sysCoverCharge1.getImgUrl())) {
+                sysCoverCharge1.setImgFlag(true);
+            }
+        }
         return getDataTable(list);
     }
 
@@ -212,12 +222,17 @@ public class SysCoverChargeController extends BaseController {
         return prefix + "/imgUrl1";
     }
 
-    /**
-     * 保存头像
-     */
-    @PostMapping("/updateImgUrl/{id}")
+    @PostMapping("/updateImgUrl")
     @ResponseBody
-    public AjaxResult updateAvatar(MultipartFile file, @PathVariable("id") String id) {
+    public AjaxResult uploadTest(@RequestParam("file") MultipartFile[] files, String id) throws IOException {
+        String msg = "";
+        //返回前端的json
+        Map<String, Object> map = new HashMap<>();
+
+        if (StringUtils.isNull(files)) {
+            msg = "附件为空";
+            return new AjaxResult(AjaxResult.Type.ERROR, msg);
+        }
         SysCoverCharge sysCoverCharge = sysCoverChargeService.selectSysCoverChargeById(Long.valueOf(id));
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
@@ -225,31 +240,37 @@ public class SysCoverChargeController extends BaseController {
             if (!currentUser.isAdmin()) {
                 if (StringUtils.isNotEmpty(sysCoverCharge.getCreateBy())) {
                     if (!currentUser.getLoginName().equals(sysCoverCharge.getCreateBy()) && !currentUser.getLoginName().equals("wangziyuan")) {
-                        return error("当前用户没有修改权限，请联系管理员或者创建人进行修改！");
+                        msg = "当前用户没有修改权限，请联系管理员或者创建人进行修改！";
+                        return new AjaxResult(AjaxResult.Type.ERROR, msg);
                     }
                 }
             }
         }
-        try {
-            if (StringUtils.isNotNull(file)) {
-                String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file, false);
-                if (StringUtils.isNotNull(sysCoverCharge.getImgUrl())) {
-                    if (!sysCoverCharge.getImgUrl().contains(file.getOriginalFilename())) {
-                        sysCoverCharge.setImgUrl(avatar + ";" + sysCoverCharge.getImgUrl());
-                    } else {
-                        return error(file.getOriginalFilename() + "上传失败");
-                    }
-                } else {
-                    sysCoverCharge.setImgUrl(avatar);
-                }
-                sysCoverChargeService.updateSysCoverCharge(sysCoverCharge);
-                return success();
+        for (MultipartFile file : files) {
+            boolean flag = fileNameForurl(Long.valueOf(id), file);
+            if (flag) {
+                msg = "上传成功";
             }
-            return error(file.getOriginalFilename() + "上传失败");
-        } catch (Exception e) {
-            logger.error("上传失败！", e);
-            return error(e.getMessage());
         }
+
+        return new AjaxResult(AjaxResult.Type.SUCCESS, msg);
+    }
+
+    public boolean fileNameForurl(Long id, MultipartFile file) throws IOException {
+        boolean flag = false;
+        String avatar = FileUploadUtils.upload(Global.getAvatarPath(), file, false);
+        SysCoverCharge sysCoverCharge = sysCoverChargeService.selectSysCoverChargeById(id);
+        if (StringUtils.isNotEmpty(sysCoverCharge.getImgUrl())) {
+            if (!sysCoverCharge.getImgUrl().contains(file.getOriginalFilename())) {
+                flag = true;
+                sysCoverCharge.setImgUrl(avatar + ";" + sysCoverCharge.getImgUrl());
+            }
+        } else {
+            flag = true;
+            sysCoverCharge.setImgUrl(avatar);
+        }
+        sysCoverChargeService.updateSysCoverCharge(sysCoverCharge);
+        return flag;
     }
 
     @PostMapping("/removeImg/{id}/{fileName}")

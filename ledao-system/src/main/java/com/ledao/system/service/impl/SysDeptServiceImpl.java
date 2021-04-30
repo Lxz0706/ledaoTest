@@ -278,4 +278,14 @@ public class SysDeptServiceImpl implements ISysDeptService {
         }
         return UserConstants.DEPT_NAME_UNIQUE;
     }
+
+    /**
+     * 根据父级id递归查询子集
+     *
+     * @param parentId
+     * @return 结果
+     */
+    public List<SysDept> selectDeptByParentId(Long parentId) {
+        return deptMapper.selectDeptByParentId(parentId);
+    }
 }

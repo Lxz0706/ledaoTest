@@ -100,7 +100,4 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
         return (T) AopContext.currentProxy();
     }
 
-    public void sdf() {
-        System.out.println("asdqwweqwegrwfasfq");
-    }
 }

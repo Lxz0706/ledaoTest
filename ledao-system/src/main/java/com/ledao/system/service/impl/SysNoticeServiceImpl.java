@@ -81,6 +81,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      * @param noticeIds 需要设置的Id
      * @return 结果
      */
+    @Override
     public int readNoticeByIds(String noticeIds) {
         return noticeMapper.readNoticeByIds(Convert.toStrArray(noticeIds));
     }

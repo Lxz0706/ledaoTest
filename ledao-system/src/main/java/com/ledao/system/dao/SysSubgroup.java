@@ -37,6 +37,18 @@ public class SysSubgroup extends BaseEntity {
     @Excel(name = "小组成员")
     private String subgroupUserName;
 
+    /**
+     * 部门id
+     */
+    private String subgroupDeptId;
+
+    /**
+     * 部门名称
+     */
+    private String subgroupDeptName;
+
+    private String shareDeptAndUser;
+
     public void setSubgroupId(Long subgroupId) {
         this.subgroupId = subgroupId;
     }
@@ -69,6 +81,30 @@ public class SysSubgroup extends BaseEntity {
         return subgroupUserName;
     }
 
+    public String getSubgroupDeptId() {
+        return subgroupDeptId;
+    }
+
+    public void setSubgroupDeptId(String subgroupDeptId) {
+        this.subgroupDeptId = subgroupDeptId;
+    }
+
+    public String getSubgroupDeptName() {
+        return subgroupDeptName;
+    }
+
+    public void setSubgroupDeptName(String subgroupDeptName) {
+        this.subgroupDeptName = subgroupDeptName;
+    }
+
+    public String getShareDeptAndUser() {
+        return shareDeptAndUser;
+    }
+
+    public void setShareDeptAndUser(String shareDeptAndUser) {
+        this.shareDeptAndUser = shareDeptAndUser;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -80,6 +116,8 @@ public class SysSubgroup extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("subgroupDeptId", getSubgroupDeptId())
+                .append("subgroupDeptName", getSubgroupDeptName())
                 .toString();
     }
 }

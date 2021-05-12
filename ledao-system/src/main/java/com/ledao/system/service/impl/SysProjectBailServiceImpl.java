@@ -95,6 +95,7 @@ public class SysProjectBailServiceImpl implements ISysProjectBailService {
      * @param projectId 项目管理projectId
      * @return 结果
      */
+    @Override
     public List<SysProjectBail> selectSysProjectBailByProjectId(String projectId) {
         return sysProjectBailMapper.selectSysProjectBailByProjectId(Convert.toStrArray(projectId));
     }
@@ -105,6 +106,7 @@ public class SysProjectBailServiceImpl implements ISysProjectBailService {
      * @param projectId
      * @return 结果
      */
+    @Override
     public SysProjectBail selectProjectBailByProjectId(Long projectId) {
         return sysProjectBailMapper.selectProjectBailByProjectId(projectId);
     }
@@ -115,6 +117,7 @@ public class SysProjectBailServiceImpl implements ISysProjectBailService {
      * @param projectId
      * @return 结果
      */
+    @Override
     public List<SysProjectBail> selectProjectBailListByProjectId(Long projectId) {
         return sysProjectBailMapper.selectProjectBailListByProjectId(projectId);
     }

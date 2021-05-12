@@ -792,7 +792,7 @@ var table = {
                 });
             },
             // 弹出层指定宽度
-            open: function (title, url, width, height, callback) {
+            open: function (title, url, width, height, callback, type) {
                 //如果是移动端，就使用自适应大小弹窗
                 if ($.common.isMobile()) {
                     width = 'auto';
@@ -810,6 +810,9 @@ var table = {
                 if ($.common.isEmpty(height)) {
                     height = ($(window).height() - 50);
                 }
+                if ($.common.isEmpty(type)) {
+                    type = 2;
+                }
                 if ($.common.isEmpty(callback)) {
                     callback = function (index, layero) {
                         var iframeWin = layero.find('iframe')[0];
@@ -817,7 +820,7 @@ var table = {
                     }
                 }
                 layer.open({
-                    type: 2,
+                    type: type,
                     area: [width + 'px', height + 'px'],
                     fix: false,
                     //不固定
@@ -883,13 +886,14 @@ var table = {
                 var _width = $.common.isEmpty(options.width) ? "800" : options.width;
                 var _height = $.common.isEmpty(options.height) ? ($(window).height() - 50) : options.height;
                 var _btn = ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'];
+                var type = $.common.isEmpty(options.type) ? 2 : options.type;
                 if ($.common.isEmpty(options.yes)) {
                     options.yes = function (index, layero) {
                         options.callBack(index, layero);
                     }
                 }
                 layer.open({
-                    type: 2,
+                    type: type,
                     maxmin: true,
                     shade: 0.3,
                     title: _title,
@@ -983,6 +987,11 @@ var table = {
             // 重新加载
             reload: function () {
                 parent.location.reload();
+            },
+            //关闭弹窗
+            layer_close: function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
             }
         },
         // 操作封装处理

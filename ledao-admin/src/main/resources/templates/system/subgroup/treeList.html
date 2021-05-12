@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('导入表结构')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <!--<input th:value="*{selectedProjectIds}" id="selectedProjectIds" type="hidden">
+            <input th:value="*{selectedProjectNames}" id="selectedProjectNames" type="hidden">-->
+            <form id="gen-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            我的小组名称：<input type="text" name="subgroupName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/subgroup";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            clickToSelect: true,
+            rememberSelected: true,
+            singleSelect: false,
+            columns: [{
+                checkbox: true/*,
+                formatter: function (value, row, index) {
+                    if ($("#selectedProjectIds").val() == row.projectId) {
+                        return checked = true;
+                    }
+                }*/
+            },
+                {
+                    field: 'subgroupId',
+                    title: '组id',
+                    visible: false
+                },
+                {
+                    field: 'subgroupName',
+                    title: '小组名称'
+                },
+                {
+                    field: 'shareDeptAndUser',
+                    title: '小组成员',
+                    formatter: function (value) {
+                        return $.table.tooltip(value, 15);
+                    }
+                },
+                {
+                    field: 'createBy',
+                    title: '创建人'
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 导入表结构-选择表结构-提交 */
+    function submitHandler() {
+        var row = selectRows();
+        window.parent.getProjectRows(row);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //如果设置了记住选中数据
+        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+            let selectedRows = table.rememberSelecteds[table.options.id];
+            if ($.common.isNotEmpty(selectedRows)) {
+                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    return row;
+                });
+            }
+        }
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i].subgroupId]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i].subgroupId] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+</script>
+</body>
+</html>

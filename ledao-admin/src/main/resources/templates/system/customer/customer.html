@@ -17,17 +17,17 @@
             <form id="user-form">
                 <div class="select-list">
                     <ul>
-                        <li>所属机构：<input type="text" name="customerName" placeholder="请输入所属机构"/></li>
+                        <li>所属机构：<input type="text" name="customerName" id="customerName" placeholder="请输入所属机构"/></li>
                         <li>
-                            联系人：<input type="text" name="contacts" placeholder="请输入联系人"/>
+                            联系人：<input type="text" name="contacts" id="contacts" placeholder="请输入联系人"/>
                         </li>
                         <li>
                             联系电话：
-                            <input type="text" name="contactNumber" placeholder="请输入联系电话"/>
+                            <input type="text" name="contactNumber" id="contactNumber" placeholder="请输入联系电话"/>
                         </li>
                         <li>
                             微信号：
-                            <input type="text" name="weChatNumber" placeholder="请输入微信号"/>
+                            <input type="text" name="weChatNumber" id="weChatNumber" placeholder="请输入微信号"/>
                         </li>
                         <div data-toggle="distpicker" id="distpicker">
                             <li>
@@ -44,42 +44,51 @@
                         </div>
                         <li>
                             客户标签：
-                            <select id="customerLable" name="customerLable" th:with="type=${@dict.getType('sys_customer_label')}" data-none-selected-text="请选择">
-                            <option value="">--请选择数据--</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                        </select>
+                            <select id="customerLable" name="customerLable"
+                                    th:with="type=${@dict.getType('sys_customer_label')}" data-none-selected-text="请选择">
+                                <option value="">--请选择数据--</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
                         </li>
                         <div id="sd" style="display: none">
                             <li>
                                 实际提交者：
-                                <input name="creator" type="text" placeholder="请输入创建人"/>
+                                <input name="creator" type="text" id="creator" placeholder="请输入创建人"/>
                             </li>
                             <li class="select-time">
                                 <label>创建时间： </label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                       name="params[beginTime]"/>
                                 <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                       name="params[endTime]"/>
                             </li>
                             <li>
                                 所属部门：
-                                <input name="deptName" type="text" placeholder="请输入所属部门"/>
+                                <input name="deptName" type="text" id="deptName" placeholder="请输入所属部门"/>
                             </li>
                             <li>
                                 资源优势：
-                                <input name="resources" type="text" placeholder="请输入资源优势"/>
+                                <input name="resources" type="text" id="resources" placeholder="请输入资源优势"/>
                             </li>
                             <li>
                                 是否添加到公司号：
-                                <select id="wechatFlag" name="wechatFlag" th:with="type=${@dict.getType('sys_project_moneyStatus')}" data-none-selected-text="请选择">
+                                <select id="wechatFlag" name="wechatFlag"
+                                        th:with="type=${@dict.getType('sys_project_moneyStatus')}"
+                                        data-none-selected-text="请选择">
                                     <option value="">--请选择数据--</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                         </div>
 
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
                 </div>
@@ -97,6 +106,9 @@
             <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                shiro:hasPermission="system:customer:remove">
                 <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:customer:export">
+                <i class="fa fa-download"></i> 导出
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -130,11 +142,6 @@
             $("#sd").show();
         }
     }
-
-    function fenxi(){
-
-    }
-
 
     $('#distpicker').distpicker({
         autoSelect: false
@@ -336,6 +343,45 @@
     function jump() {
         var data = $("#formId").serialize();
         $.operate.gets(prefix + "/queryAll", data, "查询界面");
+    }
+
+    function exportExcel() {
+        var row = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        var str = "";
+        //根据name获取所有元素
+        for (var i = 0; i < row.length; i++) {
+            str += row[i].customerId + ",";
+        }
+        //去掉最后一个逗号(如果不需要去掉，就不用写)
+        if (str.length > 0) {
+            str = str.substr(0, str.length - 1);
+        }
+        var data = {
+            'customerIds': str,
+            'customerName': $("#customerName").val(),
+            'contacts': $("#contacts").val(),
+            'contactNumber': $("#contactNumber").val(),
+            'weChatNumber': $("#weChatNumber").val(),
+            'province': $("#province").val(),
+            'city': $("#city").val(),
+            'customerLable': $("#customerLable").val(),
+            'creator': $("#creator").val(),
+            'params[beginTime]': $("#startTime").val(),
+            'params[endTime]': $("#endTime").val(),
+            'resources': $("#resources").val(),
+            'deptName': $("#deptName").val(),
+            'wechatFlag': $("#wechatFlag").val(),
+        };
+        $.ajax({
+            url: prefix + "/export",
+            data: data,
+            type: "post",
+            success: function (result) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            }
+        })
     }
 
 </script>

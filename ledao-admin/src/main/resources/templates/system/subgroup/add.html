@@ -16,17 +16,13 @@
             <label class="col-sm-3 control-label">小组成员：</label>
             <div class="col-sm-8">
                 <input name="subgroupUserId" id="subgroupUserId" class="form-control" type="hidden">
-                <input name="subgroupUserName" id="subgroupUserName" class="form-control" type="text" onclick="selectUserTree()">
+                <input name="subgroupUserName" id="subgroupUserName" class="form-control" type="hidden">
+                <input name="subgroupDeptId" class="form-control" type="hidden" id="subgroupDeptId">
+                <input name="subgroupDeptName" class="form-control" type="hidden" id="subgroupDeptName">
+                <input class="form-control" type="text" id="shareDeptAndUser" onclick="selectUserTree()">
             </div>
         </div>
     </form>
-
-    <div class="row">
-        <div class="col-sm-offset-5 col-sm-10">
-            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
-            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
-        </div>
-    </div>
 </div>
 <th:block th:include="include :: footer"/>
 <script type="text/javascript">
@@ -44,21 +40,19 @@
 
     //人员树形选择器
     function selectUserTree() {
-        var options = {
-            title: '人员选择',
-            width: "750",
-            url: ctx + "system/user/selectUserTreeList?selectedUserIds=" + $("#subgroupUserId").val() + "&selectedUserNames=" + $("#subgroupUserName").val() + "&multiSelectFlag=true",
-            callBack: doSelect
-        };
-        $.modal.openOptions(options);
+        var url = ctx + "system/user/selectUserTree?selectedUserIds=" + $("#subgroupUserId").val() + "&selectedUserNames=" + $("#subgroupUserName ").val() + "&multiSelectFlag=true&selectedDeptIds="
+            + $("#subgroupDeptId").val() + "&selectedDeptNames=" + $("#subgroupUserName").val() + "&checkFlag=true";
+        $.modal.open("人员选择器", url, "750", "300", doSelect);
     }
 
     function doSelect(index, layero) {
-
         var body = layer.getChildFrame('body', index);
-
         var userIds = "";
         var userNames = "";
+        var deptIds = "";
+        var deptNames = "";
+        window.iframeWin = window[layero.find('iframe')[0]['name']];
+        var nodes = iframeWin.zonCheck();
         body.find("#multiselect_to option").each(function () {  //遍历所有option
             var val = $(this).val();   //获取option值
             var txt = $(this).text();  //获取option的文本内容
@@ -70,11 +64,47 @@
 
         userIds = userIds.substring(0, userIds.length - 1);
         userNames = userNames.substring(0, userNames.length - 1);
+        for (var i = 0; i < nodes.length; i++) {
+            deptIds = nodes[i].id + "," + deptIds;
+            deptNames = nodes[i].name + "," + deptNames;
+        }
+
+        if ($.common.isNotEmpty(deptIds)) {
+            deptIds = deptIds.substring(0, deptIds.length - 1);
+        }
+        if ($.common.isNotEmpty(deptNames)) {
+            deptNames = deptNames.substring(0, deptNames.length - 1);
+        }
 
         $("#subgroupUserId").val(userIds);
         $("#subgroupUserName").val(userNames);
+        $("#subgroupDeptId").val(deptIds);
+        $("#subgroupDeptName").val(deptNames);
+        if ($.common.isNotEmpty(deptNames) && $.common.isNotEmpty(userNames)) {
+            $("#shareDeptAndUser").val(deptNames + "," + userNames);
+        } else if ($.common.isNotEmpty(deptNames) && $.common.isEmpty(userNames)) {
+            $("#shareDeptAndUser").val(deptNames);
+        } else if ($.common.isNotEmpty(userNames) && $.common.isEmpty(deptNames)) {
+            $("#shareDeptAndUser").val(userNames);
+        }
+
         layer.close(index);
     }
+
+    //投后项目
+    function getProjectRows(row) {
+        var projectIds = "";
+        var projectNames = "";
+        for (var i = 0; i < row.length; i++) {
+            projectIds = row[i].projectId + "," + projectIds;
+            projectNames = row[i].projectName + "," + projectNames;
+        }
+        console.log(projectIds + "=======" + projectNames)
+        // $("#projectId").val(projectIds.substr(0, projectIds.length - 1));
+        //$("#projectName").val(projectNames.substr(0, projectNames.length - 1));
+        //layer.close(layer.index);
+    }
+
 </script>
 </body>
 </html>

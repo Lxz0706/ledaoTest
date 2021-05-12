@@ -92,6 +92,7 @@ public class SysTaggingServiceImpl implements ISysTaggingService {
      * @param judicialId
      * @return 结果
      */
+    @Override
     public SysTagging selectSysTaggingByJudicialId(Long judicialId) {
         return sysTaggingMapper.selectSysTaggingByJudicialId(judicialId);
     }
@@ -102,6 +103,7 @@ public class SysTaggingServiceImpl implements ISysTaggingService {
      * @param itemId
      * @return 结果
      */
+    @Override
     public SysTagging selectSysTaggingByItemId(String itemId) {
         return sysTaggingMapper.selectSysTaggingByItemId(itemId);
     }

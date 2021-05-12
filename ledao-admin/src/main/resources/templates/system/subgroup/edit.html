@@ -1,72 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改我的小组')" />
+    <th:block th:include="include :: header('修改我的小组')"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-subgroup-edit" th:object="${sysSubgroup}">
-            <input name="subgroupId" th:field="*{subgroupId}" type="hidden">
-            <div class="form-group">
-                <label class="col-sm-3 control-label">小组名称：</label>
-                <div class="col-sm-8">
-                    <input name="subgroupName" th:field="*{subgroupName}" class="form-control" type="text">
-                </div>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-subgroup-edit" th:object="${sysSubgroup}">
+        <input name="subgroupId" th:field="*{subgroupId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">小组名称：</label>
+            <div class="col-sm-8">
+                <input name="subgroupName" th:field="*{subgroupName}" class="form-control" type="text">
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">小组成员：</label>
-                <div class="col-sm-8">
-                    <input name="subgroupUserId" th:field="*{subgroupUserId}" id="subgroupUserId" class="form-control" type="hidden">
-                    <input name="subgroupUserName" th:field="*{subgroupUserName}" id="subgroupUserName" class="form-control" type="text" onclick="selectUserTree()">
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">小组成员：</label>
+            <div class="col-sm-8">
+                <input name="subgroupUserId" id="subgroupUserId" th:field="*{subgroupUserId}" class="form-control"
+                       type="hidden">
+                <input name="subgroupUserName" id="subgroupUserName" th:field="*{subgroupUserName}" class="form-control"
+                       type="hidden">
+                <input name="subgroupDeptId" class="form-control" th:field="*{subgroupDeptId}" type="hidden"
+                       id="subgroupDeptId">
+                <input name="subgroupDeptName" class="form-control" th:field="*{subgroupDeptName}" type="hidden"
+                       id="subgroupDeptName">
+                <input class="form-control" type="text" id="shareDeptAndUser" th:field="*{shareDeptAndUser}"
+                       onclick="selectUserTree()">
             </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <script type="text/javascript">
-        var prefix = ctx + "system/subgroup";
-        $("#form-subgroup-edit").validate({
-            focusCleanup: true
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/subgroup";
+    $("#form-subgroup-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-subgroup-edit').serialize());
+        }
+    }
+
+    //人员树形选择器
+    function selectUserTree() {
+        var url = ctx + "system/user/selectUserTree?selectedUserIds=" + $("#subgroupUserId").val() + "&selectedUserNames=" + $("#subgroupUserName ").val() + "&multiSelectFlag=true&selectedDeptIds="
+            + $("#subgroupDeptId").val() + "&selectedDeptNames=" + $("#subgroupDeptName").val() + "&checkFlag=true";
+        $.modal.open("人员选择器", url, "750", "300", doSelect);
+    }
+
+    function doSelect(index, layero) {
+        var body = layer.getChildFrame('body', index);
+        var userIds = "";
+        var userNames = "";
+        var deptIds = "";
+        var deptNames = "";
+        window.iframeWin = window[layero.find('iframe')[0]['name']];
+        var nodes = iframeWin.zonCheck();
+        body.find("#multiselect_to option").each(function () {  //遍历所有option
+            var val = $(this).val();   //获取option值
+            var txt = $(this).text();  //获取option的文本内容
+            if (val != '' && txt != '') {
+                userIds = userIds + val + ",";
+                userNames = userNames + txt + ",";
+            }
         });
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-subgroup-edit').serialize());
-            }
-        }
-        //人员树形选择器
-        function selectUserTree() {
-            var options = {
-                title: '人员选择',
-                width: "750",
-                url: ctx + "system/user/selectUserTreeList?selectedUserIds=" + $("#subgroupUserId").val() + "&selectedUserNames=" + $("#subgroupUserName").val() + "&multiSelectFlag=true",
-                callBack: doSelect
-            };
-            $.modal.openOptions(options);
+        userIds = userIds.substring(0, userIds.length - 1);
+        userNames = userNames.substring(0, userNames.length - 1);
+        for (var i = 0; i < nodes.length; i++) {
+            deptIds = nodes[i].id + "," + deptIds;
+            deptNames = nodes[i].name + "," + deptNames;
         }
 
-        function doSelect(index, layero) {
-
-            var body = layer.getChildFrame('body', index);
-
-            var userIds = "";
-            var userNames = "";
-            body.find("#multiselect_to option").each(function () {  //遍历所有option
-                var val = $(this).val();   //获取option值
-                var txt = $(this).text();  //获取option的文本内容
-                if (val != '' && txt != '') {
-                    userIds = userIds + val + ",";
-                    userNames = userNames + txt + ",";
-                }
-            });
-
-            userIds = userIds.substring(0, userIds.length - 1);
-            userNames = userNames.substring(0, userNames.length - 1);
-
-            $("#subgroupUserId").val(userIds);
-            $("#subgroupUserName").val(userNames);
-            layer.close(index);
+        if ($.common.isNotEmpty(deptIds)) {
+            deptIds = deptIds.substring(0, deptIds.length - 1);
         }
-    </script>
+        if ($.common.isNotEmpty(deptNames)) {
+            deptNames = deptNames.substring(0, deptNames.length - 1);
+        }
+
+        if ($.common.isNotEmpty(deptNames) && $.common.isNotEmpty(userNames)) {
+            $("#shareDeptAndUser").val(deptNames + "," + userNames);
+        } else if ($.common.isNotEmpty(deptNames) && $.common.isEmpty(userNames)) {
+            $("#shareDeptAndUser").val(deptNames);
+        } else if ($.common.isNotEmpty(userNames) && $.common.isEmpty(deptNames)) {
+            $("#shareDeptAndUser").val(userNames);
+        }
+        $("#subgroupUserId").val(userIds);
+        $("#subgroupUserName").val(userNames);
+        $("#subgroupDeptId").val(deptIds);
+        $("#subgroupDeptName").val(deptNames);
+
+        layer.close(index);
+    }
+</script>
 </body>
 </html>

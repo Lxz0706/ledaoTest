@@ -95,6 +95,7 @@ public class SysProjectContractServiceImpl implements ISysProjectContractService
      * @param projectId
      * @return 结果
      */
+    @Override
     public List<SysProjectContract> selectSysProjectContractByProjectId(String projectId) {
         return sysProjectContractMapper.selectSysProjectContractByProjectId(Convert.toStrArray(projectId));
     }
@@ -105,6 +106,7 @@ public class SysProjectContractServiceImpl implements ISysProjectContractService
      * @param projectId
      * @return 结果
      */
+    @Override
     public SysProjectContract selectProjectContractByProjectId(Long projectId){
         return sysProjectContractMapper.selectProjectContractByProjectId(projectId);
     }

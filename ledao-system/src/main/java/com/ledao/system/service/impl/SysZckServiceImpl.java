@@ -184,6 +184,7 @@ public class SysZckServiceImpl implements ISysZckService {
      * @param zcbId
      * @return 结果
      */
+    @Override
     public List<SysZck> selectSysZckByZcbId(Long zcbId) {
         return sysZckMapper.selectSysZckByZcbId(zcbId);
     }
@@ -194,6 +195,7 @@ public class SysZckServiceImpl implements ISysZckService {
      * @param sysZck
      * @return 结果
      */
+    @Override
     public List<SysZck> selectSysZck(SysZck sysZck) {
         return sysZckMapper.selectSysZck(sysZck);
     }
@@ -204,6 +206,7 @@ public class SysZckServiceImpl implements ISysZckService {
      * @param sysZck
      * @return 结果
      */
+    @Override
     public List<SysZck> selectSysZckByParentId(SysZck sysZck) {
         return sysZckMapper.selectSysZckByParentId(sysZck);
     }
@@ -214,6 +217,7 @@ public class SysZckServiceImpl implements ISysZckService {
      * @param zckIds
      * @return 结果
      */
+    @Override
     public List<SysZck> selectSysZckByZckId(String zckIds) {
         return sysZckMapper.selectSysZckByZckId(Convert.toStrArray(zckIds));
     }
@@ -224,6 +228,7 @@ public class SysZckServiceImpl implements ISysZckService {
      * @param sysZck
      * @return 结果
      */
+    @Override
     public List<SysZck> queryAll(SysZck sysZck) {
         return sysZckMapper.queryAll(sysZck);
     }

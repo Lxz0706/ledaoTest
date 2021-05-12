@@ -92,6 +92,7 @@ public class SysProjectmanagentServiceImpl implements ISysProjectmanagentService
     /**
      * 根据类型查询
      * */
+    @Override
     public List<SysProjectmanagent> selectSysProjectmanagentListByProjectType(){
         return sysProjectmanagentMapper.selectSysProjectmanagentListByProjectType();
     }

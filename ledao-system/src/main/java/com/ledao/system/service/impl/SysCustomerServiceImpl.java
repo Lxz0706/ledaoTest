@@ -138,6 +138,7 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
      * @param sysCustomer
      * @return 查询结果
      */
+    @Override
     public List<SysCustomer> queryAll(SysCustomer sysCustomer) {
         return sysCustomerMapper.queryAll(sysCustomer);
     }
@@ -145,6 +146,7 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     /**
      * 根据传递来的数据进行分组查询
      */
+    @Override
     public List<SysCustomer> selectSysCustomerByParam(SysCustomer sysCustomer, String param) {
         if ("city".equals(param)) {
             return sysCustomerMapper.selectSysCustomerByCity(sysCustomer);

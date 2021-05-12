@@ -47,9 +47,11 @@ public class Base64Util {
     }
 
     public static File GenerateImage(String imgStr, String fileDir, String fileName) {   //对字节数组字符串进行Base64解码并生成图片
-        if (imgStr == null)
+        if (imgStr == null) {
             //图像数据为空
             return null;
+        }
+
         BASE64Decoder decoder = new BASE64Decoder();
         //图片的输出流
         OutputStream imageOut = null;

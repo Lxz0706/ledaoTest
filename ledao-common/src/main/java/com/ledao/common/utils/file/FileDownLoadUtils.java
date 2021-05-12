@@ -21,9 +21,9 @@ public class FileDownLoadUtils {
             fis = new FileInputStream(file);
             request.setCharacterEncoding("UTF-8");
             String agent = request.getHeader("User-Agent").toUpperCase();
-            if ((agent.indexOf("MSIE") > 0) || ((agent.indexOf("RV") != -1) && (agent.indexOf("FIREFOX") == -1)))
+            if ((agent.indexOf("MSIE") > 0) || ((agent.indexOf("RV") != -1) && (agent.indexOf("FIREFOX") == -1))) {
                 fileName = URLEncoder.encode(fileName, "UTF-8");
-            else {
+            } else {
                 fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
             }
             response.reset();

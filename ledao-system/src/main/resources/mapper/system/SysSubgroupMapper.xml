@@ -13,22 +13,33 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="subgroupDeptId" column="subgroup_dept_id"/>
+        <result property="subgroupDeptName" column="subgroup_dept_name"/>
     </resultMap>
 
     <sql id="selectSysSubgroupVo">
-        select subgroup_id, subgroup_name, subgroup_user_id, subgroup_user_name, create_by, create_time, update_by, update_time from sys_subgroup
+        select subgroup_id, subgroup_name, subgroup_user_id, subgroup_user_name, create_by, create_time, update_by, update_time, subgroup_dept_id, subgroup_dept_name from sys_subgroup
     </sql>
 
     <select id="selectSysSubgroupList" parameterType="SysSubgroup" resultMap="SysSubgroupResult">
         <include refid="selectSysSubgroupVo"/>
         <where>
-            <if test="subgroupName != null  and subgroupName != ''">and subgroup_name = #{subgroupName}</if>
+            <if test="subgroupName != null  and subgroupName != ''">and subgroup_name like concat('%', #{subgroupName},
+                '%')
+            </if>
             <if test="subgroupUserId != null  and subgroupUserId != ''">and subgroup_user_id like concat('%',
                 #{subgroupUserId}, '%')
             </if>
             <if test="subgroupUserName != null  and subgroupUserName != ''">and subgroup_user_name like concat('%',
                 #{subgroupUserName}, '%')
             </if>
+            <if test="subgroupDeptId != null  and subgroupDeptId != ''">and subgroup_dept_id like concat('%',
+                #{subgroupDeptId}, '%')
+            </if>
+            <if test="subgroupDeptName != null  and subgroupDeptName != ''">and subgroup_dept_name like concat('%',
+                #{subgroupDeptName}, '%')
+            </if>
+            <if test="createBy != null and createBy != ''">AND create_by = #{createBy}</if>
         </where>
     </select>
 
@@ -47,6 +58,8 @@
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="subgroupDeptId != null">subgroup_dept_id,</if>
+            <if test="subgroupDeptName != null">subgroup_dept_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="subgroupName != null">#{subgroupName},</if>
@@ -56,6 +69,8 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="subgroupDeptId != null">#{subgroupDeptId},</if>
+            <if test="subgroupDeptName != null">#{subgroupDeptName},</if>
         </trim>
     </insert>
 
@@ -69,6 +84,8 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="subgroupDeptId != null">subgroup_dept_id = #{subgroupDeptId},</if>
+            <if test="subgroupDeptName != null">subgroup_dept_name = #{subgroupDeptName},</if>
         </trim>
         where subgroup_id = #{subgroupId}
     </update>

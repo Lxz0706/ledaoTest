@@ -105,6 +105,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
      * @param type
      * @return 结果
      */
+    @Override
     public List<SysDictData> selectDictDataByType(String type) {
         return dictDataMapper.selectDictDataByType(type);
     }

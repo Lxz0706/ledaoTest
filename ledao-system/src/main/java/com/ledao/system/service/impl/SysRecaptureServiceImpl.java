@@ -95,6 +95,7 @@ public class SysRecaptureServiceImpl implements ISysRecaptureService {
      * @param projectId
      * @return 结果
      */
+    @Override
     public List<SysRecapture> selectSysRecaptureByProjectId(Long projectId) {
         return sysRecaptureMapper.selectSysRecaptureByProjectId(projectId);
     }

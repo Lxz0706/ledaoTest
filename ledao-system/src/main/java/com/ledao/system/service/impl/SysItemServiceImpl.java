@@ -95,6 +95,7 @@ public class SysItemServiceImpl implements ISysItemService {
      * @param customerId
      * @return 结果
      */
+    @Override
     public List<SysItem> selectItemByCustomerId(Long customerId) {
         return sysItemMapper.selectItemByCustomerId(customerId);
     }

@@ -95,6 +95,7 @@ public class SysNamecardServiceImpl implements ISysNamecardService {
      * @param ids
      * @result 结果
      */
+    @Override
     public List<SysNamecard> selectSysNamecardListByCardId(String ids) {
         return sysNamecardMapper.selectSysNamecardListByCardId(Convert.toStrArray(ids));
     }

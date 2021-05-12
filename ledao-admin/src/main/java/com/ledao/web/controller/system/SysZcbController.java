@@ -79,7 +79,7 @@ public class SysZcbController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"investmentManager2".equals(sysRole.getRoleKey())) {
+                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
                         sysZcb.setTeamMembersId(currentUser.getUserId().toString());
                     }
                 }

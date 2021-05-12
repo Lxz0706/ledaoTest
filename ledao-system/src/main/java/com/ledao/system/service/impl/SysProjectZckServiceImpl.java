@@ -95,6 +95,7 @@ public class SysProjectZckServiceImpl implements ISysProjectZckService {
      * @param ids 数组
      * @return 结果
      */
+    @Override
     public List<SysProjectZck> selectSysProjectZckByIds(String ids) {
         return sysProjectZckMapper.selectSysProjectZckByIds(Convert.toStrArray(ids));
     }

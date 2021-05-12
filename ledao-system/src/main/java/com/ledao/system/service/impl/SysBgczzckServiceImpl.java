@@ -137,6 +137,7 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
     /**
      * 根据项目状态查询项目
      */
+    @Override
     public List<SysBgczzck> selectByProjectStatus() {
         return sysBgczzckMapper.selectByProjectStatus();
     }
@@ -144,6 +145,7 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
     /**
      * 根据id查询
      */
+    @Override
     public List<SysBgczzck> selectByIds(String ids) {
         return sysBgczzckMapper.selectByIds(Convert.toStrArray(ids));
     }

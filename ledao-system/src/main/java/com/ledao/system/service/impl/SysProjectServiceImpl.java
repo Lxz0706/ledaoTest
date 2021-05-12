@@ -118,6 +118,7 @@ public class SysProjectServiceImpl implements ISysProjectService {
      * @param sysProject
      * @return 结果
      */
+    @Override
     public List<SysProject> selectProject(SysProject sysProject) {
         return sysProjectMapper.selectProject(sysProject);
     }
@@ -128,6 +129,7 @@ public class SysProjectServiceImpl implements ISysProjectService {
      * @param zckId
      * @return 结果
      */
+    @Override
     public List<SysProject> selectSysProjectByProjectZckId(String zckId) {
         return sysProjectMapper.selectSysProjectByProjectZckId(Convert.toStrArray(zckId));
     }

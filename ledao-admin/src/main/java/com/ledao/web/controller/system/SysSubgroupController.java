@@ -3,7 +3,9 @@ package com.ledao.web.controller.system;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +56,24 @@ public class SysSubgroupController extends BaseController {
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             if (!currentUser.isAdmin()) {
-                sysSubgroup.setCreateBy(ShiroUtils.getLoginName());
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                        sysSubgroup.setCreateBy(ShiroUtils.getLoginName());
+                    }
+                }
             }
         }
         List<SysSubgroup> list = sysSubgroupService.selectSysSubgroupList(sysSubgroup);
+        for (SysSubgroup sysSubgroup1 : list) {
+            if (StringUtils.isNotEmpty(sysSubgroup1.getSubgroupDeptName()) && StringUtils.isNotEmpty(sysSubgroup1.getSubgroupUserName())) {
+                sysSubgroup1.setShareDeptAndUser(sysSubgroup1.getSubgroupDeptName() + "," + sysSubgroup1.getSubgroupUserName());
+            } else if (StringUtils.isNotEmpty(sysSubgroup1.getSubgroupUserName())) {
+                sysSubgroup1.setShareDeptAndUser(sysSubgroup1.getSubgroupUserName());
+            } else if (StringUtils.isNotEmpty(sysSubgroup1.getSubgroupDeptName())) {
+                sysSubgroup1.setShareDeptAndUser(sysSubgroup1.getSubgroupDeptName());
+            }
+        }
         return getDataTable(list);
     }
 
@@ -100,6 +116,7 @@ public class SysSubgroupController extends BaseController {
     @GetMapping("/edit/{subgroupId}")
     public String edit(@PathVariable("subgroupId") Long subgroupId, ModelMap mmap) {
         SysSubgroup sysSubgroup = sysSubgroupService.selectSysSubgroupById(subgroupId);
+        sysSubgroup.setShareDeptAndUser(sysSubgroup.getSubgroupDeptName() + "," + sysSubgroup.getSubgroupUserName());
         mmap.put("sysSubgroup", sysSubgroup);
         return prefix + "/edit";
     }
@@ -148,5 +165,28 @@ public class SysSubgroupController extends BaseController {
     public AjaxResult selectById(String id) {
         SysSubgroup sysSubgroup = sysSubgroupService.selectSysSubgroupById(Long.valueOf(id));
         return AjaxResult.success(sysSubgroup);
+    }
+
+    /**
+     * 选择人员
+     */
+    @GetMapping("/selectUser")
+    public String selectUser(String loginName, String userName, ModelMap mmap) {
+        mmap.put("loginName", loginName);
+        mmap.put("userName", userName);
+        return prefix + "/treeList";
+    }
+
+    @PostMapping("/selectForSubgroup")
+    @ResponseBody
+    public AjaxResult selectForSubgroup(SysSubgroup sysSubgroup) {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                sysSubgroup.setCreateBy(ShiroUtils.getLoginName());
+            }
+        }
+        List<SysSubgroup> list = sysSubgroupService.selectSysSubgroupList(sysSubgroup);
+        return AjaxResult.success(list.size());
     }
 }

@@ -92,6 +92,7 @@ public class SysJudicialSuspectedServiceImpl implements ISysJudicialSuspectedSer
      * @param itemId
      * @return 结果
      */
+    @Override
     public SysJudicialSuspected selectByItemId(String itemId) {
         return sysJudicialSuspectedMapper.selectByItemId(itemId);
     }

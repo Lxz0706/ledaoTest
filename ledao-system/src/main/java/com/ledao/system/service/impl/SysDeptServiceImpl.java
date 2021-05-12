@@ -57,7 +57,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
     /**
      * 查询部门管理树（排除下级）
      *
-     * @param deptId 部门ID
+     * @param dept 部门ID
      * @return 所有部门信息
      */
     @Override
@@ -115,7 +115,6 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @return 树结构列表
      */
     public List<Ztree> initZtree(List<SysDept> deptList, List<String> roleDeptList) {
-
         List<Ztree> ztrees = new ArrayList<Ztree>();
         boolean isCheck = StringUtils.isNotNull(roleDeptList);
         for (SysDept dept : deptList) {
@@ -285,6 +284,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @param parentId
      * @return 结果
      */
+    @Override
     public List<SysDept> selectDeptByParentId(Long parentId) {
         return deptMapper.selectDeptByParentId(parentId);
     }

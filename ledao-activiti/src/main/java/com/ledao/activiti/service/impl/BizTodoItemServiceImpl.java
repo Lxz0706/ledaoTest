@@ -111,11 +111,13 @@ public class BizTodoItemServiceImpl implements IBizTodoItemService {
         todoItem.setTodoTime(DateUtils.getNowDate());
         List<Task> taskList = taskService.createTaskQuery().processInstanceId(instanceId).active().list();
         int counter = 0;
-        for (Task task: taskList) {
+        for (Task task : taskList) {
 
             // todoitem 去重
             BizTodoItem bizTodoItem = bizTodoItemMapper.selectTodoItemByTaskId(task.getId());
-            if (bizTodoItem != null) continue;
+            if (bizTodoItem != null) {
+                continue;
+            }
 
             BizTodoItem newItem = new BizTodoItem();
             BeanUtils.copyProperties(todoItem, newItem);
@@ -134,7 +136,7 @@ public class BizTodoItemServiceImpl implements IBizTodoItemService {
                 // 查询候选用户组
                 List<String> todoUserIdList = bizTodoItemMapper.selectTodoUserListByTaskId(task.getId());
                 if (!CollectionUtils.isEmpty(todoUserIdList)) {
-                    for (String todoUserId: todoUserIdList) {
+                    for (String todoUserId : todoUserIdList) {
                         SysUser todoUser = userMapper.selectUserByLoginName(todoUserId);
                         newItem.setTodoUserId(todoUser.getLoginName());
                         newItem.setTodoUserName(todoUser.getUserName());

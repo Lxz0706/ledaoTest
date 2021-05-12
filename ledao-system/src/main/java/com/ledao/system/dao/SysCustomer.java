@@ -1,9 +1,12 @@
 package com.ledao.system.dao;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 /**
  * 客户库对象 sys_customer
@@ -21,15 +24,21 @@ public class SysCustomer extends BaseEntity {
     private Long customerId;
 
     /**
+     * 市
+     */
+    @Excel(name = "所属城市")
+    private String city;
+
+    /**
      * 客户名称
      */
-    @Excel(name = "客户名称")
+    @Excel(name = "所属机构")
     private String customerName;
 
     /**
      * 所属机构
      */
-    @Excel(name = "所属机构")
+    //  @Excel(name = "所属机构")
     private String affiliation;
 
     /**
@@ -45,39 +54,71 @@ public class SysCustomer extends BaseEntity {
     private String contactNumber;
 
     /**
+     * 微信号
+     */
+    @Excel(name = "微信号")
+    private String weChatNumber;
+
+    /*
+     * 客户标签
+     * */
+    @Excel(name = "客户标签")
+    private String customerLable;
+
+    /**
+     * 创建者
+     */
+    @Excel(name = "实际提交者")
+    private String creator;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    private Date createTime;
+
+    /**
+     * 所属部门
+     */
+    @Excel(name = "所属部门")
+    private String deptName;
+
+    /**
+     * 是否添加微信
+     */
+    @Excel(name = "已加公司号")
+    private String wechatFlag;
+
+    /**
      * 职务
      */
-    @Excel(name = "职务")
+    //@Excel(name = "职务")
     private String duties;
 
     /**
      * 联系地址
      */
-    @Excel(name = "联系地址")
+    // @Excel(name = "联系地址")
     private String contactAddress;
 
     /**
      * 资源优势
      */
-    @Excel(name = "资源优势")
+    //@Excel(name = "资源优势")
     private String resources;
 
     /**
      * 省份
      */
-    @Excel(name = "省份")
+    // @Excel(name = "省份")
     private String province;
 
-    /**
-     * 市
-     */
-    @Excel(name = "市")
-    private String city;
 
     /**
      * 县/区
      */
-    @Excel(name = "县/区")
+    // @Excel(name = "县/区")
     private String county;
 
     /**
@@ -97,42 +138,15 @@ public class SysCustomer extends BaseEntity {
     private Long deptId;
 
     /**
-     * 所属部门
-     */
-    //@Excel(name = "所属部门")
-    private String deptName;
-
-    /**
-     * 是否添加微信
-     */
-    //@Excel(name = "是否添加微信")
-    private String wechatFlag;
-
-    /**
      * 原因
      */
     //@Excel(name = "原因")
     private String reason;
 
 
-    /**
-     * 微信号
-     */
-    //@Excel(name = "微信号")
-    private String weChatNumber;
-
-    //客户标签
-    private String customerLable;
-
     private String[] customerLables;
 
     private String[] deptIds;
-
-    /**
-     * 创建者
-     */
-    @Excel(name = "创建者")
-    private String creator;
 
     /**
      * 修改者
@@ -194,6 +208,8 @@ public class SysCustomer extends BaseEntity {
     private Long weChatNum;
 
     private String shareholder;
+
+    private String[] customerIds;
 
     public Long getCustomerId() {
         return customerId;
@@ -497,6 +513,24 @@ public class SysCustomer extends BaseEntity {
 
     public void setShareholder(String shareholder) {
         this.shareholder = shareholder;
+    }
+
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String[] getCustomerIds() {
+        return customerIds;
+    }
+
+    public void setCustomerIds(String[] customerIds) {
+        this.customerIds = customerIds;
     }
 
     @Override

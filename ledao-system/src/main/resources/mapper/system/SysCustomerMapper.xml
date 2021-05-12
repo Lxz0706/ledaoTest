@@ -70,7 +70,7 @@
         </if>-->
         <if test="deptName != null  and deptName != ''">and dept_name like concat('%',#{deptName}, '%')</if>
         <if test="wechatFlag != null  and wechatFlag != ''">and weChat_flag = #{wechatFlag}</if>
-        <if test="reason != null  and reason != ''">and reason like concat('%', #{reason, '%')</if>
+        <if test="reason != null  and reason != ''">and reason like concat('%', #{reason}, '%')</if>
         <if test="weChatNumber != null  and weChatNumber != ''">and we_chat_number like
             concat('%',#{weChatNumber}, '%')
         </if>
@@ -88,6 +88,12 @@
         </if>
         <if test="shareUserName != null  and shareUserName != ''">and share_user_name like
             concat('%',#{shareUserName}, '%')
+        </if>
+        <if test="customerIds !=null and customerIds.length > 0">
+            and customer_id in
+            <foreach collection="customerIds" item="customerId" open="(" separator="," close=")">
+                #{customerId}
+            </foreach>
         </if>
     </select>
 

@@ -17,7 +17,10 @@
 
 <input id="selectedUserIds" name="selectedUserIds" type="hidden" th:value="${selectedUserIds}"/>
 <input id="selectedUserNames" name="selectedUserNames" type="hidden" th:value="${selectedUserNames}"/>
+<input id="selectedDeptIds" name="selectedDeptIds" type="hidden" th:value="${selectedDeptIds}"/>
+<input id="selectedDeptNames" name="selectedDeptNames" type="hidden" th:value="${selectedDeptNames}"/>
 <input id="multiSelectFlag" name="multiSelectFlag" type="hidden" th:value="${multiSelectFlag}"/>
+<input id="checkFlag" name="checkFlag" type="hidden" th:value="${checkFlag}"/>
 <input id="deptId" name="deptId" type="hidden" th:value="${deptId}"/>
 <div class="row">
     <div class="col-xs-10">
@@ -41,47 +44,67 @@
     </div>
     <div id="tree" class="ztree treeselect"></div>
 </div>
-    <div class="col-xs-3" style="padding-top: 10px;">
-        <h4>待选人员</h4>
-        <select name="from" id="multiselect" class="js-multiselect form-control" size="15" multiple="multiple">
-        </select>
-    </div>
+<div class="col-xs-3" style="padding-top: 10px;">
+    <h4>待选人员</h4>
+    <select name="from" id="multiselect" class="js-multiselect form-control" size="15" multiple="multiple">
+    </select>
+</div>
 
-    <div class="col-xs-1" style="padding-top: 40px;">
-        <button type="button" id="multiselect_rightAll" class="btn btn-block"><i
-                class="glyphicon glyphicon-forward"></i></button>
-        <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i
-                class="glyphicon glyphicon-chevron-right"></i></button>
-        <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i
-                class="glyphicon glyphicon-chevron-left"></i></button>
-        <button type="button" id="multiselect_leftAll" class="btn btn-block"><i
-                class="glyphicon glyphicon-backward"></i></button>
-    </div>
+<div class="col-xs-1" style="padding-top: 40px;">
+    <button type="button" id="multiselect_rightAll" class="btn btn-block"><i
+            class="glyphicon glyphicon-forward"></i></button>
+    <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i
+            class="glyphicon glyphicon-chevron-right"></i></button>
+    <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i
+            class="glyphicon glyphicon-chevron-left"></i></button>
+    <button type="button" id="multiselect_leftAll" class="btn btn-block"><i
+            class="glyphicon glyphicon-backward"></i></button>
+</div>
 
-    <div class="col-xs-3" style="padding-top: 10px;">
-        <h4>已选人员</h4>
-        <select name="to" id="multiselect_to" class="form-control" size="15" multiple="multiple"></select>
-    </div>
+<div class="col-xs-3" style="padding-top: 10px;">
+    <h4>已选人员</h4>
+    <select name="to" id="multiselect_to" class="form-control" size="15" multiple="multiple"></select>
+    <input id="selectDeptId" type="hidden"/>
+    <input id="selectDeptName" type="hidden"/>
+</div>
 </div>
 
 <div th:include="include::footer"></div>
 <script th:src="@{/ajax/libs/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
 <script th:inline="javascript">
+    var prefix = ctx + "system/dept"
+    var excludeId = [[${excludeId}]];
+    var checkFlag = $("#checkFlag").val();
+    var initZTree;
     $(function () {
-        var url = ctx + "system/dept/treeData";
-        var deptId = $("#deptId").val();
-        if ($.common.isEmpty(deptId)) {
-            var options = {
-                url: url,
-                expandLevel: 2,
-                onClick: zOnClick
-            };
-            $.tree.init(options);
-        } else {
-            $(".treeExpandCollapse").hide();
-            $("#tree").hide();
-        }
+        initTree();
+        setTimeout('onAsyncSuccess()', 100);
+        userList();
+    });
 
+    function initTree() {
+        var url = $.common.isEmpty(excludeId) ? prefix + "/treeData" : prefix + "/treeData/" + excludeId;
+        var options = {
+            url: url,
+            expandLevel: 2,
+            onClick: zOnClick,
+            view: {
+                selectedMulti: true,      // 设置是否允许同时选中多个节点
+                nameIsHTML: true           // 设置 name 属性是否支持 HTML 脚本
+            },
+            check: {
+                enable: checkFlag,             // 置 zTree 的节点上是否显示 checkbox / radio
+                chkStyle: 'checkbox',
+                chkboxType: {"Y": "s", "N": "s"},
+                nocheckInherit: true,      // 设置子节点是否自动继承
+            },
+            selectById: true
+        };
+        $.tree.init(options);
+        initZTree = $.fn.zTree.getZTreeObj("tree");
+    }
+
+    function userList() {
         $('input[name="userName"]').on('input propertychange', function () {
             loadUserList();
         });
@@ -130,34 +153,6 @@
 
         //3、加载所有人员列表
         loadUserList();
-
-        //4、获取我的小组
-        loadGroupList();
-
-    });
-
-    function loadGroupList() {
-        //清空当前待选择人员框列表
-        // $("#multiselect").find("option").remove();
-
-        $.ajax({
-            type: "get",
-            url: ctx + "system/subgroup/groupList",
-            traditional: true,
-            dataType: "json",
-            data: {},
-            success: function (result) {
-                var data = result.subgroupList;
-                var str = "";
-                for (var i in data) {
-                    str += '<a onclick="datailForGroup(' + data[i].subgroupId + ')">' + data[i].subgroupName + '</a>';
-                }
-                $("#myGroup").append(str);
-            }
-        })
-    }
-    function datailForGroup(id) {
-        $("#multiselect").find("option").remove();
     }
 
     //点击部门树事件
@@ -175,11 +170,8 @@
         }
         //清空当前待选择人员框列表
         $("#multiselect").find("option").remove();
-
         var userName = $("#userName").val();
-
         var selectedUserIds = "";
-
         //获取当前已选人员ids,用于过滤
         $("#multiselect_to option").each(function () {  //遍历所有option
             var val = $(this).val();   //获取option值
@@ -199,7 +191,6 @@
                 userName: userName
             },
             success: function (result) {
-
                 for (var i = 0; i < result.userList.length; i++) {//加载未拥有的角色  这里根据后台传递的对象循环添加
                     //与当前所选人员进行对比，待选人员中过滤掉已选的人员
                     if (selectedUserIds != '') {
@@ -220,6 +211,43 @@
             }
         });
     }
+
+    //存在就勾选
+    function onAsyncSuccess() {
+        var shareDeptIds = $("#selectedDeptIds").val();
+        var treeObj = $.fn.zTree.getZTreeObj("tree");
+        if ($.common.isNotEmpty(shareDeptIds)) {
+            var shareDeptId = shareDeptIds.split(",");
+            for (var i = 0; i < shareDeptId.length; i++) {
+                if ($.common.isNotEmpty(shareDeptId[i])) {
+                    if ($.common.isNotEmpty(treeObj)) {
+                        var node = treeObj.getNodeByParam("id", shareDeptId[i], null);
+                        treeObj.checkNode(node, true, false); //根据id在ztree的复选框中实现自动勾选
+                    }
+                }
+            }
+        }
+    }
+
+    function zonCheck() {
+        var treeObj = $.fn.zTree.getZTreeObj("tree");
+        var nodes = treeObj.getCheckedNodes(true);
+        return nodes;
+    }
+
+    function submitHandler() {
+        var nodes = zonCheck();
+        var projectIds = "";
+        var projectNames = "";
+        for (var i = 0; i < nodes.length; i++) {
+            projectIds = nodes[i].id + "," + projectIds;
+            projectNames = nodes[i].name + "," + projectNames;
+        }
+        $("#selectDeptId").val(projectIds);
+        $("#selectDeptName").val(projectNames);
+        window.parent.doSelect(layer);
+    }
+
 </script>
 </body>
 </html>

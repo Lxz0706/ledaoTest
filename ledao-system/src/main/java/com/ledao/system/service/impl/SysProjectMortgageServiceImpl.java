@@ -97,6 +97,7 @@ public class SysProjectMortgageServiceImpl implements ISysProjectMortgageService
      * @param projectId
      * @return 结果
      */
+    @Override
     public List<SysProjectMortgage> selectSysProjectMortgageByProjectId(String projectId) {
         return sysProjectMortgageMapper.selectSysProjectMortgageByProjectId(Convert.toStrArray(projectId));
     }
@@ -107,6 +108,7 @@ public class SysProjectMortgageServiceImpl implements ISysProjectMortgageService
      * @param projectId
      * @return 结果
      */
+    @Override
     public SysProjectMortgage selectProjectMortgageByProjectId(Long projectId){
         return sysProjectMortgageMapper.selectProjectMortgageByProjectId(projectId);
     }
@@ -117,6 +119,7 @@ public class SysProjectMortgageServiceImpl implements ISysProjectMortgageService
      * @param projectId
      * @return 结果
      */
+    @Override
     public List<SysProjectMortgage> selectProjectMortgageByProjectIds(Long projectId){
         return sysProjectMortgageMapper.selectProjectMortgageByProjectIds(projectId);
     }

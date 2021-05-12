@@ -114,6 +114,7 @@ public class SysDocumentController extends BaseController {
                     sysDocument1.setIsAdmin("Y");
                 }
             }
+            sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName() + "," + sysDocument1.getShareUserName());
         }
         return getDataTable(list);
     }

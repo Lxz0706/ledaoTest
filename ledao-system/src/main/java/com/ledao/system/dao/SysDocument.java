@@ -103,6 +103,8 @@ public class SysDocument extends BaseEntity {
 
     private String isAdmin;
 
+    private String shareDeptAndUser;
+
     public void setFileId(Long fileId) {
         this.fileId = fileId;
     }
@@ -229,6 +231,14 @@ public class SysDocument extends BaseEntity {
 
     public void setIsAdmin(String isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public String getShareDeptAndUser() {
+        return shareDeptAndUser;
+    }
+
+    public void setShareDeptAndUser(String shareDeptAndUser) {
+        this.shareDeptAndUser = shareDeptAndUser;
     }
 
     @Override

@@ -14,11 +14,11 @@
     }
 </style>
 <body class="hold-transition box box-main">
-
+<input id="shareDeptIds" name="treeId" type="hidden" th:value="${shareDeptIds}"/>
 <input id="selectedUserIds" name="selectedUserIds" type="hidden" th:value="${selectedUserIds}"/>
 <input id="selectedUserNames" name="selectedUserNames" type="hidden" th:value="${selectedUserNames}"/>
 <input id="multiSelectFlag" name="multiSelectFlag" type="hidden" th:value="${multiSelectFlag}"/>
-<input id="deptId" name="deptId" type="hidden" th:value="${deptId}"/>
+<input id="deptId" name="deptId" type="text" th:value="${deptId}"/>
 <!--
 <div class="row">
     <div class="col-xs-10">
@@ -324,11 +324,12 @@
     }
 
     function addGroup() {
-        $("#personId").hide();
-        $("#groupDivId").show();
+        /* $("#personId").hide();
+         $("#groupDivId").show();*/
         var url = ctx + 'system/subgroup/add';
-        /*$.modal.open('新增小组', url);*/
-        document.getElementById("groupAdd").src = url;
+        $.modal.open('新增小组', url);
+        //$.modal.layer_close();
+        /*document.getElementById("groupAdd").src = url;*/
     }
 
     function removeAll(id) {
@@ -348,6 +349,27 @@
         var url = $.operate.editUrl(id);
         /* $.modal.open('修改小组', url);*/
         document.getElementById("groupEdit").src = url;
+    }
+
+    function submitHandler() {
+        //var nodes = zonCheck();
+        window.parent.doSelect();
+    }
+
+    function onAsyncSuccess() {
+        var shareDeptIds = $("#shareDeptIds").val();
+        var treeObj = $.fn.zTree.getZTreeObj("tree");
+        if ($.common.isNotEmpty(shareDeptIds)) {
+            var shareDeptId = shareDeptIds.split(",");
+            for (var i = 0; i < shareDeptId.length; i++) {
+                if ($.common.isNotEmpty(shareDeptId[i])) {
+                    if ($.common.isNotEmpty(treeObj)) {
+                        var node = treeObj.getNodeByParam("id", shareDeptId[i], null);
+                        treeObj.checkNode(node, true, false); //根据id在ztree的复选框中实现自动勾选
+                    }
+                }
+            }
+        }
     }
 </script>
 </body>

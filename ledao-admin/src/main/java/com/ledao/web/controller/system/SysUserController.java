@@ -279,7 +279,7 @@ public class SysUserController extends BaseController {
     /**
      * 选择人员树
      */
-    @GetMapping("/selectUserTree")
+/*    @GetMapping("/selectUserTree")
     public String selectUserTree(String selectedUserIds, String selectedUserNames, Boolean multiSelectFlag, ModelMap mmap, Boolean deptId) {
         mmap.put("dept", deptService.selectDeptById((long) 100));
         mmap.put("selectedUserIds", selectedUserIds);
@@ -292,17 +292,21 @@ public class SysUserController extends BaseController {
         }
 
         return prefix + "/tree";
-    }
+    }*/
 
     /**
      * 选择人员树
      */
-    @GetMapping("/selectUserTreeList")
-    public String selectUserTreeList(String selectedUserIds, String selectedUserNames, Boolean multiSelectFlag, ModelMap mmap, Boolean deptId) {
+    @GetMapping("/selectUserTree")
+    public String selectUserTree(String selectedUserIds, String selectedUserNames, String selectedDeptIds, String selectedDeptNames,
+                                     Boolean multiSelectFlag, ModelMap mmap, Boolean deptId, Boolean checkFlag) {
         mmap.put("dept", deptService.selectDeptById((long) 100));
         mmap.put("selectedUserIds", selectedUserIds);
         mmap.put("selectedUserNames", selectedUserNames);
+        mmap.put("selectedDeptIds", selectedDeptIds);
+        mmap.put("selectedDeptNames", selectedDeptNames);
         mmap.put("multiSelectFlag", multiSelectFlag);
+        mmap.put("checkFlag", checkFlag);
         if (StringUtils.isNotNull(deptId)) {
             if (deptId == true) {
                 mmap.put("deptId", "201");
@@ -316,6 +320,7 @@ public class SysUserController extends BaseController {
     @GetMapping("/listForTree")
     @ResponseBody
     public String listForTree(SysUser user) {
+        user.setStatus("0");
         List<SysUser> list = userService.selectUserList(user);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("success", true);

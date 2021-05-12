@@ -170,8 +170,8 @@ public class CommonController {
     @GetMapping("/common/download/getFileByUrl")
     public void getImage(String filePath, HttpServletRequest request, HttpServletResponse response) {
         // 从服务器端获得文件流，并输出到页面
-        InputStream inputStream = this.getInputStream(filePath);
-        this.writeFile(response, inputStream);
+        InputStream inputStream = getInputStream(filePath);
+        writeFile(response, inputStream);
     }
 
 

@@ -152,9 +152,21 @@ public class SysCustomerController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysCustomer sysCustomer) {
-        List<SysCustomer> list = sysCustomerService.selectSysCustomerList(sysCustomer);
+        List<SysCustomer> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(sysCustomer.getCustomerIds())) {
+            SysCustomer sysCustomer1 = new SysCustomer();
+            sysCustomer1.setCustomerIds(sysCustomer.getCustomerIds());
+            list = sysCustomerService.selectSysCustomerList(sysCustomer1);
+        } else {
+            list = sysCustomerService.selectSysCustomerList(sysCustomer);
+        }
+        for (SysCustomer sysCustomer1 : list) {
+            if (StringUtils.isEmpty(sysCustomer1.getWechatFlag())) {
+                sysCustomer1.setWechatFlag("否");
+            }
+        }
         ExcelUtil<SysCustomer> util = new ExcelUtil<SysCustomer>(SysCustomer.class);
-        return util.exportExcel(list, "customer");
+        return util.exportExcel(list, "客户详情");
     }
 
     /**
@@ -724,12 +736,13 @@ public class SysCustomerController extends BaseController {
             jsonObject.put("value", sysCustomer1.getCustomerLableCount());
             jsonObject.put("weChatNum", weChatList.size());
             Collections.sort(customerLableList, new Comparator<SysCustomer>() {
+                @Override
                 public int compare(SysCustomer o1, SysCustomer o2) {
                     // 按照学生的年龄进行降序排列
                     if (o1.getCustomerLableCount() > o2.getCustomerLableCount()) {
                         return -1;
                     }
-                    if (o1.getCustomerLableCount() == o2.getCustomerLableCount()) {
+                    if (o1.getCustomerLableCount().equals(o2.getCustomerLableCount())) {
                         return 0;
                     }
                     return 1;

@@ -96,6 +96,7 @@ public class SysProjectPledgeServiceImpl implements ISysProjectPledgeService {
      * @param projectId
      * @return 结果
      */
+    @Override
     public List<SysProjectPledge> selectPledgeByProjectId(String projectId) {
         return sysProjectPledgeMapper.selectPledgeByProjectId(Convert.toStrArray(projectId));
     }
@@ -103,6 +104,7 @@ public class SysProjectPledgeServiceImpl implements ISysProjectPledgeService {
     /**
      * 根据projectId查询
      */
+    @Override
     public List<SysProjectPledge> selectSysPledgeByProjectId(Long projectId) {
         return sysProjectPledgeMapper.selectSysPledgeByProjectId(projectId);
     }

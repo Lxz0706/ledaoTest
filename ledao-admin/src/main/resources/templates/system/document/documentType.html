@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('文件管理列表')"/>
+    <style>
+        .bootstrap-table .fixed-table-container .table thead th .th-inner {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input name="documentType" id="documentType" type="hidden" th:value="*{type}">
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:document:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>-->
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:document:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <!--<div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>-->
+        <div class="col-sm-12 select-table table-striped table-condensed" id="showList">
+            <!--<table id="bootstrap-table" class="rowSameHeight"></table>-->
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:document:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:document:remove')}]];
+    var prefix = ctx + "system/document";
+
+    $(function () {
+        var options = {
+            url: prefix + "/listBySubsetType",
+            createUrl: prefix + "/add/{id}",
+            modalName: "文件管理",
+            columns: [
+                {
+                    field: 'subsetType',
+                    title: '类别',
+                    align: 'center',
+                    formatter: function (value, row) {
+                        return '<a style="font-size: 20px;letter-spacing:20px;font-weight: 600" onclick="toDocumentByType(\'' + row.subsetType + '\')">' + value + '</a>';
+                    }
+                }]
+        };
+        $.table.init(options);
+        $.ajax({
+            url: prefix + "/listBySubsetType",
+            data: {'documentType': $("#documentType").val()},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var data = result.rows;
+                var str = "<div class='col-sm-12' style='height: 32em'>";
+                for (var i in data) {
+                    str += '<div class="col-sm-4" style="margin-bottom: 16px;height: 16em;text-align: center;position: relative;top:5em;">' +
+                        '<p style="font-size: 60px;letter-spacing:20px;font-weight: 600" class="'+ data[i].cssClass+'"></p>' +
+                        '<p><a style="font-size: 30px;letter-spacing:20px;font-weight: 600" onclick="toDocumentByType(\'' + data[i].subsetType + '\')">'
+                        + data[i].subsetType + '</a></p></div>';
+                }
+                str += '</div></div>';
+                $("#showList").html(str);
+            }
+        })
+    });
+
+    function toDocumentByType(type) {
+        var documentType = $("#documentType").val();
+        var url;
+        if ("无" == type) {
+            url = prefix + "/toDocumentByTypes/" + documentType;
+        } else {
+            url = prefix + "/toDocumentType/" + type + "/" + documentType;
+        }
+        //var url = prefix + "/toDocumentByType/" + type;
+        $.modal.parentTab(type + "列表", url);
+    }
+
+    function add() {
+        var type = $("#documentType").val();
+        $.operate.add(type);
+    }
+
+    function back() {
+        var documentType = $("#documentType").val();
+        var url = prefix + "/toList";
+        $.modal.parentTab("文档管理", url);
+    }
+
+</script>
+</body>
+</html>

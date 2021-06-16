@@ -2,6 +2,7 @@ package com.ledao.system.service.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysJudicialMapper;
@@ -85,4 +86,17 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
     public int deleteSysJudicialById(Long id) {
         return sysJudicialMapper.deleteSysJudicialById(id);
     }
+
+
+    /**
+     * 查询总量
+     *
+     * @param sysJudicial
+     * @return 结果
+     */
+    @Override
+    public List<SysJudicial> selectListTotal(SysJudicial sysJudicial) {
+        return sysJudicialMapper.selectListTotal(sysJudicial);
+    }
+
 }

@@ -85,44 +85,21 @@ public class SysZcbController extends BaseController {
                 }
             }
         }
-        List<SysZcb> list = this.sysZcbService.selectSysZcbList(sysZcb);
+        List<SysZcb> list = this.sysZcbService.selectZcbList(sysZcb);
         for (SysZcb sysZcb1 : list) {
             StringBuffer customerSb = new StringBuffer();
-            List<SysZck> zckList = sysZckService.selectSysZckByZcbId(sysZcb1.getId());
-            for (SysZck sysZck : zckList) {
-                if (sysZcb1.getCollateralTotal() == null) {
-                    sysZcb1.setCollateralTotal(new BigDecimal(0));
-                }
-                if (sysZck.getTotalPrice() == null) {
-                    sysZck.setTotalPrice(new BigDecimal(0));
-                }
-                if (StringUtils.isNull(sysZck.getCapValue()) || StringUtils.isEmpty(sysZck.getCapValue())) {
-                    sysZck.setCapValue(new BigDecimal(0).toString());
-                } else {
-                    sysZck.setCapValue(new BigDecimal(sysZck.getCapValue()).toString());
-                }
-                sysZck.setCapValues(new BigDecimal(sysZck.getCapValue()));
-                if (sysZcb1.getCapValue() == null) {
-                    sysZcb1.setCapValue(new BigDecimal(0));
-                }
-                if (currentUser != null) {
-                    // 如果是超级管理员，则不过滤数据
-                    if (!currentUser.isAdmin()) {
-                        List<SysRole> getRoles = currentUser.getRoles();
-                        for (SysRole sysRole : getRoles) {
-                            //投资部经理，大型单体经理，高层角色
-                            if ("investmentManager".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
-                                    || "SJXXB".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey()) || "investmentManager2".equals(sysRole.getRoleKey())) {
-                                sysZcb1.setCollateralTotal(sysZcb1.getCollateralTotal().add(sysZck.getTotalPrice()));
-                                sysZcb1.setCapValue(sysZck.getCapValues().add(sysZcb1.getCapValue()));
-                            } else {
-                                sysZcb1.setCollateralTotal(new BigDecimal(0));
-                                sysZcb1.setCapValue(new BigDecimal(0));
-                            }
+            if (currentUser != null) {
+                // 如果是超级管理员，则不过滤数据
+                if (!currentUser.isAdmin()) {
+                    List<SysRole> getRoles = currentUser.getRoles();
+                    for (SysRole sysRole : getRoles) {
+                        //投资部经理，大型单体经理，高层角色
+                        if (!"investmentManager".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                                || !"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) &&
+                                !"investmentManager2".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
+                            sysZcb1.setCollateralTotal(new BigDecimal(0));
+                            sysZcb1.setCapValue(new BigDecimal(0));
                         }
-                    } else {
-                        sysZcb1.setCollateralTotal(sysZcb1.getCollateralTotal().add(sysZck.getTotalPrice()));
-                        sysZcb1.setCapValue(sysZck.getCapValues().add(sysZcb1.getCapValue()));
                     }
                 }
             }

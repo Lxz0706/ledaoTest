@@ -288,7 +288,7 @@ public class SysZckController extends BaseController {
             }
         }
         SysZcb sysZcb = sysZcbService.selectSysZcbById(sysZck.getZcbId());
-        sysZck.setAssetPackageName(sysZcb.getAssetStatus());
+        sysZck.setAssetType(sysZcb.getAssetStatus());
         sysZck.setCreateBy(ShiroUtils.getLoginName());
         sysZckService.insertSysZck(sysZck);
 

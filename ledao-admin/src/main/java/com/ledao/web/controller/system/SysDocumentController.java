@@ -1,20 +1,30 @@
 package com.ledao.web.controller.system;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.config.Global;
-import com.ledao.common.core.page.PageDao;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.file.MimeTypeUtils;
 import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysDeptService;
 import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
+import org.apache.bcel.generic.RET;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jodconverter.DocumentConverter;
+import org.jodconverter.office.OfficeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,6 +38,10 @@ import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 文件管理Controller
  *
@@ -38,6 +52,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/system/document")
 public class SysDocumentController extends BaseController {
     private String prefix = "system/document";
+
+    @Autowired
+    private DocumentConverter converter; // 转换器
 
     @Autowired
     private ISysDocumentService sysDocumentService;
@@ -71,7 +88,59 @@ public class SysDocumentController extends BaseController {
     @GetMapping("/toDocumentByType/{type}")
     public String toDocumentByType(@PathVariable("type") String type, ModelMap modelMap) {
         modelMap.put("type", type);
+        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType(type + "_type");
+        if (sysDictDataList.size() > 0) {
+            return prefix + "/documentType";
+        } else {
+            return prefix + "/documentByType";
+        }
+    }
+
+    @GetMapping("/toBackByType/{type}")
+    public String toBackByType(@PathVariable("type") String type, ModelMap modelMap) {
+        modelMap.put("type", type);
+        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType(type + "_type");
+        if (sysDictDataList.size() > 0) {
+            return prefix + "/documentType";
+        } else {
+            return prefix + "/document";
+        }
+    }
+
+    @GetMapping("/toDocumentType/{type}/{documentType}")
+    public String toDocumentType(@PathVariable("type") String type, @PathVariable("documentType") String documentType, ModelMap modelMap) {
+        modelMap.put("type", type);
+        modelMap.put("documentType", documentType);
+        return prefix + "/documentByTypes";
+    }
+
+    @GetMapping("/toDocumentByTypes/{type}")
+    public String toDocumentByTypes(@PathVariable("type") String type, ModelMap modelMap) {
+        modelMap.put("type", type);
         return prefix + "/documentByType";
+    }
+
+    @PostMapping("/listBySubsetType")
+    @ResponseBody
+    public TableDataInfo listBySubsetType(SysDocument sysDocument) {
+        startPage();
+        Map<String, String> typeMap = new HashMap<>();
+        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType(sysDocument.getDocumentType() + "_type");
+        for (SysDictData sysDictData : sysDictDataList) {
+            typeMap.put(sysDictData.getDictValue(), sysDictData.getCssClass());
+        }
+        List<SysDocument> list = sysDocumentService.listBySubsetType(sysDocument);
+        for (SysDocument sysDocument1 : list) {
+            if (StringUtils.isNotEmpty(sysDocument1.getSubsetType())) {
+                if (StringUtils.isNotEmpty(typeMap.get(sysDocument1.getSubsetType()))) {
+                    sysDocument1.setCssClass(typeMap.get(sysDocument1.getSubsetType()));
+                }
+            }
+            if (StringUtils.isEmpty(sysDocument1.getSubsetType())) {
+                sysDocument1.setSubsetType("无");
+            }
+        }
+        return getDataTable(list);
     }
 
     /**
@@ -82,6 +151,9 @@ public class SysDocumentController extends BaseController {
     @ResponseBody
     public TableDataInfo listByType(SysDocument sysDocument) {
         startPage();
+        SysDept sysDept = new SysDept();
+        sysDept.setStatus("0");
+        //List<SysDept> sysDeptList = sysDeptService.selectDeptList(sysDept);
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
@@ -90,23 +162,20 @@ public class SysDocumentController extends BaseController {
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
                             && !"admin".equals(sysRole.getRoleKey())) {
-                        sysDocument.setShareUserId(ShiroUtils.getUserId().toString());
+                        sysDocument.setShareUserName(ShiroUtils.getSysUser().getUserName());
                     }
                 }
             }
         }
         List<SysDocument> list = sysDocumentService.selectSysDocumentList(sysDocument);
         for (SysDocument sysDocument1 : list) {
-            SysUser currentUser1 = ShiroUtils.getSysUser();
-            if (currentUser1 != null) {
+            if (currentUser != null) {
                 // 如果是超级管理员，则不过滤数据
-                if (!currentUser1.isAdmin()) {
-                    List<SysRole> getRoles = currentUser1.getRoles();
+                if (!currentUser.isAdmin()) {
+                    List<SysRole> getRoles = currentUser.getRoles();
                     for (SysRole sysRole : getRoles) {
-                        if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                                && !"admin".equals(sysRole.getRoleKey())) {
-                            sysDocument1.setIsAdmin("N");
-                        } else {
+                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
+                                || "admin".equals(sysRole.getRoleKey()) || ShiroUtils.getLoginName().equals(sysDocument1.getCreateBy())) {
                             sysDocument1.setIsAdmin("Y");
                         }
                     }
@@ -114,7 +183,29 @@ public class SysDocumentController extends BaseController {
                     sysDocument1.setIsAdmin("Y");
                 }
             }
-            sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName() + "," + sysDocument1.getShareUserName());
+
+           /* int i = 0;
+            for (String string : sysDocument1.getShareDeptId().split(",")) {
+                i++;
+                System.out.print("部门：======" + string + "-----");
+            }
+            for (SysDept sysDept1 : sysDeptList) {
+                System.out.print(sysDept1.getDeptId() + "=======");
+            }*/
+            //System.out.print(sysDeptList.size() + "=====" + i);
+
+            if (StringUtils.isNotEmpty(sysDocument1.getShareUserName()) && StringUtils.isNotEmpty(sysDocument1.getShareDeptName())) {
+                sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName() + "," + sysDocument1.getShareUserName());
+            } else if (StringUtils.isEmpty(sysDocument1.getShareDeptName())) {
+                sysDocument1.setShareDeptAndUser(sysDocument1.getShareUserName());
+            } else if (StringUtils.isEmpty(sysDocument1.getShareUserName())) {
+                sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName());
+            }/* else if (sysDeptList.size() > 0 && StringUtils.isNotEmpty(sysDocument1.getShareDeptId())) {
+                if (sysDeptList.size() == sysDocument1.getShareDeptId().split(",").length) {
+                    sysDocument1.setShareDeptAndUser("全公司");
+                }
+            }*/
+
         }
         return getDataTable(list);
     }
@@ -138,6 +229,13 @@ public class SysDocumentController extends BaseController {
     @GetMapping(value = {"/add", "/add/{type}"})
     public String add(@PathVariable(value = "type", required = false) String type, ModelMap modelMap) {
         modelMap.put("documentType", type);
+        return prefix + "/add";
+    }
+
+    @GetMapping("/adds/{documentType}/{subsetType}")
+    public String adds(@PathVariable(value = "documentType") String documentType, @PathVariable("subsetType") String subsetType, ModelMap modelMap) {
+        modelMap.put("documentType", documentType);
+        modelMap.put("subsetType", subsetType);
         return prefix + "/add";
     }
 
@@ -179,11 +277,24 @@ public class SysDocumentController extends BaseController {
         sysDocument.setShareUserId(userIds.toString());
         sysDocument.setShareUserName(userNames.toString());
         try {
+            System.out.print("文件上传开始：=======");
             String avatar = FileUploadUtils.upload(Global.getProfile() + "/document", file, false);
+            System.out.print("文件上传结束：=========" + avatar);
             sysDocument.setFileUrl(avatar);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //去除子集类型中的，
+        StringBuffer sb = new StringBuffer();
+        if (StringUtils.isNotEmpty(sysDocument.getSubsetType())) {
+            for (String string : sysDocument.getSubsetType().split(",")) {
+                if (StringUtils.isNotEmpty(string)) {
+                    sb.append(string);
+                }
+            }
+        }
+        sysDocument.setSubsetType(sb.toString());
         sysDocument.setCreateor(ShiroUtils.getSysUser().getUserName());
         sysDocument.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysDocumentService.insertSysDocument(sysDocument));
@@ -228,6 +339,19 @@ public class SysDocumentController extends BaseController {
         PageHelper.startPage(0, 10, orderBy);
         SysDocument sysDocument = new SysDocument();
         sysDocument.setDocumentType(getRequest().getParameter("type"));
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"admin".equals(sysRole.getRoleKey())) {
+                        sysDocument.setShareUserName(ShiroUtils.getSysUser().getUserName());
+                    }
+                }
+            }
+        }
         List<SysDocument> list = sysDocumentService.selectSysDocumentList(sysDocument);
         return list;
     }
@@ -236,4 +360,87 @@ public class SysDocumentController extends BaseController {
     public String toList() {
         return prefix + "/document";
     }
+
+    @GetMapping("/officeToPdf/url")
+    public void officeToPdf(String url, HttpServletResponse response) {
+        try {
+            //获取当前地址下的文件
+            File file = new File("c:/" + url);
+            String oldSuffix = url.substring(url.lastIndexOf(".") + 1);
+            //默认转pdf,excel转html
+            String suffix = ".pdf";
+            if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix)) {
+                suffix = ".html";
+            }
+
+            //转换的文件存放位置
+            String newUrl = url.replace("." + oldSuffix, suffix);
+
+            File newFile = new File("c:/" + url);
+
+            converter.convert(file).to(newFile).execute();
+            ServletOutputStream outputStream = response.getOutputStream();
+            InputStream in = new FileInputStream(newFile);// 读取文件
+
+            in.close();
+            outputStream.close();
+            newFile.delete();
+        } catch (OfficeException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping({"/queryAll"})
+    public String queryAll(ModelMap modelMap, SysDocument sysDocument) {
+        modelMap.put("sysDocument", sysDocument);
+        return prefix + "/queryAll";
+    }
+
+    @PostMapping("/listes")
+    @ResponseBody
+    public TableDataInfo listes(SysDocument sysDocument) {
+        startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"admin".equals(sysRole.getRoleKey())) {
+                        sysDocument.setShareUserName(ShiroUtils.getSysUser().getUserName());
+                    }
+                }
+            }
+        }
+        List<SysDocument> list = sysDocumentService.selectSysDocumentList(sysDocument);
+        for (SysDocument sysDocument1 : list) {
+            if (currentUser != null) {
+                // 如果是超级管理员，则不过滤数据
+                if (!currentUser.isAdmin()) {
+                    List<SysRole> getRoles = currentUser.getRoles();
+                    for (SysRole sysRole : getRoles) {
+                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
+                                || "admin".equals(sysRole.getRoleKey()) || ShiroUtils.getLoginName().equals(sysDocument1.getCreateBy())) {
+                            sysDocument1.setIsAdmin("Y");
+                        }
+                    }
+                } else {
+                    sysDocument1.setIsAdmin("Y");
+                }
+            }
+
+            if (StringUtils.isNotEmpty(sysDocument1.getShareUserName()) && StringUtils.isNotEmpty(sysDocument1.getShareDeptName())) {
+                sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName() + "," + sysDocument1.getShareUserName());
+            } else if (StringUtils.isEmpty(sysDocument1.getShareDeptName())) {
+                sysDocument1.setShareDeptAndUser(sysDocument1.getShareUserName());
+            } else if (StringUtils.isEmpty(sysDocument1.getShareUserName())) {
+                sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName());
+            }
+        }
+        return getDataTable(list);
+    }
+
 }

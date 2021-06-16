@@ -13,21 +13,25 @@
         <result property="itemTransferee" column="item_transferee"/>
         <result property="itemAmount" column="item_amount"/>
         <result property="itemUrl" column="item_url"/>
+        <result property="itemContent" column="item_content"/>
     </resultMap>
 
     <sql id="selectSysAPropertyVo">
-        select id, item_id, item_title, item_time, item_transferor, item_transferee, item_amount, item_url from sys_a_property
+        select id, item_id, item_title, item_time, item_transferor, item_transferee, item_amount, item_url,item_content,item_nums from sys_a_property
     </sql>
 
     <select id="selectSysAPropertyList" parameterType="SysAProperty" resultMap="SysAPropertyResult">
         <include refid="selectSysAPropertyVo"/>
         <where>
             <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
-            <if test="itemTitle != null  and itemTitle != ''">and item_title like concat('%', #{itemTitle},'%') </if>
+            <if test="itemTitle != null  and itemTitle != ''">and item_title like concat('%', #{itemTitle},'%')</if>
             <if test="itemTime != null  and itemTime != ''">and item_time = #{itemTime}</if>
-            <if test="itemTransferor != null  and itemTransferor != ''">and item_transferor like concat('%', #{itemTransferor},'%')</if>
+            <if test="itemTransferor != null  and itemTransferor != ''">and item_transferor like concat('%',
+                #{itemTransferor},'%')
+            </if>
             <if test="itemTransferee != null  and itemTransferee != ''">and item_transferee like concat('%',
-            #{itemTransferee},'%')</if>
+                #{itemTransferee},'%')
+            </if>
             <if test="itemAmount != null  and itemAmount != ''">and item_amount = #{itemAmount}</if>
             <if test="itemUrl != null  and itemUrl != ''">and item_url = #{itemUrl}</if>
         </where>

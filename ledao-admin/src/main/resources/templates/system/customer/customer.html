@@ -51,11 +51,11 @@
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
+                        <li id="sj" style="display: none">
+                            实际提交者：
+                            <input name="creator" type="text" id="creator" placeholder="请输入创建人"/>
+                        </li>
                         <div id="sd" style="display: none">
-                            <li>
-                                实际提交者：
-                                <input name="creator" type="text" id="creator" placeholder="请输入创建人"/>
-                            </li>
                             <li class="select-time">
                                 <label>创建时间： </label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间"
@@ -134,12 +134,13 @@
         for (var i = 0; i < roles.length; i++) {
             if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
                 $("#sd").show();
+                $("#sj").show();
+            } else {
+                if ("thbManager" == roles[i].roleKey || "thbManager2" == roles[i].roleKey || "tzbzz" == roles[i].roleKey
+                    || "investmentManager" == roles[i].roleKey || "bgczManager" == roles[i].roleKey || "thbzz" == roles[i].roleKey) {
+                    $("#sj").show();
+                }
             }
-        }
-    }
-    for (var i = 0; i < roles.length; i++) {
-        if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
-            $("#sd").show();
         }
     }
 
@@ -310,9 +311,18 @@
     }
 
     function onLoadSuccess(data) {
+        if ($.common.isEmpty(data.rows)) {
+            $.table.hideColumn("creator");
+            $.table.hideColumn("wechatFlag");
+            $.table.hideColumn("reason");
+        }
         for (var i in data.rows) {
-            if ("N" == data.rows[i].isAdmin) {
+            console.log("=====" + data.rows[i].isAdmin);
+            if ($.common.isEmpty(data.rows[i].isAdmin)) {
                 $.table.hideColumn("creator");
+                $.table.hideColumn("wechatFlag");
+                $.table.hideColumn("reason");
+            } else if ("N" == data.rows[i].isAdmin) {
                 $.table.hideColumn("wechatFlag");
                 $.table.hideColumn("reason");
             }

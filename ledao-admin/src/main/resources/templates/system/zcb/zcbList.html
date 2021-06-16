@@ -77,14 +77,14 @@
                     field: 'collateralTotal',
                     title: '抵押物估值总价',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'capValue',
                     title: '盖帽值',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {

@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import com.github.pagehelper.PageHelper;
+import com.ledao.common.core.page.PageDao;
+import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
@@ -74,7 +77,7 @@ public class SysProjectZckController extends BaseController {
                 //根据父级ID查询出子集
                 List<SysProject> sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject1);
                 for (SysProject sysProject2 : sysProjectsList) {
-                    //合同本金
+                    /*//合同本金
                     List<SysProjectContract> sysProjectContractList = sysProjectContractService.selectSysProjectContractByProjectId(sysProject2.getProjectId().toString());
                     for (SysProjectContract sysProjectContract : sysProjectContractList) {
                         if (sysProject1.getTotalPrice() == null) {
@@ -84,7 +87,7 @@ public class SysProjectZckController extends BaseController {
                             sysProjectContract.setCapital(new BigDecimal(0));
                         }
                         sysProject1.setTotalPrice(sysProject1.getTotalPrice().add(sysProjectContract.getCapital()));
-                    }
+                    }*/
                     SysProject sysProject3 = sysProjectService.selectSysProjectById(sysProject2.getProjectId());
                     //本金余额相加
                     if (sysProject1.getTotalPrincipalBalance() == null) {

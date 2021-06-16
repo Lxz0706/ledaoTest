@@ -77,7 +77,7 @@
 
     <select id="selectSysTaggingByJudicialId" parameterType="Long" resultMap="SysTaggingResult">
         <include refid="selectSysTaggingVo"/>
-        where judicial_id = #{judicialId}
+        where item_id = #{itemId}
     </select>
 
     <select id="selectSysTaggingByItemId" parameterType="String" resultMap="SysTaggingResult">

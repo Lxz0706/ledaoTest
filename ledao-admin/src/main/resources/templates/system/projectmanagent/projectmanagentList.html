@@ -88,14 +88,14 @@
                     field: 'investmentAmount',
                     title: '投资金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'amountPaid',
                     title: '目标回现金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 /*{
@@ -137,14 +137,14 @@
                     field: 'expectedAmount',
                     title: '待结算服务费',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="projectType1(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="projectType1(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
                     }
                 },
                 {
                     field: 'amountRecovered',
                     title: '已结算服务费',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="projectType(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value) + '</a>'
+                        return '<a href="javascript:void(0)" onclick="projectType(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>'
                     }/*,
                     footerFormatter: function (value) {
                         var count = 0;

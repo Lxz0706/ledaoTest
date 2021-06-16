@@ -3,6 +3,7 @@ package com.ledao.system.service;
 import java.util.List;
 
 import com.ledao.system.dao.SysJudicial;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 司法拍卖项目Service接口
@@ -58,4 +59,14 @@ public interface ISysJudicialService {
      * @return 结果
      */
     public int deleteSysJudicialById(Long id);
+
+    /*
+     * 查询总量
+     * @param sysJudicial
+     * @return 结果
+     *
+     * */
+
+    public List<SysJudicial> selectListTotal(SysJudicial sysJudicial);
+
 }

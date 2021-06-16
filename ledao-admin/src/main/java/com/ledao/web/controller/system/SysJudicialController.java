@@ -2,7 +2,12 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.ledao.activity.dao.BizLeaveVo;
 import com.ledao.common.annotation.RepeatSubmit;
+import com.ledao.common.core.page.PageDao;
+import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysTagging;
@@ -11,6 +16,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,13 +67,13 @@ public class SysJudicialController extends BaseController {
         for (SysJudicial sysJudicial1 : list) {
             SysTagging sysTagging = new SysTagging();
             sysTagging.setCreateBy(ShiroUtils.getLoginName());
-            sysTagging.setJudicialId(sysJudicial1.getId());
+             sysTagging.setItemId(sysJudicial1.getItemId());
+            sysTagging.setJudicial("Y");
             List<SysTagging> sysTaggingList = sysTaggingService.selectSysTaggingList(sysTagging);
             if (sysTaggingList.size() > 0) {
                 sysJudicial1.setTaggings("Y");
             }
         }
-
         return getDataTable(list);
     }
 
@@ -159,7 +165,7 @@ public class SysJudicialController extends BaseController {
     @ResponseBody
     @RepeatSubmit
     public AjaxResult removeTagging(SysTagging sysTagging) {
-        SysTagging sysTagging1 = sysTaggingService.selectSysTaggingByJudicialId(sysTagging.getJudicialId());
+        SysTagging sysTagging1 = sysTaggingService.selectSysTaggingByItemId(sysTagging.getItemId());
         return toAjax(sysTaggingService.deleteSysTaggingById(sysTagging1.getId()));
     }
 }

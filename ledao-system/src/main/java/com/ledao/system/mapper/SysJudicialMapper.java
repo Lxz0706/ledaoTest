@@ -3,6 +3,8 @@ package com.ledao.system.mapper;
 import java.util.List;
 
 import com.ledao.system.dao.SysJudicial;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 司法拍卖项目Mapper接口
@@ -58,4 +60,14 @@ public interface SysJudicialMapper {
      * @return 结果
      */
     public int deleteSysJudicialByIds(String[] ids);
+
+    /*
+     * 查询总量
+     * @param sysJudicial
+     * @return 结果
+     *
+     * */
+
+    public List<SysJudicial> selectListTotal(SysJudicial sysJudicial);
+
 }

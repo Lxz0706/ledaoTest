@@ -166,7 +166,7 @@ public class SysProjectUncollectedMoneyController extends BaseController {
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
-                if (!ShiroUtils.getLoginName().equals("wangziyuan")) {
+                if (!"wangziyuan".equals(ShiroUtils.getLoginName())) {
                     return error("没有权限不能修改！");
                 }
             }
@@ -244,7 +244,7 @@ public class SysProjectUncollectedMoneyController extends BaseController {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 if (StringUtils.isNotEmpty(sysProjectUncollectedMoney1.getCreateBy())) {
-                    if (!ShiroUtils.getLoginName().equals(sysProjectUncollectedMoney1.getCreateBy()) && !currentUser.getLoginName().equals("wangziyuan")) {
+                    if (!ShiroUtils.getLoginName().equals(sysProjectUncollectedMoney1.getCreateBy()) && !"wangziyuan".equals(currentUser.getLoginName())) {
                         return error("当前用户没有修改权限，请联系管理员或者创建人进行修改！");
                     }
                 }
@@ -322,7 +322,7 @@ public class SysProjectUncollectedMoneyController extends BaseController {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getCreateBy())) {
-                    if (!currentUser.getLoginName().equals(sysProjectUncollectedMoney.getCreateBy()) && !currentUser.getLoginName().equals("wangziyuan")) {
+                    if (!currentUser.getLoginName().equals(sysProjectUncollectedMoney.getCreateBy()) && !"wangziyuan".equals(currentUser.getLoginName())) {
                         msg = "当前用户没有修改权限，请联系管理员或者创建人进行修改！";
                         return new AjaxResult(AjaxResult.Type.ERROR, msg);
                     }
@@ -365,7 +365,7 @@ public class SysProjectUncollectedMoneyController extends BaseController {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 if (StringUtils.isNotEmpty(sysProjectUncollectedMoney.getCreateBy())) {
-                    if (!currentUser.getLoginName().equals(sysProjectUncollectedMoney.getCreateBy()) && !currentUser.getLoginName().equals("wangziyuan")) {
+                    if (!currentUser.getLoginName().equals(sysProjectUncollectedMoney.getCreateBy()) && !"wangziyuan".equals(currentUser.getLoginName())) {
                         return error("当前用户没有修改权限，请联系管理员或者创建人进行修改！");
                     }
                 }

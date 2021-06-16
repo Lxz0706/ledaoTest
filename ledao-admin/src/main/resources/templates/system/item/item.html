@@ -98,14 +98,14 @@
                     field: 'gmv', 
                     title: '成交金额',
                     formatter:function (value,row,index) {
-                       return $.operate.numberFormatter(value);
+                       return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'tradeDate', 
                     title: '成交日期',
                     formatter: function (value, row, index) {
-                        return $.table.dateTimeFormatter(value);
+                        return $.table.dateTimeFormatter(value,3,'.',',');
                     }
                 },
                 {

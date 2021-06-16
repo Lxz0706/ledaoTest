@@ -69,7 +69,7 @@ public interface SysCustomerMapper {
     public SysCustomer checkPhoneUnique(SysCustomer sysCustomer);
 
     /**
-     * 校验手机号码是否唯一
+     * 校验微信号码是否唯一
      *
      * @param sysCustomer 微信号
      * @return 结果

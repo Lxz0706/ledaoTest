@@ -99,9 +99,9 @@
                     }
                 },
                 {
-                    field: 'receiver',
-                    title: '接收者',
-                    formatter: function (value) {
+                    field: 'shareDeptAndUser',
+                    title: '接收部门及人员',
+                    formatter: function (value, row, index) {
                         return $.table.tooltip(value, 15);
                     }
                 },
@@ -111,8 +111,7 @@
                 },
                 {
                     field: 'createTime',
-                    title: '创建时间',
-                    sortable: true
+                    title: '创建时间'
                 },
                 /*{
                     field: 'status',

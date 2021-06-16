@@ -22,14 +22,6 @@
             background-color: rgba(220, 38, 38, 0);
         }
 
-        /*canvas {
-            width: 75%!important;
-            height: 75%!important;
-            position: relative;
-            right: 10% !important;
-            buttom: -90px !important;
-        }*/
-
         .ibox {
             height: 50% !important;
         }
@@ -68,7 +60,6 @@
             text-align: center;
             line-height: 5em;
         }
-
     </style>
 </head>
 
@@ -77,7 +68,8 @@
     <div class="div1" style="display: flex;">
         <div class="div2">乐道后台管理系统</div>
         <div>
-            <iframe width="100%" scrolling="no" height="30" frameborder="0" allowtransparency="true" src="https://i.tianqi.com?c=code&id=34&color=%230070C0&icon=1&site=17"></iframe>
+            <iframe width="100%" scrolling="no" height="30" frameborder="0" allowtransparency="true"
+                    src="https://i.tianqi.com?c=code&id=34&color=%230070C0&icon=1&site=17"></iframe>
         </div>
     </div>
 </div>
@@ -348,6 +340,42 @@
             }
         });
     }
+
+   /* function noticeList() {
+        $.ajax({
+            type: 'post',
+            url: '/system/notice/noticeList',
+            data: '',
+            dataType: "JSON",
+            success: function (result) {
+                var data = result.data;
+                var str = "<div style=\"margin-left: 0%;margin-top: 3%;\">";
+                str += "<div style=\"margin-left: 0%;margin-top: 3%;\"><ui>";
+                for (var i in data) {
+                    str += "<li><a onclick='datailForNotice(" + data[i].noticeId + ")'>" + data[i].noticeTitle + "</a></li>";
+                }
+                str += "</ui></div></div>";
+                console.log(str);
+                // layer.msg(str, {icon: 1, time: '-1'});
+
+
+                layer.open({
+                    type: 1,  //页面层
+                    shade: 0,
+                    title: "消息",
+                    content: str,
+                    area: ["300px", "200px"],
+                    //skin: 'layui-layer-nobg layer_bg', //没有背景色
+                });
+
+
+                /!*if (result.msg > 0) {
+                    layer.msg('只想弱弱提示');
+                   // $.modal.alertWarning('您共有' + result.msg + '条信息未读！！！');
+                }*!/
+            }
+        });
+    }*/
 
     //获取通知公告类型
     function selectNoticeType() {

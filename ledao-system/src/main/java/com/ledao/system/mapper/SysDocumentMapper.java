@@ -58,4 +58,13 @@ public interface SysDocumentMapper {
      * @return 结果
      */
     public int deleteSysDocumentByIds(String[] fileIds);
+
+
+    /**
+     * 根据文档类型中的子集分组
+     *
+     * @param sysDocument
+     * @return
+     */
+    public List<SysDocument> listBySubsetType(SysDocument sysDocument);
 }

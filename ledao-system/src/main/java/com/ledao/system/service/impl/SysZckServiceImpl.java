@@ -120,10 +120,10 @@ public class SysZckServiceImpl implements ISysZckService {
         for (SysZck zck : zckList) {
             try {
                 if (StringUtils.isNotNull(zck.getProjectName()) && StringUtils.isNotEmpty(zck.getProjectName())
-                        && StringUtils.isNotNull(zck.getAssetPackageName()) && StringUtils.isNotEmpty(zck.getAssetPackageName()) && StringUtils.isNotNull(zck.getNo())) {
+                        && StringUtils.isNotEmpty(zck.getAssetType()) && StringUtils.isNotNull(zck.getNo())) {
 
                     //获取父级id
-                    sysZck1.setAssetPackageName(zck.getAssetPackageName());
+                    sysZck1.setAssetType(zck.getAssetType());
                     sysZck1.setZcbId(zcbId);
                     sysZck1.setProjectName(zck.getProjectName().trim());
                     List<SysZck> zckList2 = this.selectSysZckList(sysZck1);

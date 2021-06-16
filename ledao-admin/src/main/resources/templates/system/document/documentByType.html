@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('文件管理列表')"/>
+    <!--<th:block th:include="include :: pdf-css"/>-->
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -33,6 +34,8 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: pdf-js"/>
+<th:block th:include="include :: base64-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:document:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:document:remove')}]];
@@ -69,16 +72,16 @@
                     field: 'fileType',
                     title: '文件类型'
                 },
-                {
+                /*{
                     field: 'shareDeptName',
                     title: '共享部门名称',
                     formatter: function (value, row, index) {
                         return $.table.tooltip(value, 15);
                     }
-                },
+                },*/
                 {
                     field: 'shareDeptAndUser',
-                    title: '可见人员',
+                    title: '可见部门及人员',
                     formatter: function (value, row, index) {
                         return $.table.tooltip(value, 15);
                     }
@@ -95,13 +98,73 @@
                         if ("Y" == row.isAdmin) {
                             actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         }
-                        actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileUrl + '\')"><i class="fa fa-trash"></i>下载</a>');
+                        if ("Y" == row.downloadableFlag) {
+                            var fileType = row.fileType.toLowerCase();
+                            actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
+                            if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
+                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                            } else if ('pdf' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '"><i class="fa fa-search"></i>预览</a>');
+                            } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
+                                || 'png' == fileType || 'webp' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileUrl + "',\'" + row.fileType + '\')"+row.filw+><i class="fa fa-search"></i>预览</a>');
+                            } else if ('mp4' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
+                            }
+                        }
                         return actions.join('');
                     }
                 }]
         };
         $.table.init(options);
     });
+
+    function playVideo(url, type) {
+        showVideo('<video controls="controls" autoplay="autoplay">\n' +
+            '  <source src="' + url + '" type="video/mp4" />\n' +
+            '  <source src="' + url + '" type="video/ogg" />\n' +
+            '  <source src="' + url + '" type="video/webm" />\n' +
+            '  <object data="' + url + '">\n' +
+            '    <embed src="' + url + '" />\n' +
+            '  </object>\n' +
+            '</video>'
+        );
+    }
+
+    function showVideo(content) {
+        layer.open({
+            type: 1,
+            title: false, //不显示标题栏
+            shadeClose: true, //点击遮罩时关闭
+            area: ['400px', '230px'],
+            shade: 0.8,
+            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+            moveType: 1, //拖拽模式，0或者1
+            content: content
+        });
+    }
+
+    function jpgToPdf(url, type) {
+        showImage('<img src="' + url + '" alt="x" width="400px" height="500px">');
+    }
+
+    function showImage(content) {
+        layer.open({
+            type: 1,
+            title: false, //不显示标题栏
+            shadeClose: true, //点击遮罩时关闭
+            area: ['auto', 'auto'],
+            shade: 0.8,
+            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+            moveType: 1, //拖拽模式，0或者1
+            content: content
+        });
+    };
+
+    function toPdf(url) {
+        window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+    }
 
     function downLoad(fileName) {
         window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
@@ -115,14 +178,14 @@
     function onLoadSuccess(data) {
         for (var i in data.rows) {
             if ("N" == data.rows[i].isAdmin) {
-                $.table.hideColumn("shareDeptName");
-                $.table.hideColumn("shareUserName");
+                $.table.hideColumn("shareDeptAndUser");
             }
         }
     }
 
     function back() {
-        var url = prefix + "/toList";
+        var documentType = $("#documentType").val();
+        var url = prefix + "/toBackByType/" + documentType;
         $.modal.parentTab("文档管理", url);
     }
 

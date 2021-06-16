@@ -1,5 +1,5 @@
 <!-- 通用CSS -->
-<head th:fragment=header(title)>
+<head th:fragment=header(title) xmlns:th="http://www.w3.org/1999/xhtml">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,36 +18,6 @@
 </head>
 
 <!-- 通用JS -->
-<!--<div th:fragment="footer">
-    <a id="scroll-up" href="#" class="btn btn-sm display"><i class="fa fa-angle-double-up"></i></a>
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <script th:src="@{/js/bootstrap.min.js}"></script>
-    &lt;!&ndash; bootstrap-table 表格插件 &ndash;&gt;
-    <script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js?v=20200529}"></script>
-    <script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js}"></script>
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js}"></script>
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/columns/bootstrap-table-fixed-columns.js}"></script>
-    &lt;!&ndash; jquery-validate 表单验证插件 &ndash;&gt;
-    <script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
-    <script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
-    <script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
-    &lt;!&ndash; jquery-validate 表单树插件 &ndash;&gt;
-    <script th:src="@{/ajax/libs/bootstrap-treetable/bootstrap-treetable.js}"></script>
-    &lt;!&ndash; jquery-export 表格导出插件 &ndash;&gt;
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
-    &lt;!&ndash; 遮罩层 &ndash;&gt;
-    <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
-    <script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
-    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-    <script th:src="@{/ajax/libs/layui/layui.js}"></script>
-    <script th:src="@{/ledao/js/common.js?v=4.2.0}"></script>
-    <script th:src="@{/ledao/js/ry-ui.js?v=4.2.0}"></script>
-    <script th:inline="javascript"> var ctx = [[@{/}]]; </script>
-    <script th:src="@{/js/plugins/multiselect-master/multiselect.min.js}"></script>
-</div>-->
-<!-- 通用JS -->
 <div th:fragment="footer">
     <script th:inline="javascript"> var ctx = [[@{/}]]; var lockscreen = [[${session.lockscreen}]]; if(lockscreen){window.top.location=ctx+"lockscreen";} </script>
     <a id="scroll-up" href="#" class="btn btn-sm display"><i class="fa fa-angle-double-up"></i></a>
@@ -65,7 +35,7 @@
     <script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
     <!-- jquery-validate 表单树插件 -->
     <script th:src="@{/ajax/libs/bootstrap-treetable/bootstrap-treetable.js}"></script>
-   <!-- jquery-export 表格导出插件-->
+    <!-- jquery-export 表格导出插件-->
     <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
     <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
     <!-- 遮罩层 -->
@@ -234,7 +204,7 @@
 </div>
 
 <div th:fragment="gaodeMap-css">
-    <link rel="stylesheet" href="http://lbs.amap.com/dev/mapstyle/mapshare/fc036eb2360746d4ae69cb3f73b3f1b2" />
+    <link rel="stylesheet" href="http://lbs.amap.com/dev/mapstyle/mapshare/fc036eb2360746d4ae69cb3f73b3f1b2"/>
 </div>
 <div th:fragment="gaodeMap-js">
     <script src="https://webapi.amap.com/maps?v=1.4.10&key=f661376ba7424043b0e87bcbb60b6312&plugin=AMap.AdvancedInfoWindow"></script>
@@ -243,4 +213,15 @@
 <div th:fragment="distpicker-js">
     <script th:src="@{/js/plugins/distpicker/distpicker.data.js}"></script>
     <script th:src="@{/js/plugins/distpicker/distpicker.js}"></script>
+</div>
+<!--PDF在线预览js-->
+<div th:fragment="pdf-js">
+    <script th:src="@{/js/plugins/pdfJS/build/pdf.js}"></script>
+    <script th:src="@{/js/plugins/pdfJS/build/pdf.worker.js}"></script>
+    <script th:src="@{/js/plugins/pdfJS/web/viewer.js}"></script>
+</div>
+
+<!--pdf在线预览css-->
+<div th:fragment="pdf-css">
+    <link rel="stylesheet" th:href="@{/js/plugins/pdfJS/web/viewer.css}"/>
 </div>

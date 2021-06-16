@@ -6,8 +6,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysCustomer;
-import com.ledao.system.dao.SysDept;
+import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,6 @@ import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.shiro.service.SysPasswordService;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
-import com.ledao.system.dao.SysUserRole;
 
 /**
  * 用户信息
@@ -60,6 +57,12 @@ public class SysUserController extends BaseController {
 
     @Autowired
     private ISysCustomerService sysCustomerService;
+
+    @Autowired
+    private ISysDocumentService sysDocumentService;
+
+    @Autowired
+    private ISysNoticeService sysNoticeService;
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
@@ -134,7 +137,51 @@ public class SysUserController extends BaseController {
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
-        return toAjax(userService.insertUser(user));
+        userService.insertUser(user);
+
+        SysCustomer sysCustomer = new SysCustomer();
+        sysCustomer.setCreateBy(user.getLoginName());
+        List<SysCustomer> sysCustomerList = sysCustomerService.queryAll(sysCustomer);
+        for (SysCustomer sysCustomer1 : sysCustomerList) {
+            sysCustomer1.setUpdateBy(sysCustomer1.getCreateBy());
+            sysCustomer1.setDeptId(user.getDeptId());
+            sysCustomer1.setDeptName(user.getDept().getDeptName());
+            sysCustomerService.updateSysCustomer(sysCustomer1);
+        }
+
+        //文档管理
+        SysDocument sysDocument = new SysDocument();
+        List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument);
+        for (SysDocument sysDocument1 : sysDocumentList) {
+            for (String string : sysDocument1.getShareDeptId().split(",")) {
+                if (string.equals(user.getDeptId().toString())) {
+                    SysDocument sysDocument2 = new SysDocument();
+                    sysDocument2.setFileId(sysDocument1.getFileId());
+                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                    sysDocumentService.updateSysDocument(sysDocument2);
+                }
+            }
+        }
+
+        //通知公告
+        SysNotice sysNotice = new SysNotice();
+        List<SysNotice> sysNoticeList = sysNoticeService.selectNoticeList(sysNotice);
+        for (SysNotice sysNotice1 : sysNoticeList) {
+            if (StringUtils.isNotEmpty(sysNotice1.getShareDeptId())) {
+                for (String string : sysNotice1.getShareDeptId().split(",")) {
+                    if (string.equals(user.getDeptId().toString())) {
+                        SysNotice sysNotice2 = new SysNotice();
+                        sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                        sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                        sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                        sysNoticeService.updateNotice(sysNotice2);
+                    }
+                }
+            }
+        }
+
+        return toAjax(Integer.parseInt(String.valueOf(user.getUserId())));
     }
 
     /**
@@ -171,6 +218,39 @@ public class SysUserController extends BaseController {
             sysCustomer1.setDeptName(user.getDept().getDeptName());
             sysCustomerService.updateSysCustomer(sysCustomer1);
         }
+
+        //文档管理
+        SysDocument sysDocument = new SysDocument();
+        List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument);
+        for (SysDocument sysDocument1 : sysDocumentList) {
+            for (String string : sysDocument1.getShareDeptId().split(",")) {
+                if (string.equals(user.getDeptId().toString())) {
+                    SysDocument sysDocument2 = new SysDocument();
+                    sysDocument2.setFileId(sysDocument1.getFileId());
+                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                    sysDocumentService.updateSysDocument(sysDocument2);
+                }
+            }
+        }
+
+        //通知公告
+        SysNotice sysNotice = new SysNotice();
+        List<SysNotice> sysNoticeList = sysNoticeService.selectNoticeList(sysNotice);
+        for (SysNotice sysNotice1 : sysNoticeList) {
+            if (StringUtils.isNotEmpty(sysNotice1.getShareDeptId())) {
+                for (String string : sysNotice1.getShareDeptId().split(",")) {
+                    if (string.equals(user.getDeptId().toString())) {
+                        SysNotice sysNotice2 = new SysNotice();
+                        sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                        sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                        sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                        sysNoticeService.updateNotice(sysNotice2);
+                    }
+                }
+            }
+        }
+
         user.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(userService.updateUser(user));
     }
@@ -299,7 +379,7 @@ public class SysUserController extends BaseController {
      */
     @GetMapping("/selectUserTree")
     public String selectUserTree(String selectedUserIds, String selectedUserNames, String selectedDeptIds, String selectedDeptNames,
-                                     Boolean multiSelectFlag, ModelMap mmap, Boolean deptId, Boolean checkFlag) {
+                                 Boolean multiSelectFlag, ModelMap mmap, Boolean deptId, Boolean checkFlag) {
         mmap.put("dept", deptService.selectDeptById((long) 100));
         mmap.put("selectedUserIds", selectedUserIds);
         mmap.put("selectedUserNames", selectedUserNames);

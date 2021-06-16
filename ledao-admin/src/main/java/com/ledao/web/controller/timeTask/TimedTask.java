@@ -7,10 +7,15 @@ import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
 import org.quartz.DisallowConcurrentExecution;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootVersion;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.SpringVersion;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +66,17 @@ public class TimedTask {
         //ss();
     }
 
+    //档案管理流程信息
+    public void workflow() {
+        SysNotice sysNotice = new SysNotice();
+        sysNotice.setCreateBy("admin");
+        sysNotice.setStatus("0");
+        sysNotice.setNoticeTitle("这是测试数据");
+        sysNotice.setNoticeType("2");
+        sysNotice.setNoticeContent("测试数据！！！！！！！");
+        System.out.print("新建消息");
+        sysNoticeService.insertNotice(sysNotice);
+    }
 
     public void ss() {
         SysCustomer sysCustomer = new SysCustomer();
@@ -81,27 +97,43 @@ public class TimedTask {
         List<SysProjectUncollectedMoney> sysProjectUncollectedMoneyList = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyList(sysProjectUncollectedMoney);
         for (SysProjectUncollectedMoney projectUncollectedMoney : sysProjectUncollectedMoneyList) {
             if (StringUtils.isNotNull(projectUncollectedMoney.getTime())) {
-                if (DateUtils.timeDifference(new Date(), projectUncollectedMoney.getTime(), 30)) {
-                    if (StringUtils.isNotNull(projectUncollectedMoney.getProjectManagementId())) {
-                        SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectUncollectedMoney.getProjectManagementId());
-                        if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
-                            SysNotice sysNotice = new SysNotice();
-                            sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
-                                    + "有一笔：" + projectUncollectedMoney.getFundType() + "，金额为：" + projectUncollectedMoney.getAmountMoney()
-                                    + "，距离天数为：" + DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime()));
-                            sysNotice.setNoticeType("3");
-                            sysNotice.setNoticeContent(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
-                                    + "有一笔：" + projectUncollectedMoney.getFundType() + "，金额为：" + projectUncollectedMoney.getAmountMoney()
-                                    + "，距离天数为：" + DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime()));
-                            sysNotice.setStatus("0");
-                            sysNotice.setReceiverId(sysUser.getUserId().toString());
-                            sysNotice.setReceiver(sysUser.getUserName());
-                            sysNotice.setCreateBy(sysUser.getLoginName());
-                            sysNoticeService.insertNotice(sysNotice);
+                // if (DateUtils.timeDifference(projectUncollectedMoney.getTime(), new Date(), 30)) {
+                if (StringUtils.isNotNull(projectUncollectedMoney.getProjectManagementId())) {
+                    SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(projectUncollectedMoney.getProjectManagementId());
+                    if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
+                        SysNotice sysNotice = new SysNotice();
+                        int days = 0;
+                        if (projectUncollectedMoney.getTime().before(new Date())) {
+                            days = DateUtils.differentDays(projectUncollectedMoney.getTime(), new Date());
+                        } else if (new Date().before(projectUncollectedMoney.getTime())) {
+                            days = DateUtils.differentDays(new Date(), projectUncollectedMoney.getTime());
                         }
+                        if (days <= 30) {
+                            sysNotice.setNoticeTitle(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
+                                    + "有一笔金额为：" + projectUncollectedMoney.getAmountMoney() + "的" + projectUncollectedMoney.getFundType() + "（未确认）"
+                                    + "，剩余：" + days + "天");
+                            sysNotice.setNoticeContent(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
+                                    + "有一笔金额为：" + projectUncollectedMoney.getAmountMoney() + "的" + projectUncollectedMoney.getFundType() + "（未确认）"
+                                    + "，剩余：" + days + "天");
+                        } else {
+                            sysNotice.setNoticeTitle(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
+                                    + "有一笔金额为：" + projectUncollectedMoney.getAmountMoney() + "的" + projectUncollectedMoney.getFundType() + "（未确认）"
+                                    + "，已逾期：" + days + "天");
+                            sysNotice.setNoticeContent(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(projectUncollectedMoney.getTime())
+                                    + "有一笔金额为：" + projectUncollectedMoney.getAmountMoney() + "的" + projectUncollectedMoney.getFundType() + "（未确认）"
+                                    + "，已逾期：" + days + "天");
+                        }
+
+                        sysNotice.setNoticeType("3");
+                        sysNotice.setStatus("0");
+                        sysNotice.setReceiverId(sysUser.getUserId().toString());
+                        sysNotice.setReceiver(sysUser.getUserName());
+                        sysNotice.setCreateBy(sysUser.getLoginName());
+                        sysNoticeService.insertNotice(sysNotice);
                     }
                 }
             }
+            // }
         }
     }
 
@@ -115,26 +147,48 @@ public class TimedTask {
         for (SysCoverCharge sysCoverCharge1 : sysCoverChargeList) {
             if (StringUtils.isNotNull(sysCoverCharge1)) {
                 if (StringUtils.isNotNull(sysCoverCharge1.getPaidDate())) {
-                    if (DateUtils.timeDifference(new Date(), sysCoverCharge1.getPaidDate(), 30)) {
-                        if (StringUtils.isNotNull(sysCoverCharge1.getProjectManagementId())) {
-                            SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(sysCoverCharge1.getProjectManagementId());
-                            if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
-                                SysNotice sysNotice = new SysNotice();
-                                sysNotice.setNoticeTitle(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
-                                        + "有一笔：目标回收金额，金额为：" + sysCoverCharge1.getAmountPaid()
-                                        + "，距离天数为：" + DateUtils.differentDays(new Date(), sysCoverCharge1.getPaidDate()));
-                                sysNotice.setNoticeType("3");
-                                sysNotice.setNoticeContent(sysProjectmanagent.getProjectManagementName() + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
-                                        + "有一笔：目标回收金额，金额为：" + sysCoverCharge1.getAmountPaid()
-                                        + "，距离天数为：" + DateUtils.differentDays(new Date(), sysCoverCharge1.getPaidDate()));
-                                sysNotice.setStatus("0");
-                                sysNotice.setReceiverId(sysUser.getUserId().toString());
-                                sysNotice.setReceiver(sysUser.getUserName());
-                                sysNotice.setCreateBy(sysUser.getLoginName());
-                                sysNoticeService.insertNotice(sysNotice);
+                    // if (DateUtils.timeDifference(sysCoverCharge1.getPaidDate(), new Date(), 30)) {
+                    if (StringUtils.isNotNull(sysCoverCharge1.getProjectManagementId())) {
+                        SysProjectmanagent sysProjectmanagent = sysProjectmanagentService.selectSysProjectmanagentById(sysCoverCharge1.getProjectManagementId());
+                        if (StringUtils.isNotNull(sysProjectmanagent) && StringUtils.isNotNull(sysProjectmanagent.getProjectManagementName())) {
+                            SysNotice sysNotice = new SysNotice();
+                            int days = 0;
+                            if (sysCoverCharge1.getPaidDate().before(new Date())) {
+                                days = DateUtils.differentDays(sysCoverCharge1.getPaidDate(), new Date());
+                            } else if (new Date().before(sysCoverCharge1.getPaidDate())) {
+                                days = DateUtils.differentDays(new Date(), sysCoverCharge1.getPaidDate());
                             }
+
+                            if (days <= 30) {
+                                sysNotice.setNoticeTitle(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName()
+                                        + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
+                                        + "有一笔金额为：" + sysCoverCharge1.getAmountPaid()
+                                        + "元的目标回收金额（未确认），剩余：" + days + "天");
+                                sysNotice.setNoticeContent(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName()
+                                        + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
+                                        + "有一笔金额为：" + sysCoverCharge1.getAmountPaid()
+                                        + "元的目标回收金额（未确认），剩余：" + days + "天");
+                            } else {
+                                sysNotice.setNoticeTitle(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName()
+                                        + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
+                                        + "有一笔金额为：" + sysCoverCharge1.getAmountPaid()
+                                        + "元的目标回收金额（未确认），已逾期：" + days + "天");
+                                sysNotice.setNoticeContent(sysProjectmanagent.getProjectType() + "：" + sysProjectmanagent.getProjectManagementName()
+                                        + "在" + DateUtils.dateTime(sysCoverCharge1.getPaidDate())
+                                        + "有一笔金额为：" + sysCoverCharge1.getAmountPaid()
+                                        + "元的目标回收金额（未确认），距离天数为：" + days + "天");
+                            }
+
+
+                            sysNotice.setNoticeType("3");
+                            sysNotice.setStatus("0");
+                            sysNotice.setReceiverId(sysUser.getUserId().toString());
+                            sysNotice.setReceiver(sysUser.getUserName());
+                            sysNotice.setCreateBy(sysUser.getLoginName());
+                            sysNoticeService.insertNotice(sysNotice);
                         }
                     }
+                    //}
                 }
             }
 
@@ -243,11 +297,13 @@ public class TimedTask {
     public static Long nextMonth(Date date, int flag) {
         Long res = 0L;
 
-        Calendar calendar = Calendar.getInstance();//日历对象
-        calendar.setTime(date);//设置当前日期
-        calendar.add(Calendar.MONTH, flag);//月份减一为-1，加一为1
+        //日历对象
+        Calendar calendar = Calendar.getInstance();
+        //设置当前日期
+        calendar.setTime(date);
+        //月份减一为-1，加一为1
+        calendar.add(Calendar.MONTH, flag);
         res = calendar.getTime().getTime();
-        //System.out.println(sdf.format());//输出格式化的日期
         return res;
 
     }
@@ -271,24 +327,37 @@ public class TimedTask {
             if (StringUtils.isNotNull(sysProjectContract1.getCapital()) && StringUtils.isNotNull(sysProjectContract1.getStartTime())
                     && StringUtils.isNotNull(sysProjectContract1.getEndTime()) && StringUtils.isNotNull(sysProjectContract1.getInterest())) {
                 sysProjectContract1.setContractId(sysProjectContract1.getContractId());
+                DecimalFormat DF = new DecimalFormat("0.000");
+                //计算天数
+                //利息天数/360
+                BigDecimal lxDay = new BigDecimal(DateUtils.differentDays(sysProjectContract1.getStartTime(), sysProjectContract1.getEndTime())).divide(new BigDecimal(360), 10, BigDecimal.ROUND_HALF_DOWN);
+
+
+                Calendar c = Calendar.getInstance();
+                c.setTime(sysProjectContract1.getEndTime());
+                c.add(Calendar.DAY_OF_MONTH, 1);
+                //逾期和利息复利天数
+                BigDecimal yqDay = new BigDecimal(DateUtils.differentDays(c.getTime(), new Date())).divide(new BigDecimal(360), 10, BigDecimal.ROUND_HALF_DOWN);
+
+
+                //计算利率
+                BigDecimal lv = sysProjectContract1.getInterestRate().divide(new BigDecimal(100), 5, BigDecimal.ROUND_HALF_UP);
+
+
                 //利息
                 //本金*（合同到期日-合同起始日）/360*利率
-                int day = DateUtils.differentDays(sysProjectContract1.getStartTime(), sysProjectContract1.getEndTime());
-                sysProjectContract1.setInterest(sysProjectContract1.getCapital().multiply(new BigDecimal(day).divide(new BigDecimal(360), 5, BigDecimal.ROUND_HALF_UP))
-                        .multiply(sysProjectContract1.getInterestRate().divide(new BigDecimal(100), 5, BigDecimal.ROUND_HALF_UP)));
+                sysProjectContract1.setInterest((sysProjectContract1.getCapital().multiply(lxDay).multiply(lv)).setScale(3, BigDecimal.ROUND_HALF_DOWN));
 
                 //逾期利息
                 //本金*（当前日期-合同到期日）/360*利率*1.5
-                int days = DateUtils.differentDays(DateUtils.addTime(sysProjectContract1.getEndTime(), 1, 5), new Date());
-                sysProjectContract1.setOverdueInterest(sysProjectContract1.getCapital().multiply(new BigDecimal(days).divide(new BigDecimal(360), 5, BigDecimal.ROUND_HALF_UP))
-                        .multiply(sysProjectContract1.getInterestRate()).multiply(new BigDecimal(1.5)));
+                sysProjectContract1.setOverdueInterest((sysProjectContract1.getCapital().multiply(yqDay)
+                        .multiply(lv).multiply(new BigDecimal(1.5))).setScale(3, BigDecimal.ROUND_HALF_UP));
 
                 //利息复利
                 //利息*（当前日期-合同到期日）/360*利率*1.5
-                sysProjectContract1.setCompoundInterest(sysProjectContract1.getInterest().multiply(new BigDecimal(days).divide(new BigDecimal(360), 5, BigDecimal.ROUND_HALF_UP)).multiply(sysProjectContract1.getInterestRate()).multiply(new BigDecimal(1.5)));
-
+                sysProjectContract1.setCompoundInterest((sysProjectContract1.getInterest().multiply(yqDay).
+                        multiply(lv).multiply(new BigDecimal(1.5))).setScale(3, BigDecimal.ROUND_HALF_UP));
                 sysProjectContractService.updateSysProjectContract(sysProjectContract1);
-
             }
         }
     }

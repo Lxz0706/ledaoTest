@@ -153,6 +153,8 @@ public class SysZcb extends BaseEntity {
                 .append("teamMembersId", getTeamMembersId())
                 .append("teamMembersName", getTeamMembersName())
                 .append("evaluationTime", getEvaluationTime())
+                .append("collateralTotal", getCollateralTotal())
+                .append("capValue", getCapValue())
                 .toString();
     }
 }

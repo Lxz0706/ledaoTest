@@ -105,6 +105,17 @@ public class SysDocument extends BaseEntity {
 
     private String shareDeptAndUser;
 
+    /**
+     * 子集类型
+     */
+    private String subsetType;
+
+    private String beginTime;
+
+    private String endTime;
+
+    private String cssClass;
+
     public void setFileId(Long fileId) {
         this.fileId = fileId;
     }
@@ -241,6 +252,38 @@ public class SysDocument extends BaseEntity {
         this.shareDeptAndUser = shareDeptAndUser;
     }
 
+    public String getSubsetType() {
+        return subsetType;
+    }
+
+    public void setSubsetType(String subsetType) {
+        this.subsetType = subsetType;
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -263,6 +306,8 @@ public class SysDocument extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateor", getUpdateor())
                 .append("updateTime", getUpdateTime())
+                .append("subsetType", getSubsetType())
+                .append("cssClass",getCssClass())
                 .toString();
     }
 }

@@ -96,14 +96,14 @@
                     field: 'bjye',
                     title: '本金余额总额',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'czhx',
                     title: '处置回现总额',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {

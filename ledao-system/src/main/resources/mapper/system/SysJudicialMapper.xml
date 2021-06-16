@@ -131,4 +131,27 @@
         </foreach>
     </delete>
 
+
+    <select id="selectListTotal" parameterType="SysJudicial" resultMap="SysJudicialResult">
+        select count(item_id) as totalCount from sys_judicial
+        <where>
+            <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
+            <if test="itemTitle != null  and itemTitle != ''">and item_title like concat('%', #{itemTitle},'%')</if>
+            <if test="itemOwner != null  and itemOwner != ''">and item_owner like concat('%', #{itemOwner},'%')</if>
+            <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
+            <if test="itemStatus != null  and itemStatus != ''">and item_status = #{itemStatus}</if>
+            <if test="itemLink != null  and itemLink != ''">and item_link = #{itemLink}</if>
+            <if test="itemInitialprice != null ">and item_initialPrice = #{itemInitialprice}</if>
+            <if test="itemCurrentprice != null ">and item_currentPrice = #{itemCurrentprice}</if>
+            <if test="itemConsultprice != null ">and item_consultPrice = #{itemConsultprice}</if>
+            <if test="itemMarketprice != null ">and item_marketPrice = #{itemMarketprice}</if>
+            <if test="itemStartTime != null ">and item_start_time = #{itemStartTime}</if>
+            <if test="itemEndTime != null ">and item_end_time = #{itemEndTime}</if>
+            <if test="itemProvince != null  and itemProvince != ''">and item_province = #{itemProvince}</if>
+            <if test="itemCity != null  and itemCity != ''">and item_city = #{itemCity}</if>
+            <if test="itemCounty != null  and itemCounty != ''">and item_county = #{itemCounty}</if>
+            <if test="itemSource != null  and itemSource != ''">and item_source = #{itemSource}</if>
+        </where>
+    </select>
+
 </mapper>

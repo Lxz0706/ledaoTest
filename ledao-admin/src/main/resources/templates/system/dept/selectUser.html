@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('分配角色选择用户')"/>
+</head>
+
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="role-form">
+                <div class="select-list">
+                    <input th:value="*{userId}" id="userId" type="hidden">
+                    <input th:value="*{userName}" id="userName" type="hidden">
+                    <ul>
+                        <!--<li>
+                            登录名称：<input type="text" name="loginName"/>
+                        </li>-->
+                        <li>
+                            用户名称：<input type="text" name="userName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var prefix = ctx + "system/user";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            modalName: "用户",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            clickToSelect: true,
+            rememberSelected: true,
+            singleSelect: true,
+            columns: [{
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    var userId = $("#userId").val().split(",");
+                    for (var i = 0; i < userId.length; i++) {
+                        if (userId[i] == row.userId) {
+                            return checked = true;
+                        }
+                    }
+
+                }
+            },
+                {
+                    field: 'userId',
+                    title: '用户ID',
+                    visible: false
+                },
+                {
+                    field: 'loginName',
+                    title: '登录名称',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '用户名称'
+                },
+                {
+                    field: 'email',
+                    title: '邮箱'
+                },
+                {
+                    field: 'phonenumber',
+                    title: '手机'
+                },
+                {
+                    field: 'status',
+                    title: '用户状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function submitHandler() {
+        var row = selectRows();
+        window.parent.getDeviceBasics(row);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //如果设置了记住选中数据
+        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+            let selectedRows = table.rememberSelecteds[table.options.id];
+            if ($.common.isNotEmpty(selectedRows)) {
+                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    return row;
+                });
+            }
+        }
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i]] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+
+</script>
+</body>
+</html>

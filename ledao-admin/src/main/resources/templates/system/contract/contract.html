@@ -98,7 +98,7 @@
                     field: 'capital', 
                     title: '本金',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
@@ -117,28 +117,28 @@
                     field: 'interest',
                     title: '期内利息',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'overdueInterest',
                     title: '逾期利息',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'compoundInterest',
                     title: '利息复利',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'totalInterest',
                     title: '总利息',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 }/*,
                 {

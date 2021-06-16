@@ -25,7 +25,7 @@ server:
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
-    # tomcat最大线程数，默认为200
+    # tomcat最大线程数，默认为800
     max-threads: 800
     # Tomcat启动初始化的线程数，默认值25
     min-spare-threads: 30
@@ -63,9 +63,9 @@ spring:
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size:  1024MB
+      max-file-size:  1GB
       # 设置总上传的文件大小
-      max-request-size:  2048MB
+      max-request-size:  2GB
   # 服务模块
   devtools:
     restart:
@@ -74,7 +74,7 @@ spring:
       # activiti 模块
       # 解决启动报错：class path resource [processes/] cannot be resolved to URL because it does not exist
   activiti:
-    check-process-definitions: true
+    check-process-definitions: false
     # 检测身份信息表是否存在
     db-identity-used: false
 
@@ -150,3 +150,12 @@ xss:
 swagger:
   # 是否开启swagger
   enabled: true
+
+
+jodconverter:
+  local:
+    enabled: true
+    max-tasks-per-process: 10
+    port-numbers: 8100
+    office-home: C:\Program Files (x86)\OpenOffice 4
+

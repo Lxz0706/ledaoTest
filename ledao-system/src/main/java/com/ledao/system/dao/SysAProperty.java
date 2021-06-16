@@ -61,6 +61,12 @@ public class SysAProperty extends BaseEntity {
     @Excel(name = "项目url")
     private String itemUrl;
 
+
+    /**
+     * 关键词
+     */
+    private String itemContent;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -125,17 +131,26 @@ public class SysAProperty extends BaseEntity {
         return itemUrl;
     }
 
+    public String getItemContent() {
+        return itemContent;
+    }
+
+    public void setItemContent(String itemContent) {
+        this.itemContent = itemContent;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("id" , getId())
-                .append("itemId" , getItemId())
-                .append("itemTitle" , getItemTitle())
-                .append("itemTime" , getItemTime())
-                .append("itemTransferor" , getItemTransferor())
-                .append("itemTransferee" , getItemTransferee())
-                .append("itemAmount" , getItemAmount())
-                .append("itemUrl" , getItemUrl())
+                .append("id", getId())
+                .append("itemId", getItemId())
+                .append("itemTitle", getItemTitle())
+                .append("itemTime", getItemTime())
+                .append("itemTransferor", getItemTransferor())
+                .append("itemTransferee", getItemTransferee())
+                .append("itemAmount", getItemAmount())
+                .append("itemUrl", getItemUrl())
+                .append("itemContent", getItemContent())
                 .toString();
     }
 }

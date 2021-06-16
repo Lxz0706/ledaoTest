@@ -6,7 +6,7 @@
 
     <resultMap type="SysZck" id="SysZckResult">
         <result property="id" column="id"/>
-        <result property="assetPackageName" column="asset_package_name"/>
+        <result property="assetType" column="asset_type"/>
         <result property="assetStatus" column="asset_status"/>
         <result property="no" column="no"/>
         <result property="projectName" column="project_name"/>
@@ -104,7 +104,7 @@
     </resultMap>
 
     <sql id="selectSysZckVo">
-        select id, asset_package_name, asset_status, no, project_name, city, contract_principal, principal_balance,
+        select id, asset_type, asset_status, no, project_name, city, contract_principal, principal_balance,
         interest_balance, principal_interest_balance, bxjs_date, loan_bank, loan_contract_no, loan_time, guarantor,
         bzr_zrr_number, bzr_fr_number, guarantee_amount, guarantee_contract_no, guarantee_contract_sign_time,
         maximum_guarantee_amount, maximum_guarantee_contract, maximum_guaratntee_sign_time, zzq_date_Time, guarantee_mode,
@@ -128,8 +128,8 @@
                     #{id}
                 </foreach>
             </if>
-            <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name like concat('%',
-                #{assetPackageName}, '%')
+            <if test="assetType != null  and assetType != ''">and asset_type like concat('%',
+                #{assetType}, '%')
             </if>
             <if test="assetStatus != null  and assetStatus != ''">
                 AND asset_status = #{assetStatus}
@@ -255,7 +255,7 @@
     </select>
 
     <select id="queryAll" parameterType="SysZck" resultMap="SysZckResult">
-        select z1.id, z1.asset_package_name, z1.asset_status, no, project_name, city, contract_principal,
+        select z1.id, z1.asset_type, z1.asset_status, no, project_name, city, contract_principal,
         principal_balance,
         interest_balance, principal_interest_balance, bxjs_date, loan_bank, loan_contract_no, loan_time, guarantor,
         bzr_zrr_number, bzr_fr_number, guarantee_amount, guarantee_contract_no, guarantee_contract_sign_time,
@@ -279,8 +279,8 @@
         z1 inner join sys_zcb z2 on z1.zcb_id=z2.id
         <where>
             z1.del_flag='0'
-            <if test="assetPackageName != null  and assetPackageName != ''">and z1.asset_package_name like concat('%',
-                #{assetPackageName}, '%')
+            <if test="assetType != null  and assetType != ''">and z1.asset_type like concat('%',
+                #{assetType}, '%')
             </if>
             <if test="assetStatus != null  and assetStatus != ''">
                 AND z1.asset_status = #{asset_status}
@@ -418,7 +418,7 @@
         insert into sys_zck
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null and id != '' ">id,</if>
-            <if test="assetPackageName != null and assetPackageName != '' ">asset_package_name,</if>
+            <if test="assetType != null and assetType != '' ">asset_type,</if>
             <if test="assetStatus != null and assetStatus != '' ">asset_status,</if>
             <if test="no != null and no != '' ">no,</if>
             <if test="projectName != null and projectName != '' ">project_name,</if>
@@ -527,7 +527,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null and id != ''">#{id},</if>
-            <if test="assetPackageName != null and assetPackageName != ''">#{assetPackageName},</if>
+            <if test="assetType != null and assetType != ''">#{assetType},</if>
             <if test="assetStatus != null and assetStatus != ''">#{assetStatus},</if>
             <if test="no != null and no != ''">#{no},</if>
             <if test="projectName != null and projectName != ''">#{projectName},</if>
@@ -639,8 +639,8 @@
     <update id="updateSysZck" parameterType="SysZck">
         update sys_zck
         <trim prefix="SET" suffixOverrides=",">
-            <if test="assetPackageName != null  and assetPackageName != ''  ">asset_package_name =
-                #{assetPackageName},
+            <if test="assetType != null  and assetType != ''  ">asset_type =
+                #{assetType},
             </if>
             <if test="assetStatus != null  and assetStatus != ''  ">asset_status = #{assetStatus},</if>
             <if test="no != null  ">no = #{no},</if>

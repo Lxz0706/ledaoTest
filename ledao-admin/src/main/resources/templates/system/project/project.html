@@ -208,28 +208,28 @@
                     field: 'totalPrice',
                     title: '合同本金',
                     formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId+"',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId+"',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
                     }
                 },
                 {
                     field: 'totalInterest',
                     title: '利息',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'totalPrincipalBalance',
                     title: '本金余额(元)',
                     formatter: function(value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'totalInterestBalance',
                     title: '利息余额',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
@@ -257,7 +257,7 @@
                     field: 'recapture',
                     title: '处置回现',
                     formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
                     }
                 },
                 {

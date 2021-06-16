@@ -2,6 +2,17 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('文件管理列表')"/>
+    <style>
+        .bootstrap-table .fixed-table-container .table thead th .th-inner {
+            font-size: 26px;
+        }
+
+        .rowSameHeight {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+    </style>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -9,41 +20,37 @@
         <div class="col-sm-12 search-collapse">
             <form id="formId">
                 <div class="select-list">
-                    <!--<ul>
+                    <ul>
                         <li>
-                            <label>文件大小：</label>
-                            <input type="text" name="fileSize"/>
+                            <label>文件名称：</label>
+                            <input type="text" name="fileName" placeholder="文件名称"/>
+                        </li>
+                        <li class="select-time">
+                            <label>创建时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="beginTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="endTime"/>
                         </li>
                         <li>
-                            <label>是否可下载：</label>
-                            <input type="text" name="downloadableFlag"/>
-                        </li>
-                        <li>
-                            <label>共享部门名称：</label>
-                            <input type="text" name="shareDeptName"/>
-                        </li>
-                        <li>
-                            <label>共享人名称：</label>
-                            <input type="text" name="shareUserName"/>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="jump()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
-                    </ul>-->
+                    </ul>
                 </div>
             </form>
         </div>
 
-        <div class="btn-group-sm" id="toolbar" role="group">
+        <!--<div class="btn-group-sm" id="toolbar" role="group">
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:document:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-        </div>
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table"></table>
+        </div>-->
+        <div class="col-sm-12 select-table table-striped table-condensed" id="showList">
+            <!--<table id="bootstrap-table" class="rowSameHeight"></table>-->
         </div>
     </div>
 </div>
@@ -54,25 +61,51 @@
     var prefix = ctx + "system/document";
 
     $(function () {
-        var options = {
+        /*var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
             modalName: "文件管理",
             columns: [
                 {
                     field: 'dictLabel',
-                    title: '文件类型',
-                    formatter: function (value,row) {
-                        return '<a onclick="toDocumentByType(\'' + row.dictValue+"',\'" + value + '\')">' + value + '</a>';
+                    align: 'center',
+                    formatter: function (value, row) {
+                        return '<a style="font-size: 30px;letter-spacing:20px;font-weight: 600" onclick="toDocumentByType(\'' + row.dictValue + "',\'" + value + '\')"><i class="' + row.cssClass + '"></i>' + value + '</a>';
                     }
                 }]
         };
-        $.table.init(options);
+        $.table.init(options);*/
+
+
+        $.ajax({
+            url: prefix + "/list",
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var data = result.rows;
+                var str = "<div class='col-sm-12'>";
+                for (var i in data) {
+                    str += '<div class="col-sm-4" style="margin-bottom: 16px;height: 16em;text-align: center;position: relative;top:5em;">' +
+                        '<p style="font-size: 60px;letter-spacing:20px;font-weight: 600" class="' + data[i].cssClass + '"></p>' +
+                        '<p><a style="font-size: 30px;letter-spacing:20px;font-weight: 600" onclick="toDocumentByType(\'' + data[i].dictValue + "',\'" + data[i].dictLabel + '\')">'
+                        + data[i].dictLabel + '</a></p></div>';
+                }
+                str += '</div></div>';
+                $("#showList").html(str);
+            }
+        })
     });
 
-    function toDocumentByType(type,value) {
+
+    function toDocumentByType(type, value) {
         var url = prefix + "/toDocumentByType/" + type;
         $.modal.parentTab(value + "列表", url);
+    }
+
+    //查询
+    function jump() {
+        var data = $("#formId").serialize();
+        $.operate.gets(prefix + "/queryAll", data, "查询界面");
     }
 
 </script>

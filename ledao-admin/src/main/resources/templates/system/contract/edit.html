@@ -150,7 +150,7 @@
             //本金*（到期日-起始日）/360 *（利率）
             var dates1 = getDateDiff(startTime, endTime);
             var num = capital * dates1 / 360 * (interestRate / 100);
-            $("#interest").val(num);
+            $("#interest").val((num).toFixed(3));
 
             //逾期利息
             //本金*（到期日-起始日）/360 *（利率）*1.5
@@ -158,15 +158,15 @@
             var endTime2 = getNowFormatDate();
             var dates2 = getDateDiff(startTime1, endTime2);
             var num1 = capital * (dates2 / 360) * (interestRate / 100) * 1.5;
-            $("#overdueInterest").val(num1);
+            $("#overdueInterest").val((num1).toFixed(3));
 
             //利息复利
             //利息复利=期内利息*合同利率*1.5*（今日-合同到期日）/360
             var num2 = num * (interestRate / 100) * 1.5 * getDateDiff(endTime, getNowFormatDate()) / 360
-            $("#compoundInterest").val(num2);
+            $("#compoundInterest").val(num2.toFixed(3));
 
             //总利息
-            $("#totalInterest").val(num + num1 + num2);
+            $("#totalInterest").val((num + num1 + num2).toFixed(3));
         }
     }
 

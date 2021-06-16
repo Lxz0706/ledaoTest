@@ -1396,28 +1396,67 @@ var table = {
                 $.modal.closeLoading();
             },
             // 格式化数字、金额
-            numberFormatter: function (value) {
-                //格式化金额的小数点
-                var b = false;
-                if (value == null || value == "") return "0";
-                value = value.toString();
-                if (value.indexOf('-') != -1) {
-                    b = true;
-                    value = value.substring(1, value.length);
+            numberFormatter: function (number, decimals, dec_point, thousands_sep) {
+                /*
+                * 参数说明：
+                * number：要格式化的数字
+                * decimals：保留几位小数
+                * dec_point：小数点符号
+                * thousands_sep：千分位符号
+                * */
+                number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+                var n = !isFinite(+number) ? 0 : +number,
+                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                    s = '',
+                    toFixedFix = function (n, prec) {
+                        var k = Math.pow(10, prec);
+                        return '' + Math.ceil(n * k) / k;
+                    };
+
+                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                var re = /(-?\d+)(\d{3})/;
+                while (re.test(s[0])) {
+                    s[0] = s[0].replace(re, "$1" + sep + "$2");
                 }
-                if (/^\-?[0-9]+(.[0-9]+)?$/.test(value)) {
-                    value = value.toString().replace(/^(\d*)$/, "$1.");
-                    value = (value + "00").replace(/(\d*\.\d\d)\d*/, "$1");
-                    value = value.replace(".", ",");
-                    var re = /(\d)(\d{3},)/;
-                    while (re.test(value))
-                        value = value.replace(re, "$1,$2");
-                    value = value.replace(/,(\d\d)$/, ".$1");
+
+                if ((s[1] || '').length < prec) {
+                    s[1] = s[1] || '';
+                    s[1] += new Array(prec - s[1].length + 1).join('0');
                 }
-                if (b) {
-                    value = "-" + value;
+                return s.join(dec);
+            },
+            number_format: function (number, decimals, dec_point, thousands_sep) {
+                /*
+                * 参数说明：
+                * number：要格式化的数字
+                * decimals：保留几位小数
+                * dec_point：小数点符号
+                * thousands_sep：千分位符号
+                * */
+                number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+                var n = !isFinite(+number) ? 0 : +number,
+                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                    s = '',
+                    toFixedFix = function (n, prec) {
+                        var k = Math.pow(10, prec);
+                        return '' + Math.ceil(n * k) / k;
+                    };
+
+                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                var re = /(-?\d+)(\d{3})/;
+                while (re.test(s[0])) {
+                    s[0] = s[0].replace(re, "$1" + sep + "$2");
                 }
-                return value;
+
+                if ((s[1] || '').length < prec) {
+                    s[1] = s[1] || '';
+                    s[1] += new Array(prec - s[1].length + 1).join('0');
+                }
+                return s.join(dec);
             },
             // 查询信息 刷新表格
             queryAll: function (url, data, callback) {

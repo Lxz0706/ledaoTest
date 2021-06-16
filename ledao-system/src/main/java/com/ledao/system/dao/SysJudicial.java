@@ -120,6 +120,17 @@ public class SysJudicial extends BaseEntity {
 
     private String taggings;
 
+    /**
+     * 当前记录起始索引
+     */
+    private Integer pageNum;
+    /**
+     * 每页显示记录数
+     */
+    private Integer pageSize;
+
+    private Integer totalCount;
+
     public Long getId() {
         return id;
     }
@@ -262,6 +273,30 @@ public class SysJudicial extends BaseEntity {
 
     public void setTaggings(String taggings) {
         this.taggings = taggings;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 
     @Override

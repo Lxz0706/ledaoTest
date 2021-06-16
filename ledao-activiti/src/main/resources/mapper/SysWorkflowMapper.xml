@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.activity.mapper.SysWorkflowMapper">
+
+    <resultMap type="SysWorkFlowVo" id="SysWorkflowResult">
+        <result property="workFlowId" column="work_flow_id"/>
+        <result property="workFlowType" column="work_flow_type"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="deptType" column="dept_type"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="corporateName" column="corporate_name"/>
+        <result property="documentType" column="document_type"/>
+        <result property="documentLevel" column="document_level"/>
+        <result property="documentRevertFlag" column="document_revert_flag"/>
+        <result property="documentRevertTime" column="document_revert_time"/>
+        <result property="documentId" column="document_id"/>
+        <result property="documentName" column="document_name"/>
+        <result property="documentUrl" column="document_url"/>
+        <result property="remarks" column="remarks"/>
+        <result property="createBy" column="create_by"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="reviser" column="reviser"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="applyUser" column="apply_user"/>
+        <result property="applyTime" column="apply_time"/>
+        <result property="realityStartTime" column="reality_start_time"/>
+        <result property="realityEndTime" column="reality_end_time"/>
+        <result property="instanceId" column="instance_id"/>
+        <result property="referee" column="referee"/>
+        <result property="retrieval" column="retrieval"/>
+    </resultMap>
+
+    <sql id="selectSysWorkflowVo">
+        select work_flow_id, work_flow_type, dept_id, dept_name, dept_type, project_id, project_name,
+        corporate_name, document_type, document_level, document_revert_flag, document_revert_time,
+        document_id, document_name, document_url, remarks, create_by, creator, create_time, update_by,
+        reviser, update_time, apply_user, apply_time, reality_start_time, reality_end_time,instance_id, referee,retrieval from sys_workflow
+    </sql>
+
+    <select id="selectSysWorkflowList" parameterType="SysWorkFlowVo" resultMap="SysWorkflowResult">
+        <include refid="selectSysWorkflowVo"/>
+        <where>
+            <if test="workFlowType != null  and workFlowType != ''">and work_flow_type = #{workFlowType}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+            <if test="deptName != null  and deptName != ''">and dept_name like concat('%', #{deptName}, '%')</if>
+            <if test="deptType != null  and deptType != ''">and dept_type = #{deptType}</if>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="corporateName != null  and corporateName != ''">and corporate_name like concat('%',
+                #{corporateName}, '%')
+            </if>
+            <if test="documentType != null  and documentType != ''">and document_type = #{documentType}</if>
+            <if test="documentLevel != null  and documentLevel != ''">and document_level = #{documentLevel}</if>
+            <if test="documentRevertFlag != null  and documentRevertFlag != ''">and document_revert_flag =
+                #{documentRevertFlag}
+            </if>
+            <if test="documentRevertTime != null ">and document_revert_time = #{documentRevertTime}</if>
+            <if test="documentId != null ">and document_id = #{documentId}</if>
+            <if test="documentName != null  and documentName != ''">and document_name like concat('%', #{documentName},
+                '%')
+            </if>
+            <if test="documentUrl != null  and documentUrl != ''">and document_url = #{documentUrl}</if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="creator != null  and creator != ''">and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''">and reviser = #{reviser}</if>
+            <if test="applyUser != null  and applyUser != ''">and apply_user = #{applyUser}</if>
+            <if test="applyTime != null ">and apply_time = #{applyTime}</if>
+            <if test="realityStartTime != null ">and reality_start_time = #{realityStartTime}</if>
+            <if test="realityEndTime != null ">and reality_end_time = #{realityEndTime}</if>
+            <if test="instanceId != null  and instanceId != ''">and instance_id = #{instanceId}</if>
+            <if test="referee != null  and referee != ''">and referee like concat('%', #{referee},'%')</if>
+            <if test="retrieval != null  and retrieval != ''">and retrieval = #{retrieval}</if>
+        </where>
+    </select>
+
+    <select id="selectSysWorkflowById" parameterType="Long" resultMap="SysWorkflowResult">
+        <include refid="selectSysWorkflowVo"/>
+        where work_flow_id = #{workFlowId}
+    </select>
+
+    <insert id="insertSysWorkflow" parameterType="SysWorkFlowVo" useGeneratedKeys="true" keyProperty="workFlowId">
+        insert into sys_workflow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workFlowType != null">work_flow_type,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="deptName != null">dept_name,</if>
+            <if test="deptType != null">dept_type,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="corporateName != null">corporate_name,</if>
+            <if test="documentType != null">document_type,</if>
+            <if test="documentLevel != null">document_level,</if>
+            <if test="documentRevertFlag != null">document_revert_flag,</if>
+            <if test="documentRevertTime != null">document_revert_time,</if>
+            <if test="documentId != null">document_id,</if>
+            <if test="documentName != null">document_name,</if>
+            <if test="documentUrl != null">document_url,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="reviser != null">reviser,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="applyUser != null">apply_user,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="realityStartTime != null">reality_start_time,</if>
+            <if test="realityEndTime != null">reality_end_time,</if>
+            <if test="instanceId != null  and instanceId != ''">instance_id,</if>
+            <if test="referee != null">referee,</if>
+            <if test="retrieval != null">retrieval,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workFlowType != null">#{workFlowType},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="deptName != null">#{deptName},</if>
+            <if test="deptType != null">#{deptType},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="corporateName != null">#{corporateName},</if>
+            <if test="documentType != null">#{documentType},</if>
+            <if test="documentLevel != null">#{documentLevel},</if>
+            <if test="documentRevertFlag != null">#{documentRevertFlag},</if>
+            <if test="documentRevertTime != null">#{documentRevertTime},</if>
+            <if test="documentId != null">#{documentId},</if>
+            <if test="documentName != null">#{documentName},</if>
+            <if test="documentUrl != null">#{documentUrl},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="reviser != null">#{reviser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="applyUser != null">#{applyUser},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="realityStartTime != null">#{realityStartTime},</if>
+            <if test="realityEndTime != null">#{realityEndTime},</if>
+            <if test="instanceId != null  and instanceId != ''">#{instanceId},</if>
+            <if test="referee != null">#{referee},</if>
+            <if test="retrieval != null">#{retrieval},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysWorkflow" parameterType="SysWorkFlowVo">
+        update sys_workflow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workFlowType != null">work_flow_type = #{workFlowType},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="deptName != null">dept_name = #{deptName},</if>
+            <if test="deptType != null">dept_type = #{deptType},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="corporateName != null">corporate_name = #{corporateName},</if>
+            <if test="documentType != null">document_type = #{documentType},</if>
+            <if test="documentLevel != null">document_level = #{documentLevel},</if>
+            <if test="documentRevertFlag != null">document_revert_flag = #{documentRevertFlag},</if>
+            <if test="documentRevertTime != null">document_revert_time = #{documentRevertTime},</if>
+            <if test="documentId != null">document_id = #{documentId},</if>
+            <if test="documentName != null">document_name = #{documentName},</if>
+            <if test="documentUrl != null">document_url = #{documentUrl},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="reviser != null">reviser = #{reviser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="applyUser != null">apply_user = #{applyUser},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="realityStartTime != null">reality_start_time = #{realityStartTime},</if>
+            <if test="realityEndTime != null">reality_end_time = #{realityEndTime},</if>
+            <if test="instanceId != null  and instanceId != ''">instance_id = #{instanceId},</if>
+            <if test="referee != null">referee = #{referee},</if>
+            <if test="retrieval != null">retrieval = #{retrieval},</if>
+        </trim>
+        where work_flow_id = #{workFlowId}
+    </update>
+
+    <delete id="deleteSysWorkflowById" parameterType="Long">
+        delete from sys_workflow where work_flow_id = #{workFlowId}
+    </delete>
+
+    <delete id="deleteSysWorkflowByIds" parameterType="String">
+        delete from sys_workflow where work_flow_id in
+        <foreach item="workFlowId" collection="array" open="(" separator="," close=")">
+            #{workFlowId}
+        </foreach>
+    </delete>
+
+</mapper>

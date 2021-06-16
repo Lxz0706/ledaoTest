@@ -24,10 +24,13 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateor" column="updateor"/>
         <result property="updateTime" column="update_time"/>
+        <result property="subsetType" column="subset_type"/>
     </resultMap>
 
     <sql id="selectSysDocumentVo">
-        select file_id, parent_id, file_name, file_type, document_type, file_size, file_version, downloadable_flag, share_dept_id, share_dept_name, share_user_id, share_user_name, file_url, create_by, createor, create_time, update_by, updateor, update_time from sys_document
+        select file_id, parent_id, file_name, file_type, document_type, file_size, file_version, downloadable_flag,
+        share_dept_id, share_dept_name, share_user_id, share_user_name, file_url, create_by, createor, create_time,
+        update_by, updateor, update_time,subset_type from sys_document
     </sql>
 
     <select id="selectSysDocumentList" parameterType="SysDocument" resultMap="SysDocumentResult">
@@ -46,13 +49,22 @@
             <if test="shareDeptName != null  and shareDeptName != ''">and share_dept_name like concat('%',
                 #{shareDeptName}, '%')
             </if>
-            <if test="shareUserId != null  and shareUserId != ''">and share_user_id like concat('%', #{shareUserId},'%')</if>
+            <if test="shareUserId != null  and shareUserId != ''">and share_user_id like concat('%',
+                #{shareUserId},'%')
+            </if>
             <if test="shareUserName != null  and shareUserName != ''">and share_user_name like concat('%',
                 #{shareUserName}, '%')
             </if>
             <if test="fileUrl != null  and fileUrl != ''">and file_url = #{fileUrl}</if>
             <if test="createor != null  and createor != ''">and createor = #{createor}</if>
             <if test="updateor != null  and updateor != ''">and updateor = #{updateor}</if>
+            <if test="subsetType !=null and subsetType !=''">and subset_type =#{subsetType}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
         </where>
     </select>
 
@@ -82,6 +94,7 @@
             <if test="updateBy != null">update_by,</if>
             <if test="updateor != null">updateor,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="subsetType !=null">subset_type,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="parentId != null">#{parentId},</if>
@@ -102,6 +115,7 @@
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateor != null">#{updateor},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="subsetType !=null">#{subsetType},</if>
         </trim>
     </insert>
 
@@ -126,6 +140,7 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateor != null">updateor = #{updateor},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="subsetType !=null">subset_type = #{subsetType},</if>
         </trim>
         where file_id = #{fileId}
     </update>
@@ -140,5 +155,38 @@
             #{fileId}
         </foreach>
     </delete>
+
+    <select id="listBySubsetType" parameterType="SysDocument" resultMap="SysDocumentResult">
+        select file_id, parent_id, file_name, file_type, document_type, file_size, file_version, downloadable_flag,
+        share_dept_id, share_dept_name, share_user_id, share_user_name, file_url, sys_document.create_by, createor, sys_document.create_time,
+        sys_document.update_by, updateor, sys_document.update_time,subset_type,css_class from sys_document
+        INNER JOIN sys_dict_data ON subset_type=dict_label
+        <where>
+            <if test="parentId != null ">and parent_id = #{parentId}</if>
+            <if test="fileName != null  and fileName != ''">and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''">and file_type = #{fileType}</if>
+            <if test="documentType != null  and documentType != ''">and document_type = #{documentType}</if>
+            <if test="fileSize != null ">and file_size = #{fileSize}</if>
+            <if test="fileVersion != null  and fileVersion != ''">and file_version = #{fileVersion}</if>
+            <if test="downloadableFlag != null  and downloadableFlag != ''">and downloadable_flag =
+                #{downloadableFlag}
+            </if>
+            <if test="shareDeptId != null  and shareDeptId != ''">and share_dept_id = #{shareDeptId}</if>
+            <if test="shareDeptName != null  and shareDeptName != ''">and share_dept_name like concat('%',
+                #{shareDeptName}, '%')
+            </if>
+            <if test="shareUserId != null  and shareUserId != ''">and share_user_id like concat('%',
+                #{shareUserId},'%')
+            </if>
+            <if test="shareUserName != null  and shareUserName != ''">and share_user_name like concat('%',
+                #{shareUserName}, '%')
+            </if>
+            <if test="fileUrl != null  and fileUrl != ''">and file_url = #{fileUrl}</if>
+            <if test="createor != null  and createor != ''">and createor = #{createor}</if>
+            <if test="updateor != null  and updateor != ''">and updateor = #{updateor}</if>
+            <if test="subsetType !=null and subsetType !=''">and subset_type =#{subsetType}</if>
+        </where>
+        group by subset_type ORDER BY dict_sort
+    </select>
 
 </mapper>

@@ -94,4 +94,19 @@
         SELECT DISTINCT dict_sort,asset_status FROM (SELECT a2.dict_label,a2.dict_sort,a1.asset_status FROM
         sys_zcb a1 INNER JOIN sys_dict_data a2 ON a1.asset_status=a2.dict_value WHERE a2.dict_type='sys_zcb_assetStatus' AND a1.del_flag='0') as temp ORDER BY dict_sort
     </select>
+
+    <select id="selectZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
+        SELECT SUM(t2.total_price) AS
+        collateralTotal,t1.asset_package_name,t1.id,t1.del_flag,t1.evaluation_time,SUM(t2.cap_value) as
+        capValue,t1.team_members_name,t1.team_members_id FROM sys_zcb t1 INNER JOIN sys_zck t2 ON t1.id=t2.zcb_id
+        WHERE t1.del_flag='0' AND t2.del_flag='0'
+        <if test="assetStatus != null  and assetStatus != ''">and t1.asset_status = #{assetStatus}</if>
+        <if test="teamMembersId != null  and teamMembersId != ''">and t1.team_members_id like
+            concat('%',#{teamMembersId},'%')
+        </if>
+        <if test="assetPackageName != null  and assetPackageName != ''">and t1.asset_package_name like concat('%',
+            #{assetPackageName}, '%')
+        </if>
+        GROUP BY t1.id
+    </select>
 </mapper>

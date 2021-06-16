@@ -93,6 +93,17 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">直属主管：</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="hidden" name="directorId" id="directorId"  th:field="*{directorId}">
+                            <input class="form-control" type="text" name="director" id="director" th:field="*{director}" onclick="selectUser()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
             	<div class="col-sm-12">
                     <div class="form-group">
                         <label class="col-xs-2 control-label">角色：</label>
@@ -223,6 +234,24 @@
                 allowClear: true
             });
         })
+
+        //人员树形选择器
+        function selectUser() {
+            var url = ctx + "system/dept/selectLeaderUser?userId=" + $("#directorId").val() + "&userName=" + $("#director").val();
+            $.modal.open("人员选择", url, '750', '600');
+        }
+
+        function getDeviceBasics(row) {
+            var userNames = "";
+            var userIds = "";
+            for (var i = 0; i < row.length; i++) {
+                userNames = row[i].userName + "," + userNames;
+                userIds = row[i].userId + "," + userIds;
+            }
+            $("#directorId").val(userIds.substr(0, userIds.length - 1));
+            $("#director").val(userNames.substr(0, userNames.length - 1));
+            layer.close(layer.index);
+        }
     </script>
 </body>
 </html>

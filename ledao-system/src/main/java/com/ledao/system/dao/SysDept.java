@@ -40,6 +40,11 @@ public class SysDept extends BaseEntity {
     private String orderNum;
 
     /**
+     * 负责人id
+     */
+    private Long leaderId;
+
+    /**
      * 负责人
      */
     private String leader;
@@ -112,6 +117,14 @@ public class SysDept extends BaseEntity {
         this.orderNum = orderNum;
     }
 
+    public Long getLeaderId() {
+        return leaderId;
+    }
+
+    public void setLeaderId(Long leaderId) {
+        this.leaderId = leaderId;
+    }
+
     public String getLeader() {
         return leader;
     }
@@ -171,6 +184,7 @@ public class SysDept extends BaseEntity {
                 .append("ancestors", getAncestors())
                 .append("deptName", getDeptName())
                 .append("orderNum", getOrderNum())
+                .append("leaderId", getLeaderId())
                 .append("leader", getLeader())
                 .append("phone", getPhone())
                 .append("email", getEmail())

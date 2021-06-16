@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('档案管理出入库流程列表')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input name="workFlowType" value="warehouse" type="hidden"/>
+                        <!--<li>
+                            <label>流程类别：</label>
+                            <select name="workFlowType">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>-->
+                        <li>
+                            <label>所属部门id：</label>
+                            <input type="text" name="deptId"/>
+                        </li>
+                        <li>
+                            <label>所属部门名称：</label>
+                            <input type="text" name="deptName"/>
+                        </li>
+                        <li>
+                            <label>所属部门类别：</label>
+                            <select name="deptType">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>项目id：</label>
+                            <input type="text" name="projectId"/>
+                        </li>
+                        <li>
+                            <label>项目名称：</label>
+                            <input type="text" name="projectName"/>
+                        </li>
+                        <li>
+                            <label>公司名称：</label>
+                            <input type="text" name="corporateName"/>
+                        </li>
+                        <li>
+                            <label>档案种类：</label>
+                            <select name="documentType">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>档案级别：</label>
+                            <input type="text" name="documentLevel"/>
+                        </li>
+                        <li>
+                            <label>档案是否归还：</label>
+                            <input type="text" name="documentRevertFlag"/>
+                        </li>
+                        <li class="select-time">
+                            <label>档案归还时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginDocumentRevertTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endDocumentRevertTime]"/>
+                        </li>
+                        <li>
+                            <label>档案id：</label>
+                            <input type="text" name="documentId"/>
+                        </li>
+                        <li>
+                            <label>档案名称：</label>
+                            <input type="text" name="documentName"/>
+                        </li>
+                        <li>
+                            <label>档案路径：</label>
+                            <input type="text" name="documentUrl"/>
+                        </li>
+                        <li>
+                            <label>备注：</label>
+                            <input type="text" name="remarks"/>
+                        </li>
+                        <li>
+                            <label>创建人名称：</label>
+                            <input type="text" name="creator"/>
+                        </li>
+                        <li>
+                            <label>修改人名称：</label>
+                            <input type="text" name="reviser"/>
+                        </li>
+                        <li>
+                            <label>申请人：</label>
+                            <input type="text" name="applyUser"/>
+                        </li>
+                        <li class="select-time">
+                            <label>申请时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginApplyTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endApplyTime]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>实际开始时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginRealityStartTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endRealityStartTime]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>实际结束时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginRealityEndTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endRealityEndTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activiti:workflow:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="activiti:workflow:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="activiti:workflow:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:src="@{/js/activiti.js}"></script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('activiti:workflow:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('activiti:workflow:remove')}]];
+    var prefix = ctx + "workflow";
+
+    $(function () {
+        console.log("打印：======" + prefix);
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "档案管理出入库流程",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'workFlowId',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'workFlowType',
+                    title: '流程类别'
+                },
+                {
+                    field: 'deptId',
+                    title: '所属部门id'
+                },
+                {
+                    field: 'deptName',
+                    title: '所属部门名称'
+                },
+                {
+                    field: 'deptType',
+                    title: '所属部门类别'
+                },
+                {
+                    field: 'projectId',
+                    title: '项目id'
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
+                    field: 'corporateName',
+                    title: '公司名称'
+                },
+                {
+                    field: 'documentType',
+                    title: '档案种类'
+                },
+                {
+                    field: 'documentLevel',
+                    title: '档案级别'
+                },
+                {
+                    field: 'documentRevertFlag',
+                    title: '档案是否归还'
+                },
+                {
+                    field: 'documentRevertTime',
+                    title: '档案归还时间'
+                },
+                {
+                    field: 'documentId',
+                    title: '档案id'
+                },
+                {
+                    field: 'documentName',
+                    title: '档案名称'
+                },
+                {
+                    field: 'documentUrl',
+                    title: '档案路径'
+                },
+                {
+                    field: 'remarks',
+                    title: '备注'
+                },
+                {
+                    field: 'creator',
+                    title: '创建人名称'
+                },
+                {
+                    field: 'reviser',
+                    title: '修改人名称'
+                },
+                {
+                    field: 'applyUser',
+                    title: '申请人'
+                },
+                {
+                    field: 'applyTime',
+                    title: '申请时间'
+                },
+                {
+                    field: 'realityStartTime',
+                    title: '实际开始时间'
+                },
+                {
+                    field: 'realityEndTime',
+                    title: '实际结束时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.workFlowId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.workFlowId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

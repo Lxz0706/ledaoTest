@@ -1,15 +1,17 @@
 package com.ledao.web.controller.common;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jodconverter.DocumentConverter;
+import org.jodconverter.office.OfficeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.ledao.common.config.Global;
@@ -36,6 +38,9 @@ public class CommonController {
 
     @Autowired
     private ServerConfig serverConfig;
+
+    @Autowired
+    private DocumentConverter converter;
 
     /**
      * 通用下载请求
@@ -114,7 +119,6 @@ public class CommonController {
      */
 
     public static File saveUrlAs(String url, String filePath, String method) {
-        //System.out.println("fileName---->"+filePath);
         //创建不同的文件夹目录
         File file = new File(filePath);
         //判断文件夹是否存在
@@ -191,7 +195,6 @@ public class CommonController {
             httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestMethod("GET");
             int responseCode = httpURLConnection.getResponseCode();
-            System.out.println("responseCode is:" + responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // 从服务器返回一个输入流
                 inputStream = httpURLConnection.getInputStream();
@@ -232,6 +235,139 @@ public class CommonController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @GetMapping("/common/officeToPdf")
+    public void officeToPdf(String url, HttpServletResponse response) throws FileNotFoundException {
+        String newUrl = "";
+        response.setCharacterEncoding("UTF-8");
+        byte[] b = new byte[1024];
+        try {
+            //获取当前地址下的文件
+            File file = new File("c:/" + url);
+            if (!file.exists()) {
+                throw new RuntimeException("源文件不存在");
+            }
+            String oldSuffix = url.substring(url.lastIndexOf(".") + 1);
+            //默认转pdf,excel转html
+            String suffix = ".pdf";
+            if ("txt".equals(oldSuffix)) {
+                charsetEnc("c:/" + url, "UTF-8");
+            }
+            if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
+                suffix = ".html";
+            }
+
+            //转换的文件存放位置
+            newUrl = url.replace("." + oldSuffix, suffix);
+            File newFile = new File("c:/" + newUrl);
+
+            converter.convert(file).to(newFile).execute();
+            ServletOutputStream outputStream = response.getOutputStream();
+            // 读取文件
+            InputStream in = new FileInputStream(newFile);
+            int len = 0;
+            while ((len = in.read(b)) != -1) {
+                outputStream.write(b, 0, len);
+            }
+
+            outputStream.flush();
+
+            in.close();
+            outputStream.close();
+            newFile.delete();
+        } catch (OfficeException | IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String ReaderEcd;//读取文件的字符编码设置
+
+    private static String outEcd;//写入文件的字符编码设置
+
+    /**
+     * 功能：更改单文件字符编码
+     *
+     * @param fileUrl 文件
+     * @throws IOException
+     */
+    public static void charsetEnc(String fileUrl, String code) throws Exception {
+        String context = "";
+        String cs = codeString(fileUrl);
+        InputStreamReader is = new InputStreamReader(new FileInputStream(fileUrl), cs);
+        BufferedReader bdf = new BufferedReader(is);
+        String str = null;
+        while ((str = bdf.readLine()) != null) {
+            context += str + "\n";
+        }
+        OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileUrl), code);
+        BufferedWriter bdw = new BufferedWriter(os);
+        bdw.write(context);
+        bdw.close();
+        os.close();
+        bdf.close();
+        is.close();
+    }
+
+    /**
+     * 获得文件编码
+     *
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
+    public static String codeString(String fileName) throws Exception {
+        BufferedInputStream bin = new BufferedInputStream(new FileInputStream(fileName));
+        int p = (bin.read() << 8) + bin.read();
+        bin.close();
+        String code = null;
+
+        switch (p) {
+            case 0xefbb:
+                code = "UTF-8";
+                break;
+            case 0xfffe:
+                code = "Unicode";
+                break;
+            case 0xfeff:
+                code = "UTF-16BE";
+                break;
+            case 0x5c75:
+                code = "ANSI|ASCII";
+                break;
+            default:
+                code = "GBK";
+        }
+
+        return code;
+    }
+
+    /**
+     *      * 将一个文档自动转换为另一个文档格式
+     *      * @param souseFileName  源文件路径
+     *      * @param desFileName    目标文件路径
+     *      * @param code           目标文件的文档存放格式
+     *      * @throws IOException
+     *     
+     */
+    public static void fileConvertToCode(String souseFileName, String desFileName, String code) throws Exception {
+        String cs = codeString(souseFileName);
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(souseFileName), cs);
+        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(desFileName), code);
+        int len = -1;
+        char[] cbuf = new char[1024];
+        while ((len = isr.read(cbuf, 0, cbuf.length)) != -1) {
+            osw.write(cbuf, 0, len);
+        }
+        osw.flush();
+        osw.close();
+        isr.close();
+    }
+
+    public static void main(String[] args) throws Exception {
+        charsetEnc("C:\\Users\\87852\\Desktop\\123.txt", "utf-8");
     }
 
 }

@@ -45,6 +45,11 @@ public class SysUserOnlineController extends BaseController {
         return prefix + "/online";
     }
 
+    @GetMapping("/viewer")
+    public String online1() {
+        return "/viewer";
+    }
+
     @RequiresPermissions("monitor:online:list")
     @PostMapping("/list")
     @ResponseBody

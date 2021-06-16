@@ -102,7 +102,7 @@
                     field: 'amountGuaranteed', 
                     title: '担保金额(元)',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
@@ -117,7 +117,7 @@
                     field: 'amountCompensated', 
                     title: '已代偿金额(元)',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 }/*,
                 {

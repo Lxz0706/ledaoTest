@@ -78,7 +78,7 @@
                     field: 'principalBalance',
                     title: '本金余额',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
@@ -115,14 +115,14 @@
                     field: 'landUnitPrice',
                     title: '土地单价',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'otherCollateralUnitPrice',
                     title: '其它抵置押物单价',
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
@@ -130,7 +130,7 @@
                     title: '总价',
                     sortable: true,
                     formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {

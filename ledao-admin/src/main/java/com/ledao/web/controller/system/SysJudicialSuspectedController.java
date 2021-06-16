@@ -61,6 +61,7 @@ public class SysJudicialSuspectedController extends BaseController {
             sysTagging.setCreateBy(ShiroUtils.getLoginName());
             //sysTagging.setJudicialId(sysJudicialSuspected1.getId());
             sysTagging.setItemId(sysJudicialSuspected1.getItemId());
+            sysTagging.setJudicial("N");
             List<SysTagging> sysTaggingList = sysTaggingService.selectSysTaggingList(sysTagging);
             if (sysTaggingList.size() > 0) {
                 sysJudicialSuspected1.setTaggings("Y");

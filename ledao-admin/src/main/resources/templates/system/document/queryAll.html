@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('文件管理列表')"/>
+    <!--<th:block th:include="include :: pdf-css"/>-->
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input name="params[beginTime]" id="beginDate" th:value="${sysDocument.beginTime}" type="hidden"/>
+                <input name="params[endTime]" id="endDate" th:value="${sysDocument.endTime}" type="hidden"/>
+                <input type="hidden" name="fileName" th:value="${sysDocument.fileName}"/>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:document:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:document:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>-->
+            <!--<a class="btn btn-primary" onclick="$.operate.edit()"
+               shiro:hasPermission="system:document:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-info" id="expandAllBtn">
+                <i class="fa fa-exchange"></i> 展开/折叠
+            </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: pdf-js"/>
+<th:block th:include="include :: base64-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('sys_document_type')}]];
+    var editFlag = [[${@permission.hasPermi('system:document:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:document:remove')}]];
+    var downLoadFlag = [[${@permission.hasPermi('system:document:download')}]]
+    var prefix = ctx + "system/document";
+
+    $(function () {
+        var options = {
+            url: prefix + "/listes",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove/{id}",
+            exportUrl: prefix + "/export",
+            backParentUrl: prefix + "/list",
+            sortName: "createTime",
+            sortOrder: "desc",
+            onLoadSuccess: onLoadSuccess,
+            modalName: "文件管理",
+            columns: [
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'documentType',
+                    title: '文件用途',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field: 'subsetType',
+                    title: '分类'
+                },
+                {
+                    field: 'fileName',
+                    title: '文件名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 30);
+                    }
+                },
+                {
+                    field: 'fileType',
+                    title: '文件类型'
+                },
+                /*{
+                    field: 'shareDeptName',
+                    title: '共享部门名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 15);
+                    }
+                },*/
+                {
+                    field: 'shareDeptAndUser',
+                    title: '可见部门及人员',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 15);
+                    }
+                },
+                {
+                    field: 'createor',
+                    title: '创建人名称'
+                },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if ("Y" == row.isAdmin) {
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
+                        if ("Y" == row.downloadableFlag) {
+                            var fileType = row.fileType.toLowerCase();
+                            actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
+                            if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
+                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                            } else if ('pdf' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '"><i class="fa fa-search"></i>预览</a>');
+                            } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
+                                || 'png' == fileType || 'webp' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileUrl + "',\'" + row.fileType + '\')"+row.filw+><i class="fa fa-search"></i>预览</a>');
+                            } else if ('mp4' == fileType) {
+                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
+                            }
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function playVideo(url, type) {
+        showVideo('<video controls="controls" autoplay="autoplay">\n' +
+            '  <source src="' + url + '" type="video/mp4" />\n' +
+            '  <source src="' + url + '" type="video/ogg" />\n' +
+            '  <source src="' + url + '" type="video/webm" />\n' +
+            '  <object data="' + url + '">\n' +
+            '    <embed src="' + url + '" />\n' +
+            '  </object>\n' +
+            '</video>'
+        );
+    }
+
+    function showVideo(content) {
+        layer.open({
+            type: 1,
+            title: false, //不显示标题栏
+            shadeClose: true, //点击遮罩时关闭
+            area: ['400px', '230px'],
+            shade: 0.8,
+            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+            moveType: 1, //拖拽模式，0或者1
+            content: content
+        });
+    }
+
+    function jpgToPdf(url, type) {
+        showImage('<img src="' + url + '" alt="x" width="400px" height="500px">');
+    }
+
+    function showImage(content) {
+        layer.open({
+            type: 1,
+            title: false, //不显示标题栏
+            shadeClose: true, //点击遮罩时关闭
+            area: ['auto', 'auto'],
+            shade: 0.8,
+            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+            moveType: 1, //拖拽模式，0或者1
+            content: content
+        });
+    };
+
+    function toPdf(url) {
+        window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+    }
+
+    function downLoad(fileName) {
+        window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+    }
+
+    function add() {
+        var type = $("#documentType").val();
+        $.operate.add(type);
+    }
+
+    function onLoadSuccess(data) {
+        for (var i in data.rows) {
+            if ("N" == data.rows[i].isAdmin) {
+                $.table.hideColumn("shareDeptAndUser");
+            }
+        }
+    }
+
+    function back() {
+        var url = prefix + "/toList";
+        $.modal.parentTab("文档管理", url);
+    }
+
+</script>
+</body>
+</html>

@@ -155,8 +155,8 @@ public class SysProjectController extends BaseController {
             //保证人
             List<SysProjectBail> sysProjectBailList = sysProjectBailService.selectSysProjectBailByProjectId(sb.toString());
             for (SysProjectBail sysProjectBail1 : sysProjectBailList) {
-                if (StringUtils.isNotNull(sysProjectBail1.getBail()) && StringUtils.isNotEmpty(sysProjectBail1.getBail())) {
-                    sb1.append(sysProjectBail1.getBail()).append(";");
+                if (StringUtils.isNotNull(StringUtils.replaceBlank(sysProjectBail1.getBail())) && StringUtils.isNotEmpty(StringUtils.replaceBlank(sysProjectBail1.getBail()))) {
+                    sb1.append(StringUtils.replaceBlank(sysProjectBail1.getBail())).append(";");
                 }
             }
             sysProject1.setGuarantors(sb1.toString());
@@ -165,8 +165,9 @@ public class SysProjectController extends BaseController {
             //抵押物
             List<SysProjectMortgage> sysProjectMortgageList = sysProjectMortgageService.selectSysProjectMortgageByProjectId(sb.toString());
             for (SysProjectMortgage sysProjectMortgage : sysProjectMortgageList) {
-                if (StringUtils.isNotNull(sysProjectMortgage.getMortgagor()) && StringUtils.isNotEmpty(sysProjectMortgage.getMortgagor())) {
-                    sb2.append(sysProjectMortgage.getMortgagor()).append(";");
+                if (StringUtils.isNotNull(StringUtils.replaceBlank(sysProjectMortgage.getMortgagor()))
+                        && StringUtils.isNotEmpty(StringUtils.replaceBlank(sysProjectMortgage.getMortgagor()))) {
+                    sb2.append(StringUtils.replaceBlank(sysProjectMortgage.getMortgagor())).append(";");
                 }
             }
             sysProject1.setCollaterals(sb2.toString());
@@ -174,8 +175,9 @@ public class SysProjectController extends BaseController {
             //质押物
             List<SysProjectPledge> sysProjectPledgeList = sysProjectPledgeService.selectPledgeByProjectId(sb.toString());
             for (SysProjectPledge sysProjectPledge : sysProjectPledgeList) {
-                if (StringUtils.isNotNull(sysProjectPledge.getPledgor()) && StringUtils.isNotEmpty(sysProjectPledge.getPledgor())) {
-                    sb3.append(sysProjectPledge.getPledgor()).append(";");
+                if (StringUtils.isNotNull(StringUtils.replaceBlank(sysProjectPledge.getPledgor()))
+                        && StringUtils.isNotEmpty(StringUtils.replaceBlank(sysProjectPledge.getPledgor()))) {
+                    sb3.append(StringUtils.replaceBlank(sysProjectPledge.getPledgor())).append(";");
                 }
             }
             sysProject1.setPledges(sb3.toString());
@@ -256,8 +258,8 @@ public class SysProjectController extends BaseController {
         sysProjectService.insertSysProject(sysProject);
         //保证人新增
         if (StringUtils.isNotNull(sysProject.getGuarantor()) && StringUtils.isNotEmpty(sysProject.getGuarantor())) {
-            sysProject.setGuarantor(sysProject.getGuarantor().replaceAll("；", ";"));
-            for (String string1 : sysProject.getGuarantor().split(";")) {
+            sysProject.setGuarantor(StringUtils.replaceBlank(sysProject.getGuarantor()).replaceAll("；", ";"));
+            for (String string1 : StringUtils.replaceBlank(sysProject.getGuarantor()).split(";")) {
                 SysProjectBail sysProjectBail = new SysProjectBail();
                 sysProjectBail.setProjectId(sysProject.getProjectId());
                 sysProjectBail.setBail(string1);
@@ -268,8 +270,8 @@ public class SysProjectController extends BaseController {
 
         //抵押物新增
         if (StringUtils.isNotNull(sysProject.getCollateral()) && StringUtils.isNotEmpty(sysProject.getCollateral())) {
-            sysProject.setCollateral(sysProject.getCollateral().replaceAll("；", ";"));
-            for (String string1 : sysProject.getCollateral().split(";")) {
+            sysProject.setCollateral(StringUtils.replaceBlank(sysProject.getCollateral()).replaceAll("；", ";"));
+            for (String string1 : StringUtils.replaceBlank(sysProject.getCollateral()).split(";")) {
                 SysProjectMortgage sysProjectMortgage = new SysProjectMortgage();
                 sysProjectMortgage.setMortgagor(string1);
                 sysProjectMortgage.setProjectId(sysProject.getProjectId());
@@ -280,7 +282,7 @@ public class SysProjectController extends BaseController {
 
         //质押物新增
         if (StringUtils.isNotNull(sysProject.getPledge()) && StringUtils.isNotEmpty(sysProject.getPledge())) {
-            sysProject.setPledge(sysProject.getPledge().replaceAll("；", ";"));
+            sysProject.setPledge(StringUtils.replaceBlank(sysProject.getPledge()).replaceAll("；", ";"));
             for (String string1 : sysProject.getPledge().split(";")) {
                 SysProjectPledge sysProjectPledge = new SysProjectPledge();
                 sysProjectPledge.setPledgor(string1);
@@ -375,13 +377,13 @@ public class SysProjectController extends BaseController {
 
         //修改保证人
         List<SysProjectBail> sysProjectBailList = sysProjectBailService.selectSysProjectBailByProjectId(sysProject.getProjectId().toString());
-        sysProject.setGuarantor(sysProject.getGuarantor().replaceAll("；", ";"));
+        sysProject.setGuarantor(StringUtils.replaceBlank(sysProject.getGuarantor()).replaceAll("；", ";"));
         if (sysProjectBailList.size() > 0) {
             for (SysProjectBail sysProjectBail : sysProjectBailList) {
-                bailMap.put(sysProjectBail.getBail(), sysProjectBail.getProjectId());
+                bailMap.put(StringUtils.replaceBlank(sysProjectBail.getBail()), sysProjectBail.getProjectId());
             }
             //sysProjectBailService.deleteSysProjectBailByIds(sb.toString());
-            for (String string1 : sysProject.getGuarantor().split(";")) {
+            for (String string1 : StringUtils.replaceBlank(sysProject.getGuarantor()).split(";")) {
                 if (StringUtils.isNull(bailMap.get(string1))) {
                     SysProjectBail sysProjectBail = new SysProjectBail();
                     sysProjectBail.setProjectId(sysProject.getProjectId());
@@ -391,7 +393,7 @@ public class SysProjectController extends BaseController {
                 }
             }
         } else {
-            for (String string1 : sysProject.getGuarantor().split(";")) {
+            for (String string1 : StringUtils.replaceBlank(sysProject.getGuarantor()).split(";")) {
                 SysProjectBail sysProjectBail = new SysProjectBail();
                 sysProjectBail.setProjectId(sysProject.getProjectId());
                 sysProjectBail.setBail(string1);
@@ -403,13 +405,13 @@ public class SysProjectController extends BaseController {
 
         //修改抵押物
         List<SysProjectMortgage> sysProjectMortgageList = sysProjectMortgageService.selectSysProjectMortgageByProjectId(sysProject.getProjectId().toString());
-        sysProject.setCollateral(sysProject.getCollateral().replaceAll("；", ";"));
+        sysProject.setCollateral(StringUtils.replaceBlank(sysProject.getCollateral()).replaceAll("；", ";"));
         if (sysProjectMortgageList.size() > 0) {
             for (SysProjectMortgage sysProjectMortgage : sysProjectMortgageList) {
-                sysProjectMortgageMap.put(sysProjectMortgage.getMortgagor(), sysProjectMortgage.getProjectId());
+                sysProjectMortgageMap.put(StringUtils.replaceBlank(sysProjectMortgage.getMortgagor()), sysProjectMortgage.getProjectId());
             }
             //sysProjectMortgageService.deleteSysProjectMortgageByIds(sb.toString());
-            for (String string1 : sysProject.getCollateral().split(";")) {
+            for (String string1 : StringUtils.replaceBlank(sysProject.getCollateral()).split(";")) {
                 if (StringUtils.isNull(sysProjectMortgageMap.get(string1))) {
                     SysProjectMortgage sysProjectMortgage = new SysProjectMortgage();
                     sysProjectMortgage.setMortgagor(string1);
@@ -419,7 +421,7 @@ public class SysProjectController extends BaseController {
                 }
             }
         } else {
-            for (String string1 : sysProject.getCollateral().split(";")) {
+            for (String string1 : StringUtils.replaceBlank(sysProject.getCollateral()).split(";")) {
                 SysProjectMortgage sysProjectMortgage = new SysProjectMortgage();
                 sysProjectMortgage.setMortgagor(string1);
                 sysProjectMortgage.setProjectId(sysProject.getProjectId());
@@ -430,13 +432,13 @@ public class SysProjectController extends BaseController {
 
         //修改质押物
         List<SysProjectPledge> sysProjectPledgeList = sysProjectPledgeService.selectPledgeByProjectId(sysProject.getProjectId().toString());
-        sysProject.setPledge(sysProject.getPledge().replaceAll("；", ";"));
+        sysProject.setPledge(StringUtils.replaceBlank(sysProject.getPledge()).replaceAll("；", ";"));
         if (sysProjectMortgageList.size() > 0) {
             for (SysProjectPledge sysProjectPledge : sysProjectPledgeList) {
-                sysProjectPledgeMap.put(sysProjectPledge.getPledgor(), sysProjectPledge.getProjectId());
+                sysProjectPledgeMap.put(StringUtils.replaceBlank(sysProjectPledge.getPledgor()), sysProjectPledge.getProjectId());
             }
             //sysProjectPledgeService.deleteSysProjectPledgeByIds(sb.toString());
-            for (String string1 : sysProject.getPledge().split(";")) {
+            for (String string1 : StringUtils.replaceBlank(sysProject.getPledge()).split(";")) {
                 if (StringUtils.isNull(sysProjectPledgeMap.get(string1))) {
                     SysProjectPledge sysProjectPledge = new SysProjectPledge();
                     sysProjectPledge.setPledgor(string1);
@@ -446,7 +448,7 @@ public class SysProjectController extends BaseController {
                 }
             }
         } else {
-            for (String string1 : sysProject.getPledge().split(";")) {
+            for (String string1 : StringUtils.replaceBlank(sysProject.getPledge()).split(";")) {
                 SysProjectPledge sysProjectPledge = new SysProjectPledge();
                 sysProjectPledge.setPledgor(string1);
                 sysProjectPledge.setProjectId(sysProject.getProjectId());
@@ -470,8 +472,8 @@ public class SysProjectController extends BaseController {
         }
 
         //关联项目
-        if (StringUtils.isNotNull(sysProject.getBuyer())) {
-            for (String string1 : sysProject.getBuyer().split(",")) {
+        if (StringUtils.isNotNull(StringUtils.replaceBlank(sysProject.getBuyer()))) {
+            for (String string1 : StringUtils.replaceBlank(sysProject.getBuyer()).split(",")) {
                 SysCustomer sysCustomer = new SysCustomer();
                 sysCustomer.setCustomerName(string1);
                 sysCustomer.setCreateBy(ShiroUtils.getLoginName());
@@ -855,7 +857,7 @@ public class SysProjectController extends BaseController {
             list = sysProjectService.selectSysProjectByProjectId(projectIds);
             for (SysProject sysProject1 : list) {
                 SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
-                if(StringUtils.isNotEmpty(sysProjectZck.getZckName())){
+                if (StringUtils.isNotEmpty(sysProjectZck.getZckName())) {
                     sysProject1.setProjectZckName(sysProjectZck.getZckName());
                 }
 

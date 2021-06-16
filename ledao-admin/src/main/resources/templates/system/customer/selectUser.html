@@ -8,6 +8,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input th:value="*{singleSelect}" id="singleSelect" type="hidden">
             <form id="role-form">
                 <div class="select-list">
                     <input th:value="*{loginName}" id="loginName" type="hidden">
@@ -41,6 +42,12 @@
     var prefix = ctx + "system/user";
 
     $(function () {
+        var singleSelect = $("#singleSelect").val();
+
+        var flag = false;
+        if ($.common.isNotEmpty(singleSelect)) {
+            flag = singleSelect;
+        }
         var options = {
             url: prefix + "/list",
             modalName: "用户",
@@ -49,6 +56,7 @@
             showToggle: false,
             showColumns: false,
             clickToSelect: true,
+            singleSelect: flag,
             rememberSelected: true,
             columns: [{
                 checkbox: true,

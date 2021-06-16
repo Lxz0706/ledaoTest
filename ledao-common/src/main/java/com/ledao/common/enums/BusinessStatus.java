@@ -2,11 +2,10 @@ package com.ledao.common.enums;
 
 /**
  * 操作状态
- * 
+ *
  * @author lxz
  */
-public enum BusinessStatus
-{
+public enum BusinessStatus {
     /**
      * 成功
      */

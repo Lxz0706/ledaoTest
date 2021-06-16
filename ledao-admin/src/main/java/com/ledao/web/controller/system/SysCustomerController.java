@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.controller.BaseController;
@@ -110,7 +111,16 @@ public class SysCustomerController extends BaseController {
                 if (!currentUser1.isAdmin()) {
                     List<SysRole> getRoles = currentUser1.getRoles();
                     for (SysRole sysRole : getRoles) {
-                        if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+
+                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())) {
+                            sysCustomer1.setIsAdmin("Y");
+                        } else {
+                            if ("thbManager".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey()) || "tzbzz".equals(sysRole.getRoleKey())
+                                    || "investmentManager".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey()) || "thbzz".equals(sysRole.getRoleKey())) {
+                                sysCustomer1.setIsAdmin("N");
+                            }
+                        }
+                        /*if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
                             if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
                                     && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
                                 //  sysItem.setCreateBy(ShiroUtils.getLoginName());
@@ -120,7 +130,7 @@ public class SysCustomerController extends BaseController {
                             }
                         } else {
                             sysCustomer1.setIsAdmin("Y");
-                        }
+                        }*/
                     }
                 } else {
                     sysCustomer1.setIsAdmin("Y");
@@ -130,6 +140,10 @@ public class SysCustomerController extends BaseController {
             //将手机号中的，替换成/
             if (StringUtils.isNotEmpty(sysCustomer1.getContactNumber())) {
                 sysCustomer1.setContactNumber(sysCustomer1.getContactNumber().replace(",", "/"));
+            }
+
+            if (StringUtils.isNotEmpty(sysCustomer1.getWeChatNumber())) {
+                sysCustomer1.setWeChatNumber(sysCustomer1.getWeChatNumber().replace(",", "/"));
             }
 
             sysItem.setCustomerId(sysCustomer1.getCustomerId());
@@ -153,6 +167,10 @@ public class SysCustomerController extends BaseController {
     @ResponseBody
     public AjaxResult export(SysCustomer sysCustomer) {
         List<SysCustomer> list = new ArrayList<>();
+        PageHelper.orderBy("create_time desc");
+        /*PageDao pageDao=new PageDao();
+        pageDao.setIsAsc("desc");
+        pageDao.setOrderByColumn("createTime");*/
         if (StringUtils.isNotEmpty(sysCustomer.getCustomerIds())) {
             SysCustomer sysCustomer1 = new SysCustomer();
             sysCustomer1.setCustomerIds(sysCustomer.getCustomerIds());
@@ -196,6 +214,8 @@ public class SysCustomerController extends BaseController {
         SysDictData sysDictData = new SysDictData();
         sysDictData.setDictType("sys_customer_label");
         modelMap.put("types", sysDictDataService.selectDictDataList(sysDictData));
+        modelMap.put("createBy", ShiroUtils.getLoginName());
+        modelMap.put("creator", ShiroUtils.getSysUser().getUserName());
         return prefix + "/add";
     }
 
@@ -209,6 +229,10 @@ public class SysCustomerController extends BaseController {
     public AjaxResult addSave(SysCustomer sysCustomer) {
         if (StringUtils.isNotEmpty(sysCustomer.getContactNumber())) {
             sysCustomer.setContactNumber(sysCustomer.getContactNumber().replace(",", "/"));
+        }
+
+        if (StringUtils.isNotEmpty(sysCustomer.getWeChatNumber())) {
+            sysCustomer.setWeChatNumber(sysCustomer.getWeChatNumber().replace(",", "/"));
         }
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
@@ -307,6 +331,13 @@ public class SysCustomerController extends BaseController {
             sysCustomer.setContactNumber(sysCustomer.getContactNumber().replace(",", "/"));
         }
         mmap.put("nums", sysCustomer.getContactNumber());
+
+        if (StringUtils.isNotEmpty(sysCustomer.getWeChatNumber())) {
+            sysCustomer.setWeChatNumber(sysCustomer.getWeChatNumber().replace(",", "/"));
+        }
+        mmap.put("weChatnums", sysCustomer.getWeChatNumber());
+
+
         SysDictData sysDictData = new SysDictData();
         sysDictData.setDictType("sys_customer_label");
         Map<String, String> map = new HashMap<>();
@@ -337,6 +368,9 @@ public class SysCustomerController extends BaseController {
     public AjaxResult editSave(SysCustomer sysCustomer) {
         if (StringUtils.isNotEmpty(sysCustomer.getContactNumber())) {
             sysCustomer.setContactNumber(sysCustomer.getContactNumber().replace(",", "/"));
+        }
+        if (StringUtils.isNotEmpty(sysCustomer.getWeChatNumber())) {
+            sysCustomer.setWeChatNumber(sysCustomer.getWeChatNumber().replaceAll(",", "/"));
         }
         List<SysItem> sysItemList = sysItemService.selectItemByCustomerId(sysCustomer.getCustomerId());
         for (SysItem sysItem : sysItemList) {
@@ -438,7 +472,7 @@ public class SysCustomerController extends BaseController {
     }
 
     /**
-     * 校验手机号码
+     * 校验微信号码
      */
     @PostMapping("/checkWeChatNumberUnique")
     @ResponseBody
@@ -452,21 +486,8 @@ public class SysCustomerController extends BaseController {
         if (tzbSb.toString().contains(ShiroUtils.getSysUser().getDeptId().toString())) {
             sysCustomer.setDeptIds(tzbSb.toString().split(","));
         }
-        /*if (currentUser != null) {
-            // 如果是超级管理员，则不过滤数据
-            if (!currentUser.isAdmin()) {
-                List<SysRole> getRoles = currentUser.getRoles();
-                for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
-                        if (StringUtils.isNull(sysCustomer.getDeptId())) {
-                            sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
-                        }
-                    }
-                }
-            }
-        }*/
-        //sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
-        return sysCustomerService.checkWeChatNumberUnique(sysCustomer);
+        String flag = sysCustomerService.checkWeChatNumberUnique(sysCustomer);
+        return flag;
     }
 
     @RequiresPermissions("system:customer:list")
@@ -546,9 +567,10 @@ public class SysCustomerController extends BaseController {
      * 选择人员
      */
     @GetMapping("/selectUser")
-    public String selectUser(String loginName, String userName, ModelMap mmap) {
+    public String selectUser(String loginName, String userName, Boolean singleSelect, ModelMap mmap) {
         mmap.put("loginName", loginName);
         mmap.put("userName", userName);
+        mmap.put("singleSelect", singleSelect);
         return prefix + "/selectUser";
     }
 
@@ -641,6 +663,7 @@ public class SysCustomerController extends BaseController {
     @PostMapping("/selectCustomerByCity")
     @ResponseBody
     public String selectCustomerByCity(SysCustomer sysCustomer) {
+        //PageHelper.getLocalPage().setCount(false);
         List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "city");
         JSONArray jsonArray = new JSONArray();
         for (SysCustomer sysCustomer1 : sysCustomerList) {
@@ -659,6 +682,7 @@ public class SysCustomerController extends BaseController {
     @ResponseBody
     public String selectSysCustomerByCustomerLable(SysCustomer sysCustomer) {
         JSONArray jsonArray = new JSONArray();
+        //PageHelper.getLocalPage().setCount(false);
         //查询所有数据
         List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "customerLable");
 
@@ -679,6 +703,7 @@ public class SysCustomerController extends BaseController {
     @ResponseBody
     public String selectSysCustomerByDept(SysCustomer sysCustomer) {
         JSONArray jsonArray = new JSONArray();
+        //PageHelper.getLocalPage().setCount(false);
         List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "deptType");
         for (SysCustomer sysCustomer1 : sysCustomerList) {
             JSONObject jsonObject = new JSONObject();
@@ -723,6 +748,7 @@ public class SysCustomerController extends BaseController {
     @ResponseBody
     public String selectSysCustomerByDeptId(SysCustomer sysCustomer) {
         JSONArray jsonArray = new JSONArray();
+       // PageHelper.getLocalPage().setCount(false);
         List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "dept");
 
         for (SysCustomer sysCustomer1 : sysCustomerList) {
@@ -769,6 +795,24 @@ public class SysCustomerController extends BaseController {
         }
         if (StringUtils.isNotEmpty(sb.toString())) {
             sysCustomer1.setContactNumber(sb.deleteCharAt(sb.length() - 1).toString());
+        }
+        sysCustomerService.updateSysCustomer(sysCustomer1);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/delWeChatNumber")
+    @ResponseBody
+    public AjaxResult delWeChatNumber(SysCustomer sysCustomer) {
+        StringBuffer sb = new StringBuffer();
+        SysCustomer sysCustomer1 = sysCustomerService.selectSysCustomerById(sysCustomer.getCustomerId());
+        sysCustomer1.setWeChatNumber(sysCustomer1.getWeChatNumber().replace(",", "/"));
+        for (String string : sysCustomer1.getWeChatNumber().split("/")) {
+            if (!string.equals(sysCustomer.getWeChatNumber())) {
+                sb.append(string).append(",");
+            }
+        }
+        if (StringUtils.isNotEmpty(sb.toString())) {
+            sysCustomer1.setWeChatNumber(sb.deleteCharAt(sb.length() - 1).toString());
         }
         sysCustomerService.updateSysCustomer(sysCustomer1);
         return AjaxResult.success();

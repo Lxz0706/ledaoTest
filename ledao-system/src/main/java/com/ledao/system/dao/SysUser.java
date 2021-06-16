@@ -136,6 +136,17 @@ public class SysUser extends BaseEntity {
      */
     private Long[] postIds;
 
+    /**
+     * 直接主管id
+     */
+    private Long directorId;
+
+    /**
+     * 直接主管
+     */
+    @Excel(name = "直接主管")
+    private String director;
+
     public SysUser() {
 
     }
@@ -329,6 +340,22 @@ public class SysUser extends BaseEntity {
         this.postIds = postIds;
     }
 
+    public Long getDirectorId() {
+        return directorId;
+    }
+
+    public void setDirectorId(Long directorId) {
+        this.directorId = directorId;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -354,6 +381,8 @@ public class SysUser extends BaseEntity {
                 .append("remark", getRemark())
                 .append("dept", getDept())
                 .append("roles", getRoles())
+                .append("directorId", getDirectorId())
+                .append("director", getDirector())
                 .toString();
     }
 }

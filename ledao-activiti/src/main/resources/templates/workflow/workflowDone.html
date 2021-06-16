@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('我的已办')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>流程实例ID：</p>
+                            <input type="text" name="instanceId"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:src="@{/js/activiti.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "workflow";
+    var datas = [[${@dict.getType('workFlow_type')}]];
+
+    $(function () {
+        var options = {
+            url: prefix + "/taskDoneList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/edit/{id}",
+            modalName: "请假业务",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'workFlowId',
+                    title: 'workFlowId',
+                    visible: false
+                },
+                {
+                    field: 'workFlowType',
+                    title: '流程类别',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field: 'deptName',
+                    title: '所属部门名称'
+                },
+                {
+                    field: 'deptType',
+                    title: '所属部门类别'
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
+                    field: 'corporateName',
+                    title: '公司名称'
+                },
+                {
+                    field: 'documentType',
+                    title: '档案种类'
+                },
+                {
+                    field: 'documentLevel',
+                    title: '档案级别'
+                },
+                {
+                    field: 'documentRevertFlag',
+                    title: '档案是否归还'
+                },
+                {
+                    field: 'documentRevertTime',
+                    title: '档案归还时间'
+                },
+                {
+                    field: 'documentName',
+                    title: '档案名称'
+                },
+                {
+                    field: 'documentUrl',
+                    title: '档案路径'
+                },
+                {
+                    field: 'remarks',
+                    title: '备注'
+                },
+                {
+                    field: 'creator',
+                    title: '创建人名称'
+                },
+                {
+                    field: 'realityStartTime',
+                    title: '实际开始时间'
+                },
+                {
+                    field: 'realityEndTime',
+                    title: '实际结束时间'
+                },
+                {
+                    field: 'instanceId',
+                    title: '流程实例ID'
+                },
+                {
+                    field: 'applyUserName',
+                    title: '<span style="color: red;">申请人</span>',
+                    formatter: function (value, row, index) {
+                        return '<span style="color: red;">' + (value ? value : "-") + '</span>';
+                    }
+                },
+                {
+                    field: 'applyTime',
+                    title: '申请时间'
+                },
+                {
+                    field: 'taskId',
+                    title: '任务ID',
+                    visible: false
+                },
+                {
+                    field: 'taskName',
+                    title: '已办任务名称',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return '<span class="badge badge-primary">' + value + '</span>';
+                    }
+                },
+                {
+                    field: 'doneTime',
+                    title: '办理时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-eye"></i> 申请详情</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="showHistoryDialog(\'' + row.instanceId + '\')"><i class="fa fa-list"></i> 审批历史</a> ');
+                        actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="showProcessImgDialog(\'' + row.instanceId + '\')"><i class="fa fa-image"></i> 进度查看</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

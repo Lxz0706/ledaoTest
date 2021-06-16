@@ -183,7 +183,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      */
     public static Boolean timeDifference(Date date1, Date date2, int m) {
         Boolean flag = false;
-        int days = differentDays(date1, date2);
+        int days = 0;
+        if (date1.before(date2)) {
+            days = differentDays(date1, date2);
+        } else if (date2.before(date1)) {
+            days = differentDays(date2, date1);
+        }
         if (days <= m) {
             flag = true;
         }
@@ -232,16 +237,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * 时间添加或减少
      */
     public static Date addTime(Date dateTime, int index, int type) {
-        Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateTime);//设置起时间
-        if (type == Calendar.YEAR) {
-            cal.add(Calendar.YEAR, index);
-        } else if (type == Calendar.MONTH) {
-            cal.add(Calendar.MONTH, index);
-        } else if (type == Calendar.DATE) {
-            cal.add(Calendar.DATE, index);
-        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(dateTime);
+        c.add(Calendar.DAY_OF_MONTH, index);
         return dateTime;
     }
 
@@ -253,7 +253,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return
      */
     public static String timeStamp2Date(String seconds, String format) {
-        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+        if (seconds == null || seconds.isEmpty() || "null".equals(seconds)) {
             return "";
         }
         if (format == null || format.isEmpty()) {
@@ -349,10 +349,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (sdf.format(new Date()).equals(startDate)) {
             sdf = new SimpleDateFormat("HH:mm");
-            if (startTime.equals("00:00")) {
+            if ("00:00".equals(startTime)) {
                 startTime = "24:00";
             }
-            if (endTime.equals("00:00")) {
+            if ("00:00".equals(endTime)) {
                 endTime = "24:00";
             }
             long current = sdf.parse(sdf.format(new Date())).getTime();  //当前时间

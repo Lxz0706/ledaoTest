@@ -32,7 +32,7 @@ public class SysCustomer extends BaseEntity {
     /**
      * 客户名称
      */
-    @Excel(name = "所属机构")
+    @Excel(name = "所属机构",width = 40)
     private String customerName;
 
     /**
@@ -140,7 +140,7 @@ public class SysCustomer extends BaseEntity {
     /**
      * 原因
      */
-    //@Excel(name = "原因")
+    @Excel(name = "原因",width = 40)
     private String reason;
 
 

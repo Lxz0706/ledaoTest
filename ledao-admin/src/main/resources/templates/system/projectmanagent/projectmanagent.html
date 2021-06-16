@@ -58,28 +58,28 @@
                     field: 'investmentAmount',
                     title: '总投资金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'yzfje',
                     title: '总已支付金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'yhsje',
                     title: '总已回收金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
                     field: 'recapture',
                     title: '总已回现金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                         o
                     }
                 },
@@ -87,7 +87,7 @@
                     field: 'zyjs',
                     title: '总已结算金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 }]
         };

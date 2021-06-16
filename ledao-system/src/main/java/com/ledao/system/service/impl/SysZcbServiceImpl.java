@@ -3,6 +3,7 @@ package com.ledao.system.service.impl;
 import java.util.List;
 
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysZcbMapper;
@@ -94,9 +95,15 @@ public class SysZcbServiceImpl implements ISysZcbService {
      */
     @Override
     public List<SysZcb> selectZcbByAssetStatus() {
-        List<SysZcb> list=sysZcbMapper.selectZcbByAssetStatus();
+        List<SysZcb> list = sysZcbMapper.selectZcbByAssetStatus();
         return sysZcbMapper.selectZcbByAssetStatus();
     }
 
-
+    /**
+     * 根据类型查询
+     */
+    @Override
+    public List<SysZcb> selectZcbList(SysZcb sysZcb) {
+        return sysZcbMapper.selectZcbList(sysZcb);
+    }
 }

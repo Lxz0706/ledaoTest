@@ -87,14 +87,14 @@
                         field: 'itemInitialprice',
                         title: '项目起拍价',
                         formatter:function (value,row,index) {
-                            return $.operate.numberFormatter(value);
+                            return $.operate.numberFormatter(value,3,'.',',');
                         }
                     },
                     {
                         field: 'itemCurrentprice',
                         title: '当前/成交价',
                         formatter:function (value,row,index) {
-                            return $.operate.numberFormatter(value);
+                            return $.operate.numberFormatter(value,3,'.',',');
                         }
                     },
                     {

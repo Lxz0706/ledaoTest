@@ -63,4 +63,9 @@ public interface ISysZcbService {
      * 根据资产包状态查询
      */
     public List<SysZcb> selectZcbByAssetStatus();
+
+    /**
+     * 根据类型查询
+     */
+    public List<SysZcb> selectZcbList(SysZcb sysZcb);
 }

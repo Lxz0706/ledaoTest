@@ -23,11 +23,15 @@
 				</div>
 			</div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">接收人：</label>
+                <label class="col-sm-2 control-label">接收部门及人员：</label>
                 <div class="col-sm-10">
                     <input class="form-control" type="hidden" name="receiverId" id="receiverId" th:field="*{receiverId}">
-                    <input class="form-control" type="text" name="receiver" th:field="*{receiver}" onclick="selectUserTree()" id="receiver">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>如不选择接收人，默认为全公司接收</span>
+                    <input class="form-control" type="hidden" name="receiver" th:field="*{receiver}" id="receiver">
+                    <input name="shareDeptId" class="form-control" type="hidden" id="shareDeptId" th:field ='*{shareDeptId}'>
+                    <input name="shareDeptName" class="form-control" type="hidden" id="shareDeptName" th:field ='*{shareDeptName}'>
+                    <input class="form-control" type="text" id="shareDeptAndUser" onclick="selectUserTree()">
+                    <a href="#" onclick="groupList()">我的小组</a>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>如不选择接收接收部门及人员，默认为全公司接收</span>
                 </div>
             </div>
             <div class="form-group">	
@@ -108,36 +112,87 @@
 
         //人员树形选择器
         function selectUserTree() {
-            var options = {
-                title: '人员选择',
-                width: "750",
-                url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#receiverId").val() + "&selectedUserNames=" + $("#receiver").val() + "&multiSelectFlag=false",
-                callBack: doSelect
-            };
-            $.modal.openOptions(options);
+            var url = ctx + "system/user/selectUserTree?selectedUserIds=" + $("#receiverId").val() + "&selectedUserNames=" + $("#receiver").val() + "&multiSelectFlag=true&selectedDeptIds="
+                + $("#shareDeptId").val() + "&selectedDeptNames=" + $("#shareDeptName").val() + "&checkFlag=true";
+            $.modal.open("人员选择器", url, "750", "500", doSelect);
         }
 
-        function doSelect(index, layero){
-
+        function doSelect(index, layero) {
             var body = layer.getChildFrame('body', index);
-
             var userIds = "";
             var userNames = "";
-            body.find("#multiselect_to option").each(function(){  //遍历所有option
+            var deptIds = "";
+            var deptNames = "";
+            var flag = true;
+            var shareUserIds = $("#receiverId").val();
+            var shareDeptIds = $("#shareDeptId").val();
+            window.iframeWin = window[layero.find('iframe')[0]['name']];
+            var nodes = iframeWin.zonCheck();
+            body.find("#multiselect_to option").each(function () {  //遍历所有option
                 var val = $(this).val();   //获取option值
                 var txt = $(this).text();  //获取option的文本内容
-                if(val!= '' && txt!=''){
+                if (val != '' && txt != '') {
                     userIds = userIds + val + ",";
                     userNames = userNames + txt + ",";
                 }
             });
 
-            userIds = userIds.substring(0,userIds.length-1);
-            userNames = userNames.substring(0,userNames.length-1);
+            userIds = userIds.substring(0, userIds.length - 1);
+            userNames = userNames.substring(0, userNames.length - 1);
+            for (var i = 0; i < nodes.length; i++) {
+                deptIds = nodes[i].id + "," + deptIds;
+                deptNames = nodes[i].name + "," + deptNames;
+            }
+
+            if ($.common.isNotEmpty(deptIds)) {
+                deptIds = deptIds.substring(0, deptIds.length - 1);
+            }
+            if ($.common.isNotEmpty(deptNames)) {
+                deptNames = deptNames.substring(0, deptNames.length - 1);
+            }
 
             $("#receiverId").val(userIds);
             $("#receiver").val(userNames);
+            $("#shareDeptId").val(deptIds);
+            $("#shareDeptName").val(deptNames)
+            if ($.common.isNotEmpty(deptNames) && $.common.isNotEmpty(userNames)) {
+                $("#shareDeptAndUser").val(deptNames + "," + userNames);
+            } else if ($.common.isNotEmpty(deptNames) && $.common.isEmpty(userNames)) {
+                $("#shareDeptAndUser").val(deptNames);
+            } else if ($.common.isNotEmpty(userNames) && $.common.isEmpty(deptNames)) {
+                $("#shareDeptAndUser").val(userNames);
+            }
             layer.close(index);
+            if (userIds == shareUserIds && deptIds == shareDeptIds) {
+                flag = false;
+            }
+            if (flag) {
+                $.modal.confirm("是否添加到我的小组", function () {
+                    var text = "";
+                    layer.prompt({
+                        formType: 2,
+                        title: '请输入小组名称',
+                        yes: function (index, layero) {
+                            text = layero.find(".layui-layer-input").val();
+                            layer.close(index);
+                            var url = ctx + "system/subgroup/add";
+                            var data = {
+                                "subgroupName": text,
+                                "subgroupUserId": userIds,
+                                "subgroupUserName": userNames,
+                                "subgroupDeptId": deptIds,
+                                "subgroupDeptName": deptNames
+                            };
+                            $.operate.saveModal(url, data);
+                        }
+                    });
+                });
+            }
+        }
+
+        function groupList() {
+            var url = ctx + "system/subgroup/selectUser";
+            $.modal.open("选择我的小组", url);
         }
 	</script>
 </body>

@@ -6,6 +6,8 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-document-add" enctype="multipart/form-data">
+        <input name="subsetType" id="subsetType" type="hidden"/>
+        <input name="documentType" id="documentType" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">文件名称：</label>
             <div class="col-sm-8">
@@ -13,16 +15,54 @@
                 <input name="file" id="file" type="file" multiple="multiple">
             </div>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label class="col-sm-3 control-label">文件用途：</label>
             <div class="col-sm-8">
-                <select name="documentType" id="documentType" class="form-control m-b"
+                <select name="documentType" id="documentType" class="form-control m-b" onchange="documentTypeChange()"
                         th:with="type=${@dict.getType('sys_document_type')}">
-                    <option value="">--请选择一条数据--</option>
+                    <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                 </select>
             </div>
-        </div>
+        </div>-->
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">分类：</label>
+            <div class="col-sm-8" id="law" style="display: none">
+                <select name="subsetType" id="lawType" class="form-control m-b"
+                        th:with="type=${@dict.getType('law_type')}">
+                    <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+            <div class="col-sm-8" id="point" style="display: none">
+                <select name="subsetType" id="pointType" class="form-control m-b"
+                        th:with="type=${@dict.getType('point_type')}">
+                    <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+            <div class="col-sm-8" id="SAP" style="display: none">
+                <select name="subsetType" id="SAPType" class="form-control m-b"
+                        th:with="type=${@dict.getType('SAP_type')}">
+                    <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+            <div class="col-sm-8" id="rules" style="display: none">
+                <select name="subsetType" id="rulesType" class="form-control m-b"
+                        th:with="type=${@dict.getType('rules_type')}">
+                    <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+            <div class="col-sm-8" id="meetingMinutes" style="display: none">
+                <select name="subsetType" id="meetingMinutesType" class="form-control m-b"
+                        th:with="type=${@dict.getType('meetingMinutes_type')}">
+                    <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>-->
         <div class="form-group">
             <label class="col-sm-3 control-label">是否可下载：</label>
             <div class="col-sm-8">
@@ -33,16 +73,8 @@
                 </select>
             </div>
         </div>
-        <!--<div class="form-group">
-            <label class="col-sm-3 control-label">共享部门：</label>
-            <div class="col-sm-8">
-                <input name="shareDeptId" class="form-control" type="hidden" id="shareDeptId">
-                <input name="shareDeptName" class="form-control" type="text" id="shareDeptName"
-                       onclick="selectDeptTree()">
-            </div>
-        </div>-->
         <div class="form-group">
-            <label class="col-sm-3 control-label">可见人员：</label>
+            <label class="col-sm-3 control-label">可见部门及人员：</label>
             <div class="col-sm-8">
                 <input name="shareDeptId" class="form-control" type="hidden" id="shareDeptId">
                 <input name="shareDeptName" class="form-control" type="hidden" id="shareDeptName">
@@ -61,11 +93,72 @@
         if ($.common.isNotEmpty(documentType)) {
             $("#documentType").val(documentType);
         }
+        $("#" + $("#documentType").val()).show();
+        var subsetType = '[[${subsetType}]]';
+        if ($.common.isNotEmpty(subsetType)) {
+            $("#subsetType").val(subsetType);
+        }
     })
     var prefix = ctx + "system/document"
     $("#form-document-add").validate({
         focusCleanup: true
     });
+
+    function documentTypeChange() {
+        var documentType = $("#documentType").val();
+        if ('law' == documentType) {
+            $("#law").show();
+            $("#point").hide();
+            $("#point").attr("disabled", true);
+            $("#SAP").hide();
+            $("#SAP").attr("disabled", true);
+            $("#rules").hide();
+            $("#rules").attr("disabled", true);
+            $("#meetingMinutes").hide();
+            $("#meetingMinutes").attr("disabled", true);
+        } else if ('point' == documentType) {
+            $("#point").show();
+            $("#law").hide();
+            $("#lawType").attr("disabled", true);
+            $("#SAP").hide();
+            $("#SAP").attr("disabled", true);
+            $("#rules").hide();
+            $("#rules").attr("disabled", true);
+            $("#meetingMinutes").hide();
+            $("#meetingMinutes").attr("disabled", true);
+        } else if ('SAP' == documentType) {
+            $("#SAP").show();
+            $("#law").hide();
+            $("#lawType").attr("disabled", true);
+            $("#point").hide();
+            $("#point").attr("disabled", true);
+            $("#rules").hide();
+            $("#rules").attr("disabled", true);
+            $("#meetingMinutes").hide();
+            $("#meetingMinutes").attr("disabled", true);
+        } else if ('rules' == documentType) {
+            $("#rules").show();
+            $("#law").hide();
+            $("#lawType").attr("disabled", true);
+            $("#point").hide();
+            $("#point").attr("disabled", true);
+            $("#SAP").hide();
+            $("#SAP").attr("disabled", true);
+            $("#meetingMinutes").hide();
+            $("#meetingMinutes").attr("disabled", true);
+        } else if ('meetingMinutes' == documentType) {
+            $("#meetingMinutes").show();
+            $("#law").hide();
+            $("#lawType").attr("disabled", true);
+            $("#point").hide();
+            $("#point").attr("disabled", true);
+            $("#SAP").hide();
+            $("#SAP").attr("disabled", true);
+            $("#rules").hide();
+            $("#rules").attr("disabled", true);
+        }
+
+    }
 
     function submitHandler() {
         var obj = document.getElementById("file");
@@ -90,7 +183,7 @@
 
     //人员树形选择器
     function selectUserTree() {
-        var url = ctx + "system/user/selectUserTree?selectedUserIds=" + $("#shareUserId").val() + "&selectedUserNames=" + $("#shareUserName ").val() + "&multiSelectFlag=true&selectedDeptIds="
+        var url = ctx + "system/user/selectUserTree?selectedUserIds=" + $("#shareUserId").val() + "&selectedUserNames=" + $("#shareUserName").val() + "&multiSelectFlag=true&selectedDeptIds="
             + $("#shareDeptId").val() + "&selectedDeptNames=" + $("#shareDeptName").val() + "&checkFlag=true";
         $.modal.open("人员选择器", url, "750", "500", doSelect);
     }

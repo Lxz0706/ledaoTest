@@ -88,4 +88,16 @@ public class SysDocumentServiceImpl implements ISysDocumentService {
     public int deleteSysDocumentById(Long fileId) {
         return sysDocumentMapper.deleteSysDocumentById(fileId);
     }
+
+
+    /**
+     * 根据文档类型中的子集分组
+     *
+     * @param sysDocument
+     * @return
+     */
+    @Override
+    public List<SysDocument> listBySubsetType(SysDocument sysDocument) {
+        return sysDocumentMapper.listBySubsetType(sysDocument);
+    }
 }

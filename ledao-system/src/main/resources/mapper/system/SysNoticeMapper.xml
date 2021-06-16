@@ -18,11 +18,13 @@
         <result property="receiver" column="receiver"/>
         <result property="receiverId" column="receiver_Id"/>
         <result property="readFlag" column="read_flag"/>
+        <result property="shareDeptId" column="share_dept_id"/>
+        <result property="shareDeptName" column="share_dept_name"/>
     </resultMap>
 
     <sql id="selectNoticeVo">
         select notice_id, notice_title, notice_type, notice_content, status, create_by, create_time, update_by, update_time, remark ,receiver,receiver_Id,read_flag
-		from sys_notice
+		, share_dept_id, share_dept_name from sys_notice
     </sql>
 
     <select id="selectNoticeById" parameterType="Long" resultMap="SysNoticeResult">
@@ -55,7 +57,12 @@
             <if test="readFlag != null and readFlag !=''">
                 and read_flag = #{readFlag}
             </if>
+            <if test="shareDeptId != null  and shareDeptId != ''">and share_dept_id = #{shareDeptId}</if>
+            <if test="shareDeptName != null  and shareDeptName != ''">and share_dept_name like concat('%',
+                #{shareDeptName}, '%')
+            </if>
         </where>
+        ORDER BY  read_flag DESC,create_time
     </select>
 
     <select id="selectNoticeLists" parameterType="SysNotice" resultMap="SysNoticeResult">
@@ -86,6 +93,8 @@
         <if test="receiver != null and receiver != ''">receiver,</if>
         <if test="receiverId != null and receiverId != ''">receiver_Id,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="shareDeptId != null">share_dept_id,</if>
+        <if test="shareDeptName != null">share_dept_name,</if>
         create_time
         )values(
         <if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle},</if>
@@ -96,6 +105,8 @@
         <if test="receiver != null and receiver != ''">#{receiver},</if>
         <if test="receiverId != null and receiverId != ''">#{receiverId},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="shareDeptId != null">#{shareDeptId},</if>
+        <if test="shareDeptName != null">#{shareDeptName},</if>
         sysdate()
         )
     </insert>
@@ -110,6 +121,8 @@
             <if test="receiver != null and receiver != ''">receiver = #{receiver},</if>
             <if test="receiverId != null and receiverId != ''">receiver_Id = #{receiverId},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="shareDeptId != null">share_dept_id = #{shareDeptId},</if>
+            <if test="shareDeptName != null">share_dept_name = #{shareDeptName},</if>
             update_time = sysdate()
         </set>
         where notice_id = #{noticeId}

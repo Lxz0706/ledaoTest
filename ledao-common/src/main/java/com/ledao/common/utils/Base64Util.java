@@ -16,7 +16,6 @@ public class Base64Util {
             fileForInput.read(bytes);
             content = new sun.misc.BASE64Encoder().encode(bytes); // 具体的编码方法
             fileForInput.close();
-            System.out.println(content.length());
         } catch (Exception e) {
             e.printStackTrace();
         }

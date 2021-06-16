@@ -2,6 +2,7 @@ package com.ledao.system.dao;
 
 import javax.validation.constraints.*;
 
+import com.ledao.common.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ledao.common.core.dao.BaseEntity;
@@ -54,6 +55,20 @@ public class SysNotice extends BaseEntity {
      * 是否已读
      */
     private String readFlag;
+
+    /**
+     * 共享部门id
+     */
+    @Excel(name = "共享部门id")
+    private String shareDeptId;
+
+    /**
+     * 共享部门名称
+     */
+    @Excel(name = "共享部门名称")
+    private String shareDeptName;
+
+    private String shareDeptAndUser;
 
     public Long getNoticeId() {
         return noticeId;
@@ -121,6 +136,30 @@ public class SysNotice extends BaseEntity {
         this.readFlag = readFlag;
     }
 
+    public String getShareDeptId() {
+        return shareDeptId;
+    }
+
+    public void setShareDeptId(String shareDeptId) {
+        this.shareDeptId = shareDeptId;
+    }
+
+    public String getShareDeptName() {
+        return shareDeptName;
+    }
+
+    public void setShareDeptName(String shareDeptName) {
+        this.shareDeptName = shareDeptName;
+    }
+
+    public String getShareDeptAndUser() {
+        return shareDeptAndUser;
+    }
+
+    public void setShareDeptAndUser(String shareDeptAndUser) {
+        this.shareDeptAndUser = shareDeptAndUser;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -136,6 +175,8 @@ public class SysNotice extends BaseEntity {
                 .append("remark", getRemark())
                 .append("receiver", getReceiver())
                 .append("readFlag", getReadFlag())
+                .append("shareDeptId", getShareDeptId())
+                .append("shareDeptName", getShareDeptName())
                 .toString();
     }
 }

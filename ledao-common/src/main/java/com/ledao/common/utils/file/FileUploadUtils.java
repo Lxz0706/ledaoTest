@@ -22,9 +22,9 @@ import com.ledao.common.utils.security.Md5Utils;
  */
 public class FileUploadUtils {
     /**
-     * 默认大小 900M
+     * 默认大小 2GB
      */
-    public static final long DEFAULT_MAX_SIZE = 1024 * 1024 * 1024;
+    public static final long DEFAULT_MAX_SIZE = 1024 * 1024 * 1024 * 2 - 1;
 
     /**
      * 默认的文件名最大长度 100
@@ -163,7 +163,7 @@ public class FileUploadUtils {
             throws FileSizeLimitExceededException, InvalidExtensionException {
         long size = file.getSize();
         if (DEFAULT_MAX_SIZE != -1 && size > DEFAULT_MAX_SIZE) {
-            throw new FileSizeLimitExceededException(DEFAULT_MAX_SIZE / 1024 / 1024);
+            throw new FileSizeLimitExceededException(DEFAULT_MAX_SIZE / 1024 / 1024 / 1024 / 2);
         }
 
         String fileName = file.getOriginalFilename();

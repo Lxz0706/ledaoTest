@@ -85,7 +85,7 @@
                     field: 'totalPrice',
                     title: '合同本金',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 }]
         };
@@ -155,7 +155,7 @@
                     field: 'totalPrice',
                     title: '合同本金',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value);
+                        return $.operate.numberFormatter(value,3,'.',',');
                     }
                 }]
         };

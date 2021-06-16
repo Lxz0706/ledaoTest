@@ -2,16 +2,18 @@ package com.ledao.common.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import sun.misc.BASE64Encoder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.ledao.common.core.text.StrFormatter;
 
@@ -455,5 +457,44 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             sb.append(str).append(",");
         }
         return strs.length > 0 ? sb.deleteCharAt(sb.length() - 1).toString() : "";
+    }
+
+
+    /**
+     * 获取所有字段为null的属性名
+     * 用于BeanUtils.copyProperties()拷贝属性时，忽略空值
+     *
+     * @param source
+     * @return
+     */
+    public static String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<String>();
+        for (java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) {
+                emptyNames.add(pd.getName());
+            }
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
+
+    }
+
+    /**
+     * 去除字段中的制表符
+     * @param str
+     * @return
+     */
+    public static String replaceBlank(String str) {
+        String dest = "";
+        if (str != null) {
+            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+            Matcher m = p.matcher(str);
+            dest = m.replaceAll("");
+        }
+        return dest;
     }
 }

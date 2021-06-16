@@ -64,4 +64,9 @@ public interface SysZcbMapper {
      */
 
     public List<SysZcb> selectZcbByAssetStatus();
+
+    /**
+     * 根据类型查询
+     */
+    public List<SysZcb> selectZcbList(SysZcb sysZcb);
 }

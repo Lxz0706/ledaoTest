@@ -110,25 +110,31 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
             if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
                 return UserConstants.USER_PHONE_NOT_UNIQUE;
             }
-
         }
         return UserConstants.USER_PHONE_UNIQUE;
     }
 
     /**
-     * 校验手机号码是否唯一
+     * 校验微信号码是否唯一
      *
      * @param sysCustomer 用户信息
      * @return
      */
     @Override
     public String checkWeChatNumberUnique(SysCustomer sysCustomer) {
-        Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
-        SysCustomer info = sysCustomerMapper.checkWeChatNumberUnique(sysCustomer);
-        if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
-            return UserConstants.USER_WECHATNUMBER_NOT_UNIQUE;
-        }
-        return UserConstants.USER_WECHATNUMBER_UNIQUE;
+
+       // for (String string : sysCustomer.getWeChatNumber().split(",")) {
+            System.out.print("微信号：======"+sysCustomer.getWeChatNumber().split(",").length);
+            Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
+            SysCustomer sysCustomer1 = new SysCustomer();
+            sysCustomer1.setWeChatNumber(sysCustomer.getWeChatNumber());
+            SysCustomer info = sysCustomerMapper.checkWeChatNumberUnique(sysCustomer1);
+            if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
+                return UserConstants.USER_PHONE_NOT_UNIQUE;
+            }
+      //  }
+
+        return UserConstants.USER_PHONE_UNIQUE;
     }
 
 

@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,14 +57,21 @@ public class SysValuationmapController extends BaseController {
     @RequiresPermissions("system:valuationmap:list")
     @PostMapping("/list")
     @ResponseBody
-    /*public TableDataInfo list(SysValuationmap sysValuationmap) {
-        startPage();
+    public String list(SysValuationmap sysValuationmap) {
+        JSONArray array = new JSONArray();
         List<SysValuationmap> list = sysValuationmapService.selectSysValuationmapList(sysValuationmap);
-        return getDataTable(list);
-    }*/
-    public AjaxResult list(SysValuationmap sysValuationmap) {
-        List<SysValuationmap> list = sysValuationmapService.selectSysValuationmapList(sysValuationmap);
-        return AjaxResult.success(list);
+        for (SysValuationmap sysValuationmap1 : list) {
+            JSONObject object = new JSONObject();
+            object.put("city", sysValuationmap1.getItemCity());
+            object.put("title", sysValuationmap1.getItemTitle());
+            object.put("areaMeasure", sysValuationmap1.getItemAreameasure());
+            object.put("type", sysValuationmap1.getItemType());
+            object.put("statue", sysValuationmap1.getItemStatus());
+            object.put("itemX", sysValuationmap1.getItemX());
+            object.put("itemY", sysValuationmap1.getItemY());
+            array.add(object);
+        }
+        return array.toString();
     }
 
     /**

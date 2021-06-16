@@ -30,7 +30,7 @@ public class SysZck extends BaseEntity {
      * 资产包名称
      */
     @Excel(name = "资产包状态", combo = {"已收购", "收购中", "未收购"})
-    private String assetPackageName;
+    private String assetType;
 
     /**
      * 资产状态
@@ -631,12 +631,12 @@ public class SysZck extends BaseEntity {
         this.id = id;
     }
 
-    public String getAssetPackageName() {
-        return assetPackageName;
+    public String getAssetType() {
+        return assetType;
     }
 
-    public void setAssetPackageName(String assetPackageName) {
-        this.assetPackageName = assetPackageName;
+    public void setAssetType(String assetType) {
+        this.assetType = assetType;
     }
 
     public String getAssetStatus() {
@@ -1523,7 +1523,7 @@ public class SysZck extends BaseEntity {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("id", getId())
-                .append("assetPackageName", getAssetPackageName())
+                .append("assetType", getAssetType())
                 .append("assetStatus", getAssetStatus())
                 .append("no", getNo())
                 .append("projectName", getProjectName())

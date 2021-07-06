@@ -177,6 +177,7 @@ public class SysNotice extends BaseEntity {
                 .append("readFlag", getReadFlag())
                 .append("shareDeptId", getShareDeptId())
                 .append("shareDeptName", getShareDeptName())
+                .append("shareDeptAndUser", getShareDeptAndUser())
                 .toString();
     }
 }

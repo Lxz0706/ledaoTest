@@ -4,7 +4,6 @@ import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -365,5 +364,31 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 计算两个时间之间差多少年
+     *
+     * @param date1
+     * @param date2
+     * @return
+     * @throws ParseException
+     */
+    public static Long dayCompare(Date date1, Date date2) throws ParseException {
+        Calendar bef = Calendar.getInstance();
+        Calendar aft = Calendar.getInstance();
+        bef.setTime(date1);
+        aft.setTime(date2);
+        int surplus = aft.get(Calendar.DATE) - bef.get(Calendar.DATE);
+        int result = aft.get(Calendar.MONTH) - bef.get(Calendar.MONTH);
+        int year = aft.get(Calendar.YEAR) - bef.get(Calendar.YEAR);
+        if (result < 0) {
+            result = 1;
+        } else if (result == 0) {
+            result = surplus <= 0 ? 0 : 1;
+        } else {
+            result = 0;
+        }
+        return Long.valueOf(year + result);
     }
 }

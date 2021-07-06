@@ -91,6 +91,23 @@
                     title: '创建人名称'
                 },
                 {
+                    title: '创建时间',
+                    field: 'createTime',
+                    formatter: function (value, row, index) {
+                        return $.table.dateTimeFormatter(value);
+                    }
+                },
+                {
+                    field: 'previewCount',
+                    title: '预览次数',
+                    align: 'center'
+                },
+                {
+                    field: 'downloadsCount',
+                    title: '下载次数',
+                    align: 'center'
+                },
+                {
                     title: '操作',
                     align: 'left',
                     formatter: function (value, row, index) {
@@ -100,17 +117,17 @@
                         }
                         if ("Y" == row.downloadableFlag) {
                             var fileType = row.fileType.toLowerCase();
-                            actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
+                            actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
                             if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
                                 || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                             } else if ('pdf' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '"><i class="fa fa-search"></i>预览</a>');
+                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                             } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
                                 || 'png' == fileType || 'webp' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileUrl + "',\'" + row.fileType + '\')"+row.filw+><i class="fa fa-search"></i>预览</a>');
+                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>预览</a>');
                             } else if ('mp4' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
+                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
                             }
                         }
                         return actions.join('');
@@ -120,7 +137,16 @@
         $.table.init(options);
     });
 
-    function playVideo(url, type) {
+    function playVideo(fileId, url, type) {
+        $.ajax({
+            url: prefix + '/previewCount',
+            data: {'fileId': fileId},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+            }
+        })
         showVideo('<video controls="controls" autoplay="autoplay">\n' +
             '  <source src="' + url + '" type="video/mp4" />\n' +
             '  <source src="' + url + '" type="video/ogg" />\n' +
@@ -145,7 +171,16 @@
         });
     }
 
-    function jpgToPdf(url, type) {
+    function jpgToPdf(fileId, url, type) {
+        $.ajax({
+            url: prefix + '/previewCount',
+            data: {'fileId': fileId},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+            }
+        })
         showImage('<img src="' + url + '" alt="x" width="400px" height="500px">');
     }
 
@@ -162,11 +197,29 @@
         });
     };
 
-    function toPdf(url) {
+    function toPdf(fileId, url) {
+        $.ajax({
+            url: prefix + '/previewCount',
+            data: {'fileId': fileId},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+            }
+        })
         window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
     }
 
-    function downLoad(fileName) {
+    function downLoad(fileId, fileName) {
+        $.ajax({
+            url: prefix + '/updateDownLoadCount',
+            data: {'fileId': fileId},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+            }
+        })
         window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
     }
 

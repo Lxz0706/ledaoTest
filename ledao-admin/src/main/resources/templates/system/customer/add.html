@@ -23,7 +23,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">联系电话：</label>
-            <div class="col-sm-8">
+            <div class="col-sm-8" id="num1">
                 <input name="contactNumber" id="contactNumber" class="form-control" type="text">
                 <button class="btn btn-info" type="button" title="新增" id="addSaltIpGrpBtn" onclick="addSaltIpGrp(this)">
                     <span class="glyphicon glyphicon-plus"></span></button>
@@ -32,7 +32,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">微信号：</label>
-            <div class="col-sm-8">
+            <div class="col-sm-8" id="num2">
                 <input name="weChatNumber" id="weChatNumber" class="form-control" type="text">
                 <button class="btn btn-info" type="button" title="新增" id="addWeChatGrpBtn" onclick="addWeChatGrp(this)">
                     <span class="glyphicon glyphicon-plus"></span></button>
@@ -130,7 +130,8 @@
             <label class="col-sm-3 control-label">实际提交者：</label>
             <div class="col-sm-8">
                 <input name="createBy" id="createBy" class="form-control" type="hidden" th:value="${createBy}">
-                <input name="creator" id="creator" class="form-control" type="text" th:value="${creator}" onclick="selectUser()">
+                <input name="creator" id="creator" class="form-control" type="text" th:value="${creator}"
+                       onclick="selectUser()">
             </div>
         </div>
     </form>
@@ -290,6 +291,43 @@
 
         var phonePass = false;
         var weChatPass = false;
+
+        //手机号填写，微信填写
+        if ($.common.isNotEmpty(contactNumber) && $.common.isNotEmpty(weChatNumber)) {
+            var str1 = contactNumber.split(",");
+            for (var i = 0; i < str1.length; i++) {
+                $.ajax({
+                    url: prefix + "/checkPhoneUnique",
+                    type: "post",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        "customerId": customerId,
+                        "contactNumber": str1[i]
+                    },
+                    success: function (data) {
+                        return phonePass = $.validate.unique(data);
+                    }
+                });
+            }
+            var strs = weChatNumber.split(",");
+            for (var i = 0; i < strs.length; i++) {
+                $.ajax({
+                    url: prefix + "/checkWeChatNumberUnique",
+                    type: "post",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        "customerId": customerId,
+                        "weChatNumber": strs[i]
+                    },
+                    success: function (data) {
+                        return weChatPass = $.validate.unique(data);
+                    }
+                });
+            }
+        }
+
         //手机号填写，微信没填写
         if ($.common.isNotEmpty(contactNumber) && $.common.isEmpty(weChatNumber)) {
             var strs = contactNumber.split(",");
@@ -312,44 +350,6 @@
             weChatPass = true;
         }
 
-        //手机号填写，微信填写
-        if ($.common.isNotEmpty(contactNumber) && $.common.isNotEmpty(weChatNumber)) {
-            var strs = weChatNumber.split(",");
-            for (var i = 0; i < strs.length; i++) {
-                $.ajax({
-                    url: prefix + "/checkWeChatNumberUnique",
-                    type: "post",
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        "customerId": customerId,
-                        "weChatNumber": strs[i]
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        return weChatPass = $.validate.unique(data);
-                    }
-                });
-            }
-
-            var str1 = contactNumber.split(",");
-            for (var i = 0; i < str1.length; i++) {
-                $.ajax({
-                    url: prefix + "/checkPhoneUnique",
-                    type: "post",
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        "customerId": customerId,
-                        "contactNumber": str1[i]
-                    },
-                    success: function (data) {
-                        return phonePass = $.validate.unique(data);
-                    }
-                });
-            }
-        }
-
         //手机号没填写，微信填写
         if ($.common.isEmpty(contactNumber) && $.common.isNotEmpty(weChatNumber)) {
             var strs = weChatNumber.split(",");
@@ -370,9 +370,17 @@
             }
             phonePass = true;
         }
-        if ( weChatPass && phonePass) {
+        if (!phonePass) {
+            $("#num2 input").attr("readOnly", "true");
+            document.getElementById("addSaltIpGrpBtn").style.display = "none";
+            document.getElementById("addWeChatGrpBtn").style.display = "none";
+        } else {
+            $("#num2 input").attr("readOnly", false);
+            document.getElementById("addSaltIpGrpBtn").style.display = "block";
+            document.getElementById("addWeChatGrpBtn").style.display = "block";
+        }
+        if (weChatPass && phonePass) {
             //自定义成功提示
-            //$("#receivingTelephone_tip").removeClass("errorHint").addClass("successHint").text('');
             return true;
         } else {
             return false;

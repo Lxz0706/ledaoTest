@@ -13,11 +13,14 @@
         <result property="itemTransferee" column="item_transferee"/>
         <result property="itemAmount" column="item_amount"/>
         <result property="itemUrl" column="item_url"/>
+        <result property="itemContacts" column="item_contacts"/>
+        <result property="itemTel" column="item_tel"/>
+        <result property="itemNums" column="item_nums"/>
         <result property="itemContent" column="item_content"/>
     </resultMap>
 
     <sql id="selectSysAPropertyVo">
-        select id, item_id, item_title, item_time, item_transferor, item_transferee, item_amount, item_url,item_content,item_nums from sys_a_property
+        select id, item_id, item_title, item_time, item_transferor, item_transferee, item_amount, item_url, item_contacts, item_tel, item_nums, item_content from sys_a_property
     </sql>
 
     <select id="selectSysAPropertyList" parameterType="SysAProperty" resultMap="SysAPropertyResult">
@@ -34,6 +37,12 @@
             </if>
             <if test="itemAmount != null  and itemAmount != ''">and item_amount = #{itemAmount}</if>
             <if test="itemUrl != null  and itemUrl != ''">and item_url = #{itemUrl}</if>
+            <if test="itemContacts != null  and itemContacts != ''">and item_contacts = #{itemContacts}</if>
+            <if test="itemTel != null  and itemTel != ''">and item_tel = #{itemTel}</if>
+            <if test="itemNums != null  and itemNums != ''">and item_nums = #{itemNums}</if>
+            <if test="itemContent != null  and itemContent != ''">and item_content like concat('%',
+                #{itemContent},'%')
+            </if>
         </where>
     </select>
 
@@ -52,6 +61,10 @@
             <if test="itemTransferee != null">item_transferee,</if>
             <if test="itemAmount != null">item_amount,</if>
             <if test="itemUrl != null">item_url,</if>
+            <if test="itemContacts != null">item_contacts,</if>
+            <if test="itemTel != null">item_tel,</if>
+            <if test="itemNums != null">item_nums,</if>
+            <if test="itemContent != null">item_content,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="itemId != null">#{itemId},</if>
@@ -61,6 +74,10 @@
             <if test="itemTransferee != null">#{itemTransferee},</if>
             <if test="itemAmount != null">#{itemAmount},</if>
             <if test="itemUrl != null">#{itemUrl},</if>
+            <if test="itemContacts != null">#{itemContacts},</if>
+            <if test="itemTel != null">#{itemTel},</if>
+            <if test="itemNums != null">#{itemNums},</if>
+            <if test="itemContent != null">#{itemContent},</if>
         </trim>
     </insert>
 
@@ -74,6 +91,10 @@
             <if test="itemTransferee != null">item_transferee = #{itemTransferee},</if>
             <if test="itemAmount != null">item_amount = #{itemAmount},</if>
             <if test="itemUrl != null">item_url = #{itemUrl},</if>
+            <if test="itemContacts != null">item_contacts = #{itemContacts},</if>
+            <if test="itemTel != null">item_tel = #{itemTel},</if>
+            <if test="itemNums != null">item_nums = #{itemNums},</if>
+            <if test="itemContent != null">item_content = #{itemContent},</if>
         </trim>
         where id = #{id}
     </update>

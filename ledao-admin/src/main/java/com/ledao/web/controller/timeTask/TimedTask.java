@@ -52,18 +52,23 @@ public class TimedTask {
     @Autowired
     private ISysCustomerService sysCustomerService;
 
-    public void timeTask() {
+    @Autowired
+    private ISysStaffService sysStaffService;
+
+    public void timeTask() throws ParseException {
         //应收应付未收服务费消息提醒
-        projectUncollectedMoney();
+        // projectUncollectedMoney();
         //待结算服务费消息提醒
-        projectTargetRecover();
+        // projectTargetRecover();
 
         //投后项目消息提醒
-        sysProject();
+        //sysProject();
 
         //投后项目利息自动计算
-        updateInterest();
+        //updateInterest();
         //ss();
+
+        secretaryLingAnalysis();
     }
 
     //档案管理流程信息
@@ -360,5 +365,45 @@ public class TimedTask {
                 sysProjectContractService.updateSysProjectContract(sysProjectContract1);
             }
         }
+    }
+
+
+    //人事部门员工司龄计算
+    public void secretaryLingAnalysis() throws ParseException {
+        SysStaff sysStaff = new SysStaff();
+        sysStaff.setStatus("0");
+        List<SysStaff> sysStaffList = sysStaffService.selectSysStaffList(sysStaff);
+        SysUser sysUser = sysUserService.selectUserByLoginName("miaoqing");
+        System.out.print("进来了！！！！！！！！！");
+        for (SysStaff sysStaff1 : sysStaffList) {
+            if (StringUtils.isNotNull(sysStaff1.getAccounteEntryDate())) {
+                String oldYearDate = DateUtils.parseDateToStr("YYYY", sysStaff1.getAccounteEntryDate());
+                String oldMonthDate = DateUtils.parseDateToStr("MM-dd", sysStaff1.getAccounteEntryDate());
+                String newMonthDate = DateUtils.parseDateToStr("MM-dd", DateUtils.getNowDate());
+                if (2020 <= Integer.valueOf(oldYearDate).intValue()) {
+                    if (oldMonthDate.equals(newMonthDate)) {
+                        sysStaff1.setSecretaryLing(DateUtils.dayCompare(sysStaff1.getAccounteEntryDate(), DateUtils.getNowDate()));
+                        sysStaffService.updateSysStaff(sysStaff1);
+                        SysNotice sysNotice = new SysNotice();
+                        sysNotice.setNoticeTitle(sysStaff1.getStaffName() + "司龄增加1年");
+                        sysNotice.setNoticeType("3");
+                        sysNotice.setStatus("0");
+                        sysNotice.setReceiver(sysUser.getUserName());
+                        sysNotice.setReceiverId(sysUser.getUserId().toString());
+                        sysNoticeService.insertNotice(sysNotice);
+                    }
+                } else {
+                   // if ("01-01".equals(newMonthDate)) {
+                        sysStaff1.setSecretaryLing(DateUtils.dayCompare(sysStaff1.getAccounteEntryDate(), DateUtils.getNowDate()));
+                        sysStaffService.updateSysStaff(sysStaff1);
+                  //  }
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws ParseException {
+        Long year = DateUtils.dayCompare(DateUtils.parseDate("2020-07-06"), DateUtils.parseDate("2021-07-06"));
+        System.out.print(year);
     }
 }

@@ -73,12 +73,12 @@
                     checkbox: true
                 },
                 {
-                    field: 'id', 
+                    field: 'id',
                     title: 'ID',
                     visible: false
                 },
                 {
-                    field: 'projectStatus', 
+                    field: 'projectStatus',
                     title: '项目状态',
                     formatter: function(value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectStatus + '\')">' + value + '</a>';
@@ -91,7 +91,7 @@
         /*资产库列表-详细*/
         function detail(projectStatus) {
             var url = prefix + '/selectByProjectStatus/' + projectStatus;
-            $.modal.openTab(projectStatus+"列表", decodeURI(url));
+            $.modal.parentTab(projectStatus+"列表", decodeURI(url));
         }
 
         //查询

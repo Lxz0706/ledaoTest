@@ -244,7 +244,7 @@ public class CommonController {
         byte[] b = new byte[1024];
         try {
             //获取当前地址下的文件
-            File file = new File("c:/" + url);
+            File file = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/")) + url);
             if (!file.exists()) {
                 throw new RuntimeException("源文件不存在");
             }
@@ -252,7 +252,7 @@ public class CommonController {
             //默认转pdf,excel转html
             String suffix = ".pdf";
             if ("txt".equals(oldSuffix)) {
-                charsetEnc("c:/" + url, "UTF-8");
+                charsetEnc(Global.getProfile().substring(0,Global.getProfile().indexOf("/")) + url, "UTF-8");
             }
             if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
                 suffix = ".html";
@@ -260,7 +260,7 @@ public class CommonController {
 
             //转换的文件存放位置
             newUrl = url.replace("." + oldSuffix, suffix);
-            File newFile = new File("c:/" + newUrl);
+            File newFile = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/")) + newUrl);
 
             converter.convert(file).to(newFile).execute();
             ServletOutputStream outputStream = response.getOutputStream();
@@ -364,10 +364,6 @@ public class CommonController {
         osw.flush();
         osw.close();
         isr.close();
-    }
-
-    public static void main(String[] args) throws Exception {
-        charsetEnc("C:\\Users\\87852\\Desktop\\123.txt", "utf-8");
     }
 
 }

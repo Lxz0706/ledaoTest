@@ -485,6 +485,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     /**
      * 去除字段中的制表符
+     *
      * @param str
      * @return
      */
@@ -496,5 +497,39 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             dest = m.replaceAll("");
         }
         return dest;
+    }
+
+    /**
+     * 去除字符串中的重复数据
+     */
+    public static String removeRepeatChar(String s) {
+        if (s == null) {
+            return "";
+        }
+        StringBuffer sb = new StringBuffer();
+        int i = 0;
+        int len = s.length();
+        while (i < len) {
+            char c = s.charAt(i);
+            sb.append(c);
+            i++;
+            while (i < len && s.charAt(i) == c) {//这个是如果这两个值相等，就让i+1取下一个元素
+                i++;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String removeSameString(String str) {
+        Set<String> mLinkedSet = new LinkedHashSet<String>();
+        String[] strArray = str.split(",");
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < strArray.length; i++) {
+            if (!mLinkedSet.contains(strArray[i])) {
+                mLinkedSet.add(strArray[i]);
+                sb.append(strArray[i] + " ");
+            }
+        }
+        return sb.toString().substring(0, sb.toString().length() - 1);
     }
 }

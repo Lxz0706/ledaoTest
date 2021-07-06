@@ -1,88 +1,95 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('项目选择列表')" />
+    <th:block th:include="include :: header('项目选择列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <input type="hidden" id="customerId" name="customerId" th:value="*{customerId}"/>
-                            <li>
-                                <label>项目名称：</label>
-                                <input type="text" name="projectName"/>
-                            </li>
-                            <li>
-                                <label>客户标签：</label><select name="customerLable" th:with="type=${@dict.getType('sys_customer_label')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                            </li>
-                            <!--<li>
-                                <label>成交金额：</label>
-                                <input type="text" name="gmv"/>
-                            </li>
-                            <li class="select-time">
-                                <label>成交日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTradeDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTradeDate]"/>
-                            </li>-->
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" id="customerId" name="customerId" th:value="*{customerId}"/>
+                        <li>
+                            <label>项目名称：</label>
+                            <input type="text" name="projectName"/>
+                        </li>
+                        <li>
+                            <label>客户标签：</label><select name="customerLable"
+                                                        th:with="type=${@dict.getType('sys_customer_label')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <!--<li>
+                            <label>成交金额：</label>
+                            <input type="text" name="gmv"/>
+                        </li>
+                        <li class="select-time">
+                            <label>成交日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTradeDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTradeDate]"/>
+                        </li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:item:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="system:item:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:item:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:item:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>-->
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:item:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.editFull()"
+               shiro:hasPermission="system:item:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:item:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <!--<a onclick="updates()">修复</a>-->
+            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:item:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:item:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:item:remove')}]];
-        var prefix = ctx + "system/item";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:item:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:item:remove')}]];
+    var prefix = ctx + "system/item";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "项目选择",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "项目选择",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field: 'itemId', 
+                    field: 'itemId',
                     title: 'id',
                     visible: false
                 },
                 {
-                    field: 'customerId', 
+                    field: 'customerId',
                     title: '主表id',
                     visible: false
                 },
@@ -91,25 +98,25 @@
                     title: '项目名称'
                 },
                 {
-                    field: 'customerLable', 
+                    field: 'customerLable',
                     title: '客户标签'
                 },
                 {
-                    field: 'gmv', 
+                    field: 'gmv',
                     title: '成交金额',
-                    formatter:function (value,row,index) {
-                       return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
-                    field: 'tradeDate', 
+                    field: 'tradeDate',
                     title: '成交日期',
                     formatter: function (value, row, index) {
-                        return $.table.dateTimeFormatter(value,3,'.',',');
+                        return $.table.dateTimeFormatter(value, 3, '.', ',');
                     }
                 },
                 {
-                    field: 'remarks', 
+                    field: 'remarks',
                     title: '备注'
                 }/*,
                 {
@@ -122,14 +129,26 @@
                         return actions.join('');
                     }
                 }*/]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        function add() {
-            var customerId=$("#customerId").val();
-            $.operate.addFull(customerId);
-        }
-    </script>
+    function add() {
+        var customerId = $("#customerId").val();
+        $.operate.addFull(customerId);
+    }
+
+    function updates() {
+        $.ajax({
+            url: prefix + "/updates",
+            type: 'post',
+            data: '',
+            dataType: 'json',
+            success: function (result) {
+                alert("result");
+            }
+        })
+    }
+</script>
 </body>
 </html>

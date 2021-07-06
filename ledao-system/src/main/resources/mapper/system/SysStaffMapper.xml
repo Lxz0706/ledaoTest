@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysStaffMapper">
+
+    <resultMap type="SysStaff" id="SysStaffResult">
+        <result property="staffId" column="staff_id"/>
+        <result property="staffName" column="staff_name"/>
+        <result property="birthday" column="birthday"/>
+        <result property="sex" column="sex"/>
+        <result property="entryDate" column="entry_date"/>
+        <result property="leaveDate" column="leave_date"/>
+        <result property="contact1" column="contact1"/>
+        <result property="contact2" column="contact2"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="education" column="education"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="accounteEntryDate" column="accounte_entry_date"/>
+        <result property="secretaryLing" column="secretary_ling"/>
+    </resultMap>
+
+    <sql id="selectSysStaffVo">
+        select staff_id, staff_name, birthday, sex, entry_date, leave_date, contact1, contact2,
+        department_id, department_name, education, status, del_flag, create_by, create_time,
+        update_by, update_time, accounte_entry_date, secretary_ling from sys_staff
+    </sql>
+
+    <select id="selectSysStaffList" parameterType="SysStaff" resultMap="SysStaffResult">
+        <include refid="selectSysStaffVo"/>
+        u
+        <where>
+            del_flag='0'
+            <if test="staffName != null  and staffName != ''">and staff_name like concat('%', #{staffName}, '%')</if>
+            <if test="sex != null  and sex != ''">and sex = #{sex}</if>
+            <if test="contact1 != null  and contact1 != ''">and contact1 like concat('%', #{contact1}, '%')</if>
+            <if test="contact2 != null  and contact2 != ''">and contact2 like concat('%', #{contact2}, '%')</if>
+            <if test="departmentId != null and departmentId != 0">
+                AND (u.department_id = #{departmentId} OR u.department_id IN ( SELECT t.department_id FROM
+                sys_department t WHERE FIND_IN_SET
+                (#{departmentId},ancestors) ))
+            </if>
+            <if test="departmentName != null  and departmentName != ''">and u.department_name like concat('%',
+                #{departmentName}, '%')
+            </if>
+            <if test="education != null  and education != ''">and education = #{education}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+
+            <if test="params.beginBirthday != null and params.beginBirthday != ''"><!-- 开始时间检索 -->
+                AND date_format(birthday,'%y%m%d') &gt;= date_format(#{params.beginBirthday},'%y%m%d')
+            </if>
+            <if test="params.endBirthday != null and params.endBirthday != ''"><!-- 结束时间检索 -->
+                AND date_format(birthday,'%y%m%d') &lt;= date_format(#{params.endBirthday},'%y%m%d')
+            </if>
+
+            <if test="params.beginEntryDate != null and params.beginEntryDate != ''"><!-- 开始时间检索 -->
+                AND date_format(entry_date,'%y%m%d') &gt;= date_format(#{params.beginEntryDate},'%y%m%d')
+            </if>
+            <if test="params.endEntryDate != null and params.endEntryDate != ''"><!-- 结束时间检索 -->
+                AND date_format(entry_date,'%y%m%d') &lt;= date_format(#{params.endEntryDate},'%y%m%d')
+            </if>
+
+            <if test="params.beginLeaveDate != null and params.beginLeaveDate != ''"><!-- 开始时间检索 -->
+                AND date_format(leave_date,'%y%m%d') &gt;= date_format(#{params.beginLeaveDate},'%y%m%d')
+            </if>
+            <if test="params.endLeaveDate != null and params.endLeaveDate != ''"><!-- 结束时间检索 -->
+                AND date_format(leave_date,'%y%m%d') &lt;= date_format(#{params.endLeaveDate},'%y%m%d')
+            </if>
+
+            <if test="params.beginAccounteEntryDate != null and params.AccounteEntryDate != ''"><!-- 开始时间检索 -->
+                AND date_format(accounte_entry_date,'%y%m%d') &gt;= date_format(#{params.AccounteEntryDate},'%y%m%d')
+            </if>
+            <if test="params.endAccounteEntryDate != null and params.endAccounteEntryDate != ''"><!-- 结束时间检索 -->
+                AND date_format(accounte_entry_date,'%y%m%d') &lt;= date_format(#{params.endAccounteEntryDate},'%y%m%d')
+            </if>
+            <if test="secretaryLing != null ">and secretary_ling = #{secretaryLing}</if>
+        </where>
+        ORDER BY u.status,u.entry_date DESC
+    </select>
+
+    <select id="selectSysStaffById" parameterType="Long" resultMap="SysStaffResult">
+        <include refid="selectSysStaffVo"/>
+        where staff_id = #{staffId} and del_flag='0'
+    </select>
+
+    <insert id="insertSysStaff" parameterType="SysStaff" useGeneratedKeys="true" keyProperty="staffId">
+        insert into sys_staff
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="staffName != null">staff_name,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="sex != null">sex,</if>
+            <if test="entryDate != null">entry_date,</if>
+            <if test="leaveDate != null">leave_date,</if>
+            <if test="contact1 != null">contact1,</if>
+            <if test="contact2 != null">contact2,</if>
+            <if test="departmentId != null">department_id,</if>
+            <if test="departmentName != null">department_name,</if>
+            <if test="education != null">education,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="accounteEntryDate != null">accounte_entry_date,</if>
+            <if test="secretaryLing != null">secretary_ling,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="staffName != null">#{staffName},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="entryDate != null">#{entryDate},</if>
+            <if test="leaveDate != null">#{leaveDate},</if>
+            <if test="contact1 != null">#{contact1},</if>
+            <if test="contact2 != null">#{contact2},</if>
+            <if test="departmentId != null">#{departmentId},</if>
+            <if test="departmentName != null">#{departmentName},</if>
+            <if test="education != null">#{education},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="accounteEntryDate != null">#{accounteEntryDate},</if>
+            <if test="secretaryLing != null">#{secretaryLing},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysStaff" parameterType="SysStaff">
+        update sys_staff
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="staffName != null">staff_name = #{staffName},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="leaveDate != null">leave_date = #{leaveDate},</if>
+            <if test="contact1 != null">contact1 = #{contact1},</if>
+            <if test="contact2 != null">contact2 = #{contact2},</if>
+            <if test="departmentId != null">department_id = #{departmentId},</if>
+            <if test="departmentName != null">department_name = #{departmentName},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="accounteEntryDate != null">accounte_entry_date = #{accounteEntryDate},</if>
+            <if test="secretaryLing != null">secretary_ling = #{secretaryLing},</if>
+        </trim>
+        where staff_id = #{staffId}
+    </update>
+
+    <delete id="deleteSysStaffById" parameterType="Long">
+        update sys_staff set del_flag='2' where staff_id = #{staffId}
+    </delete>
+
+    <delete id="deleteSysStaffByIds" parameterType="String">
+        update sys_staff set del_flag='2' where staff_id in
+        <foreach item="staffId" collection="array" open="(" separator="," close=")">
+            #{staffId}
+        </foreach>
+    </delete>
+
+    <select id="selectStaffByEducation" parameterType="SysStaff" resultMap="SysStaffResult">
+        SELECT COUNT(*) as educationCount,dict_label AS education,staff_id FROM sys_staff INNER JOIN sys_dict_data ON
+        sys_staff.education=sys_dict_data.dict_value
+        <where>
+            sys_staff.del_flag='0'
+            <if test="departmentId !=null and departmentId !=0">
+                AND (sys_staff.department_id = #{departmentId} OR sys_staff.department_id IN ( SELECT
+                sys_department.department_id FROM
+                sys_department WHERE FIND_IN_SET
+                (#{departmentId},ancestors) ))
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(sys_staff.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(sys_staff.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        GROUP BY education ORDER BY educationCount DESC
+    </select>
+
+    <select id="selectStaffBySex" parameterType="SysStaff" resultMap="SysStaffResult">
+        SELECT COUNT(*) sexCount,dict_label sex,staff_id FROM sys_staff INNER JOIN sys_dict_data
+        ON sex=sys_dict_data.dict_value
+        <where>
+            sys_dict_data.dict_type='sys_user_sex' and
+            sys_staff.del_flag='0'
+            <if test="departmentId !=null and departmentId !=0">
+                AND (sys_staff.department_id = #{departmentId} OR sys_staff.department_id IN ( SELECT
+                sys_department.department_id FROM
+                sys_department WHERE FIND_IN_SET
+                (#{departmentId},ancestors) ))
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(sys_staff.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(sys_staff.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        GROUP BY sex
+    </select>
+
+    <select id="selectStaffBySecretaryLing" parameterType="SysStaff" resultMap="SysStaffResult">
+        SELECT COUNT(secretary_ling) AS secretaryLingCount,secretary_ling FROM sys_staff
+        <where>
+            del_flag='0'
+            <if test="departmentId !=null and departmentId !=0">
+                AND (sys_staff.department_id = #{departmentId} OR sys_staff.department_id IN ( SELECT
+                sys_department.department_id FROM
+                sys_department WHERE FIND_IN_SET
+                (#{departmentId},ancestors) ))
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(sys_staff.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(sys_staff.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        GROUP BY secretary_ling ORDER BY secretaryLingCount asc
+    </select>
+
+</mapper>

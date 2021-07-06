@@ -25,12 +25,15 @@
         <result property="updateor" column="updateor"/>
         <result property="updateTime" column="update_time"/>
         <result property="subsetType" column="subset_type"/>
+        <result property="shareDeptAndUser" column="share_dept_and_user"/>
+        <result property="previewCount" column="preview_count"/>
+        <result property="downloadsCount" column="downloads_count"/>
     </resultMap>
 
     <sql id="selectSysDocumentVo">
         select file_id, parent_id, file_name, file_type, document_type, file_size, file_version, downloadable_flag,
         share_dept_id, share_dept_name, share_user_id, share_user_name, file_url, create_by, createor, create_time,
-        update_by, updateor, update_time,subset_type from sys_document
+        update_by, updateor, update_time,subset_type,share_dept_and_user, preview_count, downloads_count from sys_document
     </sql>
 
     <select id="selectSysDocumentList" parameterType="SysDocument" resultMap="SysDocumentResult">
@@ -95,6 +98,9 @@
             <if test="updateor != null">updateor,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="subsetType !=null">subset_type,</if>
+            <if test="shareDeptAndUser !=null">share_dept_and_user,</if>
+            <if test="previewCount != null">preview_count,</if>
+            <if test="downloadsCount != null">downloads_count,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="parentId != null">#{parentId},</if>
@@ -116,6 +122,9 @@
             <if test="updateor != null">#{updateor},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="subsetType !=null">#{subsetType},</if>
+            <if test="shareDeptAndUser !=null">#{shareDeptAndUser},</if>
+            <if test="previewCount != null">#{previewCount},</if>
+            <if test="downloadsCount != null">#{downloadsCount},</if>
         </trim>
     </insert>
 
@@ -141,6 +150,9 @@
             <if test="updateor != null">updateor = #{updateor},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="subsetType !=null">subset_type = #{subsetType},</if>
+            <if test="shareDeptAndUser !=null">share_dept_and_user = #{shareDeptAndUser},</if>
+            <if test="previewCount != null">preview_count = #{previewCount},</if>
+            <if test="downloadsCount != null">downloads_count = #{downloadsCount},</if>
         </trim>
         where file_id = #{fileId}
     </update>
@@ -158,7 +170,8 @@
 
     <select id="listBySubsetType" parameterType="SysDocument" resultMap="SysDocumentResult">
         select file_id, parent_id, file_name, file_type, document_type, file_size, file_version, downloadable_flag,
-        share_dept_id, share_dept_name, share_user_id, share_user_name, file_url, sys_document.create_by, createor, sys_document.create_time,
+        share_dept_id, share_dept_name, share_user_id, share_user_name, file_url, sys_document.create_by, createor,
+        sys_document.create_time,sys_document.share_dept_and_user,
         sys_document.update_by, updateor, sys_document.update_time,subset_type,css_class from sys_document
         INNER JOIN sys_dict_data ON subset_type=dict_label
         <where>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户库列表')"/>
+    <style type="text/css">
+        .orgchart {
+            background: white;
+        }
+
+        #chart-container {
+            border: 0px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>创建时间：</label><input type="text" class="time-input" id="startTime"
+                                                       placeholder="开始时间" name="beginTime"/>
+                            <span>-</span><input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                                 name="endTime"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="jump()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox-title">
+                <h5>公司组织架构图</a></h5>
+            </div>
+            <div class="ibox-content">
+                <div id="chart-container"></div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-sm-4">
+                <div class="ibox-title">
+                    <h5>司龄分布</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="secretaryLingAnalysis"></div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox-title">
+                    <h5>性别分布</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="sexAnalysis"></div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox-title">
+                    <h5>学历分布</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="educationAnalysis"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script src="../static/ajax/libs/orgChart/jquery.orgchart.js"
+        th:src="@{/ajax/libs/orgChart/jquery.orgchart.js}"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "system/department";
+    $(function () {
+        query();
+        educationAnalysis();
+        sexAnalysis();
+        secretaryLingAnalysis();
+    });
+
+
+    function getOrgId(id) {
+        const startTime = $("#startTime").val();
+        const endTime = $("#endTime").val();
+        var data = {'departmentId': id, 'params[beginTime]': startTime, 'params[endTime]': endTime};
+        $("#secretaryLingAnalysis").html('');
+        $("#educationAnalysis").html('');
+        $("#sexAnalysis").html('');
+        educationAnalysis(data);
+        sexAnalysis(data);
+        secretaryLingAnalysis(data);
+    }
+
+    function jump() {
+        const startTime = $("#startTime").val();
+        const endTime = $("#endTime").val();
+        var data = {'params[beginTime]': startTime, 'params[endTime]': endTime};
+        $("#secretaryLingAnalysis").html('');
+        $("#educationAnalysis").html('');
+        $("#sexAnalysis").html('');
+        educationAnalysis(data);
+        sexAnalysis(data);
+        secretaryLingAnalysis(data);
+    }
+
+    function query() {
+        //数据返回
+        $.ajax({
+            url: prefix + "/departmentAnalysis",
+            data: '',
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var str = tojson(result);
+                let index = str.lastIndexOf("]");
+                str = str.substring(1, index);
+
+                $('#chart-container').orgchart({
+                    'data': JSON.parse(str),
+                    'visibleLevel': 3,
+                    'nodeContent': '',
+                    'enableTouch': true,
+                    'createNode': function ($node, data) {
+                        //鼠标点击是根据id显示相关信息
+                        $node.on('click', function (event) {
+                            if (!$(event.target).is('.edge, .toggleBtn')) {
+                                getOrgId(event.currentTarget.id);
+                                mouse(event.currentTarget.id, event);
+                            }
+                        });
+                        //鼠标移入时根据id显示相关信息
+                        $node.on('mouseover', function (event) {
+                            if (!$(event.target).is('.edge, .toggleBtn')) {
+                                //mouse(event.currentTarget.id);
+                            }
+                        })
+                    }
+                });
+            }
+        });
+    }
+
+    function mouse(id, event) {
+        const startTime = $("#startTime").val();
+        const endTime = $("#endTime").val();
+        var data = {'departmentId': id, 'params[beginTime]': startTime, 'params[endTime]': endTime};
+        var count = 0;
+        $.ajax({
+            url: ctx + 'system/staff/selectStaffBySex',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    count = count + result[i].count;
+                }
+            }
+        });
+        $.modal.msgSuccess("该部门当前人数：" + count + "人");
+    }
+
+
+    function tojson(arr) {
+        if (!arr.length) return null;
+        var i = 0;
+        len = arr.length,
+            array = [];
+        for (; i < len; i++) {
+            array.push({"children": arr[i].children, "name": arr[i].name, 'title': arr[i].title});
+        }
+        return JSON.stringify(array);
+    };
+
+    function showall(menu_list, parent) {
+        $.each(menu_list, function (index, val) {
+            if (val.children.length > 0) {
+                var li = $("<li></li>");
+                li.append("<a href='javascript:void(0)' onclick=getOrgId(" + val.id + ");>" + val.name + "</a>").append("<ul></ul>").appendTo(parent);
+                //递归显示
+                showall(val.children, $(li).children().eq(1));
+            } else {
+                $("<li></li>").append("<a href='javascript:void(0)' onclick=getOrgId(" + val.id + ");>" + val.name + "</a>").appendTo(parent);
+            }
+        });
+    }
+
+    /**
+     * 司龄分析
+     * @param data
+     */
+    function secretaryLingAnalysis(data) {
+        $.ajax({
+            url: ctx + 'system/staff/selectStaffBySecretaryLing',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var chart = new G2.Chart({
+                    container: 'secretaryLingAnalysis',
+                    autoFit: true,
+                    height: 385,
+                });
+                chart.source(result);
+                chart.scale('value', {
+                    alias: '人',
+                    nice: true
+                });
+                chart.interval().position('type*value').size(20).color('#F29A76');
+                chart.render();
+                /*var chart = new G2.Chart({
+                    container: 'secretaryLingAnalysis',
+                    autoFit: true,
+                    height: 385,
+                });
+                chart.source(result);
+                chart.scale('value', {
+                    alias: '人',
+                    nice: true
+                });
+                chart.axis('type', {
+                    label: {
+                        offset: 12
+                    }
+                });
+                chart.coord().transpose();
+                chart.interval().position('type*value').size(20).color('#F29A76');
+                chart.render();*/
+            }
+        });
+    }
+
+    /**
+     * 学历分析
+     * @param data
+     */
+    function educationAnalysis(data) {
+        $.ajax({
+            url: ctx + 'system/staff/selectStaffByEducation',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var chart = new G2.Chart({
+                    container: 'educationAnalysis',
+                    autoFit: true,
+                    height: 385,
+                });
+                chart.source(result);
+                chart.scale('value', {
+                    alias: '位',
+                    nice: true
+                });
+                chart.interval().position('type*value').size(20).color('#A4ABD6');
+                chart.render();
+            }
+        });
+    }
+
+
+    /**
+     * 性别分析
+     * @param data
+     */
+    function sexAnalysis(data) {
+        $.ajax({
+            url: ctx + 'system/staff/selectStaffBySex',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var chart = new G2.Chart({
+                    container: 'sexAnalysis',
+                    autoFit: true,
+                    height: 385,
+                });
+                var COLORS = ['#88ABDA', '#EFC4CE'];
+                chart.coord('theta', {
+                    radius: 0.9
+                });
+                chart.source(result);
+                chart.tooltip({
+                    showTitle: false
+                });
+                chart.intervalStack().position('sold').shape('radiusPie').color('sex', COLORS).label('sold', {
+                    useHtml: true,
+                    htmlTemplate: function htmlTemplate(text, item) {
+                        var isFemale = item.point.sex === '女';
+                        var src = isFemale ? '../../static/img/women.png' : '../../static/img/man.png';
+                        var color = isFemale ? COLORS[1] : COLORS[0];
+                        var IMG = '<img style="width:40px" src="' + src + '" /><br/>';
+                        return '<div style="text-align:center;color:' + color + '">' + IMG + (text * 100).toFixed(0) + '%</div>';
+                    }
+                }).tooltip('sex*count', function (sex, count) {
+                    return {
+                        name: sex,
+                        value: count + " 人"
+                    }
+                });
+                chart.render();
+            }
+        })
+    }
+</script>
+</body>
+</html>

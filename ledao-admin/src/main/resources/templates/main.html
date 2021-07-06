@@ -64,70 +64,68 @@
 </head>
 
 <body class="gray-bg" style="height:100%;background: url('../img/background.png') no-repeat;">
-<div class="row border-bottom white-bg dashboard-header">
-    <div class="div1" style="display: flex;">
-        <div class="div2">乐道后台管理系统</div>
-        <div>
-            <iframe width="100%" scrolling="no" height="30" frameborder="0" allowtransparency="true"
-                    src="https://i.tianqi.com?c=code&id=34&color=%230070C0&icon=1&site=17"></iframe>
-        </div>
-    </div>
-</div>
-<div>
-    <div class="col-sm-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5><a onclick="noticeToList()">公告消息</a></h5>
-            </div>
-            <div class="ibox-content">
-                <ul class="nav nav-tabs" id="noticeTab"></ul>
-                <p></p>
-                <div class="tab-content" id="noticeTabContent"></div>
+    <div class="row border-bottom white-bg dashboard-header">
+        <div class="div1" style="display: flex;">
+            <div class="div2">乐道后台管理系统</div>
+            <div>
+                <iframe scrolling="no" height="30" frameborder="0" allowtransparency="true"
+                        src="https://i.tianqi.com?c=code&id=34&color=%230070C0&icon=1&site=17"></iframe>
             </div>
         </div>
     </div>
-    <div class="col-sm-5">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5><a onclick="documentToList()">文档管理</a></h5>
-            </div>
-            <div class="ibox-content">
-                <ul class="nav nav-tabs" id="myTab"></ul>
-                <p></p>
-                <div class="tab-content" id="myTabContent"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-3">
-        <div class="ibox float-e-ma rgins">
-            <div class="ibox-title">
-                <h5>日历备忘录</h5>
-            </div>
-            <div class="ibox-content">
-                <div id="calendar"></div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="wrapper wrapper-content">
-    <div class="row">
-        <div class="col-sm-9">
+    <div class="col-sm-12">
+        <div class="col-sm-4">
             <div class="ibox float-e-margins">
-                <div id="container"></div>
+                <div class="ibox-title">
+                    <h5><a onclick="noticeToList()">公告消息</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs" id="noticeTab"></ul>
+                    <p></p>
+                    <div class="tab-content" id="noticeTabContent"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a onclick="documentToList()">文档管理</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs" id="myTab"></ul>
+                    <p></p>
+                    <div class="tab-content" id="myTabContent"></div>
+                </div>
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="ibox-title">
-                <h5><a onclick="workLogToList()">日志</a></h5>
-            </div>
-            <div class="ibox-content">
-                <div id="mainWorkLog"></div>
+            <div class="ibox float-e-ma rgins">
+                <div class="ibox-title">
+                    <h5>日历备忘录</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="calendar"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="ibox float-e-margins">
+                    <div id="container"></div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox-title">
+                    <h5><a onclick="workLogToList()">日志</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="mainWorkLog"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
@@ -141,8 +139,6 @@
 
     $(function () {
         noticeList();
-        //tick();
-        // mainNoticeList();
         selectType();
         selectNoticeType();
         tb();
@@ -341,42 +337,6 @@
         });
     }
 
-   /* function noticeList() {
-        $.ajax({
-            type: 'post',
-            url: '/system/notice/noticeList',
-            data: '',
-            dataType: "JSON",
-            success: function (result) {
-                var data = result.data;
-                var str = "<div style=\"margin-left: 0%;margin-top: 3%;\">";
-                str += "<div style=\"margin-left: 0%;margin-top: 3%;\"><ui>";
-                for (var i in data) {
-                    str += "<li><a onclick='datailForNotice(" + data[i].noticeId + ")'>" + data[i].noticeTitle + "</a></li>";
-                }
-                str += "</ui></div></div>";
-                console.log(str);
-                // layer.msg(str, {icon: 1, time: '-1'});
-
-
-                layer.open({
-                    type: 1,  //页面层
-                    shade: 0,
-                    title: "消息",
-                    content: str,
-                    area: ["300px", "200px"],
-                    //skin: 'layui-layer-nobg layer_bg', //没有背景色
-                });
-
-
-                /!*if (result.msg > 0) {
-                    layer.msg('只想弱弱提示');
-                   // $.modal.alertWarning('您共有' + result.msg + '条信息未读！！！');
-                }*!/
-            }
-        });
-    }*/
-
     //获取通知公告类型
     function selectNoticeType() {
         $.ajax({
@@ -544,24 +504,6 @@
                 center: 'title',
                 right: 'dayGridMonth,listMonth'
             },
-            /*views: {
-                dayGridMonth: { //转农历
-                    dayCellContent(item) {
-                        let _date = new Date(item.date).toLocaleDateString().split('/');
-                        let _dateF = solar2lunar(_date[0], _date[1], _date[2]);
-                        if ("初一" == _dateF.IDayCn) {
-                            return {
-                                html: `<div class="cnDiv"><p><label>${_dateF.cDay}</label></p><p>${_dateF.IMonthCn}</p></div>`
-                            }
-                        } else {
-                            return {
-                                html: `<div class="cnDiv"><p><label>${_dateF.cDay}</label></p><p>${_dateF.IDayCn}</p></div>`
-                            }
-                        }
-                    }
-                }
-            },*/
-            // initialView: 'dayGridMonth', //此处使用这个就是为了不显示时间，因为当前我的场景不需要展示时间
             allDaySlot: true,
             initialDate: new Date(),
             navLinks: true, // can click day/week names to navigate views

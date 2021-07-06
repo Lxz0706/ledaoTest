@@ -44,12 +44,13 @@ user:
 
 # Spring配置
 spring:
-  # 模板引擎
   thymeleaf:
-    mode: HTML
-    encoding: utf-8
-    # 禁用缓存
     cache: false
+    prefix:  classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    encoding: utf-8
+    mode: HTML
   # 资源信息
   messages:
     # 国际化资源文件路径
@@ -63,9 +64,9 @@ spring:
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size:  1GB
+      max-file-size:  10GB
       # 设置总上传的文件大小
-      max-request-size:  2GB
+      max-request-size:  10GB
   # 服务模块
   devtools:
     restart:
@@ -83,7 +84,6 @@ spring:
       force: true
       charset: utf-8
       enabled: true
-
 # MyBatis
 mybatis:
   # 搜索指定包别名

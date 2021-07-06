@@ -116,6 +116,18 @@ public class SysDocument extends BaseEntity {
 
     private String cssClass;
 
+    /**
+     * 预览次数
+     */
+    @Excel(name = "预览次数")
+    private Long previewCount;
+
+    /**
+     * 下载次数
+     */
+    @Excel(name = "下载次数")
+    private Long downloadsCount;
+
     public void setFileId(Long fileId) {
         this.fileId = fileId;
     }
@@ -284,6 +296,22 @@ public class SysDocument extends BaseEntity {
         this.cssClass = cssClass;
     }
 
+    public Long getPreviewCount() {
+        return previewCount;
+    }
+
+    public void setPreviewCount(Long previewCount) {
+        this.previewCount = previewCount;
+    }
+
+    public Long getDownloadsCount() {
+        return downloadsCount;
+    }
+
+    public void setDownloadsCount(Long downloadsCount) {
+        this.downloadsCount = downloadsCount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -307,7 +335,10 @@ public class SysDocument extends BaseEntity {
                 .append("updateor", getUpdateor())
                 .append("updateTime", getUpdateTime())
                 .append("subsetType", getSubsetType())
-                .append("cssClass",getCssClass())
+                .append("cssClass", getCssClass())
+                .append("shareDeptAndUser", getShareDeptAndUser())
+                .append("previewCount", getPreviewCount())
+                .append("downloadsCount", getDownloadsCount())
                 .toString();
     }
 }

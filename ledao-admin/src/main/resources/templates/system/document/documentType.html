@@ -61,12 +61,12 @@
             dataType: 'json',
             success: function (result) {
                 var data = result.rows;
-                var str = "<div class='col-sm-12' style='height: 32em'>";
+                var str = "<div class='col-sm-12'>";
                 for (var i in data) {
                     str += '<div class="col-sm-4" style="margin-bottom: 16px;height: 16em;text-align: center;position: relative;top:5em;">' +
                         '<p style="font-size: 60px;letter-spacing:20px;font-weight: 600" class="'+ data[i].cssClass+'"></p>' +
-                        '<p><a style="font-size: 30px;letter-spacing:20px;font-weight: 600" onclick="toDocumentByType(\'' + data[i].subsetType + '\')">'
-                        + data[i].subsetType + '</a></p></div>';
+                        '<p><a style="font-size: 30px;letter-spacing:20px;font-weight: 600" onclick="toDocumentByType(\'' + data[i].dictValue + '\')">'
+                        + data[i].dictLabel + '</a></p></div>';
                 }
                 str += '</div></div>';
                 $("#showList").html(str);

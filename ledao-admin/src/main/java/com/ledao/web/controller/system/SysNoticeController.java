@@ -97,7 +97,7 @@ public class SysNoticeController extends BaseController {
         }
 
         List<SysNotice> list = noticeService.selectNoticeList(notice);
-        for (SysNotice sysNotice : list) {
+        /*for (SysNotice sysNotice : list) {
             if (StringUtils.isNotEmpty(sysNotice.getReceiver()) && StringUtils.isNotEmpty(sysNotice.getShareDeptName())) {
                 sysNotice.setShareDeptAndUser(sysNotice.getShareDeptName() + "," + sysNotice.getReceiver());
             } else if (StringUtils.isEmpty(sysNotice.getShareDeptName())) {
@@ -105,7 +105,7 @@ public class SysNoticeController extends BaseController {
             } else if (StringUtils.isEmpty(sysNotice.getReceiver())) {
                 sysNotice.setShareDeptAndUser(sysNotice.getShareDeptName());
             }
-        }
+        }*/
         return getDataTable(list);
     }
 

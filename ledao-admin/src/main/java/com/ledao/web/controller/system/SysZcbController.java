@@ -73,10 +73,10 @@ public class SysZcbController extends BaseController {
     public TableDataInfo lists(SysZcb sysZcb) {
         startPage();
         SysUser currentUser = ShiroUtils.getSysUser();
+        List<SysRole> getRoles = currentUser.getRoles();
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
-                List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
                             && !"investmentManager".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
@@ -91,7 +91,6 @@ public class SysZcbController extends BaseController {
             if (currentUser != null) {
                 // 如果是超级管理员，则不过滤数据
                 if (!currentUser.isAdmin()) {
-                    List<SysRole> getRoles = currentUser.getRoles();
                     for (SysRole sysRole : getRoles) {
                         //投资部经理，大型单体经理，高层角色
                         if (!"investmentManager".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
@@ -104,13 +103,19 @@ public class SysZcbController extends BaseController {
                 }
             }
             SysPcustomer sysPcustomer1 = new SysPcustomer();
-            sysPcustomer1.setProjectId(sysZcb1.getId());
             sysPcustomer1.setDeptType("tzb");
+            sysPcustomer1.setProjectId(Long.valueOf(sysZcb1.getId()));
+            if (!currentUser.isAdmin()) {
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"investmentManager".equals(sysRole.getRoleKey())) {
+                        sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
+                    }
+                }
+            }
             List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(sysPcustomer1);
             for (SysPcustomer sysPcustomer : sysPcustomerList) {
-                if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy())) {
-                    customerSb.append(sysPcustomer.getCustomerName()).append(",");
-                }
+                customerSb.append(sysPcustomer.getCustomerName()).append(",");
             }
             sysZcb1.setCustomer(StringUtils.strValue(customerSb.toString()));
         }

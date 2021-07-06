@@ -66,6 +66,9 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysPcustomerService sysPcustomerService;
 
+    @Autowired
+    private ISysNoticeService sysNoticeService;
+
     @RequiresPermissions("system:project:view")
     @GetMapping()
     public String project() {
@@ -484,6 +487,16 @@ public class SysProjectController extends BaseController {
             }
         }
 
+        /*//监控司法状态
+        SysProject sysProject1 = sysProjectService.selectSysProjectById(sysProject.getProjectId());
+        if (!sysProject.getJudicialStatus().equals(sysProject1.getJudicialStatus())) {
+            SysNotice sysNotice = new SysNotice();
+            sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
+            sysNotice.setStatus("0");
+            sysNotice.setNoticeType("3");
+            sysNoticeService.insertNotice(sysNotice);
+        }*/
+
         return toAjax(sysProjectService.updateSysProject(sysProject));
     }
 
@@ -558,6 +571,7 @@ public class SysProjectController extends BaseController {
     public String selectZcbByAssetStatus(@PathVariable("projectId") Long projectId, @PathVariable("projectZckId") Long projectZckId, ModelMap modelMap) {
         modelMap.put("projectId", projectId);
         modelMap.put("projectZckId", projectZckId);
+        modelMap.put("zckName", sysProjectZckService.selectSysProjectZckById(projectZckId).getZckName());
         return "system/project/projectList";
     }
 
@@ -646,37 +660,47 @@ public class SysProjectController extends BaseController {
     @ResponseBody
     public Map<String, Object> selectPCustomerByProjectId(String projectId) {
         Map<String, Object> map = new HashMap<String, Object>();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        List<SysRole> getRoles = currentUser.getRoles();
         SysPcustomer sysPcustomer1 = new SysPcustomer();
         sysPcustomer1.setDeptType("thb");
         sysPcustomer1.setProjectId(Long.valueOf(projectId));
         // sysPcustomer1.setCreateBy(ShiroUtils.getLoginName());
-        //sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
+        if (!currentUser.isAdmin()) {
+            for (SysRole sysRole : getRoles) {
+                if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                        && !"thbManager2".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey())) {
+                    sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
+                }
+            }
+        }
         List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(sysPcustomer1);
         for (SysPcustomer sysPcustomer : sysPcustomerList) {
-            SysUser currentUser = ShiroUtils.getSysUser();
             if (currentUser != null) {
                 // 如果是超级管理员，则不过滤数据
                 if (!currentUser.isAdmin()) {
-                    if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy()) || ShiroUtils.getUserId().toString().contains(sysPcustomer.getShareUserId())) {
-                        map.put("isCreateBy", true);
+                    if (StringUtils.isNotEmpty(sysPcustomer.getShareUserId())) {
+                        if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy()) || sysPcustomer.getShareUserId().contains(ShiroUtils.getUserId().toString())) {
+                            map.put("isCreateBy", true);
+                        }
                     }
-                    List<SysRole> getRoles = currentUser.getRoles();
-                    for (SysRole sysRole : getRoles) {
+                   /* for (SysRole sysRole : getRoles) {
                         if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
-                                /*|| ShiroUtils.getLoginName().equals(sysProject.getCreateBy())*/ || "admin".equals(sysRole.getRoleKey())) {
+                                *//*|| ShiroUtils.getLoginName().equals(sysProject.getCreateBy())*//* || "admin".equals(sysRole.getRoleKey())
+                                || "thbManager2".equals(sysRole.getRoleKey()) || "thbManager".equals(sysRole.getRoleKey())) {
                             map.put("sysPcustomerList", sysPcustomerList);
                         } else {
                             if (ShiroUtils.getLoginName().equals(sysPcustomer.getCreateBy()) || ShiroUtils.getUserId().toString().contains(sysPcustomer.getShareUserId())) {
                                 map.put("sysPcustomerList", sysPcustomerList);
                             }
                         }
-                    }
+                    }*/
                 } else {
                     map.put("isCreateBy", true);
-                    map.put("sysPcustomerList", sysPcustomerList);
                 }
             }
         }
+        map.put("sysPcustomerList", sysPcustomerList);
         return map;
     }
 

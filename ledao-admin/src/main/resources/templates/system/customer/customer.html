@@ -317,7 +317,6 @@
             $.table.hideColumn("reason");
         }
         for (var i in data.rows) {
-            console.log("=====" + data.rows[i].isAdmin);
             if ($.common.isEmpty(data.rows[i].isAdmin)) {
                 $.table.hideColumn("creator");
                 $.table.hideColumn("wechatFlag");

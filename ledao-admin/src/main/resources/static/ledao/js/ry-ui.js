@@ -1674,6 +1674,7 @@ var table = {
             notAllowLastLevel: function (_tree) {
                 var nodes = _tree.getSelectedNodes();
                 for (var i = 0; i < nodes.length; i++) {
+                    console.log("=======" + nodes[i].isParent);
                     if (!nodes[i].isParent) {
                         $.modal.msgError("不能选择最后层级节点（" + nodes[i].name + "）");
                         return false;
@@ -1889,6 +1890,15 @@ var table = {
             },
             repair: function (m) {
                 return m < 10 ? '0' + m : m
+            },
+            /*是否为数字，当为空时返回0*/
+            returnNum: function (value) {
+                var count = 0;
+                if ($.common.isEmpty(value)) {
+                    return count;
+                } else {
+                    return count = value;
+                }
             }
         }
     });

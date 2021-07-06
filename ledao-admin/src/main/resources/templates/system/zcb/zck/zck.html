@@ -1,60 +1,65 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('资产信息库列表')" />
+    <th:block th:include="include :: header('资产信息库列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <input type="hidden" id="zcbId" name="zcbId" th:value="*{sysZcb.id}">
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input type="hidden" id="assetStatus" th:value="*{sysZcb.assetStatus}">
+            <form id="formId">
+                <input type="hidden" id="zcbId" name="zcbId" th:value="*{sysZcb.id}">
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:zck:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:zck:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:zck:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:zck:import">
-                    <i class="fa fa-upload"></i> 导入
-                </a>
-                <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:zck:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:zck:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:zck:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:zck:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:zck:import">
+                <i class="fa fa-upload"></i> 导入
+            </a>
+            <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:zck:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:zck:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:zck:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:zck:remove')}]];
-        var detailFlag = [[${@permission.hasPermi('system:zck:detail')}]];
-        var prefix = ctx + "system/zcb/zck";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:zck:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:zck:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:zck:detail')}]];
+    var prefix = ctx + "system/zcb/zck";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                detailUrl: prefix + "/detail/{id}",
-                importUrl: prefix + "/importData",
-                importTemplateUrl: prefix + "/importTemplate",
-                modalName: "资产信息库",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "资产信息库",
+            columns: [{
+                checkbox: true
+            },
                 {
                     field: 'id',
                     title: 'ID',
@@ -67,13 +72,13 @@
                 {
                     field: 'projectName',
                     title: '借款人名称',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.id+"',\'" + row.projectName + '\')">' + value + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.id + "',\'" + row.projectName + '\')">' + value + '</a>';
                     },
                     sortable: true
                 },
                 {
-                    field: 'city', 
+                    field: 'city',
                     title: '城市/地区'
                 },
                 {
@@ -83,15 +88,15 @@
                 {
                     field: 'totalPrice1',
                     title: '总价',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'capValues',
                     title: '盖帽值',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 }/*,
                     {
@@ -147,50 +152,55 @@
                             return actions.join('');
                         }
                     }*/]
-            };
-            $.table.init(options);
+        };
+        $.table.init(options);
+    });
+
+    /*资产库数据-新增资产库数据*/
+    function add() {
+        var zcbId = $("#zcbId").val();
+        $.operate.add(zcbId);
+    }
+
+    /*资产库列表-详细*/
+    function detail(id, projectName) {
+        var zcbId = $("#zcbId").val();
+        var url = prefix + '/zckList/' + id + "/" + zcbId;
+        $.modal.parentTab(projectName + "列表", url);
+    }
+
+    function exportExcel() {
+        var zcbId = $("#zcbId").val();
+        var row = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
         });
-
-        /*资产库数据-新增资产库数据*/
-        function add() {
-            var zcbId=$("#zcbId").val();
-            $.operate.add(zcbId);
+        var str = "";
+        //根据name获取所有元素
+        for (var i = 0; i < row.length; i++) {
+            str += row[i].id + ",";
         }
-
-        /*资产库列表-详细*/
-        function detail(id,projectName) {
-            var zcbId=$("#zcbId").val();
-            var url = prefix + '/zckList/' + id+"/"+zcbId;
-            $.modal.openTab(projectName+"列表", url);
+        //去掉最后一个逗号(如果不需要去掉，就不用写)
+        if (str.length > 0) {
+            str = str.substr(0, str.length - 1);
         }
-
-        function exportExcel(){
-            var zcbId=$("#zcbId").val();
-            var row=$.map($("#bootstrap-table").bootstrapTable('getSelections'),function(row){
-                return row ;
-            });
-            var str = "";
-            //根据name获取所有元素
-            for (var i = 0; i < row.length; i++) {
-                str += row[i].id + ",";
+        $.ajax({
+            url: prefix + "/export2",
+            data: {
+                "ids": str,
+                "zcbId": zcbId
+            },
+            type: "post",
+            success: function (result) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
             }
-            //去掉最后一个逗号(如果不需要去掉，就不用写)
-            if (str.length > 0) {
-                str = str.substr(0, str.length - 1);
-            }
-            $.ajax({
-                url:prefix +"/export2",
-                data:{
-                    "ids":str,
-                    "zcbId":zcbId
-                },
-                type:"post",
-                success:function (result) {
-                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
-                }
-            })
-        }
-    </script>
+        })
+    }
+
+    function back() {
+        var url = ctx + 'system/zcb/selectZcbByAssetStatus/' + $("#assetStatus").val();
+        $.modal.parentTab($("#assetStatus").val() + "列表", url);
+    }
+</script>
 </body>
 <!-- 导入区域 -->
 <script id="importTpl" type="text/template">
@@ -199,7 +209,8 @@
             <input type="hidden" name="zcbId" th:value="*{sysZcb.id}">
             <input type="file" id="file" name="file"/>
             <div class="mt10 pt5">
-                &nbsp;<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+                &nbsp;<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i
+                    class="fa fa-file-excel-o"></i> 下载模板</a>
             </div>
             <font color="red" class="pull-left mt10">
                 提示：仅允许导入“xls”或“xlsx”格式文件！

@@ -20,11 +20,12 @@
         <result property="readFlag" column="read_flag"/>
         <result property="shareDeptId" column="share_dept_id"/>
         <result property="shareDeptName" column="share_dept_name"/>
+        <result property="shareDeptAndUser" column="share_dept_and_user"/>
     </resultMap>
 
     <sql id="selectNoticeVo">
         select notice_id, notice_title, notice_type, notice_content, status, create_by, create_time, update_by, update_time, remark ,receiver,receiver_Id,read_flag
-		, share_dept_id, share_dept_name from sys_notice
+		, share_dept_id, share_dept_name,share_dept_and_user from sys_notice
     </sql>
 
     <select id="selectNoticeById" parameterType="Long" resultMap="SysNoticeResult">
@@ -95,6 +96,7 @@
         <if test="createBy != null and createBy != ''">create_by,</if>
         <if test="shareDeptId != null">share_dept_id,</if>
         <if test="shareDeptName != null">share_dept_name,</if>
+        <if test="shareDeptAndUser !=null">share_dept_and_user,</if>
         create_time
         )values(
         <if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle},</if>
@@ -107,6 +109,7 @@
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         <if test="shareDeptId != null">#{shareDeptId},</if>
         <if test="shareDeptName != null">#{shareDeptName},</if>
+        <if test="shareDeptAndUser !=null">#{shareDeptAndUser},</if>
         sysdate()
         )
     </insert>
@@ -123,6 +126,7 @@
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             <if test="shareDeptId != null">share_dept_id = #{shareDeptId},</if>
             <if test="shareDeptName != null">share_dept_name = #{shareDeptName},</if>
+            <if test="shareDeptAndUser !=null">share_dept_and_user = #{shareDeptAndUser},</if>
             update_time = sysdate()
         </set>
         where notice_id = #{noticeId}

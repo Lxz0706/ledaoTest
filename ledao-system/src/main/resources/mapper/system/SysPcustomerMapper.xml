@@ -117,8 +117,13 @@
     </delete>
 
     <select id="selectPCustomerByProjectId" parameterType="SysPcustomer" resultMap="SysPcustomerResult">
-        SELECT customer_id,create_by,customer_lable,share_user_id,GROUP_CONCAT(customer_name SEPARATOR ';') customer_name FROM sys_pcustomer
-        WHERE project_id =#{projectId} AND dept_type = #{deptType} GROUP BY customer_id,customer_lable,create_by,share_user_id
+        SELECT customer_id,create_by,customer_lable,share_user_id,GROUP_CONCAT(customer_name SEPARATOR ';')
+        customer_name FROM sys_pcustomer
+        WHERE project_id =#{projectId} AND dept_type = #{deptType}
+        <if test="shareUserId != null  and shareUserId != ''">
+            and share_user_id like concat('%', #{shareUserId},'%')
+        </if>
+        GROUP BY customer_id,customer_lable,create_by,share_user_id
     </select>
 
 </mapper>

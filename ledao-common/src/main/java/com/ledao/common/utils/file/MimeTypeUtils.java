@@ -30,7 +30,7 @@ public class MimeTypeUtils {
 
     public static final String[] FLASH_EXTENSION = {"swf", "flv"};
 
-    public static final String[] MEDIA_EXTENSION = {"swf", "flv", "mp3", "wav", "wma", "wmv", "mid", "avi", "mpg", "asf", "rm", "rmvb", "mp4"};
+    public static final String[] MEDIA_EXTENSION = {"swf", "flv", "mp3", "wav", "wma", "wmv", "mid", "avi", "mpg", "asf", "rm", "rmvb", "mp4","mkv","MKV"};
 
     public static final String[] DEFAULT_ALLOWED_EXTENSION = {
             // 图片
@@ -42,7 +42,7 @@ public class MimeTypeUtils {
             // pdf
             "pdf",
             //视频文件
-            "mp4", "AVI", "mov", "rmvb", "rm", "FLV", "mp4", "3GP",
+            "mp4", "AVI", "mov", "rmvb", "rm", "FLV", "mp4", "3GP","mkv","MKV",
             //音频文件
             "swf", "flv", "mp3", "wav", "wma", "wmv", "mid", "avi", "mpg", "asf", "rm", "rmvb"
     };

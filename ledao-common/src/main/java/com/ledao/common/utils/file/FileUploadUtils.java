@@ -22,9 +22,9 @@ import com.ledao.common.utils.security.Md5Utils;
  */
 public class FileUploadUtils {
     /**
-     * 默认大小 2GB
+     * 默认大小 9GB
      */
-    public static final long DEFAULT_MAX_SIZE = 1024 * 1024 * 1024 * 2 - 1;
+    public static final long DEFAULT_MAX_SIZE = 1024 * 1024 * 1024 * 9 - 1L;
 
     /**
      * 默认的文件名最大长度 100
@@ -162,9 +162,9 @@ public class FileUploadUtils {
     public static final void assertAllowed(MultipartFile file, String[] allowedExtension)
             throws FileSizeLimitExceededException, InvalidExtensionException {
         long size = file.getSize();
-        if (DEFAULT_MAX_SIZE != -1 && size > DEFAULT_MAX_SIZE) {
-            throw new FileSizeLimitExceededException(DEFAULT_MAX_SIZE / 1024 / 1024 / 1024 / 2);
-        }
+        /*if (DEFAULT_MAX_SIZE != -1 && size > DEFAULT_MAX_SIZE) {
+            throw new FileSizeLimitExceededException(DEFAULT_MAX_SIZE / 1024 / 1024 / 1024 / 9);
+        }*/
 
         String fileName = file.getOriginalFilename();
         String extension = getExtension(file);

@@ -1,192 +1,197 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('投后部项目管理列表')" />
+    <th:block th:include="include :: header('投后部项目管理列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <input type="hidden" name="projectZckId" id="projectZckId" th:value="*{projectZckId}"/>
-                    <!--<div class="select-list">
-                        <ul>
-                            <li>
-                                <label>借款人名称：</label>
-                                <input type="text" name="projectName"/>
-                            </li>
-                            <li>
-                                <label>资产包状态：</label>
-                                <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_collateraType')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>序号：</label>
-                                <input type="text" name="no"/>
-                            </li>
-                            <li>
-                                <label>借款人名称：</label>
-                                <input type="text" name="borrower"/>
-                            </li>
-                            <li>
-                                <label>城市/地区：</label>
-                                <input type="text" name="city"/>
-                            </li>
-                            <li>
-                                <label>放款银行：</label>
-                                <input type="text" name="loanBank"/>
-                            </li>
-                            <li>
-                                <label>合同本金(元)：</label>
-                                <input type="text" name="contractPrincipal"/>
-                            </li>
-                            <li>
-                                <label>本金余额(元)：</label>
-                                <input type="text" name="principalBalance"/>
-                            </li>
-                            <li>
-                                <label>利息金额(元)：</label>
-                                <input type="text" name="interestBalance"/>
-                            </li>
-                            <li>
-                                <label>本息余额(元)：</label>
-                                <input type="text" name="principalInterestBalance"/>
-                            </li>
-                            <li>
-                                <label>项目经理：</label>
-                                <input type="text" name="projectManager"/>
-                            </li>
-                            <li>
-                                <label>项目经理ID：</label>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li>
-                                <label>司法状态：</label>
-                                <select name="judicialStatus">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>司法状态备注：</label>
-                                <input type="text" name="judicialRemarks"/>
-                            </li>
-                            <li>
-                                <label>成交类型：</label>
-                                <select name="transactionType">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>买家：</label>
-                                <input type="text" name="buyer"/>
-                            </li>
-                            <li>
-                                <label>买家ID：</label>
-                                <input type="text" name="buyerId"/>
-                            </li>
-                            <li class="select-time">
-                                <label>查封日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSealUpDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSealUpDate]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>起诉立案日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDateFiling]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDateFiling]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>执行立案日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEnforcementFilingDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEnforcementFilingDate]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>出具评估报告日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginAppraisalReportDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endAppraisalReportDate]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>第一次挂拍日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginFirstShotDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endFirstShotDate]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>第二次挂拍日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSecondShotDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSecondShotDate]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>变卖挂拍日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSellShotDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSellShotDate]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>拍卖成交日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSuccessfulBidderDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSuccessfulBidderDate]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>执行款到账日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPaymentReceivedDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endPaymentReceivedDate]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>-->
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" name="projectZckId" id="projectZckId" th:value="*{projectZckId}"/>
+                <!--<div class="select-list">
+                    <ul>
+                        <li>
+                            <label>借款人名称：</label>
+                            <input type="text" name="projectName"/>
+                        </li>
+                        <li>
+                            <label>资产包状态：</label>
+                            <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_collateraType')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>序号：</label>
+                            <input type="text" name="no"/>
+                        </li>
+                        <li>
+                            <label>借款人名称：</label>
+                            <input type="text" name="borrower"/>
+                        </li>
+                        <li>
+                            <label>城市/地区：</label>
+                            <input type="text" name="city"/>
+                        </li>
+                        <li>
+                            <label>放款银行：</label>
+                            <input type="text" name="loanBank"/>
+                        </li>
+                        <li>
+                            <label>合同本金(元)：</label>
+                            <input type="text" name="contractPrincipal"/>
+                        </li>
+                        <li>
+                            <label>本金余额(元)：</label>
+                            <input type="text" name="principalBalance"/>
+                        </li>
+                        <li>
+                            <label>利息金额(元)：</label>
+                            <input type="text" name="interestBalance"/>
+                        </li>
+                        <li>
+                            <label>本息余额(元)：</label>
+                            <input type="text" name="principalInterestBalance"/>
+                        </li>
+                        <li>
+                            <label>项目经理：</label>
+                            <input type="text" name="projectManager"/>
+                        </li>
+                        <li>
+                            <label>项目经理ID：</label>
+                            <input type="text" name="userId"/>
+                        </li>
+                        <li>
+                            <label>司法状态：</label>
+                            <select name="judicialStatus">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>司法状态备注：</label>
+                            <input type="text" name="judicialRemarks"/>
+                        </li>
+                        <li>
+                            <label>成交类型：</label>
+                            <select name="transactionType">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>买家：</label>
+                            <input type="text" name="buyer"/>
+                        </li>
+                        <li>
+                            <label>买家ID：</label>
+                            <input type="text" name="buyerId"/>
+                        </li>
+                        <li class="select-time">
+                            <label>查封日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSealUpDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSealUpDate]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>起诉立案日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDateFiling]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDateFiling]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>执行立案日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEnforcementFilingDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEnforcementFilingDate]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>出具评估报告日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginAppraisalReportDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endAppraisalReportDate]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>第一次挂拍日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginFirstShotDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endFirstShotDate]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>第二次挂拍日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSecondShotDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSecondShotDate]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>变卖挂拍日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSellShotDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSellShotDate]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>拍卖成交日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSuccessfulBidderDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSuccessfulBidderDate]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>执行款到账日期：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPaymentReceivedDate]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endPaymentReceivedDate]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>-->
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:project:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:project:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:project:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:project:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>-->
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:project:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:project:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:project:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:project:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:project:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
-        var prefix = ctx + "system/project";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:project:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
+    var prefix = ctx + "system/project";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "投后部项目管理",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "投后部项目管理",
+            columns: [{
+                checkbox: true
+            },
                 {
                     field: 'projectId',
                     title: '项目ID',
@@ -199,142 +204,147 @@
                 {
                     field: 'projectName',
                     title: '借款人名称',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId+"',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
                     },
                     sortable: true
                 },
                 {
                     field: 'totalPrice',
                     title: '合同本金',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId+"',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId + "',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
                 {
                     field: 'totalInterest',
                     title: '利息',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'totalPrincipalBalance',
                     title: '本金余额(元)',
-                    formatter: function(value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'totalInterestBalance',
                     title: '利息余额',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'guarantors',
                     title: '保证人',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail1(\'' + row.projectId+"',\'" + row.guarantors + '\')">' + strLength(row.guarantors) + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail1(\'' + row.projectId + "',\'" + row.guarantors + '\')">' + strLength(row.guarantors) + '</a>';
                     }
                 },
                 {
                     field: 'collaterals',
                     title: '抵押物',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail2(\'' + row.projectId+"',\'" + row.collaterals + '\')">' + strLength(row.collaterals) + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail2(\'' + row.projectId + "',\'" + row.collaterals + '\')">' + strLength(row.collaterals) + '</a>';
                     }
                 },
                 {
                     field: 'pledges',
                     title: '质押物',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail4(\'' + row.projectId+"',\'" + row.pledges + '\')">' + strLength(row.pledges) + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail4(\'' + row.projectId + "',\'" + row.pledges + '\')">' + strLength(row.pledges) + '</a>';
                     }
                 },
                 {
                     field: 'recapture',
                     title: '处置回现',
-                    formatter: function(value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
                 {
-                 field: 'projectManager',
-                 title: '项目经理'
+                    field: 'projectManager',
+                    title: '项目经理'
                 },
                 {
                     title: '最新进度情况',
-                    formatter:function(value, row, index){
-                        return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectId+'\')">最新进度情况</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectId + '\')">最新进度情况</a>';
                     }
                 },
                 {
                     field: 'debtStatus',
                     title: '债权状态'
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        //控制显示的字数
-        function strLength(value){
-            var str=$.common.nullToStr(value);
-            if(str.length>10){
-                str=str.substring(0,10)+'...';
-            }
-            return str;
+    //控制显示的字数
+    function strLength(value) {
+        var str = $.common.nullToStr(value);
+        if (str.length > 10) {
+            str = str.substring(0, 10) + '...';
         }
+        return str;
+    }
 
-        /*资产库数据-新增资产库数据*/
-        function add() {
-            var projectZckId=$("#projectZckId").val();
-            $.operate.add(projectZckId);
-        }
+    /*资产库数据-新增资产库数据*/
+    function add() {
+        var projectZckId = $("#projectZckId").val();
+        $.operate.add(projectZckId);
+    }
 
 
-        /*项目列表-详细*/
-        function detail(id,projectName) {
-            var projectZckId=$("#projectZckId").val();
-            var url = prefix + '/projectList/' + id + "/"+projectZckId;
-            $.modal.openTab(projectName+"列表", url);
-        }
+    /*项目列表-详细*/
+    function detail(id, projectName) {
+        var projectZckId = $("#projectZckId").val();
+        var url = prefix + '/projectList/' + id + "/" + projectZckId;
+        $.modal.parentTab(projectName + "列表", url);
+    }
 
-        /*合同本金列表-详细*/
-        function detail3(id,contractPrincipal) {
-            var url = ctx + 'system/contract/contractList/' + id;
-            $.modal.openTab("合同本金列表", url);
-        }
+    /*合同本金列表-详细*/
+    function detail3(id, contractPrincipal) {
+        var url = ctx + 'system/contract/contractList/' + id;
+        $.modal.openTab("合同本金列表", url);
+    }
 
-        /*保证人列表-详细*/
-        function detail1(id,bail) {
-            var url = ctx + 'system/bail/bailList/' + id;
-            $.modal.openTab("保证人列表", url);
-        }
+    /*保证人列表-详细*/
+    function detail1(id, bail) {
+        var url = ctx + 'system/bail/bailList/' + id;
+        $.modal.openTab("保证人列表", url);
+    }
 
-        /*抵押物列表-详细*/
-        function detail2(id,guarantor) {
-            var url = ctx + 'system/mortgage/mortgageList/' + id;
-            $.modal.openTab("抵押物列表", url);
-        }
+    /*抵押物列表-详细*/
+    function detail2(id, guarantor) {
+        var url = ctx + 'system/mortgage/mortgageList/' + id;
+        $.modal.openTab("抵押物列表", url);
+    }
 
-        /*质押物列表-详细*/
-        function detail4(id,pledge) {
-            var url = ctx + 'system/pledge/pledgeList/' + id;
-            $.modal.openTab("质押物列表", url);
-        }
+    /*质押物列表-详细*/
+    function detail4(id, pledge) {
+        var url = ctx + 'system/pledge/pledgeList/' + id;
+        $.modal.openTab("质押物列表", url);
+    }
 
-        function progress(id) {
-            var url = ctx + 'system/progress/progressLists/' + id + "/Y";
-            $.modal.openTab("进度情况列表", url);
-        }
+    function progress(id) {
+        var url = ctx + 'system/progress/progressLists/' + id + "/Y";
+        $.modal.openTab("进度情况列表", url);
+    }
 
-        //现金回现
-        function detail5(projectId){
-            var url = ctx + 'system/recapture/recaptureList/' + projectId ;
-            $.modal.openTab('处置回现列表',url);
-        }
-    </script>
+    //现金回现
+    function detail5(projectId) {
+        var url = ctx + 'system/recapture/recaptureList/' + projectId;
+        $.modal.openTab('处置回现列表', url);
+    }
+
+    function back() {
+        var url = ctx + "system/projectZck";
+        $.modal.parentTab("投后部项目管理", url);
+    }
+</script>
 </body>
 </html>

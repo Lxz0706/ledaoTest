@@ -61,6 +61,21 @@ public class SysAProperty extends BaseEntity {
     @Excel(name = "项目url")
     private String itemUrl;
 
+    /**
+     * 联系人
+     */
+    private String itemContacts;
+
+    /**
+     * 联系电话
+     */
+    private String itemTel;
+
+    /**
+     * 债权数量
+     */
+    private String itemNums;
+
 
     /**
      * 关键词
@@ -139,6 +154,30 @@ public class SysAProperty extends BaseEntity {
         this.itemContent = itemContent;
     }
 
+    public String getItemContacts() {
+        return itemContacts;
+    }
+
+    public void setItemContacts(String itemContacts) {
+        this.itemContacts = itemContacts;
+    }
+
+    public String getItemTel() {
+        return itemTel;
+    }
+
+    public void setItemTel(String itemTel) {
+        this.itemTel = itemTel;
+    }
+
+    public String getItemNums() {
+        return itemNums;
+    }
+
+    public void setItemNums(String itemNums) {
+        this.itemNums = itemNums;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -151,6 +190,9 @@ public class SysAProperty extends BaseEntity {
                 .append("itemAmount", getItemAmount())
                 .append("itemUrl", getItemUrl())
                 .append("itemContent", getItemContent())
+                .append("itemContacts",getItemContacts())
+                .append("itemTel",getItemTel())
+                .append("itemNums",getItemNums())
                 .toString();
     }
 }

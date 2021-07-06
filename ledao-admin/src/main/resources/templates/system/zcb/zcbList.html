@@ -23,6 +23,9 @@
                shiro:hasPermission="system:zcb:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:zcb:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -77,14 +80,14 @@
                     field: 'collateralTotal',
                     title: '抵押物估值总价',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'capValue',
                     title: '盖帽值',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -102,7 +105,7 @@
     /*资产库列表-详细*/
     function detail(id, assetPackageName) {
         var url = prefix + '/detail/' + id;
-        $.modal.openTab(assetPackageName + "列表", url);
+        $.modal.parentTab(assetPackageName + "列表", url);
     }
 
     //控制显示的字数
@@ -112,6 +115,11 @@
             str = str.substring(0, 20) + '...';
         }
         return str;
+    }
+
+    function back() {
+        var url = prefix;
+        $.modal.parentTab("资产包", url);
     }
 </script>
 </body>

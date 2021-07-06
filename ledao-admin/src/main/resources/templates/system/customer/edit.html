@@ -320,6 +320,7 @@
     jQuery.validator.addMethod("phone", function (value, element) {
         var customerId = $("#customerId").val();
         var contactNumberStr = "";
+        console.log($("#contactNumber").val());
         $("input[name='contactNumber']").each(function () {
             contactNumberStr += $(this).val() + ",";
         });
@@ -357,7 +358,7 @@
                     }
                 });
             }
-
+            weChatPass = true;
         }
 
         //手机号填写，微信填写
@@ -374,7 +375,6 @@
                         "weChatNumber": strs[i]
                     },
                     success: function (data) {
-                        console.log(data);
                         return weChatPass = $.validate.unique(data);
                     }
                 });
@@ -418,9 +418,16 @@
             }
             phonePass = true;
         }
+
+        if (!phonePass) {
+            $("#addWeCharNum input").attr("readOnly", "true");
+            document.getElementById("addWeChatNumBtn").style.display = "none";
+        } else {
+            $("#addWeCharNum input").attr("readOnly", false);
+            document.getElementById("addWeChatNumBtn").style.display = "block";
+        }
+
         if (!phonePass || !weChatPass || !weChatPass && !phonePass) {
-            //自定义成功提示
-            //$("#receivingTelephone_tip").removeClass("errorHint").addClass("successHint").text('');
             return false;
         } else {
             return true;

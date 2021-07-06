@@ -2,6 +2,17 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.annotation.Log;
+import com.ledao.common.constant.UserConstants;
+import com.ledao.common.core.controller.BaseController;
+import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.dao.Ztree;
+import com.ledao.common.enums.BusinessType;
+import com.ledao.framework.shiro.util.AuthorizationUtils;
+import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysMenu;
+import com.ledao.system.dao.SysRole;
+import com.ledao.system.service.ISysMenuService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,21 +23,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.ledao.common.annotation.Log;
-import com.ledao.common.constant.UserConstants;
-import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.common.core.dao.Ztree;
-import com.ledao.common.enums.BusinessType;
-import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysMenu;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.service.ISysMenuService;
 
 /**
  * 菜单信息
  *
- * @author lxz
+ * @author ruoyi
  */
 @Controller
 @RequestMapping("/system/menu")
@@ -65,7 +66,7 @@ public class SysMenuController extends BaseController {
         if (menuService.selectCountRoleMenuByMenuId(menuId) > 0) {
             return AjaxResult.warn("菜单已分配,不允许删除");
         }
-        ShiroUtils.clearCachedAuthorizationInfo();
+        AuthorizationUtils.clearAllCachedAuthorizationInfo();
         return toAjax(menuService.deleteMenuById(menuId));
     }
 
@@ -98,7 +99,7 @@ public class SysMenuController extends BaseController {
             return error("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
         }
         menu.setCreateBy(ShiroUtils.getLoginName());
-        ShiroUtils.clearCachedAuthorizationInfo();
+        AuthorizationUtils.clearAllCachedAuthorizationInfo();
         return toAjax(menuService.insertMenu(menu));
     }
 
@@ -123,7 +124,7 @@ public class SysMenuController extends BaseController {
             return error("修改菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
         }
         menu.setUpdateBy(ShiroUtils.getLoginName());
-        ShiroUtils.clearCachedAuthorizationInfo();
+        AuthorizationUtils.clearAllCachedAuthorizationInfo();
         return toAjax(menuService.updateMenu(menu));
     }
 

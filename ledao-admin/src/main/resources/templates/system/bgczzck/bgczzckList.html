@@ -9,6 +9,11 @@
         <div class="col-sm-12 search-collapse">
             <form id="formId">
                 <div class="select-list">
+                    <input name="params[beginTime]" id="beginDate" th:value="${sysBgczzck.beginTime}" type="hidden"/>
+                    <input name="params[endTime]" id="endDate" th:value="${sysBgczzck.endTime}" type="hidden"/>
+                    <input type="hidden" name="projectName" th:value="${sysBgczzck.projectName}"/>
+                    <input type="hidden" name="projectYxzName" th:value="${sysBgczzck.projectYxzName}"/>
+                    <input type="hidden" name="agreementName" th:value="${sysBgczzck.agreementName}"/>
                     <input name="projectStatus" id="projectStatus" type="hidden" th:value="*{projectStatus}"/>
                     <!--<ul>
                         <li>
@@ -67,6 +72,9 @@
             <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:bgczzck:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:bgczzck:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -122,28 +130,28 @@
                     field: 'contractPrincipal',
                     title: '合同本金',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'principalBalance',
                     title: '本金余额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'interestBalance',
                     title: '利息余额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'principalInterestBalance',
                     title: '本息余额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -210,6 +218,11 @@
                 window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
             }
         })
+    }
+
+    function back() {
+        var url = prefix;
+        $.modal.parentTab("大型单体项目", url);
     }
 
 </script>

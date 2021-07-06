@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -126,7 +127,7 @@ public class SysDocumentController extends BaseController {
         startPage();
         Map<String, String> typeMap = new HashMap<>();
         List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType(sysDocument.getDocumentType() + "_type");
-        for (SysDictData sysDictData : sysDictDataList) {
+        /*for (SysDictData sysDictData : sysDictDataList) {
             typeMap.put(sysDictData.getDictValue(), sysDictData.getCssClass());
         }
         List<SysDocument> list = sysDocumentService.listBySubsetType(sysDocument);
@@ -139,8 +140,8 @@ public class SysDocumentController extends BaseController {
             if (StringUtils.isEmpty(sysDocument1.getSubsetType())) {
                 sysDocument1.setSubsetType("无");
             }
-        }
-        return getDataTable(list);
+        }*/
+        return getDataTable(sysDictDataList);
     }
 
     /**
@@ -184,28 +185,34 @@ public class SysDocumentController extends BaseController {
                 }
             }
 
-           /* int i = 0;
-            for (String string : sysDocument1.getShareDeptId().split(",")) {
-                i++;
-                System.out.print("部门：======" + string + "-----");
-            }
-            for (SysDept sysDept1 : sysDeptList) {
-                System.out.print(sysDept1.getDeptId() + "=======");
-            }*/
-            //System.out.print(sysDeptList.size() + "=====" + i);
+           /* StringBuffer sb = new StringBuffer();
 
-            if (StringUtils.isNotEmpty(sysDocument1.getShareUserName()) && StringUtils.isNotEmpty(sysDocument1.getShareDeptName())) {
+            if (StringUtils.isNotEmpty(sysDocument1.getShareDeptId())) {
+                for (String string : sysDocument1.getShareUserId().split(",")) {
+                    SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
+                    if (StringUtils.isNotNull(sysUser)) {
+                        if (StringUtils.isNotEmpty(sysUser.getDept().getDeptName())) {
+                            if (sysDocument1.getShareDeptName().contains(sysUser.getDept().getDeptName())) {
+                                sb.append(sysUserService.selectUserById(Long.valueOf(string)).getDept().getDeptName()).append(",");
+                            } else {
+                                sb.append(sysDocument1.getShareDeptName()).append(sysDocument1.getShareUserName());
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.print("小组成员：====" + StringUtils.removeSameString(sb.toString()) + "--------");*/
+
+
+            /*if (StringUtils.isNotEmpty(sysDocument1.getShareUserName()) && StringUtils.isNotEmpty(sysDocument1.getShareDeptName())) {
                 sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName() + "," + sysDocument1.getShareUserName());
             } else if (StringUtils.isEmpty(sysDocument1.getShareDeptName())) {
                 sysDocument1.setShareDeptAndUser(sysDocument1.getShareUserName());
             } else if (StringUtils.isEmpty(sysDocument1.getShareUserName())) {
                 sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName());
-            }/* else if (sysDeptList.size() > 0 && StringUtils.isNotEmpty(sysDocument1.getShareDeptId())) {
-                if (sysDeptList.size() == sysDocument1.getShareDeptId().split(",").length) {
-                    sysDocument1.setShareDeptAndUser("全公司");
-                }
             }*/
-
+            sysDocument1.setFileUrl(sysDocument1.getFileUrl().trim());
+            System.out.print("文件路径：========" + sysDocument1.getFileUrl());
         }
         return getDataTable(list);
     }
@@ -276,10 +283,16 @@ public class SysDocumentController extends BaseController {
         }
         sysDocument.setShareUserId(userIds.toString());
         sysDocument.setShareUserName(userNames.toString());
+
+        //获取各类型名称及其子集
+        String baseDir = "";
+        /*if (StringUtils.isNotEmpty(sysDocument.getSubsetType())) {
+            baseDir = "/" + sysDocument.getDocumentType() + "/" + sysDocument.getSubsetType();
+        } else {
+            baseDir = "/" + sysDocument.getDocumentType();
+        }*/
         try {
-            System.out.print("文件上传开始：=======");
-            String avatar = FileUploadUtils.upload(Global.getProfile() + "/document", file, false);
-            System.out.print("文件上传结束：=========" + avatar);
+            String avatar = FileUploadUtils.upload(Global.getProfile() + "/document" + baseDir, file, false);
             sysDocument.setFileUrl(avatar);
         } catch (IOException e) {
             e.printStackTrace();
@@ -329,6 +342,13 @@ public class SysDocumentController extends BaseController {
     @PostMapping("/remove/{fileId}")
     @ResponseBody
     public AjaxResult remove(@PathVariable("fileId") Long fileId) {
+        String path = sysDocumentService.selectSysDocumentById(fileId).getFileUrl();
+        if (StringUtils.isNotEmpty(path)) {
+            File file = new File(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + path);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
         return toAjax(sysDocumentService.deleteSysDocumentById(fileId));
     }
 
@@ -359,37 +379,6 @@ public class SysDocumentController extends BaseController {
     @GetMapping("/toList")
     public String toList() {
         return prefix + "/document";
-    }
-
-    @GetMapping("/officeToPdf/url")
-    public void officeToPdf(String url, HttpServletResponse response) {
-        try {
-            //获取当前地址下的文件
-            File file = new File("c:/" + url);
-            String oldSuffix = url.substring(url.lastIndexOf(".") + 1);
-            //默认转pdf,excel转html
-            String suffix = ".pdf";
-            if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix)) {
-                suffix = ".html";
-            }
-
-            //转换的文件存放位置
-            String newUrl = url.replace("." + oldSuffix, suffix);
-
-            File newFile = new File("c:/" + url);
-
-            converter.convert(file).to(newFile).execute();
-            ServletOutputStream outputStream = response.getOutputStream();
-            InputStream in = new FileInputStream(newFile);// 读取文件
-
-            in.close();
-            outputStream.close();
-            newFile.delete();
-        } catch (OfficeException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @GetMapping({"/queryAll"})
@@ -441,6 +430,38 @@ public class SysDocumentController extends BaseController {
             }
         }
         return getDataTable(list);
+    }
+
+    /**
+     * 统计下载次数
+     */
+    @PostMapping("/updateDownLoadCount")
+    @ResponseBody
+    public AjaxResult updateDownLoadCount(SysDocument sysDocument) {
+        SysDocument sysDocument1 = sysDocumentService.selectSysDocumentById(sysDocument.getFileId());
+        if (StringUtils.isNull(sysDocument1.getDownloadsCount())) {
+            sysDocument1.setDownloadsCount(1L);
+        } else {
+            sysDocument1.setDownloadsCount(Long.valueOf(String.valueOf(new BigDecimal(sysDocument1.getDownloadsCount()).add(new BigDecimal(1)))));
+        }
+        sysDocumentService.updateSysDocument(sysDocument1);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 统计预览次数
+     */
+    @PostMapping("/previewCount")
+    @ResponseBody
+    public AjaxResult previewCount(SysDocument sysDocument) {
+        SysDocument sysDocument1 = sysDocumentService.selectSysDocumentById(sysDocument.getFileId());
+        if (StringUtils.isNull(sysDocument1.getPreviewCount())) {
+            sysDocument1.setPreviewCount(1L);
+        } else {
+            sysDocument1.setPreviewCount(Long.valueOf(String.valueOf(new BigDecimal(sysDocument1.getPreviewCount()).add(new BigDecimal(1)))));
+        }
+        sysDocumentService.updateSysDocument(sysDocument1);
+        return AjaxResult.success();
     }
 
 }

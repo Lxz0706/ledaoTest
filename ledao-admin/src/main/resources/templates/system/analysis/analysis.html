@@ -28,7 +28,7 @@
             </form>
         </div>
         <div class="col-sm-12">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <div class="ibox-title">
                     <h5>客户标签分布情况</a></h5>
                 </div>
@@ -36,7 +36,9 @@
                     <div id="customerLableAnalysis"></div>
                 </div>
             </div>
-            <div class="col-sm-6">
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-12">
                 <div class="ibox-title">
                     <h5>地区分布情况</a></h5>
                 </div>
@@ -73,6 +75,7 @@
 <script src="https://gw.alipayobjects.com/os/lib/antv/g2/4.1.12/dist/g2.min.js"></script>
 <script th:inline="javascript">
     var prefix = ctx + "system/customer";
+    var height = 470;
     $(function () {
         cityAnalysis();
         customerLableAnalysis();
@@ -95,18 +98,6 @@
         customerForPersonByDeptId(data);
     }
 
-    function maxNum(result) {
-        var list = new Array();
-        for (var i in result) {
-            list.push(result[i].value);
-        }
-        list.sort(function (num1, num2) {
-            return num1 - num2;
-        })
-        var maxcnt = eval(list[list.length - 1]);
-        return maxcnt;
-    }
-
     //根据所属地区分析
     function cityAnalysis(data) {
         $.ajax({
@@ -127,44 +118,104 @@
                 const chart = new G2.Chart({
                     container: 'cityAnalysis',
                     autoFit: true,
-                    height: 500,
+                    height: height,
                 });
 
                 chart.data(result);
-                chart.scale({
-                    value: {
-                        max: maxcnt + 50,
-                        min: 0,
-                        alias: '总数'
-                    },
-                });
-                chart.axis('type', {
-                    title: null,
-                    tickLine: null,
-                    line: null,
+                chart.scale('value', {
+                    alias: '总数',
+                    nice: true
                 });
 
-                chart.axis('value', {
-                    label: null,
-                    title: {
-                        offset: 5,
+                chart.axis('type', {
+                    tickLine: {
+                        alignTick: false,
+                    }, label: {
                         style: {
                             fontSize: 13,
-                        },
-                    },
+                        }
+                    }
                 });
-                chart.legend(false);
-                chart.coordinate().transpose();
-                chart.interval().position('type*value').size(15).color('value', '#76C893')
-                    .label('value', {
-                        style: {
-                            fontSize: 13,
-                            fontWeight: 'bold',
-                        },
-                        offset: 10,
-                    });
+                chart.axis('value', false);
+
+                chart.tooltip({
+                    showMarkers: true,
+                });
+
                 chart.interaction('element-active');
+
+                chart.legend(false);
+
+                chart.interval().position('type*value').color('value', '#76C893').size(15);
+                chart.interaction('active-region');
+
+                // 添加文本标注
+                result.forEach((item) => {
+                    chart
+                        .annotation()
+                        .text({
+                            position: [item.type, item.value],
+                            content: item.value,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: 12,
+                                textAlign: 'center',
+                            },
+                            offsetY: -30,
+                        })
+                        .text({
+                            position: [item.type, item.value],
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: 12,
+                                textAlign: 'center',
+                            },
+                            offsetY: -12,
+                        });
+                });
                 chart.render();
+
+                /* const chart = new G2.Chart({
+                     container: 'cityAnalysis',
+                     autoFit: true,
+                     height:height
+                 });
+
+                 chart.data(result);
+                 chart.scale({
+                     value: {
+                         max: maxcnt + 50,
+                         min: 0,
+                         alias: '总数'
+                     },
+                 });
+                 chart.axis('type', {
+                     title: null,
+                     tickLine: null,
+                     line: null,
+                 });
+
+                 chart.axis('value', {
+                     label: null,
+                     title: {
+                         offset: 5,
+                         style: {
+                             fontSize: 13,
+                         },
+                     },
+                 });
+                 chart.legend(false);
+                 chart.coordinate().transpose();
+                 chart.interval().position('type*value').size(15).color('value', '#76C893')
+                     .label('value', {
+                         style: {
+                             fontSize: 13,
+                             fontWeight: 'bold',
+                         },
+                         offset: 10,
+                     });
+                 chart.interaction('element-active');
+                 chart.render();*/
 
             }
         });
@@ -181,7 +232,7 @@
                 const chart = new G2.Chart({
                     container: 'customerLableAnalysis',
                     autoFit: true,
-                    height: 500,
+                    height: height,
                 });
 
                 chart.data(result);

@@ -110,6 +110,7 @@ public class SysZckController extends BaseController {
     public String selectZcbByAssetStatus(@PathVariable("id") Long id, @PathVariable("zcbId") Long zcbId, ModelMap modelMap) {
         modelMap.put("id", id);
         modelMap.put("zcbId", zcbId);
+        modelMap.put("projectName", sysZckService.selectSysZckById(id).getProjectName());
         return "system/zcb/zck/zckList";
     }
 

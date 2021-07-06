@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysDepartmentMapper">
+
+    <resultMap type="SysDepartment" id="SysDepartmentResult">
+        <result property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="pId" column="p_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="managerId" column="manager_id"/>
+        <result property="managerName" column="manager_name"/>
+        <result property="remarks" column="remarks"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="ancestors" column="ancestors"/>
+    </resultMap>
+
+    <sql id="selectSysDepartmentVo">
+        select department_id, department_name, p_id, order_num, manager_id, manager_name, remarks, status, del_flag, create_by, create_time,
+        update_by, update_time,ancestors from sys_department
+    </sql>
+
+    <select id="selectSysDepartmentList" parameterType="SysDepartment" resultMap="SysDepartmentResult">
+        <include refid="selectSysDepartmentVo"/>
+        <where>
+            del_flag = '0'
+            <if test="departmentName != null  and departmentName != ''">and department_name like concat('%',
+                #{departmentName}, '%')
+            </if>
+            <if test="pId != null ">and p_id = #{pId}</if>
+            <if test="orderNum != null ">and order_num = #{orderNum}</if>
+            <if test="managerId != null ">and manager_id = #{managerId}</if>
+            <if test="managerName != null  and managerName != ''">and manager_name like concat('%', #{managerName},
+                '%')
+            </if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+        order by p_id,order_num
+    </select>
+
+    <select id="selectSysDepartmentById" parameterType="Long" resultMap="SysDepartmentResult">
+    select t1.department_id, t1.department_name, t1.p_id, t1.order_num, t1.manager_id,
+        t1.manager_name, t1.remarks, t1.status, t1.del_flag, t1.create_by, t1.create_time,
+        t1.update_by, t1.update_time,t1.ancestors,(SELECT department_name FROM sys_department
+        WHERE department_id=t1.p_id) as parentName from sys_department t1 WHERE t1.department_id = #{departmentId}
+    </select>
+
+    <insert id="insertSysDepartment" parameterType="SysDepartment" useGeneratedKeys="true" keyProperty="departmentId">
+        insert into sys_department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="departmentName != null and departmentName != ''">department_name,</if>
+            <if test="pId != null">p_id,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="managerId != null">manager_id,</if>
+            <if test="managerName != null">manager_name,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="ancestors != null and ancestors != ''">ancestors,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="departmentName != null and departmentName != ''">#{departmentName},</if>
+            <if test="pId != null">#{pId},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="managerId != null">#{managerId},</if>
+            <if test="managerName != null">#{managerName},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="ancestors != null and ancestors != ''">#{ancestors},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysDepartment" parameterType="SysDepartment">
+        update sys_department
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="departmentName != null and departmentName != ''">department_name = #{departmentName},</if>
+            <if test="pId != null">p_id = #{pId},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="managerId != null">manager_id = #{managerId},</if>
+            <if test="managerName != null">manager_name = #{managerName},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="ancestors != null and ancestors != ''">ancestors = #{ancestors},</if>
+        </trim>
+        where department_id = #{departmentId}
+    </update>
+
+    <delete id="deleteSysDepartmentById" parameterType="Long">
+        update sys_department set del_flag='2' where department_id = #{departmentId}
+    </delete>
+
+    <delete id="deleteSysDepartmentByIds" parameterType="String">
+        update sys_department set del_flag='2' where department_id in
+        <foreach item="departmentId" collection="array" open="(" separator="," close=")">
+            #{departmentId}
+        </foreach>
+    </delete>
+
+
+    <select id="checkDeptNameUnique" resultMap="SysDepartmentResult">
+        <include refid="selectSysDepartmentVo"/>
+        where department_name=#{departmentName} and p_id = #{pId} and del_flag = '0'
+    </select>
+
+    <update id="updateDeptStatus" parameterType="SysDepartment">
+        update sys_department
+        <set>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where department_id in (${ancestors})
+    </update>
+
+    <update id="updateDeptChildren" parameterType="java.util.List">
+        update sys_department set ancestors =
+        <foreach collection="sysDepartments" item="item" index="index"
+                 separator=" " open="case department_id" close="end">
+            when #{item.departmentId} then #{item.ancestors}
+        </foreach>
+        where department_id in
+        <foreach collection="sysDepartments" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{item.departmentId}
+        </foreach>
+    </update>
+
+    <select id="selectChildrenDepartmentById" parameterType="Long" resultMap="SysDepartmentResult">
+		select department_id, department_name, p_id, order_num, manager_id, manager_name, remarks, status, del_flag, create_by, create_time,
+        update_by, update_time,ancestors from sys_department where find_in_set(#{departmentId}, ancestors)
+	</select>
+
+    <select id="selectDepartmentByPId" parameterType="Long" resultMap="SysDepartmentResult">
+       SELECT * FROM(
+            SELECT * FROM sys_department where p_id > 0 GROUP BY department_id
+             ORDER BY p_id, department_id DESC
+         ) realname_sorted,
+          (SELECT @pv := 1) initialisation
+          WHERE (FIND_IN_SET(p_id,@pv)>0 And @pv := concat(@pv, ',', department_id)) AND del_flag='0' AND `status`='0'
+    </select>
+
+</mapper>

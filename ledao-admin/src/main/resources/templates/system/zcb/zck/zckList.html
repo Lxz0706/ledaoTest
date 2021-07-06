@@ -7,6 +7,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input id="projectName" th:value="*{projectName}" type="hidden">
             <form id="formId">
                 <input type="hidden" id="id" name="id" th:value="*{id}">
                 <input type="hidden" id="zcbId" name="zcbId" th:value="*{zcbId}">
@@ -26,6 +27,9 @@
             </a>
             <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:zck:export">
                 <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:zck:list">
+                <i class="fa fa-backward"></i> 返回
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -75,7 +79,7 @@
                     field: 'principalBalance',
                     title: '本金余额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -115,14 +119,14 @@
                     field: 'landUnitPrice',
                     title: '土地单价',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'otherCollateralUnitPrice',
                     title: '其它抵置押物单价',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -130,7 +134,7 @@
                     title: '总价',
                     sortable: true,
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -138,7 +142,7 @@
                     title: '盖帽值',
                     sortable: true,
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -201,6 +205,11 @@
                 window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
             }
         })
+    }
+
+    function back() {
+        var url = ctx + 'system/zcb/detail/' + $("#zcbId").val();
+        $.modal.parentTab($("#projectName").val() + "列表", url);
     }
 </script>
 </body>

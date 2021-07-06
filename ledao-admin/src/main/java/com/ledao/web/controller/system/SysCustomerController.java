@@ -1,33 +1,23 @@
 package com.ledao.web.controller.system;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.annotation.Log;
-import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.common.core.page.PageDao;
 import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.common.utils.ListUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
-import com.mysql.cj.xdevapi.JsonArray;
-import org.apache.fop.fo.FObj;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import oshi.util.platform.mac.SysctlUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -374,16 +364,16 @@ public class SysCustomerController extends BaseController {
         }
         List<SysItem> sysItemList = sysItemService.selectItemByCustomerId(sysCustomer.getCustomerId());
         for (SysItem sysItem : sysItemList) {
-            sysItem.setShareUserId(sysCustomer.getShareUserId());
-            sysItem.setShareUserName(sysCustomer.getShareUserName());
+            sysItem.setShareUserId(sysItem.getShareUserId() + "," + sysCustomer.getShareUserId());
+            sysItem.setShareUserName(sysItem.getShareUserName() + "," + sysCustomer.getShareUserName());
             sysItemService.updateSysItem(sysItem);
         }
         SysPcustomer sysPcustomer = new SysPcustomer();
         sysPcustomer.setCustomerId(sysCustomer.getCustomerId().toString());
         List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectSysPcustomerList(sysPcustomer);
         for (SysPcustomer sysPcustomer1 : sysPcustomerList) {
-            sysPcustomer1.setShareUserId(sysCustomer.getShareUserId());
-            sysPcustomer1.setShareUserName(sysCustomer.getShareUserName());
+            sysPcustomer1.setShareUserId(sysPcustomer1.getShareUserId() + "," + sysCustomer.getShareUserId());
+            sysPcustomer1.setShareUserName(sysPcustomer1.getShareUserName() + "," + sysCustomer.getShareUserName());
             sysPcustomerService.updateSysPcustomer(sysPcustomer1);
         }
 
@@ -668,7 +658,7 @@ public class SysCustomerController extends BaseController {
         JSONArray jsonArray = new JSONArray();
         for (SysCustomer sysCustomer1 : sysCustomerList) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("type", sysCustomer1.getCity());
+            jsonObject.put("type", sysCustomer1.getCity().substring(0,2));
             jsonObject.put("value", sysCustomer1.getCityCount());
             jsonArray.add(jsonObject);
         }
@@ -748,7 +738,7 @@ public class SysCustomerController extends BaseController {
     @ResponseBody
     public String selectSysCustomerByDeptId(SysCustomer sysCustomer) {
         JSONArray jsonArray = new JSONArray();
-       // PageHelper.getLocalPage().setCount(false);
+        // PageHelper.getLocalPage().setCount(false);
         List<SysCustomer> sysCustomerList = sysCustomerService.selectSysCustomerByParam(sysCustomer, "dept");
 
         for (SysCustomer sysCustomer1 : sysCustomerList) {

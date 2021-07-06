@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.dao.Ztree;
 import com.ledao.common.utils.StringUtils;
@@ -21,15 +19,17 @@ import com.ledao.system.dao.SysUser;
 import com.ledao.system.mapper.SysMenuMapper;
 import com.ledao.system.mapper.SysRoleMenuMapper;
 import com.ledao.system.service.ISysMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 菜单 业务层处理
  *
- * @author lxz
+ * @author ruoyi
  */
 @Service
 public class SysMenuServiceImpl implements ISysMenuService {
-    public static final String PREMISSION_STRING = "perms[\"{0}\"]" ;
+    public static final String PREMISSION_STRING = "perms[\"{0}\"]";
 
     @Autowired
     private SysMenuMapper menuMapper;
@@ -313,12 +313,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
         t.setChildren(childList);
         for (SysMenu tChild : childList) {
             if (hasChild(list, tChild)) {
-                // 判断是否有子节点
-                Iterator<SysMenu> it = childList.iterator();
-                while (it.hasNext()) {
-                    SysMenu n = (SysMenu) it.next();
-                    recursionFn(list, n);
-                }
+                recursionFn(list, tChild);
             }
         }
     }

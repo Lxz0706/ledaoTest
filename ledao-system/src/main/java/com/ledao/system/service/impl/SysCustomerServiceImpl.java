@@ -102,15 +102,15 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
      */
     @Override
     public String checkPhoneUnique(SysCustomer sysCustomer) {
-        for (String string : sysCustomer.getContactNumber().split(",")) {
+        //for (String string : sysCustomer.getContactNumber().split(",")) {
             Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
             SysCustomer sysCustomer1 = new SysCustomer();
-            sysCustomer1.setContactNumber(string);
+            sysCustomer1.setContactNumber(sysCustomer.getContactNumber());
             SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer1);
             if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
                 return UserConstants.USER_PHONE_NOT_UNIQUE;
             }
-        }
+       // }
         return UserConstants.USER_PHONE_UNIQUE;
     }
 
@@ -124,7 +124,6 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     public String checkWeChatNumberUnique(SysCustomer sysCustomer) {
 
        // for (String string : sysCustomer.getWeChatNumber().split(",")) {
-            System.out.print("微信号：======"+sysCustomer.getWeChatNumber().split(",").length);
             Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
             SysCustomer sysCustomer1 = new SysCustomer();
             sysCustomer1.setWeChatNumber(sysCustomer.getWeChatNumber());

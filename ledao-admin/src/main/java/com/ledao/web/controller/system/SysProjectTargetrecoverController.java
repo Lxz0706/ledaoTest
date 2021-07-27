@@ -3,6 +3,7 @@ package com.ledao.web.controller.system;
 import java.util.List;
 
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.service.ISysProjectmanagentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,9 @@ public class SysProjectTargetrecoverController extends BaseController {
 
     @Autowired
     private ISysProjectTargetrecoverService sysProjectTargetrecoverService;
+
+    @Autowired
+    private ISysProjectmanagentService sysProjectmanagentService;
 
     @RequiresPermissions("system:targetrecover:view")
     @GetMapping()
@@ -124,6 +128,7 @@ public class SysProjectTargetrecoverController extends BaseController {
     @GetMapping("/projectTargetRecoverList/{projectManagementId}")
     public String selectProjectTargetRecoverListByProjectId(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
+        modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectManagementId)).getProjectType());
         return "system/targetrecover/targetrecover";
     }
 }

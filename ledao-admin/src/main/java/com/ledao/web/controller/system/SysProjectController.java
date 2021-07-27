@@ -601,8 +601,8 @@ public class SysProjectController extends BaseController {
      */
     @RequiresPermissions("system:project:detail")
     @Log(title = "项目管理", businessType = BusinessType.DETAIL)
-    @GetMapping("/detail/{id}/{ids}")
-    public String detail(@PathVariable("id") Long id, @PathVariable("ids") Long ids, ModelMap mmap) {
+    @GetMapping("/detail/{id}/{ids}/{pId}")
+    public String detail(@PathVariable("id") Long id, @PathVariable("ids") Long ids, @PathVariable("pId") Long pId, ModelMap mmap) {
         String url = "";
         DecimalFormat decimalFormat = new DecimalFormat("###,###.00");
         SysProject sysProject = sysProjectService.selectSysProjectById(id);
@@ -639,6 +639,8 @@ public class SysProjectController extends BaseController {
                 sysProject.setIsCreate("true");
             }
         }
+        sysProject.setProjectZckName(sysProjectZckService.selectSysProjectZckById(sysProject.getProjectZckId()).getZckName());
+        sysProject.setpId(pId);
         mmap.put("sysProject", sysProject);
 
         if (1 == ids) {

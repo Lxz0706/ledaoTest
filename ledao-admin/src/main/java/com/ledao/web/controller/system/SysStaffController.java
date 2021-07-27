@@ -8,6 +8,7 @@ import java.util.List;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.framework.util.ShiroUtils;
 import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.SysDepartment;
 import com.ledao.system.dao.SysUser;
@@ -95,6 +96,7 @@ public class SysStaffController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysStaff sysStaff) {
+        sysStaff.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysStaffService.insertSysStaff(sysStaff));
     }
 
@@ -116,17 +118,16 @@ public class SysStaffController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysStaff sysStaff) {
-
         if ("1".equals(sysStaff.getStatus())) {
             SysDepartment sysDepartment = new SysDepartment();
-            sysDepartment.setDepartmentName("离职人员");
+            sysDepartment.setDepartmentName("离职");
             List<SysDepartment> sysDepartmentList = sysDepartmentService.selectSysDepartmentList(sysDepartment);
-            sysStaff.setDepartmentId(sysDepartmentList.get(0).getDepartmentId());
-            sysStaff.setDepartmentName(sysDepartmentList.get(0).getDepartmentName());
+            if (sysDepartmentList.size() > 0) {
+                sysStaff.setDepartmentId(sysDepartmentList.get(0).getDepartmentId());
+                sysStaff.setDepartmentName(sysDepartmentList.get(0).getDepartmentName());
+            }
         }
-        /*if (StringUtils.isNull(sysStaff.getLeaveDate())) {
-            sysStaff.setLeaveDate(new Date());
-        }*/
+        sysStaff.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(sysStaffService.updateSysStaff(sysStaff));
     }
 
@@ -151,13 +152,12 @@ public class SysStaffController extends BaseController {
     public AjaxResult changeStatus(SysStaff sysStaff) {
         if ("1".equals(sysStaff.getStatus())) {
             SysDepartment sysDepartment = new SysDepartment();
-            sysDepartment.setDepartmentName("离职人员");
+            sysDepartment.setDepartmentName("离职");
             List<SysDepartment> sysDepartmentList = sysDepartmentService.selectSysDepartmentList(sysDepartment);
-            sysStaff.setDepartmentId(sysDepartmentList.get(0).getDepartmentId());
-            sysStaff.setDepartmentName(sysDepartmentList.get(0).getDepartmentName());
-           // sysStaff.setLeaveDate(new Date());
-        } else {
-            sysStaff.setLeaveDate(null);
+            if (sysDepartmentList.size() > 0) {
+                sysStaff.setDepartmentId(sysDepartmentList.get(0).getDepartmentId());
+                sysStaff.setDepartmentName(sysDepartmentList.get(0).getDepartmentName());
+            }
         }
         return toAjax(sysStaffService.changeStatus(sysStaff));
     }
@@ -230,4 +230,36 @@ public class SysStaffController extends BaseController {
         return jsonArray.toString();
     }
 
+    /**
+     * 查看员工详情
+     *
+     * @param staffId
+     * @param modelMap
+     * @return
+     */
+    @GetMapping("/detail/{staffId}")
+    public String detail(@PathVariable("staffId") Long staffId, ModelMap modelMap) {
+        SysStaff sysStaff = sysStaffService.selectSysStaffById(staffId);
+        if ("0".equals(sysStaff.getStatus())) {
+            sysStaff.setStatus("正常");
+        } else {
+            sysStaff.setStatus("停用");
+        }
+        modelMap.put("sysStaff", sysStaff);
+        return prefix + "/detail";
+    }
+
+    @PostMapping("/selectDepartment")
+    @ResponseBody
+    public AjaxResult selectDepartment() {
+        SysDepartment sysDepartment = new SysDepartment();
+        sysDepartment.setDepartmentName("离职");
+        List<SysDepartment> sysDepartmentList = sysDepartmentService.selectSysDepartmentList(sysDepartment);
+        SysDepartment sysDepartment1 = new SysDepartment();
+        if (sysDepartmentList.size() > 0) {
+            sysDepartment1.setDepartmentId(sysDepartmentList.get(0).getDepartmentId());
+            sysDepartment1.setDepartmentName(sysDepartmentList.get(0).getDepartmentName());
+        }
+        return AjaxResult.success(sysDepartment1);
+    }
 }

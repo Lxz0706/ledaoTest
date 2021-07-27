@@ -5,6 +5,7 @@ import java.util.List;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysProjectUncollectedMoney;
+import com.ledao.system.service.ISysProjectmanagentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,9 @@ public class SysProjectRecoveredController extends BaseController {
 
     @Autowired
     private ISysProjectRecoveredService sysProjectRecoveredService;
+
+    @Autowired
+    private ISysProjectmanagentService sysProjectmanagentService;
 
     @RequiresPermissions("system:recovered:view")
     @GetMapping()
@@ -131,6 +135,7 @@ public class SysProjectRecoveredController extends BaseController {
     @GetMapping("/recoveredList/{projectManagementId}")
     public String selectRecoveredListByProjectId(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
+        modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectManagementId)).getProjectType());
         return "system/recovered/recovered";
     }
 

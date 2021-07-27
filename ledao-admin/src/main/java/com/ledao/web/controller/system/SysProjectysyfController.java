@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.service.ISysProjectmanagentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,9 @@ public class SysProjectysyfController extends BaseController {
 
     @Autowired
     private ISysProjectysyfService sysProjectysyfService;
+
+    @Autowired
+    private ISysProjectmanagentService sysProjectmanagentService;
 
     @RequiresPermissions("system:projectysyf:view")
     @GetMapping()
@@ -129,6 +133,7 @@ public class SysProjectysyfController extends BaseController {
     @GetMapping("/projectysyfList/{projectManagementId}")
     public String selectProjectYsyfListByProjectId(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
+        modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectManagementId)).getProjectType());
         return "system/projectysyf/projectysyf";
     }
 

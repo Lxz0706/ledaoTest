@@ -216,6 +216,17 @@ public class SysRoleController extends BaseController {
     @ResponseBody
     public TableDataInfo allocatedList(SysUser user) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        user.setFormalFlag("0");
+                    }
+                }
+            }
+        }
         List<SysUser> list = userService.selectAllocatedList(user);
         return getDataTable(list);
     }
@@ -257,6 +268,17 @@ public class SysRoleController extends BaseController {
     @ResponseBody
     public TableDataInfo unallocatedList(SysUser user) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        user.setFormalFlag("0");
+                    }
+                }
+            }
+        }
         List<SysUser> list = userService.selectUnallocatedList(user);
         return getDataTable(list);
     }

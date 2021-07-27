@@ -524,6 +524,8 @@ public class SysProject extends BaseEntity {
      */
     private Long projectTotalCount;
 
+    private Long pId;
+
     public Long getProjectId() {
         return projectId;
     }
@@ -1250,6 +1252,14 @@ public class SysProject extends BaseEntity {
 
     public void setProjectTotalCount(Long projectTotalCount) {
         this.projectTotalCount = projectTotalCount;
+    }
+
+    public Long getpId() {
+        return pId;
+    }
+
+    public void setpId(Long pId) {
+        this.pId = pId;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectMortgage;
 import com.ledao.system.service.ISysProjectService;
+import com.ledao.system.service.ISysProjectZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,9 @@ public class SysProjectContractController extends BaseController {
     @Autowired
     private ISysProjectService sysProjectService;
 
+    @Autowired
+    private ISysProjectZckService sysProjectZckService;
+
 
     @RequiresPermissions("system:contract:list")
     @GetMapping({"/contractList/{projectId}"})
@@ -60,6 +64,8 @@ public class SysProjectContractController extends BaseController {
         for (SysProject sysproject : list) {
             sb1.append(sysproject.getProjectId()).append(",");
         }
+        modelMap.put("projectZckId", sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId());
+        modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId()).getZckName());
         modelMap.put("projectIds", sb1.deleteCharAt(sb1.length() - 1).toString());
         return "system/contract/contract";
     }

@@ -63,7 +63,7 @@
                 #{shareDeptName}, '%')
             </if>
         </where>
-        ORDER BY  read_flag DESC,create_time
+        ORDER BY  read_flag DESC,create_time desc
     </select>
 
     <select id="selectNoticeLists" parameterType="SysNotice" resultMap="SysNoticeResult">

@@ -35,10 +35,10 @@
             <if test="fundType != null  and fundType != ''">and fund_type = #{fundType}</if>
             <if test="time != null ">and time = #{time}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
             </if>
             <if test="amountMoney != null ">and amount_money = #{amountMoney}</if>
             <if test="state != null  and state != ''">and state = #{state}</if>

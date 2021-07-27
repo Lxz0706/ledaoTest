@@ -480,20 +480,46 @@
 
     //人员树形选择器
     function selectShareUser() {
-        var url = ctx + "system/customer/selectShareUser?loginName=" + $("#shareUserId").val() + "&userName=" + $("#shareUserName").val();
-        $.modal.open("人员选择", url, '850', '600');
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        var url = ctx + "system/customer/selectShareUser?userId=" + $("#shareUserId").val() + "&userName=" + $("#shareUserName").val();
+        $.modal.open("人员选择", url, width, height * 0.8);
     }
 
     function getParentUser(row) {
         var userNames = "";
         var userIds = "";
         for (var i = 0; i < row.length; i++) {
-            userNames = row[i].userName + "," + userNames;
-            userIds = row[i].userId + "," + userIds;
+            $.ajax({
+                url: prefix + "/selectUserById",
+                data: {'userId': row[i]},
+                type: 'post',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if ($.common.isNotEmpty(result.data.userName) && undefined !== result.data.userName) {
+                        userNames = result.data.userName + "," + userNames;
+                        userIds = result.data.userId + "," + userIds;
+                    }
+                }
+            })
         }
-        $("#shareUserId").val(userIds.substr(0, userIds.length - 1));
-        $("#shareUserName").val(userNames.substr(0, userNames.length - 1));
+        $("#shareUserId").val(distinct(userIds.substr(0, userIds.length - 1)));
+        $("#shareUserName").val(distinct(userNames.substr(0, userNames.length - 1)));
         layer.close(layer.index);
+    }
+
+    function distinct(s) {
+        var arr = s.split(",");
+        var x = new Set(arr);
+        var distinctResult = "";
+        x.forEach(function (element, sameElement, x) {
+            distinctResult += element + ",";
+        });
+        if (distinctResult != "") {
+            distinctResult = distinctResult.substring(0, distinctResult.length - 1);
+        }
+        return distinctResult;
     }
 
 </script>

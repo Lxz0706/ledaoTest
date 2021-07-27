@@ -352,7 +352,6 @@ public class SysProjectmanagentController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysProjectmanagent sysProjectmanagent) {
-        logger.info(sysProjectmanagent.getProjectManagementId() + "======" + sysProjectmanagent.getProjectType() + "-------" + sysProjectmanagent.getInvestmentAmount() + "=====" + sysProjectmanagent.getServiceFee());
         return toAjax(sysProjectmanagentService.updateSysProjectmanagent(sysProjectmanagent));
     }
 

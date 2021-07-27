@@ -32,7 +32,7 @@ public class SysCustomer extends BaseEntity {
     /**
      * 客户名称
      */
-    @Excel(name = "所属机构",width = 40)
+    @Excel(name = "所属机构", width = 40)
     private String customerName;
 
     /**
@@ -62,8 +62,14 @@ public class SysCustomer extends BaseEntity {
     /*
      * 客户标签
      * */
-    @Excel(name = "客户标签")
+    @Excel(name = "客户标签",width = 30)
     private String customerLable;
+
+    /*
+     * 关联项目
+     * */
+    @Excel(name = "合作项目",width = 60)
+    private String projectName;
 
     /**
      * 创建者
@@ -126,11 +132,6 @@ public class SysCustomer extends BaseEntity {
      */
     private String delFlag;
 
-    /*
-     * 关联项目
-     * */
-    private String projectName;
-
     /**
      * 所属部门ID
      */
@@ -140,7 +141,7 @@ public class SysCustomer extends BaseEntity {
     /**
      * 原因
      */
-    @Excel(name = "原因",width = 40)
+    @Excel(name = "原因", width = 40)
     private String reason;
 
 

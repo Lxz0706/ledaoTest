@@ -7,6 +7,8 @@
      <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
+                <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
+                <input id="zckName" th:value="*{projectZckName}" type="hidden">
                 <form id="formId">
                     <div class="select-list">
                         <input type="hidden" name="projectIds" id="projectId" th:value="*{projectIds}"/>
@@ -44,6 +46,9 @@
                 <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:pledge:export">
                     <i class="fa fa-download"></i> 导出
                 </a>-->
+                <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+                    <i class="fa fa-backward"></i> 返回
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -68,39 +73,39 @@
                     checkbox: true
                 },
                 {
-                    field: 'pledgeId', 
+                    field: 'pledgeId',
                     title: 'ID',
                     visible: false
                 },
                 {
-                    field: 'pledgeType', 
+                    field: 'pledgeType',
                     title: '质押物类型'
                 },
                 {
-                    field: 'pledgeContractNo', 
+                    field: 'pledgeContractNo',
                     title: '质押合同编号'
                 },
                 {
-                    field: 'pledgor', 
+                    field: 'pledgor',
                     title: '质押人'
                 },
                 {
-                    field: 'pledgeAmount', 
+                    field: 'pledgeAmount',
                     title: '质押金额',
                     formatter:function (value,row,index) {
                         return $.operate.numberFormatter(value,3,'.',',');
                     }
                 },
                 {
-                    field: 'pledgeCategory', 
+                    field: 'pledgeCategory',
                     title: '质押类型'
                 },
                 {
-                    field: 'maximumAmountTime', 
+                    field: 'maximumAmountTime',
                     title: '最高额确定期间'
                 },
                 {
-                    field: 'certificateNumber', 
+                    field: 'certificateNumber',
                     title: '证书编号'
                 }/*,
                 {
@@ -116,6 +121,12 @@
             };
             $.table.init(options);
         });
+
+        function back() {
+            var projectZckId = $("#projectZckId").val();
+            var url = ctx + 'system/projectZck/projectList/' + projectZckId;
+            $.modal.parentTab($("#zckName").val() + "列表", url);
+        }
     </script>
 </body>
 </html>

@@ -24,6 +24,9 @@
                shiro:hasPermission="system:projectmanagent:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:projectmanagent:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -129,32 +132,32 @@
 
     function progress(id) {
         var url = ctx + 'system/progress/progressLists/' + id + "/N";
-        $.modal.openTab("进度情况列表", url);
+        $.modal.parentTab("进度情况列表", url);
     }
 
     function detail(id) {
         var url = prefix + '/detail/' + id;
-        $.modal.openTab("项目流转表详情", url);
+        $.modal.parentTab("项目流转表详情", url);
     }
 
     function money1(id) {
         var url = ctx + 'system/projectysyf/projectysyfList/' + id;
-        $.modal.openTab("已支付金额列表", url);
+        $.modal.parentTab("已支付金额列表", url);
     }
 
     function money2(id) {
         var url = ctx + 'system/recovered/recoveredList/' + id;
-        $.modal.openTab("已回收金额列表", url);
+        $.modal.parentTab("已回收金额列表", url);
     }
 
     function money3(id) {
         var url = ctx + 'system/money/moneyList/' + id;
-        $.modal.openTab("结算情况列表", url);
+        $.modal.parentTab("结算情况列表", url);
     }
 
     function money4(id) {
         var url = ctx + 'system/targetrecover/projectTargetRecoverList/' + id;
-        $.modal.openTab("目标回收金额列表", url);
+        $.modal.parentTab("目标回收金额列表", url);
     }
 
     function add() {
@@ -165,6 +168,12 @@
     function toThou(str) {
         var reg = /(\d)(?=(?:\d{3})+\b)/g
         return str.replace(reg, '$1,')
+    }
+
+    function back() {
+        // var url = ctx + "system/projectmanagent/selectSysProjectmanagentListByProjectType/" + $("#projectType").val();
+        var url = ctx + "system/projectmanagent";
+        $.modal.parentTab("投后部项目管理", url);
     }
 
 </script>

@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -157,7 +158,7 @@ public class SysDeptController extends BaseController {
     @GetMapping(value = {"/selectDeptTreeForDocument", "/selectDeptTreeForDocument/{excludeId}"})
     public String selectDeptTreeForDocument(String deptId,
                                             @PathVariable(value = "excludeId", required = false) String excludeId, String shareDeptIds, ModelMap mmap) {
-        if(StringUtils.isNotEmpty(deptId)){
+        if (StringUtils.isNotEmpty(deptId)) {
             mmap.put("dept", deptService.selectDeptById(Long.valueOf(deptId)));
         }
         mmap.put("excludeId", excludeId);
@@ -171,7 +172,19 @@ public class SysDeptController extends BaseController {
     @GetMapping("/treeData")
     @ResponseBody
     public List<Ztree> treeData() {
-        List<Ztree> ztrees = deptService.selectDeptTree(new SysDept());
+        SysDept sysDept = new SysDept();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        sysDept.setFormalFlag("0");
+                    }
+                }
+            }
+        }
+        List<Ztree> ztrees = deptService.selectDeptTree(sysDept);
         return ztrees;
     }
 
@@ -183,6 +196,17 @@ public class SysDeptController extends BaseController {
     public List<Ztree> treeDataExcludeChild(@PathVariable(value = "excludeId", required = false) Long excludeId) {
         SysDept dept = new SysDept();
         dept.setDeptId(excludeId);
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        dept.setFormalFlag("0");
+                    }
+                }
+            }
+        }
         List<Ztree> ztrees = deptService.selectDeptTreeExcludeChild(dept);
         return ztrees;
     }

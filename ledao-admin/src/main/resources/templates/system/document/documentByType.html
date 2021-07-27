@@ -112,23 +112,23 @@
                     align: 'left',
                     formatter: function (value, row, index) {
                         var actions = [];
+                        var fileType = row.fileType.toLowerCase();
                         if ("Y" == row.isAdmin) {
                             actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         }
                         if ("Y" == row.downloadableFlag) {
-                            var fileType = row.fileType.toLowerCase();
                             actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
-                            if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
+                        }
+                        if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
                                 || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
-                            } else if ('pdf' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
-                            } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
-                                || 'png' == fileType || 'webp' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>预览</a>');
-                            } else if ('mp4' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
-                            }
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('pdf' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
+                            || 'png' == fileType || 'webp' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('mp4' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
                         }
                         return actions.join('');
                     }
@@ -137,6 +137,18 @@
         $.table.init(options);
     });
 
+    function toPdf1(fileId, url) {
+        $.ajax({
+            url: prefix + '/previewCount',
+            data: {'fileId': fileId},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+            }
+        })
+    }
+
     function playVideo(fileId, url, type) {
         $.ajax({
             url: prefix + '/previewCount',
@@ -144,10 +156,10 @@
             type: 'post',
             dataType: 'json',
             success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
             }
         })
-        showVideo('<video controls="controls" autoplay="autoplay">\n' +
+        showVideo('<video controls="controls" autoplay="autoplay" height=\'100%\' width=\'100%\'>' +
             '  <source src="' + url + '" type="video/mp4" />\n' +
             '  <source src="' + url + '" type="video/ogg" />\n' +
             '  <source src="' + url + '" type="video/webm" />\n' +
@@ -158,12 +170,15 @@
         );
     }
 
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
     function showVideo(content) {
         layer.open({
             type: 1,
             title: false, //不显示标题栏
             shadeClose: true, //点击遮罩时关闭
-            area: ['400px', '230px'],
+            area: [width - 50 + "px", height - 50 + "px"],
             shade: 0.8,
             id: 'LAY_showImage_001', //设定一个id，防止重复弹出
             moveType: 1, //拖拽模式，0或者1
@@ -178,18 +193,57 @@
             type: 'post',
             dataType: 'json',
             success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
             }
         })
-        showImage('<img src="' + url + '" alt="x" width="400px" height="500px">');
+        var img = new Image();
+        img.src = url;
+        var height = img.height; // 原图片大小
+        var width = img.width; //原图片大小
+
+        var winHeight = $(window).height() - 80;  // 浏览器可视部分高度
+        var winWidth = $(window).width() - 100;  // 浏览器可视部分宽度
+
+        // 如果图片高度或者宽度大于限定的高度或者宽度则进行等比例尺寸压缩
+        if (height > winHeight || width > winWidth) {
+            // 1.原图片宽高比例 大于等于 图片框宽高比例
+            if (winWidth / winHeight <= width / height) {
+                width = winWidth;   //以框的宽度为标准
+                height = winWidth * (height / width);
+            }
+
+            // 2.原图片宽高比例 小于 图片框宽高比例
+            if (winWidth / winHeight > width / height) {
+                width = winHeight * (width / height);
+                height = winHeight;   //以框的高度为标准
+            }
+        }
+        var imgHtml = "<img src='" + img.src + "' width='" + width + "px' height='" + height + "px' />";
+        $.table.previewImg(url.split(','));
+        // showImage(imgHtml, width, height);
+        /*if (img.complete) {
+            console.log("12312312")
+            // 打印
+            showImage(imgHtml, width, height);
+            //showImage('<img src="' + url + '" alt="x" width="' + width + 'px" height="' + height + 'px">');
+        } else {
+            console.log("jyfdas")
+            // 加载完成执行
+            img.onload = function () {
+                console.log("asdasd")
+                // 打印
+                // showImage('<img src="' + url + '" alt="x">');
+                showImage('<img src="' + url + '" alt="x">', width, height);
+            };
+        }*/
     }
 
-    function showImage(content) {
+    function showImage(content, width, height) {
         layer.open({
             type: 1,
             title: false, //不显示标题栏
             shadeClose: true, //点击遮罩时关闭
-            area: ['auto', 'auto'],
+            area: [width + 'px', (height + 50) + 'px'],
             shade: 0.8,
             id: 'LAY_showImage_001', //设定一个id，防止重复弹出
             moveType: 1, //拖拽模式，0或者1
@@ -204,7 +258,7 @@
             type: 'post',
             dataType: 'json',
             success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
             }
         })
         window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
@@ -217,7 +271,7 @@
             type: 'post',
             dataType: 'json',
             success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", { silent: true });
+                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
             }
         })
         window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;

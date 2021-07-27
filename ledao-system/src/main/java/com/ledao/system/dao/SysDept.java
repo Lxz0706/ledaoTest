@@ -74,6 +74,11 @@ public class SysDept extends BaseEntity {
      */
     private String parentName;
 
+    /**
+     * 是否正式部门（0正式 1测试）
+     */
+    private String formalFlag;
+
     public Long getDeptId() {
         return deptId;
     }
@@ -176,6 +181,14 @@ public class SysDept extends BaseEntity {
         this.parentName = parentName;
     }
 
+    public String getFormalFlag() {
+        return formalFlag;
+    }
+
+    public void setFormalFlag(String formalFlag) {
+        this.formalFlag = formalFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -194,6 +207,7 @@ public class SysDept extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("formalFlag", getFormalFlag())
                 .toString();
     }
 }

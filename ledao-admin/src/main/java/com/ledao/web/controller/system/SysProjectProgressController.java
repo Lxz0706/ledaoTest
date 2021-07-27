@@ -8,6 +8,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectmanagent;
 import com.ledao.system.service.ISysProjectService;
+import com.ledao.system.service.ISysProjectZckService;
 import com.ledao.system.service.ISysProjectmanagentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ public class SysProjectProgressController extends BaseController {
     @Autowired
     private ISysProjectService sysProjectService;
 
+    @Autowired
+    private ISysProjectZckService sysProjectZckService;
+
     @RequiresPermissions("system:progress:view")
     @GetMapping()
     public String progress() {
@@ -65,6 +69,12 @@ public class SysProjectProgressController extends BaseController {
     public String selectProjectProgressByProjectIds(@PathVariable("projectManagementId") String projectManagementId, @PathVariable("project") String project, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
         modelMap.put("project", project);
+        if ("Y".equals(project)) {
+            modelMap.put("projectZckId", sysProjectService.selectSysProjectById(Long.valueOf(projectManagementId)).getProjectZckId());
+            modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectManagementId)).getProjectZckId()).getZckName());
+        }else{
+            modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectManagementId)).getProjectType());
+        }
         return "system/progress/progress";
     }
 
@@ -116,7 +126,7 @@ public class SysProjectProgressController extends BaseController {
         return util.exportExcel(list, "progress");
     }
 
-/*    *//**
+    /*    *//**
      * 新增【请填写功能名称】
      *//*
     @GetMapping("/add/{projectManagementId}")
@@ -130,7 +140,7 @@ public class SysProjectProgressController extends BaseController {
      * 新增【请填写功能名称】
      */
     @GetMapping("/adds/{projectManagementId}/{project}")
-    public String adds(@PathVariable("projectManagementId") String projectManagementId,@PathVariable("project") String project, ModelMap modelMap) {
+    public String adds(@PathVariable("projectManagementId") String projectManagementId, @PathVariable("project") String project, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
         modelMap.put("project", project);
         return prefix + "/add";

@@ -95,7 +95,8 @@
             <label class="col-sm-3 control-label is-required">员工状态：</label>
             <div class="col-sm-8">
                 <label class="toggle-switch switch-solid">
-                    <input type="checkbox" id="status" th:checked="${sysStaff.status == '0' ? true : false}">
+                    <input type="checkbox" id="status" th:checked="${sysStaff.status == '0' ? true : false}"
+                           onchange="statusChange()">
                     <span></span>
                 </label>
             </div>
@@ -179,17 +180,41 @@
             $("#departmentId").val(body.find('#treeId').val());
             $("#departmentName").val(body.find('#treeName').val());
             layer.close(index);
+            if ("已离职" == $("#departmentName").val()) {
+                $("#status").prop("checked", false);
+            } else {
+                $("#status").prop("checked", true);
+            }
         }
     }
 
     function accounteEntryDateChange() {
         var date = $("#accounteEntryDate").val();
         var newDate = new Date();
-        console.log(date + "====" + newDate);
         var a = moment(date);
         var b = moment(newDate);
         b.diff(a, "years");
         $("#secretaryLing").val(b.diff(a, "years"));
+    }
+
+    function statusChange() {
+        var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+        if ("1" == status) {
+            $.ajax({
+                url: prefix + "/selectDepartment",
+                type: 'post',
+                data: '',
+                dataType: 'json',
+                success: function (result) {
+                    $("#departmentId").val(result.data.departmentId);
+                    $("#departmentName").val(result.data.departmentName);
+                }
+            })
+        } else {
+            $.modal.msgError("请先修改所属部门");
+            selectDeptTree();
+            $("#status").prop("checked", false);
+        }
     }
 </script>
 </body>

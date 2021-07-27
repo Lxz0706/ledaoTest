@@ -52,38 +52,38 @@
             <if test="education != null  and education != ''">and education = #{education}</if>
             <if test="status != null  and status != ''">and status = #{status}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(u.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(u.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
             </if>
 
             <if test="params.beginBirthday != null and params.beginBirthday != ''"><!-- 开始时间检索 -->
-                AND date_format(birthday,'%y%m%d') &gt;= date_format(#{params.beginBirthday},'%y%m%d')
+                AND date_format(birthday,'%Y%m%d') &gt;= date_format(#{params.beginBirthday},'%Y%m%d')
             </if>
             <if test="params.endBirthday != null and params.endBirthday != ''"><!-- 结束时间检索 -->
-                AND date_format(birthday,'%y%m%d') &lt;= date_format(#{params.endBirthday},'%y%m%d')
+                AND date_format(birthday,'%Y%m%d') &lt;= date_format(#{params.endBirthday},'%Y%m%d')
             </if>
 
             <if test="params.beginEntryDate != null and params.beginEntryDate != ''"><!-- 开始时间检索 -->
-                AND date_format(entry_date,'%y%m%d') &gt;= date_format(#{params.beginEntryDate},'%y%m%d')
+                AND date_format(entry_date,'%Y%m%d') &gt;= date_format(#{params.beginEntryDate},'%Y%m%d')
             </if>
             <if test="params.endEntryDate != null and params.endEntryDate != ''"><!-- 结束时间检索 -->
-                AND date_format(entry_date,'%y%m%d') &lt;= date_format(#{params.endEntryDate},'%y%m%d')
+                AND date_format(entry_date,'%Y%m%d') &lt;= date_format(#{params.endEntryDate},'%Y%m%d')
             </if>
 
             <if test="params.beginLeaveDate != null and params.beginLeaveDate != ''"><!-- 开始时间检索 -->
-                AND date_format(leave_date,'%y%m%d') &gt;= date_format(#{params.beginLeaveDate},'%y%m%d')
+                AND date_format(leave_date,'%Y%m%d') &gt;= date_format(#{params.beginLeaveDate},'%Y%m%d')
             </if>
             <if test="params.endLeaveDate != null and params.endLeaveDate != ''"><!-- 结束时间检索 -->
-                AND date_format(leave_date,'%y%m%d') &lt;= date_format(#{params.endLeaveDate},'%y%m%d')
+                AND date_format(leave_date,'%Y%m%d') &lt;= date_format(#{params.endLeaveDate},'%Y%m%d')
             </if>
 
             <if test="params.beginAccounteEntryDate != null and params.AccounteEntryDate != ''"><!-- 开始时间检索 -->
-                AND date_format(accounte_entry_date,'%y%m%d') &gt;= date_format(#{params.AccounteEntryDate},'%y%m%d')
+                AND date_format(accounte_entry_date,'%Y%m%d') &gt;= date_format(#{params.AccounteEntryDate},'%Y%m%d')
             </if>
             <if test="params.endAccounteEntryDate != null and params.endAccounteEntryDate != ''"><!-- 结束时间检索 -->
-                AND date_format(accounte_entry_date,'%y%m%d') &lt;= date_format(#{params.endAccounteEntryDate},'%y%m%d')
+                AND date_format(accounte_entry_date,'%Y%m%d') &lt;= date_format(#{params.endAccounteEntryDate},'%Y%m%d')
             </if>
             <if test="secretaryLing != null ">and secretary_ling = #{secretaryLing}</if>
         </where>
@@ -187,13 +187,13 @@
                 (#{departmentId},ancestors) ))
             </if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(sys_staff.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(sys_staff.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(sys_staff.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(sys_staff.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
             </if>
         </where>
-        GROUP BY education ORDER BY educationCount DESC
+        GROUP BY education ORDER BY sys_dict_data.dict_sort DESC
     </select>
 
     <select id="selectStaffBySex" parameterType="SysStaff" resultMap="SysStaffResult">
@@ -209,10 +209,10 @@
                 (#{departmentId},ancestors) ))
             </if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(sys_staff.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(sys_staff.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(sys_staff.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(sys_staff.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
             </if>
         </where>
         GROUP BY sex
@@ -229,13 +229,13 @@
                 (#{departmentId},ancestors) ))
             </if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(sys_staff.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(sys_staff.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(sys_staff.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(sys_staff.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
             </if>
         </where>
-        GROUP BY secretary_ling ORDER BY secretaryLingCount asc
+        GROUP BY secretary_ling ORDER BY secretary_ling asc
     </select>
 
 </mapper>

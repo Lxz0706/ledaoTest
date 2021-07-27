@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('员工详细')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <table class="table table-striped">
+        <tr>
+            <td style="width: 20%!important;"><h5>员工姓名：</h5></td>
+            <td style="width: 80%!important;"><span th:text="${sysStaff.staffName}"/></td>
+        </tr>
+        <tr>
+            <td><h5>出生日期：</h5></td>
+            <td><span th:text="${#dates.format(sysStaff.birthday, 'yyyy-MM-dd')}"/></td>
+        </tr>
+        <tr>
+            <td><h5>性别：</h5></td>
+            <td><span th:text="${@dict.getLabel('sys_user_sex', sysStaff.sex)}"/></td>
+        </tr>
+        <tr>
+            <td><h5>原始入职日期：</h5></td>
+            <td><span th:text="${#dates.format(sysStaff.entryDate, 'yyyy-MM-dd')}"/></td>
+        </tr>
+        <tr>
+            <td><h5>核算入职日期：</h5></td>
+            <td><span th:text="${#dates.format(sysStaff.accounteEntryDate, 'yyyy-MM-dd')}"/></td>
+        </tr>
+        <tr>
+            <td><h5>司龄：</h5></td>
+            <td><span th:text="${sysStaff.secretaryLing}"/></td>
+        </tr>
+        <tr>
+            <td><h5>联系方式1：</h5></td>
+            <td><span th:text="${sysStaff.contact1}"/></td>
+        </tr>
+        <tr>
+            <td><h5>联系方式2：</h5></td>
+            <td><span th:text="${sysStaff.contact2}"/></td>
+        </tr>
+        <tr>
+            <td><h5>所属部门：</h5></td>
+            <td><span th:text="${sysStaff.departmentName}"/></td>
+        </tr>
+        <tr>
+            <td><h5>学历：</h5></td>
+            <td><span th:text="${@dict.getLabel('sys_staff_education', sysStaff.education)}"/></td>
+        </tr>
+        <tr>
+            <td><h5>员工状态：</h5></td>
+            <td><span th:text="${sysStaff.status}"/></td>
+        </tr>
+        <tr>
+            <td><h5>离职日期：</h5></td>
+            <td><span th:text="${#dates.format(sysStaff.leaveDate, 'yyyy-MM-dd')}"/></td>
+        </tr>
+    </table>
+</div>
+<th:block th:include="include :: footer"/>
+</body>
+</html>

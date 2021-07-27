@@ -7,6 +7,8 @@ import com.ledao.common.core.page.PageDao;
 import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysUserService;
 import org.activiti.engine.IdentityService;
@@ -88,6 +90,17 @@ public class ActIdUserController extends BaseController {
     @ResponseBody
     public TableDataInfo systemUserList(SysUser user) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        user.setFormalFlag("0");
+                    }
+                }
+            }
+        }
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }

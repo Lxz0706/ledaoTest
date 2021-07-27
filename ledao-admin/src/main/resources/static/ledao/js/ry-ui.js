@@ -72,6 +72,8 @@ var table = {
                 var options = $.extend(defaults, options);
                 table.options = options;
                 table.config[options.id] = options;
+                table.rememberSelectedIds[table.options.id] = table.options.checkedIds;
+                table.rememberSelecteds[table.options.id] = table.options.checkedList;
                 $.table.initEvent();
                 $('#' + options.id).bootstrapTable({
                     id: options.id,
@@ -132,6 +134,8 @@ var table = {
                     onLoadSuccess: $.table.onLoadSuccess,               // 当所有数据被加载时触发处理函数
                     exportOptions: options.exportOptions,               // 前端导出忽略列索引
                     detailFormatter: options.detailFormatter,           // 在行下面展示其他数据列表
+                    checkedList: options.checkedList,
+                    checkedIds: options.checkedIds,
                 });
             },
             // 获取实例ID，如存在多个返回#id1,#id2 delimeter分隔符
@@ -325,6 +329,21 @@ var table = {
                 } else {
                     return $.common.nullToStr(value);
                 }
+            },
+            // 传入value 图片地址数组
+            previewImg: function (value) {
+                var data = [];
+                for (var key of value) {
+                    var json = {};
+                    json.src = key;
+                    data.push(json);
+                }
+                layer.photos({
+                    photos: {
+                        "data": data
+                    },
+                    anim: 5 // 0-6的选择，指定弹出图片动画类型，默认随机
+                });
             },
             // 搜索-默认第一个form
             search: function (formId, tableId, data) {

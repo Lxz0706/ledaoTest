@@ -165,7 +165,9 @@
     //加载人员方法
     function loadUserList(deptId) {
         var deptId;
-        if ($.common.isNotEmpty($("#deptId").val())) {
+        if ($.common.isNotEmpty(deptId)) {
+            deptId = deptId;
+        } else {
             deptId = $("#deptId").val();
         }
         //清空当前待选择人员框列表

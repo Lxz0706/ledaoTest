@@ -1,144 +1,151 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('投后部项目管理合同本金列表')" />
+    <th:block th:include="include :: header('投后部项目管理合同本金列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <input type="hidden" name="projectIds" id="projectId" th:value="*{projectIds}"/>
-                            <!--<li>
-                                <label>本金：</label>
-                                <input type="text" name="capital"/>
-                            </li>
-                            <li class="select-time">
-                                <label>期内起始日：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>期内到期日：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEndTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEndTime]"/>
-                            </li>
-                            <li>
-                                <label>利率：</label>
-                                <input type="text" name="interestRate"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>-->
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
+            <input id="zckName" th:value="*{projectZckName}" type="hidden">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" name="projectIds" id="projectId" th:value="*{projectIds}"/>
+                        <!--<li>
+                            <label>本金：</label>
+                            <input type="text" name="capital"/>
+                        </li>
+                        <li class="select-time">
+                            <label>期内起始日：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartTime]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>期内到期日：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEndTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEndTime]"/>
+                        </li>
+                        <li>
+                            <label>利率：</label>
+                            <input type="text" name="interestRate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>-->
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:contract:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>-->
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:contract:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:contract:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:contract:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:contract:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>-->
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:contract:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:contract:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:contract:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:contract:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:contract:remove')}]];
-        var prefix = ctx + "system/contract";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:contract:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:contract:remove')}]];
+    var prefix = ctx + "system/contract";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "投后部项目管理合同本金",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "投后部项目管理合同本金",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field: 'contractId', 
+                    field: 'contractId',
                     title: 'ID',
                     visible: false
                 },
                 {
-                    field: 'projectId', 
+                    field: 'projectId',
                     title: '项目ID',
                     visible: false
                 },
                 {
-                    field: 'projectName', 
+                    field: 'projectName',
                     title: '项目名称'
                 },
                 {
-                    field: 'contractNo', 
+                    field: 'contractNo',
                     title: '合同编号'
                 },
                 {
-                    field: 'capital', 
+                    field: 'capital',
                     title: '本金',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
-                    field: 'startTime', 
+                    field: 'startTime',
                     title: '期内起始日'
                 },
                 {
-                    field: 'endTime', 
+                    field: 'endTime',
                     title: '期内到期日'
                 },
                 {
-                    field: 'interestRate', 
+                    field: 'interestRate',
                     title: '利率'
                 },
                 {
                     field: 'interest',
                     title: '期内利息',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'overdueInterest',
                     title: '逾期利息',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'compoundInterest',
                     title: '利息复利',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'totalInterest',
                     title: '总利息',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 }/*,
                 {
@@ -151,14 +158,20 @@
                         return actions.join('');
                     }
                 }*/]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        function add() {
-            var projectId=$("#projectId").val();
-            $.operate.add(projectId);
-        }
-    </script>
+    function add() {
+        var projectId = $("#projectId").val();
+        $.operate.add(projectId);
+    }
+
+    function back() {
+        var projectZckId = $("#projectZckId").val();
+        var url = ctx + 'system/projectZck/projectList/' + projectZckId;
+        $.modal.parentTab($("#zckName").val() + "列表", url);
+    }
+</script>
 </body>
 </html>

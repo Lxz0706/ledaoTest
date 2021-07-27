@@ -147,6 +147,12 @@ public class SysUser extends BaseEntity {
     @Excel(name = "直接主管")
     private String director;
 
+    /**
+     * 是否正式员工（0 正式 1测试）
+     */
+    @Excel(name = "是否正式员工", readConverterExp = "0=,正=式,1=测试")
+    private String formalFlag;
+
     public SysUser() {
 
     }
@@ -356,6 +362,14 @@ public class SysUser extends BaseEntity {
         this.director = director;
     }
 
+    public String getFormalFlag() {
+        return formalFlag;
+    }
+
+    public void setFormalFlag(String formalFlag) {
+        this.formalFlag = formalFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -383,6 +397,7 @@ public class SysUser extends BaseEntity {
                 .append("roles", getRoles())
                 .append("directorId", getDirectorId())
                 .append("director", getDirector())
+                .append("formalFlag", getFormalFlag())
                 .toString();
     }
 }

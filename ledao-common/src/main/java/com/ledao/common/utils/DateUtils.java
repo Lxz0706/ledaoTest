@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 
 /**
  * 时间工具类
@@ -259,7 +260,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             format = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
+        System.out.print("时间：=====" + seconds);
         return sdf.format(new Date(Long.valueOf(seconds + "000")));
+    }
+
+    //13位毫秒时间戳  -->  yyyy-MM-dd HH:mm:ss
+    public static String timeToFormat(long time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        return sdf.format(time);
     }
 
     public static String getDateToString(long time) {
@@ -390,5 +398,59 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             result = 0;
         }
         return Long.valueOf(year + result);
+    }
+
+    //计算两个日期相差年数
+    public static int yearDateDiff(String startDate, String endDate) {
+        Calendar calBegin = Calendar.getInstance(); //获取日历实例
+        Calendar calEnd = Calendar.getInstance();
+        calBegin.setTime(stringTodate(startDate, "yyyy")); //字符串按照指定格式转化为日期
+        calEnd.setTime(stringTodate(endDate, "yyyy"));
+        return calEnd.get(Calendar.YEAR) - calBegin.get(Calendar.YEAR);
+    }
+
+    //字符串按照指定格式转化为日期
+    public static Date stringTodate(String dateStr, String formatStr) {
+        // 如果时间为空则默认当前时间
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat(formatStr);
+        if (dateStr != null && !dateStr.equals("")) {
+            String time = "";
+            try {
+                Date dateTwo = format.parse(dateStr);
+                time = format.format(dateTwo);
+                date = format.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            String timeTwo = format.format(new Date());
+            try {
+                date = format.parse(timeTwo);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return date;
+    }
+
+    /**
+     * 获取时间为上午还是下午
+     *
+     * @param date
+     * @param chinese
+     * @return
+     */
+    public static String getTimeToAmOrPm(Date date, boolean chinese) {
+        String time = "";
+        if (StringUtils.isNotNull(chinese)) {
+            SimpleDateFormat aa = new SimpleDateFormat("yyyy-MM-dd aa", Locale.CHINESE);
+            time = aa.format(date);
+        } else {
+            SimpleDateFormat aa = new SimpleDateFormat("yyyy-MM-dd aa", Locale.ENGLISH);
+            time = aa.format(date);
+        }
+        return time;
     }
 }

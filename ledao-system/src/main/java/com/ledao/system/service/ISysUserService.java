@@ -212,4 +212,12 @@ public interface ISysUserService {
      * @return 用户信息集合信息
      */
     public List<SysUser> selectUserListForDocument(SysUser user);
+
+    /**
+     * 根据IDS查询用户信息
+     *
+     * @param ids
+     * @return
+     */
+    public List<SysUser> selectUserByIds(String ids);
 }

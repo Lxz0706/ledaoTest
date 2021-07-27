@@ -8,6 +8,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input id="checkedId" th:value="*{list}" type="hidden">
             <form id="role-form">
                 <div class="select-list">
                     <input th:value="*{userId}" id="userId" type="hidden">
@@ -15,9 +16,9 @@
                     <input name="deptId" th:value="*{deptId}" id="deptId" type="hidden">
                     <input name="status" value="0" id="status" type="hidden">
                     <ul>
-                    <!--    <li>
-                            登录名称：<input type="text" name="loginName"/>
-                        </li>-->
+                        <!--    <li>
+                                登录名称：<input type="text" name="loginName"/>
+                            </li>-->
                         <li>
                             用户名称：<input type="text" name="userName"/>
                         </li>
@@ -41,21 +42,23 @@
 <script th:inline="javascript">
     var datas = [[${@dict.getType('sys_normal_disable')}]];
     var prefix = ctx + "system/user";
-
+    var checkedIds = new Array();
     $(function () {
+        checkedIds = $("#userId").val().split(",");
         var options = {
             url: prefix + "/list",
             modalName: "用户",
             clickToSelect: true,
             singleSelect: false,
             rememberSelected: true,
+            checkedIds: checkedIds,
             columns: [{
-                field: 'detail',
+                field: 'state',
                 checkbox: true,
                 formatter: function (value, row, index) {
-                    var userId = $("#userId").val().split(",");
-                    for (var i = 0; i < userId.length; i++) {
-                        if (userId[i] == row.userId) {
+                    var userIds = $("#userId").val().split(",");
+                    for (var i = 0; i < userIds.length; i++) {
+                        if (userIds[i] == row.userId) {
                             return checked = true;
                         }
                     }
@@ -97,12 +100,49 @@
                 }]
         };
         $.table.init(options);
+        $('#bootstrap-table').on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table', function (e, rows) {
+            var datas = $.isArray(rows) ? rows : [rows];        // 点击时获取选中的行或取消选中的行
+            examine(e.type, datas);                              // 保存到全局 Array() 里
+        });
+        $("#bootstrap-table").on("check-all.bs.table", (event, rows) => {
+            rows.forEach(function (item) {
+                checkedIds.push(item.userId);
+            })
+        }).on("uncheck-all.bs.table", (event, rows) => {
+            rows.forEach(function (item) {
+                checkedIds.splice(checkedIds.indexOf(item.userId), 1);
+            })
+        }).on("check.bs.table", (event, row) => {
+            checkedIds.push(row.userId)
+        }).on("uncheck.bs.table", (event, row) => {
+            checkedIds.splice(checkedIds.indexOf(row.userId), 1);
+        })
     });
 
+    var overAllIds = new Array();  //全局数组
+
+    function examine(type, datas) {
+        if (type.indexOf('uncheck') == -1) {
+            $.each(datas, function (i, v) {
+                // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
+                overAllIds.indexOf(v.userId) == -1 ? overAllIds.push(v.userId) : -1;
+            });
+        } else {
+            $.each(datas, function (i, v) {
+                overAllIds.splice(overAllIds.indexOf(v.userId), 1);    //删除取消选中行
+            });
+        }
+
+        //console.log(overAllIds);
+    }
+
     function submitHandler() {
+        //console.log(overAllIds);
+        console.log(checkedIds);
         var row = selectRows();
         var rows = $.table.selectColumns('userId');
-        window.parent.getParentUser(row);
+        window.parent.getParentUser(checkedIds);
+        //window.parent.getParentUsers(row);
     }
 
     function selectRows() {
@@ -110,15 +150,6 @@
         let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
             return row;
         });
-        //如果设置了记住选中数据
-        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
-            let selectedRows = table.rememberSelecteds[table.options.id];
-            if ($.common.isNotEmpty(selectedRows)) {
-                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
-                    return row;
-                });
-            }
-        }
         //去重
         return uniqueFnByRows(rows);
     }

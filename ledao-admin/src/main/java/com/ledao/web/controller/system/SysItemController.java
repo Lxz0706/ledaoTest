@@ -143,7 +143,7 @@ public class SysItemController extends BaseController {
                         if (StringUtils.isNotEmpty(sysUser.getRoles())) {
                             for (SysRole sysRole1 : sysUser.getRoles()) {
                                 if ("SJXXB".equals(sysRole1.getRoleKey()) || "seniorRoles".equals(sysRole1.getRoleKey()) || "admin".equals(sysRole1.getRoleKey())) {
-                                    //role = "thb";
+                                    role = "thb";
                                 } else if ("thbManager".equals(sysRole1.getRoleKey()) || "thbCommon".equals(sysRole1.getRoleKey())
                                         || "thbManager2".equals(sysRole1.getRoleKey()) || "thbzz".equals(sysRole1.getRoleKey())) {
                                     role = "thb";
@@ -155,7 +155,7 @@ public class SysItemController extends BaseController {
                                 }
                             }
                         } else {
-                            // role = "thb";
+                            role = "thb";
                         }
 
                     }
@@ -165,7 +165,7 @@ public class SysItemController extends BaseController {
                 if (StringUtils.isNotEmpty(sysUser.getRoles())) {
                     for (SysRole sysRole1 : sysUser.getRoles()) {
                         if ("SJXXB".equals(sysRole1.getRoleKey()) || "seniorRoles".equals(sysRole1.getRoleKey()) || "admin".equals(sysRole1.getRoleKey())) {
-                            //role = "thb";
+                            role = "thb";
                         } else if ("thbManager".equals(sysRole1.getRoleKey()) || "thbCommon".equals(sysRole1.getRoleKey())
                                 || "thbManager2".equals(sysRole1.getRoleKey()) || "thbzz".equals(sysRole1.getRoleKey())) {
                             role = "thb";
@@ -177,7 +177,7 @@ public class SysItemController extends BaseController {
                         }
                     }
                 } else {
-                    //role = "thb";
+                    role = "thb";
                 }
 
             }

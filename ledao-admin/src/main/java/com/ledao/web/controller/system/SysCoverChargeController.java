@@ -9,6 +9,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
+import com.ledao.system.service.ISysProjectmanagentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,9 @@ public class SysCoverChargeController extends BaseController {
 
     @Autowired
     private ISysCoverChargeService sysCoverChargeService;
+
+    @Autowired
+    private ISysProjectmanagentService sysProjectmanagentService;
 
     @RequiresPermissions("system:charge:view")
     @GetMapping()
@@ -193,6 +197,7 @@ public class SysCoverChargeController extends BaseController {
         String url = "system/charge/charge";
         modelMap.put("projectManagementId", projectManagementId);
         modelMap.put("isCharge", isCharge);
+        modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectManagementId)).getProjectType());
         if (StringUtils.isNotEmpty(isCharge) && StringUtils.isNotNull(isCharge)) {
             if ("Y".equals(isCharge)) {
                 url = "system/charge/charge1";

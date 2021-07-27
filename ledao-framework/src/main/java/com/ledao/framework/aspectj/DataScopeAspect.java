@@ -104,14 +104,16 @@ public class DataScopeAspect {
                 break;
             } else if (DATA_SCOPE_CUSTOM.equals(dataScope)) {
                 sqlString.append(StringUtils.format(
-                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) ", deptAlias,
-                        role.getRoleId()));
+                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) OR {}.create_by ='{}' or {}.user_id like '%{}%' ", deptAlias,
+                        role.getRoleId(), userAlias, user.getLoginName(), userAlias, user.getUserId()));
             } else if (DATA_SCOPE_DEPT.equals(dataScope)) {
-                sqlString.append(StringUtils.format(" OR {}.dept_id = {} ", deptAlias, user.getDeptId()));
+                sqlString.append(StringUtils.format(" OR {}.dept_id = {} OR {}.create_by ='{}' or {}.user_id like '%{}%' ",
+                        deptAlias, user.getDeptId(), userAlias, user.getLoginName(), userAlias, user.getUserId()));
             } else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope)) {
                 sqlString.append(StringUtils.format(
-                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) )",
-                        deptAlias, user.getDeptId(), user.getDeptId()));
+                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) ) OR {}.create_by ='{}' or {}.user_id like '%{}%'",
+                        deptAlias, user.getDeptId(), user.getDeptId(), userAlias, user.getLoginName(), userAlias, user.getUserId()))
+                ;
             } else if (DATA_SCOPE_SELFORSHARESELF.equals(dataScope)) {
                 if (StringUtils.isNotBlank(userAlias)) {
                     sqlString.append(StringUtils.format(" OR {}.create_by ='{}' or {}.user_id like '%{}%' ", userAlias, user.getLoginName(), userAlias, user.getUserId()));

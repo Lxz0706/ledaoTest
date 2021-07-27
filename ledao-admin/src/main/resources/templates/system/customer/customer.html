@@ -130,6 +130,7 @@
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     if ("admin" == loginName) {
         $("#sd").show();
+        $("#sj").show();
     } else {
         for (var i = 0; i < roles.length; i++) {
             if ("SJXXB" == roles[i].roleKey || "admin" == roles[i].roleKey || "seniorRoles" == roles[i].roleKey) {
@@ -346,7 +347,7 @@
 
     function detail(customerId) {
         var url = ctx + 'system/item/itemList/' + customerId;
-        $.modal.openTab("合作项目列表", url);
+        $.modal.parentTab("合作项目列表", url);
     }
 
     function jump() {
@@ -387,6 +388,18 @@
             url: prefix + "/export",
             data: data,
             type: "post",
+            success: function (result) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            }
+        })
+    }
+
+    function exportExcel1() {
+        $.ajax({
+            url: prefix + '/getData',
+            type: 'get',
+            data: '',
+            dataType: 'json',
             success: function (result) {
                 window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
             }

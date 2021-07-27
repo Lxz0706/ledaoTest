@@ -7,6 +7,8 @@
      <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
+                <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
+                <input id="zckName" th:value="*{projectZckName}" type="hidden">
                 <form id="formId">
                     <div class="select-list">
                         <ul>
@@ -53,6 +55,9 @@
                 <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:bail:export">
                     <i class="fa fa-download"></i> 导出
                 </a>-->
+                <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+                    <i class="fa fa-backward"></i> 返回
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -137,6 +142,11 @@
         function add() {
             var projectId=$("#projectId").val();
             $.operate.add(projectId);
+        }
+        function back() {
+            var projectZckId = $("#projectZckId").val();
+            var url = ctx + 'system/projectZck/projectList/' + projectZckId;
+            $.modal.parentTab($("#zckName").val() + "列表", url);
         }
     </script>
 </body>

@@ -75,6 +75,17 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysUser user) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        user.setFormalFlag("0");
+                    }
+                }
+            }
+        }
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
@@ -84,6 +95,17 @@ public class SysUserController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysUser user) {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        user.setFormalFlag("0");
+                    }
+                }
+            }
+        }
         List<SysUser> list = userService.selectUserList(user);
         ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
         return util.exportExcel(list, "用户数据");
@@ -359,24 +381,6 @@ public class SysUserController extends BaseController {
     /**
      * 选择人员树
      */
-/*    @GetMapping("/selectUserTree")
-    public String selectUserTree(String selectedUserIds, String selectedUserNames, Boolean multiSelectFlag, ModelMap mmap, Boolean deptId) {
-        mmap.put("dept", deptService.selectDeptById((long) 100));
-        mmap.put("selectedUserIds", selectedUserIds);
-        mmap.put("selectedUserNames", selectedUserNames);
-        mmap.put("multiSelectFlag", multiSelectFlag);
-        if (StringUtils.isNotNull(deptId)) {
-            if (deptId == true) {
-                mmap.put("deptId", "201");
-            }
-        }
-
-        return prefix + "/tree";
-    }*/
-
-    /**
-     * 选择人员树
-     */
     @GetMapping("/selectUserTree")
     public String selectUserTree(String selectedUserIds, String selectedUserNames, String selectedDeptIds, String selectedDeptNames,
                                  Boolean multiSelectFlag, ModelMap mmap, Boolean deptId, Boolean checkFlag) {
@@ -401,6 +405,17 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public String listForTree(SysUser user) {
         user.setStatus("0");
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        user.setFormalFlag("0");
+                    }
+                }
+            }
+        }
         List<SysUser> list = userService.selectUserList(user);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("success", true);

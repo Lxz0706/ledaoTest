@@ -8,6 +8,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input type="hidden" id="type" th:value="*{type}">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -31,6 +32,9 @@
             <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                shiro:hasPermission="system:charge:remove">
                 <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:charge:list">
+                <i class="fa fa-backward"></i> 返回
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -89,7 +93,7 @@
                     field: 'amountPaid',
                     title: '金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -183,6 +187,12 @@
                 $.table.refresh();
             }
         });
+    }
+
+    function back() {
+        var type = $("#type").val();
+        var url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+        $.modal.parentTab(type + "列表", url);
     }
 </script>
 </body>

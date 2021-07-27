@@ -56,6 +56,9 @@
                shiro:hasPermission="system:item:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:item:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
             <!--<a onclick="updates()">修复</a>-->
             <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:item:export">
                 <i class="fa fa-download"></i> 导出
@@ -148,6 +151,11 @@
                 alert("result");
             }
         })
+    }
+
+    function back() {
+        var url = ctx + 'system/customer';
+        $.modal.parentTab("客户统计", url);
     }
 </script>
 </body>

@@ -7,8 +7,12 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
+            <input id="zckName" th:value="*{projectZckName}" type="hidden">
+            <input type="hidden" id="type" th:value="*{type}">
             <form id="formId">
                 <input type="hidden" name="projectId" id="projectId" th:value="*{projectId}"/>
+                <input type="hidden" name="project" id="project" th:value="*{project}"/>
             </form>
         </div>
 
@@ -27,6 +31,9 @@
             <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:recapture:export">
                 <i class="fa fa-download"></i> 导出
             </a>-->
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:recapture:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -69,8 +76,8 @@
                 {
                     field: 'recapture',
                     title: '处置回现',
-                    formatter:function (value,row,index) {
-                        return  $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -93,11 +100,34 @@
                 }*/]
         };
         $.table.init(options);
+        var projectFlag = $("#project").val();
+        if ("Y" == projectFlag) {
+            $("#projectFlag").show();
+        }
     });
 
-    function add(){
-        var projectId=$("#projectId").val();
+    function add() {
+        var projectId = $("#projectId").val();
         $.operate.add(projectId);
+    }
+
+    function back() {
+        var projectZckId = $("#projectZckId").val();
+        var url = ctx + 'system/projectZck/projectList/' + projectZckId;
+        $.modal.parentTab($("#zckName").val() + "列表", url);
+    }
+
+    function back() {
+        var projectFlag = $("#project").val();
+        if ("Y" == projectFlag) {
+            var projectZckId = $("#projectZckId").val();
+            var url = ctx + 'system/projectZck/projectList/' + projectZckId;
+            $.modal.parentTab($("#zckName").val() + "列表", url);
+        } else {
+            var type = $("#type").val();
+            var url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+            $.modal.parentTab(type + "列表", url);
+        }
     }
 </script>
 </body>

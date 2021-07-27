@@ -457,20 +457,71 @@
 
     //人员树形选择器
     function selectShareUser() {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
         var url = ctx + "system/customer/selectShareUser?userId=" + $("#shareUserId").val() + "&userName=" + $("#shareUserName").val();
-        $.modal.open("人员选择", url, '850', '600');
+        $.modal.open("人员选择", url, width, height * 0.8);
     }
 
     function getParentUser(row) {
         var userNames = "";
         var userIds = "";
         for (var i = 0; i < row.length; i++) {
-            userNames = row[i].userName + "," + userNames;
-            userIds = row[i].userId + "," + userIds;
+            $.ajax({
+                url: prefix + "/selectUserById",
+                data: {'userId': row[i]},
+                type: 'post',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if ($.common.isNotEmpty(result.data.userName) || undefined !== result.data.userName) {
+                        userNames = result.data.userName + "," + userNames;
+                        userIds = result.data.userId + "," + userIds;
+                    }
+                }
+            })
         }
-        $("#shareUserId").val(userIds.substr(0, userIds.length - 1));
-        $("#shareUserName").val(userNames.substr(0, userNames.length - 1));
+        $("#shareUserId").val(distinct(userIds.substr(0, userIds.length - 1)));
+        $("#shareUserName").val(distinct(userNames.substr(0, userNames.length - 1)));
         layer.close(layer.index);
+    }
+
+    function distinct(s) {
+        var arr = s.split(",");
+        var x = new Set(arr);
+        var distinctResult = "";
+        x.forEach(function (element, sameElement, x) {
+            distinctResult += element + ",";
+        });
+        if (distinctResult != "") {
+            distinctResult = distinctResult.substring(0, distinctResult.length - 1);
+        }
+        return distinctResult;
+    }
+
+    function quchong(str) {
+        var newStr = "";
+        for (var i = 0, len = str.length; i < len; i++) {
+            if (newStr.indexOf(str[i]) == -1) {
+                newStr += str[i]
+            }
+        }
+        return newStr
+    }
+
+    function sd(str) {
+        var temp = {};
+        var newArr = str.split(",");
+        var arr = [];
+        var len = newArr.length;
+        for (var i = 0; i < len; i++) {
+            if (!temp[this[i]]) {
+                temp[this[i]] = "a";
+                arr.push(this[i]);
+            }
+        }
+        var str = arr.join("-"); //我将去重后的字符串用"-"分隔开
+        return str
     }
 
 </script>

@@ -115,6 +115,19 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">是否测试账号：</label>
+                        <div class="col-sm-8">
+                            <label class="toggle-switch switch-solid">
+                                <input type="checkbox" id="formalFlag" th:checked="${user.formalFlag == '1' ? true : false}">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h4 class="form-header h4">其他信息</h4>
             <div class="row">
                 <div class="col-sm-12">
@@ -138,7 +151,7 @@
 	<th:block th:include="include :: select2-js" />
 	<script type="text/javascript">
         var prefix = ctx + "system/user";
-        
+
         $("#form-user-edit").validate({
         	onkeyup: false,
         	rules:{
@@ -191,14 +204,16 @@
             },
             focusCleanup: true
         });
-        
+
         function submitHandler() {
 	        if ($.validate.form()) {
 	        	var data = $("#form-user-edit").serializeArray();
 	        	var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+                var formalFlag = $("input[id='formalFlag']").is(':checked') == true ? 1 : 0;
 	        	var roleIds = $.form.selectCheckeds("role");
 	        	var postIds = $.form.selectSelects("post");
 	        	data.push({"name": "status", "value": status});
+                data.push({"name": "formalFlag", "value": formalFlag});
 	        	data.push({"name": "roleIds", "value": roleIds});
 	        	data.push({"name": "postIds", "value": postIds});
 	        	$.operate.saveTab(prefix + "/edit", data);
@@ -217,7 +232,7 @@
 			};
 			$.modal.openOptions(options);
 		}
-		
+
 		function doSubmit(index, layero){
 			var tree = layero.find("iframe")[0].contentWindow.$._tree;
 			if ($.tree.notAllowParents(tree)) {

@@ -111,8 +111,6 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
      * @param oldAncestors 旧的父ID集合
      */
     public void updateDeptChildren(Long deptId, String newAncestors, String oldAncestors) {
-
-        System.out.print(newAncestors + "====" + oldAncestors);
         List<SysDepartment> children = sysDepartmentMapper.selectChildrenDepartmentById(deptId);
         for (SysDepartment child : children) {
             child.setAncestors(child.getAncestors().replace(oldAncestors, newAncestors));

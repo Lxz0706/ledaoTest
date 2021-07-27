@@ -32,10 +32,10 @@
             <if test="amountRecovered != null ">and amount_recovered = #{amountRecovered}</if>
             <if test="recoveredDate != null ">and recovered_date = #{recoveredDate}</if>
             <if test="params.beginRecoveredDate != null and params.beginRecoveredDate != ''"><!-- 开始时间检索 -->
-                AND date_format(recovered_date,'%y%m%d') &gt;= date_format(#{params.beginRecoveredDate},'%y%m%d')
+                AND date_format(recovered_date,'%Y%m%d') &gt;= date_format(#{params.beginRecoveredDate},'%Y%m%d')
             </if>
             <if test="params.endRecoveredDate != null and params.endRecoveredDate != ''"><!-- 结束时间检索 -->
-                AND date_format(recovered_date,'%y%m%d') &lt;= date_format(#{params.endRecoveredDate},'%y%m%d')
+                AND date_format(recovered_date,'%Y%m%d') &lt;= date_format(#{params.endRecoveredDate},'%Y%m%d')
             </if>
         </where>
     </select>

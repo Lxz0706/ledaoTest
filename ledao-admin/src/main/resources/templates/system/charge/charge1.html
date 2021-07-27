@@ -8,6 +8,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input type="hidden" id="type" th:value="*{type}">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -48,21 +49,11 @@
             </form>
         </div>
 
+
         <div class="btn-group-sm" id="toolbar" role="group">
-            <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:charge:add">
-                <i class="fa fa-plus"></i> 添加
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:charge:list">
+                <i class="fa fa-backward"></i> 返回
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:charge:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="system:charge:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>-->
-            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:charge:export">
-                <i class="fa fa-download"></i> 导出
-            </a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -78,11 +69,11 @@
 
     $(function () {
         var isCharge = $("#isCharge").val();
-        if ($.common.isNotEmpty(isCharge)) {
+       /* if ($.common.isNotEmpty(isCharge)) {
             if ("Y" == isCharge) {
                 $("#toolbar").hide();
             }
-        }
+        }*/
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add/{id}",
@@ -190,6 +181,12 @@
         $.modal.confirm("确认收到该条款项吗？", function () {
             $.operate.post(prefix + "/changeStatus", {"id": id, "state": "是"});
         })
+    }
+
+    function back() {
+        var type = $("#type").val();
+        var url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+        $.modal.parentTab(type + "列表", url);
     }
 </script>
 </body>

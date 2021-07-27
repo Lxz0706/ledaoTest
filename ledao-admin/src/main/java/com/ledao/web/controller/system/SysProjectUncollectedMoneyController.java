@@ -18,6 +18,7 @@ import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysProjectRecoveredService;
+import com.ledao.system.service.ISysProjectmanagentService;
 import com.ledao.system.service.ISysProjectysyfService;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.formula.atp.AnalysisToolPak;
@@ -58,6 +59,9 @@ public class SysProjectUncollectedMoneyController extends BaseController {
 
     @Autowired
     private ISysProjectRecoveredService sysProjectRecoveredService;
+
+    @Autowired
+    private ISysProjectmanagentService sysProjectmanagentService;
 
     @RequiresPermissions("system:money:view")
     @GetMapping()
@@ -287,6 +291,7 @@ public class SysProjectUncollectedMoneyController extends BaseController {
     @GetMapping("/moneyList/{projectManagementId}")
     public String selectProjectProgressByProjectId(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
+        modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectManagementId)).getProjectType());
         return "system/money/money";
     }
 

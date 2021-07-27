@@ -309,36 +309,36 @@
     /*合同本金列表-详细*/
     function detail3(id, contractPrincipal) {
         var url = ctx + 'system/contract/contractList/' + id;
-        $.modal.openTab("合同本金列表", url);
+        $.modal.parentTab("合同本金列表", url);
     }
 
     /*保证人列表-详细*/
     function detail1(id, bail) {
         var url = ctx + 'system/bail/bailList/' + id;
-        $.modal.openTab("保证人列表", url);
+        $.modal.parentTab("保证人列表", url);
     }
 
     /*抵押物列表-详细*/
     function detail2(id, guarantor) {
         var url = ctx + 'system/mortgage/mortgageList/' + id;
-        $.modal.openTab("抵押物列表", url);
+        $.modal.parentTab("抵押物列表", url);
     }
 
     /*质押物列表-详细*/
     function detail4(id, pledge) {
         var url = ctx + 'system/pledge/pledgeList/' + id;
-        $.modal.openTab("质押物列表", url);
+        $.modal.parentTab("质押物列表", url);
     }
 
     function progress(id) {
         var url = ctx + 'system/progress/progressLists/' + id + "/Y";
-        $.modal.openTab("进度情况列表", url);
+        $.modal.parentTab("进度情况列表", url);
     }
 
     //现金回现
     function detail5(projectId) {
-        var url = ctx + 'system/recapture/recaptureList/' + projectId;
-        $.modal.openTab('处置回现列表', url);
+        var url = ctx + 'system/recapture/recaptureList/' + projectId + "/Y";
+        $.modal.parentTab('处置回现列表', url);
     }
 
     function back() {

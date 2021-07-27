@@ -12,6 +12,7 @@ import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
+import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysDictTypeService;
 import com.ledao.system.service.ISysPcustomerService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,6 +50,9 @@ public class SysBgczzckController extends BaseController {
     @Autowired
     private ISysPcustomerService sysPcustomerService;
 
+    @Autowired
+    private ISysDictDataService sysDictDataService;
+
     @RequiresPermissions("system:bgczzck:view")
     @GetMapping()
     public String bgczzck() {
@@ -63,8 +67,8 @@ public class SysBgczzckController extends BaseController {
     @ResponseBody
     public TableDataInfo list() {
         startPage();
-        List<SysBgczzck> list = sysBgczzckService.selectByProjectStatus();
-        return getDataTable(list);
+        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType("sys_dxdtxm_project_status");
+        return getDataTable(sysDictDataList);
     }
 
     /**

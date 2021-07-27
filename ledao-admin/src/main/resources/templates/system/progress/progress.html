@@ -7,6 +7,9 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
+            <input id="zckName" th:value="*{projectZckName}" type="hidden">
+            <input type="hidden" id="type" th:value="*{type}">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -37,6 +40,14 @@
             <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:progress:export">
                 <i class="fa fa-download"></i> 导出
             </a>-->
+            <a id="projectFlag" style="display: none;" class="btn btn-info" onclick="back()"
+               shiro:hasPermission="system:project:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+            <a id="projectFalse" style="display: none;" class="btn btn-info" onclick="back()"
+               shiro:hasPermission="system:progress:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -100,12 +111,36 @@
                 }*/]
         };
         $.table.init(options);
+        var projectFlag = $("#project").val();
+        if ("Y" == projectFlag) {
+            $("#projectFlag").show();
+        } else {
+            $("#projectFalse").show();
+        }
     });
 
     function add() {
         var projectManagementId = $("#projectManagementId").val();
         var project = $("#project").val();
         $.operate.adds(projectManagementId, project);
+    }
+
+    function back() {
+        var projectFlag = $("#project").val();
+        if ("Y" == projectFlag) {
+            var projectZckId = $("#projectZckId").val();
+            var url = ctx + 'system/projectZck/projectList/' + projectZckId;
+            $.modal.parentTab($("#zckName").val() + "列表", url);
+        } else {
+            var type = $("#type").val();
+            var url = "";
+            if ("服务类项目" == type) {
+                url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+            } else if ("自投类项目" == type) {
+                url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectTypes/' + type;
+            }
+            $.modal.parentTab(type + "列表", url);
+        }
     }
 </script>
 </body>

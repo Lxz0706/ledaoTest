@@ -98,7 +98,7 @@
     <select id="selectZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
         SELECT SUM(t2.total_price) AS
         collateralTotal,t1.asset_package_name,t1.id,t1.del_flag,t1.evaluation_time,SUM(t2.cap_value) as
-        capValue,t1.team_members_name,t1.team_members_id FROM sys_zcb t1 INNER JOIN sys_zck t2 ON t1.id=t2.zcb_id
+        capValue,t1.team_members_name,t1.team_members_id FROM sys_zcb t1 LEFT JOIN sys_zck t2 ON t1.id=t2.zcb_id
         WHERE t1.del_flag='0' AND t2.del_flag='0'
         <if test="assetStatus != null  and assetStatus != ''">and t1.asset_status = #{assetStatus}</if>
         <if test="teamMembersId != null  and teamMembersId != ''">and t1.team_members_id like

@@ -32,25 +32,26 @@
     <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
+                <input id="staffId" type="hidden">
                 <form id="formId">
                     <input type="hidden" id="departmentId" name="departmentId">
                     <input type="hidden" id="pId" name="pId">
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>员工姓名：</label>
+                                员工姓名：
                                 <input type="text" name="staffName" placeholder="员工姓名"/>
                             </li>
                             <li class="select-time">
                                 <label>出生日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                <input type="text" class="time-input" id="beginBirthday" placeholder="开始时间"
                                        name="params[beginBirthday]"/>
                                 <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                <input type="text" class="time-input" id="endBirthday" placeholder="结束时间"
                                        name="params[endBirthday]"/>
                             </li>
                             <li>
-                                <label>性别：</label>
+                                性别：
                                 <select name="sex" th:with="type=${@dict.getType('sys_user_sex')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -74,15 +75,15 @@
                                        name="params[endLeaveDate]"/>
                             </li>
                             <li>
-                                <label>联系方式1：</label>
+                                联系方式1：
                                 <input type="text" name="contact1" placeholder="联系方式1"/>
                             </li>
                             <li>
-                                <label>联系方式2：</label>
+                                联系方式2：
                                 <input type="text" name="contact2" placeholder="联系方式2"/>
                             </li>
                             <li>
-                                <label>所属部门：</label>
+                                所属部门：
                                 <input type="text" name="departmentName" placeholder="所属部门"/>
                             </li>
                             <li>
@@ -132,6 +133,7 @@
     var removeFlag = [[${@permission.hasPermi('system:staff:remove')}]];
     var sexDatas = [[${@dict.getType('sys_user_sex')}]];
     var educationDatas = [[${@dict.getType('sys_staff_education')}]];
+    var detailFlag = [[${@permission.hasPermi('system:staff:list')}]];
     var prefix = ctx + "system/staff";
 
     $(function () {
@@ -151,6 +153,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
             modalName: "员工信息",
             columns: [{
                 checkbox: true
@@ -209,17 +212,16 @@
                     formatter: function (value, row, index) {
                         return statusTools(row);
                     }
-                }/*,
+                },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.staffId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.staffId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push("<a class='btn btn-default btn-xs " + detailFlag + "' href='javascript:void(0)' onclick='$.operate.detail(" + row.staffId + ")'><i class='fa fa-search'></i>详细</a> ");
                         return actions.join('');
                     }
-                }*/]
+                }]
         };
         $.table.init(options);
     }
@@ -264,8 +266,14 @@
 
     /* 用户管理启用 */
     function enable(staffId) {
+        // $.modal.alertError("请先修改所属部门");
+        /*selectDeptTree();
+        if ($.modal.confirm("确认吗")) {
+            selectDeptTree();
+        }*/
         $.modal.confirm("确认要启用该员工吗？", function () {
-            $.operate.post(prefix + "/changeStatus", {"staffId": staffId, "status": 0});
+            $("#staffId").val(staffId);
+            selectDeptTree();
         })
     }
 
@@ -282,8 +290,48 @@
     });
 
     $('#btnRefresh').click(function () {
-        queryDeptTree();
+        queryDepartmentList();
     });
+
+    function selectDeptTree() {
+        // var departmentId = $("#departmentId").val();
+        var url = "";
+        // if ($.common.isNotEmpty(departmentId)) {
+        //     url = ctx + "system/department/selectDeptTree/" + departmentId;
+        //  } else {
+        url = ctx + "system/department/selectDeptTree";
+        //}
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            layer.close(index);
+            var data = {
+                'staffId': $("#staffId").val(),
+                'status': '0',
+                'departmentId': body.find('#treeId').val(),
+                'departmentName': body.find('#treeName').val()
+            }
+            $.ajax({
+                url: prefix + "/changeStatus",
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    $.operate.ajaxSuccess(result);
+                }
+            })
+        }
+    }
 
 </script>
 </body>

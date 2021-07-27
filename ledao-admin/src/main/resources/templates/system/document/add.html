@@ -165,7 +165,7 @@
     function selectUserTree() {
         var url = ctx + "system/user/selectUserTree?selectedUserIds=" + $("#shareUserId").val() + "&selectedUserNames=" + $("#shareUserName").val() + "&multiSelectFlag=true&selectedDeptIds="
             + $("#shareDeptId").val() + "&selectedDeptNames=" + $("#shareDeptName").val() + "&checkFlag=true";
-        $.modal.open("人员选择器", url, "750", "500", doSelect);
+        $.modal.open("人员选择器", url, "750", "300", doSelect);
     }
 
     function doSelect(index, layero) {

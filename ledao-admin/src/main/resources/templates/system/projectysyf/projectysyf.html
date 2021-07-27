@@ -41,6 +41,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input type="hidden" id="type" th:value="*{type}">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -90,6 +91,9 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectysyf:export">
                 <i class="fa fa-download"></i> 导出
             </a>-->
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:projectysyf:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -143,7 +147,7 @@
                     field: 'amountPaid',
                     title: '已付金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -187,6 +191,12 @@
     function imgUrl(id) {
         var url = prefix + '/imgUrl/' + id;
         $.modal.opens("附件上传情况查看", url);
+    }
+
+    function back() {
+        var type = $("#type").val();
+        var url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectTypes/' + type;
+        $.modal.parentTab(type + "列表", url);
     }
 </script>
 </body>

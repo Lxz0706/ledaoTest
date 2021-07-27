@@ -263,7 +263,8 @@ public class SysUserServiceImpl implements ISysUserService {
     /**
      * 新增用户角色信息
      *
-     * @param user 用户对象
+     * @param userId
+     * @param roleIds
      */
     public void insertUserRole(Long userId, Long[] roleIds) {
         if (StringUtils.isNotNull(roleIds)) {
@@ -474,5 +475,16 @@ public class SysUserServiceImpl implements ISysUserService {
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserListForDocument(SysUser user) {
         return userMapper.selectUserListForDocument(user);
+    }
+
+    /**
+     * 批量删除用户信息
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public List<SysUser> selectUserByIds(String ids) throws BusinessException {
+        return userMapper.selectUserByIds(Convert.toStrArray(ids));
     }
 }

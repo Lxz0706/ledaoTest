@@ -85,7 +85,7 @@ public class SysZcbController extends BaseController {
                 }
             }
         }
-        List<SysZcb> list = this.sysZcbService.selectZcbList(sysZcb);
+        List<SysZcb> list = this.sysZcbService.selectSysZcbList(sysZcb);
         for (SysZcb sysZcb1 : list) {
             StringBuffer customerSb = new StringBuffer();
             if (currentUser != null) {

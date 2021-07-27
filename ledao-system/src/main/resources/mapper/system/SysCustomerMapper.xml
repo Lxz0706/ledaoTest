@@ -75,10 +75,10 @@
             concat('%',#{weChatNumber}, '%')
         </if>
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
         </if>
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
         <if test="creator != null  and creator != ''">and creator like concat('%', #{creator}, '%')</if>
         <if test="reviser != null  and reviser != ''">and reviser like concat('%', #{reviser}, '%')</if>
@@ -95,6 +95,13 @@
                 #{customerId}
             </foreach>
         </if>
+        <!--<if test="createBy != null and createBy != ''">
+            AND ( create_by like concat('%', #{createBy}, '%')
+            <if test="shareUserId != null and shareUserId !=''">
+                or user_id like concat('%',#{shareUserId},'%')
+            </if>
+            )
+        </if>-->
     </select>
 
     <select id="selectSysCustomerById" parameterType="Long" resultMap="SysCustomerResult">
@@ -273,10 +280,10 @@
                 </foreach>
             </if>-->
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(t1.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(t1.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(t1.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(t1.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
             </if>
             <if test="creator != null  and creator != ''">and t1.creator like concat('%', #{creator}, '%')</if>
             <if test="reviser != null  and reviser != ''">and t1.reviser like concat('%', #{reviser}, '%')</if>
@@ -301,24 +308,24 @@
     <select id="selectSysCustomerByCity" parameterType="SysCustomer" resultMap="SysCustomerResult">
         SELECT COUNT(customer_id) as cityCount,city FROM sys_customer WHERE del_flag = '0'
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
         </if>
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
-        GROUP BY city ORDER BY cityCount asc
+        GROUP BY city ORDER BY cityCount desc
     </select>
 
     <select id="selectSysCustomerByCustomerLable" parameterType="SysCustomer" resultMap="SysCustomerResult">
         SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t1.customer_lable,',',t2. help_topic_id+1),',',-1) AS shareholder
-        ,count(*) AS customerLableCount FROM lxztest.sys_customer t1 JOIN mysql.help_topic t2
+        ,count(*) AS customerLableCount FROM sys_customer t1 JOIN mysql.help_topic t2
         on t2. help_topic_id &lt;LENGTH(t1.customer_lable)-LENGTH(REPLACE(t1.customer_lable,',',''))+1 WHERE
         t1.del_flag='0' AND customer_lable !=''
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
         </if>
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
         <if test="deptName != null  and deptName != ''">and t1.dept_name like concat('%',#{deptName}, '%')</if>
         GROUP BY shareholder ORDER BY customerLableCount desc
@@ -326,14 +333,14 @@
 
     <select id="selectSysCustomerByDeptType" parameterType="SysCustomer" resultMap="SysCustomerResult">
         SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t1.dept_type,',',t2. help_topic_id+1),',',-1) AS dept_type
-        ,count(*) AS customerLableCount FROM lxztest.sys_customer t1 JOIN mysql.help_topic t2
+        ,count(*) AS customerLableCount FROM sys_customer t1 JOIN mysql.help_topic t2
         on t2. help_topic_id &lt; LENGTH(t1.dept_type)-LENGTH(REPLACE(t1.dept_type,',',''))+1 WHERE
         t1.del_flag='0'
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
         </if>
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
         GROUP BY dept_type ORDER BY customerLableCount desc;
     </select>
@@ -341,14 +348,14 @@
     <select id="selectSysCustomerByDeptId" parameterType="SysCustomer" resultMap="SysCustomerResult">
         SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t1.dept_name,',',t2. help_topic_id+1),',',-1) AS dept_name
         ,count(*) AS customerLableCount,GROUP_CONCAT(customer_lable) AS customerLable,dept_type FROM
-        lxztest.sys_customer t1 JOIN mysql.help_topic t2
+        sys_customer t1 JOIN mysql.help_topic t2
         on t2. help_topic_id &lt; LENGTH(t1.dept_name)-LENGTH(REPLACE(t1.dept_name,',',''))+1 WHERE
         t1.del_flag='0'
         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
         </if>
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            AND date_format(create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
         </if>
         <if test="deptType !=null">
             and dept_type =#{deptType}

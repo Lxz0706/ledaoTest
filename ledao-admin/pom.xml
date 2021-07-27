@@ -163,6 +163,89 @@
             <version>3.3.0</version>
         </dependency>
 
+        <!--钉钉接口-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ink.aos.module</groupId>
+            <artifactId>aos-dingtalk</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>taobao-sdk-java-auto</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20210709.jar
+            </systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>taobao-sdk-java-auto-source</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>
+                ${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20210709-source.jar
+            </systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>top-api-sdk-dev</artifactId>
+            <version>ding-open-mc-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/resources/lib/top-api-sdk-dev-ding-open-mc-20180719.091043-1.jar
+            </systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>lippi-oapi-encrpt</artifactId>
+            <version>dingtalk-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/resources/lib/lippi-oapi-encrpt.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+
+        <!--引入freemarker 模板依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
+        <!--        <dependency>
+                    <groupId>com.taobao.top</groupId>
+                    <artifactId>taobao-sdk-java-auto</artifactId>
+                    <version>1.0.0</version>
+                    <scope>system</scope>
+                    <systemPath>${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20200512.jar
+                    </systemPath>
+                </dependency>
+                <dependency>
+                    <groupId>com.taobao.top</groupId>
+                    <artifactId>taobao-sdk-java-auto-source</artifactId>
+                    <version>1.0.0</version>
+                    <scope>system</scope>
+                    <systemPath>
+                        ${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20200512-source.jar
+                    </systemPath>
+                </dependency>-->
+
     </dependencies>
 
     <build>
@@ -173,6 +256,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.1.1.RELEASE</version>
                 <configuration>
+                    <includeSystemScope>true</includeSystemScope>
                     <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
                     <jvmArguments>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5099</jvmArguments>
                 </configuration>

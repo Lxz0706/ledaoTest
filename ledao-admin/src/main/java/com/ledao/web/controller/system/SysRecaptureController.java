@@ -3,6 +3,9 @@ package com.ledao.web.controller.system;
 import java.util.List;
 
 import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.service.ISysProjectService;
+import com.ledao.system.service.ISysProjectZckService;
+import com.ledao.system.service.ISysProjectmanagentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +38,15 @@ public class SysRecaptureController extends BaseController {
     @Autowired
     private ISysRecaptureService sysRecaptureService;
 
+    @Autowired
+    private ISysProjectService sysProjectService;
+
+    @Autowired
+    private ISysProjectZckService sysProjectZckService;
+
+    @Autowired
+    private ISysProjectmanagentService sysProjectmanagentService;
+
     @RequiresPermissions("system:recapture:view")
     @GetMapping()
     public String recapture() {
@@ -57,9 +69,16 @@ public class SysRecaptureController extends BaseController {
      * 根据项目id查询列表
      */
     @RequiresPermissions("system:recapture:list")
-    @GetMapping("/recaptureList/{projectId}")
-    public String select(@PathVariable("projectId") String projectId, ModelMap modelMap) {
+    @GetMapping("/recaptureList/{projectId}/{project}")
+    public String select(@PathVariable("projectId") String projectId, @PathVariable("project") String project, ModelMap modelMap) {
         modelMap.put("projectId", projectId);
+        modelMap.put("project", project);
+        if ("Y".equals(project)) {
+            modelMap.put("projectZckId", sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId());
+            modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId()).getZckName());
+        } else {
+            modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectId)).getProjectType());
+        }
         return "system/recapture/recapture";
     }
 

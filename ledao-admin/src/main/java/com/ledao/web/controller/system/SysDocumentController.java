@@ -184,35 +184,6 @@ public class SysDocumentController extends BaseController {
                     sysDocument1.setIsAdmin("Y");
                 }
             }
-
-           /* StringBuffer sb = new StringBuffer();
-
-            if (StringUtils.isNotEmpty(sysDocument1.getShareDeptId())) {
-                for (String string : sysDocument1.getShareUserId().split(",")) {
-                    SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
-                    if (StringUtils.isNotNull(sysUser)) {
-                        if (StringUtils.isNotEmpty(sysUser.getDept().getDeptName())) {
-                            if (sysDocument1.getShareDeptName().contains(sysUser.getDept().getDeptName())) {
-                                sb.append(sysUserService.selectUserById(Long.valueOf(string)).getDept().getDeptName()).append(",");
-                            } else {
-                                sb.append(sysDocument1.getShareDeptName()).append(sysDocument1.getShareUserName());
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.print("小组成员：====" + StringUtils.removeSameString(sb.toString()) + "--------");*/
-
-
-            /*if (StringUtils.isNotEmpty(sysDocument1.getShareUserName()) && StringUtils.isNotEmpty(sysDocument1.getShareDeptName())) {
-                sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName() + "," + sysDocument1.getShareUserName());
-            } else if (StringUtils.isEmpty(sysDocument1.getShareDeptName())) {
-                sysDocument1.setShareDeptAndUser(sysDocument1.getShareUserName());
-            } else if (StringUtils.isEmpty(sysDocument1.getShareUserName())) {
-                sysDocument1.setShareDeptAndUser(sysDocument1.getShareDeptName());
-            }*/
-            sysDocument1.setFileUrl(sysDocument1.getFileUrl().trim());
-            System.out.print("文件路径：========" + sysDocument1.getFileUrl());
         }
         return getDataTable(list);
     }
@@ -274,6 +245,17 @@ public class SysDocumentController extends BaseController {
             for (String string : sysDocument.getShareDeptId().split(",")) {
                 SysUser sysUser = new SysUser();
                 sysUser.setDeptId(Long.valueOf(string));
+                SysUser currentUser = ShiroUtils.getSysUser();
+                if (currentUser != null) {
+                    if (!currentUser.isAdmin()) {
+                        List<SysRole> getRoles = currentUser.getRoles();
+                        for (SysRole sysRole : getRoles) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                                sysUser.setFormalFlag("0");
+                            }
+                        }
+                    }
+                }
                 List<SysUser> sysUserList = sysUserService.selectUserListForDocument(sysUser);
                 for (SysUser sysUser1 : sysUserList) {
                     userIds.append(sysUser1.getUserId()).append(",");
@@ -284,13 +266,9 @@ public class SysDocumentController extends BaseController {
         sysDocument.setShareUserId(userIds.toString());
         sysDocument.setShareUserName(userNames.toString());
 
+
         //获取各类型名称及其子集
         String baseDir = "";
-        /*if (StringUtils.isNotEmpty(sysDocument.getSubsetType())) {
-            baseDir = "/" + sysDocument.getDocumentType() + "/" + sysDocument.getSubsetType();
-        } else {
-            baseDir = "/" + sysDocument.getDocumentType();
-        }*/
         try {
             String avatar = FileUploadUtils.upload(Global.getProfile() + "/document" + baseDir, file, false);
             sysDocument.setFileUrl(avatar);
@@ -392,7 +370,7 @@ public class SysDocumentController extends BaseController {
     public TableDataInfo listes(SysDocument sysDocument) {
         startPage();
         SysUser currentUser = ShiroUtils.getSysUser();
-        if (currentUser != null) {
+        if (null != currentUser) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();

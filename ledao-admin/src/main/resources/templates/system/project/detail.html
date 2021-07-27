@@ -8,6 +8,9 @@
     <table class="table table-border">
         <input id="createBy" th:field="${sysProject.isCreate}" type="hidden">
         <input id="projectId" th:field="${sysProject.projectId}" type="hidden">
+        <input id="projectZckId" th:field="${sysProject.projectZckId}" type="hidden">
+        <input id="projectZckName" th:field="${sysProject.projectZckName}" type="hidden">
+        <input id="pId" th:field="${sysProject.pId}" type="hidden">
         <tr>
             <td colspan="8" style="text-align: center" class="success"><h3>债权情况</h3></td>
         </tr>
@@ -109,6 +112,11 @@
         </tr>
         <!--<tr id="create1"><td colspan="8" style="text-align: center" class="success"><h3>成交信息</h3></td></tr>-->
     </table>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回</button>&nbsp;
+        </div>
+    </div>
 </div>
 <th:block th:include="include :: footer"/>
 <script>
@@ -188,6 +196,13 @@
     function toCustomer(customerId) {
         var url = ctx + 'system/customer/detail/' + customerId;
         $.modal.opens('客户详情', url);
+    }
+
+    function back() {
+        var projectZckId = $("#projectZckId").val();
+        var pId = $("#pId").val();
+        var url = ctx + 'system/project/projectList/' + pId + "/" + projectZckId;
+        $.modal.parentTab($("#projectZckName").val() + "列表", url);
     }
 </script>
 </body>

@@ -129,4 +129,11 @@ public interface SysUserMapper {
      * @return 用户信息集合信息
      */
     public List<SysUser> selectUserListForDocument(SysUser sysUser);
+
+    /**
+     * 根据IDS查询用户信息
+     * @param ids
+     * @return
+     */
+    public List<SysUser> selectUserByIds(String[] ids);
 }

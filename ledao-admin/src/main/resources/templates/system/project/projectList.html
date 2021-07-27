@@ -254,7 +254,7 @@
 
     /*债权情况-详细*/
     function detail(id, index) {
-        var url = prefix + '/detail/' + id + "/" + index;
+        var url = prefix + '/detail/' + id + "/" + index + "/" + $("#projectId").val();
         var title = "";
         if (1 == index) {
             title = "债权情况详细";
@@ -267,7 +267,7 @@
         } else {
             title = "项目详情";
         }
-        $.modal.openTab(title, url);
+        $.modal.parentTab(title, url);
     }
 
     function exportExcel() {

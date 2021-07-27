@@ -28,10 +28,10 @@
             <if test="projectManagementId != null ">and project_management_id = #{projectManagementId}</if>
             <if test="targetRecoveryAmount != null ">and target_recovery_amount = #{targetRecoveryAmount}</if>
             <if test="params.beginTargetRecoveryDate != null and params.beginTargetRecoveryDate != ''"><!-- 开始时间检索 -->
-                AND date_format(target_recovery_date,'%y%m%d') &gt;= date_format(#{params.beginTargetRecoveryDate},'%y%m%d')
+                AND date_format(target_recovery_date,'%Y%m%d') &gt;= date_format(#{params.beginTargetRecoveryDate},'%Y%m%d')
             </if>
             <if test="params.endTargetRecoveryDate != null and params.endTargetRecoveryDate != ''"><!-- 结束时间检索 -->
-                AND date_format(target_recovery_date,'%y%m%d') &lt;= date_format(#{params.endTargetRecoveryDate},'%y%m%d')
+                AND date_format(target_recovery_date,'%Y%m%d') &lt;= date_format(#{params.endTargetRecoveryDate},'%Y%m%d')
             </if>
         </where>
         ORDER BY create_time DESC

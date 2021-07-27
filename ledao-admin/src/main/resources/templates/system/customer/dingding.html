@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户库列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: bootstrap-editable-css"/>
+    <!--<style>
+        .editable-empty, .editable-empty:hover, .editable-empty:focus {
+            color: #2f2f2f;
+        }
+    </style>-->
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="user-form">
+                <div class="select-list">
+                    <ul>
+                        <li id="sd">选择公司：
+                            <select name="company" id="company" onchange="companyChange()">
+                                <option value="江苏乐道江苏乐道胡巴投资管理有限公司">江苏乐道胡巴投资管理有限公司</option>
+                                <option value="无锡苏金企业管理有限公司">无锡苏金企业管理有限公司</option>
+                                <option value="无锡乐道投资有限公司">无锡乐道投资有限公司</option>
+                                <option value="无锡天孚营销策划有限公司">无锡天孚营销策划有限公司</option>
+                                <option value="江苏青泓信息科技有限公司">江苏青泓信息科技有限公司</option>
+                                <option value="无锡乐道天香茶业有限公司">无锡乐道天香茶业有限公司</option>
+                            </select>
+                        </li>
+                        <div id="sd1"></div>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="exportExcel1()"><i
+                                    class="fa fa-search"></i>&nbsp;打卡</a>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="exportExcel2()"><i
+                                    class="fa fa-search"></i>&nbsp;流程</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: distpicker-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "system/customer";
+    $(function () {
+        companyChange();
+    })
+
+    function exportExcel1() {
+        $.ajax({
+            url: prefix + '/getData',
+            type: 'get',
+            data: {'company': $("#company").val()},
+            dataType: 'json',
+            success: function (result) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            }
+        })
+    }
+
+    function companyChange() {
+        $.ajax({
+            url: prefix + "/getProcessCodeList",
+            type: 'get',
+            data: {'company': $("#company").val()},
+            dataType: 'json',
+            success: function (result) {
+                $("#sd1").append("");
+                var data = result.data;
+                var str = "<li> 选择流程：<select name='process' id='process'>";
+                for (var i in data) {
+                    str += '<option value="' + data[i].processCode + '">' + data[i].name + '</option>';
+                }
+                str += "</select></li>"
+                $("#sd1").append(str);
+            }
+        })
+    }
+
+    function exportExcel2() {
+        $("#loaderCenter").hide();
+        $.ajax({
+            url: prefix + '/getActivity',
+            type: 'get',
+            data: {'company': $("#company").val(), "process": $("#process").val()},
+            dataType: 'json',
+            // responseType: 'blob',
+            success: function (result) {
+                $("#loaderCenter").hide();
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

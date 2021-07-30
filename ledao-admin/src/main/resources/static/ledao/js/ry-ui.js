@@ -44,6 +44,7 @@ var table = {
                     sortOrder: "desc",
                     pagination: true,
                     paginationLoop: false,
+                    pageNumber: 1,
                     pageSize: 10,
                     pageList: [10, 20, 30, 40, 50, 100],
                     toolbar: "toolbar",
@@ -89,7 +90,7 @@ var table = {
                     sortOrder: options.sortOrder,                       // 排序方式  asc 或者 desc
                     pagination: options.pagination,                     // 是否显示分页（*）
                     paginationLoop: options.paginationLoop,             // 是否启用分页条无限循环的功能
-                    pageNumber: 1,                                      // 初始化加载第一页，默认第一页
+                    pageNumber: options.pageNumber,                     // 初始化加载第一页，默认第一页
                     pageSize: options.pageSize,                         // 每页的记录行数（*） 
                     pageList: options.pageList,                         // 可供选择的每页的行数（*）
                     firstLoad: options.firstLoad,                       // 是否首次请求加载数据，对于数据较大可以配置false
@@ -350,6 +351,7 @@ var table = {
                 table.set(tableId);
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
                 var params = $.common.isEmpty(tableId) ? $("#" + table.options.id).bootstrapTable('getOptions') : $("#" + tableId).bootstrapTable('getOptions');
+                console.log("------" + params.pageNumber + "=====" + params.limit)
                 params.queryParams = function (params) {
                     var search = $.common.formToJSON(currentId);
                     if ($.common.isNotEmpty(data)) {

@@ -10,10 +10,10 @@
             <form id="formId">
                 <div class="select-list">
                     <ul>
-                        <li>
+                        <!--<li>
                             <label>借款人名称：</label>
                             <input type="text" name="projectName"/>
-                        </li>
+                        </li>-->
                         <!--<li>
                             <label>资产库状态：</label>
                             <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
@@ -21,18 +21,18 @@
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                             </select>
                         </li>-->
-                        <li>
+                        <!--<li>
                             <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
+                        </li>-->
                     </ul>
                 </div>
             </form>
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
+            <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
             <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
@@ -42,7 +42,7 @@
             <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                shiro:hasPermission="system:projectZck:remove">
                 <i class="fa fa-remove"></i> 删除
-            </a>
+            </a>-->
             <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectZck:export">
                 <i class="fa fa-download"></i> 导出
             </a>-->
@@ -56,11 +56,11 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:projectZck:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
-    var prefix = ctx + "system/projectZck";
+    var prefix = ctx + "system/project";
 
     $(function () {
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/fwProjectList",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -70,55 +70,12 @@
                 checkbox: true
             },
                 {
-                    field: 'projectZckId',
-                    title: '项目管理资产库ID',
-                    visible: false
-                },
-                {
-                    title: "序号",
+                    field: 'dictLabel',
+                    title: '项目状态',
                     formatter: function (value, row, index) {
-                        return $.table.serialNumber(index);
+                        //  return '<a href="javascript:void(0)" onclick="detail(\'' + row.dictLabel + '\')">' + value + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.dictValue + "',\'" + row.dictLabel + '\')">' + value + '</a>';
                     }
-                },
-                {
-                    field: 'zckName',
-                    title: '资产包名称',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectZckId + "',\'" + row.zckName + '\')">' + value + '</a>';
-                    }
-                },
-                {
-                    field: 'startTime',
-                    title: '处置开始时间'
-                },
-                {
-                    field: 'endTime',
-                    title: '处置结束时间'
-                },
-                {
-                    field: 'bjye',
-                    title: '本金余额总额',
-                    formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
-                },
-                {
-                    field: 'czhx',
-                    title: '处置回现总额',
-                    formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
-                },
-                {
-                    field: 'syhs',
-                    title: '剩余债权户数'/*,
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
-                    }*/
-                },
-                {
-                    field: 'zckStatus',
-                    title: '资产包状态'
                 }]
         };
         $.table.init(options);
@@ -126,8 +83,14 @@
 
 
     /*资产库列表-详细*/
-    function detail(id, zckName) {
-        var url = prefix + '/projectList?projectZckId=' + id;
+    function detail(fwProjectType, zckName) {
+        var url = ctx + 'system/project/projectZck?fwProjectType=' + fwProjectType;
+        /*if ("investmentProject" == fwProjectType) {
+            url = ctx + 'system/project/projectZck?fwProjectType=' + fwProjectType;
+        } else {
+            url = ctx + 'system/project/toProjectLists?otherFlag=N';
+        }*/
+
         $.modal.parentTab(zckName + "列表", url);
     }
 

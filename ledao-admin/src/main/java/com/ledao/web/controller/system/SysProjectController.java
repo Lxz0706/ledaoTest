@@ -10,6 +10,7 @@ import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -68,6 +69,9 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private ISysNoticeService sysNoticeService;
+
+    @Autowired
+    private ISysDictDataService sysDictDataService;
 
     @RequiresPermissions("system:project:view")
     @GetMapping()
@@ -211,9 +215,11 @@ public class SysProjectController extends BaseController {
     /**
      * 新增投后部项目管理
      */
-    @GetMapping("/add/{projectZckId}")
-    public String add(@PathVariable("projectZckId") String projectZckId, ModelMap mmap) {
+    @GetMapping("/add")
+    public String add(String projectZckId, String parentId, String otherFlag, ModelMap mmap) {
         mmap.put("projectZckId", projectZckId);
+        mmap.put("parentId", parentId);
+        mmap.put("otherFlag", otherFlag);
         return prefix + "/add";
     }
 
@@ -567,11 +573,14 @@ public class SysProjectController extends BaseController {
     }
 
     @RequiresPermissions("system:project:list")
-    @GetMapping({"/projectList/{projectId}/{projectZckId}"})
-    public String selectZcbByAssetStatus(@PathVariable("projectId") Long projectId, @PathVariable("projectZckId") Long projectZckId, ModelMap modelMap) {
+    @GetMapping("/toProjectList")
+    public String selectZcbByAssetStatus(Long projectId, Long projectZckId, String fwProjectType, ModelMap modelMap) {
         modelMap.put("projectId", projectId);
         modelMap.put("projectZckId", projectZckId);
-        modelMap.put("zckName", sysProjectZckService.selectSysProjectZckById(projectZckId).getZckName());
+        modelMap.put("fwProjectType", fwProjectType);
+        if (StringUtils.isNotNull(projectZckId)) {
+            modelMap.put("zckName", sysProjectZckService.selectSysProjectZckById(projectZckId).getZckName());
+        }
         return "system/project/projectList";
     }
 
@@ -1298,5 +1307,39 @@ public class SysProjectController extends BaseController {
         }
 
         return AjaxResult.success(sysProjectZckList);
+    }
+
+    @GetMapping("/toFwProject")
+    public String toFwProject() {
+        return prefix + "/fwProject";
+    }
+
+    @PostMapping("/fwProjectList")
+    @ResponseBody
+    public TableDataInfo fwProjectList() {
+        startPage();
+        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType("sys_fw_type");
+        return getDataTable(sysDictDataList);
+    }
+
+    @GetMapping("/projectZck")
+    public String zck(String fwProjectType, ModelMap modelMap) {
+        String url = "";
+        modelMap.put("fwProjectType", fwProjectType);
+        if (StringUtils.isNotEmpty(fwProjectType)) {
+            if ("investmentProject".equals(fwProjectType)) {
+                url = prefix + "/projectZck";
+            } else {
+                modelMap.put("otherFlag", "N");
+                url = prefix + "/investmentProject";
+            }
+        }
+        return url;
+    }
+
+    @GetMapping("/toProjectLists")
+    public String toProjectList(String otherFlag, ModelMap modelMap) {
+        modelMap.put("otherFlag", otherFlag);
+        return prefix + "/project";
     }
 }

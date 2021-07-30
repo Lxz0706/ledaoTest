@@ -80,10 +80,6 @@
                     }
                 },
                 {
-                    field: 'projectLeader',
-                    title: '项目负责人'
-                },
-                {
                     field: 'investmentDate',
                     title: '投资日期'
                 },
@@ -165,6 +161,10 @@
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectManagementId + '\')">最新进度情况</a>';
                     }
+                },
+                {
+                    field: 'projectLeader',
+                    title: '项目负责人'
                 }]
         };
         $.table.init(options);
@@ -192,7 +192,7 @@
 
     //现金回现
     function detail5(projectManagementId) {
-        var url = ctx + 'system/recapture/recaptureList/' + projectManagementId + "/N";
+        var url = ctx + 'system/recapture/recaptureList?projectId=' + projectManagementId + "&project=N";
         $.modal.parentTab('回现列表', url);
     }
 

@@ -34,7 +34,7 @@ server:
 logging:
   level:
     com.ledao.system.mapper: ERROR
-    org.springframework: ERROR
+    org.springframework: info
 
 # 用户配置
 user:

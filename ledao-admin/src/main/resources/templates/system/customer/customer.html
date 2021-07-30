@@ -14,6 +14,8 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input name="pageNumber" id="pageNumber" type="hidden" th:value="*{pageNumber}">
+            <input name="pageSize" id="pageSize" type="hidden" th:value="*{pageSize}">
             <form id="user-form">
                 <div class="select-list">
                     <ul>
@@ -161,6 +163,9 @@
             sortOrder: 'desc',
             clickToSelect: true,
             modalName: "客户库",
+            //pageNumber: $.common.isNotEmpty($("#pageNumber").val() ? $("#pageNumber").val() : 1),
+            //  pageSize: $.common.isNotEmpty($("#pageSize").val()) ? $("#pageSize").val() : 10,
+            // queryParams: queryParams,
             onLoadSuccess: onLoadSuccess,
             onEditableSave: onEditableSave,
             columns: [{
@@ -214,7 +219,7 @@
                     field: 'projectName',
                     title: '合作项目',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.customerId + '\')">' + strLength(value) + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.customerId + '\')">' + strLength(value, 10) + '</a>';
                     }
                 },
                 {
@@ -327,26 +332,59 @@
                 $.table.hideColumn("reason");
             }
         }
+        onPostBody();
+    }
+
+    function onPostBody() {
+        var pageNumber = $("#bootstrap-table").bootstrapTable("getOptions").pageNumber;
+        //跳转到
+        var goPage = parseInt($("#pageNumber").val());
+        $("#pageNumber").val('');
+        if (goPage != pageNumber) {
+            $("#bootstrap-table").bootstrapTable('selectPage', parseInt(goPage));
+        }
     }
 
     //控制显示的字数
-    function strLength(value) {
-        var str = "";
+    function strLength(value, length, target, str) {
+        var _length = $.common.isEmpty(length) ? 20 : length;
+        var _text = "";
+        var _value = $.common.nullToStr(value, str);
+        var _target = $.common.isEmpty(target) ? 'copy' : target;
         if ($.common.isNotEmpty(value)) {
-            if (value.length > 10) {
-                str = value.substring(0, 10) + '...';
+            if (_value.length > _length) {
+                _text = _value.substr(0, _length) + "...";
+                _value = _value.replace(/\'/g, "&apos;");
+                _value = _value.replace(/\"/g, "&quot;");
+                var actions = [];
+                actions.push($.common.sprintf('<input style="opacity: 0;position: absolute;z-index:-1" type="text" value="%s"/>', _value));
+                actions.push($.common.sprintf('<span class="tooltip-show" data_target="%s" data-toggle="tooltip" title="%s">%s</span>', _target, _value, _text));
+                return actions.join('');
             } else {
-                str = value;
+                _text = _value;
+                return _text;
             }
         } else {
-            str = "暂无合作项目";
+            _text = "暂无合作项目";
+            return _text;
         }
-        return str;
+    }
+
+    function queryParams(params) {
+        var search = $.table.queryParams(params);
+        if ($.common.isNotEmpty($("#pageNumber").val())) {
+            search.pageNum = $("#pageNumber").val();
+        }
+        if ($.common.isNotEmpty($("#pageSize").val())) {
+            search.pageSize = $("#pageSize").val();
+        }
+        return search;
     }
 
 
     function detail(customerId) {
-        var url = ctx + 'system/item/itemList/' + customerId;
+        var url = ctx + 'system/item/itemList?customerId=' + customerId + "&pageNumber=" + $("#bootstrap-table").bootstrapTable('getOptions').pageNumber
+            + "&pageSize=" + $("#bootstrap-table").bootstrapTable('getOptions').pageSize;
         $.modal.parentTab("合作项目列表", url);
     }
 

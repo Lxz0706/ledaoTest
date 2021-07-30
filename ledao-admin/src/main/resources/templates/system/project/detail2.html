@@ -41,7 +41,7 @@
     function back() {
         var projectZckId = $("#projectZckId").val();
         var pId = $("#pId").val();
-        var url = ctx + 'system/project/projectList/' + pId + "/" + projectZckId;
+        var url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId;
         $.modal.parentTab($("#projectZckName").val() + "列表", url);
     }
 </script>

@@ -8,6 +8,7 @@
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <form id="formId">
+                <input name="otherFlag" id="otherFlag" type="hidden" th:value="*{otherFlag}">
                 <input type="hidden" name="projectZckId" id="projectZckId" th:value="*{projectZckId}"/>
                 <!--<div class="select-list">
                     <ul>
@@ -302,7 +303,7 @@
     /*项目列表-详细*/
     function detail(id, projectName) {
         var projectZckId = $("#projectZckId").val();
-        var url = prefix + '/projectList/' + id + "/" + projectZckId;
+        var url = prefix + '/toProjectList?projectId=' + id + "&projectZckId=" + projectZckId;
         $.modal.parentTab(projectName + "列表", url);
     }
 
@@ -337,7 +338,7 @@
 
     //现金回现
     function detail5(projectId) {
-        var url = ctx + 'system/recapture/recaptureList/' + projectId + "/Y";
+        var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId + "&project=Y";
         $.modal.parentTab('处置回现列表', url);
     }
 

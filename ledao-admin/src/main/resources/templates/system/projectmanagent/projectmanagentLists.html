@@ -75,10 +75,6 @@
                     }
                 },
                 {
-                    field: 'projectLeader',
-                    title: '项目负责人'
-                },
-                {
                     field: 'investmentDate',
                     title: '投资日期'
                 },
@@ -86,7 +82,7 @@
                     field: 'investmentAmount',
                     title: '投资金额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -97,7 +93,7 @@
                     field: 'targetRecoveryAmount',
                     title: '目标回收金额',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="money4(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
+                        return '<a href="javascript:void(0)" onclick="money4(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
                 {
@@ -110,14 +106,14 @@
                     field: 'amountPaid',
                     title: '已支付金额',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
+                        return '<a href="javascript:void(0)" onclick="money1(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
                 {
                     field: 'entryAmount',
                     title: '已回收金额',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="money2(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
+                        return '<a href="javascript:void(0)" onclick="money2(\'' + row.projectManagementId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
                 {
@@ -125,6 +121,10 @@
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectManagementId + '\')">最新进度情况</a>';
                     }
+                },
+                {
+                    field: 'projectLeader',
+                    title: '项目负责人'
                 }]
         };
         $.table.init(options);

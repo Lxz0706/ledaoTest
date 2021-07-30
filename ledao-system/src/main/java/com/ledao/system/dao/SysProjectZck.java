@@ -90,6 +90,12 @@ public class SysProjectZck extends BaseEntity {
 
     private BigDecimal totalCzhx;
 
+    /**
+     * 法务与投后项目
+     */
+    //@Excel(name = "法务与投后项目")
+    private String fwProjectType;
+
     public Long getProjectZckId() {
         return projectZckId;
     }
@@ -218,6 +224,14 @@ public class SysProjectZck extends BaseEntity {
         this.totalCzhx = totalCzhx;
     }
 
+    public String getFwProjectType() {
+        return fwProjectType;
+    }
+
+    public void setFwProjectType(String fwProjectType) {
+        this.fwProjectType = fwProjectType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -231,6 +245,7 @@ public class SysProjectZck extends BaseEntity {
                 .append("updateTime", getUpdateTime())
                 .append("startTime", getStartTime())
                 .append("endTime", getEndTime())
+                .append("fwProjectType", getFwProjectType())
                 .toString();
     }
 }

@@ -162,10 +162,22 @@ public class SysProjectZckController extends BaseController {
     /**
      * 根据资产库ID查询项目
      */
-    @GetMapping("/projectList/{projectZckId}")
-    public String projectList(@PathVariable("projectZckId") String projectZckId, ModelMap modelMap) {
+    @GetMapping("/projectList")
+    public String projectList(String projectZckId, String fwProjectType, ModelMap modelMap) {
+        String url = "";
         modelMap.put("projectZckId", projectZckId);
-        return "system/project/project";
+        modelMap.put("fwProjectType", fwProjectType);
+        if (StringUtils.isNotEmpty(fwProjectType)) {
+            if ("investmentProject".equals(fwProjectType)) {
+                url = "system/project/projectZck";
+            } else {
+                modelMap.put("otherFlag", "N");
+                url = "system/project/investmentProject";
+            }
+        } else {
+            url = "system/project/project";
+        }
+        return url;
     }
 
     /**

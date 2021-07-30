@@ -9,14 +9,19 @@ import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.annotation.Log;
+import com.ledao.common.constant.Constants;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.page.PageDao;
 import com.ledao.common.core.page.TableDataInfo;
+import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.ServletUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.freemarker.WorldUtil;
 import com.ledao.common.utils.poi.ExcelUtil;
+import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
@@ -31,6 +36,7 @@ import com.ledao.common.annotation.ExcelModel;
 import com.taobao.api.ApiException;
 
 import javax.crypto.KeyGenerator;
+import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +82,9 @@ public class SysCustomerController<main> extends BaseController {
 
     @RequiresPermissions("system:customer:view")
     @GetMapping()
-    public String customer() {
+    public String customer(String pageNumber, String pageSize, ModelMap modelMap) {
+        modelMap.put("pageNumber", pageNumber);
+        modelMap.put("pageSize", pageSize);
         return prefix + "/customer";
     }
 
@@ -1040,7 +1048,7 @@ public class SysCustomerController<main> extends BaseController {
                     map.put("deptName", getDeptNameByDeptId(accessToken, Long.valueOf(rsp1.getProcessInstance().getOriginatorDeptId())));
                     map.put("userName", valueVo.getName());
                     map.put("company", company);
-                    map.put("createTime","2021-07-05");
+                    map.put("createTime", "2021-07-05");
                     //原因
                     if ("TextareaField".equals(valueVo.getComponentType())) {
                         map.put("text", valueVo.getValue());

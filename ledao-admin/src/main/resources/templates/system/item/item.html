@@ -7,6 +7,8 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input name="pageNumber" id="pageNumber" type="hidden" th:value="*{pageNumber}">
+            <input name="pageSize" id="pageSize" type="hidden" th:value="*{pageSize}">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -154,7 +156,7 @@
     }
 
     function back() {
-        var url = ctx + 'system/customer';
+        var url = ctx + 'system/customer?pageNumber=' + $("#pageNumber").val() + "&pageSize=" + $("#pageSize").val();
         $.modal.parentTab("客户统计", url);
     }
 </script>

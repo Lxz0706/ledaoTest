@@ -532,9 +532,11 @@ public class SysItemController extends BaseController {
     }
 
     @RequiresPermissions("system:item:list")
-    @GetMapping("/itemList/{customerId}")
-    public String itemList(@PathVariable("customerId") String customerId, ModelMap modelMap) {
+    @GetMapping("/itemList")
+    public String itemList(String customerId, String pageNumber, String pageSize, ModelMap modelMap) {
         modelMap.put("customerId", customerId);
+        modelMap.put("pageNumber", pageNumber);
+        modelMap.put("pageSize", pageSize);
         return "system/item/item";
     }
 
@@ -548,7 +550,6 @@ public class SysItemController extends BaseController {
             SysPcustomer sysPcustomer = new SysPcustomer();
             sysPcustomer.setItemId(sysItem1.getItemId());
             List<SysPcustomer> list = sysPcustomerService.selectSysPcustomerList(sysPcustomer);
-            System.out.print(sysItem1.getItemId() + "-------查询数量：=======" + list.size());
             if (list.size() <= 0) {
                 for (String string : sysItem1.getProjectId().split(",")) {
                     if (StringUtils.isNotNull(sysItem1.getItemId())) {

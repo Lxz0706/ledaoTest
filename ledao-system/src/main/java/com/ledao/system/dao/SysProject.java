@@ -526,6 +526,12 @@ public class SysProject extends BaseEntity {
 
     private Long pId;
 
+    /**
+     * 是否其他项目
+     */
+    // @Excel(name = "是否其他项目")
+    private String otherFlag;
+
     public Long getProjectId() {
         return projectId;
     }
@@ -1262,6 +1268,14 @@ public class SysProject extends BaseEntity {
         this.pId = pId;
     }
 
+    public String getOtherFlag() {
+        return otherFlag;
+    }
+
+    public void setOtherFlag(String otherFlag) {
+        this.otherFlag = otherFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1344,6 +1358,7 @@ public class SysProject extends BaseEntity {
                 .append("zqcjCustomerName", getZqcjCustomerName())
                 .append("otherId", getOtherId())
                 .append("otherName", getOtherName())
+                .append("otherFlag", getOtherFlag())
                 .toString();
     }
 }

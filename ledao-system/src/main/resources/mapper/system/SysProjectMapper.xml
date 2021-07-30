@@ -84,6 +84,7 @@
         <result property="zqcjCustomerName" column="zqcj_customer_name"/>
         <result property="otherId" column="other_id"/>
         <result property="otherName" column="other_name"/>
+        <result property="otherFlag" column="other_flag"/>
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -96,7 +97,7 @@
         update_by, update_time,project_zck_id,law_firm,lawyer_contact,debt_status, potential_customers, potential_customers_id, seizure, ageing, limitation
          ,deal_customer_id,deal_customer_name,customer_lable, asset_supplier_id, asset_supplier_name, funding_provider_id, funding_provider_name,
           lawyer_id, lawyer_name, intermediary_id, intermediary_name, wqyx_customer_id, wqyx_customer_name, wqcj_customer_id, wqcj_customer_name,
-          zqyx_customer_id, zqyx_customer_name, zqcj_customer_id, zqcj_customer_name, other_id, other_name  from sys_project
+          zqyx_customer_id, zqyx_customer_name, zqcj_customer_id, zqcj_customer_name, other_id, other_name,other_flag   from sys_project
     </sql>
 
     <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
@@ -193,6 +194,7 @@
             </if>
             <if test="otherId != null  and otherId != ''">and other_id = #{otherId}</if>
             <if test="otherName != null  and otherName != ''">and other_name like concat('%', #{otherName}, '%')</if>
+            <if test="otherFlag != null  and otherFlag != ''">and other_flag = #{otherFlag}</if>
         </where>
         ORDER BY no asc
     </select>
@@ -283,6 +285,7 @@
             <if test="zqcjCustomerName != null">zqcj_customer_name,</if>
             <if test="otherId != null">other_id,</if>
             <if test="otherName != null">other_name,</if>
+            <if test="otherFlag != null">other_flag,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
@@ -363,6 +366,7 @@
             <if test="zqcjCustomerName != null">#{zqcjCustomerName},</if>
             <if test="otherId != null">#{otherId},</if>
             <if test="otherName != null">#{otherName},</if>
+            <if test="otherFlag != null">#{otherFlag},</if>
         </trim>
     </insert>
 
@@ -447,6 +451,7 @@
             <if test="zqcjCustomerName != null">zqcj_customer_name = #{zqcjCustomerName},</if>
             <if test="otherId != null">other_id = #{otherId},</if>
             <if test="otherName != null">other_name = #{otherName},</if>
+            <if test="otherFlag != null">other_flag = #{otherFlag},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -470,6 +475,7 @@
             <if test="projectId != null ">and project_id = #{projectId}</if>
             <if test="debtStatus != null ">and debt_status = #{debtStatus}</if>
             <if test="projectName != null ">and project_name like concat ('%', #{projectName},'%')</if>
+            <if test="otherFlag != null  and otherFlag != ''">and other_flag = #{otherFlag}</if>
         </where>
         order by no asc
     </select>

@@ -69,8 +69,8 @@ public class SysRecaptureController extends BaseController {
      * 根据项目id查询列表
      */
     @RequiresPermissions("system:recapture:list")
-    @GetMapping("/recaptureList/{projectId}/{project}")
-    public String select(@PathVariable("projectId") String projectId, @PathVariable("project") String project, ModelMap modelMap) {
+    @GetMapping("/recaptureList")
+    public String select(String projectId, String project, ModelMap modelMap) {
         modelMap.put("projectId", projectId);
         modelMap.put("project", project);
         if ("Y".equals(project)) {

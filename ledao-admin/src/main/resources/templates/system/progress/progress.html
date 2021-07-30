@@ -129,7 +129,7 @@
         var projectFlag = $("#project").val();
         if ("Y" == projectFlag) {
             var projectZckId = $("#projectZckId").val();
-            var url = ctx + 'system/projectZck/projectList/' + projectZckId;
+            var url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId;
             $.modal.parentTab($("#zckName").val() + "列表", url);
         } else {
             var type = $("#type").val();

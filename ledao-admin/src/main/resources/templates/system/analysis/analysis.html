@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('客户库列表')"/>
@@ -98,7 +98,7 @@
         customerForPersonByDeptId(data);
     }
 
-    //根据所属地区分析
+    //根据所属地区分析123
     function cityAnalysis(data) {
         $.ajax({
             url: ctx + 'system/customer/selectCustomerByCity',

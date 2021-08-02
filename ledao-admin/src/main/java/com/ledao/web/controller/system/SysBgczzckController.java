@@ -34,7 +34,7 @@ import com.ledao.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 重组并购项目信息库Controller123123
+ * 重组并购项目信息库Controller
  *
  * @author lxz
  * @date 2020-06-16

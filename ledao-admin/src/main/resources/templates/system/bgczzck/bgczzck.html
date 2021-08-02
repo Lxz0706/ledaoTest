@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('重组并购项目信息库列表')" />
@@ -94,7 +94,7 @@
             $.modal.parentTab(projectStatus+"列表", decodeURI(url));
         }
 
-        //查询
+        //查询请问
         function jump(){
             var data = $("#formId").serialize();
             $.operate.gets(prefix + "/queryAll", data,"查询界面");

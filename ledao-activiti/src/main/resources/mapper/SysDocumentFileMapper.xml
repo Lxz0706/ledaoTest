@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.activity.mapper.SysDocumentFileMapper">
+    
+    <resultMap type="SysDocumentFile" id="SysDocumentFileResult">
+        <result property="documentId"    column="document_id"    />
+        <result property="documentType"    column="document_type"    />
+        <result property="assetNumber"    column="asset_number"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileScanType"    column="file_scan_type"    />
+        <result property="counts"    column="counts"    />
+        <result property="pages"    column="pages"    />
+        <result property="documentStatu"    column="document_statu"    />
+        <result property="cabinetNo"    column="cabinet_no"    />
+        <result property="bagNo"    column="bag_no"    />
+        <result property="documentGetType"    column="document_get_type"    />
+        <result property="fileGetType"    column="file_get_type"    />
+        <result property="documentLevel"    column="document_level"    />
+        <result property="fileIds"    column="file_ids"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysDocumentFileVo">
+        select document_id, document_type, asset_number, contract_no, file_name, file_type, file_scan_type, counts, pages, document_statu, cabinet_no, bag_no, document_get_type, file_get_type, document_level, file_ids, apply_id, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_document_file
+    </sql>
+
+    <select id="selectSysDocumentFileList" parameterType="SysDocumentFile" resultMap="SysDocumentFileResult">
+        <include refid="selectSysDocumentFileVo"/>
+        <where>  
+            <if test="documentType != null  and documentType != ''"> and document_type = #{documentType}</if>
+            <if test="assetNumber != null  and assetNumber != ''"> and asset_number = #{assetNumber}</if>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
+            <if test="fileScanType != null  and fileScanType != ''"> and file_scan_type = #{fileScanType}</if>
+            <if test="counts != null "> and counts = #{counts}</if>
+            <if test="pages != null "> and pages = #{pages}</if>
+            <if test="documentStatu != null  and documentStatu != ''"> and document_statu = #{documentStatu}</if>
+            <if test="cabinetNo != null  and cabinetNo != ''"> and cabinet_no = #{cabinetNo}</if>
+            <if test="bagNo != null  and bagNo != ''"> and bag_no = #{bagNo}</if>
+            <if test="documentGetType != null  and documentGetType != ''"> and document_get_type = #{documentGetType}</if>
+            <if test="fileGetType != null  and fileGetType != ''"> and file_get_type = #{fileGetType}</if>
+            <if test="documentLevel != null  and documentLevel != ''"> and document_level = #{documentLevel}</if>
+            <if test="fileIds != null  and fileIds != ''"> and file_ids = #{fileIds}</if>
+            <if test="applyId != null  and applyId != ''"> and apply_id = #{applyId}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysDocumentFileById" parameterType="Long" resultMap="SysDocumentFileResult">
+        <include refid="selectSysDocumentFileVo"/>
+        where document_id = #{documentId}
+    </select>
+        
+    <insert id="insertSysDocumentFile" parameterType="SysDocumentFile" useGeneratedKeys="true" keyProperty="documentId">
+        insert into sys_document_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="documentType != null">document_type,</if>
+            <if test="assetNumber != null">asset_number,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="fileScanType != null">file_scan_type,</if>
+            <if test="counts != null">counts,</if>
+            <if test="pages != null">pages,</if>
+            <if test="documentStatu != null">document_statu,</if>
+            <if test="cabinetNo != null">cabinet_no,</if>
+            <if test="bagNo != null">bag_no,</if>
+            <if test="documentGetType != null">document_get_type,</if>
+            <if test="fileGetType != null">file_get_type,</if>
+            <if test="documentLevel != null">document_level,</if>
+            <if test="fileIds != null">file_ids,</if>
+            <if test="applyId != null">apply_id,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="reviser != null">reviser,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="documentType != null">#{documentType},</if>
+            <if test="assetNumber != null">#{assetNumber},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="fileScanType != null">#{fileScanType},</if>
+            <if test="counts != null">#{counts},</if>
+            <if test="pages != null">#{pages},</if>
+            <if test="documentStatu != null">#{documentStatu},</if>
+            <if test="cabinetNo != null">#{cabinetNo},</if>
+            <if test="bagNo != null">#{bagNo},</if>
+            <if test="documentGetType != null">#{documentGetType},</if>
+            <if test="fileGetType != null">#{fileGetType},</if>
+            <if test="documentLevel != null">#{documentLevel},</if>
+            <if test="fileIds != null">#{fileIds},</if>
+            <if test="applyId != null">#{applyId},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="reviser != null">#{reviser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysDocumentFile" parameterType="SysDocumentFile">
+        update sys_document_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="documentType != null">document_type = #{documentType},</if>
+            <if test="assetNumber != null">asset_number = #{assetNumber},</if>
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="fileScanType != null">file_scan_type = #{fileScanType},</if>
+            <if test="counts != null">counts = #{counts},</if>
+            <if test="pages != null">pages = #{pages},</if>
+            <if test="documentStatu != null">document_statu = #{documentStatu},</if>
+            <if test="cabinetNo != null">cabinet_no = #{cabinetNo},</if>
+            <if test="bagNo != null">bag_no = #{bagNo},</if>
+            <if test="documentGetType != null">document_get_type = #{documentGetType},</if>
+            <if test="fileGetType != null">file_get_type = #{fileGetType},</if>
+            <if test="documentLevel != null">document_level = #{documentLevel},</if>
+            <if test="fileIds != null">file_ids = #{fileIds},</if>
+            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="reviser != null">reviser = #{reviser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where document_id = #{documentId}
+    </update>
+
+    <delete id="deleteSysDocumentFileById" parameterType="Long">
+        delete from sys_document_file where document_id = #{documentId}
+    </delete>
+
+    <delete id="deleteSysDocumentFileByIds" parameterType="String">
+        delete from sys_document_file where document_id in 
+        <foreach item="documentId" collection="array" open="(" separator="," close=")">
+            #{documentId}
+        </foreach>
+    </delete>
+    
+</mapper>

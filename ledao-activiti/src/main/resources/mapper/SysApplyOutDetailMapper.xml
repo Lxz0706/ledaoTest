@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.activity.mapper.SysApplyOutDetailMapper">
+    
+    <resultMap type="SysApplyOutDetail" id="SysApplyOutDetailResult">
+        <result property="outDetailId"    column="out_detail_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="documentId"    column="document_id"    />
+        <result property="isPage"    column="is_page"    />
+        <result property="isElec"    column="is_elec"    />
+        <result property="isReturn"    column="is_return"    />
+        <result property="planReturnTime"    column="plan_return_time"    />
+        <result property="realReturnTime"    column="real_return_time"    />
+        <result property="outReason"    column="out_reason"    />
+        <result property="isOut"    column="is_out"    />
+        <result property="isReceive"    column="is_receive"    />
+        <result property="isReturned"    column="is_returned"    />
+        <result property="isReceived"    column="is_received"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysApplyOutDetailVo">
+        select out_detail_id, apply_id, document_id, is_page, is_elec, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_apply_out_detail
+    </sql>
+
+    <select id="selectSysApplyOutDetailList" parameterType="SysApplyOutDetail" resultMap="SysApplyOutDetailResult">
+        <include refid="selectSysApplyOutDetailVo"/>
+        <where>  
+            <if test="applyId != null "> and apply_id = #{applyId}</if>
+            <if test="documentId != null "> and document_id = #{documentId}</if>
+            <if test="isPage != null  and isPage != ''"> and is_page = #{isPage}</if>
+            <if test="isElec != null  and isElec != ''"> and is_elec = #{isElec}</if>
+            <if test="isReturn != null  and isReturn != ''"> and is_return = #{isReturn}</if>
+            <if test="planReturnTime != null "> and plan_return_time = #{planReturnTime}</if>
+            <if test="realReturnTime != null "> and real_return_time = #{realReturnTime}</if>
+            <if test="outReason != null  and outReason != ''"> and out_reason = #{outReason}</if>
+            <if test="isOut != null  and isOut != ''"> and is_out = #{isOut}</if>
+            <if test="isReceive != null  and isReceive != ''"> and is_receive = #{isReceive}</if>
+            <if test="isReturned != null  and isReturned != ''"> and is_returned = #{isReturned}</if>
+            <if test="isReceived != null  and isReceived != ''"> and is_received = #{isReceived}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysApplyOutDetailById" parameterType="Long" resultMap="SysApplyOutDetailResult">
+        <include refid="selectSysApplyOutDetailVo"/>
+        where out_detail_id = #{outDetailId}
+    </select>
+        
+    <insert id="insertSysApplyOutDetail" parameterType="SysApplyOutDetail" useGeneratedKeys="true" keyProperty="outDetailId">
+        insert into sys_apply_out_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">apply_id,</if>
+            <if test="documentId != null">document_id,</if>
+            <if test="isPage != null">is_page,</if>
+            <if test="isElec != null">is_elec,</if>
+            <if test="isReturn != null">is_return,</if>
+            <if test="planReturnTime != null">plan_return_time,</if>
+            <if test="realReturnTime != null">real_return_time,</if>
+            <if test="outReason != null">out_reason,</if>
+            <if test="isOut != null">is_out,</if>
+            <if test="isReceive != null">is_receive,</if>
+            <if test="isReturned != null">is_returned,</if>
+            <if test="isReceived != null">is_received,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="reviser != null">reviser,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">#{applyId},</if>
+            <if test="documentId != null">#{documentId},</if>
+            <if test="isPage != null">#{isPage},</if>
+            <if test="isElec != null">#{isElec},</if>
+            <if test="isReturn != null">#{isReturn},</if>
+            <if test="planReturnTime != null">#{planReturnTime},</if>
+            <if test="realReturnTime != null">#{realReturnTime},</if>
+            <if test="outReason != null">#{outReason},</if>
+            <if test="isOut != null">#{isOut},</if>
+            <if test="isReceive != null">#{isReceive},</if>
+            <if test="isReturned != null">#{isReturned},</if>
+            <if test="isReceived != null">#{isReceived},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="reviser != null">#{reviser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysApplyOutDetail" parameterType="SysApplyOutDetail">
+        update sys_apply_out_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="documentId != null">document_id = #{documentId},</if>
+            <if test="isPage != null">is_page = #{isPage},</if>
+            <if test="isElec != null">is_elec = #{isElec},</if>
+            <if test="isReturn != null">is_return = #{isReturn},</if>
+            <if test="planReturnTime != null">plan_return_time = #{planReturnTime},</if>
+            <if test="realReturnTime != null">real_return_time = #{realReturnTime},</if>
+            <if test="outReason != null">out_reason = #{outReason},</if>
+            <if test="isOut != null">is_out = #{isOut},</if>
+            <if test="isReceive != null">is_receive = #{isReceive},</if>
+            <if test="isReturned != null">is_returned = #{isReturned},</if>
+            <if test="isReceived != null">is_received = #{isReceived},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="reviser != null">reviser = #{reviser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where out_detail_id = #{outDetailId}
+    </update>
+
+    <delete id="deleteSysApplyOutDetailById" parameterType="Long">
+        delete from sys_apply_out_detail where out_detail_id = #{outDetailId}
+    </delete>
+
+    <delete id="deleteSysApplyOutDetailByIds" parameterType="String">
+        delete from sys_apply_out_detail where out_detail_id in 
+        <foreach item="outDetailId" collection="array" open="(" separator="," close=")">
+            #{outDetailId}
+        </foreach>
+    </delete>
+    
+</mapper>

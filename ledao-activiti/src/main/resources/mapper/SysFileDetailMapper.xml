@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.activity.mapper.SysFileDetailMapper">
+    
+    <resultMap type="SysFileDetail" id="SysFileDetailResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="documentFileId"    column="document_file_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysFileDetailVo">
+        select file_id, file_name, file_url, document_file_id, create_by, creator, create_time, update_by, reviser, update_time from sys_file_detail
+    </sql>
+
+    <select id="selectSysFileDetailList" parameterType="SysFileDetail" resultMap="SysFileDetailResult">
+        <include refid="selectSysFileDetailVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
+            <if test="documentFileId != null "> and document_file_id = #{documentFileId}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysFileDetailById" parameterType="Long" resultMap="SysFileDetailResult">
+        <include refid="selectSysFileDetailVo"/>
+        where file_id = #{fileId}
+    </select>
+        
+    <insert id="insertSysFileDetail" parameterType="SysFileDetail" useGeneratedKeys="true" keyProperty="fileId">
+        insert into sys_file_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">file_name,</if>
+            <if test="fileUrl != null">file_url,</if>
+            <if test="documentFileId != null">document_file_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="reviser != null">reviser,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">#{fileName},</if>
+            <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="documentFileId != null">#{documentFileId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="reviser != null">#{reviser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysFileDetail" parameterType="SysFileDetail">
+        update sys_file_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="fileUrl != null">file_url = #{fileUrl},</if>
+            <if test="documentFileId != null">document_file_id = #{documentFileId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="reviser != null">reviser = #{reviser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteSysFileDetailById" parameterType="Long">
+        delete from sys_file_detail where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteSysFileDetailByIds" parameterType="String">
+        delete from sys_file_detail where file_id in 
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+    
+</mapper>

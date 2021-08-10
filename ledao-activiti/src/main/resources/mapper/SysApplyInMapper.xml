@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.activity.mapper.SysApplyInMapper">
+    
+    <resultMap type="SysApplyIn" id="SysApplyInResult">
+        <result property="applyId"    column="apply_id"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="documentType"    column="document_type"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="debtorName"    column="debtor_name"    />
+        <result property="applyUser"    column="apply_user"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="approveUser"    column="approve_user"    />
+        <result property="approveStatu"    column="approve_statu"    />
+        <result property="realCreateBy"    column="real_create_by"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysApplyInVo">
+        select apply_id, apply_type, document_type, project_id, project_name, company_name, debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_apply_in
+    </sql>
+
+    <select id="selectSysApplyInList" parameterType="SysApplyIn" resultMap="SysApplyInResult">
+        <include refid="selectSysApplyInVo"/>
+        <where>  
+            <if test="applyType != null  and applyType != ''"> and apply_type = #{applyType}</if>
+            <if test="documentType != null  and documentType != ''"> and document_type = #{documentType}</if>
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="debtorName != null  and debtorName != ''"> and debtor_name like concat('%', #{debtorName}, '%')</if>
+            <if test="applyUser != null  and applyUser != ''"> and apply_user = #{applyUser}</if>
+            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="approveUser != null  and approveUser != ''"> and approve_user = #{approveUser}</if>
+            <if test="approveStatu != null  and approveStatu != ''"> and approve_statu = #{approveStatu}</if>
+            <if test="realCreateBy != null  and realCreateBy != ''"> and real_create_by = #{realCreateBy}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+        </where>
+    </select>
+    
+    <select id="listByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
+        <include refid="selectSysApplyInVo"/> app 
+        LEFT JOIN ( SELECT workflow.apply_id as apply_ids from sys_apply_workflow workflow  
+        where workflow.approve_user=#{approveUser} GROUP BY workflow.apply_id) work on app.apply_id = work.apply_ids 
+        ORDER BY app.create_time desc
+    </select>
+    
+    <select id="selectSysApplyInById" parameterType="Long" resultMap="SysApplyInResult">
+        <include refid="selectSysApplyInVo"/>
+        where apply_id = #{applyId}
+    </select>
+        
+    <insert id="insertSysApplyIn" parameterType="SysApplyIn" useGeneratedKeys="true" keyProperty="applyId">
+        insert into sys_apply_in
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyType != null">apply_type,</if>
+            <if test="documentType != null">document_type,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="companyName != null">company_name,</if>
+            <if test="debtorName != null">debtor_name,</if>
+            <if test="applyUser != null">apply_user,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="approveUser != null">approve_user,</if>
+            <if test="approveStatu != null">approve_statu,</if>
+            <if test="realCreateBy != null">real_create_by,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="reviser != null">reviser,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyType != null">#{applyType},</if>
+            <if test="documentType != null">#{documentType},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="debtorName != null">#{debtorName},</if>
+            <if test="applyUser != null">#{applyUser},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="approveUser != null">#{approveUser},</if>
+            <if test="approveStatu != null">#{approveStatu},</if>
+            <if test="realCreateBy != null">#{realCreateBy},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="reviser != null">#{reviser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysApplyIn" parameterType="SysApplyIn">
+        update sys_apply_in
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyType != null">apply_type = #{applyType},</if>
+            <if test="documentType != null">document_type = #{documentType},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="debtorName != null">debtor_name = #{debtorName},</if>
+            <if test="applyUser != null">apply_user = #{applyUser},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="approveUser != null">approve_user = #{approveUser},</if>
+            <if test="approveStatu != null">approve_statu = #{approveStatu},</if>
+            <if test="realCreateBy != null">real_create_by = #{realCreateBy},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="reviser != null">reviser = #{reviser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where apply_id = #{applyId}
+    </update>
+
+    <delete id="deleteSysApplyInById" parameterType="Long">
+        delete from sys_apply_in where apply_id = #{applyId}
+    </delete>
+
+    <delete id="deleteSysApplyInByIds" parameterType="String">
+        delete from sys_apply_in where apply_id in 
+        <foreach item="applyId" collection="array" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </delete>
+    
+</mapper>

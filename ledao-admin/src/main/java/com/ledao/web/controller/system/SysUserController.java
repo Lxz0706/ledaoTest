@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.http.CommonUtil;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.constant.UserConstants;
+import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.page.TableDataInfo;
@@ -364,6 +366,33 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public String checkEmailUnique(SysUser user) {
         return userService.checkEmailUnique(user);
+    }
+    
+    /**
+     *微信获取openid
+     * @param openid
+     * @return
+     */
+    @PostMapping("/getOpenid")
+    @ResponseBody
+    public  AjaxResult getOpenid(String jsCode){
+    	JSONObject jsonResult;
+		try {
+//			String requestUrl="https://api.weixin.qq.com/sns/jscode2session?appid="+Global.getConfig("wxAppid")+"&secret="+Global.getConfig("wxSecret")+"&js_code="+jsCode+"&grant_type="+Global.getConfig("wxGrant_type");  
+			String requestUrl="https://api.weixin.qq.com/sns/jscode2session?appid="+WeChatConstants.WXAPPID+"&secret="+WeChatConstants.WXSECRET+"&js_code="+jsCode+"&grant_type="+WeChatConstants.WXGRANT_TYPE;  
+			jsonResult = CommonUtil.httpsRequest(requestUrl, "GET", null);  
+			System.out.println("返回的jsonResult"+jsonResult);
+			if(jsonResult!=null){  
+				System.out.println(jsonResult.toString());
+				String openid=jsonResult.getString("openid");  
+				return AjaxResult.success(openid);
+			}else{  
+				return AjaxResult.error("openid获取失败");     
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return AjaxResult.error("openid获取失败");       
+		}
     }
 
     /**

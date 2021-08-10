@@ -84,6 +84,16 @@ spring:
       force: true
       charset: utf-8
       enabled: true
+
+#  activemq:
+#    broker-url: tcp://localhost:61616
+#    user: admin
+#    password: admin
+#
+#  jms:
+#    #点对点时为false，订阅报时为true
+#    pub-sub-domain: false
+
 # MyBatis
 mybatis:
   # 搜索指定包别名

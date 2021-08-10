@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.activity.mapper.SysApplyWorkflowMapper">
+    
+    <resultMap type="SysApplyWorkflow" id="SysApplyWorkflowResult">
+        <result property="workflowId"    column="workflow_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="approveUser"    column="approve_user"    />
+        <result property="approveStatu"    column="approve_statu"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysApplyWorkflowVo">
+        select workflow_id, apply_id, approve_user, approve_statu, remarks, create_by, create_time, update_by, update_time from sys_apply_workflow
+    </sql>
+
+    <select id="selectSysApplyWorkflowList" parameterType="SysApplyWorkflow" resultMap="SysApplyWorkflowResult">
+        <include refid="selectSysApplyWorkflowVo"/>
+        <where>  
+            <if test="applyId != null "> and apply_id = #{applyId}</if>
+            <if test="approveUser != null  and approveUser != ''"> and approve_user = #{approveUser}</if>
+            <if test="approveStatu != null  and approveStatu != ''"> and approve_statu = #{approveStatu}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectSysApplyWorkflowById" parameterType="Long" resultMap="SysApplyWorkflowResult">
+        <include refid="selectSysApplyWorkflowVo"/>
+        where workflow_id = #{workflowId}
+    </select>
+        
+    <insert id="insertSysApplyWorkflow" parameterType="SysApplyWorkflow" useGeneratedKeys="true" keyProperty="workflowId">
+        insert into sys_apply_workflow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">apply_id,</if>
+            <if test="approveUser != null">approve_user,</if>
+            <if test="approveStatu != null">approve_statu,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">#{applyId},</if>
+            <if test="approveUser != null">#{approveUser},</if>
+            <if test="approveStatu != null">#{approveStatu},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysApplyWorkflow" parameterType="SysApplyWorkflow">
+        update sys_apply_workflow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="approveUser != null">approve_user = #{approveUser},</if>
+            <if test="approveStatu != null">approve_statu = #{approveStatu},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where workflow_id = #{workflowId}
+    </update>
+
+    <delete id="deleteSysApplyWorkflowById" parameterType="Long">
+        delete from sys_apply_workflow where workflow_id = #{workflowId}
+    </delete>
+
+    <delete id="deleteSysApplyWorkflowByIds" parameterType="String">
+        delete from sys_apply_workflow where workflow_id in 
+        <foreach item="workflowId" collection="array" open="(" separator="," close=")">
+            #{workflowId}
+        </foreach>
+    </delete>
+    
+</mapper>

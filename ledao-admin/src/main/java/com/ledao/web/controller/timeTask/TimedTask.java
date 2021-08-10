@@ -1,24 +1,34 @@
 package com.ledao.web.controller.timeTask;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.constant.WeChatConstants;
+import com.ledao.common.message.Template;
+import com.ledao.common.message.TemplateParam;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
+
+import org.apache.activemq.command.ActiveMQQueue;
 import org.quartz.DisallowConcurrentExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.SpringVersion;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.jms.Queue;
 
 @Component("timedTask")
 public class TimedTask {
@@ -54,6 +64,9 @@ public class TimedTask {
 
     @Autowired
     private ISysStaffService sysStaffService;
+    
+    @Autowired
+	private JmsMessagingTemplate jmsMessagingTemplate;
 
     public void timeTask() throws ParseException {
         //应收应付未收服务费消息提醒
@@ -81,6 +94,48 @@ public class TimedTask {
         sysNotice.setNoticeContent("测试数据！！！！！！！");
         System.out.print("新建消息");
         sysNoticeService.insertNotice(sysNotice);
+    }
+    
+    /**
+     * 项目流转表消息推送
+     * @throws ParseException
+     */
+    public void xmlzb() throws ParseException {
+        SysProjectUncollectedMoney sysProjectUncollectedMoney = new SysProjectUncollectedMoney();
+        List<SysProjectUncollectedMoney> list = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyList(sysProjectUncollectedMoney);
+        System.out.print(list.toString());
+        
+        // 创建名称为zyQueue的队列
+ 		Queue queue = new ActiveMQQueue("zyQueue1");
+ 		// 向队列发送消息
+ 		jmsMessagingTemplate.convertAndSend(queue, "这是一个队列消息！");
+    }
+    
+    /**
+     * 网拍线索消息提醒
+     * @throws ParseException
+     */
+    public void racquetClues() throws ParseException {
+//    	EUser usereMaintainer = userService.get(eOperation.getMaintainerId());
+		
+		List<TemplateParam> paras=new ArrayList<TemplateParam>();  
+//		paras.add(new TemplateParam("keyword1",eOperation.getOrderId(),""));  //维修工单
+//		paras.add(new TemplateParam("keyword2",area,""));  //维修地址
+//		paras.add(new TemplateParam("keyword3",eOperation.getServiceTime(),"")); //完成时间 
+//		paras.add(new TemplateParam("keyword4",eOperation.getRemarks(),""));  //备注
+//		paras.add(new TemplateParam("keyword5",eMaintainer.getName(),""));  //维修工程师
+		
+		paras.add(new TemplateParam("keyword1","test1",""));  //维修工单
+		paras.add(new TemplateParam("keyword2","test2",""));  //维修地址
+		paras.add(new TemplateParam("keyword3","test3","")); //完成时间 
+		paras.add(new TemplateParam("keyword4","test4",""));  //备注
+		paras.add(new TemplateParam("keyword5","test5",""));  //维修工程师
+        
+        // 创建名称为zyQueue的队列
+ 		Queue queue = new ActiveMQQueue("zyQueueCommon");
+ 		String dataStr = JSONObject.toJSONString(paras);
+ 		// 向队列发送消息
+ 		jmsMessagingTemplate.convertAndSend(queue, dataStr);
     }
 
     public void ss() {

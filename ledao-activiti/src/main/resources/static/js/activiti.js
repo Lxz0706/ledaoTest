@@ -31,7 +31,12 @@ function showHistoryDialog(instanceId) {
     var url = ctx + 'process/historyList/' + instanceId;
     $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
 }
-
+/* 查看审批历史 */
+/*function selectSysApplyWorkflowList(applyId) {
+debugger;
+    var url = ctx + 'applyProcess/historyList/' + applyId;
+    $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
+}*/
 function showProcessImgDialog(instanceId) {
     var url = ctx + 'process/processImg/' + instanceId;
     $.modal.open("查看流程图", url);

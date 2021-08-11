@@ -140,6 +140,15 @@ public class SysApplyInController extends BaseController
     }
 
     /**
+     * 新增档案入库申请
+     */
+    @GetMapping("/editDocumentModal")
+    public String editDocumentModal()
+    {
+        return prefix + "/editDocumentModal";
+    }
+
+    /**
      * 新增保存档案入库申请
      */
     @RequiresPermissions("applyIn:add")

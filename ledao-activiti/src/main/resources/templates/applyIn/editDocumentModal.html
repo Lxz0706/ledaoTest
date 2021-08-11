@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <th:block th:include="include :: header('新增档案')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+  <form class="form-horizontal m" id="form-documentFile-add">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">档案种类，字典项：业务、日常经营：</label>
+      <div class="col-sm-8">
+        <select name="documentType" class="form-control m-b">
+          <option value="">所有</option>
+        </select>
+        <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">资产编号：</label>
+      <div class="col-sm-8">
+        <input name="assetNumber" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">合同编号：</label>
+      <div class="col-sm-8">
+        <textarea name="contractNo" class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">文件名称：</label>
+      <div class="col-sm-8">
+        <textarea name="fileName" class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">附件类型--字典项：</label>
+      <div class="col-sm-8">
+        <select name="fileType" class="form-control m-b">
+          <option value="">所有</option>
+        </select>
+        <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">扫描件类型--字典项：</label>
+      <div class="col-sm-8">
+        <select name="fileScanType" class="form-control m-b">
+          <option value="">所有</option>
+        </select>
+        <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">份数：</label>
+      <div class="col-sm-8">
+        <input name="counts" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">页数：</label>
+      <div class="col-sm-8">
+        <input name="pages" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">档案状态--字典项：</label>
+      <div class="col-sm-8">
+        <input name="documentnStatu" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">档案类型--字典项：</label>
+      <div class="col-sm-8">
+        <select name="documentGetType" class="form-control m-b">
+          <option value="">所有</option>
+        </select>
+        <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">文件类型--字典项：</label>
+      <div class="col-sm-8">
+        <select name="fileGetType" class="form-control m-b">
+          <option value="">所有</option>
+        </select>
+        <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">档案级别：</label>
+      <div class="col-sm-8">
+        <input name="documentLevel" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">文件id：</label>
+      <div class="col-sm-8">
+        <input name="fileIds" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">档案入库id：</label>
+      <div class="col-sm-8">
+        <input name="applyId" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">备注：</label>
+      <div class="col-sm-8">
+        <input name="remarks" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">创建人名称：</label>
+      <div class="col-sm-8">
+        <input name="creator" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">修改人名称：</label>
+      <div class="col-sm-8">
+        <input name="reviser" class="form-control" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">文件上传：</label>
+      <div class="col-sm-8">
+        <input name="reviser" class="form-control form-documentFile-add" type="file">
+      </div>
+    </div>
+  </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+  var prefix = ctx + "applyIn"
+  $("#form-documentFile-add").validate({
+    focusCleanup: true
+  });
+
+  function submitHandler() {
+    if ($.validate.form()) {
+      // $.operate.save(ctx + "documentFile/add", $('#form-documentFile-add').serialize());
+      // 处理自己的业务
+      var formdata = new FormData();
+      formdata.append("files", $('input[type=file]')[0].files[0]);
+      formdata.append("sysDocumentFile", $('#form-documentFile-add').serialize());
+      $.ajax({
+        url: ctx + 'documentFile/add',
+        data: formdata,
+        type: "post",
+        processData: false,
+        contentType: false,
+        success: function(result) {
+          // $('#processDefinitionDiv').fileinput('reset');     // 重置
+          // $.operate.ajaxSuccess(result);
+          console.log(result);
+        }
+      })
+    }
+  }
+</script>
+</body>
+</html>

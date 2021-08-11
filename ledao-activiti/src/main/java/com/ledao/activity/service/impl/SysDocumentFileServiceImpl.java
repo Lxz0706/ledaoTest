@@ -1,5 +1,6 @@
 package com.ledao.activity.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.ledao.common.utils.DateUtils;
@@ -33,6 +34,8 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	private SysDocumentFileMapper sysDocumentFileMapper;
 	@Autowired
 	private SysFileDetailMapper sysFileDetailMapper;
+	@Autowired
+	private SysFileDetailMapper fileDetailMapper;
 
 	/**
 	 * 查询档案
@@ -53,7 +56,14 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	 */
 	@Override
 	public List<SysDocumentFile> selectSysDocumentFileList(SysDocumentFile sysDocumentFile) {
-		return sysDocumentFileMapper.selectSysDocumentFileList(sysDocumentFile);
+		List<SysDocumentFile> documentFiles = sysDocumentFileMapper.selectSysDocumentFileList(sysDocumentFile);
+		for (SysDocumentFile doc : documentFiles) {
+			SysFileDetail detail = new SysFileDetail();
+			detail.setDocumentFileId(doc.getDocumentId());
+			List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
+			doc.setFileDetails(details);
+		}
+		return documentFiles;
 	}
 
 	/**
@@ -77,11 +87,12 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 				String url = filePath + fileName;
 				SysFileDetail fileDetail = new SysFileDetail();
 				fileDetail.setCreateBy(loginUser);
-				fileDetail.setFileName(fileName);
-				fileDetail.setFileUrl(filePath);
+				fileDetail.setFileName(file.getResource().getFilename());
+				fileDetail.setFileUrl(fileName);
 				fileDetail.setCreateTime(new Date());
 				fileDetail.setDocumentFileId(sysDocumentFile.getDocumentId());
 				sysFileDetailMapper.insertSysFileDetail(fileDetail);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException();

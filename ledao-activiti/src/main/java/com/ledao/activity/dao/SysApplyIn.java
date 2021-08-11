@@ -1,6 +1,7 @@
 package com.ledao.activity.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -76,8 +77,18 @@ public class SysApplyIn extends BaseEntity
     /** 修改人名称 */
     @Excel(name = "修改人名称")
     private String reviser;
+    
+    private List<SysDocumentFile> documentFiles;
 
-    public void setApplyId(Long applyId) 
+    public List<SysDocumentFile> getDocumentFiles() {
+		return documentFiles;
+	}
+
+	public void setDocumentFiles(List<SysDocumentFile> documentFiles) {
+		this.documentFiles = documentFiles;
+	}
+
+	public void setApplyId(Long applyId) 
     {
         this.applyId = applyId;
     }

@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.mapper.SysDocumentMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.dao.SysApplyWorkflow;
+import com.ledao.activity.dao.SysDocumentFile;
+import com.ledao.activity.dao.SysFileDetail;
 import com.ledao.activity.mapper.SysApplyInMapper;
 import com.ledao.activity.mapper.SysApplyWorkflowMapper;
+import com.ledao.activity.mapper.SysDocumentFileMapper;
+import com.ledao.activity.mapper.SysFileDetailMapper;
 import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.DateUtils;
@@ -37,6 +42,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private SysUserMapper userMapper;
+    
+    @Autowired
+    private SysDocumentFileMapper documentFileMapper;
+    
+    @Autowired
+    private SysFileDetailMapper fileDetailMapper;
 
     /**
      * 查询档案入库申请
@@ -47,7 +58,18 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     @Override
     public SysApplyIn selectSysApplyInById(Long applyId)
     {
-        return sysApplyInMapper.selectSysApplyInById(applyId);
+    	SysApplyIn applyIn = sysApplyInMapper.selectSysApplyInById(applyId);
+    	SysDocumentFile documentFile = new SysDocumentFile();
+    	documentFile.setApplyId(applyId);
+    	List<SysDocumentFile> documentFiles = documentFileMapper.selectSysDocumentFileList(documentFile);
+    	for (SysDocumentFile sysDocumentFile : documentFiles) {
+			SysFileDetail detail = new SysFileDetail();
+			detail.setDocumentFileId(sysDocumentFile.getDocumentId());
+			List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
+			sysDocumentFile.setFileDetails(details);
+		}
+    	applyIn.setDocumentFiles(documentFiles);
+        return applyIn;
     }
 
     /**

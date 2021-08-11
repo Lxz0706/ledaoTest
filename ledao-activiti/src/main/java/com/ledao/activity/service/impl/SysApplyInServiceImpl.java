@@ -212,7 +212,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         }
         //审批通过，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
-            sysApplyInEntity.setApproveUser("下级审批人");
+            List<String> users = getApplyNextUser(sysApplyIn);
+            sysApplyInEntity.setApproveUser(StringUtils.join(",",users));
         }
         //撤回
         if("4".equals(sysApplyIn.getApproveStatu())) {
@@ -225,7 +226,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         }
         //审批拒绝，回到申请人
         if("2".equals(sysApplyIn.getApproveStatu())){
-
+            sysApplyInEntity.setApproveUser(sysApplyIn.getApplyUser());
         }
         sysApplyInEntity.setUpdateTime(new Date());
         sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());

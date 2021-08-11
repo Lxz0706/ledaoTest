@@ -2,6 +2,7 @@ package com.ledao.activity.service.impl;
 
 import java.util.*;
 
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,11 +95,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     	return 1;
     }
 
-    public Map<String, Object> getApplyNextUser(SysApplyIn sysApplyIn){
+    public List<String> getApplyNextUser(SysApplyIn sysApplyIn){
         Map<String, Object> variables = new HashMap<>();
         String key = "";
         String itemName = "";
         SysUser sysUser = ShiroUtils.getSysUser();
+        List<String> users = new ArrayList<>();
         if (StringUtils.isNotNull(sysUser)) {
             //入库申请
             if ("0".equals(sysApplyIn.getApplyType())) {
@@ -108,6 +110,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                     //动态设置审批人员
                     variables.put("userId", sysUser1.getLoginName());
+                    users.add(sysUser1.getLoginName());
                 } else {
                     key = "document_rk_zgNo";
                 }
@@ -119,6 +122,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 userList.add("yangxu");
                 userList.add("yangxudong");
                 variables.put("assigneeList", userList);
+                users.add("yangxu");
+                users.add("yangxudong");
 
                 //判断是否存在直接主管
                 if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
@@ -132,6 +137,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                             variables.put("zgUser", sysUser1.getLoginName());
                             variables.put("ejzgUser", sysUser2.getLoginName());
                             variables.put("sjzgUser", sysUser3.getLoginName());
+                            users.add(sysUser1.getLoginName());
+                            users.add(sysUser2.getLoginName());
+                            users.add(sysUser3.getLoginName());
                             /*if ("否".equals(entity.getDocumentRevertFlag())) {
                                 key = "document_ck_sjzgNo";
                             } else {
@@ -141,6 +149,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
                             variables.put("zgUser", sysUser.getLoginName());
                             variables.put("ejzgUser", sysUser1.getLoginName());
+                            users.add(sysUser.getLoginName());
+                            users.add(sysUser1.getLoginName());
 
                            /* if ("否".equals(entity.getDocumentRevertFlag())) {
                                 key = "document_ck_ejzgNo";
@@ -165,7 +175,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 }
             }
         }
-        return variables;
+        return users;
     }
 
     /**
@@ -212,4 +222,45 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 	public List<SysApplyIn> listByMe(SysApplyIn sysApplyIn) {
 		return sysApplyInMapper.listByMe(sysApplyIn);
 	}
+
+    @Override
+    public AjaxResult applyEditSave(SysApplyIn sysApplyIn) {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        String loginUser = currentUser.getLoginName();
+        SysApplyIn sysApplyInEntity = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
+        //审批通过，寻找下一审批人
+        if("5".equals(sysApplyIn.getApproveStatu())) {
+            sysApplyInEntity.setApproveUser("下级审批人");
+
+        }
+        //撤回
+        if("4".equals(sysApplyIn.getApproveStatu())) {
+            if (!sysApplyInEntity.getCreateBy().equals(loginUser)){
+                return AjaxResult.error("非创建人无法撤回");
+            }
+            if(!"5".equals(sysApplyInEntity.getApproveStatu())){
+                return AjaxResult.error("无法撤回");
+            }
+        }
+        //审批拒绝，回到申请人
+        if("2".equals(sysApplyIn.getApproveStatu())){
+
+        }
+        sysApplyInEntity.setUpdateTime(new Date());
+        sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
+        sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
+        SysApplyWorkflow workflow = new SysApplyWorkflow();
+        workflow.setApplyId(sysApplyIn.getApplyId());
+        workflow.setApproveStatu(sysApplyIn.getApproveStatu());
+        workflow.setApproveUser(loginUser);
+        workflow.setCreateBy(loginUser);
+        sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
+        return AjaxResult.success();
+    }
+
+    @Override
+    public int editSave(SysApplyIn sysApplyIn) {
+        sysApplyIn.setUpdateTime(new Date());
+	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
+    }
 }

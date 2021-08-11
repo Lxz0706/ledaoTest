@@ -62,7 +62,9 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:applyIn:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-
+                <a class="btn btn-danger multiple disabled" onclick="applyEditSave()" shiro:hasPermission="activity:applyIn:applyBack">
+                    <i class="fa fa-remove"></i> 撤回
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -164,6 +166,9 @@
         function selectSysApplyWorkflowList(applyId){
         	 var url = 'http://localhost/applyProcess/historyList/' + applyId;
         	 $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
+        }
+        function applyEditSave(){
+
         }
     </script>
 </body>

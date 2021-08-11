@@ -2,7 +2,7 @@ package com.ledao.activity.service;
 
 import java.util.List;
 import com.ledao.activity.dao.SysApplyIn;
-import com.ledao.activity.dao.SysApplyWorkflow;
+import com.ledao.common.core.dao.AjaxResult;
 
 /**
  * 档案入库申请Service接口
@@ -67,4 +67,22 @@ public interface ISysApplyInService
      * @return 结果
      */
 	public List<SysApplyIn> listByMe(SysApplyIn sysApplyIn);
+
+    /**
+     * 修改申请
+     *
+     * @param applyId 查询自己的工作流
+     * @param sysApplyIn
+     * @return 结果
+     */
+    int editSave(SysApplyIn sysApplyIn);
+
+    /**
+     * 修改申请
+     *
+     * @param applyId 申请状态修改
+     * @param sysApplyIn
+     * @return 结果
+     */
+    AjaxResult applyEditSave(SysApplyIn sysApplyIn);
 }

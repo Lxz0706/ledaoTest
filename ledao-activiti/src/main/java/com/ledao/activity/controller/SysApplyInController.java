@@ -156,6 +156,17 @@ public class SysApplyInController extends BaseController
     }
 
     /**
+     * 修改档案入库申请
+     */
+    @GetMapping("/applyBack/{applyId}")
+    public String applyBack(@PathVariable("applyId") Long applyId, ModelMap mmap)
+    {
+        SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
+        mmap.put("sysApplyIn", sysApplyIn);
+        return prefix + "/edit";
+    }
+
+    /**
      * 修改保存档案入库申请
      */
 //    @RequiresPermissions("applyIn:edit")
@@ -164,21 +175,17 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysApplyIn sysApplyIn)
     {
-    	//审批通过，寻找下一审批人
-    	if("1".equals(sysApplyIn.getApproveStatu())) {
-    		sysApplyIn.setApproveUser("下级审批人");
-    	}
-    	//审批拒绝，回到申请人
-    	sysApplyInService.updateSysApplyIn(sysApplyIn);
-    	SysUser currentUser = ShiroUtils.getSysUser();
-    	String loginUser = currentUser.getLoginName();
-    	SysApplyWorkflow workflow = new SysApplyWorkflow();
-    	workflow.setApplyId(sysApplyIn.getApplyId());
-    	workflow.setApproveStatu(sysApplyIn.getApproveStatu());
-    	workflow.setApproveUser(loginUser);
-    	workflow.setCreateBy(loginUser);
-    	sysApplyWorkflowService.insertSysApplyWorkflow(workflow);
-        return toAjax(true);
+        return toAjax(sysApplyInService.editSave(sysApplyIn));
+    }
+
+    @Log(title = "档案状态修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/applyEditSave")
+    @ResponseBody
+    public AjaxResult applyEditSave(SysApplyIn sysApplyIn)
+    {
+        AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn);
+
+        return res;
     }
     
     @PostMapping("/selectSysApplyWorkflowList")

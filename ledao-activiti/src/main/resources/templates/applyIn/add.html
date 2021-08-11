@@ -63,7 +63,6 @@
         $("#form-applyIn-add").validate({
             focusCleanup: true
         });
-
         function submitHandler() {
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-applyIn-add').serialize());

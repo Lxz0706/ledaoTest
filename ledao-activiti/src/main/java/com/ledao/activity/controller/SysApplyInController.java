@@ -44,6 +44,7 @@ public class SysApplyInController extends BaseController
 
     @Autowired
     private ISysApplyInService sysApplyInService;
+
     
     @Autowired
     private ISysApplyWorkflowService sysApplyWorkflowService;
@@ -184,7 +185,6 @@ public class SysApplyInController extends BaseController
     public AjaxResult applyEditSave(SysApplyIn sysApplyIn)
     {
         AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn);
-
         return res;
     }
     

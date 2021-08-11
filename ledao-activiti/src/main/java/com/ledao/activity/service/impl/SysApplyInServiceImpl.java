@@ -231,7 +231,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         //审批通过，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
             sysApplyInEntity.setApproveUser("下级审批人");
-
         }
         //撤回
         if("4".equals(sysApplyIn.getApproveStatu())) {

@@ -61,12 +61,12 @@ public interface ISysApplyInService
     public int deleteSysApplyInById(Long applyId);
 
     /**
-     * 查询自己的工作流
+     * 我的已办
      * 
-     * @param applyId 查询自己的工作流
+     * @param applyId 我的已办
      * @return 结果
      */
-	public List<SysApplyIn> listByMe(SysApplyIn sysApplyIn);
+	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn);
 
 
     /**
@@ -86,4 +86,12 @@ public interface ISysApplyInService
      * @return 结果
      */
     AjaxResult applyEditSave(SysApplyIn sysApplyIn);
+
+    /**
+     * 我的待办
+     *
+     * @param applyId 我的待办
+     * @return 结果
+     */
+    List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn);
 }

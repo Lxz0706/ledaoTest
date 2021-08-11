@@ -60,11 +60,18 @@ public interface SysApplyInMapper
     public int deleteSysApplyInByIds(String[] applyIds);
 
     /**
-     * 查询自己的工作流
+     * 我的已办
      * 
-     * @param applyIds 查询自己的工作流
+     * @param applyIds 我的已办
      * @return 结果
      */
-	public List<SysApplyIn> listByMe(SysApplyIn sysApplyIn);
+	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn);
 
+    /**
+     * 我的待办
+     *
+     * @param applyIds 我的待办
+     * @return 结果
+     */
+    List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn);
 }

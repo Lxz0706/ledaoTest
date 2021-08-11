@@ -112,6 +112,13 @@ public class SysApplyOutDetailController extends BaseController
         return toAjax(sysApplyOutDetailService.updateSysApplyOutDetail(sysApplyOutDetail));
     }
 
+    @PostMapping("/saveApplyOutDetails")
+    @ResponseBody
+    public AjaxResult saveApplyOutDetails(List<SysApplyOutDetail> sysApplyOutDetails,String applyId)
+    {
+        return toAjax(sysApplyOutDetailService.saveApplyOutDetails(sysApplyOutDetails,applyId));
+    }
+
     /**
      * 删除档案出库详情记录
      */

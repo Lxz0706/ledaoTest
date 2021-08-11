@@ -133,6 +133,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from sys_apply_out_detail where out_detail_id = #{outDetailId}
     </delete>
 
+    <delete id="deleteSysApplyOutDetailByApplyId" parameterType="Long">
+        delete from sys_apply_out_detail where apply_id = #{applyId}
+    </delete>
+
     <delete id="deleteSysApplyOutDetailByIds" parameterType="String">
         delete from sys_apply_out_detail where out_detail_id in 
         <foreach item="outDetailId" collection="array" open="(" separator="," close=")">

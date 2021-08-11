@@ -58,4 +58,12 @@ public interface SysApplyOutDetailMapper
      * @return 结果
      */
     public int deleteSysApplyOutDetailByIds(String[] outDetailIds);
+
+    /**
+     * 批量删除档案出库详情记录
+     *
+     * @param outDetailIds 需要删除的数据ID
+     * @return 结果
+     */
+    public int  deleteSysApplyOutDetailByApplyId(String applyId);
 }

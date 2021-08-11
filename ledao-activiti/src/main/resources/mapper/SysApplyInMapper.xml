@@ -50,13 +50,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="listByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
+    <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
         <include refid="selectSysApplyInVo"/> app 
         LEFT JOIN ( SELECT workflow.apply_id as apply_ids from sys_apply_workflow workflow  
-        where workflow.approve_user=#{approveUser} GROUP BY workflow.apply_id) work on app.apply_id = work.apply_ids 
+        where workflow.approve_user=#{approveUser} GROUP BY workflow.apply_id) work on app.apply_id = work.apply_ids
         ORDER BY app.create_time desc
     </select>
-    
+
+    <select id="listUnDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
+        <include refid="selectSysApplyInVo"/> app
+         where FIND_IN_SET(#{approveUser},app.approve_user)
+        ORDER BY app.create_time desc
+    </select>
+
     <select id="selectSysApplyInById" parameterType="Long" resultMap="SysApplyInResult">
         <include refid="selectSysApplyInVo"/>
         where apply_id = #{applyId}

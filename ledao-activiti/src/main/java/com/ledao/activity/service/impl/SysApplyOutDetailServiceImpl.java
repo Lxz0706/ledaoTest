@@ -8,6 +8,7 @@ import com.ledao.activity.mapper.SysApplyOutDetailMapper;
 import com.ledao.activity.dao.SysApplyOutDetail;
 import com.ledao.activity.service.ISysApplyOutDetailService;
 import com.ledao.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 档案出库详情记录Service业务层处理
@@ -16,6 +17,7 @@ import com.ledao.common.core.text.Convert;
  * @date 2021-08-10
  */
 @Service
+@Transactional
 public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService 
 {
     @Autowired
@@ -93,5 +95,18 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
     public int deleteSysApplyOutDetailById(Long outDetailId)
     {
         return sysApplyOutDetailMapper.deleteSysApplyOutDetailById(outDetailId);
+    }
+
+    @Override
+    public int saveApplyOutDetails(List<SysApplyOutDetail> sysApplyOutDetails, String applyId) {
+        try {
+            sysApplyOutDetailMapper.deleteSysApplyOutDetailByApplyId(applyId);
+            for (SysApplyOutDetail d : sysApplyOutDetails){
+                sysApplyOutDetailMapper.insertSysApplyOutDetail(d);
+            }
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
+        return 0;
     }
 }

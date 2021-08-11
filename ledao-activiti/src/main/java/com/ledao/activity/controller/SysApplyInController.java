@@ -83,15 +83,36 @@ public class SysApplyInController extends BaseController
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
         return getDataTable(list);
     }
-    
+
+    /**
+     * 我的已办
+     * @param sysApplyIn
+     * @return
+     */
     @PostMapping("/listByMe")
     @ResponseBody
-    public TableDataInfo listByMe(SysApplyIn sysApplyIn)
+    public TableDataInfo listDownByMe(SysApplyIn sysApplyIn)
     {
         startPage();
         SysUser user = ShiroUtils.getSysUser();
-        sysApplyIn.setReviser(user.getLoginName());
-        List<SysApplyIn> list = sysApplyInService.listByMe(sysApplyIn);
+        sysApplyIn.setApplyUser(user.getLoginName());
+        List<SysApplyIn> list = sysApplyInService.listDownByMe(sysApplyIn);
+        return getDataTable(list);
+    }
+
+    /**
+     * 我的待办
+     * @param sysApplyIn
+     * @return
+     */
+    @PostMapping("/listUnDownByMe")
+    @ResponseBody
+    public TableDataInfo listUnDownByMe(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        SysUser user = ShiroUtils.getSysUser();
+        sysApplyIn.setApplyUser(user.getLoginName());
+        List<SysApplyIn> list = sysApplyInService.listUnDownByMe(sysApplyIn);
         return getDataTable(list);
     }
 
@@ -122,12 +143,12 @@ public class SysApplyInController extends BaseController
      * 新增保存档案入库申请
      */
     @RequiresPermissions("applyIn:add")
-    @Log(title = "档案入库申请", businessType = BusinessType.INSERT)
+    @Log(title = "档案入库申请(保存0)", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysApplyIn sysApplyIn)
     {
-    	
+        sysApplyIn.setApproveStatu("0");
         return toAjax(sysApplyInService.insertSysApplyIn(sysApplyIn));
     }
     
@@ -141,6 +162,7 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult addSysApplyIn(SysApplyIn sysApplyIn)
     {
+        sysApplyIn.setApproveStatu("0");
     	sysApplyInService.insertSysApplyIn(sysApplyIn);
         return toAjax(true);
     }
@@ -179,6 +201,9 @@ public class SysApplyInController extends BaseController
         return toAjax(sysApplyInService.editSave(sysApplyIn));
     }
 
+    /**
+     * 档案状态修改，保存，提交审批，审批通过，审批拒绝
+     */
     @Log(title = "档案状态修改", businessType = BusinessType.UPDATE)
     @PostMapping("/applyEditSave")
     @ResponseBody

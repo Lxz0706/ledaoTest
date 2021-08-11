@@ -58,4 +58,13 @@ public interface ISysApplyOutDetailService
      * @return 结果
      */
     public int deleteSysApplyOutDetailById(Long outDetailId);
+
+    /**
+     * 批量增加出库明细
+     *
+     * @param 批量增加出库明细
+     * @param applyId
+     * @return 结果
+     */
+    int saveApplyOutDetails(List<SysApplyOutDetail> sysApplyOutDetails, String applyId);
 }

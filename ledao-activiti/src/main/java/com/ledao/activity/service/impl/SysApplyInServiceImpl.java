@@ -71,28 +71,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     @Override
     public int insertSysApplyIn(SysApplyIn sysApplyIn)
     {
-    	try {
-			SysUser currentUser = ShiroUtils.getSysUser();
-			String loginUser = currentUser.getLoginName();
-			sysApplyIn.setApplyUser(loginUser);
-			sysApplyIn.setApplyTime(new Date());
-			sysApplyIn.setCreateBy(loginUser);
-			sysApplyIn.setApproveUser("审批领导1");
-			sysApplyIn.setApproveStatu("0");
-			sysApplyIn.setCreateTime(DateUtils.getNowDate());
-			sysApplyInMapper.insertSysApplyIn(sysApplyIn);
-			//申请状态 0申请中；1审批通过，2审批拒绝，3审批结束
-			SysApplyWorkflow workflow = new SysApplyWorkflow();
-			workflow.setApplyId(sysApplyIn.getApplyId());
-			workflow.setApproveStatu("0");
-			workflow.setApproveUser(loginUser);
-			workflow.setCreateBy(loginUser);
-			sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-    	return 1;
+    	return sysApplyInMapper.insertSysApplyIn(sysApplyIn);
     }
 
     public List<String> getApplyNextUser(SysApplyIn sysApplyIn){
@@ -219,8 +198,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
      * 查询自己的工作流
      */
 	@Override
-	public List<SysApplyIn> listByMe(SysApplyIn sysApplyIn) {
-		return sysApplyInMapper.listByMe(sysApplyIn);
+	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn) {
+		return sysApplyInMapper.listDownByMe(sysApplyIn);
 	}
 
     @Override
@@ -228,6 +207,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         SysUser currentUser = ShiroUtils.getSysUser();
         String loginUser = currentUser.getLoginName();
         SysApplyIn sysApplyInEntity = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
+        if (sysApplyInEntity==null || sysApplyInEntity.getApplyId()==null){
+            return AjaxResult.error("无该申请");
+        }
         //审批通过，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
             sysApplyInEntity.setApproveUser("下级审批人");
@@ -255,6 +237,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         workflow.setCreateBy(loginUser);
         sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
         return AjaxResult.success();
+    }
+
+    @Override
+    public List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.listUnDownByMe(sysApplyIn);
     }
 
     @Override

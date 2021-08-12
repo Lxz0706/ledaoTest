@@ -65,6 +65,9 @@
                 <a class="btn btn-danger multiple disabled" onclick="applyEditSave()" shiro:hasPermission="activity:applyIn:applyBack">
                     <i class="fa fa-remove"></i> 撤回
                 </a>
+                <a class="btn btn-primary single disabled" onclick="applySubmit()" shiro:hasPermission="activity:applyIn:applySubmit">
+                    <i class="fa fa-user"></i> 提交审批
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -168,6 +171,28 @@
         	 $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
         }
         function applyEditSave(){
+        }
+
+        function applySubmit() {
+            // var form = document.getElementById("formId")
+            // var forDta = new FormData(form)
+            $.ajax({
+                url: ctx + 'applyIn/applyEditSave',
+                data: {
+                    approveStatu: "5",
+                    applyType: "0",
+                    applyId: applyId
+                },
+                type: "post",
+                processData: false,
+                contentType: false,
+                success: function(result) {
+                    // $('#processDefinitionDiv').fileinput('reset');     // 重置
+                    // $.operate.ajaxSuccess(result);
+                    console.log(result);
+                }
+            })
+            // console.log('applyId',forDta)
         }
     </script>
 </body>

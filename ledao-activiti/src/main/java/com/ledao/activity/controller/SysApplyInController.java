@@ -125,7 +125,7 @@ public class SysApplyInController extends BaseController
     /**
      * 导出档案入库申请列表
      */
-    @RequiresPermissions("applyIn:export")
+//    @RequiresPermissions("applyIn:export")
     @Log(title = "档案入库申请", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -157,7 +157,7 @@ public class SysApplyInController extends BaseController
     /**
      * 新增保存档案入库申请
      */
-    @RequiresPermissions("applyIn:add")
+//    @RequiresPermissions("applyIn:add")
     @Log(title = "档案入库申请(保存0)", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -171,7 +171,7 @@ public class SysApplyInController extends BaseController
     /**
      * 新增保存档案入库申请
      */
-    @RequiresPermissions("applyIn:addSysApplyIn")
+//    @RequiresPermissions("applyIn:addSysApplyIn")
     @Log(title = "档案入库申请发起", businessType = BusinessType.INSERT)
     @PostMapping("/addSysApplyIn")
     @ResponseBody
@@ -239,7 +239,7 @@ public class SysApplyInController extends BaseController
     /**
      * 删除档案入库申请
      */
-    @RequiresPermissions("applyIn:remove")
+//    @RequiresPermissions("applyIn:remove")
     @Log(title = "档案入库申请", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

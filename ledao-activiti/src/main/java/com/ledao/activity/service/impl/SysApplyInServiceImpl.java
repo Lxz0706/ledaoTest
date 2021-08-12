@@ -234,6 +234,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         }
         //审批通过，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
+            if (!sysApplyInEntity.getCreateBy().equals(loginUser)){
+                return AjaxResult.error("非创建人无法提交审批");
+            }
             List<String> users = getApplyNextUser(sysApplyIn);
             sysApplyInEntity.setApproveUser(StringUtils.join(",",users));
         }

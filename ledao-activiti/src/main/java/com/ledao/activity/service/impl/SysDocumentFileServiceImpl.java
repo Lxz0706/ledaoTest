@@ -3,8 +3,12 @@ package com.ledao.activity.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
+
+import com.itextpdf.text.log.SysoLogger;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.file.FileUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
 
@@ -88,7 +92,7 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 				SysFileDetail fileDetail = new SysFileDetail();
 				fileDetail.setCreateBy(loginUser);
 				fileDetail.setFileName(file.getResource().getFilename());
-				fileDetail.setFileUrl(fileName);
+				fileDetail.setFileUrl(fileName.split("/document")[1]);
 				fileDetail.setCreateTime(new Date());
 				fileDetail.setDocumentFileId(sysDocumentFile.getDocumentId());
 				sysFileDetailMapper.insertSysFileDetail(fileDetail);
@@ -121,7 +125,18 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	 */
 	@Override
 	public int deleteSysDocumentFileByIds(String ids) {
-		return sysDocumentFileMapper.deleteSysDocumentFileByIds(Convert.toStrArray(ids));
+		String[] idArray = Convert.toStrArray(ids);
+		for (String id: idArray) {
+			SysFileDetail SysFileDetail = new SysFileDetail();
+			SysFileDetail.setDocumentFileId(Long.parseLong(id));
+			List<SysFileDetail> files = fileDetailMapper.selectSysFileDetailList(SysFileDetail);
+			for (SysFileDetail f : files){
+				System.out.println(Global.getUploadPath()+f.getFileUrl());
+				FileUtils.deleteFile(Global.getUploadPath()+"/document"+f.getFileUrl());
+				sysFileDetailMapper.deleteSysFileDetailById(f.getFileId());
+			}
+		}
+		return sysDocumentFileMapper.deleteSysDocumentFileByIds(idArray);
 	}
 
 	/**

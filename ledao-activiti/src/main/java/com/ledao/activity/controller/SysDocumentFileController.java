@@ -126,6 +126,7 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
+        logger.info("开始进行档案删除操作");
         return toAjax(sysDocumentFileService.deleteSysDocumentFileByIds(ids));
     }
 }

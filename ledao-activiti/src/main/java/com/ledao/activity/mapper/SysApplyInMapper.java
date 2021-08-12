@@ -2,6 +2,7 @@ package com.ledao.activity.mapper;
 
 import java.util.List;
 import com.ledao.activity.dao.SysApplyIn;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 档案入库申请Mapper接口
@@ -65,7 +66,7 @@ public interface SysApplyInMapper
      * @param applyIds 我的已办
      * @return 结果
      */
-	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn);
+	public List<SysApplyIn> listDownByMe(@Param("username") String username);
 
     /**
      * 我的待办
@@ -73,5 +74,5 @@ public interface SysApplyInMapper
      * @param applyIds 我的待办
      * @return 结果
      */
-    List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn);
+    List<SysApplyIn> listUnDownByMe(@Param("username") String username);
 }

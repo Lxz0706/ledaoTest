@@ -99,10 +99,11 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public TableDataInfo listDownByMe(SysApplyIn sysApplyIn)
     {
+        sysApplyIn = new SysApplyIn();
         startPage();
         SysUser user = ShiroUtils.getSysUser();
         sysApplyIn.setApplyUser(user.getLoginName());
-        List<SysApplyIn> list = sysApplyInService.listDownByMe(sysApplyIn);
+        List<SysApplyIn> list = sysApplyInService.listDownByMe(user.getLoginName());
         return getDataTable(list);
     }
 
@@ -115,10 +116,11 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public TableDataInfo listUnDownByMe(SysApplyIn sysApplyIn)
     {
+        sysApplyIn = new SysApplyIn();
         startPage();
         SysUser user = ShiroUtils.getSysUser();
         sysApplyIn.setApplyUser(user.getLoginName());
-        List<SysApplyIn> list = sysApplyInService.listUnDownByMe(sysApplyIn);
+        List<SysApplyIn> list = sysApplyInService.listUnDownByMe(user.getLoginName());
         return getDataTable(list);
     }
 
@@ -163,6 +165,11 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult addSave(SysApplyIn sysApplyIn)
     {
+        String userName = ShiroUtils.getLoginName();
+        sysApplyIn.setApplyUser(userName);
+        sysApplyIn.setApplyTime(new Date());
+        sysApplyIn.setCreateBy(userName);
+        sysApplyIn.setCreateTime(new Date());
         sysApplyIn.setApproveStatu("0");
         return toAjax(sysApplyInService.insertSysApplyIn(sysApplyIn));
     }

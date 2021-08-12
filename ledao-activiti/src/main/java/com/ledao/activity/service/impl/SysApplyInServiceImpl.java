@@ -220,8 +220,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
      * 查询自己的工作流
      */
 	@Override
-	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn) {
-		return sysApplyInMapper.listDownByMe(sysApplyIn);
+	public List<SysApplyIn> listDownByMe(String username) {
+		return sysApplyInMapper.listDownByMe(username);
 	}
 
     @Override
@@ -234,11 +234,14 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         }
         //审批通过，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
+            if (!"0".equals(sysApplyInEntity.getApproveStatu())){
+                return AjaxResult.error("非待审批状态");
+            }
             if (!sysApplyInEntity.getCreateBy().equals(loginUser)){
                 return AjaxResult.error("非创建人无法提交审批");
             }
             List<String> users = getApplyNextUser(sysApplyIn);
-            sysApplyInEntity.setApproveUser(StringUtils.join(",",users));
+            sysApplyInEntity.setApproveUser(String.join(",",users));
         }
         //撤回
         if("4".equals(sysApplyIn.getApproveStatu())) {
@@ -266,8 +269,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
-    public List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn) {
-        return sysApplyInMapper.listUnDownByMe(sysApplyIn);
+    public List<SysApplyIn> listUnDownByMe(String username) {
+        return sysApplyInMapper.listUnDownByMe(username);
     }
 
     @Override

@@ -68,7 +68,13 @@ public class SysApplyInController extends BaseController
     }
     @GetMapping("/applyList")
     public String applyList(ModelMap modelMap) {
+//        我的已办
         return prefix + "/applyList";
+    }
+    @GetMapping("/applyUnDoneList")
+    public String applyUnDoneList(ModelMap modelMap) {
+//        我的待办
+        return prefix + "/applyUnDoneList";
     }
 
     /**

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('我的代办')" />
+    <th:block th:include="include :: header('我的已办')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -78,12 +78,12 @@
 
         $(function() {
             var options = {
-                url: prefix + "/listByMe",
+                url: prefix + "/listUnDownByMe",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "档案入库申请",
+                modalName: "我的代办列表",
                 columns: [{
                     checkbox: true
                 },

@@ -23,6 +23,8 @@ import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.poi.ExcelUtil;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * 档案Controller
  * 
@@ -88,7 +90,7 @@ public class SysDocumentFileController extends BaseController
     @Log(title = "档案", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysDocumentFile sysDocumentFile,@RequestParam("files")MultipartFile[] files )
+    public AjaxResult addSave(HttpSession session, SysDocumentFile sysDocumentFile, @RequestParam("files")MultipartFile[] files )
     {
     	sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
         return toAjax(true);

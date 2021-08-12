@@ -55,7 +55,7 @@ public class SysApplyInController extends BaseController
     @Autowired
     private ISysFileDetailService sysFileDetailService;
 
-    @RequiresPermissions("applyIn:view")
+//    @RequiresPermissions("applyIn:view")
     @GetMapping("/applyIn")
     public String applyIn()
     {

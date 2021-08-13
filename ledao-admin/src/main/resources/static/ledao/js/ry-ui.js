@@ -1115,6 +1115,20 @@ var table = {
                     $.operate.submit(url, "post", "json", data);
                 });
             },
+            // 提交审批
+            applySubmit: function () {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
+                    var url = table.options.submitUrl;
+                    var data = {"applyId": rows.join(), "approveStatu": "5","applyType": "0"};
+                    $.operate.submit(url, "post", "json", data);
+                });
+            },
             // 设置信息为已读
             read: function (id) {
                 table.set();

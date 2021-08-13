@@ -259,6 +259,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         if("2".equals(sysApplyIn.getApproveStatu())){
             sysApplyInEntity.setApproveUser(sysApplyIn.getApplyUser());
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
+            workflow.setRemarks(sysApplyIn.getRemarks());
+            sysApplyInEntity.setRemarks(null);
         }
         //同意审批
         if("6".equals(sysApplyIn.getApproveStatu())){

@@ -232,7 +232,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         if (sysApplyInEntity==null || sysApplyInEntity.getApplyId()==null){
             return AjaxResult.error("无该申请");
         }
-        //审批通过，寻找下一审批人
+        SysApplyWorkflow workflow = new SysApplyWorkflow();
+        //提交审批，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
             if (!"0".equals(sysApplyInEntity.getApproveStatu())){
                 return AjaxResult.error("非待审批状态");
@@ -242,6 +243,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
             List<String> users = getApplyNextUser(sysApplyIn);
             sysApplyInEntity.setApproveUser(String.join(",",users));
+            sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
         }
         //撤回
         if("4".equals(sysApplyIn.getApproveStatu())) {
@@ -251,15 +253,24 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             if(!"5".equals(sysApplyInEntity.getApproveStatu())){
                 return AjaxResult.error("无法撤回");
             }
+            sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
         }
         //审批拒绝，回到申请人
         if("2".equals(sysApplyIn.getApproveStatu())){
             sysApplyInEntity.setApproveUser(sysApplyIn.getApplyUser());
+            sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
+        }
+        //同意审批
+        if("6".equals(sysApplyIn.getApproveStatu())){
+            //1表示审批中
+            List<String> users = getApplyNextUser(sysApplyIn);
+            sysApplyInEntity.setApproveUser(String.join(",",users));
+            sysApplyInEntity.setApproveStatu("1");
         }
         sysApplyInEntity.setUpdateTime(new Date());
-        sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
+
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
-        SysApplyWorkflow workflow = new SysApplyWorkflow();
+
         workflow.setApplyId(sysApplyIn.getApplyId());
         workflow.setApproveStatu(sysApplyIn.getApproveStatu());
         workflow.setApproveUser(loginUser);

@@ -77,6 +77,12 @@ public class SysApplyInController extends BaseController
         return prefix + "/applyUnDoneList";
     }
 
+    @GetMapping("/applyListByMe")
+    public String applyListByMe(ModelMap modelMap) {
+//        我的申请
+        return prefix + "/applyListByMe";
+    }
+
     @GetMapping("/reject")
     public String reject(ModelMap modelMap) {
 //        我的添加审批拒绝备注
@@ -110,6 +116,23 @@ public class SysApplyInController extends BaseController
         SysUser user = ShiroUtils.getSysUser();
         sysApplyIn.setApplyUser(user.getLoginName());
         List<SysApplyIn> list = sysApplyInService.listDownByMe(user.getLoginName());
+        return getDataTable(list);
+    }
+
+    /**
+     * 我的申请
+     * @param applyListByMe
+     * @return
+     */
+    @PostMapping("/applyListByMe")
+    @ResponseBody
+    public TableDataInfo applyListByMe(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        SysUser user = ShiroUtils.getSysUser();
+        sysApplyIn = new SysApplyIn();
+        sysApplyIn.setApplyUser(user.getLoginName());
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
         return getDataTable(list);
     }
 

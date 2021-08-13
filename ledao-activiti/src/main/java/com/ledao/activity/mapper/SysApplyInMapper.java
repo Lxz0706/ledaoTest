@@ -75,4 +75,12 @@ public interface SysApplyInMapper
      * @return 结果
      */
     List<SysApplyIn> listUnDownByMe(@Param("username") String username);
+
+    /**
+     * 我的申请
+     *
+     * @param applyIds 我的申请
+     * @return 结果
+     */
+    List<SysApplyIn> applyListByMe(@Param("username") String username);
 }

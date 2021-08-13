@@ -29,6 +29,10 @@ public class SysDocumentFile extends BaseEntity
     @Excel(name = "资产编号")
     private String assetNumber;
 
+    /** 资产编号 */
+    @Excel(name = "资产包")
+    private String assetPag;
+
     /** 合同编号 */
     @Excel(name = "合同编号")
     private String contractNo;
@@ -101,6 +105,14 @@ public class SysDocumentFile extends BaseEntity
      * 添加附件
      */
     private List<SysFileDetail> fileDetails;
+
+    public String getAssetPag() {
+        return assetPag;
+    }
+
+    public void setAssetPag(String assetPag) {
+        this.assetPag = assetPag;
+    }
 
     public void setDocumentId(Long documentId) 
     {

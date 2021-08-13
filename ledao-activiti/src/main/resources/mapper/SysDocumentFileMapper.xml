@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="documentId"    column="document_id"    />
         <result property="documentType"    column="document_type"    />
         <result property="assetNumber"    column="asset_number"    />
+        <result property="asset_pag"    column="assetPag"    />
         <result property="contractNo"    column="contract_no"    />
         <result property="fileName"    column="file_name"    />
         <result property="fileType"    column="file_type"    />
@@ -32,13 +33,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysDocumentFileVo">
-        select document_id, document_type, asset_number, contract_no, file_name, file_type, file_scan_type, counts, pages, document_statu, cabinet_no, bag_no, document_get_type, file_get_type, document_level, file_ids, apply_id, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_document_file
+        select document_id, document_type, asset_pag, asset_number, contract_no, file_name, file_type, file_scan_type, counts, pages, document_statu, cabinet_no, bag_no, document_get_type, file_get_type, document_level, file_ids, apply_id, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_document_file
     </sql>
 
     <select id="selectSysDocumentFileList" parameterType="SysDocumentFile" resultMap="SysDocumentFileResult">
         <include refid="selectSysDocumentFileVo"/>
         <where>  
             <if test="documentType != null  and documentType != ''"> and document_type = #{documentType}</if>
+            <if test="assetPag != null  and assetNumber != ''"> and asset_pag = #{assetPag}</if>
             <if test="assetNumber != null  and assetNumber != ''"> and asset_number = #{assetNumber}</if>
             <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
             <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
@@ -69,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into sys_document_file
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="documentType != null">document_type,</if>
+            <if test="assetPag != null">asset_pag,</if>
             <if test="assetNumber != null">asset_number,</if>
             <if test="contractNo != null">contract_no,</if>
             <if test="fileName != null">file_name,</if>
@@ -94,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="documentType != null">#{documentType},</if>
+            <if test="assetPag != null">#{assetPag},</if>
             <if test="assetNumber != null">#{assetNumber},</if>
             <if test="contractNo != null">#{contractNo},</if>
             <if test="fileName != null">#{fileName},</if>
@@ -123,6 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_document_file
         <trim prefix="SET" suffixOverrides=",">
             <if test="documentType != null">document_type = #{documentType},</if>
+            <if test="assetPag != null">asset_pag = #{assetPag},</if>
             <if test="assetNumber != null">asset_number = #{assetNumber},</if>
             <if test="contractNo != null">contract_no = #{contractNo},</if>
             <if test="fileName != null">file_name = #{fileName},</if>

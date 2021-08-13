@@ -5,6 +5,7 @@ import java.util.*;
 import com.ledao.activity.controller.ProcessDefinitionController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.mapper.SysDocumentMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import org.slf4j.Logger;
@@ -285,27 +286,33 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         }
         //同意审批
         if("6".equals(sysApplyIn.getApproveStatu())){
-            //1表示审批中
-            List<String> users = getApplyNextUser(sysApplyIn);
-            sysApplyInEntity.setApproveUser(String.join(",",users));
-            sysApplyInEntity.setApproveStatu("1");
+            List<SysRole> ros = currentUser.getRoles();
+            List<String> ids = new ArrayList<>();
+            for (SysRole r:ros) {
+                ids.add(r.getRoleId().toString());
+            }
+            if(ids.contains("118")){
+                //判断所有的档案状态是否时”在库“，是才能完成，否则无法完成
+                SysDocumentFile df = new SysDocumentFile();
+                df.setApplyId(sysApplyIn.getApplyId());
+                List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(df);
+                for(SysDocumentFile d : doc){
+                    if (!"1".equals(d.getDocumentStatu())){
+                        return AjaxResult.error("存在档案未在库，无法完成审批");
+                    }
+                }
+                sysApplyIn.setApproveStatu("3");
+                sysApplyInEntity.setApproveStatu("3");
+                sysApplyInEntity.setApproveUser("");
+            }else{
+                //1表示审批中
+                List<String> users = getApplyNextUser(sysApplyIn);
+                sysApplyInEntity.setApproveUser(String.join(",",users));
+                sysApplyInEntity.setApproveStatu("1");
+            }
+
         }
 
-        //完成审批(入库)
-        if("3".equals(sysApplyIn.getApproveStatu())){
-            if(currentUser.getRoleId()!=118){
-                return AjaxResult.error("非档案管理员无法操作");
-            }
-            //判断所有的档案状态是否时”在库“，是才能完成，否则无法完成
-            SysDocumentFile sysDocumentFile = new SysDocumentFile();
-            sysDocumentFile.setApplyId(sysApplyIn.getApplyId());
-            List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(sysDocumentFile);
-            for(SysDocumentFile d : doc){
-                if (!"1".equals(d.getDocumentStatu())){
-                    return AjaxResult.error("存在档案未在库，无法完成审批");
-                }
-            }
-        }
         sysApplyInEntity.setUpdateTime(new Date());
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
         workflow.setApplyId(sysApplyIn.getApplyId());

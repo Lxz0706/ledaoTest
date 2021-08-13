@@ -77,6 +77,12 @@ public class SysApplyInController extends BaseController
         return prefix + "/applyUnDoneList";
     }
 
+    @GetMapping("/reject")
+    public String reject(ModelMap modelMap) {
+//        我的添加审批拒绝备注
+        return prefix + "/reject";
+    }
+
     /**
      * 查询档案入库申请列表
      */

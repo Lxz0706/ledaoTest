@@ -143,7 +143,6 @@
         $("#form-documentFile-add").validate({
             focusCleanup: true
         });
-
         function submitHandler() {
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-documentFile-add').serialize());

@@ -315,7 +315,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
 
         }
-
         sysApplyInEntity.setUpdateTime(new Date());
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
         workflow.setApplyId(sysApplyIn.getApplyId());

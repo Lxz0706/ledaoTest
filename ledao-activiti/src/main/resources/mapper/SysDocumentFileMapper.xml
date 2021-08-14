@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysDocumentFileVo"/>
         where document_id = #{documentId}
     </select>
-        
+
     <insert id="insertSysDocumentFile" parameterType="SysDocumentFile" useGeneratedKeys="true" keyProperty="documentId">
         insert into sys_document_file
         <trim prefix="(" suffix=")" suffixOverrides=",">

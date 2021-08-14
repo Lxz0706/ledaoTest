@@ -97,7 +97,6 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 				fileDetail.setCreateTime(new Date());
 				fileDetail.setDocumentFileId(sysDocumentFile.getDocumentId());
 				sysFileDetailMapper.insertSysFileDetail(fileDetail);
-
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException();

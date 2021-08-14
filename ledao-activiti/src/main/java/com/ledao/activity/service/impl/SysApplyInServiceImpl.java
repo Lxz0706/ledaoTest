@@ -313,7 +313,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 sysApplyInEntity.setApproveUser(String.join(",",users));
                 sysApplyInEntity.setApproveStatu("1");
             }
-
         }
         sysApplyInEntity.setUpdateTime(new Date());
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);

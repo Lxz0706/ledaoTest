@@ -104,7 +104,6 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 		}
 		return 0;
 	}
-
 	/**
 	 * 修改档案
 	 * 

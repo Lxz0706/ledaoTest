@@ -250,7 +250,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         SysApplyWorkflow workflow = new SysApplyWorkflow();
         //提交审批，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
-            if (!"0".equals(sysApplyInEntity.getApproveStatu())){
+            String[] applyStatusList = {"0","4","2"};
+            // 可提交审批的状态     0保存；4撤回；2拒绝
+            if (!Arrays.asList(applyStatusList).contains(sysApplyInEntity.getApproveStatu())){
                 return AjaxResult.error("非待审批状态");
             }
             if (!sysApplyInEntity.getCreateBy().equals(loginUser)){
@@ -272,13 +274,14 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 return AjaxResult.error("非创建人无法撤回");
             }
             if(!"5".equals(sysApplyInEntity.getApproveStatu())){
-                return AjaxResult.error("无法撤回");
+                return AjaxResult.error("该申请不可撤回");
             }
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
+            sysApplyInEntity.setApproveUser("");
         }
         //审批拒绝，回到申请人
         if("2".equals(sysApplyIn.getApproveStatu())){
-            sysApplyInEntity.setApproveUser(sysApplyIn.getApplyUser());
+            sysApplyInEntity.setApproveUser("");
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
             workflow.setRemarks(sysApplyIn.getRemarks());
             sysApplyInEntity.setRemarks(null);
@@ -319,6 +322,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         workflow.setApproveStatu(sysApplyIn.getApproveStatu());
         workflow.setApproveUser(loginUser);
         workflow.setCreateBy(loginUser);
+        workflow.setCreateTime(new Date());
         sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
         return AjaxResult.success();
     }

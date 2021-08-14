@@ -37,6 +37,10 @@ public class SysDocumentFile extends BaseEntity
     @Excel(name = "合同编号")
     private String contractNo;
 
+    /** 日常经营类档案类型 */
+    @Excel(name = "档案类型")
+    private String dailyDocumentType;
+
     /** 文件名称 */
     @Excel(name = "文件名称")
     private String fileName;
@@ -105,6 +109,15 @@ public class SysDocumentFile extends BaseEntity
      * 添加附件
      */
     private List<SysFileDetail> fileDetails;
+
+
+    public String getDailyDocumentType() {
+        return dailyDocumentType;
+    }
+
+    public void setDailyDocumentType(String dailyDocumentType) {
+        this.dailyDocumentType = dailyDocumentType;
+    }
 
     public String getAssetPag() {
         return assetPag;
@@ -302,12 +315,14 @@ public class SysDocumentFile extends BaseEntity
             .append("documentType", getDocumentType())
             .append("assetNumber", getAssetNumber())
             .append("contractNo", getContractNo())
+            .append("assetPag", getAssetPag())
+            .append("dailyDocumentType", getDailyDocumentType())
             .append("fileName", getFileName())
             .append("fileType", getFileType())
             .append("fileScanType", getFileScanType())
             .append("counts", getCounts())
             .append("pages", getPages())
-            .append("documentnStatu", getDocumentStatu())
+            .append("documentStatu", getDocumentStatu())
             .append("cabinetNo", getCabinetNo())
             .append("bagNo", getBagNo())
             .append("documentGetType", getDocumentGetType())

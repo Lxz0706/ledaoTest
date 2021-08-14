@@ -79,6 +79,7 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	@Override
 	public int insertSysDocumentFile(SysDocumentFile sysDocumentFile, MultipartFile[] files) {
 		sysDocumentFile.setCreateTime(DateUtils.getNowDate());
+		sysDocumentFile.setCreateBy(ShiroUtils.getLoginName());
 		sysDocumentFileMapper.insertSysDocumentFile(sysDocumentFile);
 		SysUser currentUser = ShiroUtils.getSysUser();
 		String loginUser = currentUser.getLoginName();

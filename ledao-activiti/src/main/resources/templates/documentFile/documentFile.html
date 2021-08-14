@@ -48,7 +48,7 @@
                             </li>
                             <li>
                                 <label>档案状态--字典项：</label>
-                                <input type="text" name="documentnStatu"/>
+                                <input type="text" name="documentStatu"/>
                             </li>
                             <li>
                                 <label>柜号：</label>
@@ -142,6 +142,10 @@
                     visible: false
                 },
                 {
+                    field: 'assetPag',
+                    title: '资产包'
+                },
+                {
                     field: 'documentType',
                     title: '档案种类',
                     formatter: function(value, item, index) {
@@ -155,6 +159,10 @@
                 {
                     field: 'contractNo',
                     title: '合同编号'
+                },
+                {
+                    field: 'dailyDocumentType',
+                    title: '档案类型'
                 },
                 {
                     field: 'fileName',
@@ -177,7 +185,7 @@
                     title: '页数'
                 },
                 {
-                    field: 'documentnStatu',
+                    field: 'documentStatu',
                     title: '档案状态--字典项'
                 },
                 {

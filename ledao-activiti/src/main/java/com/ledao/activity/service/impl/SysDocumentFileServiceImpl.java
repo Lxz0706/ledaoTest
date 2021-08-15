@@ -120,6 +120,7 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	@Override
 	public int updateSysDocumentFile(SysDocumentFile sysDocumentFile) {
 		sysDocumentFile.setUpdateTime(DateUtils.getNowDate());
+		sysDocumentFile.setUpdateBy(ShiroUtils.getLoginName());
 		return sysDocumentFileMapper.updateSysDocumentFile(sysDocumentFile);
 	}
 

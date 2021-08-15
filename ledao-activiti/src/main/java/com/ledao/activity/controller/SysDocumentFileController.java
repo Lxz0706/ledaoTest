@@ -1,9 +1,14 @@
 package com.ledao.activity.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.core.text.Convert;
+import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +46,9 @@ public class SysDocumentFileController extends BaseController
 
     @Autowired
     private ISysDocumentFileService sysDocumentFileService;
+
+    @Autowired
+    private ISysApplyInService sysApplyInService;
 
     @RequiresPermissions("activity:documentFile:view")
     @GetMapping()
@@ -122,9 +130,23 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysDocumentFile sysDocumentFile)
     {
-        boolean isChange = sysDocumentFileService.isInChangeStatus(sysDocumentFile.getApplyId());
-        if(!isChange){
-            return AjaxResult.error("当前状态不可修改");
+        SysApplyIn ap = sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
+        if (!ap.getApplyUser().equals(ShiroUtils.getLoginName())){
+            SysUser user = ShiroUtils.getSysUser();
+            boolean isFileAdmin = false;
+            for (SysRole role:user.getRoles()){
+                if (role.getRoleId()==118){
+                    isFileAdmin=true;
+                }
+            }
+            if (!isFileAdmin){
+                return AjaxResult.error("当前申请不可修改");
+            }
+        }else{
+            boolean isChange = sysDocumentFileService.isInChangeStatus(sysDocumentFile.getApplyId());
+            if(!isChange){
+                return AjaxResult.error("当前申请不可修改");
+            }
         }
         return toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
     }
@@ -140,13 +162,15 @@ public class SysDocumentFileController extends BaseController
     {
         logger.info("开始进行档案删除操作");
         String[] idArray = Convert.toStrArray(ids);
-        long applyId = 0;
-        if (idArray.length>0){
-            applyId = Long.valueOf(idArray[0]);
+        SysDocumentFile d = sysDocumentFileService.selectSysDocumentFileById(Long.getLong(idArray[0]));
+        SysApplyIn ap = sysApplyInService.selectSysApplyInById(d.getApplyId());
+        if (ap.getApplyUser()!= ShiroUtils.getLoginName()){
+            return AjaxResult.error("当前申请不可修改");
         }
-        boolean isChange = sysDocumentFileService.isInChangeStatus(applyId);
-        if(!isChange){
-            return AjaxResult.error("当前状态不可修改");
+        String[] applyStatusList = {"0","4","2"};
+        // 可提交审批的状态     0保存；4撤回；2拒绝
+        if (!Arrays.asList(applyStatusList).contains(ap.getApproveStatu())){
+            return AjaxResult.error("当前申请不可修改");
         }
         return toAjax(sysDocumentFileService.deleteSysDocumentFileByIds(ids));
     }

@@ -9,7 +9,7 @@
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="role-form">
-					<input type="hidden" id="applyId" name="applyId" th:value="${applyIds}">
+					<input type="hidden" id="applyId" name="applyId" th:value="${applyId}">
 					<!-- <div class="select-list">
 						<ul>
 							<li>
@@ -35,11 +35,12 @@
 	<th:block th:include="include :: footer" />
 	<script th:src="@{/js/activiti.js}"></script>
 	<script th:inline="javascript">
-		var prefix = ctx + "process";
+		var prefix = ctx + "activity/workflow";
+		var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
 
 		$(function() {
 			var options = {
-		        url: prefix + "/selectSysApplyWorkflowList",
+		        url: prefix + "/list",
 		        queryParams: queryParams,
 		        sortName: "createTime",
 		        sortOrder: "desc",
@@ -62,7 +63,10 @@
 		        },
 		        {
 		            field: 'approveStatu',
-		            title: '处理结果'
+		            title: '处理结果',
+					formatter: function(value, item, index) {
+						return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
+					}
 		        }]
 		    };
 		    $.table.init(options);

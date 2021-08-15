@@ -44,7 +44,7 @@ public class SysApplyWorkflowController extends BaseController
     /**
      * 查询档案出入库审批流程列表
      */
-    @RequiresPermissions("activity:workflow:list")
+//    @RequiresPermissions("activity:workflow:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysApplyWorkflow sysApplyWorkflow)

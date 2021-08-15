@@ -89,6 +89,12 @@ public class SysApplyInController extends BaseController
         return prefix + "/reject";
     }
 
+    @GetMapping("/applyProcess/historyList/{applyId}")
+    public String historyProcess(@PathVariable("applyId") String applyId,ModelMap modelMap) {
+//        查看审批历史
+        return "/applyProcess/historyList";
+    }
+
     /**
      * 查询档案入库申请列表
      */

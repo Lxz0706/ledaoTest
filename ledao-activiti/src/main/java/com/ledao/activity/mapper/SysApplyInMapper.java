@@ -83,4 +83,12 @@ public interface SysApplyInMapper
      * @return 结果
      */
     List<SysApplyIn> applyListByMe(@Param("username") String username);
+
+    /**
+     * 根据applyId获取申请
+     *
+     * @param applyIds 我的申请
+     * @return 结果
+     */
+    List<SysApplyIn> selectSysApplyInListByIds(String[] idsArr);
 }

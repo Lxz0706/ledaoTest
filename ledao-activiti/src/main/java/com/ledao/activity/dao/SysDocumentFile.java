@@ -40,7 +40,7 @@ public class SysDocumentFile extends BaseEntity
     /** 日常经营类档案类型 */
     @Excel(name = "档案类型")
     private String dailyDocumentType;
-    
+
 
     /** 文件名称 */
     @Excel(name = "文件名称")

@@ -2,6 +2,8 @@ package com.ledao.activity.controller;
 
 import java.util.List;
 
+import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.common.core.text.Convert;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -92,6 +94,10 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult addSave(HttpSession session, SysDocumentFile sysDocumentFile, @RequestParam("files")MultipartFile[] files )
     {
+        boolean isChange = sysDocumentFileService.isInChangeStatus(sysDocumentFile.getApplyId());
+        if(!isChange){
+            return AjaxResult.error("当前状态不可修改");
+        }
     	sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
         return toAjax(true);
     }
@@ -116,6 +122,10 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysDocumentFile sysDocumentFile)
     {
+        boolean isChange = sysDocumentFileService.isInChangeStatus(sysDocumentFile.getApplyId());
+        if(!isChange){
+            return AjaxResult.error("当前状态不可修改");
+        }
         return toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
     }
 
@@ -129,6 +139,15 @@ public class SysDocumentFileController extends BaseController
     public AjaxResult remove(String ids)
     {
         logger.info("开始进行档案删除操作");
+        String[] idArray = Convert.toStrArray(ids);
+        long applyId = 0;
+        if (idArray.length>0){
+            applyId = Long.valueOf(idArray[0]);
+        }
+        boolean isChange = sysDocumentFileService.isInChangeStatus(applyId);
+        if(!isChange){
+            return AjaxResult.error("当前状态不可修改");
+        }
         return toAjax(sysDocumentFileService.deleteSysDocumentFileByIds(ids));
     }
 }

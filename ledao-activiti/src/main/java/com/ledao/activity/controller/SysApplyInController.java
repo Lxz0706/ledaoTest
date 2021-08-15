@@ -121,7 +121,7 @@ public class SysApplyInController extends BaseController
 
     /**
      * 我的申请
-     * @param applyListByMe
+     * @param
      * @return
      */
     @PostMapping("/applyListByMe")
@@ -281,6 +281,7 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(sysApplyInService.deleteSysApplyInByIds(ids));
+        AjaxResult res = sysApplyInService.deleteSysApplyInByIds(ids);
+        return res;
     }
 }

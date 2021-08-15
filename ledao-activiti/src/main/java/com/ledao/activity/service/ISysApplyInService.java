@@ -50,7 +50,7 @@ public interface ISysApplyInService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteSysApplyInByIds(String ids);
+    public AjaxResult deleteSysApplyInByIds(String ids);
 
     /**
      * 删除档案入库申请信息

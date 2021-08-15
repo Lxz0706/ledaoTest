@@ -1,11 +1,15 @@
 package com.ledao.activity.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
 import com.itextpdf.text.log.SysoLogger;
+import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.mapper.SysApplyInMapper;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;
@@ -40,6 +44,8 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	private SysFileDetailMapper sysFileDetailMapper;
 	@Autowired
 	private SysFileDetailMapper fileDetailMapper;
+	@Autowired
+	private SysApplyInMapper sysApplyInMapper;
 
 	/**
 	 * 查询档案
@@ -69,6 +75,7 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 		}
 		return documentFiles;
 	}
+
 
 	/**
 	 * 新增档案
@@ -147,5 +154,16 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	@Override
 	public int deleteSysDocumentFileById(Long documentId) {
 		return sysDocumentFileMapper.deleteSysDocumentFileById(documentId);
+	}
+
+	@Override
+	public boolean isInChangeStatus(long applyId) {
+		SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(applyId);
+		String[] applyStatusList = {"0","4","2"};
+		// 可提交审批的状态     0保存；4撤回；2拒绝
+		if (Arrays.asList(applyStatusList).contains(ap.getApproveStatu())){
+			return true;
+		}
+		return false;
 	}
 }

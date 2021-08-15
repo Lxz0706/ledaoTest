@@ -71,6 +71,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where apply_id = #{applyId}
     </select>
 
+    <select id="selectSysApplyInListByIds" parameterType="String" resultMap="SysApplyInResult">
+        <include refid="selectSysApplyInVo"/>
+        where apply_id in
+        <foreach item="applyId" collection="array" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </select>
+
     <insert id="insertSysApplyIn" parameterType="SysApplyIn" useGeneratedKeys="true" keyProperty="applyId">
         insert into sys_apply_in
         <trim prefix="(" suffix=")" suffixOverrides=",">

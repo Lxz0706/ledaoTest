@@ -3,6 +3,7 @@ package com.ledao.activity.service.impl;
 import java.util.*;
 
 import com.ledao.activity.controller.ProcessDefinitionController;
+import com.ledao.activity.service.ISysDocumentFileService;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysRole;
@@ -52,6 +53,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     
     @Autowired
     private SysFileDetailMapper fileDetailMapper;
+
+    @Autowired
+    private ISysDocumentFileService sysDocumentFileService;
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
 
@@ -213,9 +217,29 @@ public class SysApplyInServiceImpl implements ISysApplyInService
      * @return 结果
      */
     @Override
-    public int deleteSysApplyInByIds(String ids)
+    public AjaxResult deleteSysApplyInByIds(String ids)
     {
-        return sysApplyInMapper.deleteSysApplyInByIds(Convert.toStrArray(ids));
+        String[] idsArr = Convert.toStrArray(ids);
+        List<SysApplyIn> apps = sysApplyInMapper.selectSysApplyInListByIds(idsArr);
+        String[] applyStatusList = {"0","4"};
+        String delDocumentIds = "";
+        for (SysApplyIn a:apps) {
+            // 可提交审批的状态     0保存；4撤回;
+            if (!Arrays.asList(applyStatusList).contains(a.getApproveStatu()) || a.getApplyUser()!=ShiroUtils.getLoginName()){
+                return AjaxResult.error("存在不可删除的申请");
+            }
+            SysDocumentFile d = new SysDocumentFile();
+            d.setApplyId(a.getApplyId());
+            List<SysDocumentFile> documentFiles = documentFileMapper.selectSysDocumentFileList(d);
+            for (SysDocumentFile f:documentFiles) {
+                delDocumentIds = delDocumentIds+String.valueOf(f.getDocumentId())+",";
+            }
+        }
+        if (StringUtils.isNotEmpty(delDocumentIds)){
+            sysDocumentFileService.deleteSysDocumentFileByIds(delDocumentIds.substring(0,delDocumentIds.length()-1));
+        }
+        sysApplyInMapper.deleteSysApplyInByIds(idsArr);
+        return AjaxResult.success();
     }
 
     /**

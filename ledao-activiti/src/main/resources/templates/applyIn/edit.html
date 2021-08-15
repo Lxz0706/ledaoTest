@@ -81,7 +81,8 @@
 <script type="text/javascript" th:inline="javascript">
         var prefix = ctx + "applyIn";
         var prefixDocumentFile = ctx + "documentFile";
-        // var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
+        var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+        var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
     $(function () {
         var options = {
             url: prefixDocumentFile + "/list",
@@ -127,11 +128,17 @@
                 },
                 {
                     field: 'fileType',
-                    title: '附件类型--字典项'
+                    title: '附件类型',
+                    formatter: function(value, item, index) {
+                                return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
+                            }
                 },
                 {
                     field: 'fileScanType',
-                    title: '扫描件类型--字典项'
+                    title: '扫描件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType);
+                    }
                 },
                 {
                     field: 'counts',
@@ -144,10 +151,6 @@
                 {
                     field: 'files',
                     title: '添加附件'
-                },
-                {
-                    field: 'QrCode',
-                    title: '二维码'
                 },
                 {
                     title: '操作',

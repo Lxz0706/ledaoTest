@@ -62,4 +62,12 @@ public interface ISysDocumentFileService
      * @return 结果
      */
     public int deleteSysDocumentFileById(Long documentId);
+
+    /**
+     * 删除档案信息
+     *
+     * @param 判断档案是否在可修改状态
+     * @return 结果
+     */
+    boolean isInChangeStatus(long applyId);
 }

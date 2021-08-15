@@ -16,12 +16,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="SysApplyWorkflow" id="SysApplyWorkflowDetailResult">
+        <result property="workflowId"    column="workflow_id"    />
+        <result property="approveUserName"    column="user_name"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="approveUser"    column="approve_user"    />
+        <result property="approveStatu"    column="approve_statu"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
     <sql id="selectSysApplyWorkflowVo">
         select workflow_id, apply_id, approve_user, approve_statu, remarks, create_by, create_time, update_by, update_time from sys_apply_workflow
     </sql>
 
-    <select id="selectSysApplyWorkflowList" parameterType="SysApplyWorkflow" resultMap="SysApplyWorkflowResult">
-        <include refid="selectSysApplyWorkflowVo"/>
+    <select id="selectSysApplyWorkflowList" parameterType="SysApplyWorkflow" resultMap="SysApplyWorkflowDetailResult">
+        select a.workflow_id,b.user_name, a.apply_id, a.approve_user, a.approve_statu, a.remarks, a.create_by, a.create_time, a.update_by, a.update_time from sys_apply_workflow a
+        left join sys_user b on a.approve_user=b.login_name
         <where>  
             <if test="applyId != null "> and apply_id = #{applyId}</if>
             <if test="approveUser != null  and approveUser != ''"> and approve_user = #{approveUser}</if>

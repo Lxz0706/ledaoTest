@@ -27,6 +27,11 @@ public class SysApplyWorkflow extends BaseEntity
     @Excel(name = "审批人")
     private String approveUser;
 
+    /** 审批人 */
+    @Excel(name = "审批人姓名")
+    private String approveUserName;
+
+
     /** 审批状态 */
     @Excel(name = "审批状态")
     private String approveStatu;
@@ -34,6 +39,15 @@ public class SysApplyWorkflow extends BaseEntity
     /** 备注 */
     @Excel(name = "备注")
     private String remarks;
+
+
+    public String getApproveUserName() {
+        return approveUserName;
+    }
+
+    public void setApproveUserName(String approveUserName) {
+        this.approveUserName = approveUserName;
+    }
 
     public void setWorkflowId(Long workflowId) 
     {
@@ -87,6 +101,7 @@ public class SysApplyWorkflow extends BaseEntity
             .append("workflowId", getWorkflowId())
             .append("applyId", getApplyId())
             .append("approveUser", getApproveUser())
+            .append("approveUserName", getApproveUserName())
             .append("approveStatu", getApproveStatu())
             .append("remarks", getRemarks())
             .append("createBy", getCreateBy())

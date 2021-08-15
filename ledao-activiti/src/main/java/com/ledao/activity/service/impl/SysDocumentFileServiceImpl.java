@@ -11,6 +11,7 @@ import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.mapper.SysApplyInMapper;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;
 import com.ledao.framework.util.ShiroUtils;
@@ -92,6 +93,9 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 		String loginUser = currentUser.getLoginName();
 		for (MultipartFile file : files) {
 			try {
+				if (StringUtils.isEmpty(file.getResource().getFilename())){
+					continue;
+				}
 				// 上传文件路径
 				String filePath = Global.getUploadPath() + "/document";
 				// 上传并返回新文件名称

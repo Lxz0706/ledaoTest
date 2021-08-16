@@ -191,6 +191,7 @@ public class SysApplyInController extends BaseController
         return prefix + "/addOut";
     }
 
+
     /**
      * 新增档案入库申请
      */
@@ -242,6 +243,17 @@ public class SysApplyInController extends BaseController
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
         return prefix + "/edit";
+    }
+
+    /**
+     * 修改档案入库申请
+     */
+    @GetMapping("/editOut/{applyId}")
+    public String editOut(@PathVariable("applyId") Long applyId, ModelMap mmap)
+    {
+        SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
+        mmap.put("sysApplyIn", sysApplyIn);
+        return prefix + "/editOut";
     }
 
     /**

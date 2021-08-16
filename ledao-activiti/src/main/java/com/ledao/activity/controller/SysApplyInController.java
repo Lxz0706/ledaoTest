@@ -118,11 +118,11 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public TableDataInfo listDownByMe(SysApplyIn sysApplyIn)
     {
-        sysApplyIn = new SysApplyIn();
+//        sysApplyIn = new SysApplyIn();
         startPage();
         SysUser user = ShiroUtils.getSysUser();
         sysApplyIn.setApplyUser(user.getLoginName());
-        List<SysApplyIn> list = sysApplyInService.listDownByMe(user.getLoginName());
+        List<SysApplyIn> list = sysApplyInService.listDownByMe(sysApplyIn);
         return getDataTable(list);
     }
 
@@ -137,7 +137,6 @@ public class SysApplyInController extends BaseController
     {
         startPage();
         SysUser user = ShiroUtils.getSysUser();
-        sysApplyIn = new SysApplyIn();
         sysApplyIn.setApplyUser(user.getLoginName());
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
         return getDataTable(list);
@@ -152,11 +151,11 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public TableDataInfo listUnDownByMe(SysApplyIn sysApplyIn)
     {
-        sysApplyIn = new SysApplyIn();
+//        sysApplyIn = new SysApplyIn();
         startPage();
         SysUser user = ShiroUtils.getSysUser();
         sysApplyIn.setApplyUser(user.getLoginName());
-        List<SysApplyIn> list = sysApplyInService.listUnDownByMe(user.getLoginName());
+        List<SysApplyIn> list = sysApplyInService.listUnDownByMe(sysApplyIn);
         return getDataTable(list);
     }
 

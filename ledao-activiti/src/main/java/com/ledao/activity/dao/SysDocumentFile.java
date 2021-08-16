@@ -105,7 +105,19 @@ public class SysDocumentFile extends BaseEntity
     /** 修改人名称 */
     @Excel(name = "修改人名称")
     private String reviser;
-    
+
+    /** 修改人名称 */
+    @Excel(name = "附件名称")
+    private String fileNames;
+
+    public String getFileNames() {
+        return fileNames;
+    }
+
+    public void setFileNames(String fileNames) {
+        this.fileNames = fileNames;
+    }
+
     /**
      * 添加附件
      */

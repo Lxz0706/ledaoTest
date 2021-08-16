@@ -69,10 +69,14 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	public List<SysDocumentFile> selectSysDocumentFileList(SysDocumentFile sysDocumentFile) {
 		List<SysDocumentFile> documentFiles = sysDocumentFileMapper.selectSysDocumentFileList(sysDocumentFile);
 		for (SysDocumentFile doc : documentFiles) {
+			List<String> fileNames = new ArrayList<>();
 			SysFileDetail detail = new SysFileDetail();
 			detail.setDocumentFileId(doc.getDocumentId());
 			List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
-			doc.setFileDetails(details);
+			for (SysFileDetail fd: details){
+				fileNames.add(fd.getFileName());
+			}
+			doc.setFileNames(String.join(",",fileNames));
 		}
 		return documentFiles;
 	}

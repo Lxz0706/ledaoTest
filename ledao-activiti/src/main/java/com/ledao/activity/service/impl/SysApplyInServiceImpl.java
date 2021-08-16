@@ -296,8 +296,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
      * 查询自己的工作流
      */
 	@Override
-	public List<SysApplyIn> listDownByMe(String username) {
-		return sysApplyInMapper.listDownByMe(username);
+	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn) {
+		return sysApplyInMapper.listDownByMe(sysApplyIn);
 	}
 
     @Override
@@ -388,8 +388,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
-    public List<SysApplyIn> listUnDownByMe(String username) {
-        return sysApplyInMapper.listUnDownByMe(username);
+    public List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.listUnDownByMe(sysApplyIn);
     }
 
     @Override

@@ -24,10 +24,10 @@
             </select>
             </div>
         </div>
-        <div class="form-group" id="projectName" style="display: none">
+        <div class="form-group" id="projectName" >
             <label class="col-sm-3 control-label">项目名称：</label>
             <div class="col-sm-8">
-                <input disabled name="projectName" th:field="*{projectName}" class="form-control" type="text">
+                <input name="projectName" th:field="*{projectName}" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
@@ -35,16 +35,16 @@
             <div class="col-sm-8">
                 <select id="companyName" name="companyName"
                         th:with="type=${@dict.getType('sys_company_name')}"
-                        data-none-selected-text="请选择" class="form-control m-b" disabled>
+                        data-none-selected-text="请选择" class="form-control m-b">
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                             th:value="${dict.dictValue}" th:field="*{companyName}"></option>
                 </select>
             </div>
         </div>
-        <div class="form-group" id="debtorName" style="display: none">
+        <div class="form-group" id="debtorName" >
             <label class="col-sm-3 control-label">债务人名称：</label>
             <div class="col-sm-8">
-                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">
+                <input name="debtorName" th:field="*{debtorName}" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
@@ -54,14 +54,16 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="remarks" th:field="*{remarks}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">文件列表：</label>
             <div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-                   shiro:hasPermission="activity:documentFile:edit">
-                    <i class="fa fa-edit"></i> 修改
                 </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                    shiro:hasPermission="activity:documentFile:remove">
@@ -216,8 +218,8 @@
                     visible: showNames
                 },
                 {
-                    field: 'files',
-                    title: '添加附件'
+                    field: 'fileNames',
+                    title: '附件'
                 },
                 {
                     title: '操作',

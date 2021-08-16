@@ -66,7 +66,7 @@ public interface SysApplyInMapper
      * @param applyIds 我的已办
      * @return 结果
      */
-	public List<SysApplyIn> listDownByMe(@Param("username") String username);
+	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn);
 
     /**
      * 我的待办
@@ -74,7 +74,7 @@ public interface SysApplyInMapper
      * @param applyIds 我的待办
      * @return 结果
      */
-    List<SysApplyIn> listUnDownByMe(@Param("username") String username);
+    List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn);
 
     /**
      * 我的申请
@@ -82,7 +82,7 @@ public interface SysApplyInMapper
      * @param applyIds 我的申请
      * @return 结果
      */
-    List<SysApplyIn> applyListByMe(@Param("username") String username);
+    List<SysApplyIn> applyListByMe(SysApplyIn sysApplyIn);
 
     /**
      * 根据applyId获取申请

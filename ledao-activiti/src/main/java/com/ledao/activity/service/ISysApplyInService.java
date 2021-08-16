@@ -66,7 +66,7 @@ public interface ISysApplyInService
      * @param applyId 我的已办
      * @return 结果
      */
-	public List<SysApplyIn> listDownByMe(String username);
+	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn);
 
 
     /**
@@ -93,6 +93,6 @@ public interface ISysApplyInService
      * @param applyId 我的待办
      * @return 结果
      */
-    List<SysApplyIn> listUnDownByMe(String username);
+    List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn);
 
 }

@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>档案种类：</label>
+                                <label>档案类别：</label>
                                 <select id="documentType" name="documentType"
                                         th:with="type=${@dict.getType('sys_document_busi_type')}"
                                         data-none-selected-text="请选择">
@@ -110,7 +110,7 @@
                 },
                 {
                     field: 'documentType',
-                    title: '档案种类',
+                    title: '档案类别',
                     formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
 		            }

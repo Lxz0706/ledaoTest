@@ -104,6 +104,7 @@ public class SysApplyInController extends BaseController
     public TableDataInfo list(SysApplyIn sysApplyIn)
     {
         startPage();
+        sysApplyIn.setApplyUser(ShiroUtils.getLoginName());
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
         return getDataTable(list);
     }

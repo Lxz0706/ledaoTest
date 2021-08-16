@@ -12,7 +12,7 @@
         <input name="applyId" th:field="*{applyId}" type="hidden">
         <input name="applyType" th:field="*{applyType}" value="0" type="hidden">
         <div class="form-group">
-            <label class="col-sm-3 control-label">档案种类：</label>
+            <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
                  <select id="documentType"  name="documentType"
                          th:with="type=${@dict.getType('sys_document_busi_type')}" data-none-selected-text="请选择"
@@ -83,6 +83,10 @@
         var prefixDocumentFile = ctx + "documentFile";
         var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
         var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+        var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var documentStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
         var showNames = false
@@ -119,7 +123,7 @@
                 },
                 // {
                 //     field: 'documentType',
-                //     title: '档案种类',
+                //     title: '档案类别',
                 //     formatter: function(value, item, index) {
                 //         return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
                 //     }
@@ -141,7 +145,10 @@
                 },
                 {
                     field: 'dailyDocumentType',
-                    title: '档案类型'
+                    title: '种类',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.fileScanType);
+                    }
                 },
                 {
                     field: 'fileName',
@@ -171,8 +178,11 @@
                 },
                 {
                     field: 'documentStatu',
-                    title: '档案状态--字典项',
-                    visible: showNames
+                    title: '档案状态',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentStatuDictDatas, item.fileScanType);
+                    }
                 },
                 {
                     field: 'cabinetNo',
@@ -186,13 +196,19 @@
                 },
                 {
                     field: 'documentGetType',
-                    title: '档案类型--字典项',
-                    visible: showNames
+                    title: '档案类型',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.fileScanType);
+                    }
                 },
                 {
                     field: 'fileGetType',
-                    title: '文件类型--字典项',
-                    visible: showNames
+                    title: '文件类型',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentInTypeDictDatas, item.fileScanType);
+                    }
                 },
                 {
                     field: 'documentLevel',

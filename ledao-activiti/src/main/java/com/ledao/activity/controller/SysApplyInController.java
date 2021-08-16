@@ -183,6 +183,15 @@ public class SysApplyInController extends BaseController
     }
 
     /**
+     * 新增档案出库申请
+     */
+    @GetMapping("/addOut")
+    public String addOut()
+    {
+        return prefix + "/addOut";
+    }
+
+    /**
      * 新增档案入库申请
      */
     @GetMapping("/editDocumentModal")

@@ -162,9 +162,9 @@ public class SysDocumentFileController extends BaseController
     {
         logger.info("开始进行档案删除操作");
         String[] idArray = Convert.toStrArray(ids);
-        SysDocumentFile d = sysDocumentFileService.selectSysDocumentFileById(Long.getLong(idArray[0]));
+        SysDocumentFile d = sysDocumentFileService.selectSysDocumentFileById(Long.parseLong(idArray[0]));
         SysApplyIn ap = sysApplyInService.selectSysApplyInById(d.getApplyId());
-        if (ap.getApplyUser()!= ShiroUtils.getLoginName()){
+        if (!ap.getApplyUser().equals(ShiroUtils.getLoginName())){
             return AjaxResult.error("当前申请不可修改");
         }
         String[] applyStatusList = {"0","4","2"};

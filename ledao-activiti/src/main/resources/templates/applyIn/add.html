@@ -16,17 +16,15 @@
                     </select> -->
                     <select id="documentType" onchange="changeDocumentType(this.value)" name="documentType" th:with="type=${@dict.getType('sys_document_busi_type')}"
                                         data-none-selected-text="请选择" class="form-control m-b">
-                                    <option value="">--请选择数据--</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
                                 </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
             <div class="form-group" id="projectName">
-                <label class="col-sm-3 control-label">项目名称：</label>
+                <label class="col-sm-3 control-label is-required" >项目名称：</label>
                 <div class="col-sm-8">
-                    <input name="projectName" class="form-control" type="text">
+                    <input name="projectName" class="form-control required" required type="text">
                 </div>
             </div>
             <div class="form-group">    
@@ -35,7 +33,6 @@
                     <select id="companyName" name="companyName"
                                         th:with="type=${@dict.getType('sys_company_name')}"
                                         data-none-selected-text="请选择" class="form-control m-b">
-                                    <option value="">--请选择数据--</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
                                 </select>

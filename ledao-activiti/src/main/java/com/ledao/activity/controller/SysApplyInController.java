@@ -196,9 +196,11 @@ public class SysApplyInController extends BaseController
     /**
      * 新增档案入库申请
      */
-    @GetMapping("/editDocumentModal")
-    public String editDocumentModal()
+    @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}")
+    public String editDocumentModal(@PathVariable("applyId") Long applyId, @PathVariable("documentTypeVal") String documentTypeVal,ModelMap mmap)
     {
+        mmap.put("applyId",applyId);
+        mmap.put("documentTypeVal",documentTypeVal);
         return prefix + "/editDocumentModal";
     }
 

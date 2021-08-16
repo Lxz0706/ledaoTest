@@ -1,91 +1,103 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('档案出库申请列表')" />
+    <th:block th:include="include :: header('档案入库申请列表')" />
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                        	<input name="applyType" value="1" type="hidden"/>
-                            <li>
-                                <label>档案类别：</label>
-                                <select id="documentType" name="documentType"
-                                        th:with="type=${@dict.getType('sys_document_busi_type')}"
-                                        data-none-selected-text="请选择">
-                                    <option value="">--请选择数据--</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>项目名称：</label>
-                                <input type="text" name="projectName"/>
-                            </li>
-                            <li>
-                                <label>公司名称：</label>
-                                <select id="companyName" name="companyName"
-                                        th:with="type=${@dict.getType('sys_company_name')}"
-                                        data-none-selected-text="请选择">
-                                    <option value="">--请选择数据--</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>债务人名称：</label>
-                                <input type="text" name="debtorName"/>
-                            </li>
-                            <li>
-                                <label>实际提交人：</label>
-                                <input type="text" name="realCreateBy"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input name="applyType" value="1" type="hidden"/>
+                        <li>
+                            <label>档案类别：</label>
+                            <select id="documentType" name="documentType"
+                                    th:with="type=${@dict.getType('sys_document_busi_type')}"
+                                    data-none-selected-text="请选择"
+                                    onchange="changeDocumentType(this.value)">
+                                <option value="">--请选择数据--</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li id="projectName">
+                            <label>项目名称：</label>
+                            <input type="text" name="projectName"/>
+                        </li>
+                        <li>
+                            <label>公司名称：</label>
+                            <select id="companyName" name="companyName"
+                                    th:with="type=${@dict.getType('sys_company_name')}"
+                                    data-none-selected-text="请选择">
+                                <option value="">--请选择数据--</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li id="debtorName">
+                            <label>债务人名称：</label>
+                            <input type="text" name="debtorName"/>
+                        </li>
+                        <li>
+                            <label>实际提交人：</label>
+                            <input type="text" name="realCreateBy"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:applyIn:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:applyIn:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:applyIn:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:applyIn:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:applyIn:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:applyIn:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-danger single disabled" onclick="$.operate.applyBack()" shiro:hasPermission="activity:applyIn:applyBack">
+                <i class="fa fa-remove"></i> 撤回
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.applySubmit()" shiro:hasPermission="activity:applyIn:applySubmit">
+                <i class="fa fa-user"></i> 提交审批
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
-        var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
-        var prefix = ctx + "applyIn";
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
+    var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
+    var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    console.log('roles',roles)
+    console.log('loginName',loginName)
+    var prefix = ctx + "applyIn";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "档案入库申请",
-                columns: [{
-                    checkbox: true
-                },
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/addOut",
+            updateUrl: prefix + "/editOut/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            submitUrl: ctx + "applyIn/applyEditSave",
+            modalName: "档案出库申请",
+            columns: [{
+                checkbox: true
+            },
                 {
                     field: 'applyId',
                     title: 'id',
@@ -95,8 +107,8 @@
                     field: 'documentType',
                     title: '档案类别',
                     formatter: function(value, item, index) {
-		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
-		            }
+                        return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
+                    }
                 },
                 {
                     field: 'projectName',
@@ -106,8 +118,8 @@
                     field: 'companyName',
                     title: '公司名称',
                     formatter: function(value, item, index) {
-		            	return $.table.selectDictLabel(companyDictDatas, item.companyName);
-		            }
+                        return $.table.selectDictLabel(companyDictDatas, item.companyName);
+                    }
                 },
                 {
                     field: 'debtorName',
@@ -127,7 +139,10 @@
                 },
                 {
                     field: 'approveStatu',
-                    title: '审批状态'
+                    title: '审批状态',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
+                    }
                 },
                 {
                     field: 'realCreateBy',
@@ -149,13 +164,34 @@
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        /* actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="selectSysApplyWorkflowList(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>查看审批流</a>'); */
+                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="selectSysApplyWorkflowList(\'' + row.applyId + '\')"><i class="fa fa-list"></i> 审批历史</a> ');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        };
+        $.table.init(options);
+    });
+    function selectSysApplyWorkflowList(applyId){
+        var url = prefix+'/applyProcess/historyList/'+applyId;
+        $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
+    }
+    function applyEditSave(){
+    }
+    function changeDocumentType(val) {
+        var projectName = document.getElementById("projectName")
+        var debtorName = document.getElementById("debtorName")
+        if(val === '0') {
+            projectName.style.display = "block"
+            debtorName.style.display = "block"
+        } else if(val === '1') {
+            projectName.style.display = "none"
+            debtorName.style.display = "none"
+        } else {
+            projectName.style.display = "block"
+            debtorName.style.display = "block"
+        }
+    }
+</script>
 </body>
 </html>

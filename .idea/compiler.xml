@@ -7,13 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ledao-admin" />
-        <module name="ledao-common" />
+        <module name="ledao-system" />
+        <module name="ledao-generator" />
+        <module name="ledao-framework" />
         <module name="ledao-quartz" />
         <module name="ledao-activiti" />
-        <module name="ledao-generator" />
-        <module name="ledao-system" />
-        <module name="ledao-framework" />
+        <module name="ledao-common" />
+        <module name="ledao-admin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

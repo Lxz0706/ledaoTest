@@ -14,13 +14,14 @@
                                 <label>档案类别：</label>
                                 <select id="documentType" name="documentType"
                                         th:with="type=${@dict.getType('sys_document_busi_type')}"
-                                        data-none-selected-text="请选择">
+                                        data-none-selected-text="请选择"
+                                        onchange="changeDocumentType(this.value)">
                                     <option value="">--请选择数据--</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-                            <li>
+                            <li id="projectName">
                                 <label>项目名称：</label>
                                 <input type="text" name="projectName"/>
                             </li>
@@ -34,13 +35,29 @@
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-                            <li>
+                            <li id="debtorName">
                                 <label>债务人名称：</label>
                                 <input type="text" name="debtorName"/>
                             </li>
                             <li>
                                 <label>实际提交人：</label>
                                 <input type="text" name="realCreateBy"/>
+                            </li>
+                            <li class="select-time">
+                                <label>申请时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
+                            </li>
+                            <li>
+                                <label>申请类型：</label>
+                                <select id="applyType" name="applyType"
+                                        th:with="type=${@dict.getType('sys_file_apply_type')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">--请选择数据--</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -176,6 +193,21 @@
             };
             $.table.init(options);
         });
+
+        function changeDocumentType(val) {
+            var projectName = document.getElementById("projectName")
+            var debtorName = document.getElementById("debtorName")
+            if(val === '0') {
+                projectName.style.display = "block"
+                debtorName.style.display = "block"
+            } else if(val === '1') {
+                projectName.style.display = "none"
+                debtorName.style.display = "none"
+            } else {
+                projectName.style.display = "block"
+                debtorName.style.display = "block"
+            }
+        }
 
         // function reject () {
         //     var url = prefix + "/reject";

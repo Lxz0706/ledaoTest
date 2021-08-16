@@ -135,7 +135,7 @@ public class SysDocumentFileController extends BaseController
             SysUser user = ShiroUtils.getSysUser();
             boolean isFileAdmin = false;
             for (SysRole role:user.getRoles()){
-                if (role.getRoleId()==118){
+                if (role.getRoleKey()=="documentAdmin"){
                     isFileAdmin=true;
                 }
             }

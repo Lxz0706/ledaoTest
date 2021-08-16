@@ -109,4 +109,9 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
         }
         return 0;
     }
+
+    @Override
+    public List<SysApplyOutDetail> listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail) {
+        return sysApplyOutDetailMapper.listDocumentAndDetail(sysApplyOutDetail);
+    }
 }

@@ -26,6 +26,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
+    <resultMap type="SysApplyOutDetail" id="SysApplyOutDocDetailResult">
+        <result property="outDetailId"    column="out_detail_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="documentId"    column="document_id"    />
+        <result property="isPage"    column="is_page"    />
+        <result property="isElec"    column="is_elec"    />
+        <result property="isReturn"    column="is_return"    />
+        <result property="planReturnTime"    column="plan_return_time"    />
+        <result property="realReturnTime"    column="real_return_time"    />
+        <result property="outReason"    column="out_reason"    />
+        <result property="isOut"    column="is_out"    />
+        <result property="isReceive"    column="is_receive"    />
+        <result property="isReturned"    column="is_returned"    />
+        <result property="isReceived"    column="is_received"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="assetNumber"    column="asset_number"    />
+        <result property="assetPag"    column="asset_pag"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="dailyDocumentType"    column="daily_document_type"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileScanType"    column="file_scan_type"    />
+        <result property="counts"    column="counts"    />
+        <result property="pages"    column="pages"    />
+    </resultMap>
 
     <sql id="selectSysApplyOutDetailVo">
         select out_detail_id, apply_id, document_id, is_page, is_elec, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_apply_out_detail
@@ -49,6 +80,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
             <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+        </where>
+    </select>
+
+    <select id="listDocumentAndDetail" parameterType="SysApplyOutDetail" resultMap="SysApplyOutDocDetailResult">
+        SELECT
+        od.out_detail_id,
+        od.apply_id,
+        od.document_id,
+        od.is_page,
+        od.is_elec,
+        od.is_return,
+        od.plan_return_time,
+        od.real_return_time,
+        od.out_reason,
+        od.is_out,
+        od.is_receive,
+        od.is_returned,
+        od.is_received,
+        od.remarks,
+        od.create_by,
+        od.creator,
+        od.create_time,
+        od.update_by,
+        od.reviser,
+        od.update_time,
+        file.asset_number,
+        file.contract_no,
+        file.asset_pag,
+        file.daily_document_type,
+        file.file_name,
+        file.file_type,
+        file.file_scan_type,
+        file.counts,
+        file.pages
+        FROM
+        sys_apply_out_detail od
+        LEFT JOIN sys_document_file file ON od.document_id = file.document_id
+        <where>
+            <if test="applyId != null "> and od.apply_id = #{applyId}</if>
+            <if test="documentId != null "> and od.document_id = #{documentId}</if>
+            <if test="isPage != null  and isPage != ''"> and od.is_page = #{isPage}</if>
+            <if test="isElec != null  and isElec != ''"> and od.is_elec = #{isElec}</if>
+            <if test="isReturn != null  and isReturn != ''"> and od.is_return = #{isReturn}</if>
+            <if test="planReturnTime != null "> and od.plan_return_time = #{planReturnTime}</if>
+            <if test="realReturnTime != null "> and od.real_return_time = #{realReturnTime}</if>
+            <if test="outReason != null  and outReason != ''"> and od.out_reason = #{outReason}</if>
+            <if test="isOut != null  and isOut != ''"> and od.is_out = #{isOut}</if>
+            <if test="isReceive != null  and isReceive != ''"> and od.is_receive = #{isReceive}</if>
+            <if test="isReturned != null  and isReturned != ''"> and od.is_returned = #{isReturned}</if>
+            <if test="isReceived != null  and isReceived != ''"> and od.is_received = #{isReceived}</if>
+            <if test="remarks != null  and remarks != ''"> and od.remarks = #{remarks}</if>
+            <if test="creator != null  and creator != ''"> and od.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and od.reviser = #{reviser}</if>
         </where>
     </select>
     

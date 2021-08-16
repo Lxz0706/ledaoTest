@@ -66,4 +66,12 @@ public interface SysApplyOutDetailMapper
      * @return 结果
      */
     public int  deleteSysApplyOutDetailByApplyId(String applyId);
+
+    /**
+     * 查询档案出库详情记录列表
+     *
+     * @param sysApplyOutDetail 档案出库详情记录
+     * @return 档案出库详情记录集合
+     */
+    List<SysApplyOutDetail> listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail);
 }

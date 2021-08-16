@@ -21,6 +21,43 @@ public class SysApplyOutDetail extends BaseEntity
     /** id */
     private Long outDetailId;
 
+    /** 资产编号 */
+    @Excel(name = "资产编号")
+    private String assetNumber;
+
+    /** 资产编号 */
+    @Excel(name = "资产包")
+    private String assetPag;
+
+    /** 合同编号 */
+    @Excel(name = "合同编号")
+    private String contractNo;
+
+    /** 日常经营类档案类型 */
+    @Excel(name = "档案类型")
+    private String dailyDocumentType;
+
+
+    /** 文件名称 */
+    @Excel(name = "文件名称")
+    private String fileName;
+
+    /** 附件类型--字典项 */
+    @Excel(name = "附件类型--字典项")
+    private String fileType;
+
+    /** 扫描件类型--字典项 */
+    @Excel(name = "扫描件类型--字典项")
+    private String fileScanType;
+
+    /** 份数 */
+    @Excel(name = "份数")
+    private Long counts;
+
+    /** 页数 */
+    @Excel(name = "页数")
+    private Long pages;
+
     /** 申请id */
     @Excel(name = "申请id")
     private Long applyId;
@@ -81,7 +118,79 @@ public class SysApplyOutDetail extends BaseEntity
     @Excel(name = "修改人名称")
     private String reviser;
 
-    public void setOutDetailId(Long outDetailId) 
+    public String getAssetNumber() {
+        return assetNumber;
+    }
+
+    public void setAssetNumber(String assetNumber) {
+        this.assetNumber = assetNumber;
+    }
+
+    public String getAssetPag() {
+        return assetPag;
+    }
+
+    public void setAssetPag(String assetPag) {
+        this.assetPag = assetPag;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public String getDailyDocumentType() {
+        return dailyDocumentType;
+    }
+
+    public void setDailyDocumentType(String dailyDocumentType) {
+        this.dailyDocumentType = dailyDocumentType;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getFileScanType() {
+        return fileScanType;
+    }
+
+    public void setFileScanType(String fileScanType) {
+        this.fileScanType = fileScanType;
+    }
+
+    public Long getCounts() {
+        return counts;
+    }
+
+    public void setCounts(Long counts) {
+        this.counts = counts;
+    }
+
+    public Long getPages() {
+        return pages;
+    }
+
+    public void setPages(Long pages) {
+        this.pages = pages;
+    }
+
+    public void setOutDetailId(Long outDetailId)
     {
         this.outDetailId = outDetailId;
     }
@@ -230,6 +339,15 @@ public class SysApplyOutDetail extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("outDetailId", getOutDetailId())
+            .append("assetNumber", getAssetNumber())
+            .append("contractNo", getContractNo())
+            .append("assetPag", getAssetPag())
+            .append("dailyDocumentType", getDailyDocumentType())
+            .append("fileName", getFileName())
+            .append("fileType", getFileType())
+            .append("fileScanType", getFileScanType())
+            .append("counts", getCounts())
+            .append("pages", getPages())
             .append("applyId", getApplyId())
             .append("documentId", getDocumentId())
             .append("isPage", getIsPage())

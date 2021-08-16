@@ -44,13 +44,26 @@ public class SysApplyOutDetailController extends BaseController
     /**
      * 查询档案出库详情记录列表
      */
-    @RequiresPermissions("activity:outFiledetail:list")
+//    @RequiresPermissions("activity:outFiledetail:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysApplyOutDetail sysApplyOutDetail)
     {
         startPage();
         List<SysApplyOutDetail> list = sysApplyOutDetailService.selectSysApplyOutDetailList(sysApplyOutDetail);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询档案出库详情记录列表
+     */
+//    @RequiresPermissions("activity:outFiledetail:list")
+    @PostMapping("/listDocumentAndDetail")
+    @ResponseBody
+    public TableDataInfo listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail)
+    {
+        startPage();
+        List<SysApplyOutDetail> list = sysApplyOutDetailService.listDocumentAndDetail(sysApplyOutDetail);
         return getDataTable(list);
     }
 

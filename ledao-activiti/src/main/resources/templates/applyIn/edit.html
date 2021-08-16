@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">文件列表</label>
+            <label class="col-sm-3 control-label">文件列表：</label>
             <div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
@@ -86,8 +86,8 @@
     $(function () {
         var options = {
             url: prefixDocumentFile + "/list",
-            createUrl: prefix + "/editDocumentModal",
-            updateUrl: prefix + "/edit/{id}",
+            createUrl: prefix + "/editDocumentModal/{id}",
+            updateUrl: prefixDocumentFile + "/edit/{id}",
             removeUrl: prefixDocumentFile + "/remove",
             exportUrl: prefix + "/export",
             modalName: "档案",
@@ -147,6 +147,30 @@
                 {
                     field: 'pages',
                     title: '页数'
+                },
+                {
+                    field: 'documentStatu',
+                    title: '档案状态--字典项'
+                },
+                {
+                    field: 'cabinetNo',
+                    title: '柜号'
+                },
+                {
+                    field: 'bagNo',
+                    title: '档案袋编号'
+                },
+                {
+                    field: 'documentGetType',
+                    title: '档案类型--字典项'
+                },
+                {
+                    field: 'fileGetType',
+                    title: '文件类型--字典项'
+                },
+                {
+                    field: 'documentLevel',
+                    title: '档案级别'
                 },
                 {
                     field: 'files',

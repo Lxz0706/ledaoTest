@@ -27,11 +27,11 @@
     });
     function submitHandler() {
         if ($.validate.form()) {
-            // var docId = document.getElementById("form-applyIn-add")
-            // var formData = new FormData(docId)
-            // var rejectmak = formData.get("realCreateBy")
+            var docId = document.getElementById("form-applyIn-add")
+            var formData = new FormData(docId)
+            var rejectmak = formData.get("realCreateBy")
             // $.operate.rejectMask(rejectmak)
-            $.operate.reject()
+            $.operate.reject(rejectmak)
         }
     }
 

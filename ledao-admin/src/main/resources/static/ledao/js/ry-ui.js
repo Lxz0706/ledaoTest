@@ -1132,54 +1132,33 @@ var table = {
             // 审批成功 （同意）
             approve: function (id) {
                 table.set();
-                // var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                // if (rows.length == 0) {
-                //     $.modal.alertWarning("请至少选择一条记录");
-                //     return;
-                // }
-                // $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
+                $.modal.confirm("确认要提交选中的数据吗?", function () {
                     var url = table.options.approveUrl;
                     var data = {"applyId": id, "approveStatu": "6","applyType": "0"};
                     $.operate.submit(url, "post", "json", data);
-                // });
+                });
             },
             // 审批失败画面（驳回）
-            reject: function (name) {
-                table.set();
-                console.log(table)
-                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                if (rows.length == 0) {
-                    $.modal.alertWarning("请至少选择一条记录");
-                    return;
-                }
-
-                // if(name) {
-                //     $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
-                //         var url = table.options.approveUrl;
-                //         var data = {"applyId": rows.join(), "approveStatu": "2","applyType": "0","remarks": "123"};
-                //         $.operate.submit(url, "post", "json", data);
-                //     });
-                // } else {
-                //     $.modal.open("添加备注","/applyIn/reject")
-                // }
-                // // $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
-                //     var url = table.options.approveUrl;
-                //     var data = {"applyId": rows.join(), "approveStatu": "2","applyType": "0","remarks": "123"};
-                //     $.operate.submit(url, "post", "json", data);
-                // // // });
-
-                console.log(name)
+            reject: function (id,name) {
+                table.set()
+                $.modal.confirm("请确认操作", function () {
+                    var url = "/applyIn/applyEditSave";
+                    var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": name};
+                    var row = $("#" + table.options.id);
+                    $.operate.submit(url, "post", "json", data)
+                    $.modal.close();
+                    $.table.refresh();
+                });
             },
             // 驳回画面
-            // rejectMask:function (name) {
-            //     console.log('name',name)
-            //     var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-            //     // var url = table.options.approveUrl;
-            //     // // var applyId =
-            //     // var data = {"applyId": rows.join(), "approveStatu": "2","applyType": "0","remarks": name};
-            //     // $.operate.submit(url, "post", "json", data);
-            //     console.log(rows)
-            // },
+            rejectMask:function (id) {
+                table.set()
+                // var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                var url = "/applyIn/reject/" + id;
+                // var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": name};
+                // $.operate.submit(url, "post", "json", data);
+                $.modal.open("添加备注",url);
+            },
             // 设置信息为已读
             read: function (id) {
                 table.set();
@@ -1416,6 +1395,9 @@ var table = {
                 } else if (result.code == web_status.SUCCESS && table.options.type == table_type.bootstrapTreeTable) {
                     $.modal.msgSuccess(result.msg);
                     $.treeTable.refresh();
+                } else if (result.code == web_status.SUCCESS && table.options.type == undefined) {
+                    $.modal.msgSuccess(result.msg);
+                    $.table.refresh();
                 } else if (result.code == web_status.SUCCESS && table.option.type == undefined) {
                     $.modal.msgSuccess(result.msg)
                 } else if (result.code == web_status.WARNING) {

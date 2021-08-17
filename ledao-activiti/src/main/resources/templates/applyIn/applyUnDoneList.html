@@ -200,7 +200,7 @@
                         }
                         actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="selectSysApplyWorkflowList(\'' + row.applyId + '\')"><i class="fa fa-list"></i> 审批历史</a> ');
                         actions.push('<a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="$.operate.approve(\'' + row.applyId + '\')"><i class="fa fa-user"></i> 通过</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate(\'' + row.applyId + '\')"><i class="fa fa-remove"></i> 驳回</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.rejectMask(\'' + row.applyId + '\')"><i class="fa fa-remove"></i> 驳回</a> ');
                         // actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -229,8 +229,8 @@
             }
         }
 
-        // function reject () {
-        //     var url = prefix + "/reject";
+        // function rejectMask (id) {
+        //     var url = prefix + "/reject/" + id;
         //     $.modal.open("添加备注",url);
         // }
     </script>

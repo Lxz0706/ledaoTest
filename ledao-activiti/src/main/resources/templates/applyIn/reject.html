@@ -8,6 +8,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-applyIn-add">
         <input name="applyType" value="0" type="hidden"/>
+        <input name="applyId" id="applyId" th:value="*{applyId}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
@@ -27,11 +28,11 @@
     });
     function submitHandler() {
         if ($.validate.form()) {
-            var docId = document.getElementById("form-applyIn-add")
-            var formData = new FormData(docId)
-            var rejectmak = formData.get("realCreateBy")
-            // $.operate.rejectMask(rejectmak)
-            $.operate.reject(rejectmak)
+            var docId = document.getElementById("form-applyIn-add");
+            var formData = new FormData(docId);
+            var rejectmak = formData.get("realCreateBy");
+            var id = document.getElementById("applyId").value;
+            $.operate.reject(id,rejectmak)
         }
     }
 

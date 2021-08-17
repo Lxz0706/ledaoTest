@@ -104,15 +104,7 @@
                 showNames = true
             }
         }
-        if(approveStatu!=0 && approveStatu != 4){
-            if(approveStatu == 1 && showNames){
-            }else{
-                $("input").attr("disabled",true);
-                $("select").attr("disabled",true);
-                $("a").attr("disabled",true);
-                $('.btn').removeAttr('onclick')
-            }
-        }
+
         if(documentTypeVal == "0") {
             projectName.style.display = 'block'
             debtorName.style.display = 'block'
@@ -248,6 +240,15 @@
                 }]
         };
         $.table.init(options);
+        if(approveStatu!=0 && approveStatu != 4){
+            if(approveStatu == 1 && showNames){
+            }else{
+                $("input").attr("disabled",true);
+                $("select").attr("disabled",true);
+                $("a").attr("disabled",true);
+                $('.btn').removeAttr('onclick')
+            }
+        }
     });
 
     $("#form-applyIn-edit").validate({

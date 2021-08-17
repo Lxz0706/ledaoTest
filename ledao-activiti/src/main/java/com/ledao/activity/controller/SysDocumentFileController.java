@@ -124,7 +124,7 @@ public class SysDocumentFileController extends BaseController
     /**
      * 修改保存档案
      */
-    @RequiresPermissions("activity:documentFile:edit")
+//    @RequiresPermissions("activity:documentFile:edit")
     @Log(title = "档案", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody

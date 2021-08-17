@@ -118,7 +118,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         List<String> users = new ArrayList<>();
         if (StringUtils.isNotNull(sysUser)) {
             //入库申请
+            SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
             if ("0".equals(sysApplyIn.getApplyType())) {
+                if ("5".equals(sysApplyIn.getApproveStatu())){
+                    if (StringUtils.isNotEmpty(a.getRealCreateBy())){
+                        sysUser = userMapper.selectUserByLoginName(a.getRealCreateBy());
+                    }
+                }
                 //根据提交人查询是否存在直接主管
                 if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
                     key = "document_rk_zg";

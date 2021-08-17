@@ -3,6 +3,8 @@ package com.ledao.activity.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
+import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,9 @@ public class SysApplyInController extends BaseController
     
     @Autowired
     private ISysApplyWorkflowService sysApplyWorkflowService;
+
+    @Autowired
+    private ISysUserService ISysUserService;
     
     @Autowired
     private ISysDocumentFileService sysDocumentFileService;
@@ -219,6 +224,14 @@ public class SysApplyInController extends BaseController
         sysApplyIn.setCreateBy(userName);
         sysApplyIn.setCreateTime(new Date());
         sysApplyIn.setApproveStatu("0");
+        //            判断当有实际提交人时，获取实际提交人的直属领导
+        if (StringUtils.isNotEmpty(sysApplyIn.getRealCreateBy())){
+            SysUser realUser = ISysUserService.selectUserByLoginName(sysApplyIn.getRealCreateBy());
+            if (realUser!=null && StringUtils.isNotEmpty(realUser.getLoginName())){}
+            else{
+                return AjaxResult.error("实际提交人不存在，请重新输入");
+            }
+        }
         return toAjax(sysApplyInService.insertSysApplyIn(sysApplyIn));
     }
     

@@ -340,6 +340,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
             sysApplyInEntity.setApproveUser(null);
+            saveWorkFlow(sysApplyInEntity,workflow);
         }
         //审批拒绝，回到申请人
         if("2".equals(sysApplyIn.getApproveStatu())){
@@ -347,7 +348,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
             workflow.setRemarks(sysApplyIn.getRemarks());
             sysApplyInEntity.setRemarks(null);
-
+            saveWorkFlow(sysApplyInEntity,workflow);
         }
         //同意审批
         if("6".equals(sysApplyIn.getApproveStatu())){
@@ -375,16 +376,20 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 sysApplyInEntity.setApproveUser(String.join(",",users));
                 sysApplyInEntity.setApproveStatu("1");
             }
+            saveWorkFlow(sysApplyInEntity,workflow);
         }
         sysApplyInEntity.setUpdateTime(new Date());
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
+        return AjaxResult.success();
+    }
+
+    private int saveWorkFlow(SysApplyIn sysApplyIn,SysApplyWorkflow workflow){
         workflow.setApplyId(sysApplyIn.getApplyId());
         workflow.setApproveStatu(sysApplyIn.getApproveStatu());
-        workflow.setApproveUser(loginUser);
-        workflow.setCreateBy(loginUser);
+        workflow.setApproveUser(ShiroUtils.getLoginName());
+        workflow.setCreateBy(ShiroUtils.getLoginName());
         workflow.setCreateTime(new Date());
-        sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
-        return AjaxResult.success();
+        return sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
     }
 
     @Override

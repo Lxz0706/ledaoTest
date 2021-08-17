@@ -112,6 +112,14 @@
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
         }
+        var isNotChange = false
+        if(approveStatu!=0 && approveStatu != 4){
+            isNotChange = false
+            if((approveStatu == 1 || approveStatu == 5) && showNames){
+            }else{
+                isNotChange = true
+            }
+        }
         var options = {
             url: prefixDocumentFile + "/list",
             createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal,
@@ -236,18 +244,15 @@
                         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     },
-                    visible: approveStatu==0 || approveStatu == 4
+                    visible: !isNotChange
                 }]
         };
         $.table.init(options);
-        if(approveStatu!=0 && approveStatu != 4){
-            if(approveStatu == 1 && showNames){
-            }else{
-                $("input").attr("disabled",true);
-                $("select").attr("disabled",true);
-                $("a").attr("disabled",true);
-                $('.btn').removeAttr('onclick')
-            }
+        if(isNotChange){
+            $("input").attr("disabled",true);
+            $("select").attr("disabled",true);
+            $("a").attr("disabled",true);
+            $('.btn').removeAttr('onclick')
         }
     });
 

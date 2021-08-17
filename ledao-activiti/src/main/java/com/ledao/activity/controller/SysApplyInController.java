@@ -83,9 +83,10 @@ public class SysApplyInController extends BaseController
         return prefix + "/applyListByMe";
     }
 
-    @GetMapping("/reject")
-    public String reject(ModelMap modelMap) {
+    @GetMapping("/reject/{applyId}")
+    public String reject(@PathVariable("applyId") String applyId,ModelMap modelMap) {
 //        我的添加审批拒绝备注
+        modelMap.put("applyId",applyId);
         return prefix + "/reject";
     }
 

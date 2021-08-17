@@ -1130,18 +1130,18 @@ var table = {
                 });
             },
             // 审批成功 （同意）
-            approve: function () {
+            approve: function (id) {
                 table.set();
-                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                if (rows.length == 0) {
-                    $.modal.alertWarning("请至少选择一条记录");
-                    return;
-                }
-                $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
+                // var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                // if (rows.length == 0) {
+                //     $.modal.alertWarning("请至少选择一条记录");
+                //     return;
+                // }
+                // $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
                     var url = table.options.approveUrl;
-                    var data = {"applyId": rows.join(), "approveStatu": "6","applyType": "0"};
+                    var data = {"applyId": id, "approveStatu": "6","applyType": "0"};
                     $.operate.submit(url, "post", "json", data);
-                });
+                // });
             },
             // 审批失败画面（驳回）
             reject: function (name) {
@@ -1153,15 +1153,15 @@ var table = {
                     return;
                 }
 
-                if(name) {
-                    $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
-                        var url = table.options.approveUrl;
-                        var data = {"applyId": rows.join(), "approveStatu": "2","applyType": "0","remarks": "123"};
-                        $.operate.submit(url, "post", "json", data);
-                    });
-                } else {
-                    $.modal.open("添加备注","/applyIn/reject")
-                }
+                // if(name) {
+                //     $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
+                //         var url = table.options.approveUrl;
+                //         var data = {"applyId": rows.join(), "approveStatu": "2","applyType": "0","remarks": "123"};
+                //         $.operate.submit(url, "post", "json", data);
+                //     });
+                // } else {
+                //     $.modal.open("添加备注","/applyIn/reject")
+                // }
                 // // $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
                 //     var url = table.options.approveUrl;
                 //     var data = {"applyId": rows.join(), "approveStatu": "2","applyType": "0","remarks": "123"};

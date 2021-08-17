@@ -92,7 +92,7 @@ public class SysApplyInController extends BaseController
     @GetMapping("/applyProcess/historyList/{applyId}")
     public String historyProcess(@PathVariable("applyId") String applyId,ModelMap modelMap) {
 //        查看审批历史
-        return "/applyProcess/historyList";
+        return "applyProcess/historyList";
     }
 
     /**

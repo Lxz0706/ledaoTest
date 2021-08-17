@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('我的代办')" />
+    <th:block th:include="include :: header('我的已办')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -163,7 +163,8 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="selectSysApplyWorkflowList(\'' + row.applyId + '\')"><i class="fa fa-list"></i> 审批历史</a> ');
                         // actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -171,6 +172,10 @@
             };
             $.table.init(options);
         });
+        function selectSysApplyWorkflowList(applyId){
+            var url = prefix+'/applyProcess/historyList/'+applyId;
+            $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
+        }
 
         function changeDocumentType(val) {
             var projectName = document.getElementById("projectName")

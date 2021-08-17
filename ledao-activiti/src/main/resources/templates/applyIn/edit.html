@@ -249,7 +249,7 @@
         };
         $.table.init(options);
         if(isNotChange){
-            $("input").attr("disabled",true);
+            $("input").attr("readonly","readonly");
             $("select").attr("disabled",true);
             $("a").attr("disabled",true);
             $('.btn').removeAttr('onclick')

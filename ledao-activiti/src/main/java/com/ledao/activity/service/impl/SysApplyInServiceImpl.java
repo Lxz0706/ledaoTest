@@ -369,7 +369,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 }
                 sysApplyIn.setApproveStatu("3");
                 sysApplyInEntity.setApproveStatu("3");
-                sysApplyInEntity.setApproveUser(null);
+                sysApplyInEntity.setApproveUser("");
             }else{
                 //1表示审批中
                 List<String> users = getApplyNextUser(sysApplyIn);

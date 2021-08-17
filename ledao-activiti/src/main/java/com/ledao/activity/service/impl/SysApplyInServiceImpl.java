@@ -339,12 +339,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 return AjaxResult.error("该申请不可撤回");
             }
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
-            sysApplyInEntity.setApproveUser(null);
+            sysApplyInEntity.setApproveUser("");
             saveWorkFlow(sysApplyInEntity,workflow);
         }
         //审批拒绝，回到申请人
         if("2".equals(sysApplyIn.getApproveStatu())){
-            sysApplyInEntity.setApproveUser(null);
+            sysApplyInEntity.setApproveUser("");
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
             workflow.setRemarks(sysApplyIn.getRemarks());
             sysApplyInEntity.setRemarks(null);

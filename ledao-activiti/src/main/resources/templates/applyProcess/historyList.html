@@ -75,7 +75,11 @@
 					formatter: function(value, item, index) {
 						return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
 					}
-		        }]
+		        },
+				{
+					field: 'remarks',
+					title: '处理意见'
+				}]
 		    };
 		    $.table.init(options);
 		});

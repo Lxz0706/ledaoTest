@@ -130,24 +130,6 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysDocumentFile sysDocumentFile)
     {
-        SysApplyIn ap = sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
-        if (!ap.getApplyUser().equals(ShiroUtils.getLoginName())){
-            SysUser user = ShiroUtils.getSysUser();
-            boolean isFileAdmin = false;
-            for (SysRole role:user.getRoles()){
-                if (role.getRoleKey()=="documentAdmin"){
-                    isFileAdmin=true;
-                }
-            }
-            if (!isFileAdmin){
-                return AjaxResult.error("当前申请不可修改");
-            }
-        }else{
-            boolean isChange = sysDocumentFileService.isInChangeStatus(sysDocumentFile.getApplyId());
-            if(!isChange){
-                return AjaxResult.error("当前申请不可修改");
-            }
-        }
         return toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
     }
 
@@ -161,17 +143,6 @@ public class SysDocumentFileController extends BaseController
     public AjaxResult remove(String ids)
     {
         logger.info("开始进行档案删除操作");
-        String[] idArray = Convert.toStrArray(ids);
-        SysDocumentFile d = sysDocumentFileService.selectSysDocumentFileById(Long.parseLong(idArray[0]));
-        SysApplyIn ap = sysApplyInService.selectSysApplyInById(d.getApplyId());
-        if (!ap.getApplyUser().equals(ShiroUtils.getLoginName())){
-            return AjaxResult.error("当前申请不可修改");
-        }
-        String[] applyStatusList = {"0","4","2"};
-        // 可提交审批的状态     0保存；4撤回；2拒绝
-        if (!Arrays.asList(applyStatusList).contains(ap.getApproveStatu())){
-            return AjaxResult.error("当前申请不可修改");
-        }
         return toAjax(sysDocumentFileService.deleteSysDocumentFileByIds(ids));
     }
 }

@@ -1152,25 +1152,10 @@ var table = {
                     $.operate.submit(url, "post", "json", data);
                 });
             },
-            // 审批失败画面（驳回）
-            // reject: function (id,name) {
-            //     table.set()
-            //     $.modal.confirm("请确认操作", function () {
-            //         var url = "/applyIn/applyEditSave";
-            //         var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": name};
-            //         // var row = $("#" + table.options.id);
-            //         $.operate.submit(url, "post", "json", data)
-            //         // $.modal.close();
-            //         // $.table.refresh();
-            //     });
-            // },
             // 驳回画面
             rejectMask:function (id) {
                 table.set()
-                // var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
                 var url = "/applyIn/reject/" + id;
-                // var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": name};
-                // $.operate.submit(url, "post", "json", data);
                 $.modal.open("添加备注",url);
             },
             // 设置信息为已读

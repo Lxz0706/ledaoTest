@@ -111,7 +111,7 @@ public class SysApplyOutDetailController extends BaseController
     @ResponseBody
     public AjaxResult addDocDetailIds(String ids,long applyId)
     {
-        return toAjax(sysApplyOutDetailService.addDocDetailIds(ids,applyId));
+        return sysApplyOutDetailService.addDocDetailIds(ids,applyId);
     }
 
     /**
@@ -128,7 +128,7 @@ public class SysApplyOutDetailController extends BaseController
     /**
      * 修改保存档案出库详情记录
      */
-    @RequiresPermissions("activity:outFiledetail:edit")
+//    @RequiresPermissions("activity:outFiledetail:edit")
     @Log(title = "档案出库详情记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -147,7 +147,7 @@ public class SysApplyOutDetailController extends BaseController
     /**
      * 删除档案出库详情记录
      */
-    @RequiresPermissions("activity:outFiledetail:remove")
+//    @RequiresPermissions("activity:outFiledetail:remove")
     @Log(title = "档案出库详情记录", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

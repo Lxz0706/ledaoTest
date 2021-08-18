@@ -191,10 +191,17 @@ public class SysApplyInController extends BaseController
     /**
      * 新增档案入库申请
      */
-    @GetMapping("/editOutList")
-    public String editOutList()
+    @GetMapping("/editOutList/{applyId}")
+    public String editOutList(@PathVariable("applyId") Long applyId,ModelMap mmap)
     {
+        mmap.put("applyId",applyId);
         return prefix + "/editOutList";
+    }
+    @GetMapping("/editOutUpdate/{outDetailId}")
+    public String editOutUpdate(@PathVariable("outDetailId") Long outDetailId,ModelMap mmap)
+    {
+        mmap.put("outDetailId",outDetailId);
+        return prefix + "/editOutUpdate";
     }
 
     /**

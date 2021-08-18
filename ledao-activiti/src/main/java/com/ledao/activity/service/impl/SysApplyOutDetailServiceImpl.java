@@ -2,6 +2,8 @@ package com.ledao.activity.service.impl;
 
 import java.util.Date;
 import java.util.List;
+
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.framework.util.ShiroUtils;
 import net.sf.jsqlparser.expression.LongValue;
@@ -119,7 +121,7 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
     }
 
     @Override
-    public int addDocDetailIds(String ids, long applyId) {
+    public AjaxResult addDocDetailIds(String ids, long applyId) {
         String[] idsArr = Convert.toStrArray(ids);
         for (int i = 0; i < idsArr.length; i++){
             SysApplyOutDetail SysApplyOutDetail = new SysApplyOutDetail();
@@ -130,6 +132,6 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
             SysApplyOutDetail.setCreateTime(new Date());
             sysApplyOutDetailMapper.insertSysApplyOutDetail(SysApplyOutDetail);
         }
-        return 0;
+        return AjaxResult.success();
     }
 }

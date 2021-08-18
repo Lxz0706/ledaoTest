@@ -2,6 +2,7 @@ package com.ledao.activity.service;
 
 import java.util.List;
 import com.ledao.activity.dao.SysApplyOutDetail;
+import com.ledao.common.core.dao.AjaxResult;
 
 /**
  * 档案出库详情记录Service接口
@@ -84,5 +85,5 @@ public interface ISysApplyOutDetailService
      * @param applyId
      * @return 结果
      */
-    int addDocDetailIds(String ids, long applyId);
+    AjaxResult addDocDetailIds(String ids, long applyId);
 }

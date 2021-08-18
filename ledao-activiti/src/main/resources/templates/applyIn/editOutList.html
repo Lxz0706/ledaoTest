@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('档案列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <input name="applyId" id="applyId" th:value="*{applyId}" type="hidden">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>档案类别：</label>
+                                <select id="documentType" name="documentType"
+                                        th:with="type=${@dict.getType('sys_document_busi_type')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>资产编号：</label>
+                                <input type="text" name="assetNumber"/>
+                            </li>
+                            <li>
+                                <label>附件类型：</label>
+                                <select id="fileType" name="fileType"
+                                        th:with="type=${@dict.getType('document_file_type')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>扫描件类型：</label>
+                                <select id="fileScanType" name="fileScanType"
+                                        th:with="type=${@dict.getType('document_scan_type')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>份数：</label>
+                                <input type="text" name="counts"/>
+                            </li>
+                            <li>
+                                <label>页数：</label>
+                                <input type="text" name="pages"/>
+                            </li>
+                            <li>
+                                <label>档案状态：</label>
+                                <select id="documentStatu" name="documentStatu"
+                                        th:with="type=${@dict.getType('document_in_status')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>柜号：</label>
+                                <input type="text" name="cabinetNo"/>
+                            </li>
+                            <li>
+                                <label>档案袋编号：</label>
+                                <input type="text" name="bagNo"/>
+                            </li>
+                            <li>
+                                <label>档案类型：</label>
+                                <select id="documentGetType" name="documentGetType"
+                                        th:with="type=${@dict.getType('busi_document_type')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>文件类型--字典项：</label>
+                                <select id="fileGetType" name="fileGetType"
+                                        th:with="type=${@dict.getType('document_in_type')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>档案级别：</label>
+                                <select id="documentLevel" name="documentLevel"
+                                        th:with="type=${@dict.getType('document_level')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>文件id：</label>
+                                <input type="text" name="fileIds"/>
+                            </li>
+                            <li>
+                                <label>备注：</label>
+                                <input type="text" name="remarks"/>
+                            </li>
+                            <li>
+                                <label>创建人名称：</label>
+                                <input type="text" name="creator"/>
+                            </li>
+                            <li>
+                                <label>修改人名称：</label>
+                                <input type="text" name="reviser"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+<!--            <div class="btn-group-sm" id="toolbar" role="group">-->
+<!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">-->
+<!--                    <i class="fa fa-plus"></i> 添加-->
+<!--                </a>-->
+<!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:documentFile:edit">-->
+<!--                    <i class="fa fa-edit"></i> 修改-->
+<!--                </a>-->
+<!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:documentFile:remove">-->
+<!--                    <i class="fa fa-remove"></i> 删除-->
+<!--                </a>-->
+
+<!--            </div>-->
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        /* var editFlag = [[${@permission.hasPermi('activity:documentFile:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('activity:documentFile:remove')}]]; */
+        var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
+        var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+        var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
+        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var companyNameDictDatas = [[${@dict.getType('sys_company_name')}]];
+        var prefix = ctx + "documentFile";
+        var docDetailIds = ctx + "activity/outFiledetail"
+        var applyId = document.getElementById("applyId").value
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "档案",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'documentId',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'assetPag',
+                    title: '资产包'
+                },
+                {
+                    field: 'debtorName',
+                    title: '债务人名称'
+                },
+                {
+                    field: 'companyName',
+                    title: '公司名称',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(companyNameDictDatas, item.companyName);
+                    }
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
+                    field: 'documentType',
+                    title: '档案种类',
+                    formatter: function(value, item, index) {
+		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
+		            }
+                },
+                {
+                    field: 'assetNumber',
+                    title: '资产编号'
+                },
+                {
+                    field: 'contractNo',
+                    title: '合同编号'
+                },
+                {
+                    field: 'dailyDocumentType',
+                    title: '档案类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
+                    }
+                },
+                {
+                    field: 'fileName',
+                    title: '文件名称'
+                },
+                {
+                    field: 'fileType',
+                    title: '附件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
+                    }
+                },
+                {
+                    field: 'fileScanType',
+                    title: '扫描件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType);
+                    }
+                },
+                {
+                    field: 'counts',
+                    title: '份数'
+                },
+                {
+                    field: 'pages',
+                    title: '页数'
+                },
+                {
+                    field: 'documentStatu',
+                    title: '档案状态',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentStatuDictDatas, item.documentStatu);
+                    }
+                },
+                {
+                    field: 'cabinetNo',
+                    title: '柜号'
+                },
+                {
+                    field: 'bagNo',
+                    title: '档案袋编号'
+                },
+                {
+                    field: 'documentGetType',
+                    title: '档案类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType);
+                    }
+                },
+                {
+                    field: 'fileGetType',
+                    title: '文件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType);
+                    }
+                },
+                {
+                    field: 'documentLevel',
+                    title: '档案级别',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentLevelDictDatas, item.documentLevel);
+                    }
+                },
+                {
+                    field: 'fileIds',
+                    title: '文件id'
+                },
+                {
+                    field: 'applyId',
+                    title: '档案入库id'
+                },
+                {
+                    field: 'remarks',
+                    title: '备注'
+                },
+                {
+                    field: 'creator',
+                    title: '创建人名称'
+                },
+                {
+                    field: 'reviser',
+                    title: '修改人名称'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function submitHandler() {
+            // if ($.validate.form()) {
+            //     $.operate.save(docDetailIds + "/addDocDetailIds", $('#formId').serialize());
+            // }
+            var rows = $.table.selectFirstColumns().join();
+            console.log(rows)
+            console.log(applyId)
+            $.ajax({
+                url: docDetailIds + "/addDocDetailIds",
+                data: {
+                    ids: rows,
+                    applyId:applyId
+                },
+                type: "post",
+                dataType: "json",
+                success: function(result) {
+                    $.operate.successCallback(result);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

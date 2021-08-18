@@ -51,23 +51,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
-        <include refid="selectSysApplyInVo"/> app 
-        left JOIN ( SELECT workflow.apply_id as apply_ids from sys_apply_workflow workflow
-        where workflow.approve_user= #{applyUser} GROUP BY workflow.apply_id) work on app.apply_id = work.apply_ids
-        <where>
-            <if test="applyType != null  and applyType != ''"> and app.apply_type = #{applyType}</if>
-            <if test="documentType != null  and documentType != ''"> and app.document_type = #{documentType}</if>
-            <if test="projectId != null "> and app.project_id = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''"> and app.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and app.company_name like concat('%', #{companyName}, '%')</if>
-            <if test="debtorName != null  and debtorName != ''"> and app.debtor_name like concat('%', #{debtorName}, '%')</if>
-            <if test="applyTime != null "> and app.apply_time = #{applyTime}</if>
-            <if test="approveUser != null  and approveUser != ''"> and app.approve_user = #{approveUser}</if>
-            <if test="approveStatu != null  and approveStatu != ''"> and app.approve_statu = #{approveStatu}</if>
-            <if test="realCreateBy != null  and realCreateBy != ''"> and app.real_create_by = #{realCreateBy}</if>
-            <if test="creator != null  and creator != ''"> and app.creator = #{creator}</if>
-            <if test="reviser != null  and reviser != ''"> and app.reviser = #{reviser}</if>
-        </where>
+        <include refid="selectSysApplyInVo"/> app,( SELECT workflow.apply_id as apply_ids from sys_apply_workflow workflow
+        where workflow.approve_user= #{applyUser} GROUP BY workflow.apply_id) work
+        where app.apply_id = work.apply_ids
+        <if test="applyType != null  and applyType != ''"> and app.apply_type = #{applyType}</if>
+        <if test="documentType != null  and documentType != ''"> and app.document_type = #{documentType}</if>
+        <if test="projectId != null "> and app.project_id = #{projectId}</if>
+        <if test="projectName != null  and projectName != ''"> and app.project_name like concat('%', #{projectName}, '%')</if>
+        <if test="companyName != null  and companyName != ''"> and app.company_name like concat('%', #{companyName}, '%')</if>
+        <if test="debtorName != null  and debtorName != ''"> and app.debtor_name like concat('%', #{debtorName}, '%')</if>
+        <if test="applyTime != null "> and app.apply_time = #{applyTime}</if>
+        <if test="approveUser != null  and approveUser != ''"> and app.approve_user = #{approveUser}</if>
+        <if test="approveStatu != null  and approveStatu != ''"> and app.approve_statu = #{approveStatu}</if>
+        <if test="realCreateBy != null  and realCreateBy != ''"> and app.real_create_by = #{realCreateBy}</if>
+        <if test="creator != null  and creator != ''"> and app.creator = #{creator}</if>
+        <if test="reviser != null  and reviser != ''"> and app.reviser = #{reviser}</if>
         ORDER BY app.create_time desc
     </select>
 

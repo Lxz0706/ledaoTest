@@ -161,7 +161,7 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 			SysApplyIn ap2 = new SysApplyIn();
 			SysDocumentFile doc =  sysDocumentFileMapper.selectSysDocumentFileById(docId);
 			ap2.setApplyId(doc.getApplyId());
-			ap2.setCreator(ShiroUtils.getLoginName());
+			ap2.setReviser(ShiroUtils.getLoginName());
 			sysApplyInMapper.updateSysApplyIn(ap2);
 		}
 		return sysDocumentFileMapper.deleteSysDocumentFileByIds(idArray);

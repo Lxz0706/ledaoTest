@@ -76,4 +76,13 @@ public interface ISysApplyOutDetailService
      * @return 结果
      */
     List<SysApplyOutDetail> listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail);
+
+    /**
+     * 批量增加出库明细
+     *
+     * @param 插入要出库的档案id
+     * @param applyId
+     * @return 结果
+     */
+    int addDocDetailIds(String ids, long applyId);
 }

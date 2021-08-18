@@ -1,7 +1,10 @@
 package com.ledao.activity.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.framework.util.ShiroUtils;
+import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.activity.mapper.SysApplyOutDetailMapper;
@@ -113,5 +116,20 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
     @Override
     public List<SysApplyOutDetail> listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail) {
         return sysApplyOutDetailMapper.listDocumentAndDetail(sysApplyOutDetail);
+    }
+
+    @Override
+    public int addDocDetailIds(String ids, long applyId) {
+        String[] idsArr = Convert.toStrArray(ids);
+        for (int i = 0; i < idsArr.length; i++){
+            SysApplyOutDetail SysApplyOutDetail = new SysApplyOutDetail();
+            SysApplyOutDetail.setDocumentId(Long.parseLong(idsArr[i]));
+            SysApplyOutDetail.setApplyId(applyId);
+            SysApplyOutDetail.setCreateBy(ShiroUtils.getLoginName());
+            SysApplyOutDetail.setCreateBy(ShiroUtils.getLoginName());
+            SysApplyOutDetail.setCreateTime(new Date());
+            sysApplyOutDetailMapper.insertSysApplyOutDetail(SysApplyOutDetail);
+        }
+        return 0;
     }
 }

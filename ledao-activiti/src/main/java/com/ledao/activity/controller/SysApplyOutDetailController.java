@@ -93,13 +93,25 @@ public class SysApplyOutDetailController extends BaseController
     /**
      * 新增保存档案出库详情记录
      */
-    @RequiresPermissions("activity:outFiledetail:add")
+//    @RequiresPermissions("activity:outFiledetail:add")
     @Log(title = "档案出库详情记录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysApplyOutDetail sysApplyOutDetail)
     {
         return toAjax(sysApplyOutDetailService.insertSysApplyOutDetail(sysApplyOutDetail));
+    }
+
+    /**
+     * 新增保存档案出库详情记录
+     */
+//    @RequiresPermissions("activity:outFiledetail:add")
+    @Log(title = "档案出库添加要出库的档案id", businessType = BusinessType.INSERT)
+    @PostMapping("/addDocDetailIds")
+    @ResponseBody
+    public AjaxResult addDocDetailIds(String ids,long applyId)
+    {
+        return toAjax(sysApplyOutDetailService.addDocDetailIds(ids,applyId));
     }
 
     /**

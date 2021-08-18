@@ -390,8 +390,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     private int saveWorkFlow(SysApplyIn sysApplyIn,SysApplyWorkflow workflow){
+	    if("1".equals(sysApplyIn.getApproveStatu())){
+            workflow.setApproveStatu("6");
+        }else{
+            workflow.setApproveStatu(sysApplyIn.getApproveStatu());
+        }
         workflow.setApplyId(sysApplyIn.getApplyId());
-        workflow.setApproveStatu(sysApplyIn.getApproveStatu());
         workflow.setApproveUser(ShiroUtils.getLoginName());
         workflow.setCreateBy(ShiroUtils.getLoginName());
         workflow.setCreateTime(new Date());

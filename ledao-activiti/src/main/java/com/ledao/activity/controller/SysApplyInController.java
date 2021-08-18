@@ -189,6 +189,15 @@ public class SysApplyInController extends BaseController
     }
 
     /**
+     * 新增档案入库申请
+     */
+    @GetMapping("/EditOutList")
+    public String EditOutList()
+    {
+        return prefix + "/EditOutList";
+    }
+
+    /**
      * 新增档案出库申请
      */
     @GetMapping("/addOut")

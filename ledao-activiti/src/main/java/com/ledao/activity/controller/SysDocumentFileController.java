@@ -113,7 +113,7 @@ public class SysDocumentFileController extends BaseController
     {
     	sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
         SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
-        ap.setCreator(ShiroUtils.getLoginName());
+        ap.setReviser(ShiroUtils.getLoginName());
         sysApplyInService.updateSysApplyIn(ap);
         return toAjax(true);
     }
@@ -140,7 +140,7 @@ public class SysDocumentFileController extends BaseController
     {
         AjaxResult res = toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
         SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
-        ap.setCreator(ShiroUtils.getLoginName());
+        ap.setReviser(ShiroUtils.getLoginName());
         sysApplyInService.updateSysApplyIn(ap);
         return res;
     }

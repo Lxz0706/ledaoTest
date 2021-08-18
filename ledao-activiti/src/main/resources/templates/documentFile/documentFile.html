@@ -15,7 +15,7 @@
                                 <select id="documentType" name="documentType"
                                         th:with="type=${@dict.getType('sys_document_busi_type')}"
                                         data-none-selected-text="请选择">
-                                    <option value="">--请选择数据--</option>
+                                    <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
                                 </select>
@@ -25,17 +25,23 @@
                                 <input type="text" name="assetNumber"/>
                             </li>
                             <li>
-                                <label>附件类型--字典项：</label>
-                                <select name="fileType">
+                                <label>附件类型：</label>
+                                <select id="fileType" name="fileType"
+                                        th:with="type=${@dict.getType('document_file_type')}"
+                                        data-none-selected-text="请选择">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>扫描件类型--字典项：</label>
-                                <select name="fileScanType">
+                                <label>扫描件类型：</label>
+                                <select id="fileScanType" name="fileScanType"
+                                        th:with="type=${@dict.getType('document_scan_type')}"
+                                        data-none-selected-text="请选择">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
@@ -47,8 +53,14 @@
                                 <input type="text" name="pages"/>
                             </li>
                             <li>
-                                <label>档案状态--字典项：</label>
-                                <input type="text" name="documentStatu"/>
+                                <label>档案状态：</label>
+                                <select id="documentStatu" name="documentStatu"
+                                        th:with="type=${@dict.getType('document_in_status')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <label>柜号：</label>
@@ -59,22 +71,34 @@
                                 <input type="text" name="bagNo"/>
                             </li>
                             <li>
-                                <label>档案类型--字典项：</label>
-                                <select name="documentGetType">
+                                <label>档案类型：</label>
+                                <select id="documentGetType" name="documentGetType"
+                                        th:with="type=${@dict.getType('busi_document_type')}"
+                                        data-none-selected-text="请选择">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
                                 <label>文件类型--字典项：</label>
-                                <select name="fileGetType">
+                                <select id="fileGetType" name="fileGetType"
+                                        th:with="type=${@dict.getType('document_in_type')}"
+                                        data-none-selected-text="请选择">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
                                 <label>档案级别：</label>
-                                <input type="text" name="documentLevel"/>
+                                <select id="documentLevel" name="documentLevel"
+                                        th:with="type=${@dict.getType('document_level')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <label>文件id：</label>
@@ -123,6 +147,14 @@
         /* var editFlag = [[${@permission.hasPermi('activity:documentFile:edit')}]];
         var removeFlag = [[${@permission.hasPermi('activity:documentFile:remove')}]]; */
         var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
+        var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+        var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
+        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var companyNameDictDatas = [[${@dict.getType('sys_company_name')}]];
         var prefix = ctx + "documentFile";
 
         $(function() {
@@ -146,6 +178,21 @@
                     title: '资产包'
                 },
                 {
+                    field: 'debtorName',
+                    title: '债务人名称'
+                },
+                {
+                    field: 'companyName',
+                    title: '公司名称',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(companyNameDictDatas, item.companyName);
+                    }
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
                     field: 'documentType',
                     title: '档案种类',
                     formatter: function(value, item, index) {
@@ -162,7 +209,10 @@
                 },
                 {
                     field: 'dailyDocumentType',
-                    title: '档案类型'
+                    title: '档案类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
+                    }
                 },
                 {
                     field: 'fileName',
@@ -170,11 +220,17 @@
                 },
                 {
                     field: 'fileType',
-                    title: '附件类型--字典项'
+                    title: '附件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
+                    }
                 },
                 {
                     field: 'fileScanType',
-                    title: '扫描件类型--字典项'
+                    title: '扫描件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType);
+                    }
                 },
                 {
                     field: 'counts',
@@ -186,7 +242,10 @@
                 },
                 {
                     field: 'documentStatu',
-                    title: '档案状态--字典项'
+                    title: '档案状态',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentStatuDictDatas, item.documentStatu);
+                    }
                 },
                 {
                     field: 'cabinetNo',
@@ -198,15 +257,24 @@
                 },
                 {
                     field: 'documentGetType',
-                    title: '档案类型--字典项'
+                    title: '档案类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType);
+                    }
                 },
                 {
                     field: 'fileGetType',
-                    title: '文件类型--字典项'
+                    title: '文件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType);
+                    }
                 },
                 {
                     field: 'documentLevel',
-                    title: '档案级别'
+                    title: '档案级别',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentLevelDictDatas, item.documentLevel);
+                    }
                 },
                 {
                     field: 'fileIds',

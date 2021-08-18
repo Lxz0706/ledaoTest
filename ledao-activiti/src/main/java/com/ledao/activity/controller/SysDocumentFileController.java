@@ -50,7 +50,7 @@ public class SysDocumentFileController extends BaseController
     @Autowired
     private ISysApplyInService sysApplyInService;
 
-    @RequiresPermissions("activity:documentFile:view")
+//    @RequiresPermissions("activity:documentFile:view")
     @GetMapping()
     public String documentFile()
     {
@@ -64,6 +64,15 @@ public class SysDocumentFileController extends BaseController
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysDocumentFile sysDocumentFile)
+    {
+        startPage();
+        List<SysDocumentFile> list = sysDocumentFileService.selectSysDocumentFileDetailList(sysDocumentFile);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/listDocApp")
+    @ResponseBody
+    public TableDataInfo listDocApp(SysDocumentFile sysDocumentFile)
     {
         startPage();
         List<SysDocumentFile> list = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);

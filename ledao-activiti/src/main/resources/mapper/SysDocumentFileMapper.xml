@@ -33,6 +33,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="SysDocumentFile" id="SysDocumentFileDetailResult">
+        <result property="documentId"    column="document_id"    />
+        <result property="documentType"    column="document_type"    />
+        <result property="assetNumber"    column="asset_number"    />
+        <result property="assetPag"    column="asset_pag"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="dailyDocumentType"    column="daily_document_type"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileScanType"    column="file_scan_type"    />
+        <result property="counts"    column="counts"    />
+        <result property="pages"    column="pages"    />
+        <result property="documentStatu"    column="document_statu"    />
+        <result property="cabinetNo"    column="cabinet_no"    />
+        <result property="bagNo"    column="bag_no"    />
+        <result property="documentGetType"    column="document_get_type"    />
+        <result property="fileGetType"    column="file_get_type"    />
+        <result property="documentLevel"    column="document_level"    />
+        <result property="fileIds"    column="file_ids"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="debtorName"    column="debtor_name"    />
+    </resultMap>
+
     <sql id="selectSysDocumentFileVo">
         select document_id, document_type, asset_pag, asset_number, contract_no, daily_document_type, file_name, file_type, file_scan_type, counts, pages, document_statu, cabinet_no, bag_no, document_get_type, file_get_type, document_level, file_ids, apply_id, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_document_file
     </sql>
@@ -61,6 +93,64 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
         </where>
+    </select>
+    <select id="selectSysDocumentFileDetailList" parameterType="SysDocumentFile" resultMap="SysDocumentFileDetailResult">
+        SELECT
+        file.document_id,
+        file.document_type,
+        file.asset_pag,
+        file.asset_number,
+        file.contract_no,
+        file.daily_document_type,
+        file.file_name,
+        file.file_type,
+        file.file_scan_type,
+        file.counts,
+        file.pages,
+        file.document_statu,
+        file.cabinet_no,
+        file.bag_no,
+        file.document_get_type,
+        file.file_get_type,
+        file.document_level,
+        file.file_ids,
+        file.apply_id,
+        file.remarks,
+        file.create_by,
+        file.creator,
+        file.create_time,
+        file.update_by,
+        file.reviser,
+        file.update_time,
+        app.company_name,
+        app.project_name,
+        app.debtor_name
+        FROM
+        sys_document_file file
+        LEFT JOIN sys_apply_in app ON file.apply_id = app.apply_id
+        <where>
+            <if test="documentType != null  and documentType != ''"> and file.document_type = #{documentType}</if>
+            <if test="assetPag != null  and assetPag != ''"> and file.asset_pag = #{assetPag}</if>
+            <if test="assetNumber != null  and assetNumber != ''"> and file.asset_number = #{assetNumber}</if>
+            <if test="contractNo != null  and contractNo != ''"> and file.contract_no = #{contractNo}</if>
+            <if test="dailyDocumentType != null  and dailyDocumentType != ''"> and file.daily_document_type like concat('%', #{dailyDocumentType}, '%')</if>
+            <if test="fileName != null  and fileName != ''"> and file.file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''"> and file.file_type = #{fileType}</if>
+            <if test="fileScanType != null  and fileScanType != ''"> and file.file_scan_type = #{fileScanType}</if>
+            <if test="counts != null "> and file.counts = #{counts}</if>
+            <if test="pages != null "> and file.pages = #{pages}</if>
+            <if test="documentStatu != null  and documentStatu != ''"> and file.document_statu = #{documentStatu}</if>
+            <if test="cabinetNo != null  and cabinetNo != ''"> and file.cabinet_no = #{cabinetNo}</if>
+            <if test="bagNo != null  and bagNo != ''"> and file.bag_no = #{bagNo}</if>
+            <if test="documentGetType != null  and documentGetType != ''"> and file.document_get_type = #{documentGetType}</if>
+            <if test="fileGetType != null  and fileGetType != ''"> and file.file_get_type = #{fileGetType}</if>
+            <if test="documentLevel != null  and documentLevel != ''"> and file.document_level = #{documentLevel}</if>
+            <if test="fileIds != null  and fileIds != ''"> and file.file_ids = #{fileIds}</if>
+            <if test="applyId != null  and applyId != ''"> and file.apply_id = #{applyId}</if>
+            <if test="creator != null  and creator != ''"> and file.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and file.reviser = #{reviser}</if>
+        </where>
+        order by file.create_time desc
     </select>
     
     <select id="selectSysDocumentFileById" parameterType="Long" resultMap="SysDocumentFileResult">

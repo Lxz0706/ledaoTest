@@ -110,6 +110,39 @@ public class SysDocumentFile extends BaseEntity
     @Excel(name = "附件名称")
     private String fileNames;
 
+    @Excel(name = "项目名称")
+    private String projectName;
+
+    @Excel(name = "公司名称")
+    private String companyName;
+
+    @Excel(name = "债务人名称")
+    private String debtorName;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getDebtorName() {
+        return debtorName;
+    }
+
+    public void setDebtorName(String debtorName) {
+        this.debtorName = debtorName;
+    }
+
     public String getFileNames() {
         return fileNames;
     }

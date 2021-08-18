@@ -102,11 +102,10 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult addSave(HttpSession session, SysDocumentFile sysDocumentFile, @RequestParam("files")MultipartFile[] files )
     {
-        boolean isChange = sysDocumentFileService.isInChangeStatus(sysDocumentFile.getApplyId());
-        if(!isChange){
-            return AjaxResult.error("当前状态不可修改");
-        }
     	sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
+        SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
+        ap.setCreator(ShiroUtils.getLoginName());
+        sysApplyInService.updateSysApplyIn(ap);
         return toAjax(true);
     }
 
@@ -130,7 +129,11 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysDocumentFile sysDocumentFile)
     {
-        return toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
+        AjaxResult res = toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
+        SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
+        ap.setCreator(ShiroUtils.getLoginName());
+        sysApplyInService.updateSysApplyIn(ap);
+        return res;
     }
 
     /**

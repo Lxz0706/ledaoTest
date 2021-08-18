@@ -142,7 +142,11 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	@Override
 	public int deleteSysDocumentFileByIds(String ids) {
 		String[] idArray = Convert.toStrArray(ids);
+		SysApplyIn ap = new SysApplyIn();
+		boolean flag = false;
 		for (String id: idArray) {
+			flag = true;
+			ap.setApplyId(Long.parseLong(id));
 			SysFileDetail SysFileDetail = new SysFileDetail();
 			SysFileDetail.setDocumentFileId(Long.parseLong(id));
 			List<SysFileDetail> files = fileDetailMapper.selectSysFileDetailList(SysFileDetail);
@@ -151,6 +155,11 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 				FileUtils.deleteFile(Global.getUploadPath()+"/document"+f.getFileUrl());
 				sysFileDetailMapper.deleteSysFileDetailById(f.getFileId());
 			}
+		}
+		if (flag){
+			SysApplyIn ap2 =  sysApplyInMapper.selectSysApplyInById(ap.getApplyId());
+			ap2.setCreator(ShiroUtils.getLoginName());
+			sysApplyInMapper.updateSysApplyIn(ap2);
 		}
 		return sysDocumentFileMapper.deleteSysDocumentFileByIds(idArray);
 	}

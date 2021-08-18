@@ -32,7 +32,17 @@
             var formData = new FormData(docId);
             var rejectmak = formData.get("realCreateBy");
             var id = document.getElementById("applyId").value;
-            $.operate.reject(id,rejectmak)
+            var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": rejectmak}
+            // $.operate.reject(id,rejectmak)
+            $.ajax({
+                url: prefix + "/applyEditSave",
+                data: data,
+                type: "post",
+                dataType: "json",
+                success: function(result) {
+                    $.operate.saveSuccess(result);
+                }
+            })
         }
     }
 

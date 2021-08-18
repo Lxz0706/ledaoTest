@@ -1129,6 +1129,20 @@ var table = {
                     $.operate.submit(url, "post", "json", data);
                 });
             },
+            // 撤回
+            applyBack: function () {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
+                    var url = table.options.submitUrl;
+                    var data = {"applyId": rows.join(), "approveStatu": "4","applyType": "0"};
+                    $.operate.submit(url, "post", "json", data);
+                });
+            },
             // 审批成功 （同意）
             approve: function (id) {
                 table.set();
@@ -1139,17 +1153,17 @@ var table = {
                 });
             },
             // 审批失败画面（驳回）
-            reject: function (id,name) {
-                table.set()
-                $.modal.confirm("请确认操作", function () {
-                    var url = "/applyIn/applyEditSave";
-                    var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": name};
-                    var row = $("#" + table.options.id);
-                    $.operate.submit(url, "post", "json", data)
-                    $.modal.close();
-                    $.table.refresh();
-                });
-            },
+            // reject: function (id,name) {
+            //     table.set()
+            //     $.modal.confirm("请确认操作", function () {
+            //         var url = "/applyIn/applyEditSave";
+            //         var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": name};
+            //         // var row = $("#" + table.options.id);
+            //         $.operate.submit(url, "post", "json", data)
+            //         // $.modal.close();
+            //         // $.table.refresh();
+            //     });
+            // },
             // 驳回画面
             rejectMask:function (id) {
                 table.set()

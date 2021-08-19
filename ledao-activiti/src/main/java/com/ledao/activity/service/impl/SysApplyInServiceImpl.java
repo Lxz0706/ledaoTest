@@ -3,6 +3,8 @@ package com.ledao.activity.service.impl;
 import java.util.*;
 
 import com.ledao.activity.controller.ProcessDefinitionController;
+import com.ledao.activity.dao.*;
+import com.ledao.activity.mapper.*;
 import com.ledao.activity.service.ISysDocumentFileService;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
@@ -16,14 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ledao.activity.dao.SysApplyIn;
-import com.ledao.activity.dao.SysApplyWorkflow;
-import com.ledao.activity.dao.SysDocumentFile;
-import com.ledao.activity.dao.SysFileDetail;
-import com.ledao.activity.mapper.SysApplyInMapper;
-import com.ledao.activity.mapper.SysApplyWorkflowMapper;
-import com.ledao.activity.mapper.SysDocumentFileMapper;
-import com.ledao.activity.mapper.SysFileDetailMapper;
 import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.DateUtils;
@@ -60,6 +54,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private ISysDocumentFileService sysDocumentFileService;
+
+    @Autowired
+    private SysApplyOutDetailMapper sysApplyOutDetailMapper;
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
 
@@ -146,8 +143,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 userList.add("yangxu");
                 userList.add("yangxudong");
                 variables.put("assigneeList", userList);
-                users.add("yangxu");
-                users.add("yangxudong");
 
                 List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
                 List<String> ids = new ArrayList<>();
@@ -165,7 +160,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 }else{
                     //判断是否存在直接主管
                     if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
-                        users.add(sysUser.getDirector());
+                        SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
+                        users.add(sysUser1.getLoginName());
                         //                    SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                         //判断是否存在二级主管
                     /*if (StringUtils.isNotEmpty(sysUser1.getDirector()) && StringUtils.isNotEmpty(sysUser1.getDirectorId().toString())) {
@@ -326,11 +322,29 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             if (!sysApplyInEntity.getCreateBy().equals(loginUser)){
                 return AjaxResult.error("非创建人无法提交审批");
             }
-            SysDocumentFile sysDocumentFile = new SysDocumentFile();
-            sysDocumentFile.setApplyId(sysApplyIn.getApplyId());
-            List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(sysDocumentFile);
-            if (doc==null || doc.size()==0){
-                return AjaxResult.error("无档案明细，请添加档案");
+            if ("1".equals(sysApplyIn.getApplyType())){
+                //如果是出库申请
+                SysApplyOutDetail detail = new SysApplyOutDetail();
+                detail.setApplyId(sysApplyIn.getApplyId());
+                List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(detail);
+                if (des!=null && des.size()>0){
+                    for (SysApplyOutDetail d:des){
+                        /////////////
+                        if (StringUtils.isEmpty(d.getIsElec())){
+                            return AjaxResult.error("档案借出信息填写不完整，请补充之后提交");
+                        }
+                    }
+                }else{
+                    return AjaxResult.error("无借出档案明细，请添加档案");
+                }
+            }else{
+                //入库申请
+                SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                sysDocumentFile.setApplyId(sysApplyIn.getApplyId());
+                List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(sysDocumentFile);
+                if (doc==null || doc.size()==0){
+                    return AjaxResult.error("无档案明细，请添加档案");
+                }
             }
             List<String> users = getApplyNextUser(sysApplyIn);
             sysApplyInEntity.setApproveUser(String.join(",",users));
@@ -346,7 +360,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
             sysApplyInEntity.setApproveUser("");
-            saveWorkFlow(sysApplyInEntity,workflow);
+//            saveWorkFlow(sysApplyInEntity,workflow);
         }
         //审批拒绝，回到申请人
         if("2".equals(sysApplyIn.getApproveStatu())){
@@ -364,23 +378,82 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 ids.add(r.getRoleKey());
             }
             if(ids.contains("documentAdmin")){
-                //判断所有的档案状态是否时”在库“，是才能完成，否则无法完成
-                SysDocumentFile df = new SysDocumentFile();
-                df.setApplyId(sysApplyIn.getApplyId());
-                List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(df);
-                for(SysDocumentFile d : doc){
-                    if (!"1".equals(d.getDocumentStatu())){
-                        return AjaxResult.error("存在档案未在库，无法完成审批");
+//                档案管理员
+                if("1".equals(sysApplyIn.getApplyType())){
+//                    出库，档案管理员进行出库确认
+                    if ("1".equals(sysApplyInEntity.getApproveStatu())){
+                        SysApplyOutDetail detail = new SysApplyOutDetail();
+                        detail.setApplyId(sysApplyIn.getApplyId());
+                        List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(detail);
+                        for (SysApplyOutDetail d:des){
+                            if (!"0".equals(d.getIsOut())){
+                                return AjaxResult.error("存在档案未出库，无法完成借出审批");
+                            }
+                        }
+                        sysApplyIn.setApproveStatu("7");
+                        sysApplyInEntity.setApproveStatu("7");
+                        sysApplyInEntity.setApproveUser(sysApplyInEntity.getApplyUser());
+                    }else if ("9".equals(sysApplyInEntity.getApproveStatu())){
+                        SysApplyOutDetail d2 = new SysApplyOutDetail();
+                        d2.setApplyId(sysApplyIn.getApplyId());
+                        List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(d2);
+                        for (SysApplyOutDetail d:des){
+                            if (!"0".equals(d.getIsReceived())){
+                                return AjaxResult.error("存在档案未收到，无法完成借出审批");
+                            }
+                        }
+                        sysApplyIn.setApproveStatu("3");
+                        sysApplyInEntity.setApproveStatu("3");
+                        sysApplyInEntity.setApproveUser("");
                     }
+                }else{
+//                    入库
+                    //判断所有的档案状态是否时”在库“，是才能完成，否则无法完成
+                    SysDocumentFile df = new SysDocumentFile();
+                    df.setApplyId(sysApplyIn.getApplyId());
+                    List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(df);
+                    for(SysDocumentFile d : doc){
+                        if (!"1".equals(d.getDocumentStatu())){
+                            return AjaxResult.error("存在档案未在库，无法完成审批");
+                        }
+                    }
+                    sysApplyIn.setApproveStatu("3");
+                    sysApplyInEntity.setApproveStatu("3");
+                    sysApplyInEntity.setApproveUser("");
                 }
-                sysApplyIn.setApproveStatu("3");
-                sysApplyInEntity.setApproveStatu("3");
-                sysApplyInEntity.setApproveUser("");
+
             }else{
-                //1表示审批中
-                List<String> users = getApplyNextUser(sysApplyIn);
-                sysApplyInEntity.setApproveUser(String.join(",",users));
-                sysApplyInEntity.setApproveStatu("1");
+//                非档案管理员
+                if ("7".equals(sysApplyInEntity.getApproveStatu())){
+                    SysApplyOutDetail dt = new SysApplyOutDetail();
+                    dt.setApplyId(sysApplyIn.getApplyId());
+                    List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(dt);
+                    for (SysApplyOutDetail d:des){
+                        if (!"0".equals(d.getIsReceive())){
+                            return AjaxResult.error("存在档案未收到，无法完成确认");
+                        }
+                    }
+                    sysApplyIn.setApproveStatu("8");
+                    sysApplyInEntity.setApproveStatu("8");
+                }else if ("8".equals(sysApplyInEntity.getApproveStatu())){
+                    SysApplyOutDetail dt3 = new SysApplyOutDetail();
+                    dt3.setApplyId(sysApplyIn.getApplyId());
+                    List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(dt3);
+                    for (SysApplyOutDetail d:des){
+                        if (!"0".equals(d.getIsReturned())){
+                            return AjaxResult.error("存在档案未发起归还，无法完成确认");
+                        }
+                    }
+                    sysApplyIn.setApproveStatu("9");
+                    sysApplyInEntity.setApproveStatu("9");
+                    List<String> jls = getUsers("documentAdmin");
+                    sysApplyInEntity.setApproveUser(String.join(",",jls));
+                }else{
+                    //1表示审批中
+                    List<String> users = getApplyNextUser(sysApplyIn);
+                    sysApplyInEntity.setApproveUser(String.join(",",users));
+                    sysApplyInEntity.setApproveStatu("1");
+                }
             }
             saveWorkFlow(sysApplyInEntity,workflow);
         }

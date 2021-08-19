@@ -89,7 +89,7 @@
         var editFlag = [[${@permission.hasPermi('activity:detail:edit')}]];
         var removeFlag = [[${@permission.hasPermi('activity:detail:remove')}]];
         var isPageDatas = [[${@dict.getType('sys_is_not')}]];
-        var isElecDatas = [[${@dict.getType('sys_is_not')}]];
+        var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
         var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
         var planReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
         var realReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
@@ -228,16 +228,16 @@
                     field: 'files',
                     title: '添加附件'
                 },
-                {
+                /*{
                     field: 'isPage',
                     title: '借出是否包含字纸',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(isPageDatas, value);
                     }
-                },
+                },*/
                 {
                     field: 'isElec',
-                    title: '借出是否包电子扫描件',
+                    title: '借出文档类型',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(isElecDatas, value);
                     }

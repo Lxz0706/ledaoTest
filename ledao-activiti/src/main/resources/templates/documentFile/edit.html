@@ -38,10 +38,10 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">附件类型：</label>
+                <label class="col-sm-3 control-label is-required">附件类型：</label>
                 <div class="col-sm-8">
                     <select id="fileType" name="fileType" th:with="type=${@dict.getType('document_file_type')}"
-                            data-none-selected-text="请选择" class="form-control m-b" onchange="changeFileTypeVal(this.value)">
+                            data-none-selected-text="请选择" class="form-control m-b required" onchange="changeFileTypeVal(this.value)">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                 th:value="${dict.dictValue}"></option>
                     </select>
@@ -52,6 +52,7 @@
                 <div class="col-sm-8">
                     <select id="fileScanType" name="fileScanType" th:with="type=${@dict.getType('document_scan_type')}"
                             data-none-selected-text="请选择" class="form-control m-b">
+                        <option value="">请选择数据</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                 th:value="${dict.dictValue}"></option>
                     </select>

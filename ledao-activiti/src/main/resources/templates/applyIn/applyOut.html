@@ -112,7 +112,10 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目名称'
+                    title: '项目名称',
+                    formatter: function(value, item, index) {
+                        return strLength(item.projectName);
+                    }
                 },
                 {
                     field: 'companyName',
@@ -123,7 +126,10 @@
                 },
                 {
                     field: 'debtorName',
-                    title: '债务人名称'
+                    title: '债务人名称',
+                    formatter: function(value, item, index) {
+                        return strLength(item.debtorName);
+                    }
                 },
                 {
                     field: 'applyUser',
@@ -146,7 +152,10 @@
                 },
                 {
                     field: 'realCreateBy',
-                    title: '实际提交人'
+                    title: '实际提交人',
+                    formatter: function(value, item, index) {
+                        return strLength(item.realCreateBy);
+                    }
                 },
                 {
                     field: 'remarks',
@@ -175,6 +184,13 @@
     function selectSysApplyWorkflowList(applyId){
         var url = prefix+'/applyProcess/historyList/'+applyId;
         $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
+    }
+    function strLength(value){
+        var str = $.common.nullToStr(value);
+        if (str.length > 10) {
+            str = str.substring(0, 10) + '...';
+        }
+        return str;
     }
     function applyEditSave(){
     }

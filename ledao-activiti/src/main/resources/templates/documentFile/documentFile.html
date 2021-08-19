@@ -175,11 +175,17 @@
                 },
                 {
                     field: 'assetPag',
-                    title: '资产包'
+                    title: '资产包',
+                    formatter: function(value, item, index) {
+                        return strLength(item.assetPag);
+                    }
                 },
                 {
                     field: 'debtorName',
-                    title: '债务人名称'
+                    title: '债务人名称',
+                    formatter: function(value, item, index) {
+                        return strLength(item.debtorName);
+                    }
                 },
                 {
                     field: 'companyName',
@@ -190,7 +196,10 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目名称'
+                    title: '项目名称',
+                    formatter: function(value, item, index) {
+                        return strLength(item.projectName);
+                    }
                 },
                 {
                     field: 'documentType',
@@ -201,11 +210,17 @@
                 },
                 {
                     field: 'assetNumber',
-                    title: '资产编号'
+                    title: '资产编号',
+                    formatter: function(value, item, index) {
+                        return strLength(item.assetNumber);
+                    }
                 },
                 {
                     field: 'contractNo',
-                    title: '合同编号'
+                    title: '合同编号',
+                    formatter: function(value, item, index) {
+                        return strLength(item.contractNo);
+                    }
                 },
                 {
                     field: 'dailyDocumentType',
@@ -249,16 +264,23 @@
                 },
                 {
                     field: 'cabinetNo',
-                    title: '柜号'
+                    title: '柜号',
+                    formatter: function(value, item, index) {
+                        return strLength(item.cabinetNo);
+                    }
                 },
                 {
                     field: 'bagNo',
-                    title: '档案袋编号'
+                    title: '档案袋编号',
+                    formatter: function(value, item, index) {
+                        return strLength(item.bagNo);
+                    }
                 },
                 {
                     field: 'documentGetType',
                     title: '档案类型',
                     formatter: function(value, item, index) {
+                        console.log($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType))
                         return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType);
                     }
                 },
@@ -311,6 +333,13 @@
             };
             $.table.init(options);
         });
+        function strLength(value){
+            var str = $.common.nullToStr(value);
+            if (str.length > 10) {
+                str = str.substring(0, 10) + '...';
+            }
+            return str;
+        }
     </script>
 </body>
 </html>

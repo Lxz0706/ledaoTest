@@ -142,7 +142,10 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目名称'
+                    title: '项目名称',
+                    formatter: function(value, item, index) {
+                        return strLength(item.projectName);
+                    }
                 },
                 {
                     field: 'companyName',
@@ -153,7 +156,10 @@
                 },
                 {
                     field: 'debtorName',
-                    title: '债务人名称'
+                    title: '债务人名称',
+                    formatter: function(value, item, index) {
+                        return strLength(item.debtorName);
+                    }
                 },
                 {
                     field: 'applyUser',
@@ -176,11 +182,17 @@
                 },
                 {
                     field: 'realCreateBy',
-                    title: '实际提交人'
+                    title: '实际提交人',
+                    formatter: function(value, item, index) {
+                        return strLength(item.realCreateBy);
+                    }
                 },
                 {
                     field: 'remarks',
-                    title: '备注'
+                    title: '备注',
+                    formatter: function(value, item, index) {
+                        return strLength(item.remarks);
+                    }
                 },
                 {
                     field: 'reviser',
@@ -208,6 +220,14 @@
             };
             $.table.init(options);
         });
+
+        function strLength(value){
+            var str = $.common.nullToStr(value);
+            if (str.length > 10) {
+                str = str.substring(0, 10) + '...';
+            }
+            return str;
+        }
 
         function selectSysApplyWorkflowList(applyId){
             var url = prefix+'/applyProcess/historyList/'+applyId;

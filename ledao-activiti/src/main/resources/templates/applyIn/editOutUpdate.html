@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('修改档案出库详情记录')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-detail-edit" enctype="multipart/form-data">
-        <input name="outDetailId" type="hidden">
+    <form class="form-horizontal m" id="form-detail-edit" th:object="${sysApplyOutDetail}">
+        <input name="outDetailId" th:field="*{outDetailId}" type="hidden">
 <!--        <div class="form-group">-->
 <!--            <label class="col-sm-3 control-label">申请id：</label>-->
 <!--            <div class="col-sm-8">-->
@@ -23,19 +23,37 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">借出是否包含字纸：</label>
             <div class="col-sm-8">
-                <input name="isPage" class="form-control" type="text">
+                <select id="isPage" name="isPage"
+                        th:with="type=${@dict.getType('sys_is_not')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option value="">请选择数据</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{isPage}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">借出是否包电子扫描件：</label>
             <div class="col-sm-8">
-                <textarea name="isElec" class="form-control">[[*{isElec}]]</textarea>
+                <select id="isElec" name="isElec"
+                        th:with="type=${@dict.getType('sys_is_not')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option value="">请选择数据</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{isElec}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">是否归还：</label>
             <div class="col-sm-8">
-                <textarea name="isReturn" class="form-control">[[*{isReturn}]]</textarea>
+                <select id="isReturn" name="isReturn"
+                        th:with="type=${@dict.getType('sys_is_not')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option value="">请选择数据</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{isReturn}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -43,7 +61,7 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="planReturnTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="planReturnTime" th:value="${#dates.format(sysApplyOutDetail.planReturnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
@@ -52,7 +70,7 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="realReturnTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="realReturnTime" th:value="${#dates.format(sysApplyOutDetail.realReturnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
@@ -65,31 +83,55 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">已出库：</label>
             <div class="col-sm-8">
-                <textarea name="isOut" class="form-control">[[*{isOut}]]</textarea>
+                <select id="isOut" name="isOut"
+                        th:with="type=${@dict.getType('sys_is_not')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option value="">请选择数据</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{isOut}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">已收到：</label>
             <div class="col-sm-8">
-                <textarea name="isReceive" class="form-control">[[*{isReceive}]]</textarea>
+                <select id="isReceive" name="isReceive"
+                        th:with="type=${@dict.getType('sys_is_not')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option value="">请选择数据</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{isReceive}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">已还：</label>
             <div class="col-sm-8">
-                <textarea name="isReturned" class="form-control">[[*{isReturned}]]</textarea>
+                <select id="isReturned" name="isReturned"
+                        th:with="type=${@dict.getType('sys_is_not')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option value="">请选择数据</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{isReturned}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">归还接受：</label>
             <div class="col-sm-8">
-                <textarea name="isReceived" class="form-control">[[*{isReceived}]]</textarea>
+                <select id="isReceived" name="isReceived"
+                        th:with="type=${@dict.getType('sys_is_not')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option value="">请选择数据</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{isReceived}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
-                <input name="remarks" class="form-control" type="text">
+                <textarea name="remarks" class="form-control">[[*{remarks}]]</textarea>
             </div>
         </div>
 <!--        <div class="form-group">-->
@@ -109,7 +151,7 @@
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: datetimepicker-js" />
 <script type="text/javascript">
-    var prefix = ctx + "activity/detail";
+    var prefix = ctx + "activity/outFiledetail";
     $("#form-detail-edit").validate({
         focusCleanup: true
     });

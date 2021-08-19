@@ -12,7 +12,7 @@
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
         <input name="applyType" th:field="*{applyType}" value="0" type="hidden">
         <div class="form-group">
-            <label class="col-sm-3 control-label">档案种类：</label>
+            <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
                  <select id="documentType"  name="documentType"
                          th:with="type=${@dict.getType('sys_document_busi_type')}" data-none-selected-text="请选择"
@@ -131,14 +131,14 @@
                     title: 'id',
                     visible: false
                 },
-                {
-                    field: 'applyId',
-                    title: '申请id'
-                },
-                {
-                    field: 'documentId',
-                    title: '档案id'
-                },
+                // {
+                //     field: 'applyId',
+                //     title: '申请id'
+                // },
+                // {
+                //     field: 'documentId',
+                //     title: '档案id'
+                // },
                 // {
                 //     field: 'documentType',
                 //     title: '档案种类',
@@ -163,7 +163,7 @@
                 },
                 {
                     field: 'dailyDocumentType',
-                    title: '档案类型',
+                    title: '档案种类',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
                     }
@@ -192,7 +192,7 @@
                 },
                 {
                     field: 'pages',
-                    title: '页数'
+                    title: '页数/时长'
                 },
                 {
                     field: 'documentStatu',
@@ -252,16 +252,10 @@
                 {
                     field: 'planReturnTime',
                     title: '计划归还时间',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(planReturnTimeDatas, value);
-                    }
                 },
                 {
                     field: 'realReturnTime',
                     title: '实际归还时间',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(realReturnTimeDatas, value);
-                    }
                 },
                 {
                     field: 'outReason',
@@ -269,14 +263,14 @@
                 },
                 {
                     field: 'isOut',
-                    title: '是否出库',
+                    title: '已出库',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(isOutDatas, value);
                     }
                 },
                 {
                     field: 'isReceive',
-                    title: '是否出库',
+                    title: '已收到',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(isReceiveDatas, value);
                     }

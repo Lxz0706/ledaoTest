@@ -80,10 +80,6 @@
         var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
         var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
         var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
-        var roles = [[${@permission.getPrincipalProperty('roles')}]];
-        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
-        console.log('roles',roles)
-        console.log('loginName',loginName)
         var prefix = ctx + "applyIn";
 
         $(function() {

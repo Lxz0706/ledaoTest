@@ -3,6 +3,8 @@ package com.ledao.activity.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.ledao.activity.dao.*;
+import com.ledao.activity.service.*;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -15,14 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ledao.activity.dao.SysApplyIn;
-import com.ledao.activity.dao.SysApplyWorkflow;
-import com.ledao.activity.dao.SysDocumentFile;
-import com.ledao.activity.dao.SysFileDetail;
-import com.ledao.activity.service.ISysApplyInService;
-import com.ledao.activity.service.ISysApplyWorkflowService;
-import com.ledao.activity.service.ISysDocumentFileService;
-import com.ledao.activity.service.ISysFileDetailService;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
@@ -59,6 +53,9 @@ public class SysApplyInController extends BaseController
     
     @Autowired
     private ISysFileDetailService sysFileDetailService;
+
+    @Autowired
+    private ISysApplyOutDetailService sysApplyOutDetailService;
 
 //    @RequiresPermissions("applyIn:view")
     @GetMapping("/applyIn")
@@ -200,7 +197,9 @@ public class SysApplyInController extends BaseController
     @GetMapping("/editOutUpdate/{outDetailId}")
     public String editOutUpdate(@PathVariable("outDetailId") Long outDetailId,ModelMap mmap)
     {
+        SysApplyOutDetail sysApplyOutDetail = sysApplyOutDetailService.selectSysApplyOutDetailById(outDetailId);
         mmap.put("outDetailId",outDetailId);
+        mmap.put("sysApplyOutDetail",sysApplyOutDetail);
         return prefix + "/editOutUpdate";
     }
 

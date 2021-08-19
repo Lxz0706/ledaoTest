@@ -156,11 +156,19 @@
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
         var companyNameDictDatas = [[${@dict.getType('sys_company_name')}]];
+        var roles = [[${@permission.getPrincipalProperty('roles')}]];
+        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
         var prefix = ctx + "documentFile";
         var docDetailIds = ctx + "activity/outFiledetail"
         var applyId = document.getElementById("applyId").value
+        var showNames = false
 
         $(function() {
+            for(var i =0; i < roles.length;i++) {
+                if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                    showNames = true
+                }
+            }
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
@@ -175,10 +183,6 @@
                     field: 'documentId',
                     title: 'id',
                     visible: false
-                },
-                {
-                    field: 'assetPag',
-                    title: '资产包'
                 },
                 {
                     field: 'debtorName',
@@ -201,6 +205,10 @@
                     formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
 		            }
+                },
+                {
+                    field: 'assetPag',
+                    title: '资产包'
                 },
                 {
                     field: 'assetNumber',
@@ -248,44 +256,42 @@
                     title: '档案状态',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(documentStatuDictDatas, item.documentStatu);
-                    }
+                    },
+                    visible: showNames
                 },
                 {
                     field: 'cabinetNo',
-                    title: '柜号'
+                    title: '柜号',
+                    visible: showNames
                 },
                 {
                     field: 'bagNo',
-                    title: '档案袋编号'
+                    title: '档案袋编号',
+                    visible: showNames
                 },
                 {
                     field: 'documentGetType',
                     title: '档案类型',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType);
-                    }
+                    },
+                    visible: showNames
                 },
                 {
                     field: 'fileGetType',
                     title: '文件类型',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType);
-                    }
+                    },
+                    visible: showNames
                 },
                 {
                     field: 'documentLevel',
                     title: '档案级别',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(documentLevelDictDatas, item.documentLevel);
-                    }
-                },
-                {
-                    field: 'fileIds',
-                    title: '文件id'
-                },
-                {
-                    field: 'applyId',
-                    title: '档案入库id'
+                    },
+                    visible: showNames
                 },
                 {
                     field: 'remarks',

@@ -111,6 +111,7 @@
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
+            showNames = true
         }
         var isNotChange = false
         if(approveStatu!=0 && approveStatu != 4){
@@ -162,7 +163,8 @@
                     title: '种类',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
-                    }
+                    },
+                    visible: showNames
                 },
                 {
                     field: 'fileName',
@@ -188,7 +190,7 @@
                 },
                 {
                     field: 'pages',
-                    title: '页数'
+                    title: '页数/时长'
                 },
                 {
                     field: 'documentStatu',

@@ -1116,46 +1116,48 @@ var table = {
                 });
             },
             // 提交审批
-            applySubmit: function () {
+            applySubmit: function (id) {
                 table.set();
-                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                if (rows.length == 0) {
-                    $.modal.alertWarning("请至少选择一条记录");
-                    return;
-                }
-                $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
+                // var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                // if (rows.length == 0) {
+                //     $.modal.alertWarning("请至少选择一条记录");
+                //     return;
+                // }
+                $.modal.confirm("确认提交?", function () {
                     var url = table.options.submitUrl;
-                    var data = {"applyId": rows.join(), "approveStatu": "5","applyType": "0"};
+                    var status = table.options.status == "In" ? "0" : "1"
+                    var data = {"applyId": id, "approveStatu": "5","applyType": status};
                     $.operate.submit(url, "post", "json", data);
                 });
             },
             // 撤回
-            applyBack: function () {
+            applyBack: function (id) {
                 table.set();
-                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                if (rows.length == 0) {
-                    $.modal.alertWarning("请至少选择一条记录");
-                    return;
-                }
-                $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function () {
+                // var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                // if (rows.length == 0) {
+                //     $.modal.alertWarning("请至少选择一条记录");
+                //     return;
+                // }
+                $.modal.confirm("确认撤回?", function () {
                     var url = table.options.submitUrl;
-                    var data = {"applyId": rows.join(), "approveStatu": "4","applyType": "0"};
+                    var status = table.options.status == "In" ? "0" : "1"
+                    var data = {"applyId": id, "approveStatu": "4","applyType": status};
                     $.operate.submit(url, "post", "json", data);
                 });
             },
             // 审批成功 （同意）
-            approve: function (id) {
+            approve: function (id , applyType) {
                 table.set();
-                $.modal.confirm("确认要提交选中的数据吗?", function () {
+                $.modal.confirm("确认提交?", function () {
                     var url = table.options.approveUrl;
-                    var data = {"applyId": id, "approveStatu": "6","applyType": "0"};
+                    var data = {"applyId": id, "approveStatu": "6","applyType": applyType};
                     $.operate.submit(url, "post", "json", data);
                 });
             },
             // 驳回画面
-            rejectMask:function (id) {
+            rejectMask:function (id,applyType) {
                 table.set()
-                var url = "/applyIn/reject/" + id;
+                var url = "/applyIn/reject/" + id + "/" + applyType;
                 $.modal.open("添加备注",url);
             },
             // 设置信息为已读

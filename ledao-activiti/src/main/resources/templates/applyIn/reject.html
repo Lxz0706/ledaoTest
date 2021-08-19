@@ -7,8 +7,8 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-applyIn-add">
-        <input name="applyType" value="0" type="hidden"/>
         <input name="applyId" id="applyId" th:value="*{applyId}" type="hidden">
+        <input name="applyType" id="applyType" th:value="*{applyType}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
@@ -31,8 +31,9 @@
             var docId = document.getElementById("form-applyIn-add");
             var formData = new FormData(docId);
             var rejectmak = formData.get("realCreateBy");
+            var applyType = formData.get("applyType");
             var id = document.getElementById("applyId").value;
-            var data = {"applyId": id, "approveStatu": "2","applyType": "0","remarks": rejectmak}
+            var data = {"applyId": id, "approveStatu": "2","applyType": applyType,"remarks": rejectmak}
             $.ajax({
                 url: prefix + "/applyEditSave",
                 data: data,

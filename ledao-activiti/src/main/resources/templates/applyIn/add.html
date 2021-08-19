@@ -44,10 +44,11 @@
                     <input name="debtorName" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">实际提交人：</label>
                 <div class="col-sm-8">
-                    <input name="realCreateBy" class="form-control" type="text">
+                    <input class="form-control" type="hidden" name="realCreateById" id="realCreateById">
+                    <input class="form-control" type="text" name="realCreateBy" id="realCreateBy" onclick="selectUser()">
                 </div>
             </div>
             <div class="form-group">
@@ -56,7 +57,6 @@
                     <input name="remarks" class="form-control" type="text">
                 </div>
             </div>
-           
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -92,6 +92,23 @@
             minView: "month",
             autoclose: true
         });
+
+        //人员树形选择器
+        function selectUser() {
+            var url = ctx + "system/dept/selectLeaderUser?userId=" + $("#realCreateById").val() + "&userName=" + $("#realCreateBy").val();
+            $.modal.open("人员选择", url, '750', '600/2');
+        }
+        function getDeviceBasics(row) {
+            var userNames = "";
+            var userIds = "";
+            for (var i = 0; i < row.length; i++) {
+                userNames = row[i].loginName + "," + userNames;
+                userIds = row[i].userId + "," + userIds;
+            }
+            $("#realCreateById").val(userIds.substr(0, userIds.length - 1));
+            $("#realCreateBy").val(userNames.substr(0, userNames.length - 1));
+            layer.close(layer.index);
+        }
     </script>
 </body>
 </html>

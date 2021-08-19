@@ -1282,6 +1282,11 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
+            editApplyInAndOut: function (id,applyType) {
+                table.set();
+                var url = "applyIn/edit/" + id + '/' + applyType
+                $.modal.open("修改" + table.options.modalName, url);
+            },
             // 修改信息，以tab页展现
             editTab: function (id) {
                 table.set();

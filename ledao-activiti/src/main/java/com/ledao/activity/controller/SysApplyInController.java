@@ -99,6 +99,16 @@ public class SysApplyInController extends BaseController
         return "applyProcess/historyList";
     }
 
+    @GetMapping("/fileDetail/{documentId}")
+    public String fileDetail(@PathVariable("documentId") Long documentId,ModelMap modelMap) {
+//        查看档案附件
+        SysFileDetail sysFileDetail = new SysFileDetail();
+        sysFileDetail.setDocumentFileId(documentId);
+        List<SysFileDetail> des = sysFileDetailService.selectSysFileDetailList(sysFileDetail);
+        modelMap.put("sysFileDetail",sysFileDetail);
+        return "fileDetail/detail";
+    }
+
     /**
      * 查询档案入库申请列表
      */

@@ -973,6 +973,7 @@ var table = {
             },
             // 选卡页方式打开
             openTab: function (title, url) {
+                debugger
                 createMenuItem(url, title);
             },
             // 选卡页同一页签打开
@@ -1284,7 +1285,7 @@ var table = {
             },
             editApplyInAndOut: function (id,applyType) {
                 table.set();
-                var url = "applyIn/edit/" + id + '/' + applyType
+                var url = "edit/" + id + '/' + applyType
                 $.modal.open("修改" + table.options.modalName, url);
             },
             // 修改信息，以tab页展现

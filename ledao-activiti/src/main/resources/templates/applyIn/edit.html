@@ -249,7 +249,13 @@
                 },
                 {
                     field: 'fileNames',
-                    title: '附件'
+                    title: '附件',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
+                        return actions.join('');
+                    }
                 },
                 {
                     title: '操作',
@@ -297,6 +303,12 @@
         minView: "month",
         autoclose: true
     });
+
+    function addFile (id) {
+        var detail = ctx + 'activity/fileDetail'
+        var url = detail + '/detail/' + id;
+        $.modal.open("添加附件", url);
+    }
 </script>
 </body>
 

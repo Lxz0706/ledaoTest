@@ -37,7 +37,7 @@
             <div class="col-sm-8">
                 <select id="isElec" name="isElec"
                         th:with="type=${@dict.getType('sys_borrow_type')}"
-                        data-none-selected-text="请选择" class="form-control m-b">
+                        data-none-selected-text="请选择" class="form-control m-b" onchange="changeIsElec(this.value)">
                     <option value="">请选择数据</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                             th:value="${dict.dictValue}" th:field="*{isElec}"></option>
@@ -49,28 +49,28 @@
             <div class="col-sm-8">
                 <select id="isReturn" name="isReturn"
                         th:with="type=${@dict.getType('sys_is_not')}"
-                        data-none-selected-text="请选择" class="form-control m-b">
+                        data-none-selected-text="请选择" class="form-control m-b" onchange="changeIsReturn(this.value)">
                     <option value="">请选择数据</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                             th:value="${dict.dictValue}" th:field="*{isReturn}"></option>
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">计划归还时间：</label>
+        <div class="form-group" id="planReturnTimeShow" style="display: none">
+            <label class="col-sm-3 control-label is-required">计划归还时间：</label>
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="planReturnTime" th:value="${#dates.format(sysApplyOutDetail.planReturnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input name="planReturnTime" th:value="${#dates.format(sysApplyOutDetail.planReturnTime, 'yyyy-MM-dd')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="realReturnTime" style="display: none">
             <label class="col-sm-3 control-label">实际归还时间：</label>
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="realReturnTime" th:value="${#dates.format(sysApplyOutDetail.realReturnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input disabled name="realReturnTime" th:value="${#dates.format(sysApplyOutDetail.realReturnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
                 <textarea name="outReason" class="form-control">[[*{outReason}]]</textarea>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="isOutShow" style="display: none">
             <label class="col-sm-3 control-label">已出库：</label>
             <div class="col-sm-8">
                 <select id="isOut" name="isOut"
@@ -92,7 +92,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="isReceiveShow" style="display: none">
             <label class="col-sm-3 control-label">已收到：</label>
             <div class="col-sm-8">
                 <select id="isReceive" name="isReceive"
@@ -104,7 +104,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="isReturnedShow" style="display: none">
             <label class="col-sm-3 control-label">已还：</label>
             <div class="col-sm-8">
                 <select id="isReturned" name="isReturned"
@@ -116,7 +116,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="isReceivedShow" style="display: none">
             <label class="col-sm-3 control-label">归还接受：</label>
             <div class="col-sm-8">
                 <select id="isReceived" name="isReceived"
@@ -150,8 +150,28 @@
 </div>
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: datetimepicker-js" />
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
     var prefix = ctx + "activity/outFiledetail";
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    var isElec = document.getElementById("isElec").value
+    var isReturn = document.getElementById("isReturn").value
+    $(function () {
+        for(var i =0; i < roles.length;i++) {
+            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                $("#isOutShow").show()
+                $("#isReceiveShow").show()
+                $("#isReturnedShow").show()
+                $("#isReceivedShow").show()
+                $("select,input,textarea").attr("disabled", "disabled");
+                $("#isOut").removeAttr("disabled")
+            }
+        }
+        // 借出文档类型
+        changeIsElec(isElec)
+        //归还
+        changeIsReturn()
+    })
     $("#form-detail-edit").validate({
         focusCleanup: true
     });
@@ -159,6 +179,41 @@
     function submitHandler() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/edit", $('#form-detail-edit').serialize());
+        }
+    }
+
+    function changeIsReturn(val) {
+        if(val == "0") {
+            $("#realReturnTime").show()
+            $("#planReturnTimeShow").show()
+        } else if (val == "1") {
+            $("#realReturnTime").hide()
+            $("#planReturnTimeShow").hide()
+        } else {
+            $("#realReturnTime").hide()
+            $("#planReturnTimeShow").hide()
+        }
+    }
+
+    function changeIsElec(val) {
+        console.log('类型',$("#isElec").val())
+        console.log('是否归还',$("#isReturn").val())
+        if(val == "0") {
+            $("#isReturn").val("1")
+            $("#isReturn").attr("disabled", "disabled")
+        } else {
+            $("#isReturn").removeAttr("disabled")
+        }
+        showTime()
+    }
+
+    function showTime() {
+        if($("#isReturn").val() == '0') {
+            $("#realReturnTime").show()
+            $("#planReturnTimeShow").show()
+        } else {
+            $("#realReturnTime").hide()
+            $("#planReturnTimeShow").hide()
         }
     }
 

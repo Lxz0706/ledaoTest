@@ -103,6 +103,7 @@
         var debtorName = document.getElementById("debtorName")
         var applyIds = document.getElementById("applyId").value
     $(function () {
+        // 管理员与档案管理员
         for(var i =0; i < roles.length;i++) {
             if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
                 showNames = true

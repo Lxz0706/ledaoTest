@@ -34,7 +34,7 @@ public class SysFileDetailController extends BaseController
     @Autowired
     private ISysFileDetailService sysFileDetailService;
 
-    @RequiresPermissions("activity:fileDetail:view")
+//    @RequiresPermissions("activity:fileDetail:view")
     @GetMapping()
     public String fileDetail()
     {
@@ -44,7 +44,7 @@ public class SysFileDetailController extends BaseController
     /**
      * 查询档案详情列表
      */
-    @RequiresPermissions("activity:fileDetail:list")
+//    @RequiresPermissions("activity:fileDetail:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysFileDetail sysFileDetail)
@@ -57,7 +57,7 @@ public class SysFileDetailController extends BaseController
     /**
      * 导出档案详情列表
      */
-    @RequiresPermissions("activity:fileDetail:export")
+//    @RequiresPermissions("activity:fileDetail:export")
     @Log(title = "档案详情", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -74,13 +74,23 @@ public class SysFileDetailController extends BaseController
     @GetMapping("/add")
     public String add()
     {
-        return prefix + "/add";
+        return "fileDetail/add";
+    }
+
+    @GetMapping("/detail/{documentId}")
+    public String fileDetail(@PathVariable("documentId") Long documentId,ModelMap modelMap) {
+//        查看档案附件
+        SysFileDetail sysFileDetail = new SysFileDetail();
+        sysFileDetail.setDocumentFileId(documentId);
+        List<SysFileDetail> des = sysFileDetailService.selectSysFileDetailList(sysFileDetail);
+        modelMap.put("sysFileDetail",sysFileDetail);
+        return "fileDetail/detail";
     }
 
     /**
      * 新增保存档案详情
      */
-    @RequiresPermissions("activity:fileDetail:add")
+//    @RequiresPermissions("activity:fileDetail:add")
     @Log(title = "档案详情", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -97,13 +107,13 @@ public class SysFileDetailController extends BaseController
     {
         SysFileDetail sysFileDetail = sysFileDetailService.selectSysFileDetailById(fileId);
         mmap.put("sysFileDetail", sysFileDetail);
-        return prefix + "/edit";
+        return "fileDetail/edit";
     }
 
     /**
      * 修改保存档案详情
      */
-    @RequiresPermissions("activity:fileDetail:edit")
+//    @RequiresPermissions("activity:fileDetail:edit")
     @Log(title = "档案详情", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -115,7 +125,7 @@ public class SysFileDetailController extends BaseController
     /**
      * 删除档案详情
      */
-    @RequiresPermissions("activity:fileDetail:remove")
+//    @RequiresPermissions("activity:fileDetail:remove")
     @Log(title = "档案详情", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

@@ -385,14 +385,24 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         SysApplyOutDetail detail = new SysApplyOutDetail();
                         detail.setApplyId(sysApplyIn.getApplyId());
                         List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(detail);
+                        boolean isAllNotReturn = true;
                         for (SysApplyOutDetail d:des){
                             if (!"0".equals(d.getIsOut())){
                                 return AjaxResult.error("存在档案未出库，无法完成借出审批");
                             }
+                            if ("0".equals(d.getIsReturn())){
+                                isAllNotReturn = false;
+                            }
                         }
-                        sysApplyIn.setApproveStatu("7");
-                        sysApplyInEntity.setApproveStatu("7");
-                        sysApplyInEntity.setApproveUser(sysApplyInEntity.getApplyUser());
+                        if (isAllNotReturn){
+                            sysApplyIn.setApproveStatu("7");
+                            sysApplyInEntity.setApproveStatu("7");
+                            sysApplyInEntity.setApproveUser("");
+                        }else{
+                            sysApplyIn.setApproveStatu("3");
+                            sysApplyInEntity.setApproveStatu("3");
+                            sysApplyInEntity.setApproveUser("");
+                        }
                     }else if ("9".equals(sysApplyInEntity.getApproveStatu())){
                         SysApplyOutDetail d2 = new SysApplyOutDetail();
                         d2.setApplyId(sysApplyIn.getApplyId());
@@ -401,6 +411,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                             if (!"0".equals(d.getIsReceived())){
                                 return AjaxResult.error("存在档案未收到，无法完成借出审批");
                             }
+                        }
+                        for (SysApplyOutDetail d:des){
+                            //设置实际归还时间
+                            d.setRealReturnTime(new Date());
+                            sysApplyOutDetailMapper.updateSysApplyOutDetail(d);
                         }
                         sysApplyIn.setApproveStatu("3");
                         sysApplyInEntity.setApproveStatu("3");

@@ -3,6 +3,8 @@ package com.ledao.activity.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.mapper.SysApplyInMapper;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.framework.util.ShiroUtils;
@@ -27,6 +29,9 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
 {
     @Autowired
     private SysApplyOutDetailMapper sysApplyOutDetailMapper;
+
+    @Autowired
+    private SysApplyInMapper sysApplyInMapper;
 
     /**
      * 查询档案出库详情记录
@@ -75,7 +80,67 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
     public int updateSysApplyOutDetail(SysApplyOutDetail sysApplyOutDetail)
     {
         sysApplyOutDetail.setUpdateTime(DateUtils.getNowDate());
-        return sysApplyOutDetailMapper.updateSysApplyOutDetail(sysApplyOutDetail);
+        sysApplyOutDetailMapper.updateSysApplyOutDetail(sysApplyOutDetail);
+
+        SysApplyOutDetail d = sysApplyOutDetailMapper.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
+        SysApplyIn app = sysApplyInMapper.selectSysApplyInById(d.getApplyId());
+
+        boolean flag = true;
+        if ("7".equals(app.getApproveStatu())){
+            //已出库待确认
+            SysApplyOutDetail de = new SysApplyOutDetail();
+            de.setApplyId(d.getApplyId());
+            List<SysApplyOutDetail> apps = sysApplyOutDetailMapper.selectSysApplyOutDetailList(de);
+            for (SysApplyOutDetail a :apps){
+                if ("0".equals(a.getIsReturn())){
+                    if (!"0".equals(a.getIsReceive())){
+                        flag = false;
+                    }
+                }
+            }
+            if (flag){
+                app.setApproveStatu("8");
+                sysApplyInMapper.updateSysApplyIn(app);
+            }
+        }else if("8".equals(app.getApproveStatu())){
+            //已出库待确认
+            SysApplyOutDetail de2 = new SysApplyOutDetail();
+            de2.setApplyId(d.getApplyId());
+            List<SysApplyOutDetail> apps = sysApplyOutDetailMapper.selectSysApplyOutDetailList(de2);
+            for (SysApplyOutDetail a :apps){
+                if ("0".equals(a.getIsReturn())){
+                    if (!"0".equals(a.getIsReturned())){
+                        flag = false;
+                    }
+                }
+            }
+            if (flag){
+                app.setApproveStatu("9");
+                sysApplyInMapper.updateSysApplyIn(app);
+            }
+        }else if("9".equals(app.getApproveStatu())){
+            //已出库待确认
+            SysApplyOutDetail de3 = new SysApplyOutDetail();
+            de3.setApplyId(d.getApplyId());
+            List<SysApplyOutDetail> apps = sysApplyOutDetailMapper.selectSysApplyOutDetailList(de3);
+            for (SysApplyOutDetail a :apps){
+                if ("0".equals(a.getIsReturn())){
+                    if (!"0".equals(a.getIsReceived())){
+                        flag = false;
+                    }
+                }
+            }
+            if (flag){
+                app.setApproveStatu("3");
+                sysApplyInMapper.updateSysApplyIn(app);
+                for (SysApplyOutDetail a :apps){
+                    a.setRealReturnTime(new Date());
+                    sysApplyOutDetailMapper.updateSysApplyOutDetail(a);
+                }
+            }
+        }
+
+        return 1;
     }
 
     /**

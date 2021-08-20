@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ledao.activity.mapper.SysFileDetailMapper">
-    
+
     <resultMap type="SysFileDetail" id="SysFileDetailResult">
         <result property="fileId"    column="file_id"    />
         <result property="fileName"    column="file_name"    />
@@ -15,28 +15,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="downLoadCount"    column="down_load_count"    />
+        <result property="viewCount"    column="view_count"    />
     </resultMap>
 
     <sql id="selectSysFileDetailVo">
-        select file_id, file_name, file_url, document_file_id, create_by, creator, create_time, update_by, reviser, update_time from sys_file_detail
+        select file_id, file_name, file_url, document_file_id, create_by, creator, create_time, update_by, reviser, update_time, down_load_count, view_count from sys_file_detail
     </sql>
 
     <select id="selectSysFileDetailList" parameterType="SysFileDetail" resultMap="SysFileDetailResult">
         <include refid="selectSysFileDetailVo"/>
-        <where>  
+        <where>
             <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
             <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
             <if test="documentFileId != null "> and document_file_id = #{documentFileId}</if>
             <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+            <if test="downLoadCount != null "> and down_load_count = #{downLoadCount}</if>
+            <if test="viewCount != null "> and view_count = #{viewCount}</if>
         </where>
     </select>
-    
+
     <select id="selectSysFileDetailById" parameterType="Long" resultMap="SysFileDetailResult">
         <include refid="selectSysFileDetailVo"/>
         where file_id = #{fileId}
     </select>
-        
+
     <insert id="insertSysFileDetail" parameterType="SysFileDetail" useGeneratedKeys="true" keyProperty="fileId">
         insert into sys_file_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -49,7 +53,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="reviser != null">reviser,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+            <if test="downLoadCount != null">down_load_count,</if>
+            <if test="viewCount != null">view_count,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="fileName != null">#{fileName},</if>
             <if test="fileUrl != null">#{fileUrl},</if>
@@ -60,7 +66,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="reviser != null">#{reviser},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+            <if test="downLoadCount != null">#{downLoadCount},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+        </trim>
     </insert>
 
     <update id="updateSysFileDetail" parameterType="SysFileDetail">
@@ -75,6 +83,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="reviser != null">reviser = #{reviser},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="downLoadCount != null">down_load_count = #{downLoadCount},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
         </trim>
         where file_id = #{fileId}
     </update>
@@ -84,10 +94,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteSysFileDetailByIds" parameterType="String">
-        delete from sys_file_detail where file_id in 
+        delete from sys_file_detail where file_id in
         <foreach item="fileId" collection="array" open="(" separator="," close=")">
             #{fileId}
         </foreach>
     </delete>
-    
+
 </mapper>

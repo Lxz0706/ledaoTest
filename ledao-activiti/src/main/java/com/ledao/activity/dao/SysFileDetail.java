@@ -34,12 +34,36 @@ public class SysFileDetail extends BaseEntity
     /** 修改人名称 */
     @Excel(name = "修改人名称")
     private String reviser;
+
+    /** 下载次数 */
+    @Excel(name = "下载次数")
+    private Long downLoadCount;
+
+    /** 下载次数 */
+    @Excel(name = "下载次数")
+    private Long viewCount;
     
 
 	/** 档案id */
     @Excel(name = "档案id")
     private Long documentFileId;
-    
+
+    public Long getDownLoadCount() {
+        return downLoadCount;
+    }
+
+    public void setDownLoadCount(Long downLoadCount) {
+        this.downLoadCount = downLoadCount;
+    }
+
+    public Long getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Long viewCount) {
+        this.viewCount = viewCount;
+    }
+
     public Long getDocumentFileId() {
     	return documentFileId;
     }

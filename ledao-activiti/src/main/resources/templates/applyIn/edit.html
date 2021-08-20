@@ -89,6 +89,7 @@
         var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
         var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
         var showNames = false
@@ -181,41 +182,53 @@
                     field: 'fileScanType',
                     title: '扫描件类型',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType);
+                        return strLength($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType));
                     }
                 },
                 {
                     field: 'counts',
-                    title: '份数'
+                    title: '份数',
+                    formatter: function(value, item, index) {
+                        return strLength(item.counts);
+                    }
                 },
                 {
                     field: 'pages',
-                    title: '页数/时长'
+                    title: '页数/时长',
+                    formatter: function(value, item, index) {
+                        return strLength(item.pages);
+                    }
                 },
                 {
                     field: 'documentStatu',
                     title: '档案状态',
                     visible: showNames,
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(documentStatuDictDatas, item.documentStatu);
+                        return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
                     }
                 },
                 {
                     field: 'cabinetNo',
                     title: '柜号',
-                    visible: showNames
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength(item.cabinetNo);
+                    }
                 },
                 {
                     field: 'bagNo',
                     title: '档案袋编号',
-                    visible: showNames
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength(item.bagNo);
+                    }
                 },
                 {
                     field: 'documentGetType',
                     title: '档案类型',
                     visible: showNames,
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType);
+                        return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
                     }
                 },
                 {
@@ -223,13 +236,16 @@
                     title: '文件类型',
                     visible: showNames,
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType);
+                        return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
                     }
                 },
                 {
                     field: 'documentLevel',
                     title: '档案级别',
-                    visible: showNames
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentLevelDictDatas, item.fileGetType));
+                    }
                 },
                 {
                     field: 'fileNames',
@@ -261,6 +277,14 @@
     $("#form-applyIn-edit").validate({
         focusCleanup: true
     });
+
+    function strLength(value){
+        var str = $.common.nullToStr(value);
+        if (str.length > 10) {
+            str = str.substring(0, 10) + '...';
+        }
+        return str;
+    }
 
     function submitHandler() {
         if ($.validate.form()) {

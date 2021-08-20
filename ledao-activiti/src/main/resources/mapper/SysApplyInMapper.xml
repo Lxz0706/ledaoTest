@@ -51,9 +51,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
-        <include refid="selectSysApplyInVo"/> app,( SELECT workflow.apply_id as apply_ids from sys_apply_workflow workflow
-        where workflow.approve_user= #{applyUser} GROUP BY workflow.apply_id) work
-        where app.apply_id = work.apply_ids
+        SELECT
+        app.apply_id,
+        app.apply_type,
+        app.document_type,
+        app.project_id,
+        app.project_name,
+        app.company_name,
+        app.debtor_name,
+        app.apply_user,
+        app.apply_time,
+        app.approve_user,
+        WORK.approve_statu,
+        app.real_create_by,
+        app.remarks,
+        app.create_by,
+        app.creator,
+        app.create_time,
+        app.update_by,
+        app.reviser,
+        app.update_time
+        FROM
+        sys_apply_in app,
+        ( SELECT workflow.apply_id, workflow.approve_statu FROM sys_apply_workflow workflow WHERE workflow.approve_user = #{applyUser} GROUP BY workflow.apply_id ) WORK
+        WHERE
+        app.apply_id = WORK.apply_id
         <if test="applyType != null  and applyType != ''"> and app.apply_type = #{applyType}</if>
         <if test="documentType != null  and documentType != ''"> and app.document_type = #{documentType}</if>
         <if test="projectId != null "> and app.project_id = #{projectId}</if>

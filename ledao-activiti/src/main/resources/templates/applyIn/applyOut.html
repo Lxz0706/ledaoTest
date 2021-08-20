@@ -142,7 +142,10 @@
                 },
                 {
                     field: 'approveUser',
-                    title: '下一节点审批人'
+                    title: '下一节点审批人',
+                    formatter: function(value, item, index) {
+                        return strLength(item.approveUser);
+                    }
                 },
                 {
                     field: 'approveStatu',
@@ -160,7 +163,10 @@
                 },
                 {
                     field: 'remarks',
-                    title: '备注'
+                    title: '备注',
+                    formatter: function(value, item, index) {
+                        return strLength(item.remarks);
+                    }
                 },
                 {
                     field: 'reviser',

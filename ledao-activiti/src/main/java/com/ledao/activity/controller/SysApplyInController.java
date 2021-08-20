@@ -283,6 +283,17 @@ public class SysApplyInController extends BaseController
     /**
      * 修改档案入库申请
      */
+    @GetMapping("/edit/{applyId}")
+    public String editApplyIn(@PathVariable("applyId") Long applyId, ModelMap mmap)
+    {
+        SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
+        mmap.put("sysApplyIn", sysApplyIn);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改档案入库申请
+     */
     @GetMapping("/editOut/{applyId}")
     public String editOut(@PathVariable("applyId") Long applyId, ModelMap mmap)
     {

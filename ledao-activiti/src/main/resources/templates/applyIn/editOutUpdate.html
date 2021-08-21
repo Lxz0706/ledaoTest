@@ -6,6 +6,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input name="approveStatu" id="approveStatu" th:value="*{approveStatu}" type="text">
     <form class="form-horizontal m" id="form-detail-edit" th:object="${sysApplyOutDetail}">
         <input name="outDetailId" th:field="*{outDetailId}" type="hidden">
 <!--        <div class="form-group">-->
@@ -156,6 +157,7 @@
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var isElec = document.getElementById("isElec").value
     var isReturn = document.getElementById("isReturn").value
+    var approveStatu = document.getElementById("approveStatu").value
     $(function () {
         for(var i =0; i < roles.length;i++) {
             if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
@@ -166,6 +168,21 @@
                 $("select,input,textarea").attr("readonly","readonly");
                 $("#isOut").removeAttr("readonly")
             }
+        }
+        if(approveStatu == "7" || approveStatu == "8") {
+            $("select,input,textarea").attr("readonly","readonly");
+            $("#planReturnTimeShow").show()
+            $("#realReturnTime").show()
+            $("#isOutShow").show()
+            $("#isReceiveShow").show()
+            $("#isReturnedShow").show()
+            $("#isReceivedShow").show()
+            if(approveStatu == "7") {
+                $("#isReceive").removeAttr("readonly")
+            } else if (approveStatu == "8") {
+                $("#isReturned").removeAttr("readonly")
+            }
+
         }
         // 借出文档类型
         // changeIsElec(isElec)
@@ -178,7 +195,6 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            debugger
             $.operate.save(prefix + "/edit", $('#form-detail-edit').serialize());
         }
     }

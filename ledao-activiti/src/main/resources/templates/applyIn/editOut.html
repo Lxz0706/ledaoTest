@@ -122,7 +122,7 @@
         if(approveStatu !=0 && approveStatu != 4){
             isNotChange = false
             if((approveStatu == 1 || approveStatu == 5) && showNames){
-            }else{
+            }else {
                 isNotChange = true
             }
         }
@@ -311,11 +311,14 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if((approveStatu == "7" || approveStatu == "8") && row.createBy == loginName) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        }
+                        if((approveStatu !== "7" ||  approveStatu !== "8") && row.createBy !== loginName) {
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
                         return actions.join('');
-                    },
-                    visible: !isNotChange
+                    }
                 }]
         };
         $.table.init(options);

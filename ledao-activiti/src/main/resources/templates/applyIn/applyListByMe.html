@@ -79,6 +79,7 @@
         var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
         var applyTypeDictDatas = [[${@dict.getType('sys_file_apply_type')}]];
         var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
         var prefix = ctx + "applyIn";
 
         $(function() {
@@ -179,7 +180,7 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        if(row.approveStatu==0 || row.approveStatu == 4){
+                        if((row.approveStatu == 0 || row.approveStatu == 4) || ((row.approveStatu == 7 || row.approveStatu == 8) && row.applyUser == loginName)){
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.editApplyInAndOut(\'' + row.applyId + '\',\'' + row.applyType + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         }else{
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.editApplyInAndOut(\'' + row.applyId + '\',\'' + row.applyType + '\')"><i class="fa fa-edit"></i>查看</a> ');

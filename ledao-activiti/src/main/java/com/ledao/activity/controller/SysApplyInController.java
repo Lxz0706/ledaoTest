@@ -312,6 +312,7 @@ public class SysApplyInController extends BaseController
     {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
+        mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
         return prefix + "/editOut";
     }
 

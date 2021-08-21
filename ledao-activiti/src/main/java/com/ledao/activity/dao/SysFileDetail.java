@@ -27,6 +27,10 @@ public class SysFileDetail extends BaseEntity
     @Excel(name = "档案路径")
     private String fileUrl;
 
+    /** 档案路径 */
+    @Excel(name = "档案路径")
+    private String fileType;
+
     /** 创建人名称 */
     @Excel(name = "创建人名称")
     private String creator;
@@ -47,6 +51,14 @@ public class SysFileDetail extends BaseEntity
 	/** 档案id */
     @Excel(name = "档案id")
     private Long documentFileId;
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 
     public Long getDownLoadCount() {
         return downLoadCount;
@@ -124,6 +136,7 @@ public class SysFileDetail extends BaseEntity
             .append("fileId", getFileId())
             .append("fileName", getFileName())
             .append("fileUrl", getFileUrl())
+            .append("fileType", getFileType())
             .append("createBy", getCreateBy())
             .append("creator", getCreator())
             .append("createTime", getCreateTime())

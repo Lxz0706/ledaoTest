@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import com.itextpdf.text.log.SysoLogger;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.mapper.SysApplyInMapper;
+import com.ledao.common.constant.Constants;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
@@ -152,9 +153,12 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 			SysFileDetail.setDocumentFileId(Long.parseLong(id));
 			List<SysFileDetail> files = fileDetailMapper.selectSysFileDetailList(SysFileDetail);
 			for (SysFileDetail f : files){
-				System.out.println(Global.getUploadPath()+f.getFileUrl());
-				FileUtils.deleteFile(Global.getUploadPath()+"/document"+f.getFileUrl());
+//				System.out.println(Global.getUploadPath()+f.getFileUrl());
+//				FileUtils.deleteFile(Global.getUploadPath()+"/document"+f.getFileUrl());
+				String url = f.getFileUrl().replace(Constants.RESOURCE_PREFIX,"");
+				FileUtils.deleteFile(Global.getProfile()+url);
 				sysFileDetailMapper.deleteSysFileDetailById(f.getFileId());
+
 			}
 		}
 		if (flag){

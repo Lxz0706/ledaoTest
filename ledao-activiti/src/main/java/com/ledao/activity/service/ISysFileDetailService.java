@@ -2,6 +2,7 @@ package com.ledao.activity.service;
 
 import java.util.List;
 import com.ledao.activity.dao.SysFileDetail;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 档案详情Service接口
@@ -33,7 +34,7 @@ public interface ISysFileDetailService
      * @param sysFileDetail 档案详情
      * @return 结果
      */
-    public int insertSysFileDetail(SysFileDetail sysFileDetail);
+    public int insertSysFileDetail(SysFileDetail sysFileDetail, MultipartFile file);
 
     /**
      * 修改档案详情

@@ -5,11 +5,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.activity.dao.SysFileDetail;
@@ -18,6 +14,7 @@ import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 档案详情Controller
@@ -71,9 +68,10 @@ public class SysFileDetailController extends BaseController
     /**
      * 新增档案详情
      */
-    @GetMapping("/add")
-    public String add()
+    @GetMapping("/add/{documentFileId}")
+    public String add(@PathVariable("documentFileId") Long documentFileId,ModelMap modelMap)
     {
+        modelMap.put("documentFileId",documentFileId);
         return "fileDetail/add";
     }
 
@@ -84,6 +82,7 @@ public class SysFileDetailController extends BaseController
         sysFileDetail.setDocumentFileId(documentId);
         List<SysFileDetail> des = sysFileDetailService.selectSysFileDetailList(sysFileDetail);
         modelMap.put("sysFileDetail",sysFileDetail);
+        modelMap.put("documentFileId",documentId);
         return "fileDetail/detail";
     }
 
@@ -94,9 +93,9 @@ public class SysFileDetailController extends BaseController
     @Log(title = "档案详情", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysFileDetail sysFileDetail)
+    public AjaxResult addSave(SysFileDetail sysFileDetail,@RequestParam("file") MultipartFile file)
     {
-        return toAjax(sysFileDetailService.insertSysFileDetail(sysFileDetail));
+        return toAjax(sysFileDetailService.insertSysFileDetail(sysFileDetail,file));
     }
 
     /**

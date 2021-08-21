@@ -6,7 +6,14 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-detail-add">
-            <div class="form-group">
+            <input name="documentFileId" id="documentFileId" th:value="*{documentFileId}" type="hidden">
+            <div class="form-group" id="processDefinitionDiv">
+                <label class="col-sm-3 control-label is-required">文件上传：</label>
+                <div class="col-sm-8">
+                    <input name="file" class="form-control form-documentFile-add required" multiple type="file">
+                </div>
+            </div>
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">文件名称：</label>
                 <div class="col-sm-8">
                     <input name="fileName" class="form-control" type="text">
@@ -16,12 +23,6 @@
                 <label class="col-sm-3 control-label">文件路径：</label>
                 <div class="col-sm-8">
                     <input name="fileUrl" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">档案id：</label>
-                <div class="col-sm-8">
-                    <input name="documentFileId" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -47,7 +48,7 @@
                 <div class="col-sm-8">
                     <input name="viewCount" class="form-control" type="text">
                 </div>
-            </div>
+            </div>-->
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -58,8 +59,24 @@
         });
 
         function submitHandler() {
-            if ($.validate.form()) {
+           /* if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-detail-add').serialize());
+            }*/
+            if ($.validate.form()) {
+                // 处理自己的业务
+                var form = document.getElementById("form-detail-add");
+                var formdata = new FormData(form);
+                formdata.append("files", $('input[type=file]')[0]);
+                $.ajax({
+                    url: prefix + '/add',
+                    data: formdata,
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        $.operate.successCallback(result);
+                    }
+                })
             }
         }
     </script>

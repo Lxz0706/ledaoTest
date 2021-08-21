@@ -1,6 +1,11 @@
 package com.ledao.activity.controller;
 
 import java.util.List;
+
+import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.dao.SysDocumentFile;
+import com.ledao.activity.service.ISysApplyInService;
+import com.ledao.activity.service.ISysDocumentFileService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +35,12 @@ public class SysFileDetailController extends BaseController
 
     @Autowired
     private ISysFileDetailService sysFileDetailService;
+
+    @Autowired
+    private ISysDocumentFileService sysDocumentFileService;
+
+    @Autowired
+    private ISysApplyInService sysApplyInService;
 
 //    @RequiresPermissions("activity:fileDetail:view")
     @GetMapping()
@@ -77,12 +88,15 @@ public class SysFileDetailController extends BaseController
 
     @GetMapping("/detail/{documentId}")
     public String fileDetail(@PathVariable("documentId") Long documentId,ModelMap modelMap) {
+        SysDocumentFile df = sysDocumentFileService.selectSysDocumentFileById(documentId);
+        SysApplyIn in = sysApplyInService.selectSysApplyInById(df.getApplyId());
 //        查看档案附件
         SysFileDetail sysFileDetail = new SysFileDetail();
         sysFileDetail.setDocumentFileId(documentId);
         List<SysFileDetail> des = sysFileDetailService.selectSysFileDetailList(sysFileDetail);
         modelMap.put("sysFileDetail",sysFileDetail);
         modelMap.put("documentFileId",documentId);
+        modelMap.put("approveStatu",in.getApproveStatu());
         return "fileDetail/detail";
     }
 

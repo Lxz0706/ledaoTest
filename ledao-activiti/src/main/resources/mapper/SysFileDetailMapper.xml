@@ -36,6 +36,7 @@
             <if test="viewCount != null "> and view_count = #{viewCount}</if>
             <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
         </where>
+        order by create_time desc
     </select>
 
     <select id="selectSysFileDetailById" parameterType="Long" resultMap="SysFileDetailResult">

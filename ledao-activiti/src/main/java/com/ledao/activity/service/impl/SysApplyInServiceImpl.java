@@ -395,12 +395,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                             }
                         }
                         if (isAllNotReturn){
-                            sysApplyIn.setApproveStatu("7");
-                            sysApplyInEntity.setApproveStatu("7");
-                            sysApplyInEntity.setApproveUser("");
-                        }else{
                             sysApplyIn.setApproveStatu("3");
                             sysApplyInEntity.setApproveStatu("3");
+                            sysApplyInEntity.setApproveUser("");
+                        }else{
+                            sysApplyIn.setApproveStatu("7");
+                            sysApplyInEntity.setApproveStatu("7");
                             sysApplyInEntity.setApproveUser("");
                         }
                     }else if ("9".equals(sysApplyInEntity.getApproveStatu())){

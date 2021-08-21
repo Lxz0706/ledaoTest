@@ -81,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
         </where>
+        order by create_time desc
     </select>
 
     <select id="listDocumentAndDetail" parameterType="SysApplyOutDetail" resultMap="SysApplyOutDocDetailResult">
@@ -134,6 +135,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creator != null  and creator != ''"> and od.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and od.reviser = #{reviser}</if>
         </where>
+        order by od.create_time desc
     </select>
     
     <select id="selectSysApplyOutDetailById" parameterType="Long" resultMap="SysApplyOutDetailResult">

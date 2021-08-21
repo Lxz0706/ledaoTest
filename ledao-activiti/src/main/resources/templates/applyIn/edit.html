@@ -66,6 +66,10 @@
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+                   shiro:hasPermission="activity:documentFile:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                    shiro:hasPermission="activity:documentFile:remove">
                     <i class="fa fa-remove"></i> 删除
@@ -253,6 +257,7 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
+                        console.log(row)
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
                         return actions.join('');
                     }

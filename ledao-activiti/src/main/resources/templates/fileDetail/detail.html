@@ -9,6 +9,7 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <input name="documentFileId" id="documentFileId" th:value="*{documentFileId}" type="hidden">
+                    <input name="approveStatu" id="approveStatu" th:value="*{approveStatu}" type="hidden">
                     <!--<div class="select-list">
                         <ul>
                             <li>
@@ -49,7 +50,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:detail:add">
+                <a id="addFile" class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:detail:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
                <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:detail:edit">
@@ -71,8 +72,15 @@
         var removeFlag = [[${@permission.hasPermi('activity:detail:remove')}]];
         var prefix = ctx + "activity/fileDetail";
         var docfieldId = document.getElementById("documentFileId").value;
+        var approveStatu = document.getElementById("approveStatu").value;
+        var delets = document.getElementById("delets")
 
         $(function() {
+            if(approveStatu == "0" || approveStatu == "4" || approveStatu == "2") {
+                $("#addFile").attr("disabled",false);
+            } else {
+                $("#addFile").attr("disabled",true);
+            }
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add/"+docfieldId,
@@ -129,7 +137,7 @@
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.fileId + '\')"><i class="fa fa-edit"></i>预览</a> ');
                         if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
                                 || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
-                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                            actions.push('<a class="btn btn-success btn-xs" id="" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                         } else if ('pdf' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                         } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
@@ -138,7 +146,9 @@
                         } else if ('mp4' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
                         }
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2) {
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
                         return actions.join('');
                     }
                 }]
@@ -284,6 +294,10 @@
                 }
             })*/
             window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+        }
+
+        function submitHandler () {
+            $.modal.close()
         }
     </script>
 </body>

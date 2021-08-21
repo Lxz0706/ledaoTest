@@ -163,14 +163,14 @@
                 $("#isReceiveShow").show()
                 $("#isReturnedShow").show()
                 $("#isReceivedShow").show()
-                $("select,input,textarea").attr("disabled", "disabled");
-                $("#isOut").removeAttr("disabled")
+                $("select,input,textarea").attr("readonly","readonly");
+                $("#isOut").removeAttr("readonly")
             }
         }
         // 借出文档类型
-        changeIsElec(isElec)
+        // changeIsElec(isElec)
         //归还
-        changeIsReturn()
+        // changeIsReturn()
     })
     $("#form-detail-edit").validate({
         focusCleanup: true
@@ -178,6 +178,7 @@
 
     function submitHandler() {
         if ($.validate.form()) {
+            debugger
             $.operate.save(prefix + "/edit", $('#form-detail-edit').serialize());
         }
     }
@@ -195,27 +196,28 @@
         }
     }
 
-    function changeIsElec(val) {
-        console.log('类型',$("#isElec").val())
-        console.log('是否归还',$("#isReturn").val())
-        if(val == "0") {
-            $("#isReturn").val("1")
-            $("#isReturn").attr("disabled", "disabled")
-        } else {
-            $("#isReturn").removeAttr("disabled")
-        }
-        showTime()
-    }
+    // function changeIsElec(val) {
+    //     console.log('类型',$("#isElec").val())
+    //     console.log('是否归还',$("#isReturn").val())
+    //     if(val == "0") {
+    //         $("#isReturn").val("1")
+    //         $("#isReturn").attr("disabled", "disabled")
+    //     } else {
+    //         $("#isReturn").removeAttr("disabled")
+    //     }
+    //     showTime()
+    // }
 
-    function showTime() {
-        if($("#isReturn").val() == '0') {
-            $("#realReturnTime").show()
-            $("#planReturnTimeShow").show()
-        } else {
-            $("#realReturnTime").hide()
-            $("#planReturnTimeShow").hide()
-        }
-    }
+    // function showTime() {
+    //     if($("#isReturn").val() == '0') {
+    //         $("#realReturnTime").show()
+    //         $("#planReturnTimeShow").show()
+    //     } else {
+    //         $("#realReturnTime").hide()
+    //         $("#planReturnTimeShow").hide()
+    //     }
+    // }
+    // showTime()
 
     $("input[name='planReturnTime']").datetimepicker({
         format: "yyyy-mm-dd",

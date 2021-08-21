@@ -11,6 +11,7 @@
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
         <input name="applyType" th:field="*{applyType}" value="0" type="hidden">
+        <input name="approveStatu" id="approveStatu" th:field="*{approveStatu}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
@@ -102,6 +103,8 @@
         var projectName = document.getElementById("projectName")
         var debtorName = document.getElementById("debtorName")
         var applyIds = document.getElementById("applyId").value
+        var isNotChange = false
+        var approveStatu = document.getElementById("approveStatu").value;
     $(function () {
         // 管理员与档案管理员
         for(var i =0; i < roles.length;i++) {
@@ -115,6 +118,13 @@
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
+        }
+        if(approveStatu !=0 && approveStatu != 4){
+            isNotChange = false
+            if((approveStatu == 1 || approveStatu == 5) && showNames){
+            }else{
+                isNotChange = true
+            }
         }
         var options = {
             // url: 档案出库获取的list
@@ -304,10 +314,17 @@
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
-                    }
+                    },
+                    visible: !isNotChange
                 }]
         };
         $.table.init(options);
+        if(isNotChange){
+            $("input").attr("readonly","readonly");
+            $("select").attr("disabled",true);
+            $("a").attr("disabled",true);
+            $('.btn').removeAttr('onclick')
+        }
     });
 
     $("#form-applyIn-edit").validate({

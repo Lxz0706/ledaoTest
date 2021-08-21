@@ -8,9 +8,9 @@
 
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input name="appStatu" type="hidden" id="appStatu" th:value="*{appStatu}">
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
-        <input name="approveStatu" id="approveStatu" th:field="*{approveStatu}" type="hidden">
         <input name="applyType" th:field="*{applyType}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">档案类别：</label>
@@ -102,7 +102,7 @@
         var debtorName = document.getElementById("debtorName")
         var ids = document.getElementById("applyId").value
     $(function () {
-        var approveStatu = document.getElementById("approveStatu").value;
+        var appStatu = document.getElementById("appStatu").value;
 
         for(var i =0; i < roles.length;i++) {
             if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
@@ -119,9 +119,9 @@
             showNames = true
         }
         var isNotChange = false
-        if(approveStatu!=0 && approveStatu != 4){
+        if(appStatu!=0 && appStatu != 4){
             isNotChange = false
-            if((approveStatu == 1 || approveStatu == 5) && showNames){
+            if((appStatu == 1 || appStatu == 5) && showNames){
             }else{
                 isNotChange = true
             }
@@ -267,7 +267,6 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        debugger
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');

@@ -6,7 +6,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <input name="approveStatu" id="approveStatu" th:value="*{approveStatu}" type="text">
+    <input name="approveStatu" id="approveStatu" th:value="*{approveStatu}" type="hidden">
     <form class="form-horizontal m" id="form-detail-edit" th:object="${sysApplyOutDetail}">
         <input name="outDetailId" th:field="*{outDetailId}" type="hidden">
 <!--        <div class="form-group">-->
@@ -169,7 +169,7 @@
                 $("#isOut").removeAttr("readonly")
             }
         }
-        if(approveStatu == "7" || approveStatu == "8") {
+        if(approveStatu == "7" || approveStatu == "8" || approveStatu == "9") {
             $("select,input,textarea").attr("readonly","readonly");
             $("#planReturnTimeShow").show()
             $("#realReturnTime").show()
@@ -181,6 +181,8 @@
                 $("#isReceive").removeAttr("readonly")
             } else if (approveStatu == "8") {
                 $("#isReturned").removeAttr("readonly")
+            } else if (approveStatu == "9") {
+                $("#isReceived").removeAttr("readonly")
             }
 
         }

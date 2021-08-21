@@ -973,7 +973,6 @@ var table = {
             },
             // 选卡页方式打开
             openTab: function (title, url) {
-                debugger
                 createMenuItem(url, title);
             },
             // 选卡页同一页签打开

@@ -209,8 +209,10 @@ public class SysApplyInController extends BaseController
     public String editOutUpdate(@PathVariable("outDetailId") Long outDetailId,ModelMap mmap)
     {
         SysApplyOutDetail sysApplyOutDetail = sysApplyOutDetailService.selectSysApplyOutDetailById(outDetailId);
+        SysApplyIn in = sysApplyInService.selectSysApplyInById(sysApplyOutDetail.getApplyId());
         mmap.put("outDetailId",outDetailId);
         mmap.put("sysApplyOutDetail",sysApplyOutDetail);
+        mmap.put("approveStatu",in.getApproveStatu());
         return prefix + "/editOutUpdate";
     }
 

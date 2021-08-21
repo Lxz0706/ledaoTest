@@ -299,6 +299,7 @@ public class SysApplyInController extends BaseController
     public String editApplyIn(@PathVariable("applyId") Long applyId, ModelMap mmap)
     {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
+        mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
         mmap.put("sysApplyIn", sysApplyIn);
         return prefix + "/edit";
     }

@@ -57,12 +57,29 @@ public class SysApplyInController extends BaseController
     @Autowired
     private ISysApplyOutDetailService sysApplyOutDetailService;
 
-//    @RequiresPermissions("applyIn:view")
     @GetMapping("/applyIn")
     public String applyIn()
     {
         return prefix + "/applyIn";
     }
+
+
+
+//    @RequiresPermissions("applyIn:view")
+    @GetMapping("/docApplyIn")
+    public String docApplyIn()
+    {
+        return "docList/docApplyIn";
+    }
+    @GetMapping("/docEdit/{applyId}")
+    public String docEditApplyIn(@PathVariable("applyId") Long applyId, ModelMap mmap)
+    {
+        SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
+        mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
+        mmap.put("sysApplyIn", sysApplyIn);
+        return "docList/docEdit";
+    }
+
     
     @GetMapping("/applyOut")
     public String applyOut(ModelMap modelMap) {
@@ -119,6 +136,15 @@ public class SysApplyInController extends BaseController
     {
         startPage();
         sysApplyIn.setApplyUser(ShiroUtils.getLoginName());
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/docList")
+    @ResponseBody
+    public TableDataInfo docList(SysApplyIn sysApplyIn)
+    {
+        startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
         return getDataTable(list);
     }

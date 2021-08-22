@@ -100,6 +100,20 @@ public class SysFileDetailController extends BaseController
         return "fileDetail/detail";
     }
 
+    @GetMapping("/docDetail/{documentId}")
+    public String docFileDetail(@PathVariable("documentId") Long documentId,ModelMap modelMap) {
+        SysDocumentFile df = sysDocumentFileService.selectSysDocumentFileById(documentId);
+        SysApplyIn in = sysApplyInService.selectSysApplyInById(df.getApplyId());
+//        查看档案附件
+        SysFileDetail sysFileDetail = new SysFileDetail();
+        sysFileDetail.setDocumentFileId(documentId);
+        List<SysFileDetail> des = sysFileDetailService.selectSysFileDetailList(sysFileDetail);
+        modelMap.put("sysFileDetail",sysFileDetail);
+        modelMap.put("documentFileId",documentId);
+        modelMap.put("approveStatu",in.getApproveStatu());
+        return "docList/docDetail";
+    }
+
     /**
      * 新增保存档案详情
      */

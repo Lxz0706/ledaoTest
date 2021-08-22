@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <th:block th:include="include :: header('档案入库申请')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input name="appStatu" type="hidden" id="appStatu" th:value="*{appStatu}">
+    <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
+        <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
+         <input name="applyType" th:field="*{applyType}" type="hidden">
+         <div class="form-group">
+             <label class="col-sm-3 control-label">档案类别：</label>
+             <div class="col-sm-8">
+                  <select id="documentType"  name="documentType"
+                          th:with="type=${@dict.getType('sys_document_busi_type')}" data-none-selected-text="请选择"
+                          class="form-control m-b"
+                          disabled>                         
+                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                         th:field="*{documentType}">
+                 </option>
+             </select>
+             </div>
+         </div>
+         <div class="form-group" id="projectName" >
+             <label class="col-sm-3 control-label">项目名称：</label>
+             <div class="col-sm-8">
+                 <input name="projectName" th:field="*{projectName}" class="form-control" type="text">
+             </div>
+         </div>
+         <div class="form-group">
+             <label class="col-sm-3 control-label">公司名称：</label>
+             <div class="col-sm-8">
+                 <select id="companyName" name="companyName"
+                         th:with="type=${@dict.getType('sys_company_name')}"
+                         data-none-selected-text="请选择" class="form-control m-b">
+                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                             th:value="${dict.dictValue}" th:field="*{companyName}"></option>
+                 </select>
+             </div>
+         </div>
+        <div class="form-group" id="debtorName" >
+            <label class="col-sm-3 control-label">债务人名称：</label>
+            <div class="col-sm-8">
+                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">实际提交人：</label>
+            <div class="col-sm-8">
+                <input disabled name="realCreateBy" th:field="*{realCreateBy}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input name="remarks" th:field="*{remarks}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">文件列表：</label>
+            <div class="btn-group-sm" id="toolbar" role="group">
+               <!-- <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+                   shiro:hasPermission="activity:documentFile:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>-->
+               <!-- <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+                   shiro:hasPermission="activity:documentFile:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript" th:inline="javascript">
+        var prefix = ctx + "applyIn";
+        var prefixDocumentFile = ctx + "documentFile";
+        var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+        var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+        var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
+        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var roles = [[${@permission.getPrincipalProperty('roles')}]];
+        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+        var showNames = false
+        var documentTypeVal = document.getElementById("documentType").value
+        var projectName = document.getElementById("projectName")
+        var debtorName = document.getElementById("debtorName")
+        var ids = document.getElementById("applyId").value
+    $(function () {
+        var appStatu = document.getElementById("appStatu").value;
+
+        for(var i =0; i < roles.length;i++) {
+            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                showNames = true
+            }
+        }
+
+        if(documentTypeVal == "0") {
+            projectName.style.display = 'block'
+            debtorName.style.display = 'block'
+        } else {
+            projectName.style.display = 'none'
+            debtorName.style.display = 'none'
+            showNames = true
+        }
+        var isNotChange = false
+        if(appStatu!=0 && appStatu != 4){
+            isNotChange = false
+            if((appStatu == 1 || appStatu == 5) && showNames){
+            }else{
+                isNotChange = true
+            }
+        }
+        var options = {
+            url: prefixDocumentFile + "/listDocApp",
+            createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal,
+            updateUrl: prefixDocumentFile + "/edit/{id}",
+            removeUrl: prefixDocumentFile + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "档案",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'documentId',
+                    title: 'id',
+                    visible: false
+                },
+                // {
+                //     field: 'documentType',
+                //     title: '档案类别',
+                //     formatter: function(value, item, index) {
+                //         return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
+                //     }
+                // },
+                {
+                    field: 'assetPag',
+                    title: '资产包',
+                    visible: documentTypeVal == "0" ? true : false
+                },
+                {
+                    field: 'assetNumber',
+                    title: '资产编号',
+                    visible: documentTypeVal == "0" ? true : false
+                },
+                {
+                    field: 'contractNo',
+                    title: '合同编号',
+                    visible: documentTypeVal == "0" ? true : false
+                },
+                {
+                    field: 'dailyDocumentType',
+                    title: '种类',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
+                    },
+                    visible: showNames
+                },
+                {
+                    field: 'fileName',
+                    title: '文件名称'
+                },
+                {
+                    field: 'fileType',
+                    title: '附件类型',
+                    formatter: function(value, item, index) {
+                                return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
+                            }
+                },
+                {
+                    field: 'fileScanType',
+                    title: '扫描件类型',
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType));
+                    }
+                },
+                {
+                    field: 'counts',
+                    title: '份数',
+                    formatter: function(value, item, index) {
+                        return strLength(item.counts);
+                    }
+                },
+                {
+                    field: 'pages',
+                    title: '页数/时长',
+                    formatter: function(value, item, index) {
+                        return strLength(item.pages);
+                    }
+                },
+                {
+                    field: 'documentStatu',
+                    title: '档案状态',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
+                    }
+                },
+                {
+                    field: 'cabinetNo',
+                    title: '柜号',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength(item.cabinetNo);
+                    }
+                },
+                {
+                    field: 'bagNo',
+                    title: '档案袋编号',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength(item.bagNo);
+                    }
+                },
+                {
+                    field: 'documentGetType',
+                    title: '档案类型',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
+                    }
+                },
+                {
+                    field: 'fileGetType',
+                    title: '文件类型',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
+                    }
+                },
+                {
+                    field: 'documentLevel',
+                    title: '档案级别',
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentLevelDictDatas, item.fileGetType));
+                    }
+                },
+                {
+                    field: 'fileNames',
+                    title: '附件',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        console.log(row)
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
+                        return actions.join('');
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    },
+                    visible: !isNotChange
+                }]
+        };
+        $.table.init(options);
+        if(isNotChange){
+            $("input").attr("readonly","readonly");
+            $("select").attr("disabled",true);
+            $("a").attr("disabled",true);
+            $('.btn').removeAttr('onclick')
+        }
+    });
+
+    $("#form-applyIn-edit").validate({
+        focusCleanup: true
+    });
+
+    function strLength(value){
+        var str = $.common.nullToStr(value);
+        if (str.length > 10) {
+            str = str.substring(0, 10) + '...';
+        }
+        return str;
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-applyIn-edit').serialize());
+        }
+    }
+
+    $("input[name='applyTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    function addFile (id) {
+        var detail = ctx + 'activity/fileDetail'
+        var url = detail + '/docDetail/' + id;
+        $.modal.open("添加附件", url);
+    }
+</script>
+</body>
+
+</html>

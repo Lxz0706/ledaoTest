@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         app.apply_user,
         app.apply_time,
         app.approve_user,
-        WORK.approve_statu,
+        if(WORK.approve_statu=7,app.approve_statu,WORK.approve_statu) as approve_statu,
         app.real_create_by,
         app.remarks,
         app.create_by,

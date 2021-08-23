@@ -344,6 +344,15 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(sysDocumentFile);
                 if (doc==null || doc.size()==0){
                     return AjaxResult.error("无档案明细，请添加档案");
+                }else{
+                    for (SysDocumentFile d : doc){
+                        SysFileDetail sysFileDetail = new SysFileDetail();
+                        sysFileDetail.setDocumentFileId(d.getDocumentId());
+                        List<SysFileDetail> fs = fileDetailMapper.selectSysFileDetailList(sysFileDetail);
+                        if (fs==null ||fs.size()==0){
+                            return AjaxResult.error("存在档案无附件");
+                        }
+                    }
                 }
             }
             List<String> users = getApplyNextUser(sysApplyIn);

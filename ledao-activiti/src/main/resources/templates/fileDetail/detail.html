@@ -80,6 +80,7 @@
                 $("#addFile").attr("disabled",false);
             } else {
                 $("#addFile").attr("disabled",true);
+                $("#addFile").removeAttr("onclick");
             }
             var options = {
                 url: prefix + "/list",

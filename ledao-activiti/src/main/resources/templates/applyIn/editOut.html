@@ -62,7 +62,7 @@
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+                <a id="edit" class="btn btn-primary single disabled" onclick="$.operate.edit()"
                    shiro:hasPermission="activity:documentFile:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
@@ -318,10 +318,12 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        if(showNames || (appStatu == "7" || appStatu == "8") && row.createBy == loginName || (appStatu == "9" && showNames ) || appStatu == "0") {
+                        console.log(showNames)
+                        console.log(row.createBy == loginName && (appStatu == "0" || appStatu == "4" || appStatu == "2"))
+                        if(showNames || (row.createBy == loginName && (appStatu == "0" || appStatu == "4" || appStatu == "2"))) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         }
-                        if(((appStatu == "2" || appStatu == "4") && row.createBy !== loginName) || appStatu == "0") {
+                        if(row.createBy == loginName && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         }
                         return actions.join('');

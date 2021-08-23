@@ -238,7 +238,14 @@
                 },
                 {
                     field: 'files',
-                    title: '添加附件'
+                    title: '添加附件',
+                    align: 'center',
+                    // formatter: function (value, row, index) {
+                    //     var actions = [];
+                    //     console.log(row)
+                    //     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
+                    //     return actions.join('');
+                    // }
                 },
                 /*{
                     field: 'isPage',
@@ -312,10 +319,10 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        if(showNames || (appStatu == "7" || appStatu == "8") && row.createBy == loginName || (appStatu == "9" && showNames )) {
+                        if(showNames || (appStatu == "7" || appStatu == "8") && row.createBy == loginName || (appStatu == "9" && showNames ) || appStatu == "0") {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         }
-                        if((appStatu == "0" || appStatu == "2" || appStatu == "4") && row.createBy !== loginName) {
+                        if(((appStatu == "2" || appStatu == "4") && row.createBy !== loginName) || appStatu == "0") {
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         }
                         return actions.join('');
@@ -350,6 +357,12 @@
         minView: "month",
         autoclose: true
     });
+
+    // function addFile (id) {
+    //     var detail = ctx + 'activity/fileDetail'
+    //     var url = detail + '/docDetail/' + id;
+    //     $.modal.open("添加附件", url);
+    // }
 </script>
 </body>
 

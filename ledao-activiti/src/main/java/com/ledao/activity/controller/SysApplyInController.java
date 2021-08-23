@@ -228,7 +228,9 @@ public class SysApplyInController extends BaseController
     @GetMapping("/editOutList/{applyId}")
     public String editOutList(@PathVariable("applyId") Long applyId,ModelMap mmap)
     {
+        SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("applyId",applyId);
+        mmap.put("sysApplyIn",sysApplyIn);
         return prefix + "/editOutList";
     }
     @GetMapping("/editOutUpdate/{outDetailId}")

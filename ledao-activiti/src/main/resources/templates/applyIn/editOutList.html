@@ -8,10 +8,14 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <input name="applyId" id="applyId" th:value="*{applyId}" type="hidden">
-                <form id="formId">
+                <form id="formId" th:object="${sysApplyIn}" enctype="multipart/form-data">
+                    <input name="documentType" id="documentType" th:field="*{documentType}" type="hidden">
+                    <input name="companyName" id="companyName" th:field="*{companyName}" type="hidden">
+                    <input name="projectName" id="projectName" th:field="*{projectName}" type="hidden">
+                    <input name="debtorName" id="debtorName" th:field="*{debtorName}" type="hidden">
                     <div class="select-list">
                         <ul>
-                            <li>
+                            <!--<li>
                                 <label>档案类别：</label>
                                 <select id="documentType" name="documentType"
                                         th:with="type=${@dict.getType('sys_document_busi_type')}"
@@ -20,12 +24,32 @@
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
                                 </select>
+                            </li>-->
+                            <li id="assetPag">
+                                <label>资产包：</label>
+                                <input type="text" name="assetPag" />
                             </li>
-                            <li>
+                            <li id="assetNumber">
                                 <label>资产编号：</label>
-                                <input type="text" name="assetNumber"/>
+                                <input type="text" name="assetNumber" />
                             </li>
-                            <li>
+                            <li id="contractNo">
+                                <label>合同编号：</label>
+                                <input type="text" name="contractNo" />
+                            </li>
+                            <li id="dailyDocumentType">
+                                <label class="col-sm-3 control-label">种类：</label>
+                                <div class="col-sm-8">
+                                    <select id="dailyDocumentTypeSelect" name="dailyDocumentType" th:with="type=${@dict.getType('daily_document_type')}"
+                                            data-none-selected-text="请选择" class="form-control m-b" >
+                                        <option value="">请选择</option>
+                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                th:value="${dict.dictValue}" ></option>
+                                    </select>
+                                </div>
+<!--                                <input type="text" name="dailyDocumentType" />-->
+                            </li>
+                            <!--<li>
                                 <label>附件类型：</label>
                                 <select id="fileType" name="fileType"
                                         th:with="type=${@dict.getType('document_file_type')}"
@@ -82,7 +106,7 @@
                                 </select>
                             </li>
                             <li>
-                                <label>文件类型--字典项：</label>
+                                <label>文件类型&#45;&#45;字典项：</label>
                                 <select id="fileGetType" name="fileGetType"
                                         th:with="type=${@dict.getType('document_in_type')}"
                                         data-none-selected-text="请选择">
@@ -116,7 +140,7 @@
                             <li>
                                 <label>修改人名称：</label>
                                 <input type="text" name="reviser"/>
-                            </li>
+                            </li>-->
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -162,6 +186,8 @@
         var docDetailIds = ctx + "activity/outFiledetail"
         var applyId = document.getElementById("applyId").value
         var showNames = false
+        var documentType = document.getElementById("documentType").value;
+        changeDocumentType(documentType);
 
         $(function() {
             for(var i =0; i < roles.length;i++) {
@@ -340,6 +366,30 @@
                     $.operate.successCallback(result);
                 }
             })
+        }
+
+        function changeDocumentType(val) {
+            debugger
+            var assetPag = document.getElementById("assetPag")
+            var assetNumber = document.getElementById("assetNumber")
+            var contractNo = document.getElementById("contractNo")
+            var dailyDocumentType = document.getElementById("dailyDocumentType")
+            if(val === '0') {
+                assetPag.style.display = "block"
+                assetNumber.style.display = "block"
+                contractNo.style.display = "block"
+                dailyDocumentType.style.display = "none"
+            } else if(val === '1') {
+                assetPag.style.display = "none"
+                assetNumber.style.display = "none"
+                contractNo.style.display = "none"
+                dailyDocumentType.style.display = "block"
+            } else {
+                assetPag.style.display = "block"
+                assetNumber.style.display = "block"
+                contractNo.style.display = "block"
+                dailyDocumentType.style.display = "none"
+            }
         }
     </script>
 </body>

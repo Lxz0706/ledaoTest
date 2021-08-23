@@ -73,7 +73,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         app.update_time
         FROM
         sys_apply_in app,
-        ( SELECT workflow.apply_id, workflow.approve_statu FROM sys_apply_workflow workflow WHERE workflow.approve_user = #{applyUser} GROUP BY workflow.apply_id ) WORK
+        (SELECT
+        workflow.apply_id,
+        workflow.approve_statu
+        FROM sys_apply_workflow workflow ,
+        (
+        SELECT
+        MAX(a.create_time) as create_time,a.apply_id
+        FROM
+        sys_apply_workflow a
+        WHERE
+        a.approve_user = #{applyUser}
+        GROUP BY a.apply_id
+        ORDER BY
+        a.create_time desc
+        ) b
+        where workflow.create_time = b.create_time and workflow.apply_id = b.apply_id) WORK
         WHERE
         app.apply_id = WORK.apply_id
         <if test="applyType != null  and applyType != ''"> and app.apply_type = #{applyType}</if>

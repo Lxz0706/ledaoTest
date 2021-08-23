@@ -134,7 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="assetPag != null  and assetPag != ''"> and file.asset_pag = #{assetPag}</if>
             <if test="assetNumber != null  and assetNumber != ''"> and file.asset_number = #{assetNumber}</if>
             <if test="contractNo != null  and contractNo != ''"> and file.contract_no = #{contractNo}</if>
-            <if test="dailyDocumentType != null  and dailyDocumentType != ''"> and file.daily_document_type like concat('%', #{dailyDocumentType}, '%')</if>
+            <if test="dailyDocumentType != null  and dailyDocumentType != ''"> and file.daily_document_type = #{dailyDocumentType}</if>
             <if test="fileName != null  and fileName != ''"> and file.file_name like concat('%', #{fileName}, '%')</if>
             <if test="fileType != null  and fileType != ''"> and file.file_type = #{fileType}</if>
             <if test="fileScanType != null  and fileScanType != ''"> and file.file_scan_type = #{fileScanType}</if>
@@ -150,6 +150,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyId != null  and applyId != ''"> and file.apply_id = #{applyId}</if>
             <if test="creator != null  and creator != ''"> and file.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and file.reviser = #{reviser}</if>
+            <if test="companyName != null  and companyName != ''"> and app.company_name = #{companyName}</if>
+            <if test="debtorName != null  and debtorName != ''"> and app.debtor_name = #{debtorName}</if>
+            <if test="projectName != null  and projectName != ''"> and app.project_name = #{projectName}</if>
         </where>
         order by file.create_time desc
     </select>

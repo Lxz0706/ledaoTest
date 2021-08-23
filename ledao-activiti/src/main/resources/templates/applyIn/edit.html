@@ -257,7 +257,6 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        console.log(row)
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
                         return actions.join('');
                     }

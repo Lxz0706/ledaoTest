@@ -170,6 +170,16 @@
                     title: '修改人名称'
                 },
                 {
+                    field: 'erweima',
+                    title: '二维码',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)"><i class="fa fa-edit"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {

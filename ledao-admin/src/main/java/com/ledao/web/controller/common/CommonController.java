@@ -237,6 +237,52 @@ public class CommonController {
         }
     }
 
+    @GetMapping("/common/officeToPdfHand")
+    public void officeToPdfHand(String url, HttpServletResponse response) throws FileNotFoundException {
+        String newUrl = "";
+        response.setCharacterEncoding("UTF-8");
+        byte[] b = new byte[1024];
+        try {
+            //获取当前地址下的文件
+            File file = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/profile")) + url);
+            if (!file.exists()) {
+                throw new RuntimeException("源文件不存在");
+            }
+            String oldSuffix = url.substring(url.lastIndexOf(".") + 1);
+            //默认转pdf,excel转html
+            String suffix = ".pdf";
+            if ("txt".equals(oldSuffix)) {
+                charsetEnc(Global.getProfile().substring(0,Global.getProfile().indexOf("/profile")) + url, "UTF-8");
+            }
+            if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
+                suffix = ".html";
+            }
+
+            //转换的文件存放位置
+            newUrl = url.replace("." + oldSuffix, suffix);
+            File newFile = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/profile")) + newUrl);
+
+            converter.convert(file).to(newFile).execute();
+            ServletOutputStream outputStream = response.getOutputStream();
+            // 读取文件
+            InputStream in = new FileInputStream(newFile);
+            int len = 0;
+            while ((len = in.read(b)) != -1) {
+                outputStream.write(b, 0, len);
+            }
+
+            outputStream.flush();
+
+            in.close();
+            outputStream.close();
+            newFile.delete();
+        } catch (OfficeException | IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @GetMapping("/common/officeToPdf")
     public void officeToPdf(String url, HttpServletResponse response) throws FileNotFoundException {
         String newUrl = "";

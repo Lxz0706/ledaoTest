@@ -17,12 +17,12 @@ import com.ledao.common.utils.http.CommonUtil;
 public class JmsConsumer {
 	private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,sss");
 
-	@JmsListener(destination = "zyQueue1")
+	/*@JmsListener(destination = "zyQueue1")
 	public void receiveMessage1(String text) {
 		System.out.println("1接收队列消息时间：" + df.format(new Date()) + ", 接收到消息内容:" + text);
-	}
+	}*/
 
-	@JmsListener(destination = "zyQueueCommon")
+	/*@JmsListener(destination = "zyQueueCommon")
 	public void receiveMessageCommon(String dataStr) {
 		List<TemplateParam> templateParamList = new ArrayList<>();
 		try {
@@ -47,7 +47,7 @@ public class JmsConsumer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public boolean sendTemplateMsg(Template template) {
 		String token = getToken(template);

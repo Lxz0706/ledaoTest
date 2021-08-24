@@ -137,7 +137,7 @@
                         var fileType = row.fileType.toLowerCase();
                         // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.fileId + '\')"><i class="fa fa-edit"></i>预览</a> ');
                         if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
-                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
+                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType || 'xlsx' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" id="" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                         } else if ('pdf' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
@@ -281,7 +281,7 @@
                     $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                 }
             })*/
-            window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+            window.open(ctx + "common/officeToPdfHand?url=" + encodeURIComponent(url));
         }
 
         function downLoad(fileId, fileName) {

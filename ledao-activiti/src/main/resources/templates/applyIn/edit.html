@@ -9,9 +9,10 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <input name="appStatu" type="hidden" id="appStatu" th:value="*{appStatu}">
+    <input name="applyTypeUnDone" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
-        <input name="applyType" th:field="*{applyType}" type="hidden">
+        <input name="applyType" id="applyType" th:field="*{applyType}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
@@ -96,11 +97,13 @@
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
-        var showNames = false
-        var documentTypeVal = document.getElementById("documentType").value
-        var projectName = document.getElementById("projectName")
-        var debtorName = document.getElementById("debtorName")
-        var ids = document.getElementById("applyId").value
+        var showNames = false;
+        var documentTypeVal = document.getElementById("documentType").value;
+        var projectName = document.getElementById("projectName");
+        var debtorName = document.getElementById("debtorName");
+        var ids = document.getElementById("applyId").value;
+        var applyType = document.getElementById("applyType").value;
+        var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
     $(function () {
         var appStatu = document.getElementById("appStatu").value;
 
@@ -128,7 +131,7 @@
         }
         var options = {
             url: prefixDocumentFile + "/listDocApp",
-            createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal,
+            createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal + '/' + applyType + '/' + applyTypeUnDone,
             updateUrl: prefixDocumentFile + "/edit/{id}",
             removeUrl: prefixDocumentFile + "/remove",
             exportUrl: prefix + "/export",
@@ -257,7 +260,11 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
+                        if(row.fileNames == "") {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>查看附件</a> ');
+                        }
                         return actions.join('');
                     }
                 },

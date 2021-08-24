@@ -214,17 +214,17 @@
         }
     }
 
-    // function changeIsElec(val) {
-    //     console.log('类型',$("#isElec").val())
-    //     console.log('是否归还',$("#isReturn").val())
-    //     if(val == "0") {
-    //         $("#isReturn").val("1")
-    //         $("#isReturn").attr("disabled", "disabled")
-    //     } else {
-    //         $("#isReturn").removeAttr("disabled")
-    //     }
-    //     showTime()
-    // }
+    function changeIsElec(val) {
+        console.log('类型',$("#isElec").val())
+        console.log('是否归还',$("#isReturn").val())
+        if(val == "0") {
+            $("#isReturn").val("1")
+            $("#isReturn").attr("disabled", "disabled")
+        } else {
+            $("#isReturn").removeAttr("disabled")
+        }
+        // showTime()
+    }
 
     // function showTime() {
     //     if($("#isReturn").val() == '0') {

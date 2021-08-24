@@ -8,6 +8,8 @@
   <form class="form-horizontal m" id="form-applyIn-editDocumentModal" enctype="multipart/form-data">
     <input name="applyId" id="applyId" th:value="*{applyId}" type="hidden">
     <input name="documentType" id="documentType" th:value="*{documentTypeVal}" type="hidden">
+    <input name="applyType" id="applyType" th:value="*{applyType}" type="hidden">
+    <input name="applyTypeUnDone" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
     <div class="form-group" id="assetPag" style="display: none">
       <label class="col-sm-3 control-label is-required">资产包：</label>
       <div class="col-sm-8">
@@ -146,15 +148,26 @@
   var aNumber = document.getElementById("assetNumber");
   var cNo = document.getElementById("contractNo");
   var dailyDocumentType = document.getElementById("dailyDocumentType")
+  var applyType = document.getElementById("applyType").value
   for(var i = 0; i < roles.length; i++) {
-    if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
-      $("#documentStatu").show();
-      $("#cabinetNo").show();
-      $("#bagNo").show();
-      $("#documentGetType").show();
-      $("#fileGetType").show();
-      $("#documentLevel").show();
+    if(applyType == "0") {
+      $("#documentStatu").hide();
+      $("#cabinetNo").hide();
+      $("#bagNo").hide();
+      $("#documentGetType").hide();
+      $("#fileGetType").hide();
+      $("#documentLevel").hide();
+    } else {
+      if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+        $("#documentStatu").show();
+        $("#cabinetNo").show();
+        $("#bagNo").show();
+        $("#documentGetType").show();
+        $("#fileGetType").show();
+        $("#documentLevel").show();
+      }
     }
+
   }
   if(documentTypeId == "0") {
       apag.style.display = "block"

@@ -1282,9 +1282,9 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
-            editApplyInAndOut: function (id,applyType) {
+            editApplyInAndOut: function (id,applyType,applyTypeUnDone) {
                 table.set();
-                var url = "edit/" + id + '/' + applyType
+                var url = "edit/" + id + '/' + applyType + '/' + applyTypeUnDone
                 $.modal.open("修改" + table.options.modalName, url);
             },
             // 修改信息，以tab页展现

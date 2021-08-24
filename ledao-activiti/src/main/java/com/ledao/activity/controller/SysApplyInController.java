@@ -257,11 +257,31 @@ public class SysApplyInController extends BaseController
     /**
      * 新增档案入库申请
      */
-    @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}")
-    public String editDocumentModal(@PathVariable("applyId") Long applyId, @PathVariable("documentTypeVal") String documentTypeVal,ModelMap mmap)
+    @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}/{applyType}")
+    public String editDocumentModal(@PathVariable("applyId") Long applyId
+            ,@PathVariable("documentTypeVal") String documentTypeVal
+            ,@PathVariable("applyType") String applyType
+            ,ModelMap mmap)
     {
         mmap.put("applyId",applyId);
         mmap.put("documentTypeVal",documentTypeVal);
+        mmap.put("applyType",applyType);
+        return prefix + "/editDocumentModal";
+    }
+    /**
+     * 我的待办
+     */
+    @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}/{applyType}/{applyTypeUnDone}")
+    public String editDocumentModalUnDone(@PathVariable("applyId") Long applyId
+            ,@PathVariable("documentTypeVal") String documentTypeVal
+            ,@PathVariable("applyType") String applyType
+            ,@PathVariable("applyTypeUnDone") String applyTypeUnDone
+            ,ModelMap mmap)
+    {
+        mmap.put("applyId",applyId);
+        mmap.put("documentTypeVal",documentTypeVal);
+        mmap.put("applyType",applyType);
+        mmap.put("applyType",applyTypeUnDone);
         return prefix + "/editDocumentModal";
     }
 
@@ -309,12 +329,13 @@ public class SysApplyInController extends BaseController
     /**
      * 修改档案入库申请
      */
-    @GetMapping("/edit/{applyId}/{applyType}")
-    public String edit(@PathVariable("applyId") Long applyId,@PathVariable("applyType") String applyType, ModelMap mmap)
+    @GetMapping("/edit/{applyId}/{applyType}/{applyTypeUnDone}")
+    public String edit(@PathVariable("applyId") Long applyId,@PathVariable("applyType") String applyType, @PathVariable("applyTypeUnDone") String applyTypeUnDone,ModelMap mmap)
     {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
         mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
+        mmap.put("applyTypeUnDone", applyTypeUnDone);
         if ("1".equals(applyType)){
             return prefix + "/editOut";
         }

@@ -55,10 +55,10 @@
                 </a>
                <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:detail:edit">
                     <i class="fa fa-edit"></i> 修改
-                </a>
+                </a>-->
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:detail:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>-->
+                </a>
 
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -73,10 +73,18 @@
         var prefix = ctx + "activity/fileDetail";
         var docfieldId = document.getElementById("documentFileId").value;
         var approveStatu = document.getElementById("approveStatu").value;
-        var delets = document.getElementById("delets")
+        var delets = document.getElementById("delets");
+        var roles = [[${@permission.getPrincipalProperty('roles')}]];
+        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+        var showNames = false;
 
         $(function() {
-            if(approveStatu == "0" || approveStatu == "4" || approveStatu == "2") {
+            for(var i =0; i < roles.length;i++) {
+                if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                    showNames = true
+                }
+            }
+            if(approveStatu == "0" || approveStatu == "4" || approveStatu == "2" || showNames) {
                 $("#addFile").attr("disabled",false);
             } else {
                 $("#addFile").attr("disabled",true);
@@ -136,8 +144,8 @@
                         var actions = [];
                         var fileType = row.fileType.toLowerCase();
                         // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.fileId + '\')"><i class="fa fa-edit"></i>预览</a> ');
-                        if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
-                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType || 'xlsx' == fileType) {
+                        if ('doc' == fileType || 'docx' == fileType || 'xlsx' == fileType /*|| 'xls' == fileType
+                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" id="" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                         } else if ('pdf' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
@@ -147,7 +155,7 @@
                         } else if ('mp4' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
                         }
-                        if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2) {
+                        if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2 || showNames) {
                             actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         }
                         return actions.join('');

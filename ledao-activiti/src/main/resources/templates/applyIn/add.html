@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('新增档案入库申请')" />
     <th:block th:include="include :: datetimepicker-css" />
@@ -57,18 +57,262 @@
                     <input name="remarks" class="form-control" type="text">
                 </div>
             </div>
+            <div class="form-group" id="saveButton">
+                <div class="col-sm-11" style="text-align: right">
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick="saveClick()"><i class="fa fa-save"></i> 保存</a>
+                </div>
+            </div>
+            <div class="form-group"  id="showTable">
+                <label class="col-sm-3 control-label">文件列表：</label>
+                <div class="btn-group-sm" id="toolbar" role="group">
+                    <a class="btn btn-success" onclick="$.operate.addInfo()" shiro:hasPermission="activity:documentFile:add">
+                        <i class="fa fa-plus"></i> 添加
+                    </a>
+                    <a class="btn btn-primary single" onclick="$.operate.edit()"
+                       shiro:hasPermission="activity:documentFile:edit">
+                        <i class="fa fa-edit"></i> 修改
+                    </a>
+                    <a class="btn btn-danger multiple" onclick="$.operate.removeAll()"
+                       shiro:hasPermission="activity:documentFile:remove">
+                        <i class="fa fa-remove"></i> 删除
+                    </a>
+
+                </div>
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-table"></table>
+                </div>
+            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
+        var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+        var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+        var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
+        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var roles = [[${@permission.getPrincipalProperty('roles')}]];
+        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+        var showNames = false;
+        var documentTypeVal = document.getElementById("documentType").value;
         var prefix = ctx + "applyIn"
+        var prefixDocumentFile = ctx + "documentFile";
+        var ids = '';
+        var optionUrl = prefix + "/editDocumentModal/";
+        $(function () {
+            $("#showTable").hide()
+            for(var i =0; i < roles.length;i++) {
+                if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                    showNames = true
+                }
+            }
+
+        })
+
         $("#form-applyIn-add").validate({
             focusCleanup: true
         });
+
+        function init(id) {
+            console.log(id)
+            var options = {
+                url: prefixDocumentFile + "/listDocApp/" + id,
+                // createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal + '/' + applyType + '/' + applyTypeUnDone,
+                updateUrl: prefixDocumentFile + "/edit/{id}",
+                removeUrl: prefixDocumentFile + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "档案",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field: 'documentId',
+                        title: 'id',
+                        visible: false
+                    },
+                    // {
+                    //     field: 'documentType',
+                    //     title: '档案类别',
+                    //     formatter: function(value, item, index) {
+                    //         return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
+                    //     }
+                    // },
+                    {
+                        field: 'assetPag',
+                        title: '资产包',
+                        visible: documentTypeVal == "0" ? true : false
+                    },
+                    {
+                        field: 'assetNumber',
+                        title: '资产编号',
+                        visible: documentTypeVal == "0" ? true : false
+                    },
+                    {
+                        field: 'contractNo',
+                        title: '合同编号',
+                        visible: documentTypeVal == "0" ? true : false
+                    },
+                    {
+                        field: 'dailyDocumentType',
+                        title: '种类',
+                        formatter: function(value, item, index) {
+                            return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
+                        },
+                        visible: showNames
+                    },
+                    {
+                        field: 'fileName',
+                        title: '文件名称'
+                    },
+                    {
+                        field: 'fileType',
+                        title: '附件类型',
+                        formatter: function(value, item, index) {
+                            return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
+                        }
+                    },
+                    {
+                        field: 'fileScanType',
+                        title: '扫描件类型',
+                        formatter: function(value, item, index) {
+                            return strLength($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType));
+                        }
+                    },
+                    {
+                        field: 'counts',
+                        title: '份数',
+                        formatter: function(value, item, index) {
+                            return strLength(item.counts);
+                        }
+                    },
+                    {
+                        field: 'pages',
+                        title: '页数/时长',
+                        formatter: function(value, item, index) {
+                            return strLength(item.pages);
+                        }
+                    },
+                    {
+                        field: 'documentStatu',
+                        title: '档案状态',
+                        visible: showNames,
+                        formatter: function(value, item, index) {
+                            return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
+                        }
+                    },
+                    {
+                        field: 'cabinetNo',
+                        title: '柜号',
+                        visible: showNames,
+                        formatter: function(value, item, index) {
+                            return strLength(item.cabinetNo);
+                        }
+                    },
+                    {
+                        field: 'bagNo',
+                        title: '档案袋编号',
+                        visible: showNames,
+                        formatter: function(value, item, index) {
+                            return strLength(item.bagNo);
+                        }
+                    },
+                    {
+                        field: 'documentGetType',
+                        title: '档案类型',
+                        visible: showNames,
+                        formatter: function(value, item, index) {
+                            return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
+                        }
+                    },
+                    {
+                        field: 'fileGetType',
+                        title: '文件类型',
+                        visible: showNames,
+                        formatter: function(value, item, index) {
+                            return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
+                        }
+                    },
+                    {
+                        field: 'documentLevel',
+                        title: '档案级别',
+                        visible: showNames,
+                        formatter: function(value, item, index) {
+                            return strLength($.table.selectDictLabel(documentLevelDictDatas, item.fileGetType));
+                        }
+                    },
+                    {
+                        field: 'fileNames',
+                        title: '附件',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            if(row.fileNames == "") {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
+                            } else {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>查看附件</a> ');
+                            }
+                            return actions.join('');
+                        }
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            return actions.join('');
+                        }
+                    }]
+            };
+            $.table.init(options);
+        }
+
+        function saveClick(callback) {
+            if ($.validate.form()) {
+                    var data = $('#form-applyIn-add').serialize();
+                    var url = prefix + "/add";
+                    var config = {
+                        url: url,
+                        type: "post",
+                        dataType: "json",
+                        data: data,
+                        beforeSend: function () {
+                            $.modal.loading("正在处理中，请稍后...");
+                            $.modal.disable();
+                        },
+                        success: function (result) {
+                            if (typeof callback == "function") {
+                                callback(result);
+                            }
+                            if (result.code == web_status.SUCCESS) {
+                                $.modal.msgSuccess(result.msg);
+                                $("#showTable").show();
+                                $("#saveButton").hide();
+                                ids = result.data.applyId;
+                                optionUrl = prefix + "/editDocumentModal/" + ids;
+                                init(ids)
+                            } else if(result.code == web_status.WARNING) {
+                                $.modal.alertWarning(result.msg)
+                            } else {
+                                $.modal.alertError(result.msg);
+                            }
+                            $.modal.closeLoading();
+                            $.modal.enable();
+                        }
+                };
+                    $.ajax(config)
+            }
+        }
+
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-applyIn-add').serialize());
+                $.operate.save(prefix + "/add");
             }
         }
 
@@ -93,6 +337,14 @@
             autoclose: true
         });
 
+        function strLength(value){
+            var str = $.common.nullToStr(value);
+            if (str.length > 10) {
+                str = str.substring(0, 10) + '...';
+            }
+            return str;
+        }
+
         //人员树形选择器
         function selectUser() {
             var url = ctx + "system/dept/selectLeaderUser?userId=" + $("#realCreateById").val() + "&userName=" + $("#realCreateBy").val();
@@ -108,6 +360,12 @@
             $("#realCreateById").val(userIds.substr(0, userIds.length - 1));
             $("#realCreateBy").val(userNames.substr(0, userNames.length - 1));
             layer.close(layer.index);
+        }
+
+        function addFile (id) {
+            var detail = ctx + 'activity/fileDetail'
+            var url = detail + '/detail/' + id;
+            $.modal.open("添加附件", url);
         }
     </script>
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('新增档案出库申请')" />
     <th:block th:include="include :: datetimepicker-css" />
@@ -57,20 +57,313 @@
                 <input name="remarks" class="form-control" type="text">
             </div>
         </div>
+        <div class="form-group" id="saveButton">
+            <div class="col-sm-11" style="text-align: right">
+                <a class="btn btn-primary btn-rounded btn-sm" onclick="saveClick()"><i class="fa fa-save"></i> 保存</a>
+            </div>
+        </div>
+        <div class="form-group"  id="showTable">
+            <label class="col-sm-3 control-label">文件列表：</label>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addInfo()" shiro:hasPermission="activity:documentFile:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single" onclick="$.operate.edit()"
+                   shiro:hasPermission="activity:documentFile:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple" onclick="$.operate.removeAll()"
+                   shiro:hasPermission="activity:documentFile:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
 
     </form>
 </div>
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: datetimepicker-js" />
-<script type="text/javascript">
-    var prefix = ctx + "applyIn"
+<script type="text/javascript" th:inline="javascript">
+    var prefix = ctx + "applyIn";
+    var docDetailUrl = ctx + "activity/outFiledetail";
+    var documentTypeVal = document.getElementById("documentType").value;
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+    var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+    var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+    var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
+    var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
+    var showNames = false;
+    var ids = '';
+    var optionUrl = prefix + "/editOutList/";
+
+    $(function (){
+        $("#showTable").hide()
+        // 管理员与档案管理员
+        for(var i =0; i < roles.length;i++) {
+            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                showNames = true
+            }
+        }
+    })
+
     $("#form-applyIn-add").validate({
         focusCleanup: true
     });
+
+    function init(id) {
+        console.log(id)
+        var options = {
+            // url: 档案出库获取的list
+            url: docDetailUrl + "/listDocumentAndDetail/" + id,
+            // createUrl: prefix + "/editOutList/" + applyIds,
+            updateUrl: prefix + "/editOutUpdate/{id}",
+            removeUrl: docDetailUrl + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "档案出库详情记录",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'outDetailId',
+                    title: 'id',
+                    visible: false
+                },
+                // {
+                //     field: 'applyId',
+                //     title: '申请id'
+                // },
+                // {
+                //     field: 'documentId',
+                //     title: '档案id'
+                // },
+                // {
+                //     field: 'documentType',
+                //     title: '档案种类',
+                //     formatter: function(value, item, index) {
+                //         return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
+                //     }
+                // },
+                {
+                    field: 'assetPag',
+                    title: '资产包',
+                    visible: documentTypeVal == "0" ? true : false
+                },
+                {
+                    field: 'assetNumber',
+                    title: '资产编号',
+                    visible: documentTypeVal == "0" ? true : false
+                },
+                {
+                    field: 'contractNo',
+                    title: '合同编号',
+                    visible: documentTypeVal == "0" ? true : false
+                },
+                {
+                    field: 'dailyDocumentType',
+                    title: '档案种类',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
+                    }
+                },
+                {
+                    field: 'fileName',
+                    title: '文件名称'
+                },
+                {
+                    field: 'fileType',
+                    title: '附件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
+                    }
+                },
+                {
+                    field: 'fileScanType',
+                    title: '扫描件类型',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType);
+                    }
+                },
+                {
+                    field: 'counts',
+                    title: '份数'
+                },
+                {
+                    field: 'pages',
+                    title: '页数/时长'
+                },
+                {
+                    field: 'documentStatu',
+                    title: '档案状态',
+                    visible: showNames
+                },
+                {
+                    field: 'cabinetNo',
+                    title: '柜号',
+                    visible: showNames
+                },
+                {
+                    field: 'bagNo',
+                    title: '档案袋编号',
+                    visible: showNames
+                },
+                {
+                    field: 'documentGetType',
+                    title: '档案类型',
+                    visible: showNames
+                },
+                {
+                    field: 'fileGetType',
+                    title: '文件类型',
+                    visible: showNames
+                },
+                {
+                    field: 'documentLevel',
+                    title: '档案级别',
+                    visible: showNames
+                },
+                {
+                    field: 'files',
+                    title: '添加附件',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-search"></i>查看附件</a> ');
+                        return actions.join('');
+                    }
+                },
+                /*{
+                    field: 'isPage',
+                    title: '借出是否包含字纸',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(isPageDatas, value);
+                    }
+                },*/
+                {
+                    field: 'isElec',
+                    title: '借出文档类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(isElecDatas, value);
+                    }
+                },
+                {
+                    field: 'isReturn',
+                    title: '是否归还',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(isReturnDatas, value);
+                    }
+                },
+                {
+                    field: 'planReturnTime',
+                    title: '计划归还时间',
+                },
+                {
+                    field: 'realReturnTime',
+                    title: '实际归还时间',
+                },
+                {
+                    field: 'outReason',
+                    title: '出库原因'
+                },
+                // {
+                //     field: 'isOut',
+                //     title: '已出库',
+                //     formatter: function(value, row, index) {
+                //         return $.table.selectDictLabel(isOutDatas, value);
+                //     }
+                // },
+                // {
+                //     field: 'isReceive',
+                //     title: '已收到',
+                //     formatter: function(value, row, index) {
+                //         return $.table.selectDictLabel(isReceiveDatas, value);
+                //     }
+                // },
+                // {
+                //     field: 'isReturned',
+                //     title: '是否已还',
+                //     formatter: function(value, row, index) {
+                //         return $.table.selectDictLabel(isReturnedDatas, value);
+                //     }
+                // },
+                // {
+                //     field: 'isReceived',
+                //     title: '归还接受',
+                //     formatter: function(value, row, index) {
+                //         return $.table.selectDictLabel(isReceivedDatas, value);
+                //     }
+                // },
+                {
+                    field: 'remarks',
+                    title: '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function saveClick(callback) {
+        if ($.validate.form()) {
+            var data = $('#form-applyIn-add').serialize();
+            var url = prefix + "/add";
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.modal.disable();
+                },
+                success: function (result) {
+                    if (typeof callback == "function") {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        $.modal.msgSuccess(result.msg);
+                        $("#showTable").show();
+                        $("#saveButton").hide();
+                        ids = result.data.applyId;
+                        optionUrl = prefix + "/editOutList/" + ids;
+                        init(ids)
+                    } else if(result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                    $.modal.enable();
+                }
+            };
+            $.ajax(config)
+        }
+    }
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/add", $('#form-applyIn-add').serialize());
+            $.operate.save(prefix + "/add");
         }
+    }
+
+    function addFile (id) {
+        var detail = ctx + 'activity/fileDetail'
+        var url = detail + '/docDetail/' + id;
+        $.modal.open("添加附件", url);
     }
 
     function changeDocumentType(val) {

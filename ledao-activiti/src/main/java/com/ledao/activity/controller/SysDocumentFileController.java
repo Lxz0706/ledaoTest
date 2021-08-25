@@ -87,6 +87,16 @@ public class SysDocumentFileController extends BaseController
         return getDataTable(list);
     }
 
+    @PostMapping("/listDocApp/{applyId}")
+    @ResponseBody
+    public TableDataInfo listDocApp(SysDocumentFile sysDocumentFile,@PathVariable("applyId") Long applyId)
+    {
+        startPage();
+        sysDocumentFile.setApplyId(applyId);
+        List<SysDocumentFile> list = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
+        return getDataTable(list);
+    }
+
     /**
      * 导出档案列表
      */

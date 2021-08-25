@@ -1201,6 +1201,11 @@ var table = {
                 table.set();
                 $.modal.open("添加" + table.options.modalName, $.operate.addUrl(id));
             },
+            // 添加信息地址
+            addInfo: function (id) {
+                table.set();
+                $.modal.open("添加" + table.options.modalName, $.operate.addInfoUrl(id));
+            },
             // 添加信息，以tab页展现
             addTab: function (id) {
                 table.set();
@@ -1215,6 +1220,10 @@ var table = {
             // 添加访问地址
             addUrl: function (id) {
                 var url = $.common.isEmpty(id) ? table.options.createUrl.replace("{id}", "") : table.options.createUrl.replace("{id}", id);
+                return url;
+            },
+            addInfoUrl:function (id) {
+                var url = $.common.isEmpty(id) ? optionUrl.replace("{id}", "") : optionUrl.replace("{id}", id);
                 return url;
             },
             adds: function (id, ids) {
@@ -1328,6 +1337,7 @@ var table = {
                 }
                 return url;
             },
+
             // 保存信息 刷新表格
             save: function (url, data, callback) {
                 var config = {

@@ -67,6 +67,16 @@ public class SysApplyOutDetailController extends BaseController
         return getDataTable(list);
     }
 
+    @PostMapping("/listDocumentAndDetail/{applyId}")
+    @ResponseBody
+    public TableDataInfo listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail, @PathVariable("applyId") Long applyId)
+    {
+        startPage();
+        sysApplyOutDetail.setApplyId(applyId);
+        List<SysApplyOutDetail> list = sysApplyOutDetailService.listDocumentAndDetail(sysApplyOutDetail);
+        return getDataTable(list);
+    }
+
     /**
      * 导出档案出库详情记录列表
      */

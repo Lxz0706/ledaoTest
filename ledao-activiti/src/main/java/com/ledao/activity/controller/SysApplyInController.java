@@ -283,7 +283,16 @@ public class SysApplyInController extends BaseController
         mmap.put("applyId",applyId);
         mmap.put("documentTypeVal",documentTypeVal);
         mmap.put("applyType",applyType);
-        mmap.put("applyType",applyTypeUnDone);
+        mmap.put("applyTypeUnDone",applyTypeUnDone);
+        return prefix + "/editDocumentModal";
+    }
+
+    @GetMapping("/editDocumentModal/{applyId}")
+    public String editDocumentModalUnDoneAdd(@PathVariable("applyId") Long applyId,ModelMap mmap)
+    {
+        SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
+        mmap.put("documentType", sysApplyIn.getDocumentType());
+        mmap.put("applyId",applyId);
         return prefix + "/editDocumentModal";
     }
 

@@ -121,9 +121,9 @@ public class SysFileDetailController extends BaseController
     @Log(title = "档案详情", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysFileDetail sysFileDetail,@RequestParam("file") MultipartFile file)
+    public AjaxResult addSave(SysFileDetail sysFileDetail,@RequestParam("file") MultipartFile[] files)
     {
-        return toAjax(sysFileDetailService.insertSysFileDetail(sysFileDetail,file));
+        return sysFileDetailService.insertSysFileDetail(sysFileDetail,files);
     }
 
     /**

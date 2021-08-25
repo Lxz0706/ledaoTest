@@ -77,4 +77,11 @@ public interface ISysDocumentFileService
      * @return 结果
      */
     List<SysDocumentFile> selectSysDocumentFileDetailList(SysDocumentFile sysDocumentFile);
+
+    /**
+     *
+     * @param 查询详细的档案明细
+     * @return 结果
+     */
+    List<SysDocumentFile> selectSysDocumentFileTotalList(SysDocumentFile sysDocumentFile);
 }

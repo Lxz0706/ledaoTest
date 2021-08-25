@@ -95,6 +95,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by create_time desc
     </select>
+
+    <select id="selectSysDocumentFileTotalList" parameterType="SysDocumentFile" resultMap="SysDocumentFileResult">
+        <include refid="selectSysDocumentFileVo"/>
+        <where>
+            <if test="documentType != null  and documentType != ''"> and document_type = #{documentType}</if>
+            <if test="assetPag != null  and assetPag != ''"> and asset_pag = #{assetPag}</if>
+            <if test="assetNumber != null  and assetNumber != ''"> and asset_number = #{assetNumber}</if>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
+            <if test="dailyDocumentType != null  and dailyDocumentType != ''"> and daily_document_type = #{dailyDocumentType}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name = #{fileName}</if>
+            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
+            <if test="fileScanType != null  and fileScanType != ''"> and file_scan_type = #{fileScanType}</if>
+            <if test="counts != null "> and counts = #{counts}</if>
+            <if test="pages != null "> and pages = #{pages}</if>
+            <if test="documentStatu != null  and documentStatu != ''"> and document_statu = #{documentStatu}</if>
+            <if test="cabinetNo != null  and cabinetNo != ''"> and cabinet_no = #{cabinetNo}</if>
+            <if test="bagNo != null  and bagNo != ''"> and bag_no = #{bagNo}</if>
+            <if test="documentGetType != null  and documentGetType != ''"> and document_get_type = #{documentGetType}</if>
+            <if test="fileGetType != null  and fileGetType != ''"> and file_get_type = #{fileGetType}</if>
+            <if test="documentLevel != null  and documentLevel != ''"> and document_level = #{documentLevel}</if>
+            <if test="fileIds != null  and fileIds != ''"> and file_ids = #{fileIds}</if>
+            <if test="applyId != null  and applyId != ''"> and apply_id = #{applyId}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+        order by create_time desc
+    </select>
     <select id="selectSysDocumentFileDetailList" parameterType="SysDocumentFile" resultMap="SysDocumentFileDetailResult">
         SELECT
         file.document_id,

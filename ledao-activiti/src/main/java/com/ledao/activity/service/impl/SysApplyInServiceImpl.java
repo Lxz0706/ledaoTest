@@ -117,13 +117,15 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             //入库申请
             SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
             if ("0".equals(sysApplyIn.getApplyType())) {
-                if ("5".equals(sysApplyIn.getApproveStatu())){
+                /*if ("5".equals(sysApplyIn.getApproveStatu())){
                     if (StringUtils.isNotEmpty(a.getRealCreateBy())){
                         sysUser = userMapper.selectUserByLoginName(a.getRealCreateBy());
                     }
-                }
+                }*/
+                //获取申请人的个人信息
+                sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
                 //根据提交人查询是否存在直接主管
-                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
+                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && sysUser.getLoginName().equals(ShiroUtils.getLoginName())) {
                     key = "document_rk_zg";
                     SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                     //动态设置审批人员
@@ -132,7 +134,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 } else {
                     //没有直接审批人，转到档案管理员下
                     List<String> jls = getUsers("documentAdmin");
-                    users.addAll(jls);
+                    List<String> js = new ArrayList<>();
+                    for (String n: jls){
+                        if (!n.equals(a.getApplyUser())){
+                            js.add(n);
+                        }
+                    }
+                    users.addAll(js);
                     key = "document_rk_zgNo";
                 }
                 itemName = sysApplyIn.getCreator() + "提交的入库申请";
@@ -156,7 +164,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     users.addAll(jls);
                 }else if(ids.contains("zjl")){
                     List<String> jls = getUsers("documentAdmin");
-                    users.addAll(jls);
+                    List<String> js = new ArrayList<>();
+                    for (String n: jls){
+                        if (!n.equals(a.getApplyUser())){
+                            js.add(n);
+                        }
+                    }
+                    users.addAll(js);
                 }else{
                     //判断是否存在直接主管
                     if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
@@ -472,6 +486,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     sysApplyInEntity.setApproveStatu("9");
                     List<String> jls = getUsers("documentAdmin");
                     sysApplyInEntity.setApproveUser(String.join(",",jls));
+                }else if (ids.contains("flgw") && !sysApplyInEntity.getApproveUser().equals(ShiroUtils.getLoginName())){
+                    List<String> idsStr = new ArrayList<>(Arrays.asList(sysApplyInEntity.getApproveUser().split(",")));
+                    idsStr.remove(ShiroUtils.getLoginName());
+                    sysApplyInEntity.setApproveUser(String.join(",",idsStr));
+                    sysApplyInEntity.setApproveStatu("1");
                 }else{
                     //1表示审批中
                     List<String> users = getApplyNextUser(sysApplyIn);

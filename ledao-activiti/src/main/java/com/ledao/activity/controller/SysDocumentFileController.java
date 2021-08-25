@@ -10,6 +10,8 @@ import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -43,6 +45,8 @@ import javax.servlet.http.HttpSession;
 public class SysDocumentFileController extends BaseController
 {
     private String prefix = "documentFile";
+
+    private static final Logger log = LoggerFactory.getLogger(SysDocumentFileController.class);
 
     @Autowired
     private ISysDocumentFileService sysDocumentFileService;
@@ -111,6 +115,20 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult addSave(HttpSession session, SysDocumentFile sysDocumentFile, @RequestParam("files")MultipartFile[] files )
     {
+        SysDocumentFile f = new SysDocumentFile();
+        f.setAssetPag(sysDocumentFile.getAssetPag());
+        f.setAssetNumber(sysDocumentFile.getAssetNumber());
+        f.setBagNo(sysDocumentFile.getBagNo());
+        f.setDocumentType(sysDocumentFile.getDocumentType());
+        f.setDailyDocumentType(sysDocumentFile.getDailyDocumentType());
+        f.setFileName(sysDocumentFile.getFileName());
+        f.setFileType(sysDocumentFile.getFileType());
+        f.setCreateBy(ShiroUtils.getLoginName());
+        f.setFileScanType(sysDocumentFile.getFileScanType());
+        List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
+        if (ss !=null && ss.size()>0){
+            return AjaxResult.error("存在重复记录，请检查");
+        }
     	sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
         SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
         ap.setReviser(ShiroUtils.getLoginName());

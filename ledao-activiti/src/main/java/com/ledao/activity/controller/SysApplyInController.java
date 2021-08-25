@@ -1,7 +1,9 @@
 package com.ledao.activity.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ledao.activity.dao.*;
 import com.ledao.activity.service.*;
@@ -308,7 +310,10 @@ public class SysApplyInController extends BaseController
                 return AjaxResult.error("实际提交人不存在，请重新输入");
             }
         }
-        return toAjax(sysApplyInService.insertSysApplyIn(sysApplyIn));
+        sysApplyInService.insertSysApplyIn(sysApplyIn);
+        Map resMpa = new HashMap();
+        resMpa.put("applyId",sysApplyIn.getApplyId());
+        return AjaxResult.success(resMpa);
     }
     
     

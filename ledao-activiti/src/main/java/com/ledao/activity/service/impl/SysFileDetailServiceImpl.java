@@ -1,11 +1,13 @@
 package com.ledao.activity.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.ledao.common.config.Global;
 import com.ledao.common.constant.Constants;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
@@ -62,37 +64,40 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
      * @return 结果
      */
     @Override
-    public int insertSysFileDetail(SysFileDetail sysFileDetail, MultipartFile file)
+    public AjaxResult insertSysFileDetail(SysFileDetail sysFileDetail, MultipartFile[] files)
     {
         try {
-            // 上传文件路径
-            String filePath = Global.getUploadPath();
-            // 上传并返回新文件名称
-            String fileName = FileUploadUtils.upload(filePath, file, true);
-            String url = filePath + fileName;
-            sysFileDetail.setFileUrl(fileName);
-            sysFileDetail.setCreateBy(ShiroUtils.getLoginName());
-            sysFileDetail.setFileName(file.getResource().getFilename());
-//            sysFileDetail.setFileUrl(fileName.split("/document")[1]);
-            sysFileDetail.setCreateTime(new Date());
+            boolean flag = true;
+            List<MultipartFile> muFs = new ArrayList<>();
+            for (MultipartFile f : files) {
+                muFs.add(f);
+                SysFileDetail sysFile = new SysFileDetail();
+                sysFile.setFileName(f.getResource().getFilename());
+                List<SysFileDetail> fs = sysFileDetailMapper.selectSysFileDetailList(sysFile);
+                if (fs!=null && fs.size()>0){
+                    return AjaxResult.error("存在相同文件，请修改后重新上传");
+                }
+            }
+            for (MultipartFile file : muFs) {
+                // 上传文件路径
+                String filePath = Global.getUploadPath();
+                // 上传并返回新文件名称
+                String fileName = FileUploadUtils.upload(filePath, file, true);
+                String url = filePath + fileName;
+                sysFileDetail.setFileUrl(fileName);
+                sysFileDetail.setCreateBy(ShiroUtils.getLoginName());
+                sysFileDetail.setFileName(file.getResource().getFilename());
+                //            sysFileDetail.setFileUrl(fileName.split("/document")[1]);
+                sysFileDetail.setCreateTime(new Date());
+                sysFileDetail.setFileType(FileUploadUtils.getExtension(file));
+                sysFileDetailMapper.insertSysFileDetail(sysFileDetail);
+            }
 
-            //获取各类型名称及其子集
-//            String baseDir = "";
-//            try {
-//                String avatar = FileUploadUtils.upload(Global.getProfile() + "/document" + baseDir, file, false);
-//                sysFileDetail.setFileUrl(avatar);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            sysFileDetail.setFileName(fileName.substring(0, fileName.indexOf(".")));
-//            sysDocument.setFileSize((double) file.getSize());
-            sysFileDetail.setFileType(FileUploadUtils.getExtension(file));
-            sysFileDetailMapper.insertSysFileDetail(sysFileDetail);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        return 1;
+        return AjaxResult.success();
     }
 
     /**

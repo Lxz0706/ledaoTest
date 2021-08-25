@@ -131,6 +131,7 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	public int updateSysDocumentFile(SysDocumentFile sysDocumentFile) {
 		sysDocumentFile.setUpdateTime(DateUtils.getNowDate());
 		sysDocumentFile.setUpdateBy(ShiroUtils.getLoginName());
+		sysDocumentFile.setReviser(ShiroUtils.getLoginName());
 		return sysDocumentFileMapper.updateSysDocumentFile(sysDocumentFile);
 	}
 
@@ -196,5 +197,10 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
 	@Override
 	public List<SysDocumentFile> selectSysDocumentFileDetailList(SysDocumentFile sysDocumentFile) {
 		return sysDocumentFileMapper.selectSysDocumentFileDetailList(sysDocumentFile);
+	}
+
+	@Override
+	public List<SysDocumentFile> selectSysDocumentFileTotalList(SysDocumentFile sysDocumentFile) {
+		return sysDocumentFileMapper.selectSysDocumentFileTotalList(sysDocumentFile);
 	}
 }

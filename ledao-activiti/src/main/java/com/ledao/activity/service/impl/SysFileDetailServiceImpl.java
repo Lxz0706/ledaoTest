@@ -73,6 +73,7 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
                 muFs.add(f);
                 SysFileDetail sysFile = new SysFileDetail();
                 sysFile.setFileName(f.getResource().getFilename());
+                sysFile.setDocumentFileId(sysFileDetail.getDocumentFileId());
                 List<SysFileDetail> fs = sysFileDetailMapper.selectSysFileDetailList(sysFile);
                 if (fs!=null && fs.size()>0){
                     return AjaxResult.error("存在相同文件，请修改后重新上传");

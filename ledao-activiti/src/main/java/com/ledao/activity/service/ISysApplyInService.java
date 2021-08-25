@@ -95,4 +95,10 @@ public interface ISysApplyInService
      */
     List<SysApplyIn> listUnDownByMe(SysApplyIn sysApplyIn);
 
+    /**
+     * 查询明细
+     * @param sysApplyIn
+     * @return
+     */
+    List<SysApplyIn> selectSysApplyInListUser(SysApplyIn sysApplyIn);
 }

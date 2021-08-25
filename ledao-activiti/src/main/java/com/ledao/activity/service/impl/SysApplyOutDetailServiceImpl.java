@@ -100,7 +100,7 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
             }
             if (flag){
                 app.setApproveStatu("8");
-                sysApplyInMapper.updateSysApplyIn(app);
+//                sysApplyInMapper.updateSysApplyIn(app);
             }
         }else if("8".equals(app.getApproveStatu())){
             //已出库待确认
@@ -116,7 +116,7 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
             }
             if (flag){
                 app.setApproveStatu("9");
-                sysApplyInMapper.updateSysApplyIn(app);
+//                sysApplyInMapper.updateSysApplyIn(app);
             }
         }else if("9".equals(app.getApproveStatu())){
             //已出库待确认
@@ -132,12 +132,17 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
             }
             if (flag){
                 app.setApproveStatu("3");
-                sysApplyInMapper.updateSysApplyIn(app);
+//                sysApplyInMapper.updateSysApplyIn(app);
                 for (SysApplyOutDetail a :apps){
                     a.setRealReturnTime(new Date());
                     sysApplyOutDetailMapper.updateSysApplyOutDetail(a);
                 }
             }
+        }
+        if (flag){
+            app.setReviser(ShiroUtils.getLoginName());
+            app.setUpdateTime(DateUtils.getNowDate());
+            sysApplyInMapper.updateSysApplyIn(app);
         }
 
         return 1;
@@ -152,7 +157,17 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
     @Override
     public int deleteSysApplyOutDetailByIds(String ids)
     {
+        String[] ds = Convert.toStrArray(ids);
+        SysApplyOutDetail sd = sysApplyOutDetailMapper.selectSysApplyOutDetailById(Long.parseLong(ds[0]));
+        updateSysApplyIn(sd.getApplyId());
         return sysApplyOutDetailMapper.deleteSysApplyOutDetailByIds(Convert.toStrArray(ids));
+    }
+
+    public int updateSysApplyIn(Long applyId){
+        SysApplyIn ap =  sysApplyInMapper.selectSysApplyInById(applyId);
+        ap.setReviser(ShiroUtils.getLoginName());
+        ap.setUpdateTime(DateUtils.getNowDate());
+        return sysApplyInMapper.updateSysApplyIn(ap);
     }
 
     /**
@@ -187,16 +202,22 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
 
     @Override
     public AjaxResult addDocDetailIds(String ids, long applyId) {
+        String loginName = ShiroUtils.getLoginName();
+        List<SysApplyOutDetail> outs = sysApplyOutDetailMapper.selectSysApplyOutDetailByDocumentIds(applyId,Convert.toStrArray(ids),loginName);
+        if (outs!=null && outs.size()>0){
+            return AjaxResult.error("该档案已存在");
+        }
         String[] idsArr = Convert.toStrArray(ids);
         for (int i = 0; i < idsArr.length; i++){
             SysApplyOutDetail SysApplyOutDetail = new SysApplyOutDetail();
             SysApplyOutDetail.setDocumentId(Long.parseLong(idsArr[i]));
             SysApplyOutDetail.setApplyId(applyId);
-            SysApplyOutDetail.setCreateBy(ShiroUtils.getLoginName());
-            SysApplyOutDetail.setCreateBy(ShiroUtils.getLoginName());
+            SysApplyOutDetail.setCreateBy(loginName);
+            SysApplyOutDetail.setCreateBy(loginName);
             SysApplyOutDetail.setCreateTime(new Date());
             sysApplyOutDetailMapper.insertSysApplyOutDetail(SysApplyOutDetail);
         }
+        updateSysApplyIn(applyId);
         return AjaxResult.success();
     }
 }

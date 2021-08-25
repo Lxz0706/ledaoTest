@@ -132,20 +132,20 @@
                     }
                 },
                 {
-                    field: 'applyUser',
-                    title: '申请人'
+                    field: 'applyUserName',
+                    title: '实际提交人'
                 },
                 {
                     field: 'applyTime',
                     title: '申请时间'
                 },
-                {
+                /*{
                     field: 'approveUser',
                     title: '下一节点审批人',
                     formatter: function(value, item, index) {
                         return strLength(item.approveUser);
                     }
-                },
+                },*/
                 {
                     field: 'approveStatu',
                     title: '审批状态',
@@ -154,10 +154,10 @@
 		            }
                 },
                 {
-                    field: 'realCreateBy',
-                    title: '实际提交人',
+                    field: 'realCreateName',
+                    title: '代提交人',
                     formatter: function(value, item, index) {
-                        return strLength(item.realCreateBy);
+                        return strLength(item.realCreateName);
                     }
                 },
                 {
@@ -168,7 +168,7 @@
                     }
                 },
                 {
-                    field: 'reviser',
+                    field: 'reviserName',
                     title: '修改人名称'
                 },
                 {

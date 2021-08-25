@@ -67,8 +67,12 @@ public class SysApplyIn extends BaseEntity
     private String approveStatu;
 
     /** 实际提交人 */
-    @Excel(name = "实际提交人")
+    @Excel(name = "代提交人")
     private String realCreateBy;
+
+    /** 实际提交人 */
+    @Excel(name = "代提交人")
+    private String realCreateName;
 
     /** 备注 */
     @Excel(name = "备注")
@@ -85,6 +89,14 @@ public class SysApplyIn extends BaseEntity
     /** 修改人名称 */
     @Excel(name = "修改人名称")
     private String reviserName;
+
+    public String getRealCreateName() {
+        return realCreateName;
+    }
+
+    public void setRealCreateName(String realCreateName) {
+        this.realCreateName = realCreateName;
+    }
 
     public String getReviserName() {
         return reviserName;

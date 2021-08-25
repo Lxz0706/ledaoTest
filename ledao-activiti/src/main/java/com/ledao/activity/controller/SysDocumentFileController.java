@@ -119,6 +119,7 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult addSave(HttpSession session, SysDocumentFile sysDocumentFile, @RequestParam("files")MultipartFile[] files )
     {
+        String loginName = ShiroUtils.getLoginName();
         SysDocumentFile f = new SysDocumentFile();
         f.setAssetPag(sysDocumentFile.getAssetPag());
         f.setAssetNumber(sysDocumentFile.getAssetNumber());
@@ -127,12 +128,14 @@ public class SysDocumentFileController extends BaseController
         f.setDailyDocumentType(sysDocumentFile.getDailyDocumentType());
         f.setFileName(sysDocumentFile.getFileName());
         f.setFileType(sysDocumentFile.getFileType());
-        f.setCreateBy(ShiroUtils.getLoginName());
+        f.setCreateBy(loginName);
         f.setFileScanType(sysDocumentFile.getFileScanType());
         List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
         if (ss !=null && ss.size()>0){
             return AjaxResult.error("存在重复记录，请检查");
         }
+        sysDocumentFile.setReviser(loginName);
+        sysDocumentFile.setCreateBy(loginName);
     	sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
         SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
         ap.setReviser(ShiroUtils.getLoginName());
@@ -147,8 +150,8 @@ public class SysDocumentFileController extends BaseController
     public String edit(@PathVariable("documentId") Long documentId, ModelMap mmap)
     {
         SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(documentId);
-        sysDocumentFile.setCreatorName(ISysUserService.selectUserByLoginName(sysDocumentFile.getCreator()).getUserName());
-        sysDocumentFile.setReviserName(ISysUserService.selectUserByLoginName(sysDocumentFile.getReviser()).getUserName());
+//        sysDocumentFile.setCreatorName(ISysUserService.selectUserByLoginName(sysDocumentFile.getCreator()).getUserName());
+//        sysDocumentFile.setReviserName(ISysUserService.selectUserByLoginName(sysDocumentFile.getReviser()).getUserName());
         mmap.put("sysDocumentFile", sysDocumentFile);
         return prefix + "/edit";
     }

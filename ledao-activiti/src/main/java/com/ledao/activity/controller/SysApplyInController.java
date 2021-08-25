@@ -138,7 +138,7 @@ public class SysApplyInController extends BaseController
     {
         startPage();
         sysApplyIn.setApplyUser(ShiroUtils.getLoginName());
-        List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(sysApplyIn);
         return getDataTable(list);
     }
 
@@ -297,7 +297,9 @@ public class SysApplyInController extends BaseController
     public AjaxResult addSave(SysApplyIn sysApplyIn)
     {
         String userName = ShiroUtils.getLoginName();
-        sysApplyIn.setApplyUser(userName);
+        if (StringUtils.isEmpty(sysApplyIn.getApplyUser())){
+            sysApplyIn.setApplyUser(userName);
+        }
         sysApplyIn.setApplyTime(new Date());
         sysApplyIn.setCreateBy(userName);
         sysApplyIn.setCreateTime(new Date());

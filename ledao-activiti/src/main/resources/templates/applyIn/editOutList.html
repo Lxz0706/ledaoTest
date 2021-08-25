@@ -25,18 +25,18 @@
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>-->
-                            <li id="assetPag">
+                            <!--<li id="assetPag">
                                 <label>资产包：</label>
                                 <input type="text" name="assetPag" />
-                            </li>
+                            </li>-->
                             <li id="assetNumber">
                                 <label>资产编号：</label>
                                 <input type="text" name="assetNumber" />
                             </li>
-                            <li id="contractNo">
+                            <!--<li id="contractNo">
                                 <label>合同编号：</label>
                                 <input type="text" name="contractNo" />
-                            </li>
+                            </li>-->
                             <li id="dailyDocumentType">
                                 <label class="col-sm-3 control-label">种类：</label>
                                 <div class="col-sm-8">
@@ -49,7 +49,7 @@
                                 </div>
 <!--                                <input type="text" name="dailyDocumentType" />-->
                             </li>
-                            <!--<li>
+                            <li>
                                 <label>附件类型：</label>
                                 <select id="fileType" name="fileType"
                                         th:with="type=${@dict.getType('document_file_type')}"
@@ -60,6 +60,10 @@
                                 </select>
                             </li>
                             <li>
+                                <label>文件名称：</label>
+                                <input type="text" name="fileName"/>
+                            </li>
+                            <!--<li>
                                 <label>扫描件类型：</label>
                                 <select id="fileScanType" name="fileScanType"
                                         th:with="type=${@dict.getType('document_scan_type')}"
@@ -125,6 +129,7 @@
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
+
                             <li>
                                 <label>文件id：</label>
                                 <input type="text" name="fileIds"/>
@@ -218,7 +223,7 @@
                     field: 'companyName',
                     title: '公司名称',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(companyNameDictDatas, item.companyName);
+                        return $.table.tooltip(getDictStr($.table.selectDictLabel(companyNameDictDatas, item.companyName)),10);
                     }
                 },
                 {
@@ -347,6 +352,10 @@
             $.table.init(options);
         });
 
+        function getDictStr(value){
+            return value.slice(15,value.length-9);
+        }
+
         function submitHandler() {
             // if ($.validate.form()) {
             //     $.operate.save(docDetailIds + "/addDocDetailIds", $('#formId').serialize());
@@ -369,24 +378,24 @@
         }
 
         function changeDocumentType(val) {
-            var assetPag = document.getElementById("assetPag")
+            // var assetPag = document.getElementById("assetPag")
             var assetNumber = document.getElementById("assetNumber")
-            var contractNo = document.getElementById("contractNo")
+            // var contractNo = document.getElementById("contractNo")
             var dailyDocumentType = document.getElementById("dailyDocumentType")
             if(val === '0') {
-                assetPag.style.display = "block"
+                // assetPag.style.display = "block"
                 assetNumber.style.display = "block"
-                contractNo.style.display = "block"
+                // contractNo.style.display = "block"
                 dailyDocumentType.style.display = "none"
             } else if(val === '1') {
-                assetPag.style.display = "none"
+                // assetPag.style.display = "none"
                 assetNumber.style.display = "none"
-                contractNo.style.display = "none"
+                // contractNo.style.display = "none"
                 dailyDocumentType.style.display = "block"
             } else {
-                assetPag.style.display = "block"
+                // assetPag.style.display = "block"
                 assetNumber.style.display = "block"
-                contractNo.style.display = "block"
+                // contractNo.style.display = "block"
                 dailyDocumentType.style.display = "none"
             }
         }

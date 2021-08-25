@@ -26,6 +26,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="SysApplyIn" id="SysApplyInResultUser">
+        <result property="applyId"    column="apply_id"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="documentType"    column="document_type"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="debtorName"    column="debtor_name"    />
+        <result property="applyUser"    column="apply_user"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="approveUser"    column="approve_user"    />
+        <result property="approveStatu"    column="approve_statu"    />
+        <result property="realCreateBy"    column="real_create_by"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="applyUserName"    column="applyUserName"    />
+        <result property="realCreateName"    column="realCreateName"    />
+        <result property="reviserName"    column="reviserName"    />
+    </resultMap>
+
     <sql id="selectSysApplyInVo">
         select apply_id, apply_type, document_type, project_id, project_name, company_name, debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_apply_in
     </sql>
@@ -49,8 +74,55 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by create_time desc
     </select>
+
+    <select id="selectSysApplyInListUser" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
+        SELECT
+        a.apply_id,
+        a.apply_type,
+        a.document_type,
+        a.project_id,
+        a.project_name,
+        a.company_name,
+        a.debtor_name,
+        a.apply_user,
+        a.apply_time,
+        a.approve_user,
+        a.approve_statu,
+        a.real_create_by,
+        a.remarks,
+        a.create_by,
+        a.creator,
+        a.create_time,
+        a.update_by,
+        a.reviser,
+        a.update_time,
+        b.user_name as applyUserName,
+        c.user_name as realCreateName,
+        d.user_name as reviserName
+        FROM
+        sys_apply_in a
+        LEFT JOIN sys_user b ON a.apply_user = b.login_name
+        LEFT JOIN sys_user c ON a.real_create_by = c.login_name
+        LEFT JOIN sys_user d ON a.reviser = d.login_name
+        <where>
+            <if test="applyType != null  and applyType != ''"> and a.apply_type = #{applyType}</if>
+            <if test="documentType != null  and documentType != ''"> and a.document_type = #{documentType}</if>
+            <if test="projectId != null "> and a.project_id = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
+            <if test="applyUser != null  and applyUser != ''"> and a.apply_user = #{applyUser}</if>
+            <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+            <if test="approveUser != null  and approveUser != ''"> and a.approve_user = #{approveUser}</if>
+            <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
+            <if test="realCreateBy != null  and realCreateBy != ''"> and a.real_create_by = #{realCreateBy}</if>
+            <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
+        </where>
+        order by create_time desc
+    </select>
     
-    <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
+    <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
         SELECT
         app.apply_id,
         app.apply_type,
@@ -62,7 +134,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         app.apply_user,
         app.apply_time,
         app.approve_user,
-        if(WORK.approve_statu=7  || WORK.approve_statu = 8 || WORK.approve_statu = 9,app.approve_statu,WORK.approve_statu) as approve_statu,
+        IF
+        ( WORK.approve_statu = 7 || WORK.approve_statu = 8 || WORK.approve_statu = 9, app.approve_statu, WORK.approve_statu ) AS approve_statu,
         app.real_create_by,
         app.remarks,
         app.create_by,
@@ -70,57 +143,97 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         app.create_time,
         app.update_by,
         app.reviser,
-        app.update_time
+        app.update_time ,
+        ub.user_name as applyUserName,
+        uc.user_name as realCreateName,
+        ud.user_name as reviserName
         FROM
-        sys_apply_in app,
-        (SELECT
+        sys_apply_in app
+        INNER JOIN (
+        SELECT
         workflow.apply_id,
         workflow.approve_statu
-        FROM sys_apply_workflow workflow ,
+        FROM
+        sys_apply_workflow workflow,
         (
         SELECT
-        MAX(a.create_time) as create_time,a.apply_id
+        MAX( a.create_time ) AS create_time,
+        a.apply_id
         FROM
         sys_apply_workflow a
         WHERE
         a.approve_user = #{applyUser}
-        GROUP BY a.apply_id
+        GROUP BY
+        a.apply_id
         ORDER BY
-        a.create_time desc
+        a.create_time DESC
         ) b
-        where workflow.create_time = b.create_time and workflow.apply_id = b.apply_id) WORK
         WHERE
-        app.apply_id = WORK.apply_id
-        <if test="applyType != null  and applyType != ''"> and app.apply_type = #{applyType}</if>
-        <if test="documentType != null  and documentType != ''"> and app.document_type = #{documentType}</if>
-        <if test="projectId != null "> and app.project_id = #{projectId}</if>
-        <if test="projectName != null  and projectName != ''"> and app.project_name like concat('%', #{projectName}, '%')</if>
-        <if test="companyName != null  and companyName != ''"> and app.company_name like concat('%', #{companyName}, '%')</if>
-        <if test="debtorName != null  and debtorName != ''"> and app.debtor_name like concat('%', #{debtorName}, '%')</if>
-        <if test="applyTime != null "> and app.apply_time = #{applyTime}</if>
-        <if test="approveUser != null  and approveUser != ''"> and app.approve_user = #{approveUser}</if>
-        <if test="approveStatu != null  and approveStatu != ''"> and app.approve_statu = #{approveStatu}</if>
-        <if test="realCreateBy != null  and realCreateBy != ''"> and app.real_create_by = #{realCreateBy}</if>
-        <if test="creator != null  and creator != ''"> and app.creator = #{creator}</if>
-        <if test="reviser != null  and reviser != ''"> and app.reviser = #{reviser}</if>
+        workflow.create_time = b.create_time
+        AND workflow.apply_id = b.apply_id
+        ) WORK ON app.apply_id = WORK.apply_id
+        LEFT JOIN sys_user ub on app.apply_user=ub.login_name
+        LEFT JOIN sys_user uc ON app.real_create_by = uc.login_name
+        LEFT JOIN sys_user ud ON app.reviser = ud.login_name
+        <where>
+            <if test="applyType != null  and applyType != ''"> and app.apply_type = #{applyType}</if>
+            <if test="documentType != null  and documentType != ''"> and app.document_type = #{documentType}</if>
+            <if test="projectId != null "> and app.project_id = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and app.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and app.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="debtorName != null  and debtorName != ''"> and app.debtor_name like concat('%', #{debtorName}, '%')</if>
+            <if test="applyTime != null "> and app.apply_time = #{applyTime}</if>
+            <if test="approveUser != null  and approveUser != ''"> and app.approve_user = #{approveUser}</if>
+            <if test="approveStatu != null  and approveStatu != ''"> and app.approve_statu = #{approveStatu}</if>
+            <if test="realCreateBy != null  and realCreateBy != ''"> and app.real_create_by = #{realCreateBy}</if>
+            <if test="creator != null  and creator != ''"> and app.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and app.reviser = #{reviser}</if>
+        </where>
         ORDER BY app.create_time desc
     </select>
 
-    <select id="listUnDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResult">
-        <include refid="selectSysApplyInVo"/> app
-        where FIND_IN_SET( #{applyUser},app.approve_user)
-        <if test="applyType != null  and applyType != ''"> and apply_type = #{applyType}</if>
-        <if test="documentType != null  and documentType != ''"> and document_type = #{documentType}</if>
-        <if test="projectId != null "> and project_id = #{projectId}</if>
-        <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
-        <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
-        <if test="debtorName != null  and debtorName != ''"> and debtor_name like concat('%', #{debtorName}, '%')</if>
-        <if test="applyTime != null "> and apply_time = #{applyTime}</if>
-        <if test="approveStatu != null  and approveStatu != ''"> and approve_statu = #{approveStatu}</if>
-        <if test="realCreateBy != null  and realCreateBy != ''"> and real_create_by = #{realCreateBy}</if>
-        <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
-        <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
-        ORDER BY app.create_time desc
+    <select id="listUnDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
+        SELECT
+        a.apply_id,
+        a.apply_type,
+        a.document_type,
+        a.project_id,
+        a.project_name,
+        a.company_name,
+        a.debtor_name,
+        a.apply_user,
+        a.apply_time,
+        a.approve_user,
+        a.approve_statu,
+        a.real_create_by,
+        a.remarks,
+        a.create_by,
+        a.creator,
+        a.create_time,
+        a.update_by,
+        a.reviser,
+        a.update_time,
+        b.user_name as applyUserName,
+        c.user_name as realCreateName,
+        d.user_name as reviserName
+        FROM
+        sys_apply_in a
+        LEFT JOIN sys_user b ON a.apply_user = b.login_name
+        LEFT JOIN sys_user c ON a.real_create_by = c.login_name
+        LEFT JOIN sys_user d ON a.reviser = d.login_name
+        where FIND_IN_SET( #{applyUser},a.approve_user)
+        <if test="applyType != null  and applyType != ''"> and a.apply_type = #{applyType}</if>
+        <if test="documentType != null  and documentType != ''"> and a.document_type = #{documentType}</if>
+        <if test="projectId != null "> and a.project_id = #{projectId}</if>
+        <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
+        <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+        <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
+        <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+        <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
+        <if test="realCreateBy != null  and realCreateBy != ''"> and a.real_create_by = #{realCreateBy}</if>
+        <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
+        <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
+        ORDER BY a.create_time desc
     </select>
 
     <select id="selectSysApplyInById" parameterType="Long" resultMap="SysApplyInResult">

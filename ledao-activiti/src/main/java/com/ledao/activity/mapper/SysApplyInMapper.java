@@ -91,4 +91,6 @@ public interface SysApplyInMapper
      * @return 结果
      */
     List<SysApplyIn> selectSysApplyInListByIds(String[] idsArr);
+
+    List<SysApplyIn> selectSysApplyInListUser(SysApplyIn sysApplyIn);
 }

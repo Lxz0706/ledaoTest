@@ -524,6 +524,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
+    public List<SysApplyIn> selectSysApplyInListUser(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.selectSysApplyInListUser(sysApplyIn);
+    }
+
+    @Override
     public int editSave(SysApplyIn sysApplyIn) {
         sysApplyIn.setUpdateTime(new Date());
 	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);

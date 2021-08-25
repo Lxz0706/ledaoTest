@@ -142,6 +142,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysApplyOutDetailVo"/>
         where out_detail_id = #{outDetailId}
     </select>
+
+    <select id="selectSysApplyOutDetailByDocumentIds" resultMap="SysApplyOutDetailResult">
+        <include refid="selectSysApplyOutDetailVo"/>
+        where document_id in
+        <foreach item="item" collection="documentIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and create_by = #{loginName}
+        and apply_id = #{applyId}
+    </select>
         
     <insert id="insertSysApplyOutDetail" parameterType="SysApplyOutDetail" useGeneratedKeys="true" keyProperty="outDetailId">
         insert into sys_apply_out_detail

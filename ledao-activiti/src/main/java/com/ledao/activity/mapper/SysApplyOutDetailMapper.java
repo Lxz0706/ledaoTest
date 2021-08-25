@@ -2,6 +2,7 @@ package com.ledao.activity.mapper;
 
 import java.util.List;
 import com.ledao.activity.dao.SysApplyOutDetail;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 档案出库详情记录Mapper接口
@@ -74,4 +75,7 @@ public interface SysApplyOutDetailMapper
      * @return 档案出库详情记录集合
      */
     List<SysApplyOutDetail> listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail);
+
+
+    List<SysApplyOutDetail> selectSysApplyOutDetailByDocumentIds(@Param("applyId")long applyId, @Param("documentIds") String[] documentIds, @Param("loginName") String loginName);
 }

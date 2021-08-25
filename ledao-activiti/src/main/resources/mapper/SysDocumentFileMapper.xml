@@ -33,6 +33,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="SysDocumentFile" id="SysDocumentFileResultUser">
+        <result property="documentId"    column="document_id"    />
+        <result property="documentType"    column="document_type"    />
+        <result property="assetNumber"    column="asset_number"    />
+        <result property="assetPag"    column="asset_pag"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="dailyDocumentType"    column="daily_document_type"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileScanType"    column="file_scan_type"    />
+        <result property="counts"    column="counts"    />
+        <result property="pages"    column="pages"    />
+        <result property="documentStatu"    column="document_statu"    />
+        <result property="cabinetNo"    column="cabinet_no"    />
+        <result property="bagNo"    column="bag_no"    />
+        <result property="documentGetType"    column="document_get_type"    />
+        <result property="fileGetType"    column="file_get_type"    />
+        <result property="documentLevel"    column="document_level"    />
+        <result property="fileIds"    column="file_ids"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="realCreateName"    column="realCreateName"    />
+        <result property="reviserName"    column="reviserName"    />
+    </resultMap>
+
     <resultMap type="SysDocumentFile" id="SysDocumentFileDetailResult">
         <result property="documentId"    column="document_id"    />
         <result property="documentType"    column="document_type"    />
@@ -186,7 +217,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectSysDocumentFileById" parameterType="Long" resultMap="SysDocumentFileResult">
-        <include refid="selectSysDocumentFileVo"/>
+        SELECT
+            file.document_id,
+            file.document_type,
+            file.asset_pag,
+            file.asset_number,
+            file.contract_no,
+            file.daily_document_type,
+            file.file_name,
+            file.file_type,
+            file.file_scan_type,
+            file.counts,
+            file.pages,
+            file.document_statu,
+            file.cabinet_no,
+            file.bag_no,
+            file.document_get_type,
+            file.file_get_type,
+            file.document_level,
+            file.file_ids,
+            file.apply_id,
+            file.remarks,
+            file.create_by,
+            file.creator,
+            file.create_time,
+            file.update_by,
+            file.reviser,
+            file.update_time,
+            b.user_name as creatorName,
+            c.user_name as reviserName
+        from sys_document_file file
+        left join sys_user b on file.create_by=b.login_name
+        left join sys_user c on file.reviser=c.login_name
         where document_id = #{documentId}
     </select>
     <insert id="insertSysDocumentFile" parameterType="SysDocumentFile" useGeneratedKeys="true" keyProperty="documentId">

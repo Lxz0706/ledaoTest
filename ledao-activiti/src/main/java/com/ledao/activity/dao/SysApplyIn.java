@@ -49,6 +49,10 @@ public class SysApplyIn extends BaseEntity
     /** 申请人 */
     @Excel(name = "申请人")
     private String applyUser;
+    /** 申请人 */
+    @Excel(name = "申请人姓名")
+    private String applyUserName;
+
 
     /** 申请时间 */
     @Excel(name = "申请时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -77,6 +81,26 @@ public class SysApplyIn extends BaseEntity
     /** 修改人名称 */
     @Excel(name = "修改人名称")
     private String reviser;
+
+    /** 修改人名称 */
+    @Excel(name = "修改人名称")
+    private String reviserName;
+
+    public String getReviserName() {
+        return reviserName;
+    }
+
+    public void setReviserName(String reviserName) {
+        this.reviserName = reviserName;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
+    }
     
     private List<SysDocumentFile> documentFiles;
 
@@ -235,6 +259,7 @@ public class SysApplyIn extends BaseEntity
             .append("companyName", getCompanyName())
             .append("debtorName", getDebtorName())
             .append("applyUser", getApplyUser())
+            .append("applyUserName", getApplyUserName())
             .append("applyTime", getApplyTime())
             .append("approveUser", getApproveUser())
             .append("approveStatu", getApproveStatu())
@@ -245,6 +270,7 @@ public class SysApplyIn extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("reviser", getReviser())
+            .append("reviserName", getReviser())
             .append("updateTime", getUpdateTime())
             .toString();
     }

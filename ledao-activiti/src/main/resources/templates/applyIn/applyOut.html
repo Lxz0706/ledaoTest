@@ -111,14 +111,14 @@
                     field: 'projectName',
                     title: '项目名称',
                     formatter: function(value, item, index) {
-                        return strLength(item.projectName);
+                        return $.table.tooltip(item.projectName,10);
                     }
                 },
                 {
                     field: 'companyName',
                     title: '公司名称',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(companyDictDatas, item.companyName);
+                        return $.table.tooltip(getDictStr($.table.selectDictLabel(companyDictDatas, item.companyName)),10);
                     }
                 },
                 {
@@ -161,7 +161,7 @@
                     field: 'remarks',
                     title: '备注',
                     formatter: function(value, item, index) {
-                        return strLength(item.remarks);
+                        return $.table.tooltip(item.remarks,10);
                     }
                 },
                 {
@@ -190,6 +190,9 @@
         };
         $.table.init(options);
     });
+    function getDictStr(value){
+        return value.slice(15,value.length-9);
+    }
     function selectSysApplyWorkflowList(applyId){
         var url = prefix+'/applyProcess/historyList/'+applyId;
         $.modal.open("查看审批历史", url, 800, $(window).height() - 50);

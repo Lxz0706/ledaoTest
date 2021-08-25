@@ -9,6 +9,7 @@ import com.ledao.common.core.text.Convert;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
+import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,9 @@ public class SysDocumentFileController extends BaseController
 
     @Autowired
     private ISysApplyInService sysApplyInService;
+
+    @Autowired
+    private com.ledao.system.service.ISysUserService ISysUserService;
 
 //    @RequiresPermissions("activity:documentFile:view")
     @GetMapping()
@@ -143,6 +147,8 @@ public class SysDocumentFileController extends BaseController
     public String edit(@PathVariable("documentId") Long documentId, ModelMap mmap)
     {
         SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(documentId);
+        sysDocumentFile.setCreatorName(ISysUserService.selectUserByLoginName(sysDocumentFile.getCreator()).getUserName());
+        sysDocumentFile.setReviserName(ISysUserService.selectUserByLoginName(sysDocumentFile.getReviser()).getUserName());
         mmap.put("sysDocumentFile", sysDocumentFile);
         return prefix + "/edit";
     }

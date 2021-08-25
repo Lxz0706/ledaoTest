@@ -101,10 +101,15 @@ public class SysDocumentFile extends BaseEntity
     /** 创建人名称 */
     @Excel(name = "创建人名称")
     private String creator;
+    @Excel(name = "创建人名称")
+    private String creatorName;
 
     /** 修改人名称 */
     @Excel(name = "修改人名称")
     private String reviser;
+
+    @Excel(name = "修改人名称")
+    private String reviserName;
 
     /** 修改人名称 */
     @Excel(name = "附件名称")
@@ -118,6 +123,22 @@ public class SysDocumentFile extends BaseEntity
 
     @Excel(name = "债务人名称")
     private String debtorName;
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public String getReviserName() {
+        return reviserName;
+    }
+
+    public void setReviserName(String reviserName) {
+        this.reviserName = reviserName;
+    }
 
     public String getProjectName() {
         return projectName;

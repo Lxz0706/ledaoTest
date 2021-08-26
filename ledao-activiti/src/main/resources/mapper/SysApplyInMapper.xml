@@ -111,11 +111,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
             <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
             <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
-            <if test="applyUser != null  and applyUser != ''"> and a.apply_user = #{applyUser}</if>
+            <if test="applyUser != null  and applyUser != ''"> and a.apply_user = #{applyUser} or (a.real_create_by = #{applyUser} and a.approve_statu='0')</if>
             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
             <if test="approveUser != null  and approveUser != ''"> and a.approve_user = #{approveUser}</if>
             <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
-            <if test="realCreateBy != null  and realCreateBy != ''"> and a.real_create_by = #{realCreateBy}</if>
             <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
         </where>

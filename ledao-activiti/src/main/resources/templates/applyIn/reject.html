@@ -32,18 +32,26 @@
             var docId = document.getElementById("form-applyIn-add");
             var formData = new FormData(docId);
             var rejectmak = formData.get("realCreateBy");
+            // var rejectmak = $("#textReject").val();
             var applyType = formData.get("applyType");
             var id = document.getElementById("applyId").value;
-            var data = {"applyId": id, "approveStatu": "2","applyType": applyType,"remarks": rejectmak}
+            var approveStatu = document.getElementById("approveStatu").value;
+            var data = {"applyId": id, "approveStatu": approveStatu,"applyType": applyType,"remarks": rejectmak}
             $.ajax({
                 url: prefix + "/applyEditSave",
                 data: data,
                 type: "post",
                 dataType: "json",
                 success: function(result) {
-                    $.modal.confirm("确认要驳回本条数据吗?", function () {
-                        $.operate.successCallback(result);
-                    })
+                    if(approveStatu == "2") {
+                        $.modal.confirm("确认通过本条数据吗?", function () {
+                            $.operate.successCallback(result);
+                        })
+                    } else {
+                        $.modal.confirm("确认驳回本条数据吗?", function () {
+                            $.operate.successCallback(result);
+                        })
+                    }
                 }
             })
         }

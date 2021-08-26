@@ -414,7 +414,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         // 如果时间为空则默认当前时间
         Date date = null;
         SimpleDateFormat format = new SimpleDateFormat(formatStr);
-        if (dateStr != null && !dateStr.equals("")) {
+        if (dateStr != null && !"".equals(dateStr)) {
             String time = "";
             try {
                 Date dateTwo = format.parse(dateStr);

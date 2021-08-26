@@ -16,10 +16,13 @@
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="fwProjectType" column="fw_project_type"/>
+        <result property="projectZckType" column="project_zck_type"/>
+
     </resultMap>
 
     <sql id="selectSysProjectZckVo">
-        select project_zck_id, zck_name, zck_status, del_flag, create_by, create_time, update_by, update_time,start_time,end_time, fw_project_type from sys_project_zck
+        select project_zck_id, zck_name, zck_status, del_flag, create_by, create_time, update_by, update_time,
+        start_time,end_time, fw_project_type,project_zck_type  from sys_project_zck
     </sql>
 
     <select id="selectSysProjectZckList" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
@@ -29,6 +32,7 @@
             <if test="zckName != null  and zckName != ''">and zck_name like concat('%', #{zckName}, '%')</if>
             <if test="zckStatus != null  and zckStatus != ''">and zck_status = #{zckStatus}</if>
             <if test="fwProjectType != null  and fwProjectType != ''">and fw_project_type = #{fwProjectType}</if>
+            <if test="projectZckType != null  and projectZckType != ''">and project_zck_type = #{projectZckType}</if>
         </where>
     </select>
 
@@ -50,6 +54,7 @@
             <if test="startTime !=null">start_time,</if>
             <if test="endTime !=null">end_time,</if>
             <if test="fwProjectType != null">fw_project_type,</if>
+            <if test="projectZckType != null">project_zck_type,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="zckName != null">#{zckName},</if>
@@ -62,6 +67,7 @@
             <if test="startTime !=null">#{startTime},</if>
             <if test="endTime !=null">#{endTime},</if>
             <if test="fwProjectType != null">#{fwProjectType},</if>
+            <if test="projectZckType != null">#{projectZckType},</if>
         </trim>
     </insert>
 
@@ -78,6 +84,7 @@
             <if test="startTime !=null">start_time = #{startTime},</if>
             <if test="endTime !=null">end_time = #{endTime},</if>
             <if test="fwProjectType != null">fw_project_type = #{fwProjectType},</if>
+            <if test="projectZckType != null">project_zck_type = #{projectZckType},</if>
         </trim>
         where project_zck_id = #{projectZckId}
     </update>
@@ -99,6 +106,16 @@
         <foreach item="projectZckId" collection="array" open="(" separator="," close=")">
             #{projectZckId}
         </foreach>
+    </select>
+
+    <select id="selectSysProjectZckByType" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
+        SELECT COALESCE (dict_label) as dictLable,COALESCE(dict_value) as project_zck_type,GROUP_CONCAT(project_zck_id) as projectZckIds FROM sys_project_zck t1
+        LEFT JOIN sys_dict_data t2 ON t1.project_zck_type=t2.dict_value	WHERE  del_flag='0' GROUP BY project_zck_type
+    </select>
+
+    <select id="selectProjectZckGroupByType" parameterType="String" resultMap="SysProjectZckResult">
+        SELECT COALESCE (`zck_status`) as zck_status, COUNT(`zck_status`) as zckStatusCount FROM sys_project_zck
+        WHERE project_zck_type=#{projectZckType} AND del_flag='0' GROUP BY zck_status
     </select>
 
 </mapper>

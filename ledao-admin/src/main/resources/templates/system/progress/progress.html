@@ -9,7 +9,10 @@
         <div class="col-sm-12 search-collapse">
             <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
             <input id="zckName" th:value="*{projectZckName}" type="hidden">
-            <input type="hidden" id="type" th:value="*{type}">
+            <input id="type" th:value="*{type}" type="hidden">
+            <input id="projectZckType" th:value="*{projectZckType}" type="hidden">
+            <input id="otherFlag" th:value="*{otherFlag}" type="hidden">
+            <input id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -22,6 +25,9 @@
                         </li>-->
                     </ul>
                 </div>
+            </form>
+            <form id="toProject">
+                <input type="hidden" name="projectName" id="projectName" th:value="${projectName}"/>
             </form>
         </div>
 
@@ -127,19 +133,39 @@
 
     function back() {
         var projectFlag = $("#project").val();
-        if ("Y" == projectFlag) {
-            var projectZckId = $("#projectZckId").val();
-            var url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId;
-            $.modal.parentTab($("#zckName").val() + "列表", url);
-        } else {
-            var type = $("#type").val();
-            var url = "";
-            if ("服务类项目" == type) {
-                url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
-            } else if ("自投类项目" == type) {
-                url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectTypes/' + type;
+        var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
+        var zckName = $("#zckName").val();
+        var type = $("#type").val();
+        var projectName = $("#projectName").val();
+        var url = "";
+        var title = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#zckName").val() + "列表";
             }
-            $.modal.parentTab(type + "列表", url);
+        } else {
+            if ("Y" == projectFlag) {
+                url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val();
+                title = zckName + "列表";
+            } else {
+                if ("服务类项目" == type) {
+                    url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+                } else if ("自投类项目" == type) {
+                    url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectTypes/' + type;
+                }
+                title = type + "列表";
+            }
+        }
+        if ($.common.isNotEmpty(projectName)) {
+            var data = $("#toProject").serialize();
+            $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+        } else {
+            $.modal.parentTab(title, url);
         }
     }
 </script>

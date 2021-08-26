@@ -9,148 +9,11 @@
         <div class="col-sm-12 search-collapse">
             <input type="hidden" name="zckName" id="zckName" th:value="*{zckName}"/>
             <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
+            <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+            <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
             <form id="formId">
                 <input type="hidden" name="projectZckId" id="projectZckId" th:value="*{projectZckId}"/>
                 <input type="hidden" name="projectId" id="projectId" th:value="*{projectId}"/>
-                <!--<div class="select-list">
-                    <ul>
-                        <li>
-                            <label>借款人名称：</label>
-                            <input type="text" name="projectName"/>
-                        </li>
-                        <li>
-                            <label>资产包状态：</label>
-                            <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_collateraType')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            <label>序号：</label>
-                            <input type="text" name="no"/>
-                        </li>
-                        <li>
-                            <label>借款人名称：</label>
-                            <input type="text" name="borrower"/>
-                        </li>
-                        <li>
-                            <label>城市/地区：</label>
-                            <input type="text" name="city"/>
-                        </li>
-                        <li>
-                            <label>放款银行：</label>
-                            <input type="text" name="loanBank"/>
-                        </li>
-                        <li>
-                            <label>合同本金(元)：</label>
-                            <input type="text" name="contractPrincipal"/>
-                        </li>
-                        <li>
-                            <label>本金余额(元)：</label>
-                            <input type="text" name="principalBalance"/>
-                        </li>
-                        <li>
-                            <label>利息金额(元)：</label>
-                            <input type="text" name="interestBalance"/>
-                        </li>
-                        <li>
-                            <label>本息余额(元)：</label>
-                            <input type="text" name="principalInterestBalance"/>
-                        </li>
-                        <li>
-                            <label>项目经理：</label>
-                            <input type="text" name="projectManager"/>
-                        </li>
-                        <li>
-                            <label>项目经理ID：</label>
-                            <input type="text" name="userId"/>
-                        </li>
-                        <li>
-                            <label>司法状态：</label>
-                            <select name="judicialStatus">
-                                <option value="">所有</option>
-                                <option value="-1">代码生成请选择字典属性</option>
-                            </select>
-                        </li>
-                        <li>
-                            <label>司法状态备注：</label>
-                            <input type="text" name="judicialRemarks"/>
-                        </li>
-                        <li>
-                            <label>成交类型：</label>
-                            <select name="transactionType">
-                                <option value="">所有</option>
-                                <option value="-1">代码生成请选择字典属性</option>
-                            </select>
-                        </li>
-                        <li>
-                            <label>买家：</label>
-                            <input type="text" name="buyer"/>
-                        </li>
-                        <li>
-                            <label>买家ID：</label>
-                            <input type="text" name="buyerId"/>
-                        </li>
-                        <li class="select-time">
-                            <label>查封日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSealUpDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSealUpDate]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>起诉立案日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDateFiling]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDateFiling]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>执行立案日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEnforcementFilingDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEnforcementFilingDate]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>出具评估报告日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginAppraisalReportDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endAppraisalReportDate]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>第一次挂拍日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginFirstShotDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endFirstShotDate]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>第二次挂拍日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSecondShotDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSecondShotDate]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>变卖挂拍日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSellShotDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSellShotDate]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>拍卖成交日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSuccessfulBidderDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSuccessfulBidderDate]"/>
-                        </li>
-                        <li class="select-time">
-                            <label>执行款到账日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPaymentReceivedDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endPaymentReceivedDate]"/>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
-                    </ul>
-                </div>-->
             </form>
         </div>
 
@@ -257,7 +120,11 @@
 
     /*债权情况-详细*/
     function detail(id, index) {
-        var url = prefix + '/detail/' + id + "/" + index + "/" + $("#projectId").val();
+        var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
+        var url = prefix + '/detail?id=' + id + "&ids=" + index + "&pId=" + $("#projectId").val()
+            + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
         var title = "";
         if (1 == index) {
             title = "债权情况详细";
@@ -313,7 +180,13 @@
     function back() {
         var projectZckId = $("#projectZckId").val();
         var fwProjectType = $("#fwProjectType").val();
-        var url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&fwProjectType=" + fwProjectType;
+        var otherFlag = $("#otherFlag").val();
+        var url = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+        } else {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val();
+        }
         $.modal.parentTab($("#zckName").val() + "列表", url);
     }
 

@@ -10,9 +10,15 @@
             <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
             <input id="zckName" th:value="*{projectZckName}" type="hidden">
             <input type="hidden" id="type" th:value="*{type}">
+            <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+            <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+            <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
             <form id="formId">
                 <input type="hidden" name="projectId" id="projectId" th:value="*{projectId}"/>
                 <input type="hidden" name="project" id="project" th:value="*{project}"/>
+            </form>
+            <form id="toProject">
+                <input type="hidden" name="projectName" id="projectName" th:value="${projectName}"/>
             </form>
         </div>
 
@@ -113,16 +119,49 @@
 
     function back() {
         var projectFlag = $("#project").val();
-        if ("Y" == projectFlag) {
-            var projectZckId = $("#projectZckId").val();
-            var url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId;
-            $.modal.parentTab($("#zckName").val() + "列表", url);
+        var type = $("#type").val();
+        var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
+        var projectName = $("#projectName").val();
+        var projectZckType = $("#projectZckType").val();
+        var title = '';
+        var url = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + projectZckType + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#zckName").val() + "列表";
+            }
         } else {
-            var type = $("#type").val();
-            var url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
-            $.modal.parentTab(type + "列表", url);
+            if ("Y" == projectFlag) {
+                if ($.common.isNotEmpty(projectName)) {
+                    url = ctx + "system/project/queryAll";
+                    title = '查询界面';
+                } else {
+                    url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + projectZckType;
+                    if ("otherProject" == fwProjectType) {
+                        title = '其他项目列表';
+                    } else {
+                        title = $("#zckName").val() + "列表";
+                    }
+                }
+            } else {
+                url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+                title = $("#zckName").val() + "列表";
+            }
         }
+
+        if ($.common.isNotEmpty(projectName)) {
+            var data = $("#toProject").serialize();
+            $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+        } else {
+            $.modal.parentTab(title, url);
+        }
+
     }
+
 </script>
 </body>
 </html>

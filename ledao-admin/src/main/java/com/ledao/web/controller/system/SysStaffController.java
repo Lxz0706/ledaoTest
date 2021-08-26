@@ -1,5 +1,6 @@
 package com.ledao.web.controller.system;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,10 +8,13 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.config.Global;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.SysDepartment;
+import com.ledao.system.dao.SysProjectUncollectedMoney;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysDepartmentService;
 import com.ledao.system.service.ISysDictDataService;
@@ -18,11 +22,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.system.dao.SysStaff;
@@ -31,6 +31,7 @@ import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 员工信息Controller
@@ -64,6 +65,17 @@ public class SysStaffController extends BaseController {
     public TableDataInfo list(SysStaff sysStaff) {
         startPage();
         List<SysStaff> list = sysStaffService.selectSysStaffList(sysStaff);
+        for (SysStaff sysStaff1 : list) {
+            logger.info(sysStaff1.getContact1() + "======" + sysStaff1.getContact2());
+            if (StringUtils.isNotEmpty(sysStaff1.getContact1()) && StringUtils.isNotEmpty(sysStaff1.getContact2())) {
+                sysStaff1.setContact1(sysStaff1.getContact1() + ";" + sysStaff1.getContact2());
+            } else if (StringUtils.isNotEmpty(sysStaff1.getContact2()) && StringUtils.isEmpty(sysStaff1.getContact1())) {
+                sysStaff1.setContact1(sysStaff1.getContact2());
+            }
+            if (StringUtils.isNotEmpty(sysStaff1.getResumeUrl())) {
+                sysStaff1.setFileCount(Long.valueOf(sysStaff1.getResumeUrl().split(";").length));
+            }
+        }
         return getDataTable(list);
     }
 
@@ -95,7 +107,7 @@ public class SysStaffController extends BaseController {
     @Log(title = "员工信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysStaff sysStaff) {
+    public AjaxResult addSave(SysStaff sysStaff) throws IOException {
         sysStaff.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysStaffService.insertSysStaff(sysStaff));
     }
@@ -128,8 +140,48 @@ public class SysStaffController extends BaseController {
             }
         }
         sysStaff.setUpdateBy(ShiroUtils.getLoginName());
+
         return toAjax(sysStaffService.updateSysStaff(sysStaff));
     }
+
+    @PostMapping("/editResume")
+    @ResponseBody
+    public AjaxResult editResume(SysStaff sysStaff, @RequestParam("resume") MultipartFile resume) throws IOException {
+        SysStaff sysStaff1 = sysStaffService.selectSysStaffById(sysStaff.getStaffId());
+        String avatar = FileUploadUtils.upload(Global.getProfile() + "/staff", resume, false);
+        if (StringUtils.isNotEmpty(sysStaff1.getResumeUrl())) {
+            if (!sysStaff1.getResumeUrl().contains(resume.getOriginalFilename())) {
+                sysStaff1.setResumeUrl(avatar + ";" + sysStaff1.getResumeUrl());
+            }
+        } else {
+            sysStaff1.setResumeUrl(avatar);
+        }
+        sysStaffService.updateSysStaff(sysStaff1);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/removeResume")
+    @ResponseBody
+    public AjaxResult removeResume(@RequestParam("staffId") Long staffId, @RequestParam("resumeUrls") String resumeUrls) {
+        logger.info("文件长度：========" + resumeUrls);
+        SysStaff sysStaff = sysStaffService.selectSysStaffById(staffId);
+        for (String string : resumeUrls.split(",")) {
+            if (StringUtils.isNotNull(string)) {
+                StringBuffer sb = new StringBuffer();
+                if (StringUtils.isNotEmpty(sysStaff.getResumeUrl())) {
+                    for (String string1 : sysStaff.getResumeUrl().split(";")) {
+                        if (!string.equals(StringUtils.substringAfterLast(string1, "/"))) {
+                            sb.append(string1).append(";");
+                        }
+                    }
+                }
+                sysStaff.setResumeUrl(sb.toString());
+                sysStaffService.updateSysStaff(sysStaff);
+            }
+        }
+        return AjaxResult.success();
+    }
+
 
     /**
      * 删除员工信息
@@ -261,5 +313,31 @@ public class SysStaffController extends BaseController {
             sysDepartment1.setDepartmentName(sysDepartmentList.get(0).getDepartmentName());
         }
         return AjaxResult.success(sysDepartment1);
+    }
+
+    @GetMapping("/toUpload")
+    public String toUpload(Long staffId, ModelMap modelMap) {
+        modelMap.put("sysStaff", sysStaffService.selectSysStaffById(staffId));
+        return prefix + "/uploadResume";
+    }
+
+    @PostMapping("/removeFile")
+    @ResponseBody
+    public AjaxResult removeImg(Long id, String fileName) {
+        SysStaff sysStaff = sysStaffService.selectSysStaffById(id);
+        logger.info(sysStaff.getResumeUrl());
+        if (StringUtils.isNotNull(fileName)) {
+            StringBuffer sb = new StringBuffer();
+            if (StringUtils.isNotEmpty(sysStaff.getResumeUrl())) {
+                for (String string1 : sysStaff.getResumeUrl().split(";")) {
+                    if (!fileName.equals(StringUtils.substringAfterLast(string1, "/"))) {
+                        sb.append(string1).append(";");
+                    }
+                }
+            }
+            sysStaff.setResumeUrl(sb.toString());
+            sysStaffService.updateSysStaff(sysStaff);
+        }
+        return success();
     }
 }

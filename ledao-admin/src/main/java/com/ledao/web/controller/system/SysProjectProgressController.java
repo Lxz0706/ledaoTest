@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysProject;
+import com.ledao.system.dao.SysProjectZck;
 import com.ledao.system.dao.SysProjectmanagent;
 import com.ledao.system.service.ISysProjectService;
 import com.ledao.system.service.ISysProjectZckService;
@@ -65,16 +66,32 @@ public class SysProjectProgressController extends BaseController {
     }
 
     @RequiresPermissions("system:projectmanagent:list")
-    @GetMapping("/progressLists/{projectManagementId}/{project}")
-    public String selectProjectProgressByProjectIds(@PathVariable("projectManagementId") String projectManagementId, @PathVariable("project") String project, ModelMap modelMap) {
+    @GetMapping("/progressLists")
+    public String selectProjectProgressByProjectIds(String projectManagementId, String project, String projectZckType, String fwProjectType, String otherFlag, String projectName, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
         modelMap.put("project", project);
+        modelMap.put("projectName", projectName);
         if ("Y".equals(project)) {
-            modelMap.put("projectZckId", sysProjectService.selectSysProjectById(Long.valueOf(projectManagementId)).getProjectZckId());
-            modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectManagementId)).getProjectZckId()).getZckName());
-        }else{
+            SysProject sysProject1 = sysProjectService.selectSysProjectById(Long.valueOf(projectManagementId));
+            if (StringUtils.isNotNull(sysProject1) && StringUtils.isNotNull(sysProject1.getProjectZckId())) {
+                SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+                if (StringUtils.isNotNull(sysProjectZck)) {
+                    if (StringUtils.isNotNull(sysProjectZck.getZckName())) {
+                        modelMap.put("projectZckName", sysProjectZck.getZckName());
+                    }
+                    if (StringUtils.isNotNull(sysProjectZck.getProjectZckId())) {
+                        modelMap.put("projectZckId", sysProjectZck.getProjectZckId());
+                    }
+                }
+            }
+            //modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectManagementId)).getProjectZckId()).getZckName());
+        } else {
             modelMap.put("type", sysProjectmanagentService.selectSysProjectmanagentById(Long.valueOf(projectManagementId)).getProjectType());
         }
+
+        modelMap.put("otherFlag", otherFlag);
+        modelMap.put("fwProjectType", fwProjectType);
+        modelMap.put("projectZckType", projectZckType);
         return "system/progress/progress";
     }
 

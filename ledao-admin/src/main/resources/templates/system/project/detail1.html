@@ -5,6 +5,9 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+    <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+    <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
     <div align="center">
         <div align="left">
             <form class="form-horizontal m-t" id="signupForm">
@@ -72,7 +75,7 @@
     </div>
     <div class="row">
         <div class="col-sm-offset-5 col-sm-10">
-            <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返  回</button>&nbsp;
+            <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回</button>&nbsp;
         </div>
     </div>
 </div>
@@ -80,9 +83,21 @@
 <script>
     function back() {
         var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
         var pId = $("#pId").val();
-        var url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId;
-        $.modal.parentTab($("#projectZckName").val() + "列表", url);
+        var url = url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+        var title = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#projectZckName").val() + "列表";
+            }
+        } else {
+            title = $("#projectZckName").val() + "列表";
+        }
+        $.modal.parentTab(title, url);
     }
 </script>
 </body>

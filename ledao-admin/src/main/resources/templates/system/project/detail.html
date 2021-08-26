@@ -5,19 +5,23 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+    <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+    <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
     <table class="table table-border">
         <input id="createBy" th:field="${sysProject.isCreate}" type="hidden">
         <input id="projectId" th:field="${sysProject.projectId}" type="hidden">
         <input id="projectZckId" th:field="${sysProject.projectZckId}" type="hidden">
         <input id="projectZckName" th:field="${sysProject.projectZckName}" type="hidden">
         <input id="pId" th:field="${sysProject.pId}" type="hidden">
+        <input id="openTime" th:field="${sysProject.openTime}" type="hidden">
         <tr>
             <td colspan="8" style="text-align: center" class="success"><h3>债权情况</h3></td>
         </tr>
         <tr>
-            <td class="col-sm-1 text-right">序号:</td>
+            <td class="col-sm-1 text-right"><h5>序号:</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.no}"/></td>
-            <td class="col-sm-1 text-right">借款人名称：</td>
+            <td class="col-sm-1 text-right"><h5>借款人名称：</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.projectName}"/></td>
             <td class="col-sm-1 text-right"><h5>城市/名称:</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.city}"/></td>
@@ -100,7 +104,7 @@
             <td class="col-sm-1 text-right"><h5>第一次挂拍日期：</h5></td>
             <td class="col-sm-1"><span th:text="${#dates.format(sysProject.firstShotDate, 'yyyy-MM-dd')}"/></td>
         </tr>
-        <tr id="create1">
+        <tr>
             <td class="col-sm-1 text-right"><h5>第二次挂拍日期：</h5></td>
             <td class="col-sm-1"><span th:text="${#dates.format(sysProject.secondShotDate, 'yyyy-MM-dd')}"/></td>
             <td class="col-sm-1 text-right"><h5>变卖挂拍日期：</h5></td>
@@ -110,11 +114,16 @@
             <td class="col-sm-1 text-right"><h5>执行款到账日期：</h5></td>
             <td class="col-sm-1"><span th:text="${#dates.format(sysProject.paymentReceivedDate, 'yyyy-MM-dd')}"/></td>
         </tr>
-        <!--<tr id="create1"><td colspan="8" style="text-align: center" class="success"><h3>成交信息</h3></td></tr>-->
+        <tr>
+            <td class="col-sm-1 text-right"><h5>开庭时间：</h5></td>
+            <td class="col-sm-1" colspan="7" id="addNum"></td>
+        </tr>
+        <tr id="create1"></tr>
     </table>
     <div class="row">
         <div class="col-sm-offset-5 col-sm-10">
-            <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回</button>&nbsp;
+            <button id="back" type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回
+            </button>&nbsp;
         </div>
     </div>
 </div>
@@ -123,6 +132,11 @@
     $(function () {
         var createBy = $("#createBy").val();
         var projectId = $("#projectId").val();
+        var pId = $("#pId").val();
+        // var openTime = $("#openTime").val();
+        if ($.common.isEmpty(pId)) {
+            $("#back").hide();
+        }
         /*if ("true" == createBy) {
            // $("#create1").show();
             $.ajax({
@@ -163,7 +177,6 @@
             dataType: "JSON",
             success: function (result) {
                 var arr = result.sysPcustomerList;
-                console.log(result.isCreateBy);
                 var str = "<tr><td colspan=\"8\" style=\"text-align: center\" class=\"success\"><h3>成交信息</h3></td></tr>";
                 var num = 0;
                 for (var i = 0; i < result.sysPcustomerList.length; i++) {
@@ -191,6 +204,7 @@
                 $("#create1").after(str);
             }
         });
+        openTime($("#openTime").val());
     })
 
     function toCustomer(customerId) {
@@ -198,11 +212,55 @@
         $.modal.opens('客户详情', url);
     }
 
+/*    function back() {
+        var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
+        var pId = $("#pId").val();
+        var url = '';
+        var title = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#zckName").val() + "列表";
+            }
+        } else {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val();
+            title = $("#zckName").val() + "列表";
+        }
+        $.modal.parentTab(title, url);
+    }*/
     function back() {
         var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
         var pId = $("#pId").val();
-        var url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId;
-        $.modal.parentTab($("#projectZckName").val() + "列表", url);
+        var url = url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+        var title = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#projectZckName").val() + "列表";
+            }
+        } else {
+            title = $("#projectZckName").val() + "列表";
+        }
+        $.modal.parentTab(title, url);
+    }
+
+    function openTime(openTime) {
+        var str = "";
+        var str1 = eval(openTime);
+        if ($.common.isNotEmpty(str1)) {
+            for (var i = 0; i < str1.length; i++) {
+                var parse = str1[i];
+                str += '<div class="input-group"><span>' + parse.type + '</span>:<span>' + parse.value + '</span>';
+            }
+        }
+        $("#addNum").html(str);
     }
 </script>
 </body>

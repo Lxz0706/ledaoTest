@@ -2,11 +2,16 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('项目管理资产库列表')"/>
+    <style>
+        .border {
+            border: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 <div class="container-div">
     <div class="row">
-        <div class="col-sm-12 search-collapse">
+        <!--<div class="col-sm-12 search-collapse">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -14,13 +19,6 @@
                             <label>借款人名称：</label>
                             <input type="text" name="projectName"/>
                         </li>
-                        <!--<li>
-                            <label>资产库状态：</label>
-                            <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>-->
                         <li>
                             <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
@@ -29,27 +27,28 @@
                     </ul>
                 </div>
             </form>
-        </div>
+        </div>-->
 
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:projectZck:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="system:projectZck:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectZck:export">
-                <i class="fa fa-download"></i> 导出
-            </a>-->
-        </div>
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table"></table>
-        </div>
+        <!--        <div class="btn-group-sm" id="toolbar" role="group">
+                    <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
+                        <i class="fa fa-plus"></i> 添加
+                    </a>
+                    <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+                       shiro:hasPermission="system:projectZck:edit">
+                        <i class="fa fa-edit"></i> 修改
+                    </a>
+                    <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+                       shiro:hasPermission="system:projectZck:remove">
+                        <i class="fa fa-remove"></i> 删除
+                    </a>
+                    <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectZck:export">
+                        <i class="fa fa-download"></i> 导出
+                    </a>
+                </div>-->
+        <!-- <div class="col-sm-12 select-table table-striped">
+             <table id="bootstrap-table"></table>
+         </div>-->
+        <div class="row" style="min-height: 80%;" id="showList"></div>
     </div>
 </div>
 <th:block th:include="include :: footer"/>
@@ -59,8 +58,9 @@
     var prefix = ctx + "system/projectZck";
 
     $(function () {
-        var options = {
-            url: prefix + "/list",
+        showRow();
+        /*var options = {
+            url: prefix + "/listGroupByType",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -69,66 +69,94 @@
             columns: [{
                 checkbox: true
             },
-                {
-                    field: 'projectZckId',
-                    title: '项目管理资产库ID',
-                    visible: false
-                },
-                {
-                    title: "序号",
-                    formatter: function (value, row, index) {
-                        return $.table.serialNumber(index);
-                    }
-                },
-                {
+                /!*{
                     field: 'zckName',
                     title: '资产包名称',
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectZckId + "',\'" + row.zckName + '\')">' + value + '</a>';
                     }
-                },
+                }*!/
                 {
-                    field: 'startTime',
-                    title: '处置开始时间'
-                },
-                {
-                    field: 'endTime',
-                    title: '处置结束时间'
+                    field: 'dictLable',
+                    title: '项目状态',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.dictLable + "',\'" + row.projectZckType + '\')">' + value + '</a>';
+                    }
                 },
                 {
                     field: 'bjye',
                     title: '本金余额总额',
-                    formatter: function (value, row, index) {
+                    /!*formatter: function (value, row, index) {
                         return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
+                    }*!/
                 },
                 {
                     field: 'czhx',
                     title: '处置回现总额',
-                    formatter: function (value, row, index) {
+                    /!*formatter: function (value, row, index) {
                         return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
+                    }*!/
                 },
                 {
                     field: 'syhs',
-                    title: '剩余债权户数'/*,
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
-                    }*/
+                    title: '剩余债权户数'
                 },
                 {
-                    field: 'zckStatus',
-                    title: '资产包状态'
+                    field: 'ongoingCount',
+                    title: '处置中'
+                },
+                {
+                    field: 'quitCount',
+                    title: '已退出'
                 }]
         };
-        $.table.init(options);
+        $.table.init(options);*/
     });
 
+    var height = $(".row").height();
+    var winHeight = height / 2;
+    var lineHeight = winHeight / 8;
+    var paddingTop = winHeight / 4;
+
+    function showRow() {
+        $.ajax({
+            url: prefix + "/listGroupByType",
+            data: {},
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                var str = '';
+                var row = result.rows;
+                for (var i in row) {
+                    if($.common.isNotEmpty(row[i].dictLable)){
+                        str += '<div class="border col-sm-12" style="height: ' + winHeight + 'px;margin-left:auto; margin-right:auto;">';
+                        str += '<div class="col-sm-3" style="text-align: right;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">资产包数量：' + $.common.returnNum(row[i].totalZck) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">已退出的资产包：' + $.common.returnNum(row[i].quitCount) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">处置回现总额：' + $.operate.numberFormatter(row[i].czhx, 0, '.', ',') + '</lable><br/>';
+                        str += '</div>'
+                        str += '<div class="col-sm-6" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+                        str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictLable + "',\'" + row[i].projectZckType + '\')">' + row[i].dictLable + '</a><br/>';
+                        str += '</div>';
+                        str += '<div class="col-sm-3" style="display:inline-block;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">处置中的资产包：' + $.common.returnNum(row[i].ongoingCount) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">剩余债权户数：' + $.common.returnNum(row[i].syhs) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">剩余债权本金余额：' + $.operate.numberFormatter(row[i].bjye, 0, '.', ',') + '</lable><br/>';
+                        str += '</div>'
+                        str += '</div>'
+                    }
+                }
+                $("#showList").html(str);
+            }
+        })
+    }
 
     /*资产库列表-详细*/
-    function detail(id, zckName) {
-        var url = prefix + '/projectList?projectZckId=' + id;
-        $.modal.parentTab(zckName + "列表", url);
+    function detail(dictLabel, dictValue) {
+        //var url = prefix + '/toProjectZckByType?projectZckType=' + dictValue;
+        var url = prefix + '/toProjectZckByType?projectZckType=' + dictValue + "&fwProjectType=" + $("#fwProjectType").val() + "&otherFlag=" + $("#otherFlag").val();
+
+        $.modal.parentTab(dictLabel + "列表", url);
     }
 
     //查询

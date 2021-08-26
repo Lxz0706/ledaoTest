@@ -11,6 +11,9 @@
         <input id="projectZckId" th:field="${sysProject.projectZckId}" type="hidden">
         <input id="projectZckName" th:field="${sysProject.projectZckName}" type="hidden">
         <input id="pId" th:field="${sysProject.pId}" type="hidden">
+        <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+        <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+        <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
         <div id="create">
             <!--<div class="form-group">
                 <label class="col-sm-2 control-label"><h5>成交类型：</h5></label>
@@ -108,9 +111,21 @@
 
     function back() {
         var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
         var pId = $("#pId").val();
-        var url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId;
-        $.modal.parentTab($("#projectZckName").val() + "列表", url);
+        var url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+        var title = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#projectZckName").val() + "列表";
+            }
+        } else {
+            title = $("#projectZckName").val() + "列表";
+        }
+        $.modal.parentTab(title, url);
     }
 </script>
 </body>

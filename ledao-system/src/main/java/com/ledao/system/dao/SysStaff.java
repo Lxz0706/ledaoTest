@@ -119,6 +119,19 @@ public class SysStaff extends BaseEntity {
      */
     private Long secretaryLingCount;
 
+    /**
+     * 简历地址
+     */
+    @Excel(name = "简历地址")
+    private String resumeUrl;
+
+    /**
+     * 简历类型
+     */
+    private String resumeType;
+
+    private Long fileCount;
+
     public void setStaffId(Long staffId) {
         this.staffId = staffId;
     }
@@ -263,6 +276,30 @@ public class SysStaff extends BaseEntity {
         this.secretaryLingCount = secretaryLingCount;
     }
 
+    public String getResumeUrl() {
+        return resumeUrl;
+    }
+
+    public void setResumeUrl(String resumeUrl) {
+        this.resumeUrl = resumeUrl;
+    }
+
+    public String getResumeType() {
+        return resumeType;
+    }
+
+    public void setResumeType(String resumeType) {
+        this.resumeType = resumeType;
+    }
+
+    public Long getFileCount() {
+        return fileCount;
+    }
+
+    public void setFileCount(Long fileCount) {
+        this.fileCount = fileCount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -288,6 +325,8 @@ public class SysStaff extends BaseEntity {
                 .append("accounteEntryDate", getAccounteEntryDate())
                 .append("secretaryLing", getSecretaryLing())
                 .append("secretaryLingCount", getSecretaryLingCount())
+                .append("resumeUrl", getResumeUrl())
+                .append("resumeType", getResumeType())
                 .toString();
     }
 }

@@ -313,6 +313,9 @@ public class SysProject extends BaseEntity {
 
     private BigDecimal totalPrice;
 
+    /**
+     * 利息余额
+     */
     private BigDecimal totalInterestBalance;
 
     /**
@@ -354,7 +357,7 @@ public class SysProject extends BaseEntity {
     /**
      * 总本金余额
      */
-    private BigDecimal TotalPrincipalBalance;
+    private BigDecimal totalPrincipalBalance;
 
     /**
      * 意向客户
@@ -531,6 +534,13 @@ public class SysProject extends BaseEntity {
      */
     // @Excel(name = "是否其他项目")
     private String otherFlag;
+
+    /**
+     * 开庭时间
+     */
+    private String openTime;
+
+    private Long projectCount;
 
     public Long getProjectId() {
         return projectId;
@@ -989,11 +999,11 @@ public class SysProject extends BaseEntity {
     }
 
     public BigDecimal getTotalPrincipalBalance() {
-        return TotalPrincipalBalance;
+        return totalPrincipalBalance;
     }
 
     public void setTotalPrincipalBalance(BigDecimal totalPrincipalBalance) {
-        TotalPrincipalBalance = totalPrincipalBalance;
+        this.totalPrincipalBalance = totalPrincipalBalance;
     }
 
     public String getGuarantors() {
@@ -1276,6 +1286,22 @@ public class SysProject extends BaseEntity {
         this.otherFlag = otherFlag;
     }
 
+    public String getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
+
+    public Long getProjectCount() {
+        return projectCount;
+    }
+
+    public void setProjectCount(Long projectCount) {
+        this.projectCount = projectCount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1359,6 +1385,8 @@ public class SysProject extends BaseEntity {
                 .append("otherId", getOtherId())
                 .append("otherName", getOtherName())
                 .append("otherFlag", getOtherFlag())
+                .append("openTime", getOpenTime())
+                .append("totalPrincipalBalance", getTotalPrincipalBalance())
                 .toString();
     }
 }

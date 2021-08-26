@@ -343,6 +343,7 @@ var table = {
                     photos: {
                         "data": data
                     },
+                    closeBtn:1,
                     anim: 5 // 0-6的选择，指定弹出图片动画类型，默认随机
                 });
             },
@@ -1126,7 +1127,7 @@ var table = {
                 $.modal.confirm("确认提交?", function () {
                     var url = table.options.submitUrl;
                     var status = table.options.status == "In" ? "0" : "1"
-                    var data = {"applyId": id, "approveStatu": "5","applyType": status};
+                    var data = {"applyId": id, "approveStatu": "5", "applyType": status};
                     $.operate.submit(url, "post", "json", data);
                 });
             },
@@ -1141,12 +1142,12 @@ var table = {
                 $.modal.confirm("确认撤回?", function () {
                     var url = table.options.submitUrl;
                     var status = table.options.status == "In" ? "0" : "1"
-                    var data = {"applyId": id, "approveStatu": "4","applyType": status};
+                    var data = {"applyId": id, "approveStatu": "4", "applyType": status};
                     $.operate.submit(url, "post", "json", data);
                 });
             },
             // 审批成功 （同意）
-            approve: function (id , applyType,val) {
+            approve: function (id, applyType, val) {
                 table.set();
                 // $.modal.confirm("确认提交?", function () {
                 //     var url = table.options.approveUrl;
@@ -1154,13 +1155,13 @@ var table = {
                 //     $.operate.submit(url, "post", "json", data);
                 // });
                 var url = "/applyIn/reject/" + id + "/" + applyType + "/" + val;
-                $.modal.open("添加备注",url);
+                $.modal.open("添加备注", url);
             },
             // 驳回画面
-            rejectMask:function (id,applyType,val) {
+            rejectMask: function (id, applyType, val) {
                 table.set()
                 var url = "/applyIn/reject/" + id + "/" + applyType + "/" + val;
-                $.modal.open("添加备注",url);
+                $.modal.open("添加备注", url);
             },
             // 设置信息为已读
             read: function (id) {
@@ -1224,7 +1225,7 @@ var table = {
                 var url = $.common.isEmpty(id) ? table.options.createUrl.replace("{id}", "") : table.options.createUrl.replace("{id}", id);
                 return url;
             },
-            addInfoUrl:function (id) {
+            addInfoUrl: function (id) {
                 var url = $.common.isEmpty(id) ? optionUrl.replace("{id}", "") : optionUrl.replace("{id}", id);
                 return url;
             },
@@ -1293,7 +1294,7 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
-            editApplyInAndOut: function (id,applyType,applyTypeUnDone) {
+            editApplyInAndOut: function (id, applyType, applyTypeUnDone) {
                 table.set();
                 var url = "edit/" + id + '/' + applyType + '/' + applyTypeUnDone
                 $.modal.open("修改" + table.options.modalName, url);
@@ -1985,6 +1986,25 @@ var table = {
                 } else {
                     return count = value;
                 }
+            },
+            /*根据文件路径，获取文件的文件名*/
+            getFileNameByPath: function (path) {
+                var index = path.lastIndexOf("/"); // lastIndexOf("/")  找到最后一个  /  的位置
+                var fileName = path.substr(index + 1); // substr() 截取剩余的字符，即得文件名xxx.doc
+                return fileName;
+            },
+            /*根据文件路径，获取文件的后缀名*/
+            getFileExtensionByPath: function (path) {
+                var index1 = path.lastIndexOf("."); // lastIndexOf("/")  找到最后一个  /  的位置
+                var index2 = path.length;
+                var fileExtension = path.substr(index1, index2); // substr() 截取剩余的字符，即文件名.doc
+                return fileExtension;
+            },
+            /*根据文件路径获取文件的类型*/
+            getFileTypeByPath: function (path) {
+                var index = path.lastIndexOf("."); // lastIndexOf("/")  找到最后一个  /  的位置
+                var fileType = path.substr(index + 1); // substr() 截取剩余的字符，即文件名doc
+                return fileType;
             }
         }
     });

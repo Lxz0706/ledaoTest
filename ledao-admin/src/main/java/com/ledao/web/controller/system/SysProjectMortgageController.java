@@ -4,9 +4,7 @@ import java.util.List;
 
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysProject;
-import com.ledao.system.dao.SysProjectBail;
-import com.ledao.system.dao.SysProjectPledge;
+import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysProjectService;
 import com.ledao.system.service.ISysProjectZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.dao.SysProjectMortgage;
 import com.ledao.system.service.ISysProjectMortgageService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
@@ -73,8 +70,8 @@ public class SysProjectMortgageController extends BaseController {
      * 根据项目ID查询抵押物
      */
     @RequiresPermissions("system:mortgage:list")
-    @GetMapping("/mortgageList/{projectId}")
-    public String selectProjectMortgageByProjectId(@PathVariable("projectId") String projectId, ModelMap modelMap) {
+    @GetMapping("/mortgageList")
+    public String selectProjectMortgageByProjectId(String projectId, String projectZckType, String fwProjectType, String otherFlag, String projectName, ModelMap modelMap) {
         StringBuffer sb = new StringBuffer();
         StringBuffer sb1 = new StringBuffer();
         SysProject sysProject = new SysProject();
@@ -88,9 +85,23 @@ public class SysProjectMortgageController extends BaseController {
         for (SysProject sysproject : list) {
             sb1.append(sysproject.getProjectId()).append(",");
         }
-        modelMap.put("projectZckId", sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId());
-        modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId()).getZckName());
+        modelMap.put("otherFlag", otherFlag);
+        modelMap.put("fwProjectType", fwProjectType);
+        modelMap.put("projectZckType", projectZckType);
+        modelMap.put("projectName", projectName);
         modelMap.put("projectIds", sb1.deleteCharAt(sb1.length() - 1).toString());
+        SysProject sysProject1 = sysProjectService.selectSysProjectById(Long.valueOf(projectId));
+        if (StringUtils.isNotNull(sysProject1) && StringUtils.isNotNull(sysProject1.getProjectZckId())) {
+            SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+            if (StringUtils.isNotNull(sysProjectZck)) {
+                if (StringUtils.isNotNull(sysProjectZck.getZckName())) {
+                    modelMap.put("projectZckName", sysProjectZck.getZckName());
+                }
+                if (StringUtils.isNotNull(sysProjectZck.getProjectZckId())) {
+                    modelMap.put("projectZckId", sysProjectZck.getProjectZckId());
+                }
+            }
+        }
         return "system/mortgage/mortgage";
     }
 

@@ -303,7 +303,6 @@ public class SysCoverChargeController extends BaseController {
                     }
                 }
             }
-            logger.info(sb.toString());
             //if (StringUtils.isNotEmpty(sb)) {
             sysCoverCharge.setImgUrl(sb.toString());
             sysCoverChargeService.updateSysCoverCharge(sysCoverCharge);

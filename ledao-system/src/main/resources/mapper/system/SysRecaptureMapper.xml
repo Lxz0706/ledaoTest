@@ -86,6 +86,10 @@
 
     <select id="selectSysRecaptureByProjectId" parameterType="Long" resultMap="SysRecaptureResult">
         <include refid="selectSysRecaptureVo"/>
-        where project_id = #{projectId} and del_flag = '0' order  by create_time desc
+        where project_id = #{projectId} and del_flag = '0' order by create_time desc
+    </select>
+
+    <select id="selectTotalRecaptureByProjectId" parameterType="Long" resultMap="SysRecaptureResult">
+        SELECT SUM(recapture) as totalRecapture FROM sys_recapture WHERE project_id = #{projectId}
     </select>
 </mapper>

@@ -133,4 +133,26 @@ public class SysProjectServiceImpl implements ISysProjectService {
     public List<SysProject> selectSysProjectByProjectZckId(String zckId) {
         return sysProjectMapper.selectSysProjectByProjectZckId(Convert.toStrArray(zckId));
     }
+
+    /**
+     * 根据资产库id查询数据
+     *
+     * @param projectZckType
+     * @return 结果
+     */
+    @Override
+    public SysProject selectCountByProjectZckType(String projectZckType) {
+        return sysProjectMapper.selectCountByProjectZckType(projectZckType);
+    }
+
+    /**
+     * 根据projectId查询总的本金余额
+     *
+     * @param projectId
+     * @return
+     */
+    @Override
+    public SysProject selectTotalPrincipalBalanceByParentId(Long projectId) {
+        return sysProjectMapper.selectTotalPrincipalBalanceByParentId(projectId);
+    }
 }

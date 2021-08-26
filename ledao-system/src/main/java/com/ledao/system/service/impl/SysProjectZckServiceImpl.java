@@ -99,4 +99,24 @@ public class SysProjectZckServiceImpl implements ISysProjectZckService {
     public List<SysProjectZck> selectSysProjectZckByIds(String ids) {
         return sysProjectZckMapper.selectSysProjectZckByIds(Convert.toStrArray(ids));
     }
+
+    /**
+     * 根据资产包状态进行分组查询出数量
+     *
+     * @param projectZckType
+     * @return
+     */
+    @Override
+    public List<SysProjectZck> selectProjectZckGroupByType(String projectZckType) {
+        return sysProjectZckMapper.selectProjectZckGroupByType(projectZckType);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public List<SysProjectZck> selectSysProjectZckByType() {
+        return sysProjectZckMapper.selectSysProjectZckByType();
+    }
+
 }

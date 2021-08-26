@@ -86,7 +86,6 @@ public class ModelerController extends BaseController {
 
     @GetMapping("/modeler/addModal")
     public String addModal() {
-        logger.info("23123123");
         return prefix + "/modelModal";
     }
 

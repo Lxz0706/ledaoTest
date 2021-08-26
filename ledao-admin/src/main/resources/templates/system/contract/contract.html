@@ -9,6 +9,9 @@
         <div class="col-sm-12 search-collapse">
             <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
             <input id="zckName" th:value="*{projectZckName}" type="hidden">
+            <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+            <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+            <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -39,6 +42,9 @@
                         </li>-->
                     </ul>
                 </div>
+            </form>
+            <form id="toProject">
+                <input type="hidden" name="projectName" id="projectName" th:value="${projectName}"/>
             </form>
         </div>
 
@@ -169,8 +175,28 @@
 
     function back() {
         var projectZckId = $("#projectZckId").val();
-        var url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId;
-        $.modal.parentTab($("#zckName").val() + "列表", url);
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
+        var projectName = $("#projectName").val();
+        var url = '';
+        var title = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#zckName").val() + "列表";
+            }
+        } else {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val();
+            title = $("#zckName").val() + "列表";
+        }
+        if ($.common.isNotEmpty(projectName)) {
+            var data = $("#toProject").serialize();
+            $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+        } else {
+            $.modal.parentTab(title, url);
+        }
     }
 </script>
 </body>

@@ -33,6 +33,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      */
     private static final char SEPARATOR = '_';
 
+    private static final Pattern STR_PATTERN = Pattern.compile("\\s*|\t|\r|\n");
+
     private static String strNetImageToBase64;
     private static String strLocalImageToBase64;
 
@@ -492,8 +494,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static String replaceBlank(String str) {
         String dest = "";
         if (str != null) {
-            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
-            Matcher m = p.matcher(str);
+            Matcher m = STR_PATTERN.matcher(str);
             dest = m.replaceAll("");
         }
         return dest;

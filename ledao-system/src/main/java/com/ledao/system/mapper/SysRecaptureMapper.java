@@ -66,4 +66,12 @@ public interface SysRecaptureMapper {
      * @return 结果
      */
     public List<SysRecapture> selectSysRecaptureByProjectId(Long projectId);
+
+    /**
+     * 根据projectId查询出总的现金回现金额
+     *
+     * @param projectId
+     * @return
+     */
+    public SysRecapture selectTotalRecaptureByProjectId(Long projectId);
 }

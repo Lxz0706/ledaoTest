@@ -50,6 +50,8 @@ public class SysRecapture extends BaseEntity {
      */
     private Date recaptureTime;
 
+    private BigDecimal totalRecapture;
+
     public Long getRecaptureId() {
         return recaptureId;
     }
@@ -98,6 +100,14 @@ public class SysRecapture extends BaseEntity {
         this.recaptureTime = recaptureTime;
     }
 
+    public BigDecimal getTotalRecapture() {
+        return totalRecapture;
+    }
+
+    public void setTotalRecapture(BigDecimal totalRecapture) {
+        this.totalRecapture = totalRecapture;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -111,6 +121,7 @@ public class SysRecapture extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("recaptureTime", getRecaptureTime())
+                .append("totalRecapture", getTotalRecapture())
                 .toString();
     }
 }

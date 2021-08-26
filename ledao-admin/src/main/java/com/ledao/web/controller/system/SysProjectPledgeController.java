@@ -71,8 +71,8 @@ public class SysProjectPledgeController extends BaseController {
      * 根据项目ID查询质押物
      */
     @RequiresPermissions("system:pledge:list")
-    @GetMapping("/pledgeList/{projectId}")
-    public String selectProjectMortgageByProjectId(@PathVariable("projectId") String projectId, ModelMap modelMap) {
+    @GetMapping("/pledgeList")
+    public String selectProjectMortgageByProjectId(String projectId, String projectZckType, String fwProjectType, String otherFlag,String projectName, ModelMap modelMap) {
         StringBuffer sb = new StringBuffer();
         StringBuffer sb1 = new StringBuffer();
         SysProject sysProject = new SysProject();
@@ -86,8 +86,23 @@ public class SysProjectPledgeController extends BaseController {
         for (SysProject sysproject : list) {
             sb1.append(sysproject.getProjectId()).append(",");
         }
-        modelMap.put("projectZckId", sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId());
-        modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId()).getZckName());
+        modelMap.put("otherFlag", otherFlag);
+        modelMap.put("fwProjectType", fwProjectType);
+        modelMap.put("projectZckType", projectZckType);
+        modelMap.put("projectName", projectName);
+        SysProject sysProject1 = sysProjectService.selectSysProjectById(Long.valueOf(projectId));
+        if (StringUtils.isNotNull(sysProject1) && StringUtils.isNotNull(sysProject1.getProjectZckId())) {
+            SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+            if (StringUtils.isNotNull(sysProjectZck)) {
+                if (StringUtils.isNotNull(sysProjectZck.getZckName())) {
+                    modelMap.put("projectZckName", sysProjectZck.getZckName());
+                }
+                if (StringUtils.isNotNull(sysProjectZck.getProjectZckId())) {
+                    modelMap.put("projectZckId", sysProjectZck.getProjectZckId());
+                }
+            }
+        }
+        //modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId()).getZckName());
         modelMap.put("projectIds", sb1.deleteCharAt(sb1.length() - 1).toString());
         return "system/pledge/pledge";
     }

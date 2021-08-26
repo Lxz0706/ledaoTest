@@ -6,7 +6,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-staff-edit" th:object="${sysStaff}">
+    <form class="form-horizontal m" id="form-staff-edit" th:object="${sysStaff}" enctype="multipart/form-data">
         <input name="staffId" th:field="*{staffId}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">员工姓名：</label>
@@ -111,6 +111,14 @@
                 </div>
             </div>
         </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">简历：</label>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input name="resume" id="resume" type="file" multiple="multiple">
+                </div>
+            </div>
+        </div>-->
     </form>
 </div>
 <th:block th:include="include :: footer"/>

@@ -97,7 +97,7 @@
     }
 
     function progress(id) {
-        var url = ctx + 'system/progress/progressLists/' + id + "/Y";
+        var url = ctx + 'system/progress/progressLists?projectManagementId=' + id+ "&project=Y";
         $.modal.openTab("进度情况列表", url);
     }
 

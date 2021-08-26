@@ -1,128 +1,136 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('投后部项目管理保证人列表')" />
+    <th:block th:include="include :: header('投后部项目管理保证人列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
-                <input id="zckName" th:value="*{projectZckName}" type="hidden">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <input type="hidden" name="projectIds" id="projectId" th:value="*{projectIds}"/>
-                            <!--<li>
-                                <label>担保金额(元)：</label>
-                                <input type="text" name="amountGuaranteed"/>
-                            </li>
-                            <li class="select-time">
-                                <label>起始日：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>到期日：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEndTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEndTime]"/>
-                            </li>
-                            <li>
-                                <label>已代偿金额(元)：</label>
-                                <input type="text" name="amountCompensated"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>-->
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input id="projectZckId" th:value="*{projectZckId}" type="hidden">
+            <input id="zckName" th:value="*{projectZckName}" type="hidden">
+            <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+            <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+            <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" name="projectIds" id="projectId" th:value="*{projectIds}"/>
+                        <!--<li>
+                            <label>担保金额(元)：</label>
+                            <input type="text" name="amountGuaranteed"/>
+                        </li>
+                        <li class="select-time">
+                            <label>起始日：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartTime]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>到期日：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEndTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEndTime]"/>
+                        </li>
+                        <li>
+                            <label>已代偿金额(元)：</label>
+                            <input type="text" name="amountCompensated"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>-->
+                    </ul>
+                </div>
+            </form>
+            <form id="toProject">
+                <input type="hidden" name="projectName" id="projectName" th:value="${projectName}"/>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:bail:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>-->
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:bail:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:bail:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:bail:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>-->
-                <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
-                    <i class="fa fa-backward"></i> 返回
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="add()" shiro:hasPermission="system:bail:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>-->
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:bail:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:bail:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:bail:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:bail:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:bail:remove')}]];
-        var prefix = ctx + "system/bail";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:bail:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:bail:remove')}]];
+    var prefix = ctx + "system/bail";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "投后部项目管理保证人",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "投后部项目管理保证人",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field: 'bailId', 
+                    field: 'bailId',
                     title: 'ID',
                     visible: false
                 },
                 {
-                    field: 'projectId', 
+                    field: 'projectId',
                     title: '项目ID',
                     visible: false
                 },
                 {
-                    field: 'projectName', 
+                    field: 'projectName',
                     title: '项目名称'
                 },
                 {
-                    field: 'contractNo', 
+                    field: 'contractNo',
                     title: '合同编号'
                 },
                 {
-                    field: 'bail', 
+                    field: 'bail',
                     title: '保证人'
                 },
                 {
-                    field: 'amountGuaranteed', 
+                    field: 'amountGuaranteed',
                     title: '担保金额(元)',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
-                    field: 'startTime', 
+                    field: 'startTime',
                     title: '起始日'
                 },
                 {
-                    field: 'endTime', 
+                    field: 'endTime',
                     title: '到期日'
                 },
                 {
-                    field: 'amountCompensated', 
+                    field: 'amountCompensated',
                     title: '已代偿金额(元)',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 }/*,
                 {
@@ -135,19 +143,40 @@
                         return actions.join('');
                     }
                 }*/]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        function add() {
-            var projectId=$("#projectId").val();
-            $.operate.add(projectId);
+    function add() {
+        var projectId = $("#projectId").val();
+        $.operate.add(projectId);
+    }
+
+    function back() {
+        var projectZckId = $("#projectZckId").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var otherFlag = $("#otherFlag").val();
+        var projectName = $("#projectName").val();
+        var url = '';
+        var title = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+            if ("otherProject" == fwProjectType) {
+                title = '其他项目列表';
+            } else {
+                title = $("#zckName").val() + "列表";
+            }
+        } else {
+            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val();
+            title = $("#zckName").val() + "列表";
         }
-        function back() {
-            var projectZckId = $("#projectZckId").val();
-            var url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId;
-            $.modal.parentTab($("#zckName").val() + "列表", url);
+        if ($.common.isNotEmpty(projectName)) {
+            var data = $("#toProject").serialize();
+            $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+        } else {
+            $.modal.parentTab(title, url);
         }
-    </script>
+    }
+</script>
 </body>
 </html>

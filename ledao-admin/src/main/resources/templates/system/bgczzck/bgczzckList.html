@@ -176,10 +176,47 @@
                         //actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
+                },
+                {
+                    field: 'legalProgress',
+                    title: '法律进度',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="toMonomerLaw(\'' + row.id + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
+                    }
                 }]
         };
         $.table.init(options);
     });
+
+    function toMonomerLaw(id, projectName) {
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + id + "&projectType=2";
+        $.modal.parentTab(projectName + '法律信息', url);
+    }
+
+    //控制显示的字数
+    function strLength(value, length, target, str) {
+        var _length = $.common.isEmpty(length) ? 20 : length;
+        var _text = "";
+        var _value = $.common.nullToStr(value, str);
+        var _target = $.common.isEmpty(target) ? 'copy' : target;
+        if ($.common.isNotEmpty(value)) {
+            if (_value.length > _length) {
+                _text = _value.substr(0, _length) + "...";
+                _value = _value.replace(/\'/g, "&apos;");
+                _value = _value.replace(/\"/g, "&quot;");
+                var actions = [];
+                actions.push($.common.sprintf('<input style="opacity: 0;position: absolute;z-index:-1" type="text" value="%s"/>', _value));
+                actions.push($.common.sprintf('<span class="tooltip-show" data_target="%s" data-toggle="tooltip" title="%s">%s</span>', _target, _value, _text));
+                return actions.join('');
+            } else {
+                _text = _value;
+                return _text;
+            }
+        } else {
+            _text = "无";
+            return _text;
+        }
+    }
 
     /*资产库列表-详细*/
     function detail(id, projectName) {

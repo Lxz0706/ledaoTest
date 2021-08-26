@@ -7,9 +7,12 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
+            <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+            <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
             <form id="formId">
                 <div class="select-list">
-                    <input type="hidden" name="projectName" th:value="${sysProject.projectName}"/>
+                    <input type="hidden" name="projectName" id="projectName" th:value="${sysProject.projectName}"/>
                     <!--<input type="text" id="assetStatus" name="assetStatus" th:value="${sysProject.assetStatus}"/>-->
                 </div>
             </form>
@@ -31,6 +34,10 @@
     var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
     var detailFlag = [[${@permission.hasPermi('system:project:detail')}]];
     var prefix = ctx + "system/project";
+
+    var fwProjectType = $("#fwProjectType").val();
+    var projectZckType = $("#projectZckType").val();
+    var otherFlag = $("#otherFlag").val();
 
     $(function () {
         var options = {
@@ -64,28 +71,28 @@
                     field: 'totalPrice',
                     title: '合同本金',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId + "',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId + "',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
                 {
                     field: 'totalInterest',
                     title: '利息',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'totalPrincipalBalance',
                     title: '本金余额(元)',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'totalInterestBalance',
                     title: '利息余额',
                     formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -113,7 +120,7 @@
                     field: 'recapture',
                     title: '处置回现',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value,3,'.',',') + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
                 {
@@ -153,43 +160,53 @@
     }
 
     function progress(id) {
-        var url = ctx + 'system/progress/progressLists/' + id + "/Y";
-        $.modal.openTab("进度情况列表", url);
+        //var url = ctx + 'system/progress/progressLists/' + id + "/Y";
+        var url = ctx + 'system/progress/progressLists?projectManagementId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&project=Y" + "&projectName=" + $("#projectName").val();
+        $.modal.parentTab("进度情况列表", url);
     }
 
     //现金回现
     function detail5(projectId) {
-        var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId +"&project=Y";
-        $.modal.openTab('处置回现列表', url);
+        //var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId + "&project=Y";
+        var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&project=Y" + "&projectName=" + $("#projectName").val();
+        $.modal.parentTab('处置回现列表', url);
     }
 
     /*合同本金列表-详细*/
     function detail3(id, contractPrincipal) {
-        var url = ctx + 'system/contract/contractList/' + id;
-        $.modal.openTab("合同本金列表", url);
+        var url = ctx + 'system/contract/contractList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&projectName=" + $("#projectName").val();
+        $.modal.parentTab("合同本金列表", url);
     }
 
     /*保证人列表-详细*/
     function detail1(id, bail) {
-        var url = ctx + 'system/bail/bailList/' + id;
-        $.modal.openTab("保证人列表", url);
+        // var url = ctx + 'system/bail/bailList/' + id;
+        var url = ctx + 'system/bail/bailList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&projectName=" + $("#projectName").val();
+        $.modal.parentTab("保证人列表", url);
     }
 
     /*抵押物列表-详细*/
     function detail2(id, guarantor) {
-        var url = ctx + 'system/mortgage/mortgageList/' + id;
-        $.modal.openTab("抵押物列表", url);
+        //var url = ctx + 'system/mortgage/mortgageList/' + id;
+        var url = ctx + 'system/mortgage/mortgageList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&projectName=" + $("#projectName").val();
+        $.modal.parentTab("抵押物列表", url);
     }
 
     /*质押物列表-详细*/
     function detail4(id, pledge) {
-        var url = ctx + 'system/pledge/pledgeList/' + id;
-        $.modal.openTab("质押物列表", url);
+        var url = ctx + 'system/pledge/pledgeList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&projectName=" + $("#projectName").val();
+        $.modal.parentTab("质押物列表", url);
     }
 
     /*债权情况-详细*/
     function detail(id, index) {
-        var url = prefix + '/detail/' + id + "/" + index;
+        var url = prefix + '/detail?id=' + id + "&ids=" + index;
         var title = "";
         if (1 == index) {
             title = "债权情况详细";

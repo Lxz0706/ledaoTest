@@ -24,12 +24,14 @@
         <result property="updateTime" column="update_time"/>
         <result property="accounteEntryDate" column="accounte_entry_date"/>
         <result property="secretaryLing" column="secretary_ling"/>
+        <result property="resumeUrl" column="resume_url"/>
+        <result property="resumeType" column="resume_type"/>
     </resultMap>
 
     <sql id="selectSysStaffVo">
         select staff_id, staff_name, birthday, sex, entry_date, leave_date, contact1, contact2,
         department_id, department_name, education, status, del_flag, create_by, create_time,
-        update_by, update_time, accounte_entry_date, secretary_ling from sys_staff
+        update_by, update_time, accounte_entry_date, secretary_ling,resume_url,resume_type from sys_staff
     </sql>
 
     <select id="selectSysStaffList" parameterType="SysStaff" resultMap="SysStaffResult">
@@ -116,6 +118,8 @@
             <if test="updateTime != null">update_time,</if>
             <if test="accounteEntryDate != null">accounte_entry_date,</if>
             <if test="secretaryLing != null">secretary_ling,</if>
+            <if test="resumeUrl != null">resume_url,</if>
+            <if test="resumeType != null">resume_type,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="staffName != null">#{staffName},</if>
@@ -136,6 +140,8 @@
             <if test="updateTime != null">#{updateTime},</if>
             <if test="accounteEntryDate != null">#{accounteEntryDate},</if>
             <if test="secretaryLing != null">#{secretaryLing},</if>
+            <if test="resumeUrl != null">#{resumeUrl},</if>
+            <if test="resumeType != null">#{resumeType},</if>
         </trim>
     </insert>
 
@@ -160,6 +166,8 @@
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="accounteEntryDate != null">accounte_entry_date = #{accounteEntryDate},</if>
             <if test="secretaryLing != null">secretary_ling = #{secretaryLing},</if>
+            <if test="resumeUrl != null">resume_url = #{resumeUrl},</if>
+            <if test="resumeType != null">resume_type = #{resumeType},</if>
         </trim>
         where staff_id = #{staffId}
     </update>

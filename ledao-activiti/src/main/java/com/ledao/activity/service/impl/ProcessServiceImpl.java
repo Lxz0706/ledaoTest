@@ -57,7 +57,6 @@ public class ProcessServiceImpl implements IProcessService {
     public ProcessInstance submitApply(String applyUserId, String businessKey, String itemName, String itemConent, String module, Map<String, Object> variables) {
         // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
         identityService.setAuthenticatedUserId(applyUserId);
-        System.out.print("variables:======" + variables);
         // 启动流程时设置业务 key
         ProcessInstance instance = runtimeService.startProcessInstanceByKey(module, businessKey, variables);
         // 下一节点处理人待办事项

@@ -153,6 +153,8 @@ public class SysUser extends BaseEntity {
     @Excel(name = "是否正式员工", readConverterExp = "0=,正=式,1=测试")
     private String formalFlag;
 
+    private String roleKey;
+
     public SysUser() {
 
     }
@@ -370,6 +372,14 @@ public class SysUser extends BaseEntity {
         this.formalFlag = formalFlag;
     }
 
+    public String getRoleKey() {
+        return roleKey;
+    }
+
+    public void setRoleKey(String roleKey) {
+        this.roleKey = roleKey;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -398,6 +408,7 @@ public class SysUser extends BaseEntity {
                 .append("directorId", getDirectorId())
                 .append("director", getDirector())
                 .append("formalFlag", getFormalFlag())
+                .append("roleKey", getRoleKey())
                 .toString();
     }
 }

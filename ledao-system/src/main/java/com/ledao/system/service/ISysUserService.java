@@ -220,4 +220,20 @@ public interface ISysUserService {
      * @return
      */
     public List<SysUser> selectUserByIds(String ids);
+
+    /**
+     * 根据用户名称查询用户信息
+     *
+     * @param userName
+     * @return
+     */
+    public SysUser selectUserByUserName(String userName);
+
+    /**
+     * 根据角色查询用户信息
+     *
+     * @param sysUser
+     * @return
+     */
+    public List<SysUser> selectUserByRoleKey(SysUser sysUser);
 }

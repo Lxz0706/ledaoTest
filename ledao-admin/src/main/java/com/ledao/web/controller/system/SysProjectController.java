@@ -4,13 +4,11 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -194,8 +192,6 @@ public class SysProjectController extends BaseController {
             }
 
         }
-
-
         return getDataTable(list);
     }
 
@@ -244,6 +240,9 @@ public class SysProjectController extends BaseController {
         SysProject sysProject1 = new SysProject();
         if (StringUtils.isNotNull(sysProject.getProjectName())) {
             sysProject1.setProjectName(sysProject.getProjectName());
+        }
+        if (StringUtils.isNotNull(sysProject.getProjectZckId())) {
+            sysProject1.setProjectZckId(sysProject.getProjectZckId());
         }
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject1);
         Map<String, Long> map = new HashMap<>();
@@ -574,10 +573,12 @@ public class SysProjectController extends BaseController {
 
     @RequiresPermissions("system:project:list")
     @GetMapping("/toProjectList")
-    public String selectZcbByAssetStatus(Long projectId, Long projectZckId, String fwProjectType, ModelMap modelMap) {
+    public String selectZcbByAssetStatus(Long projectId, Long projectZckId, String fwProjectType, String otherFlag, String projectZckType, ModelMap modelMap) {
         modelMap.put("projectId", projectId);
         modelMap.put("projectZckId", projectZckId);
         modelMap.put("fwProjectType", fwProjectType);
+        modelMap.put("otherFlag", otherFlag);
+        modelMap.put("projectZckType", projectZckType);
         if (StringUtils.isNotNull(projectZckId)) {
             modelMap.put("zckName", sysProjectZckService.selectSysProjectZckById(projectZckId).getZckName());
         }
@@ -600,7 +601,7 @@ public class SysProjectController extends BaseController {
             sb.append(sysProject1.getProjectId()).append(",");
         }
         startPage();
-        String projectIds = sb.deleteCharAt(sb.length() - 1).toString();
+        String projectIds = sb.toString();
         List<SysProject> list = sysProjectService.selectSysProjectByProjectId(projectIds);
         return getDataTable(list);
     }
@@ -610,8 +611,8 @@ public class SysProjectController extends BaseController {
      */
     @RequiresPermissions("system:project:detail")
     @Log(title = "项目管理", businessType = BusinessType.DETAIL)
-    @GetMapping("/detail/{id}/{ids}/{pId}")
-    public String detail(@PathVariable("id") Long id, @PathVariable("ids") Long ids, @PathVariable("pId") Long pId, ModelMap mmap) {
+    @GetMapping("/detail")
+    public String detail(Long id, Long ids, Long pId, String projectZckType, String fwProjectType, String otherFlag, ModelMap mmap) {
         String url = "";
         DecimalFormat decimalFormat = new DecimalFormat("###,###.00");
         SysProject sysProject = sysProjectService.selectSysProjectById(id);
@@ -648,9 +649,17 @@ public class SysProjectController extends BaseController {
                 sysProject.setIsCreate("true");
             }
         }
-        sysProject.setProjectZckName(sysProjectZckService.selectSysProjectZckById(sysProject.getProjectZckId()).getZckName());
+        if (StringUtils.isNotNull(sysProject.getProjectZckId())) {
+            sysProject.setProjectZckName(sysProjectZckService.selectSysProjectZckById(sysProject.getProjectZckId()).getZckName());
+        }
         sysProject.setpId(pId);
+        if (StringUtils.isNotEmpty(sysProject.getOpenTime())) {
+            Arrays.sort(sysProject.getOpenTime().split(","));
+        }
         mmap.put("sysProject", sysProject);
+        mmap.put("projectZckType", projectZckType);
+        mmap.put("fwProjectType", fwProjectType);
+        mmap.put("otherFlag", otherFlag);
 
         if (1 == ids) {
             url = "/detail1";
@@ -1328,18 +1337,24 @@ public class SysProjectController extends BaseController {
         modelMap.put("fwProjectType", fwProjectType);
         if (StringUtils.isNotEmpty(fwProjectType)) {
             if ("investmentProject".equals(fwProjectType)) {
-                url = prefix + "/projectZck";
-            } else {
                 modelMap.put("otherFlag", "N");
+                url = prefix + "/projectZck";
+            } else if ("investment".equals(fwProjectType)) {
+                modelMap.put("otherFlag", "N");
+                url = prefix + "/investment";
+            } else {
+                modelMap.put("otherFlag", "Y");
                 url = prefix + "/investmentProject";
             }
         }
         return url;
     }
 
-    @GetMapping("/toProjectLists")
-    public String toProjectList(String otherFlag, ModelMap modelMap) {
+    @GetMapping("/toProjectZckByType")
+    public String toProjectZckByType(String projectZckType, String fwProjectType, String otherFlag, ModelMap modelMap) {
+        modelMap.put("projectZckType", projectZckType);
+        modelMap.put("fwProjectType", fwProjectType);
         modelMap.put("otherFlag", otherFlag);
-        return prefix + "/project";
+        return prefix + "/projectZckByType";
     }
 }

@@ -66,4 +66,17 @@ public interface SysProjectZckMapper {
      * @return 结果
      */
     public List<SysProjectZck> selectSysProjectZckByIds(String[] ids);
+
+    /**
+     * @return
+     */
+    public List<SysProjectZck> selectSysProjectZckByType();
+
+    /**
+     * 根据资产包状态进行分组查询出数量
+     *
+     * @param projectZckType
+     * @return
+     */
+    public List<SysProjectZck> selectProjectZckGroupByType(String projectZckType);
 }

@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('修改投后部项目管理')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
     <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
@@ -194,6 +195,12 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">开庭时间：</label>
+            <input name="openTime" id="openTime" type="hidden" th:field="*{openTime}">
+            <div class="col-sm-8" id="addNum">
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">查封标的：</label>
             <div class="col-sm-8">
                 <textarea name="sealUpSubjectMatter" class="form-control">[[*{sealUpSubjectMatter}]]</textarea>
@@ -330,71 +337,55 @@
                 </div>
             </div>
         </div>
-        <!--<div id="create">
-            <div class="form-group">
-                <label class="col-sm-3 control-label">成交类型：</label>
-                <div class="col-sm-8">
-                    <select name="transactionType" class="form-control m-b"
-                            th:with="type=${@dict.getType('sys_project_cjlx')}">
-                        <option value="">&#45;&#45;请选择一条数据&#45;&#45;</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
-                                th:field="*{transactionType}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">买家：</label>
-                <div class="col-sm-8">
-                    <input name="buyerId" th:field="*{buyerId}" class="form-control" type="hidden">
-                    <input name="buyer" th:field="*{buyer}" class="form-control" type="text">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：个人写买家姓名、企业写全称)</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">买家来源：</label>
-                <div class="col-sm-8">
-                    <textarea name="buyerSources" class="form-control">[[*{buyerSources}]]</textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">买家联系方式：</label>
-                <div class="col-sm-8">
-                    <textarea name="buyerContact" class="form-control">[[*{buyerContact}]]</textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：买家手机号码)</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">成交客户：</label>
-                <div class="col-sm-8">
-                    <input name="dealCustomerId" id="dealCustomerId" th:field="*{dealCustomerId}" class="form-control" type="hidden">
-                    <input name="dealCustomerName" id="dealCustomerName" th:field="*{dealCustomerName}" class="form-control" type="text">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：张三18#########;李四15#########)</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">意向客户：</label>
-                <div class="col-sm-8">
-                    <input name="potentialCustomersId" id="potentialCustomersId" th:field="*{potentialCustomersId}" class="form-control" type="hidden">
-                    <input name="potentialCustomers" id="potentialCustomers" th:field="*{potentialCustomers}" class="form-control" type="text">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>（提示：张三18#########;李四15#########)</span>
-                </div>
-            </div>-->
-        </div>
     </form>
+</div>
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script type="text/javascript">
 
     $(function () {
+        var openTime = $("#openTime").val();
         var createBy = $("#createBy").val();
-        if("true" == createBy){
+        if ("true" == createBy) {
             $("#create").show();
-        }else{
+        } else {
             $("#create").hide();
         }
+        setOpenTime(openTime);
     })
+
+    function setOpenTime(openTime) {
+        var str = "";
+        if ($.common.isNotEmpty(openTime)) {
+            var str1 = eval(openTime);
+            for (var i = 0; i < str1.length; i++) {
+                var parse = str1[i];
+                var ids = ['一审', '二审', '再审', '其他'];
+                str += "<div class=\"input-group\">";
+                if ('一审' == parse.type || '二审' == parse.type || '再审' == parse.type) {
+                    str += '<select onchange="typeChange(this)" class="form-control" style="width: 35%">';
+                    for (var j = 0; j < ids.length; j++) {
+                        if (ids[j] === parse.type) {
+                            str += '<option value ="' + ids[j] + '" selected>' + ids[j] + '</option>';
+                        } else {
+                            str += '<option value ="' + ids[j] + '">' + ids[j] + '</option>';
+                        }
+                    }
+                    str += '</select>';
+                } else {
+                    str += '<input value="' + parse.type + '" type="text" class="form-control">';
+                }
+                str += '<!--<span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->' +
+                    '<input name="openTimes" id="openTimes" value="' + parse.value + '"  style="width: 65%" class="form-control" placeholder="yyyy-MM-dd" type="text" autocomplete="off"></div>';
+            }
+        }
+        str += '<button class="btn btn-info" type="button" title="新增" id="addSaltIpGrpBtn" onclick="addSaltIpGrp(this)">' +
+            '<span class="glyphicon glyphicon-plus"></span></button>'
+        $("#addNum").html(str);
+        $.initDataPlugin();
+    }
 
     var prefix = ctx + "system/project";
     $("#form-project-edit").validate({
@@ -497,6 +488,178 @@
         $("#buyer").val(customerNames.substr(0, customerNames.length - 1));
         layer.close(layer.index);
     }
+
+    var i = 0;
+
+    function addSaltIpGrp(obj) {
+        i++;
+        html = '<div class="input-group">\n' +
+            ' <select class="form-control" onchange="typeChange(this)" style="width: 35%">\n' +
+            ' <option value="">--请选择--</option>                   <option value="一审">一审</option>\n' +
+            '                    <option value="二审">二审</option>\n' +
+            '                    <option value="再审">再审</option>\n' +
+            '                    <option value="其他">其他</option>\n' +
+            '                </select><!--<span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->\n' +
+            '<input name="openTimes" class="form-control" placeholder="yyyy-MM-dd" type="text" autocomplete="off" style="width: 65%">\n' +
+            '<button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delOpenTimes" ' +
+            'onclick="delete(this)"><span class="glyphicon glyphicon-minus"></span></button></div>';
+        $(html).insertBefore(obj);
+        $.initDataPlugin();
+    };
+
+    $(document).on('click', '#delOpenTimes', function () {
+        var type = $(this).prev().prev().val();
+        var openTime = $("#openTime").val();
+        var str1 = eval(openTime);
+        var index;
+        for (var i = 0; i < str1.length; i++) {
+            if ($.common.isNotEmpty(type)) {
+                if (str1[i].type == type) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        str1.splice(index, 1);
+        $("#openTime").val(JSON.stringify(str1));
+        $(this).parent().remove();
+    });
+
+    function typeChange(obj) {
+        var value = $(obj).val();
+        if ('其他' == value) {
+            var str = '<input name="openType" class="form-control" type="text" style="width: 35%" onBlur="onBlur(this)">';
+            $(str).insertAfter(obj);
+            $(obj).hide();
+        } else {
+            var push = [];
+            var thisTime = $(obj).next().val();
+            var openTime = $("#openTime").val();
+            if ($.common.isNotEmpty(openTime)) {
+                var str1 = eval($("#openTime").val());
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(thisTime)) {
+                        if ($.common.equalsIgnoreCase(thisTime, str1[i].value)) {
+                            str1[i].type = $(obj).val();
+                        }
+                    }
+                    push.push(str1[i]);
+                }
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        }
+    }
+
+    function onBlur(obj) {
+        var push = [];
+        var thisTime = $(obj).next().val();
+        if ($.common.isNotEmpty(thisTime)) {
+            var openTime = $("#openTime").val();
+            if ($.common.isNotEmpty(openTime)) {
+                var str1 = eval($("#openTime").val());
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(thisTime)) {
+                        if ($.common.equalsIgnoreCase(thisTime, str1[i].value)) {
+                            str1[i].type = $(obj).val();
+                        }
+                    }
+                    push.push(str1[i]);
+                }
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        }
+    }
+
+    $.initDataPlugin = function () {
+        $("input[name='openTimes']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: 'month',
+            autoclose: true,
+        }).on("hide", function (ev) {
+            var thisTime = $(this).val();
+            var type = $(this).prev().val();
+            var push = [];
+            var str = "";
+            var openTime = $("#openTime").val();
+            var str1 = eval(openTime);
+            if ($.common.isNotEmpty(str1)) {
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(type)) {
+                        if ($.common.equalsIgnoreCase(type, str1[i].type)) {
+                            str1[i].value = thisTime;
+                        } else {
+                            str = '{"type":"' + type + '","value":"' + thisTime + '"}';
+                        }
+                    }
+                    if ($.common.isNotEmpty(str)) {
+                        push.push(JSON.parse(str));
+                    }
+                    push.push(str1[i]);
+                }
+            } else {
+                str = '{"type":"' + type + '","value":"' + thisTime + '"}';
+                push.push(JSON.parse(str));
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        });
+    };
+
+    function unique(list) {
+        var arr = [];
+        for (var i = 0; i < list.length; i++) {
+            if (i == 0) arr.push(list[i]);
+            b = false;
+            if (arr.length > 0 && i > 0) {
+                for (var j = 0; j < arr.length; j++) {
+                    if (arr[j].type == list[i].type) {
+                        b = true;
+                        break;
+                    }
+                }
+                if (!b) {
+                    arr.push(list[i]);
+                }
+            }
+        }
+        return arr;
+    }
+
+    //$.initDataPlugin();
+
+    function getJsonArr(arr) {
+//定义需要的空数组
+        var newArr = [];
+//定义转换字符串后的数组
+        var newStringArr = [];
+        $.each(arr, function (i, v) {
+            var sArr = JSON.stringify(v);
+            if ($.inArray(sArr, newStringArr) == -1) {
+// 根据字符串数组push对象
+                newStringArr.push(sArr);
+                newArr.push(v)
+            }
+        });
+        return newArr;
+    }
+
+    function uniqueArray(array, key) {
+        var result = [array[0]];
+        for (var i = 1; i < array.length; i++) {
+            var item = array[i];
+            var repeat = false;
+            for (var j = 0; j < result.length; j++) {
+                if (item[key] == result[j][key]) {
+                    repeat = true;
+                    break;
+                }
+            }
+            if (!repeat) {
+                result.push(item);
+            }
+        }
+        return result;
+    }
+
 </script>
 </body>
 </html>

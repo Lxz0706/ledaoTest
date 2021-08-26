@@ -330,7 +330,6 @@ public class SysProjectmanagentController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysProjectmanagent sysProjectmanagent) {
-        logger.info(sysProjectmanagent.getServiceFee());
         return toAjax(sysProjectmanagentService.insertSysProjectmanagent(sysProjectmanagent));
     }
 

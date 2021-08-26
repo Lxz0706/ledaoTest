@@ -91,4 +91,20 @@ public interface SysProjectMapper {
      * @return 结果
      */
     public List<SysProject> selectSysProjectByProjectZckId(String[] zckId);
+
+    /**
+     * 根据资产库类型查询数据
+     *
+     * @param projectZckType
+     * @return 结果
+     */
+    public SysProject selectCountByProjectZckType(String projectZckType);
+
+    /**
+     * 根据projectId查询总的本金余额
+     *
+     * @param projectId
+     * @return
+     */
+    public SysProject selectTotalPrincipalBalanceByParentId(Long projectId);
 }

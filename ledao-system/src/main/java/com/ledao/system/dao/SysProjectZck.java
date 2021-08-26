@@ -96,6 +96,30 @@ public class SysProjectZck extends BaseEntity {
     //@Excel(name = "法务与投后项目")
     private String fwProjectType;
 
+    /**
+     * 资产库类型
+     */
+    //@Excel(name = "资产库类型")
+    private String projectZckType;
+
+    private Long ongoingCount;
+
+    private Long quitCount;
+
+    private Long zckStatusCount;
+
+    /**
+     * 分组的id集合
+     */
+    private String projectZckIds;
+
+    /**
+     * 资产库类型对应的名称
+     */
+    private String dictLable;
+
+    private Long totalZck;
+
     public Long getProjectZckId() {
         return projectZckId;
     }
@@ -232,6 +256,62 @@ public class SysProjectZck extends BaseEntity {
         this.fwProjectType = fwProjectType;
     }
 
+    public String getProjectZckType() {
+        return projectZckType;
+    }
+
+    public void setProjectZckType(String projectZckType) {
+        this.projectZckType = projectZckType;
+    }
+
+    public Long getOngoingCount() {
+        return ongoingCount;
+    }
+
+    public void setOngoingCount(Long ongoingCount) {
+        this.ongoingCount = ongoingCount;
+    }
+
+    public Long getQuitCount() {
+        return quitCount;
+    }
+
+    public void setQuitCount(Long quitCount) {
+        this.quitCount = quitCount;
+    }
+
+    public Long getZckStatusCount() {
+        return zckStatusCount;
+    }
+
+    public void setZckStatusCount(Long zckStatusCount) {
+        this.zckStatusCount = zckStatusCount;
+    }
+
+    public String getProjectZckIds() {
+        return projectZckIds;
+    }
+
+    public void setProjectZckIds(String projectZckIds) {
+        this.projectZckIds = projectZckIds;
+    }
+
+    public String getDictLable() {
+        return dictLable;
+    }
+
+    public void setDictLable(String dictLable) {
+        this.dictLable = dictLable;
+    }
+
+    public Long getTotalZck() {
+        return totalZck;
+    }
+
+    public void setTotalZck(Long totalZck) {
+        this.totalZck = totalZck;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -246,6 +326,10 @@ public class SysProjectZck extends BaseEntity {
                 .append("startTime", getStartTime())
                 .append("endTime", getEndTime())
                 .append("fwProjectType", getFwProjectType())
+                .append("projectZckType", getProjectZckType())
+                .append("projectZckIds", getProjectZckIds())
+                .append("dictLable", getDictLable())
+                .append("zckStatusCount", getZckStatusCount())
                 .toString();
     }
 }

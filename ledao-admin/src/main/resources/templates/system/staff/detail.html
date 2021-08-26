@@ -5,6 +5,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input id="resumeUrl" th:value="${sysStaff.resumeUrl}" type="hidden">
     <table class="table table-striped">
         <tr>
             <td style="width: 20%!important;"><h5>员工姓名：</h5></td>
@@ -54,8 +55,66 @@
             <td><h5>离职日期：</h5></td>
             <td><span th:text="${#dates.format(sysStaff.leaveDate, 'yyyy-MM-dd')}"/></td>
         </tr>
+        <tr>
+            <td><h5>文件信息：</h5></td>
+            <td>
+                <div id="getData" class="form-group"></div>
+            </td>
+        </tr>
     </table>
+
 </div>
 <th:block th:include="include :: footer"/>
+<script src="../static/ajax/libs/moment/moment.js"
+        th:src="@{/ajax/libs/moment/moment.js}"></script>
+<script>
+    $(function () {
+        var url = $("#resumeUrl").val();
+        console.log(url);
+        var urlArray = url.split(";");
+        getFileDatas(urlArray);
+    });
+
+    function getFileDatas(urlArray) {
+        var str = '';
+        if ($.common.isNotEmpty(urlArray)) {
+            for (let i in urlArray) {
+                var array_element = urlArray[i];
+                if ($.common.isNotEmpty(array_element)) {
+                    if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'pptx') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'ppt')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><div class="fa fa-file-powerpoint-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a onclick="toPdf(\'' + array_element + '\')" style="word-wrap: break-word">'
+                            + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'doc') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'docx') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'txt')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><div class="fa fa-file-word-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a onclick="toPdf(\'' + array_element + '\')" style="word-wrap: break-word">'
+                            + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'pdf')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><div class="fa fa-file-pdf-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + array_element + '" style="word-wrap: break-word">'
+                            + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'png') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'jpg') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'jpeg')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><div class="fa fa-image" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><a onclick="imgPre(\'' + array_element + '\')" style="word-wrap: break-word">' + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    }
+                }
+            }
+            $("#getData").append(str);
+        }
+    }
+
+    function toPdf(url) {
+        window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+    }
+
+    function imgPre(url) {
+        $.table.previewImg(url.split(','));
+    }
+
+    function img(url) {
+        return '<div><img src="' + url + '" width="90" height="90"></div>';
+    }
+</script>
 </body>
 </html>

@@ -131,7 +131,7 @@
     });
 
     function progress(id) {
-        var url = ctx + 'system/progress/progressLists/' + id + "/N";
+        var url = ctx + 'system/progress/progressLists?projectManagementId=' + id+ "&project=N";;
         $.modal.parentTab("进度情况列表", url);
     }
 

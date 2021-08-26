@@ -64,68 +64,68 @@
 </head>
 
 <body class="gray-bg" style="height:100%;background: url('../img/background.png') no-repeat;">
-    <div class="row border-bottom white-bg dashboard-header">
-        <div class="div1" style="display: flex;">
-            <div class="div2">乐道后台管理系统</div>
-            <div>
-                <iframe scrolling="no" height="30" frameborder="0" allowtransparency="true"
-                        src="https://i.tianqi.com?c=code&id=34&color=%230070C0&icon=1&site=17"></iframe>
+<div class="row border-bottom white-bg dashboard-header">
+    <div class="div1" style="display: flex;">
+        <div class="div2">乐道后台管理系统</div>
+        <div>
+            <iframe scrolling="no" height="30" frameborder="0" allowtransparency="true"
+                    src="https://i.tianqi.com?c=code&id=34&color=%230070C0&icon=1&site=17"></iframe>
+        </div>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-4">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><a onclick="noticeToList()">公告消息</a></h5>
+            </div>
+            <div class="ibox-content">
+                <ul class="nav nav-tabs" id="noticeTab"></ul>
+                <p></p>
+                <div class="tab-content" id="noticeTabContent"></div>
             </div>
         </div>
     </div>
-    <div class="col-sm-12">
-        <div class="col-sm-4">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5><a onclick="noticeToList()">公告消息</a></h5>
-                </div>
-                <div class="ibox-content">
-                    <ul class="nav nav-tabs" id="noticeTab"></ul>
-                    <p></p>
-                    <div class="tab-content" id="noticeTabContent"></div>
-                </div>
+    <div class="col-sm-5">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><a onclick="documentToList()">文档管理</a></h5>
+            </div>
+            <div class="ibox-content">
+                <ul class="nav nav-tabs" id="myTab"></ul>
+                <p></p>
+                <div class="tab-content" id="myTabContent"></div>
             </div>
         </div>
-        <div class="col-sm-5">
+    </div>
+    <div class="col-sm-3">
+        <div class="ibox float-e-ma rgins">
+            <div class="ibox-title">
+                <h5>日历备忘录</h5>
+            </div>
+            <div class="ibox-content">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-9">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5><a onclick="documentToList()">文档管理</a></h5>
-                </div>
-                <div class="ibox-content">
-                    <ul class="nav nav-tabs" id="myTab"></ul>
-                    <p></p>
-                    <div class="tab-content" id="myTabContent"></div>
-                </div>
+                <div id="container"></div>
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="ibox float-e-ma rgins">
-                <div class="ibox-title">
-                    <h5>日历备忘录</h5>
-                </div>
-                <div class="ibox-content">
-                    <div id="calendar"></div>
-                </div>
+            <div class="ibox-title">
+                <h5><a onclick="workLogToList()">日志</a></h5>
+            </div>
+            <div class="ibox-content">
+                <div id="mainWorkLog"></div>
             </div>
         </div>
     </div>
-    <div class="wrapper wrapper-content">
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="ibox float-e-margins">
-                    <div id="container"></div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="ibox-title">
-                    <h5><a onclick="workLogToList()">日志</a></h5>
-                </div>
-                <div class="ibox-content">
-                    <div id="mainWorkLog"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
@@ -379,9 +379,11 @@
                     div1.className = "tab-pane";
                 }
                 str += "<ul>";
-                for (var i = 0; i < array.length; i++) {
-                    str += '<li style="margin-bottom: 1.1em"><span><a onclick="datailForNotice(' + array[i].noticeId + ')">' + strLength(array[i].noticeTitle) + '</a></span>' +
-                        '<span style="float: right">' + array[i].createTime + '</span></li>';
+                if ($.common.isNotEmpty(array)) {
+                    for (var i = 0; i < array.length; i++) {
+                        str += '<li style="margin-bottom: 1.1em"><span><a onclick="datailForNotice(' + array[i].noticeId + ')">' + strLength(array[i].noticeTitle) + '</a></span>' +
+                            '<span style="float: right">' + array[i].createTime + '</span></li>';
+                    }
                 }
                 str += '<p style="float: right"><a onclick="toListByType(\'' + noticeType + "',\'" + label + '\')">更多>></a></p>';
                 str += '</ul>';

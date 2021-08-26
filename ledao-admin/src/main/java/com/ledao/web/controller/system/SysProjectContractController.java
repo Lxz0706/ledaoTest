@@ -7,6 +7,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectMortgage;
+import com.ledao.system.dao.SysProjectZck;
 import com.ledao.system.service.ISysProjectService;
 import com.ledao.system.service.ISysProjectZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,8 +50,8 @@ public class SysProjectContractController extends BaseController {
 
 
     @RequiresPermissions("system:contract:list")
-    @GetMapping({"/contractList/{projectId}"})
-    public String selectProjectContractByProjectId(@PathVariable("projectId") String projectId, ModelMap modelMap) {
+    @GetMapping({"/contractList"})
+    public String selectProjectContractByProjectId(String projectId, String projectZckType, String fwProjectType, String otherFlag, String projectName, ModelMap modelMap) {
         StringBuffer sb = new StringBuffer();
         StringBuffer sb1 = new StringBuffer();
         SysProject sysProject = new SysProject();
@@ -64,8 +65,23 @@ public class SysProjectContractController extends BaseController {
         for (SysProject sysproject : list) {
             sb1.append(sysproject.getProjectId()).append(",");
         }
-        modelMap.put("projectZckId", sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId());
-        modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId()).getZckName());
+        modelMap.put("otherFlag", otherFlag);
+        modelMap.put("fwProjectType", fwProjectType);
+        modelMap.put("projectZckType", projectZckType);
+        modelMap.put("projectName", projectName);
+        SysProject sysProject1 = sysProjectService.selectSysProjectById(Long.valueOf(projectId));
+        if (StringUtils.isNotNull(sysProject1) && StringUtils.isNotNull(sysProject1.getProjectZckId())) {
+            SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+            if (StringUtils.isNotNull(sysProjectZck)) {
+                if (StringUtils.isNotNull(sysProjectZck.getZckName())) {
+                    modelMap.put("projectZckName", sysProjectZck.getZckName());
+                }
+                if (StringUtils.isNotNull(sysProjectZck.getProjectZckId())) {
+                    modelMap.put("projectZckId", sysProjectZck.getProjectZckId());
+                }
+            }
+        }
+        //modelMap.put("projectZckName", sysProjectZckService.selectSysProjectZckById(sysProjectService.selectSysProjectById(Long.valueOf(projectId)).getProjectZckId()).getZckName());
         modelMap.put("projectIds", sb1.deleteCharAt(sb1.length() - 1).toString());
         return "system/contract/contract";
     }

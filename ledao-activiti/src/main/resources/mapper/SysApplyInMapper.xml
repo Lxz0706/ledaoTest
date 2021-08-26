@@ -24,6 +24,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="isReturn"    column="is_return"    />
+        <result property="planReturnTime"    column="plan_return_time"    />
+        <result property="realReturnTime"    column="real_return_time"    />
+        <result property="outReason"    column="out_reason"    />
+        <result property="isOut"    column="is_out"    />
+        <result property="isReceive"    column="is_receive"    />
+        <result property="isReturned"    column="is_returned"    />
+        <result property="isReceived"    column="is_received"    />
+        <result property="remarksOut"    column="remarks_out"    />
     </resultMap>
 
     <resultMap type="SysApplyIn" id="SysApplyInResultUser">
@@ -46,13 +55,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="isReturn"    column="is_return"    />
+        <result property="planReturnTime"    column="plan_return_time"    />
+        <result property="realReturnTime"    column="real_return_time"    />
+        <result property="outReason"    column="out_reason"    />
+        <result property="isOut"    column="is_out"    />
+        <result property="isReceive"    column="is_receive"    />
+        <result property="isReturned"    column="is_returned"    />
+        <result property="isReceived"    column="is_received"    />
+        <result property="remarksOut"    column="remarks_out"    />
         <result property="applyUserName"    column="applyUserName"    />
         <result property="realCreateName"    column="realCreateName"    />
         <result property="reviserName"    column="reviserName"    />
     </resultMap>
 
     <sql id="selectSysApplyInVo">
-        select apply_id, apply_type, document_type, project_id, project_name, company_name, debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_apply_in
+        select apply_id, apply_type, document_type, project_id, project_name, company_name, debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks_out from sys_apply_in
     </sql>
 
     <select id="selectSysApplyInList" parameterType="SysApplyIn" resultMap="SysApplyInResult">
@@ -96,6 +114,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.update_by,
         a.reviser,
         a.update_time,
+        a.is_return,
+        a.plan_return_time,
+        a.real_return_time,
+        a.out_reason,
+        a.is_out,
+        a.is_receive,
+        a.is_returned,
+        a.is_received,
+        a.remarks_out,
         b.user_name as applyUserName,
         c.user_name as realCreateName,
         d.user_name as reviserName
@@ -143,6 +170,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         app.update_by,
         app.reviser,
         app.update_time ,
+        app.is_return,
+        app.plan_return_time,
+        app.real_return_time,
+        app.out_reason,
+        app.is_out,
+        app.is_receive,
+        app.is_returned,
+        app.is_received,
+        app.remarks_out,
         ub.user_name as applyUserName,
         uc.user_name as realCreateName,
         ud.user_name as reviserName

@@ -90,6 +90,114 @@ public class SysApplyIn extends BaseEntity
     @Excel(name = "修改人名称")
     private String reviserName;
 
+    /** 是否归还--字典项 */
+    @Excel(name = "是否归还--字典项")
+    private String isReturn;
+
+    /** 计划归还时间 */
+    @Excel(name = "计划归还时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date planReturnTime;
+
+    /** 实际归还时间 */
+    @Excel(name = "实际归还时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date realReturnTime;
+
+    /** 出库原因 */
+    @Excel(name = "出库原因")
+    private String outReason;
+
+    /** 是否出库--字典项 */
+    @Excel(name = "是否出库--字典项")
+    private String isOut;
+
+    /** 是否出库--字典项 */
+    @Excel(name = "是否出库--字典项")
+    private String isReceive;
+
+    /** 是否已还--字典项 */
+    @Excel(name = "是否已还--字典项")
+    private String isReturned;
+
+    /** 归还接受--字典项 */
+    @Excel(name = "归还接受--字典项")
+    private String isReceived;
+
+    /** 备注 */
+    @Excel(name = "备注")
+    private String remarksOut;
+
+    public String getIsReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(String isReturn) {
+        this.isReturn = isReturn;
+    }
+
+    public Date getPlanReturnTime() {
+        return planReturnTime;
+    }
+
+    public void setPlanReturnTime(Date planReturnTime) {
+        this.planReturnTime = planReturnTime;
+    }
+
+    public Date getRealReturnTime() {
+        return realReturnTime;
+    }
+
+    public void setRealReturnTime(Date realReturnTime) {
+        this.realReturnTime = realReturnTime;
+    }
+
+    public String getOutReason() {
+        return outReason;
+    }
+
+    public void setOutReason(String outReason) {
+        this.outReason = outReason;
+    }
+
+    public String getIsOut() {
+        return isOut;
+    }
+
+    public void setIsOut(String isOut) {
+        this.isOut = isOut;
+    }
+
+    public String getIsReceive() {
+        return isReceive;
+    }
+
+    public void setIsReceive(String isReceive) {
+        this.isReceive = isReceive;
+    }
+
+    public String getIsReturned() {
+        return isReturned;
+    }
+
+    public void setIsReturned(String isReturned) {
+        this.isReturned = isReturned;
+    }
+
+    public String getIsReceived() {
+        return isReceived;
+    }
+
+    public void setIsReceived(String isReceived) {
+        this.isReceived = isReceived;
+    }
+
+    public String getRemarksOut() {
+        return remarksOut;
+    }
+
+    public void setRemarksOut(String remarksOut) {
+        this.remarksOut = remarksOut;
+    }
+
     public String getRealCreateName() {
         return realCreateName;
     }

@@ -170,7 +170,7 @@
                     field: 'dailyDocumentType',
                     title: '种类',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
+                        return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType));
                     },
                     visible: showNames
                 },
@@ -182,8 +182,8 @@
                     field: 'fileType',
                     title: '附件类型',
                     formatter: function(value, item, index) {
-                                return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
-                            }
+                        return strLength($.table.selectDictLabel(documentFileTypeDictDatas, item.fileType));
+                    }
                 },
                 {
                     field: 'fileScanType',
@@ -251,7 +251,7 @@
                     title: '档案级别',
                     visible: showNames,
                     formatter: function(value, item, index) {
-                        return strLength($.table.selectDictLabel(documentLevelDictDatas, item.fileGetType));
+                        return strLength($.table.selectDictLabel(documentLevelDictDatas, item.documentLevel));
                     }
                 },
                 {
@@ -297,9 +297,6 @@
 
     function strLength(value){
         var str = $.common.nullToStr(value);
-        if (str.length > 10) {
-            str = str.substring(0, 10) + '...';
-        }
         return str;
     }
 

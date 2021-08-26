@@ -136,6 +136,13 @@
                     title: '实际提交人'
                 },
                 {
+                    field: 'realCreateName',
+                    title: '代提交人',
+                    formatter: function(value, item, index) {
+                        return strLength(item.realCreateName);
+                    }
+                },
+                {
                     field: 'applyTime',
                     title: '申请时间'
                 },
@@ -152,13 +159,6 @@
                     formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
 		            }
-                },
-                {
-                    field: 'realCreateName',
-                    title: '代提交人',
-                    formatter: function(value, item, index) {
-                        return strLength(item.realCreateName);
-                    }
                 },
                 {
                     field: 'remarks',
@@ -194,9 +194,6 @@
 
         function strLength(value){
             var str = $.common.nullToStr(value);
-            if (str.length > 10) {
-                str = str.substring(0, 10) + '...';
-            }
             return str;
         }
         function selectSysApplyWorkflowList(applyId){

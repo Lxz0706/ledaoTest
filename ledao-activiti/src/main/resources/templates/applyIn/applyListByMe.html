@@ -196,9 +196,6 @@
 
         function strLength(value){
             var str = $.common.nullToStr(value);
-            if (str.length > 10) {
-                str = str.substring(0, 10) + '...';
-            }
             return str;
         }
         function selectSysApplyWorkflowList(applyId){

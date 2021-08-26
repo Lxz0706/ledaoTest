@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('项目管理资产库列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+                    <ul>
+                        <li>
+                            <label>借款人名称：</label>
+                            <input type="text" name="projectName"/>
+                        </li>
+                        <!--<li>
+                            <label>资产库状态：</label>
+                            <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>-->
+                        <li>
+                            <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:projectZck:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:projectZck:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectZck:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:projectZck:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
+    var prefix = ctx + "system/projectZck";
+
+    $(function () {
+        var options = {
+            url: prefix + "/listByType",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "项目管理资产库",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'projectZckId',
+                    title: '项目管理资产库ID',
+                    visible: false
+                },
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'zckName',
+                    title: '资产包名称',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectZckId + "',\'" + row.zckName + '\')">' + value + '</a>';
+                    }
+                },
+                {
+                    field: 'startTime',
+                    title: '处置开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '处置结束时间'
+                },
+                {
+                    field: 'bjye',
+                    title: '本金余额总额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'czhx',
+                    title: '处置回现总额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'syhs',
+                    title: '剩余债权户数'/*,
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value);
+                    }*/
+                },
+                {
+                    field: 'zckStatus',
+                    title: '资产包状态'
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    /*资产库列表-详细*/
+    function detail(id, zckName) {
+        var url = prefix + '/projectList?projectZckId=' + id + "&projectZckType=" + $("#projectZckType").val();
+        $.modal.parentTab(zckName + "列表", url);
+    }
+
+    //查询
+    function jump() {
+        var data = $("#formId").serialize();
+        $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+    }
+
+    function back() {
+        var url = ctx + "system/projectZck";
+        $.modal.parentTab("投后部项目管理", url);
+    }
+
+</script>
+</body>
+</html>

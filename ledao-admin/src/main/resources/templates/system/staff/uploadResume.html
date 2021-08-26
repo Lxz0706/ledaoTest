@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改员工信息')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-staff-edit" th:object="${sysStaff}" enctype="multipart/form-data">
+        <input name="staffId" id="staffId" th:field="*{staffId}" type="hidden">
+        <div class="col-sm-12">
+            <button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delWeChatNum"
+                    style="float: right"
+                    onclick="deleteResume()">删除附件
+            </button>
+        </div>
+        <div class="form-group" style="display: none">
+            <label class="col-sm-3 control-label">简历：</label>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input name="resume"accept="application/pdf,image/jpeg,image/png,application/vnd.ms-powerpoint,text/plain" id="resume" type="file" multiple="multiple" onchange="uploadFile(this)">
+                    <!--<input id="resume" name="resume" multiple type="file" class="file" data-allowed-file-extensions='["jpg","png", "txt","doc","docx"]'>-->
+                </div>
+            </div>
+        </div>
+        <div id="getData" class="form-group"></div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script src="../static/ajax/libs/moment/moment.js"
+        th:src="@{/ajax/libs/moment/moment.js}"></script>
+<script type="text/javascript">
+    var prefix = ctx + "system/staff";
+    var url = '[[${sysStaff.resumeUrl}]]';
+    var urlArray = url.split(";");
+    $(function () {
+        getFileDatas();
+    });
+
+    function deleteResume() {
+        obj = document.getElementsByName("fileUrl");
+        check_val = [];
+        for (k in obj) {
+            if (obj[k].checked)
+                check_val.push(obj[k].value);
+        }
+        var str = check_val.join(",");
+        console.log(str);
+        $.ajax({
+            url: prefix + "/removeResume",
+            data:
+                { // 提交数据
+                    "staffId": $("#staffId").val(), // 前者为字段名，后者为数据
+                    "resumeUrls": str
+                },
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                location.reload();
+                window.parent.$.table.refresh();
+                //$.operate.successCallback(result);
+            }
+        })
+    }
+
+    function getFileDatas() {
+        var str = '';
+        if ($.common.isNotEmpty(urlArray)) {
+            for (let i in urlArray) {
+                var array_element = urlArray[i];
+                if ($.common.isNotEmpty(array_element)) {
+                    if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'pptx') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'ppt')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><input type="checkbox" style="position:relative;top: -10px;" name="fileUrl" value="' + $.common.getFileNameByPath(array_element) + '"><div class="fa fa-file-powerpoint-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a onclick="toPdf(\'' + array_element + '\')" style="word-wrap: break-word">'
+                            + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'doc') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'docx') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'txt')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><input type="checkbox" style="position:relative;top: -10px;" name="fileUrl" value="' + $.common.getFileNameByPath(array_element) + '"><div class="fa fa-file-word-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a onclick="toPdf(\'' + array_element + '\')" style="word-wrap: break-word">'
+                            + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'pdf')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><input type="checkbox" style="position:relative;top: -10px;" name="fileUrl" value="' + $.common.getFileNameByPath(array_element) + '"><div class="fa fa-file-pdf-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + array_element + '" style="word-wrap: break-word">'
+                            + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'png') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'jpg') ||
+                        $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'jpeg')) {
+                        str += '<div class="col-sm-3" style="height: 150px;"><input type="checkbox" style="position:relative;top: -10px;" name="fileUrl" value="' + $.common.getFileNameByPath(array_element) + '"><div class="fa fa-image" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><a onclick="imgPre(\'' + array_element + '\')" style="word-wrap: break-word">' + $.common.getFileNameByPath(array_element) + '</a></div></div>';
+                    }
+                }
+            }
+        }
+        str += '<div class="col-sm-3" style="height: 150px"><div class="btn btn-info" style="font-size: 2em;margin: 30px;" type="button" title="新增" id="addWeChatGrpBtn" onclick="add()">\n' +
+            '<span class="glyphicon glyphicon-plus"></span></div></div>';
+        $("#getData").append(str);
+    }
+
+    function add() {
+        var file = document.getElementById("resume");
+        file.click();
+    }
+
+    function toPdf(url) {
+        window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+    }
+
+    function imgPre(url) {
+        $.table.previewImg(url.split(','));
+    }
+
+    function img(url) {
+        return '<div><input type="checkbox" name="fileUrl" value="' + $.common.getFileNameByPath(url) + '"><img src="' + url + '" width="90" height="90"></div>';
+    }
+
+    function uploadFile() {
+        var formData = new FormData();
+        if ($('#resume')[0].files[0] == null) {
+            $.modal.alertWarning("请先选择文件路径");
+            return false;
+        }
+        for (var i = 0; i < $('#resume')[0].files.length; i++) {
+            var name = $('#resume')[0].files[i].value;
+            var string = $("#resume")[0].value;
+            console.log(string + "=======" + name);
+            var fileName = string.substring(string.lastIndexOf(".") + 1).toLowerCase();
+            if (fileName == "xls" && fileName == "xlsx") {
+                $.modal.alertError("请选择doc、docx、text、PPT、pptx、png、jpg、jpeg格式的文件！");
+                return false;   //阻止submit提交
+            } else {
+                formData.append('resume', $('#resume')[0].files[i]);
+                formData.append("staffId", $("#staffId").val())
+                $.ajax({
+                    url: prefix + "/editResume",
+                    type: 'post',
+                    cache: false,
+                    async: false,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "json",
+                    success: function (result) {
+                        location.reload();
+                        window.parent.$.table.refresh();
+                        //$.operate.successCallback(result);
+                    }
+                });
+                formData = new FormData();
+            }
+
+        }
+    }
+
+    function initFileInput(initialPreview, initialPreviewConfig) {
+        $("#resume").fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: prefix + "/edit",
+            uploadAsync: false,
+            uploadExtraData: function () {   //向后台传递的附带参数
+                var data = {
+                    staffId: $("#staffId").val()
+                }
+                return data;
+            },
+            enctype: 'multipart/form-data',
+            dropZoneEnabled: false,// 显示拖拽区域
+            allowedFileExtensions: ['png', 'jpg', 'pdf', 'doc', 'docx', 'txt'], //上传文件后缀
+            showUpload: true, //是否显示上传按钮
+            showRemove: false, //显示移除按钮
+            showPreview: true, //是否显示预览
+            maxFileCount: 15,
+            maxFileSize: 204800,//单位为kb，如果为0表示不限制文件大小
+            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            initialPreview: initialPreview,
+            initialPreviewConfig: initialPreviewConfig,
+            // initialPreviewAsData: true, // 特别重要
+        })
+    }
+
+    function getFileData() {
+        //获取照片的路径封装至数组中
+        var initialPreview = [];
+        var initialPreviewConfig = [];
+        if ($.common.isNotEmpty(urlArray)) {
+            for (let i in urlArray) {
+                var array_element = urlArray[i];
+                if ($.common.isNotEmpty(array_element)) {
+                    if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'pdf')) {
+                        initialPreview.push('<iframe src="/js/plugins/pdfJS/web/viewer.html?file=' + array_element + '" width="100%" height="100%" style="border: 0;overflow: hidden;" scrolling="no"></iframe>');
+                    } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'txt')) {
+                        initialPreview.push("<div class='file-preview-other-frame'><div class='file-preview-other'><span class='file-icon-4x'><i class='fa fa-file-text-o text-info'></i></span></div></div>");
+                    } else {
+                        initialPreview.push("<img src=\"" + array_element + "\" class=\"file-preview-image\">");
+                    }
+                    initialPreviewConfig.push({
+                        previewAsData: false,
+                        type: $.common.getFileTypeByPath(array_element),//文件类型（后缀）
+                        caption: array_element.substring(array_element.lastIndexOf("/") + 1),/*文件标题*/
+                        url: prefix + '/removeFile?id=' + $("#staffId").val() + '&fileName=' + array_element.substring(array_element.lastIndexOf("/") + 1),/* 预览中的删除按钮的url*/
+                        key: $("#staffId").val(),/* 删除时ajax携带的参数*/
+                        downloadUrl: '',   //这个是显示下载按钮的关键，如果没有此属性，下载按钮是不会显示的。
+                        extra: {staffId: $("#staffId").val()}  /*删除文件携带的参数*/
+                    });
+                }
+            }
+            initFileInput(initialPreview, initialPreviewConfig);
+        } else {
+            initFileInput();
+        }
+    }
+
+    $("#form-staff-edit").validate({
+        focusCleanup: true
+    });
+
+    /* function initFileInput(initialPreview, initialPreviewConfig) {
+
+         $("#resume").fileinput({
+             language: 'zh', //设置语言
+             uploadUrl: "", //上传的地址
+             //deleteUrl: '',//批量删除的url
+             //deleteExtraData: {},//删除的参数
+             allowedFileExtensions: ['jpg', 'tiff', 'tif', 'gif', 'png', 'pdf'],//接收的文件后缀
+             uploadExtraData: {"recid": recid},//参数
+             dropZoneEnabled: true,//是否显示拖拽区域
+             dropZoneTitle: '无原文<br/>可以将图片拖放到这里 …<br/>支持多文件上传',
+             uploadAsync: true, //默认异步上传
+             showUpload: false, //是否显示上传按钮
+             showRemove: false, //显示移除按钮
+             showPreview: true, //是否显示预览
+             purifyHtml: true, // 这是默认情况下为预览净化HTML数据
+             showCaption: true,//是否显示标题
+             overwriteInitial: false, //不覆盖已存在的图片
+             browseClass: "btn btn-primary", //按钮样式
+             previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+             initialPreview: initialPreview,
+             initialPreviewConfig: initialPreviewConfig,
+             initialPreviewAsData: true, // 特别重要
+             previewTemplates: {
+                 pdf: '<div class="file-preview-frame{frameClass}" id="{previewId}" data-fileindex="{fileindex}" data-template="{template}">\n' +
+                     '   <div class="kv-file-content">' +
+                     //'       <embed class="kv-preview-data" src="{data}" width="{width}" height="{height}" type="application/pdf">\n',
+                     '		   <iframe src="/modules/pdfPreView/generic/web/viewer.html?file={data}" width="100%" height="100%" style="border: 0;overflow: hidden;" scrolling="no"></iframe>' +
+                     '   </div>\n' +
+                     '   {footer}\n' +
+                     '</div>',
+             },
+             fileActionSettings: {
+                 showRemove: false,
+                 showUpload: false,
+                 showDownload: false,
+                 showZoom: true,
+                 showDrag: false
+             },
+             layoutTemplates: {
+                 actionUpload: '',//去除上传预览缩略图中的上传图片
+                 //actionZoom:'',   //去除上传预览缩略图中的查看详情预览的缩略图标
+                 actionDownload: '', //去除上传预览缩略图中的下载图标
+                 actionDelete: '', //去除上传预览的缩略图中的删除图标
+                 actionDrag: ''//去除缩略图中的拖拽图标
+             },//对象用于渲染布局的每个部分的模板配置。您可以设置以下模板来控制窗口小部件布局.eg:去除上传图标
+         }).on('filepreupload', function (event, data, previewId, index) {     //上传中
+             var form = data.form, files = data.files, extra = data.extra,
+                 response = data.response, reader = data.reader;
+             console.log('文件正在上传');
+         }).on("fileuploaded", function (event, data, previewId, index) {    //一个文件上传成功
+             var response = data.response;
+             //alert(response.filePath);
+             console.log('文件上传成功！' + data.id);
+             //在上传成功事件中将服务器返回的所需数据，添加到该文件对应的div中
+             $('#' + previewId).attr('fileid', response.id);
+             //$('#' + previewId).attr('deletePath', response.deletePath);
+
+         }).on('fileerror', function (event, data, msg) {  //一个文件上传失败
+             console.log('文件上传失败！' + data.id);
+         }).on('filesuccessremove', function (event, previewId, extra) {//单个文件删除
+             //在移除事件里取出所需数据，并执行相应的删除指令
+             //delete(($('#' + previewId).attr('fileid'));
+         })
+     }
+
+     function getFileData() {
+         $.ajax({
+             url: '',//访问后台的url
+             data: {
+                 //参数
+             },
+             type: 'post',
+             dataType: 'json',
+             success: function (data) {
+                 //封装回显的图片
+                 if ("1" == data.flag) {
+                     if (data.data) {
+                         //获取照片的路径封装至数组中
+                         var initialPreview = [];
+                         var initialPreviewConfig = [];
+                         for (var i = 0; i < data.data.length; i++) {
+                             if (data.data[i].affixSuffix.indexOf('pdf') > -1) {
+                                 //'<img src="http://lorempixel.com/800/460/nature/1" class="kv-preview-data krajee-init-preview file-preview-image">'
+                                 initialPreview.push('<iframe src="/modules/pdfPreView/generic/web/viewer.html?file=' + 文件在服务器的访问路径 + '" width="100%" height="100%" style="border: 0;overflow: hidden;" scrolling="no"></iframe>');
+                                 initialPreviewConfig.push({
+                                     previewAsData: false,
+                                     type: 'pdf',//文件类型（后缀）
+                                     caption: data.data[i].affixName,/!*文件标题*!/
+                                     size: data.data[i].affixSize,
+                                     url: '',/!* 预览中的删除按钮的url*!/
+                                     key: data.data[i].id,/!* 删除时ajax携带的参数*!/
+                                     downloadUrl: '',   //这个是显示下载按钮的关键，如果没有此属性，下载按钮是不会显示的。
+                                     extra: {ids: data.data[i].id}  /!*删除文件携带的参数*!/
+                                 });
+                             }
+                         }
+                         initFileInput(initialPreview, initialPreviewConfig);
+                     } else {
+                         initFileInput();
+                     }
+                 }
+
+             },
+             error: function (err) {
+                 layer.msg('获取档案照片失败，请刷新重试！', {icon: 2, time: 1000});
+
+             }
+         });
+     }
+
+
+     function submitHandler() {
+         if ($.validate.form()) {
+             var form = document.getElementById("form-staff-edit")//先获到表单的JQ对象
+             formData = new FormData(form);
+             if (onSubmit()) {
+                 // 禁用按钮
+                 $.modal.disable();
+                 var str = "";
+                 $.ajax({
+                     url: prefix + "/edit",
+                     type: "post",
+                     data: formData,
+                     processData: false,
+                     contentType: false,
+                     success: function (result) {
+                         $.operate.successCallback(result);
+                     }
+                 })
+             }
+         }
+     }
+
+
+     function onSubmit() {
+         var flag = true;
+         var file = document.getElementById("resume").value;
+         if ($.common.isNotEmpty(file)) {
+             var AllImgExt = ".doc|.docx|.ppt|.pptx|.pdf|.text";
+             var extName = file.substring(file.lastIndexOf(".")).toLowerCase();//（把路径中的所有字母全部转换为小写）
+             if (AllImgExt.indexOf(extName + "|") == -1) {
+                 $.modal.alertError("该文件类型不允许上传。请上传 " + AllImgExt + " 类型的文件，当前文件类型为" + extName);
+                 flag = false;
+             }
+         }
+         return flag;
+     }
+
+     $("input[name='birthday']").datetimepicker({
+         format: "yyyy-mm-dd",
+         minView: "month",
+         autoclose: true
+     });
+
+     $("input[name='entryDate']").datetimepicker({
+         format: "yyyy-mm-dd",
+         minView: "month",
+         autoclose: true
+     });
+
+     $("input[name='leaveDate']").datetimepicker({
+         format: "yyyy-mm-dd",
+         minView: "month",
+         autoclose: true
+     });
+
+     $("input[name='accounteEntryDate']").datetimepicker({
+         format: "yyyy-mm-dd",
+         minView: "month",
+         autoclose: true
+     });
+
+     function selectDeptTree() {
+         var departmentId = $("#departmentId").val();
+         var url = "";
+         if ($.common.isNotEmpty(departmentId)) {
+             url = ctx + "system/department/selectDeptTree/" + departmentId;
+         } else {
+             url = ctx + "system/department/selectDeptTree";
+         }
+         var options = {
+             title: '选择部门',
+             width: "380",
+             url: url,
+             callBack: doSubmit
+         };
+         $.modal.openOptions(options);
+     }
+
+     function doSubmit(index, layero) {
+         var tree = layero.find("iframe")[0].contentWindow.$._tree;
+         if ($.tree.notAllowParents(tree)) {
+             var body = layer.getChildFrame('body', index);
+             $("#departmentId").val(body.find('#treeId').val());
+             $("#departmentName").val(body.find('#treeName').val());
+             layer.close(index);
+             if ("已离职" == $("#departmentName").val()) {
+                 $("#status").prop("checked", false);
+             } else {
+                 $("#status").prop("checked", true);
+             }
+         }
+     }
+
+     function accounteEntryDateChange() {
+         var date = $("#accounteEntryDate").val();
+         var newDate = new Date();
+         var a = moment(date);
+         var b = moment(newDate);
+         b.diff(a, "years");
+         $("#secretaryLing").val(b.diff(a, "years"));
+     }
+
+     function statusChange() {
+         var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+         if ("1" == status) {
+             $.ajax({
+                 url: prefix + "/selectDepartment",
+                 type: 'post',
+                 data: '',
+                 dataType: 'json',
+                 success: function (result) {
+                     $("#departmentId").val(result.data.departmentId);
+                     $("#departmentName").val(result.data.departmentName);
+                 }
+             })
+         } else {
+             $.modal.msgError("请先修改所属部门");
+             selectDeptTree();
+             $("#status").prop("checked", false);
+         }
+     }*/
+</script>
+</body>
+</html>

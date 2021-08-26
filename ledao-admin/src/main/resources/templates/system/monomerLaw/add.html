@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增项目法律信息')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-monomerLaw-add">
+        <input name="projectId" class="form-control" type="hidden" th:value="*{projectId}">
+        <input name="projectType" class="form-control" type="hidden" th:value="*{projectType}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">司法状态：</label>
+            <div class="col-sm-8">
+                <select name="judicialStatus" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_project_sfzt')}">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">管辖法院：</label>
+            <div class="col-sm-8">
+                <input name="competentCourt" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">法官及联系方式：</label>
+            <div class="col-sm-8">
+                <input name="judgeContact" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">律所：</label>
+            <div class="col-sm-8">
+                <input name="lawFirm" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">律师及联系方式：</label>
+            <div class="col-sm-8">
+                <input name="lawyerContact" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所属债权合同编号：</label>
+            <div class="col-sm-8">
+                <input name="contractNo" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">诉讼时效起算日：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="limitationAction" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开庭时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <input name="openTime" id="openTime" type="hidden">
+                    <select onchange="typeChange(this)" class="form-control" style="width: 35%">
+                        <option value="一审">一审</option>
+                        <option value="二审">二审</option>
+                        <option value="再审">再审</option>
+                        <option value="其他">其他</option>
+                    </select>
+                    <!--<span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+                    <input name="openTimes" id="openTimes" class="form-control" placeholder="yyyy-MM-dd" type="text"
+                           autocomplete="off" style="width: 65%">
+                    <button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delOpenTimes"
+                            onclick="delete(this)"><span class="glyphicon glyphicon-minus"></span></button>
+                </div>
+                <button class="btn btn-info" type="button" title="新增" id="addSaltIpGrpBtn"
+                        onclick="addSaltIpGrp(this)">
+                    <span class="glyphicon glyphicon-plus"></span></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">查封标的：</label>
+            <div class="col-sm-8">
+                <input name="sealUpSubjectMatter" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">查封日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="sealUpDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行时效起算日：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="limitationExecution" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">起诉立案日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="dateFiling" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">一审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <input name="firstInstance" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">二审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <input name="secondInstance" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">再审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <input name="retrial" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行立案日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="enforcementFilingDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">出具评估报告日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="appraisalReportDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">第一次挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="firstShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">第二次挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="secondShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">变卖挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="sellShotDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">拍卖成交日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="successfulBidderDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行款到账日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="paymentReceivedDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">创建人名称：</label>
+            <div class="col-sm-8">
+                <input name="creator" class="form-control" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/monomerLaw"
+    $("#form-monomerLaw-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-monomerLaw-add').serialize());
+        }
+    }
+
+    $("input[name='limitationAction']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='sealUpDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='limitationExecution']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='dateFiling']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='enforcementFilingDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='appraisalReportDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='firstShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='secondShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='sellShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='successfulBidderDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='paymentReceivedDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    var i = 0;
+
+    function addSaltIpGrp(obj) {
+        i++;
+        var str = '<div class="input-group date">';
+        str += '<select onchange="typeChange(this)" class="form-control" style="width: 35%">';
+        str += '<option value="一审">一审</option>';
+        str += '<option value="二审">二审</option>';
+        str += '<option value="再审">再审</option>';
+        str += '<option value="其他">其他</option>';
+        str += '</select>';
+        //str += '<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
+        str += '<input name="openTimes" id="openTimes" class="form-control" placeholder="yyyy-MM-dd" type="text"autocomplete="off" style="width: 65%">';
+        str += '<button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delOpenTimes" onclick="delete(this)"><span class="glyphicon glyphicon-minus"></span></button>';
+        str += '</div>';
+        $(str).insertBefore(obj);
+        $.initDataPlugin();
+    };
+
+    function typeChange(obj) {
+        var value = $(obj).val();
+        if ('其他' == value) {
+            var str = '<input name="openType" class="form-control" type="text" style="width: 35%" onBlur="onBlur(this)">';
+            $(str).insertAfter(obj);
+            $(obj).hide();
+        } else {
+            var push = [];
+            var thisTime = $(obj).next().val();
+            var openTime = $("#openTime").val();
+            if ($.common.isNotEmpty(openTime)) {
+                var str1 = eval($("#openTime").val());
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(thisTime)) {
+                        if ($.common.equalsIgnoreCase(thisTime, str1[i].value)) {
+                            str1[i].type = $(obj).val();
+                        }
+                    }
+                    push.push(str1[i]);
+                }
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        }
+    }
+
+    function onBlur(obj) {
+        var push = [];
+        var thisTime = $(obj).next().val();
+        if ($.common.isNotEmpty(thisTime)) {
+            var openTime = $("#openTime").val();
+            if ($.common.isNotEmpty(openTime)) {
+                var str1 = eval($("#openTime").val());
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(thisTime)) {
+                        if ($.common.equalsIgnoreCase(thisTime, str1[i].value)) {
+                            str1[i].type = $(obj).val();
+                        }
+                    }
+                    push.push(str1[i]);
+                }
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        }
+    }
+
+    function unique(list) {
+        var arr = [];
+        for (var i = 0; i < list.length; i++) {
+            if (i == 0) arr.push(list[i]);
+            b = false;
+            if (arr.length > 0 && i > 0) {
+                for (var j = 0; j < arr.length; j++) {
+                    if (arr[j].type == list[i].type || arr[j].value == list[i].value) {
+                        b = true;
+                        break;
+                    }
+                }
+                if (!b) {
+                    arr.push(list[i]);
+                }
+            }
+        }
+        return arr;
+    }
+
+    $(document).on('click', '#delOpenTimes', function () {
+            var type = $(this).prev().prev().val();
+            var openTime = $("#openTime").val();
+            var str1 = eval(openTime);
+            var index;
+            for (var i = 0; i < str1.length; i++) {
+                if ($.common.isNotEmpty(type)) {
+                    if (str1[i].type == type) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+            str1.splice(index, 1);
+            $("#openTime").val(JSON.stringify(str1));
+            $(this).parent().remove();
+        }
+    );
+    $.initDataPlugin = function () {
+        $("input[name='openTimes']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: 'month',
+            autoclose: true,
+        }).on("hide", function (ev) {
+            var thisTime = $(this).val();
+            var type = $(this).prev().val();
+            var push = [];
+            var str = "";
+            var openTime = $("#openTime").val();
+            var str1 = eval(openTime);
+            if ($.common.isNotEmpty(str1)) {
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(type)) {
+                        if ($.common.equalsIgnoreCase(type, str1[i].type)) {
+                            str1[i].value = thisTime;
+                        } else {
+                            str = '{"type":"' + type + '","value":"' + thisTime + '"}';
+                        }
+                    }
+                    if ($.common.isNotEmpty(str)) {
+                        push.push(JSON.parse(str));
+                    }
+                    push.push(str1[i]);
+                }
+            } else {
+                str = '{"type":"' + type + '","value":"' + thisTime + '"}';
+                push.push(JSON.parse(str));
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        });
+    };
+    $.initDataPlugin();
+</script>
+</body>
+</html>

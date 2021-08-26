@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysMonomerLawMapper">
+
+    <resultMap type="SysMonomerLaw" id="SysMonomerLawResult">
+        <result property="monomerLawId" column="monomer_law_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectType" column="project_type"/>
+        <result property="judicialStatus" column="judicial_status"/>
+        <result property="competentCourt" column="competent_court"/>
+        <result property="judgeContact" column="judge_contact"/>
+        <result property="lawFirm" column="law_firm"/>
+        <result property="lawyerContact" column="lawyer_contact"/>
+        <result property="contractNo" column="contract_no"/>
+        <result property="limitationAction" column="limitation_action"/>
+        <result property="openTime" column="open_time"/>
+        <result property="sealUpSubjectMatter" column="seal_up_subject_matter"/>
+        <result property="sealUpDate" column="seal_up_date"/>
+        <result property="limitationExecution" column="limitation_execution"/>
+        <result property="dateFiling" column="date_filing"/>
+        <result property="firstInstance" column="first_instance"/>
+        <result property="secondInstance" column="second_instance"/>
+        <result property="retrial" column="retrial"/>
+        <result property="enforcementFilingDate" column="enforcement_filing_date"/>
+        <result property="appraisalReportDate" column="appraisal_report_date"/>
+        <result property="firstShotDate" column="first_shot_date"/>
+        <result property="secondShotDate" column="second_shot_date"/>
+        <result property="sellShotDate" column="sell_shot_date"/>
+        <result property="successfulBidderDate" column="successful_bidder_date"/>
+        <result property="paymentReceivedDate" column="payment_received_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="reviser" column="reviser"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <sql id="selectSysMonomerLawVo">
+        select monomer_law_id, project_id, project_type, judicial_status, competent_court, judge_contact, law_firm, lawyer_contact, contract_no, limitation_action, open_time, seal_up_subject_matter, seal_up_date, limitation_execution, date_filing, first_instance, second_instance, retrial, enforcement_filing_date, appraisal_report_date, first_shot_date, second_shot_date, sell_shot_date, successful_bidder_date, payment_received_date, create_by, creator, create_time, update_by, reviser, update_time, del_flag from sys_monomer_law
+    </sql>
+
+    <select id="selectSysMonomerLawList" parameterType="SysMonomerLaw" resultMap="SysMonomerLawResult">
+        <include refid="selectSysMonomerLawVo"/>
+        <where>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="projectType != null  and projectType != ''">and project_type = #{projectType}</if>
+            <if test="judicialStatus != null  and judicialStatus != ''">and judicial_status = #{judicialStatus}</if>
+            <if test="competentCourt != null  and competentCourt != ''">and competent_court = #{competentCourt}</if>
+            <if test="judgeContact != null  and judgeContact != ''">and judge_contact = #{judgeContact}</if>
+            <if test="lawFirm != null  and lawFirm != ''">and law_firm = #{lawFirm}</if>
+            <if test="lawyerContact != null  and lawyerContact != ''">and lawyer_contact = #{lawyerContact}</if>
+            <if test="contractNo != null  and contractNo != ''">and contract_no = #{contractNo}</if>
+            <if test="limitationAction != null ">and limitation_action = #{limitationAction}</if>
+            <if test="openTime != null  and openTime != ''">and open_time = #{openTime}</if>
+            <if test="sealUpSubjectMatter != null  and sealUpSubjectMatter != ''">and seal_up_subject_matter =
+                #{sealUpSubjectMatter}
+            </if>
+            <if test="sealUpDate != null ">and seal_up_date = #{sealUpDate}</if>
+            <if test="limitationExecution != null ">and limitation_execution = #{limitationExecution}</if>
+            <if test="dateFiling != null ">and date_filing = #{dateFiling}</if>
+            <if test="firstInstance != null  and firstInstance != ''">and first_instance = #{firstInstance}</if>
+            <if test="secondInstance != null  and secondInstance != ''">and second_instance = #{secondInstance}</if>
+            <if test="retrial != null  and retrial != ''">and retrial = #{retrial}</if>
+            <if test="enforcementFilingDate != null ">and enforcement_filing_date = #{enforcementFilingDate}</if>
+            <if test="appraisalReportDate != null ">and appraisal_report_date = #{appraisalReportDate}</if>
+            <if test="firstShotDate != null ">and first_shot_date = #{firstShotDate}</if>
+            <if test="secondShotDate != null ">and second_shot_date = #{secondShotDate}</if>
+            <if test="sellShotDate != null ">and sell_shot_date = #{sellShotDate}</if>
+            <if test="successfulBidderDate != null ">and successful_bidder_date = #{successfulBidderDate}</if>
+            <if test="paymentReceivedDate != null ">and payment_received_date = #{paymentReceivedDate}</if>
+            <if test="creator != null  and creator != ''">and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''">and reviser = #{reviser}</if>
+            <if test="delFlag != null  and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectSysMonomerLawById" parameterType="Long" resultMap="SysMonomerLawResult">
+        <include refid="selectSysMonomerLawVo"/>
+        where monomer_law_id = #{monomerLawId}
+    </select>
+
+    <insert id="insertSysMonomerLaw" parameterType="SysMonomerLaw">
+        insert into sys_monomer_law
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="monomerLawId != null">monomer_law_id,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="judicialStatus != null">judicial_status,</if>
+            <if test="competentCourt != null">competent_court,</if>
+            <if test="judgeContact != null">judge_contact,</if>
+            <if test="lawFirm != null">law_firm,</if>
+            <if test="lawyerContact != null">lawyer_contact,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="limitationAction != null">limitation_action,</if>
+            <if test="openTime != null">open_time,</if>
+            <if test="sealUpSubjectMatter != null">seal_up_subject_matter,</if>
+            <if test="sealUpDate != null">seal_up_date,</if>
+            <if test="limitationExecution != null">limitation_execution,</if>
+            <if test="dateFiling != null">date_filing,</if>
+            <if test="firstInstance != null">first_instance,</if>
+            <if test="secondInstance != null">second_instance,</if>
+            <if test="retrial != null">retrial,</if>
+            <if test="enforcementFilingDate != null">enforcement_filing_date,</if>
+            <if test="appraisalReportDate != null">appraisal_report_date,</if>
+            <if test="firstShotDate != null">first_shot_date,</if>
+            <if test="secondShotDate != null">second_shot_date,</if>
+            <if test="sellShotDate != null">sell_shot_date,</if>
+            <if test="successfulBidderDate != null">successful_bidder_date,</if>
+            <if test="paymentReceivedDate != null">payment_received_date,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="reviser != null">reviser,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="monomerLawId != null">#{monomerLawId},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="judicialStatus != null">#{judicialStatus},</if>
+            <if test="competentCourt != null">#{competentCourt},</if>
+            <if test="judgeContact != null">#{judgeContact},</if>
+            <if test="lawFirm != null">#{lawFirm},</if>
+            <if test="lawyerContact != null">#{lawyerContact},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="limitationAction != null">#{limitationAction},</if>
+            <if test="openTime != null">#{openTime},</if>
+            <if test="sealUpSubjectMatter != null">#{sealUpSubjectMatter},</if>
+            <if test="sealUpDate != null">#{sealUpDate},</if>
+            <if test="limitationExecution != null">#{limitationExecution},</if>
+            <if test="dateFiling != null">#{dateFiling},</if>
+            <if test="firstInstance != null">#{firstInstance},</if>
+            <if test="secondInstance != null">#{secondInstance},</if>
+            <if test="retrial != null">#{retrial},</if>
+            <if test="enforcementFilingDate != null">#{enforcementFilingDate},</if>
+            <if test="appraisalReportDate != null">#{appraisalReportDate},</if>
+            <if test="firstShotDate != null">#{firstShotDate},</if>
+            <if test="secondShotDate != null">#{secondShotDate},</if>
+            <if test="sellShotDate != null">#{sellShotDate},</if>
+            <if test="successfulBidderDate != null">#{successfulBidderDate},</if>
+            <if test="paymentReceivedDate != null">#{paymentReceivedDate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="reviser != null">#{reviser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysMonomerLaw" parameterType="SysMonomerLaw">
+        update sys_monomer_law
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="judicialStatus != null">judicial_status = #{judicialStatus},</if>
+            <if test="competentCourt != null">competent_court = #{competentCourt},</if>
+            <if test="judgeContact != null">judge_contact = #{judgeContact},</if>
+            <if test="lawFirm != null">law_firm = #{lawFirm},</if>
+            <if test="lawyerContact != null">lawyer_contact = #{lawyerContact},</if>
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="limitationAction != null">limitation_action = #{limitationAction},</if>
+            <if test="openTime != null">open_time = #{openTime},</if>
+            <if test="sealUpSubjectMatter != null">seal_up_subject_matter = #{sealUpSubjectMatter},</if>
+            <if test="sealUpDate != null">seal_up_date = #{sealUpDate},</if>
+            <if test="limitationExecution != null">limitation_execution = #{limitationExecution},</if>
+            <if test="dateFiling != null">date_filing = #{dateFiling},</if>
+            <if test="firstInstance != null">first_instance = #{firstInstance},</if>
+            <if test="secondInstance != null">second_instance = #{secondInstance},</if>
+            <if test="retrial != null">retrial = #{retrial},</if>
+            <if test="enforcementFilingDate != null">enforcement_filing_date = #{enforcementFilingDate},</if>
+            <if test="appraisalReportDate != null">appraisal_report_date = #{appraisalReportDate},</if>
+            <if test="firstShotDate != null">first_shot_date = #{firstShotDate},</if>
+            <if test="secondShotDate != null">second_shot_date = #{secondShotDate},</if>
+            <if test="sellShotDate != null">sell_shot_date = #{sellShotDate},</if>
+            <if test="successfulBidderDate != null">successful_bidder_date = #{successfulBidderDate},</if>
+            <if test="paymentReceivedDate != null">payment_received_date = #{paymentReceivedDate},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="reviser != null">reviser = #{reviser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where monomer_law_id = #{monomerLawId}
+    </update>
+
+    <delete id="deleteSysMonomerLawById" parameterType="Long">
+        delete from sys_monomer_law where monomer_law_id = #{monomerLawId}
+    </delete>
+
+    <delete id="deleteSysMonomerLawByIds" parameterType="String">
+        delete from sys_monomer_law where monomer_law_id in
+        <foreach item="monomerLawId" collection="array" open="(" separator="," close=")">
+            #{monomerLawId}
+        </foreach>
+    </delete>
+
+</mapper>

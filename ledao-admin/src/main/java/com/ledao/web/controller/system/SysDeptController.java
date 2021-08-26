@@ -230,4 +230,12 @@ public class SysDeptController extends BaseController {
         mmap.put("userName", userName);
         return prefix + "/selectUser";
     }
+
+    @GetMapping("/selectLeaderDepUser")
+    public String selectLeaderDepUser(String userId, String userName,String deptId, ModelMap mmap) {
+        mmap.put("userId", userId);
+        mmap.put("deptId", deptId);
+        mmap.put("userName", userName);
+        return prefix + "/selectUser";
+    }
 }

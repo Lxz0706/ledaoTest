@@ -98,6 +98,7 @@
     var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
     var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
     var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
+    var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
     var showNames = false;
     var ids = '';
     var optionUrl = prefix + "/editOutList/";
@@ -390,7 +391,7 @@
 
     //人员树形选择器
     function selectUser() {
-        var url = ctx + "system/dept/selectLeaderUser?userId=" + $("#realCreateById").val() + "&userName=" + $("#realCreateBy").val();
+        var url = ctx + "system/dept/selectLeaderDepUser?userId=" + $("#realCreateById").val() + "&userName=" + $("#realCreateBy").val() + "&deptId=" + deptId;
         $.modal.open("人员选择", url, '750', '600/2');
     }
     function getDeviceBasics(row) {

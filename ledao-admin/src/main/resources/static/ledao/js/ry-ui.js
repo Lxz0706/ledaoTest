@@ -1146,18 +1146,20 @@ var table = {
                 });
             },
             // 审批成功 （同意）
-            approve: function (id , applyType) {
+            approve: function (id , applyType,val) {
                 table.set();
-                $.modal.confirm("确认提交?", function () {
-                    var url = table.options.approveUrl;
-                    var data = {"applyId": id, "approveStatu": "6","applyType": applyType};
-                    $.operate.submit(url, "post", "json", data);
-                });
+                // $.modal.confirm("确认提交?", function () {
+                //     var url = table.options.approveUrl;
+                //     var data = {"applyId": id, "approveStatu": "6","applyType": applyType};
+                //     $.operate.submit(url, "post", "json", data);
+                // });
+                var url = "/applyIn/reject/" + id + "/" + applyType + "/" + val;
+                $.modal.open("添加备注",url);
             },
             // 驳回画面
-            rejectMask:function (id,applyType) {
+            rejectMask:function (id,applyType,val) {
                 table.set()
-                var url = "/applyIn/reject/" + id + "/" + applyType;
+                var url = "/applyIn/reject/" + id + "/" + applyType + "/" + val;
                 $.modal.open("添加备注",url);
             },
             // 设置信息为已读

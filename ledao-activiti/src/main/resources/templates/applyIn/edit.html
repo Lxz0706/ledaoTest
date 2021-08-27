@@ -10,6 +10,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <input name="appStatu" type="hidden" id="appStatu" th:value="*{appStatu}">
     <input name="applyTypeUnDone" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
+    <input name="seOrEd" id="seOrEd" th:value="*{seOrEd}" type="hidden">
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
         <input name="applyType" id="applyType" th:field="*{applyType}" type="hidden">
@@ -46,13 +47,13 @@
         <div class="form-group" id="debtorName" >
             <label class="col-sm-3 control-label">债务人名称：</label>
             <div class="col-sm-8">
-                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">
+                <input name="debtorName" th:field="*{debtorName}" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">实际提交人：</label>
             <div class="col-sm-8">
-                <input disabled name="realCreateBy" th:field="*{realCreateBy}" class="form-control" type="text">
+                <input name="realCreateBy" th:field="*{realCreateBy}" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
@@ -104,6 +105,7 @@
         var ids = document.getElementById("applyId").value;
         var applyType = document.getElementById("applyType").value;
         var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
+        var seOrEd = document.getElementById("seOrEd").value;
     $(function () {
         var appStatu = document.getElementById("appStatu").value;
 
@@ -122,12 +124,17 @@
             showNames = true
         }
         var isNotChange = false
-        if(appStatu!=0 && appStatu != 4){
+        // if(appStatu!=0 && appStatu != 4 && appStatu != 2){
+        //     isNotChange = false
+        //     if((appStatu == 1 || appStatu == 5) && showNames){
+        //     }else{
+        //         isNotChange = true
+        //     }
+        // }
+        if(appStatu == 0 || appStatu == 4 || appStatu == 2) {
             isNotChange = false
-            if((appStatu == 1 || appStatu == 5) && showNames){
-            }else{
-                isNotChange = true
-            }
+        } else {
+            isNotChange = true
         }
         var options = {
             url: prefixDocumentFile + "/listDocApp",
@@ -152,8 +159,8 @@
                 //     }
                 // },
                 {
-                    field: 'assetPag',
-                    title: '资产包',
+                    field: 'projectName',
+                    title: '项目名称',
                     visible: documentTypeVal == "0" ? true : false
                 },
                 {
@@ -275,19 +282,40 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if(!isNotChange) {
+                            if(applyTypeUnDone == "3") {
+                                if(seOrEd == "edse1") {
+                                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                    actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                                }
+                            } else {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+
+                            }
+                        }
                         return actions.join('');
-                    },
-                    visible: !isNotChange
+                    }
                 }]
         };
         $.table.init(options);
-        if(isNotChange){
-            $("input").attr("readonly","readonly");
-            $("select").attr("disabled",true);
-            $("a").attr("disabled",true);
-            $('.btn').removeAttr('onclick')
+
+        if(applyTypeUnDone == "3") {
+            debugger
+            if(seOrEd == "edse0") {
+                $("input").attr("readonly","readonly");
+                $("select").attr("disabled",true);
+                $("a").attr("disabled",true);
+                $('.btn').removeAttr('onclick')
+            }
+        } else {
+            debugger
+            if(isNotChange){
+                $("input").attr("readonly","readonly");
+                $("select").attr("disabled",true);
+                $("a").attr("disabled",true);
+                $('.btn').removeAttr('onclick')
+            }
         }
     });
 

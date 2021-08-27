@@ -306,7 +306,8 @@
         }
 
         function submitHandler () {
-            $.modal.close()
+            var result = {code:0,msg:'操作成功'};
+            $.operate.successCallback(result)
         }
     </script>
 </body>

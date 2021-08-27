@@ -160,13 +160,16 @@
     var approveStatu = document.getElementById("approveStatu").value
     $(function () {
         for(var i =0; i < roles.length;i++) {
-            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
-                $("#isOutShow").show()
-                $("#isReceiveShow").show()
-                $("#isReturnedShow").show()
-                $("#isReceivedShow").show()
-                $("select,input,textarea").attr("readonly","readonly");
-                $("#isOut").removeAttr("readonly")
+            if(applyType == "0" || applyType == "") {
+            } else {
+                if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                    $("#isOutShow").show()
+                    $("#isReceiveShow").show()
+                    $("#isReturnedShow").show()
+                    $("#isReceivedShow").show()
+                    $("select,input,textarea").attr("readonly","readonly");
+                    $("#isOut").removeAttr("readonly")
+                }
             }
         }
         if(approveStatu == "7" || approveStatu == "8" || approveStatu == "9") {

@@ -25,6 +25,8 @@ public class SysDocumentFile extends BaseEntity
     @Excel(name = "档案种类，字典项：业务、日常经营")
     private String documentType;
 
+    private String documentTypeVal;
+
     /** 资产编号 */
     @Excel(name = "资产编号")
     private String assetNumber;
@@ -123,6 +125,14 @@ public class SysDocumentFile extends BaseEntity
 
     @Excel(name = "债务人名称")
     private String debtorName;
+
+    public String getDocumentTypeVal() {
+        return documentTypeVal;
+    }
+
+    public void setDocumentTypeVal(String documentTypeVal) {
+        this.documentTypeVal = documentTypeVal;
+    }
 
     public String getCreatorName() {
         return creatorName;
@@ -380,6 +390,7 @@ public class SysDocumentFile extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("documentId", getDocumentId())
             .append("documentType", getDocumentType())
+            .append("documentTypeVal", getDocumentTypeVal())
             .append("assetNumber", getAssetNumber())
             .append("contractNo", getContractNo())
             .append("assetPag", getAssetPag())

@@ -45,12 +45,12 @@
                                 </select>
                             </li>
                             <li>
-                                <label>份数：</label>
-                                <input type="text" name="counts"/>
+                                <label class="is-required">份数：</label>
+                                <input class="required" type="text" name="counts"/>
                             </li>
                             <li>
-                                <label>页数：</label>
-                                <input type="text" name="pages"/>
+                                <label class="is-required">页数：</label>
+                                <input class="required" type="text" name="pages"/>
                             </li>
                             <li>
                                 <label>档案状态：</label>
@@ -174,10 +174,10 @@
                     visible: false
                 },
                 {
-                    field: 'assetPag',
-                    title: '资产包',
+                    field: 'projectName',
+                    title: '项目名称',
                     formatter: function(value, item, index) {
-                        return strLength(item.assetPag);
+                        return strLength(item.projectName);
                     }
                 },
                 {

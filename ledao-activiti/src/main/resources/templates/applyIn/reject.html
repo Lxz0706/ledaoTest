@@ -9,7 +9,7 @@
     <form class="form-horizontal m" id="form-applyIn-add">
         <input name="applyId" id="applyId" th:value="*{applyId}" type="hidden">
         <input name="applyType" id="applyType" th:value="*{applyType}" type="hidden">
-        <input name="approveStatu" id="approveStatu" th:value="*{approveStatu}" type="text">
+        <input name="approveStatu" id="approveStatu" th:value="*{approveStatu}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
@@ -43,7 +43,7 @@
                 type: "post",
                 dataType: "json",
                 success: function(result) {
-                    if(approveStatu == "2") {
+                    if(approveStatu == "6") {
                         $.modal.confirm("确认通过本条数据吗?", function () {
                             $.operate.successCallback(result);
                         })

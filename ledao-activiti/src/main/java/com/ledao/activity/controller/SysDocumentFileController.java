@@ -6,6 +6,7 @@ import java.util.List;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.core.text.Convert;
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
@@ -143,6 +144,9 @@ public class SysDocumentFileController extends BaseController
         List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
         if (ss !=null && ss.size()>0){
             return AjaxResult.error("存在重复记录，请检查");
+        }
+        if (StringUtils.isNotEmpty(sysDocumentFile.getDocumentTypeVal())){
+            sysDocumentFile.setDocumentType(sysDocumentFile.getDocumentTypeVal());
         }
         sysDocumentFile.setReviser(loginName);
         sysDocumentFile.setCreateBy(loginName);

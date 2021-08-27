@@ -1294,9 +1294,9 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
-            editApplyInAndOut: function (id, applyType, applyTypeUnDone) {
+            editApplyInAndOut: function (id,applyType,applyTypeUnDone,seOrEd) {
                 table.set();
-                var url = "edit/" + id + '/' + applyType + '/' + applyTypeUnDone
+                var url = "edit/" + id + '/' + applyType + '/' + applyTypeUnDone + '/' + seOrEd
                 $.modal.open("修改" + table.options.modalName, url);
             },
             // 修改信息，以tab页展现

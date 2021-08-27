@@ -25,10 +25,6 @@
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>-->
-                            <!--<li id="assetPag">
-                                <label>资产包：</label>
-                                <input type="text" name="assetPag" />
-                            </li>-->
                             <li id="assetNumber">
                                 <label>资产编号：</label>
                                 <input type="text" name="assetNumber" />
@@ -236,8 +232,8 @@
 		            }
                 },
                 {
-                    field: 'assetPag',
-                    title: '资产包'
+                    field: 'projectName',
+                    title: '项目名称'
                 },
                 {
                     field: 'assetNumber',
@@ -358,9 +354,14 @@
             // if ($.validate.form()) {
             //     $.operate.save(docDetailIds + "/addDocDetailIds", $('#formId').serialize());
             // }
+
             var rows = $.table.selectFirstColumns().join();
             console.log(rows)
             console.log(applyId)
+            if(rows == "") {
+                $.modal.alertWarning("请至少选择一条记录");
+                return
+            }
             $.ajax({
                 url: docDetailIds + "/addDocDetailIds",
                 data: {

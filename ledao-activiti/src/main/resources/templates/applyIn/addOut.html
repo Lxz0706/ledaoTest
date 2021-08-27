@@ -442,7 +442,8 @@
     }
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/add");
+            // $.operate.save(prefix + "/add");
+            $.operate.successCallbackClose();
         }
     }
 

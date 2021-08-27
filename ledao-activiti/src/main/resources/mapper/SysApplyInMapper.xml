@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="instanceId"    column="instance_id"    />
         <result property="isReturn"    column="is_return"    />
         <result property="planReturnTime"    column="plan_return_time"    />
         <result property="realReturnTime"    column="real_return_time"    />
@@ -55,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="instanceId"    column="instance_id"    />
         <result property="isReturn"    column="is_return"    />
         <result property="planReturnTime"    column="plan_return_time"    />
         <result property="realReturnTime"    column="real_return_time"    />
@@ -305,6 +307,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="reviser != null">reviser,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="instanceId != null">instance_id,</if>
+            <if test="isReturn != null">is_return,</if>
+            <if test="planReturnTime != null">plan_return_time,</if>
+            <if test="realReturnTime != null">real_return_time,</if>
+            <if test="outReason != null">out_reason,</if>
+            <if test="isOut != null">is_out,</if>
+            <if test="isReceive != null">is_receive,</if>
+            <if test="isReturned != null">is_returned,</if>
+            <if test="isReceived != null">is_received,</if>
+            <if test="remarksOut != null">remarks_out,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="applyType != null">#{applyType},</if>
@@ -325,6 +337,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="reviser != null">#{reviser},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="instanceId != null">#{instanceId},</if>
+            <if test="isReturn != null">#{isReturn},</if>
+            <if test="planReturnTime != null">#{planReturnTime},</if>
+            <if test="realReturnTime != null">#{realReturnTime},</if>
+            <if test="outReason != null">#{outReason},</if>
+            <if test="isOut != null">#{isOut},</if>
+            <if test="isReceive != null">#{isReceive},</if>
+            <if test="isReturned != null">#{isReturned},</if>
+            <if test="isReceived != null">#{isReceived},</if>
+            <if test="remarksOut != null">#{remarksOut},</if>
          </trim>
     </insert>
 
@@ -349,6 +371,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="reviser != null">reviser = #{reviser},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="instanceId != null">instance_id = #{instanceId},</if>
+            <if test="isReturn != null">is_return = #{isReturn},</if>
+            <if test="planReturnTime != null">plan_return_time = #{planReturnTime},</if>
+            <if test="realReturnTime != null">real_return_time = #{realReturnTime},</if>
+            <if test="outReason != null">out_reason = #{outReason},</if>
+            <if test="isOut != null">is_out = #{isOut},</if>
+            <if test="isReceive != null">is_receive = #{isReceive},</if>
+            <if test="isReturned != null">is_returned = #{isReturned},</if>
+            <if test="isReceived != null">is_received = #{isReceived},</if>
+            <if test="remarksOut != null">remarks_out = #{remarksOut},</if>
         </trim>
         where apply_id = #{applyId}
     </update>

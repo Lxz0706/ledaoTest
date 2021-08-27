@@ -106,6 +106,10 @@ public class SysApplyIn extends BaseEntity
     @Excel(name = "出库原因")
     private String outReason;
 
+    /** 出库原因 */
+    @Excel(name = "流程id")
+    private String instanceId;
+
     /** 是否出库--字典项 */
     @Excel(name = "是否出库--字典项")
     private String isOut;
@@ -125,6 +129,14 @@ public class SysApplyIn extends BaseEntity
     /** 备注 */
     @Excel(name = "备注")
     private String remarksOut;
+
+    public String getInstanceId() {
+        return instanceId;
+    }
+
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+    }
 
     public String getIsReturn() {
         return isReturn;

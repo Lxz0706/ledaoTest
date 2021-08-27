@@ -529,6 +529,32 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
+    public String checkUserRole() {
+	    //投后部---投后部项目 0
+        String[] stbList = new String[] { "thbManager", "thbManager2", "thbzz", "thbCommon"};
+        List<String> stbs = Arrays.asList(stbList);
+        //并购重组---大型单体 1
+        String[] dxdtList = new String[] { "bgczCommon", "bgczManager" };
+        List<String> dxdts = Arrays.asList(dxdtList);
+        //投资部---资产包 2
+        String[] tzbList = new String[] { "investmentCommon", "investmentManager", "investmentManager2", "tzbzz"};
+        List<String> tzbs = Arrays.asList(tzbList);
+        SysUser u = ShiroUtils.getSysUser();
+        List<SysRole> rs = u.getRoles();
+
+        for (SysRole r: rs){
+            if (stbs.contains(r.getRoleKey())){
+                return "thb";
+            }else if(dxdts.contains(r.getRoleKey())){
+                return "bg";
+            }else if(tzbs.contains(r.getRoleKey())){
+                return "inve";
+            }
+        }
+        return null;
+    }
+
+    @Override
     public int editSave(SysApplyIn sysApplyIn) {
         sysApplyIn.setUpdateTime(new Date());
 	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);

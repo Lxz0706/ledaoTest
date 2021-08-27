@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('投后部项目管理列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input name="projectZckType" id="projectZckType" th:value="automaticSwitch" type="hidden">
+            <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
+            <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
+            <form id="formId">
+                <input name="projectZckId" id="projectZckId" type="hidden" th:value="*{proId}"/>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:project:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
+    var prefix = ctx + "system/project";
+
+    var fwProjectType = $("#fwProjectType").val();
+    var projectZckType = $("#projectZckType").val();
+    var otherFlag = $("#otherFlag").val();
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "投后部项目管理",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'projectId',
+                    title: '项目ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectName',
+                    title: '借款人名称',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
+                    },
+                    sortable: true
+                },
+                {
+                    field: 'city',
+                    title: '城市'
+                },
+                /*,
+                {
+                    field: 'totalPrice',
+                    title: '合同本金',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId + "',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
+                    }
+                },
+                {
+                    field: 'totalInterest',
+                    title: '利息',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'totalPrincipalBalance',
+                    title: '本金余额(元)',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'totalInterestBalance',
+                    title: '利息余额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'guarantors',
+                    title: '保证人',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail1(\'' + row.projectId + "',\'" + row.guarantors + '\')">' + strLength(row.guarantors) + '</a>';
+                    }
+                },
+                {
+                    field: 'collaterals',
+                    title: '抵押物',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail2(\'' + row.projectId + "',\'" + row.collaterals + '\')">' + strLength(row.collaterals) + '</a>';
+                    }
+                },
+                {
+                    field: 'pledges',
+                    title: '质押物',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail4(\'' + row.projectId + "',\'" + row.pledges + '\')">' + strLength(row.pledges) + '</a>';
+                    }
+                },
+                {
+                    field: 'recapture',
+                    title: '处置回现',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
+                    }
+                },
+                {
+                    field: 'projectManager',
+                    title: '项目经理'
+                },
+                {
+                    title: '最新进度情况',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectId + '\')">最新进度情况</a>';
+                    }
+                },*/
+                {
+                    field: 'debtStatus',
+                    title: '债权状态'
+                }]
+        };
+        $.table.init(options);
+    });
+
+    //控制显示的字数
+    function strLength(value) {
+        var str = $.common.nullToStr(value);
+        if (str.length > 10) {
+            str = str.substring(0, 10) + '...';
+        }
+        return str;
+    }
+
+    /*资产库数据-新增资产库数据*/
+    function add() {
+        var projectZckId = $("#projectZckId").val()
+        var url = prefix + "/add?projectZckId=" + projectZckId;
+        $.modal.open("添加项目", url);
+    }
+
+
+    /*项目列表-详细*/
+    function detail(id, projectName) {
+        var projectZckId = $("#projectZckId").val();
+        var url = prefix + '/toProjectList?projectId=' + id + "&projectZckId=" + projectZckId + "&fwProjectType=" + fwProjectType
+            + '&otherFlag=' + otherFlag + "&projectZckType=" + projectZckType;
+        $.modal.parentTab(projectName + "列表", url);
+    }
+
+    /*合同本金列表-详细*/
+    function detail3(id, contractPrincipal) {
+        var url = ctx + 'system/contract/contractList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
+        $.modal.parentTab("合同本金列表", url);
+    }
+
+    /*保证人列表-详细*/
+    function detail1(id, bail) {
+        // var url = ctx + 'system/bail/bailList/' + id;
+        var url = ctx + 'system/bail/bailList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
+        $.modal.parentTab("保证人列表", url);
+    }
+
+    /*抵押物列表-详细*/
+    function detail2(id, guarantor) {
+        //var url = ctx + 'system/mortgage/mortgageList/' + id;
+        var url = ctx + 'system/mortgage/mortgageList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
+        $.modal.parentTab("抵押物列表", url);
+    }
+
+    /*质押物列表-详细*/
+    function detail4(id, pledge) {
+        //var url = ctx + 'system/pledge/pledgeList/' + id;
+        var url = ctx + 'system/pledge/pledgeList?projectId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
+        $.modal.parentTab("质押物列表", url);
+    }
+
+    function progress(id) {
+        //var url = ctx + 'system/progress/progressLists/' + id + "/Y";
+        var url = ctx + 'system/progress/progressLists?projectManagementId=' + id + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&project=Y";
+        $.modal.parentTab("进度情况列表", url);
+    }
+
+    //现金回现
+    function detail5(projectId) {
+        //var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId + "&project=Y";
+        var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId + "&projectZckType=" + projectZckType
+            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&project=Y";
+        $.modal.parentTab('处置回现列表', url);
+    }
+
+    function back() {
+        var url = '';
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/project/toProjectZckByType?projectZckType=' + projectZckType + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
+        } else {
+            url = ctx + 'system/projectZck/toProjectZckByType?projectZckType=' + projectZckType;
+        }
+        $.modal.parentTab("投后部项目管理", url);
+    }
+
+    function submitHandler() {
+        var row = selectRows();
+        window.parent.getDobtSelected(row);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //如果设置了记住选中数据
+        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+            let selectedRows = table.rememberSelecteds[table.options.id];
+            if ($.common.isNotEmpty(selectedRows)) {
+                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    return row;
+                });
+            }
+        }
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i]] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+</script>
+</body>
+</html>

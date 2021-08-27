@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产信息库列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                    <div class="select-list">
+                        <!--                <input type="hidden" id="assetStatus" th:value="已收购" name="assetStatus">-->
+                        <li id="zcbName">
+                            <label>资产包名称：</label>
+                            <input type="text" name="zcbName"/>
+                        </li>
+                        <li id="zcbStatus">
+                            <label>资产包状态：</label>
+                            <input type="text" name="zcbStatus"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:zcb:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:zcb:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:zcb:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:zcb:detail')}]];
+    var prefix = ctx + "system/zcb/zck";
+
+    $(function () {
+        var options = {
+            url: prefix + "/listesDoc",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "资产信息库",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'zcbStatus',
+                    title: '资产包状态'
+                },
+                {
+                    field: 'zcbName',
+                    title: '资产包名称'
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                }
+
+               /* {
+                    field: 'projectName',
+                    title: '借款人名称'
+                },
+                {
+                    field: 'city',
+                    title: '城市/地区'
+                },
+                {
+                    field: 'principalBalance',
+                    title: '本金余额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'guarantor',
+                    title: '保证人'
+                },
+                {
+                    field: 'mortgageRank',
+                    title: '抵押顺位'
+                },
+                {
+                    field: 'natureLand',
+                    title: '土地性质'
+                },
+                {
+                    field: 'landArea',
+                    title: '土地面积',
+                    sortable: true
+                },
+                {
+                    field: 'floors',
+                    title: '所在层数/总层数'
+                },
+                {
+                    field: 'collateType',
+                    title: '抵/置押物类型'
+                },
+                {
+                    field: 'floorage',
+                    title: '建筑面积/㎡',
+                    sortable: true
+                },
+                {
+                    field: 'landUnitPrice',
+                    title: '土地单价',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'otherCollateralUnitPrice',
+                    title: '其它抵置押物单价',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'totalPrice',
+                    title: '总价',
+                    sortable: true,
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'capValue',
+                    title: '盖帽值',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        /!*actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');*!/
+                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="detail(\'' + row.id + "',\'" + row.projectName + '\')"><i class="fa fa-search"></i>详细</a>');
+                        /!*actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');*!/
+                        return actions.join('');
+                    }
+                }*/
+                ]
+        };
+        $.table.init(options);
+    });
+
+    /*资产库列表-详细*/
+    function detail(id, projectName) {
+        var url = prefix + '/detail/' + id;
+        if (projectName == '' || projectName == null) {
+            $.modal.openTab("资产库详情", url);
+        } else {
+            $.modal.openTab(projectName, url);
+        }
+    }
+
+
+    function exportExcel() {
+        var row = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        var str = "";
+        //根据name获取所有元素
+        for (var i = 0; i < row.length; i++) {
+            str += row[i].id + ",";
+        }
+        //去掉最后一个逗号(如果不需要去掉，就不用写)
+        if (str.length > 0) {
+            str = str.substr(0, str.length - 1);
+        }
+        console.log(str);
+        var projectName = $("#projectName").val();
+        var city = $("#city").val();
+        var guarantor = $("#guarantor").val();
+        var mortgageRank = $("#mortgageRank").val();
+        var natureLand = $("#natureLand").val();
+        var collateType = $("#collateType").val();
+        $.ajax({
+            url: prefix + "/export1",
+            data: {
+                "ids": str,
+                "projectName": projectName,
+                "city": city,
+                "guarantor": guarantor,
+                "mortgageRank": mortgageRank,
+                "natureLand": natureLand,
+                "collateType": collateType
+            },
+            type: "post",
+            success: function (result) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            }
+        })
+    };
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    function submitHandler() {
+        var row = selectRows();
+        window.parent.getZcdSelected(row);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //如果设置了记住选中数据
+        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+            let selectedRows = table.rememberSelecteds[table.options.id];
+            if ($.common.isNotEmpty(selectedRows)) {
+                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    return row;
+                });
+            }
+        }
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i]] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+</script>
+</body>
+</html>

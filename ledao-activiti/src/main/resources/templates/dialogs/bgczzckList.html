@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('重组并购项目信息库列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                   <!-- <input name="params[beginTime]" id="beginDate" th:value="${sysBgczzck.beginTime}" type="hidden"/>
+                    <input name="params[endTime]" id="endDate" th:value="${sysBgczzck.endTime}" type="hidden"/>
+                    <input type="hidden" name="projectName" th:value="${sysBgczzck.projectName}"/>
+                    <input type="hidden" name="projectYxzName" th:value="${sysBgczzck.projectYxzName}"/>
+                    <input type="hidden" name="agreementName" th:value="${sysBgczzck.agreementName}"/>-->
+                    <input name="projectStatus" id="projectStatus" type="hidden" th:value="投资中"/>
+                    <!--<ul>
+                        <li>
+                            项目名称：<input type="text" name="projectName"/>
+                        </li>
+                        &lt;!&ndash;<li>
+                            <label>项目状态：</label>
+                            <input type="text" name="projectStatus"/>
+                        </li>&ndash;&gt;
+                        <li>
+                            签署协议名称：<input type="text" name="projectYxzName"/>
+                        </li>
+                        <li>
+                            协议名称：
+                            <select name="agreementName" th:with="type=${@dict.getType('sys_bgzc_xymc')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                        <li class="select-time">
+                            <label>付息日： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
+                        </li>
+                            &lt;!&ndash;付息日：<input type="text" name="bxjsDate"/>&ndash;&gt;
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>-->
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:bgczzck:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:bgczzck:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:bgczzck:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:bgczzck:import">
+                <i class="fa fa-upload"></i> 导入
+            </a>
+            <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:bgczzck:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:bgczzck:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:bgczzck:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:bgczzck:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
+    var prefix = ctx + "system/bgczzck";
+    $(function () {
+        var options = {
+            url: prefix + "/lists",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "重组并购项目信息库",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
+                    field: 'projectStatus',
+                    title: '项目状态'
+                },
+                {
+                    field: 'spvName',
+                    title: 'SPV名称'
+                },
+                {
+                    field: 'city',
+                    title: '城市/地区'
+                },
+                {
+                    field: 'contractPrincipal',
+                    title: '合同本金',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'principalBalance',
+                    title: '本金余额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'interestBalance',
+                    title: '利息余额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'principalInterestBalance',
+                    title: '本息余额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'finalParty',
+                    title: '融资人名称'
+                },
+                {
+                    field: 'finalAgreementNo',
+                    title: '融资协议编号'
+                },
+                {
+                    field: 'finalTerm',
+                    title: '融资期限'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        //actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="detail(\'' + row.id + "',\'" + row.projectName + '\')"><i class="fa fa-search"></i>详细</a>');
+                        //actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                },
+                {
+                    field: 'legalProgress',
+                    title: '法律进度',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="toMonomerLaw(\'' + row.id + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function toMonomerLaw(id, projectName) {
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + id + "&projectType=2";
+        $.modal.parentTab(projectName + '法律信息', url);
+    }
+
+    //控制显示的字数
+    function strLength(value, length, target, str) {
+        var _length = $.common.isEmpty(length) ? 20 : length;
+        var _text = "";
+        var _value = $.common.nullToStr(value, str);
+        var _target = $.common.isEmpty(target) ? 'copy' : target;
+        if ($.common.isNotEmpty(value)) {
+            if (_value.length > _length) {
+                _text = _value.substr(0, _length) + "...";
+                _value = _value.replace(/\'/g, "&apos;");
+                _value = _value.replace(/\"/g, "&quot;");
+                var actions = [];
+                actions.push($.common.sprintf('<input style="opacity: 0;position: absolute;z-index:-1" type="text" value="%s"/>', _value));
+                actions.push($.common.sprintf('<span class="tooltip-show" data_target="%s" data-toggle="tooltip" title="%s">%s</span>', _target, _value, _text));
+                return actions.join('');
+            } else {
+                _text = _value;
+                return _text;
+            }
+        } else {
+            _text = "无";
+            return _text;
+        }
+    }
+
+    /*资产库列表-详细*/
+    function detail(id, projectName) {
+        var url = prefix + '/detail/' + id;
+        if (projectName == '' || projectName == null) {
+            $.modal.openTab("重组并购项目信息库详情", url);
+        } else {
+            $.modal.openTab(projectName, url);
+        }
+
+    }
+
+    function exportExcel() {
+        var projectStatus = $("#projectStatus").val();
+        console.log(projectStatus);
+        var row = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        var str = "";
+        //根据name获取所有元素
+        for (var i = 0; i < row.length; i++) {
+            str += row[i].id + ",";
+        }
+        //去掉最后一个逗号(如果不需要去掉，就不用写)
+        if (str.length > 0) {
+            str = str.substr(0, str.length - 1);
+        }
+        $.ajax({
+            url: prefix + "/export",
+            data: {
+                "ids": str,
+                "projectStatus": projectStatus
+            },
+            type: "post",
+            success: function (result) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            }
+        })
+    }
+
+    function back() {
+        var url = prefix;
+        $.modal.parentTab("大型单体项目", url);
+    }
+
+    function submitHandler() {
+        var row = selectRows();
+        window.parent.getZcdSelected(row);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //如果设置了记住选中数据
+        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+            let selectedRows = table.rememberSelecteds[table.options.id];
+            if ($.common.isNotEmpty(selectedRows)) {
+                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    return row;
+                });
+            }
+        }
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i]] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+
+</script>
+</body>
+<!-- 导入区域 -->
+<script id="importTpl" type="text/template">
+    <form enctype="multipart/form-data" class="mt20 mb10">
+        <div class="col-xs-offset-1">
+            <input type="file" id="file" name="file"/>
+            <div class="mt10 pt5">
+                &nbsp;<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i
+                    class="fa fa-file-excel-o"></i> 下载模板</a>
+            </div>
+            <font color="red" class="pull-left mt10">
+                提示：仅允许导入“xls”或“xlsx”格式文件！
+            </font>
+        </div>
+    </form>
+</script>
+</html>

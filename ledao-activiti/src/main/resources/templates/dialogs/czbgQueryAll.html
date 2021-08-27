@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('重组并购项目信息库列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+<!--                    <input name="params[beginTime]" id="beginDate" th:value="" type="hidden"/>-->
+<!--                    <input name="params[endTime]" id="endDate" th:value="" type="hidden"/>-->
+<!--                    <input type="hidden" name="projectName" th:value="1"/>-->
+<!--                    <input type="hidden" name="projectYxzName" th:value="${sysBgczzck.projectYxzName}"/>-->
+<!--                    <input type="hidden" name="agreementName" th:value="${sysBgczzck.agreementName}"/>-->
+                            <li id="projectName">
+                                <label>项目名称：</label>
+                                <input type="text" name="projectName"/>
+                            </li>
+                            <li id="projectStatus">
+                                <label>项目状态：</label>
+                                <input type="text" name="projectStatus"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <!--<div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:bgczzck:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>-->
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:bgczzck:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:bgczzck:remove')}]];
+        var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
+        var prefix = ctx + "system/bgczzck";
+        $(function() {
+            var options = {
+                url: prefix + "/listesDoc",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                detailUrl: prefix + "/detail/{id}",
+                importUrl: prefix + "/importData",
+                importTemplateUrl: prefix + "/importTemplate",
+                modalName: "重组并购项目信息库",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id', 
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectName', 
+                    title: '项目名称',
+                    sortable: true
+                },
+                {
+                    field: 'projectStatus', 
+                    title: '项目状态'
+                },
+                /*{
+                    field: 'spvName', 
+                    title: 'SPV名称'
+                },*/
+                {
+                    field: 'city', 
+                    title: '城市/地区'
+                }
+                /*{
+                    field: 'contractPrincipal', 
+                    title: '合同本金',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'principalBalance', 
+                    title: '本金余额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'interestBalance', 
+                    title: '利息余额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'principalInterestBalance', 
+                    title: '本息余额',
+                    formatter:function (value,row,index) {
+                        return $.operate.numberFormatter(value,3,'.',',');
+                    }
+                },
+                {
+                    field: 'finalParty', 
+                    title: '融资人名称'
+                },
+                {
+                    field: 'finalAgreementNo', 
+                    title: '融资协议编号'
+                },
+                {
+                    field: 'finalTerm', 
+                    title: '融资期限'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="detail(\'' + row.id+"',\'" + row.projectName + '\')"><i class="fa fa-search"></i>详细</a>');
+                        return actions.join('');
+                    }
+                }*/
+                ]
+            };
+            $.table.init(options);
+        });
+
+        /*资产库列表-详细*/
+        function detail(id,projectName) {
+            var url = prefix + '/detail/' + id;
+            if(projectName =='' ||projectName ==null){
+                $.modal.openTab("重组并购项目信息库详情", url);
+            }else{
+                $.modal.openTab(projectName, url);
+            }
+
+        }
+
+        function submitHandler() {
+            var row = selectRows();
+            window.parent.getZcdSelected(row);
+        }
+
+        function selectRows() {
+            //获取当前选中的值
+            let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+                return row;
+            });
+            //如果设置了记住选中数据
+            if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+                let selectedRows = table.rememberSelecteds[table.options.id];
+                if ($.common.isNotEmpty(selectedRows)) {
+                    rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                        return row;
+                    });
+                }
+            }
+            //去重
+            return uniqueFnByRows(rows);
+        }
+
+        function uniqueFnByRows(array) {
+            var result = [];
+            var hashObj = {};
+            for (var i = 0; i < array.length; i++) {
+                if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
+                    hashObj[array[i]] = true;
+                    result.push(array[i]);
+                }
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>

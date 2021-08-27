@@ -13,11 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.ledao.common.annotation.Log;
 import com.ledao.common.core.controller.BaseController;
@@ -221,8 +217,10 @@ public class SysApplyInController extends BaseController
      * 新增档案入库申请
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+        String roleType = sysApplyInService.checkUserRole();
+        mmap.put("roleType",roleType);
         return prefix + "/add";
     }
 
@@ -296,6 +294,36 @@ public class SysApplyInController extends BaseController
         mmap.put("documentType", sysApplyIn.getDocumentType());
         mmap.put("applyId",applyId);
         return prefix + "/editDocumentModal";
+    }
+
+    @GetMapping("/selectPro")
+    public String selectPro(ModelMap mmap)
+    {
+        String roleType = sysApplyInService.checkUserRole();
+        if("inve".equals(roleType)){
+            return "dialogs/zcbQueryAll";
+        }else if ("thb".equals(roleType)){
+            return "dialogs/projectZckByType";
+        }else if ("bg".equals(roleType)){
+            return "dialogs/czbgQueryAll";
+        }else {
+            return null;
+        }
+    }
+
+    @GetMapping("/selectDebtor")
+    public String selectDebtor(@RequestParam("zcbId")String zcbId,@RequestParam("roleType")String roleType,ModelMap mmap)
+    {
+        mmap.put("proId",zcbId);
+        if ("inve".equals(roleType)){
+            return "dialogs/zck";
+        }
+//        String roleType = sysApplyInService.checkUserRole();
+        if("thb".equals(roleType)){
+            return "dialogs/project";
+        }else{
+            return null;
+        }
     }
 
     /**

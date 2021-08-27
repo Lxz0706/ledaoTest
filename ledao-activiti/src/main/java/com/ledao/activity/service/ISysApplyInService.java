@@ -101,4 +101,11 @@ public interface ISysApplyInService
      * @return
      */
     List<SysApplyIn> selectSysApplyInListUser(SysApplyIn sysApplyIn);
+
+    /**
+     *
+     * @param 查询当前人所在部门
+     * @return
+     */
+    String checkUserRole();
 }

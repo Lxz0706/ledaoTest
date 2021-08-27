@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产包列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+<!--                <input type="hidden" id="assetStatus" th:value="已收购" name="assetStatus">-->
+                <li id="assetName">
+                    <label>资产包名称：</label>
+                    <input type="text" name="assetName"/>
+                </li>
+                <li id="assetStatus">
+                    <label>资产包状态：</label>
+                    <input type="text" name="assetStatus"/>
+                </li>
+                <!--<li>
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                </li>-->
+                </div>
+            </form>
+        </div>
+
+       <!-- <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:zcb:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:zcb:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:zcb:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:zcb:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>-->
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:zcb:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:zcb:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:zcb:detail')}]];
+    var prefix = ctx + "system/zcb";
+
+    $(function () {
+        var options = {
+            url: prefix + "/listsDoc",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "资产包",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'assetPackageName',
+                    title: '资产包名称',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.id + "',\'" + row.assetPackageName + '\')">' + strLength(value) + '</a>';
+                    },
+                    sortable: true
+                },
+                {
+                    field: 'evaluationTime',
+                    title: '评估时间',
+                    formatter: function (value, row, index) {
+                        return $.common.changeDateFormatToMonth(value);
+                    }
+                },
+                {
+                    field: 'collateralTotal',
+                    title: '抵押物估值总价',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'capValue',
+                    title: '盖帽值',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'teamMembersName',
+                    title: '小组成员'
+                },
+                {
+                    field: 'customer',
+                    title: '客户'
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /*资产库列表-详细*/
+    function detail(id, assetPackageName) {
+        var url = prefix + '/detail/' + id;
+        $.modal.parentTab(assetPackageName + "列表", url);
+    }
+
+    //控制显示的字数
+    function strLength(value) {
+        var str = $.common.nullToStr(value);
+        if (str.length > 20) {
+            str = str.substring(0, 20) + '...';
+        }
+        return str;
+    }
+
+    function back() {
+        var url = prefix;
+        $.modal.parentTab("资产包", url);
+    }
+
+    function submitHandler() {
+        var row = selectRows();
+        window.parent.getZcdSelected(row);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //如果设置了记住选中数据
+        if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+            let selectedRows = table.rememberSelecteds[table.options.id];
+            if ($.common.isNotEmpty(selectedRows)) {
+                rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                    return row;
+                });
+            }
+        }
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i]] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+</script>
+</body>
+</html>

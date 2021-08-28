@@ -257,6 +257,16 @@ public class SysBgczzckController extends BaseController {
         return getDataTable(list);
     }
 
+//    @RequiresPermissions("system:bgczzck:list")
+    @PostMapping("/listesDoc")
+    @ResponseBody
+    public TableDataInfo listesDoc(SysBgczzck sysBgczzck) {
+        startPage();
+//        sysBgczzck.setProjectName("");
+        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        return getDataTable(list);
+    }
+
     /**
      * 选择项目树
      */

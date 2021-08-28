@@ -8,6 +8,7 @@ import java.util.Map;
 import com.ledao.activity.dao.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,10 +218,8 @@ public class SysApplyInController extends BaseController
      * 新增档案入库申请
      */
     @GetMapping("/add")
-    public String add(ModelMap mmap)
+    public String add()
     {
-        String roleType = sysApplyInService.checkUserRole();
-        mmap.put("roleType",roleType);
         return prefix + "/add";
     }
 
@@ -250,9 +249,24 @@ public class SysApplyInController extends BaseController
      * 新增档案出库申请
      */
     @GetMapping("/addOut")
-    public String addOut()
+    public String addOut(ModelMap mmap)
     {
+        String roleType = sysApplyInService.checkUserRole(ShiroUtils.getSysUser());
+        mmap.put("roleType",roleType);
         return prefix + "/addOut";
+    }
+
+    @PostMapping("/getRoleType")
+    @ResponseBody
+    public AjaxResult getRoleType(@RequestParam("applyUser")String applyUser)
+    {
+        String  roleType = sysApplyInService.checkUserRole(ISysUserService.selectUserByLoginName(applyUser));
+        if (roleType!=null){
+            return AjaxResult.success(roleType);
+        } else{
+            return AjaxResult.error("无项目");
+        }
+
     }
 
 
@@ -297,9 +311,8 @@ public class SysApplyInController extends BaseController
     }
 
     @GetMapping("/selectPro")
-    public String selectPro(ModelMap mmap)
+    public String selectPro(@RequestParam("roleType")String roleType, ModelMap mmap)
     {
-        String roleType = sysApplyInService.checkUserRole();
         if("inve".equals(roleType)){
             return "dialogs/zcbQueryAll";
         }else if ("thb".equals(roleType)){
@@ -387,6 +400,8 @@ public class SysApplyInController extends BaseController
         mmap.put("applyTypeUnDone", applyTypeUnDone);
         mmap.put("seOrEd", seOrEd);
         if ("1".equals(applyType)){
+            String roleType = sysApplyInService.checkUserRole(ShiroUtils.getSysUser());
+            mmap.put("roleType",roleType);
             return prefix + "/editOut";
         }
         return prefix + "/edit";
@@ -413,6 +428,8 @@ public class SysApplyInController extends BaseController
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
         mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
+        String roleType = sysApplyInService.checkUserRole(ISysUserService.selectUserByLoginName(sysApplyIn.getApplyUser()));
+        mmap.put("roleType",roleType);
         return prefix + "/editOut";
     }
 

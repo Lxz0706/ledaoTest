@@ -3,6 +3,7 @@ package com.ledao.activity.service;
 import java.util.List;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 档案入库申请Service接口
@@ -107,5 +108,5 @@ public interface ISysApplyInService
      * @param 查询当前人所在部门
      * @return
      */
-    String checkUserRole();
+    String checkUserRole(SysUser u);
 }

@@ -82,7 +82,7 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
         sysApplyOutDetail.setUpdateTime(DateUtils.getNowDate());
         sysApplyOutDetailMapper.updateSysApplyOutDetail(sysApplyOutDetail);
 
-        SysApplyOutDetail d = sysApplyOutDetailMapper.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
+        /*SysApplyOutDetail d = sysApplyOutDetailMapper.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
         SysApplyIn app = sysApplyInMapper.selectSysApplyInById(d.getApplyId());
 
         boolean flag = true;
@@ -143,7 +143,7 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService
             app.setReviser(ShiroUtils.getLoginName());
             app.setUpdateTime(DateUtils.getNowDate());
             sysApplyInMapper.updateSysApplyIn(app);
-        }
+        }*/
 
         return 1;
     }

@@ -43,7 +43,10 @@ public class SysApplyIn extends BaseEntity
     private String companyName;
 
     /** 债务人名称 */
-    @Excel(name = "债务人名称")
+    @Excel(name = "债务人id")
+    private Long debtorId;
+    /** 债务人名称 */
+    @Excel(name = "债务人名字")
     private String debtorName;
 
     /** 申请人 */
@@ -129,6 +132,25 @@ public class SysApplyIn extends BaseEntity
     /** 备注 */
     @Excel(name = "备注")
     private String remarksOut;
+
+    @Excel(name = "档案角色")
+    private String roleType;
+
+    public Long getDebtorId() {
+        return debtorId;
+    }
+
+    public void setDebtorId(Long debtorId) {
+        this.debtorId = debtorId;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
+    }
 
     public String getInstanceId() {
         return instanceId;
@@ -390,6 +412,7 @@ public class SysApplyIn extends BaseEntity
             .append("projectName", getProjectName())
             .append("companyName", getCompanyName())
             .append("debtorName", getDebtorName())
+            .append("roleType", getRoleType())
             .append("applyUser", getApplyUser())
             .append("applyUserName", getApplyUserName())
             .append("applyTime", getApplyTime())

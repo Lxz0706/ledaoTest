@@ -9,9 +9,11 @@ import com.ledao.activity.service.ISysDocumentFileService;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysZck;
 import com.ledao.system.mapper.SysDocumentMapper;
 import com.ledao.system.mapper.SysRoleMapper;
 import com.ledao.system.mapper.SysUserMapper;
+import com.ledao.system.mapper.SysZckMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private SysApplyOutDetailMapper sysApplyOutDetailMapper;
+
+    @Autowired
+    private SysZckMapper SysZckMapper;
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
 
@@ -326,6 +331,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             return AjaxResult.error("无该申请");
         }
         SysApplyWorkflow workflow = new SysApplyWorkflow();
+        workflow.setRemarks(sysApplyIn.getRemarks());
         //提交审批，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
             String[] applyStatusList = {"0","4","2"};
@@ -405,17 +411,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 if("1".equals(sysApplyIn.getApplyType())){
 //                    出库，档案管理员进行出库确认
                     if ("1".equals(sysApplyInEntity.getApproveStatu())){
-                        SysApplyOutDetail detail = new SysApplyOutDetail();
-                        detail.setApplyId(sysApplyIn.getApplyId());
-                        List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(detail);
                         boolean isAllNotReturn = true;
-                        for (SysApplyOutDetail d:des){
-                            if (!"0".equals(d.getIsOut())){
-                                return AjaxResult.error("存在档案未出库，无法完成借出审批");
-                            }
-                            if ("0".equals(d.getIsReturn())){
-                                isAllNotReturn = false;
-                            }
+                        if (!"0".equals(sysApplyInEntity.getIsOut())){
+                            return AjaxResult.error("档案未出库，无法完成借出审批");
+                        }
+                        if ("0".equals(sysApplyInEntity.getIsReturn())){
+                            isAllNotReturn = false;
                         }
                         if (isAllNotReturn){
                             sysApplyIn.setApproveStatu("3");
@@ -427,19 +428,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                             sysApplyInEntity.setApproveUser("");
                         }
                     }else if ("9".equals(sysApplyInEntity.getApproveStatu())){
-                        SysApplyOutDetail d2 = new SysApplyOutDetail();
-                        d2.setApplyId(sysApplyIn.getApplyId());
-                        List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(d2);
-                        for (SysApplyOutDetail d:des){
-                            if (!"0".equals(d.getIsReceived())){
-                                return AjaxResult.error("存在档案未收到，无法完成借出审批");
-                            }
+
+                        if (!"0".equals(sysApplyInEntity.getIsReceived())){
+                            return AjaxResult.error("档案未收到，无法完成借出审批");
                         }
-                        for (SysApplyOutDetail d:des){
-                            //设置实际归还时间
-                            d.setRealReturnTime(new Date());
-                            sysApplyOutDetailMapper.updateSysApplyOutDetail(d);
-                        }
+                        sysApplyInEntity.setRealReturnTime(DateUtils.getNowDate());
                         sysApplyIn.setApproveStatu("3");
                         sysApplyInEntity.setApproveStatu("3");
                         sysApplyInEntity.setApproveUser("");
@@ -462,7 +455,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
             }else{
 //                非档案管理员
-                if ("7".equals(sysApplyInEntity.getApproveStatu())){
+                /*if ("7".equals(sysApplyInEntity.getApproveStatu())){
                     SysApplyOutDetail dt = new SysApplyOutDetail();
                     dt.setApplyId(sysApplyIn.getApplyId());
                     List<SysApplyOutDetail> des = sysApplyOutDetailMapper.selectSysApplyOutDetailList(dt);
@@ -486,7 +479,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     sysApplyInEntity.setApproveStatu("9");
                     List<String> jls = getUsers("documentAdmin");
                     sysApplyInEntity.setApproveUser(String.join(",",jls));
-                }else if (ids.contains("flgw") && !sysApplyInEntity.getApproveUser().equals(ShiroUtils.getLoginName())){
+                }else */
+                if (ids.contains("flgw") && !sysApplyInEntity.getApproveUser().equals(ShiroUtils.getLoginName())){
                     List<String> idsStr = new ArrayList<>(Arrays.asList(sysApplyInEntity.getApproveUser().split(",")));
                     idsStr.remove(ShiroUtils.getLoginName());
                     sysApplyInEntity.setApproveUser(String.join(",",idsStr));
@@ -527,9 +521,18 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     public List<SysApplyIn> selectSysApplyInListUser(SysApplyIn sysApplyIn) {
         return sysApplyInMapper.selectSysApplyInListUser(sysApplyIn);
     }
+   /* private List<SysApplyIn> addDobtName(List<SysApplyIn> sysApplyIns){
+	    for (SysApplyIn s:sysApplyIns){
+	        if ("inve".equals(s.getRoleType())){
+                SysZck sz = SysZckMapper.selectSysZckById(Long.parseLong(s.getDebtorName()));
+	            s.setDebtorNameTip(sz.getProjectName());
+            }
+        }
+	    return sysApplyIns;
+    }*/
 
     @Override
-    public String checkUserRole() {
+    public String checkUserRole(SysUser u) {
 	    //投后部---投后部项目 0
         String[] stbList = new String[] { "thbManager", "thbManager2", "thbzz", "thbCommon"};
         List<String> stbs = Arrays.asList(stbList);
@@ -539,7 +542,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         //投资部---资产包 2
         String[] tzbList = new String[] { "investmentCommon", "investmentManager", "investmentManager2", "tzbzz"};
         List<String> tzbs = Arrays.asList(tzbList);
-        SysUser u = ShiroUtils.getSysUser();
+//        SysUser u = ShiroUtils.getSysUser();
         List<SysRole> rs = u.getRoles();
 
         for (SysRole r: rs){
@@ -557,6 +560,15 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     @Override
     public int editSave(SysApplyIn sysApplyIn) {
         sysApplyIn.setUpdateTime(new Date());
+        if ("7".equals(sysApplyIn.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){
+            sysApplyIn.setApproveStatu("8");
+        }
+        if ("8".equals(sysApplyIn.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturn())){
+            sysApplyIn.setApproveStatu("9");
+        }
+        if ("9".equals(sysApplyIn.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturned())){
+            sysApplyIn.setApproveStatu("3");
+        }
 	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
     }
 }

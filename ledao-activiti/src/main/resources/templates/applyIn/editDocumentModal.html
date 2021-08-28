@@ -11,12 +11,12 @@
     <input name="documentType" id="documentType" th:value="*{documentType}" type="hidden">
     <input name="applyType" id="applyType" th:value="*{applyType}" type="hidden">
     <input name="applyTypeUnDone" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
-    <div class="form-group" id="assetPag" style="display: none">
+    <!--<div class="form-group" id="assetPag" style="display: none">
       <label class="col-sm-3 control-label is-required">项目名称：</label>
       <div class="col-sm-8">
         <input name="projectName" class="form-control required" type="text">
       </div>
-    </div>
+    </div>-->
     <div class="form-group" id="assetNumber" style="display: none">
       <label class="col-sm-3 control-label is-required">资产编号：</label>
       <div class="col-sm-8">
@@ -148,7 +148,7 @@
   var documentTypeId = document.getElementById('documentTypeVal').value;
   // 用于 [新增] 入库申请 判断档案类别
   var documentType = document.getElementById('documentType').value;
-  var apag = document.getElementById("assetPag");
+  // var apag = document.getElementById("assetPag");
   var aNumber = document.getElementById("assetNumber");
   var cNo = document.getElementById("contractNo");
   var dailyDocumentType = document.getElementById("dailyDocumentType")
@@ -174,12 +174,12 @@
 
   }
   if(documentTypeId == "0" || documentType == "0") {
-      apag.style.display = "block"
+      // apag.style.display = "block"
       aNumber.style.display = "block"
       cNo.style.display = "block"
       dailyDocumentType.style.display = "none"
   } else {
-      apag.style.display = "none"
+      // apag.style.display = "none"
       aNumber.style.display = "none"
       cNo.style.display = "none"
       dailyDocumentType.style.display = "block"

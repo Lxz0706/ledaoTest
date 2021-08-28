@@ -9,6 +9,7 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <input name="appStatu" type="hidden" id="appStatu" th:value="*{appStatu}">
+    <input name="roleType" id="roleType" th:value="*{roleType}" type="hidden">
     <input name="seOrEd" id="seOrEd" th:value="*{seOrEd}" type="hidden">
     <input name="applyTypeUnDone" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
@@ -33,7 +34,9 @@
         <div class="form-group" id="projectName" style="display: none">
             <label class="col-sm-3 control-label">项目名称：</label>
             <div class="col-sm-8">
-                <input name="projectName" th:field="*{projectName}" class="form-control" type="text">
+<!--                <input name="projectName" th:field="*{projectName}" class="form-control" type="text">-->
+                <input name="projectId" id="projectIdVal" th:field="*{projectId}" class="form-control required" required type="hidden">
+                <input name="projectName" id="projectNameVal" th:field="*{projectName}" class="form-control required" required type="text" onclick="selectPro()">
             </div>
         </div>
         <div class="form-group">
@@ -50,7 +53,9 @@
         <div class="form-group" id="debtorName" style="display: none">
             <label class="col-sm-3 control-label">债务人名称：</label>
             <div class="col-sm-8">
-                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">
+<!--                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">-->
+                <input name="debtorId" id="debtorNameVal" th:field="*{debtorId}"  class="form-control" type="hidden">
+                <input name="debtorName" id="debtorNameTip" th:field="*{debtorName}" disabled  class="form-control" type="text" onclick="selectDebtor()">
             </div>
         </div>
         <div class="form-group">
@@ -190,6 +195,7 @@
         var seOrEd = document.getElementById("seOrEd").value;
         var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
         var isReturn = document.getElementById("isReturn").value;
+        var roleType = document.getElementById("roleType").value;
     $(function () {
         // 管理员与档案管理员
         for(var i =0; i < roles.length;i++) {
@@ -202,6 +208,9 @@
                 $("select,input,textarea").attr("readonly","readonly");
                 $("#isOut").removeAttr("readonly")
             }
+        }
+        if ("bg"==roleType){
+            $("#debtorName").hide()
         }
         if (isReturn == "0") {
             $("#realReturnTime").show()
@@ -475,6 +484,74 @@
     $("#form-applyIn-edit").validate({
         focusCleanup: true
     });
+
+        function changeRoleType(){
+            roleType = document.getElementById("roleType").value;
+            if ("bg"==roleType){
+                $("#debtorName").hide()
+            }else{
+                $("#debtorName").show()
+            }
+            $("#projectIdVal").val("");
+            $("#projectNameVal").val("");
+            $("#debtorNameVal").val("");
+            $("#debtorNameTip").val("");
+        }
+
+        function selectDebtor(){
+            var url = ctx + "applyIn/selectDebtor?zcbId=" + $("#projectIdVal").val()+"&roleType="+roleType;
+            $.modal.open("债务人选择", url, '750', '600/2');
+        }
+
+        function selectPro(){
+            var url = ctx + "applyIn/selectPro?roleType="+roleType;
+            $.modal.open("项目选择", url, '750', '600/2');
+        }
+        function getDeviceBasics(row) {
+            var userNames = "";
+            var userIds = "";
+            for (var i = 0; i < row.length; i++) {
+                userNames = row[i].loginName + "," + userNames;
+                userIds = row[i].userId + "," + userIds;
+            }
+            $("#realCreateById").val(userIds.substr(0, userIds.length - 1));
+            $("#realCreateBy").val(userNames.substr(0, userNames.length - 1));
+            layer.close(layer.index);
+        }
+        function getZcdSelected(row) {
+            if (roleType == "inve"){
+                $("#projectIdVal").val(row[0].id);
+                $("#projectNameVal").val(row[0].assetPackageName);
+            }else if(roleType == "thb"){
+                $("#projectIdVal").val(row[0].projectZckId);
+                $("#projectNameVal").val(row[0].zckName);
+            }else if(roleType == "bg"){
+                $("#projectIdVal").val(row[0].id);
+                $("#projectNameVal").val(row[0].projectName);
+            }
+            if (row.length>0){
+                $("#debtorNameVal").val("");
+                $("#debtorNameTip").val("");
+                $("#debtorNameTip").removeAttr("disabled");
+            }
+            layer.close(layer.index);
+        }
+        /*  function getThbSelected(row) {
+              $("#projectIdVal").val(row[0].projectZckId);
+              $("#projectNameVal").val(row[0].zckName);
+              layer.close(layer.index);
+          }*/
+        function getDobtSelected(row){
+            if (roleType == "inve"){
+                $("#debtorNameVal").val(row[0].id);
+                $("#debtorNameTip").val(row[0].projectName);
+            }else if(roleType == "thb"){
+                $("#debtorNameVal").val(row[0].projectId);
+                $("#debtorNameTip").val(row[0].projectName);
+            }
+
+            layer.close(layer.index);
+        }
 
     // 是否归还
     function changeIsReturn(val) {

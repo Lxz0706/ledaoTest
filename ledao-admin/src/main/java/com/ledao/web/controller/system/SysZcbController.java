@@ -68,6 +68,61 @@ public class SysZcbController extends BaseController {
     }
 
     @RequiresPermissions("system:zcb:list")
+    @PostMapping("/listsDoc")
+    @ResponseBody
+    public TableDataInfo listsDoc(SysZcb sysZcb) {
+        startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        List<SysRole> getRoles = currentUser.getRoles();
+        /*if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
+                        sysZcb.setTeamMembersId(currentUser.getUserId().toString());
+                    }
+                }
+            }
+        }*/
+        List<SysZcb> list = this.sysZcbService.selectSysZcbList(sysZcb);
+        for (SysZcb sysZcb1 : list) {
+            StringBuffer customerSb = new StringBuffer();
+            if (currentUser != null) {
+                // 如果是超级管理员，则不过滤数据
+                if (!currentUser.isAdmin()) {
+                    for (SysRole sysRole : getRoles) {
+                        //投资部经理，大型单体经理，高层角色
+                        if (!"investmentManager".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                                || !"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) &&
+                                !"investmentManager2".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
+                            sysZcb1.setCollateralTotal(new BigDecimal(0));
+                            sysZcb1.setCapValue(new BigDecimal(0));
+                        }
+                    }
+                }
+            }
+            SysPcustomer sysPcustomer1 = new SysPcustomer();
+            sysPcustomer1.setDeptType("tzb");
+            sysPcustomer1.setProjectId(Long.valueOf(sysZcb1.getId()));
+            if (!currentUser.isAdmin()) {
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                            && !"investmentManager".equals(sysRole.getRoleKey())) {
+                        sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
+                    }
+                }
+            }
+            List<SysPcustomer> sysPcustomerList = sysPcustomerService.selectPCustomerByProjectId(sysPcustomer1);
+            for (SysPcustomer sysPcustomer : sysPcustomerList) {
+                customerSb.append(sysPcustomer.getCustomerName()).append(",");
+            }
+            sysZcb1.setCustomer(StringUtils.strValue(customerSb.toString()));
+        }
+        return this.getDataTable(list);
+    }
+
+    @RequiresPermissions("system:zcb:list")
     @PostMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(SysZcb sysZcb) {

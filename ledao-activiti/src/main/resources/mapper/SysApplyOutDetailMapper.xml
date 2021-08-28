@@ -123,14 +123,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="documentId != null "> and od.document_id = #{documentId}</if>
             <if test="isPage != null  and isPage != ''"> and od.is_page = #{isPage}</if>
             <if test="isElec != null  and isElec != ''"> and od.is_elec = #{isElec}</if>
-            <if test="isReturn != null  and isReturn != ''"> and od.is_return = #{isReturn}</if>
+<!--            <if test="isReturn != null  and isReturn != ''"> and od.is_return = #{isReturn}</if>
             <if test="planReturnTime != null "> and od.plan_return_time = #{planReturnTime}</if>
             <if test="realReturnTime != null "> and od.real_return_time = #{realReturnTime}</if>
             <if test="outReason != null  and outReason != ''"> and od.out_reason = #{outReason}</if>
             <if test="isOut != null  and isOut != ''"> and od.is_out = #{isOut}</if>
             <if test="isReceive != null  and isReceive != ''"> and od.is_receive = #{isReceive}</if>
             <if test="isReturned != null  and isReturned != ''"> and od.is_returned = #{isReturned}</if>
-            <if test="isReceived != null  and isReceived != ''"> and od.is_received = #{isReceived}</if>
+            <if test="isReceived != null  and isReceived != ''"> and od.is_received = #{isReceived}</if>-->
             <if test="remarks != null  and remarks != ''"> and od.remarks = #{remarks}</if>
             <if test="creator != null  and creator != ''"> and od.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and od.reviser = #{reviser}</if>

@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectId"    column="project_id"    />
         <result property="projectName"    column="project_name"    />
         <result property="companyName"    column="company_name"    />
+        <result property="debtorId"    column="debtor_id"    />
         <result property="debtorName"    column="debtor_name"    />
         <result property="applyUser"    column="apply_user"    />
         <result property="applyTime"    column="apply_time"    />
@@ -34,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isReturned"    column="is_returned"    />
         <result property="isReceived"    column="is_received"    />
         <result property="remarksOut"    column="remarks_out"    />
+        <result property="roleType"    column="role_type"    />
     </resultMap>
 
     <resultMap type="SysApplyIn" id="SysApplyInResultUser">
@@ -43,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectId"    column="project_id"    />
         <result property="projectName"    column="project_name"    />
         <result property="companyName"    column="company_name"    />
+        <result property="debtorId"    column="debtor_id"    />
         <result property="debtorName"    column="debtor_name"    />
         <result property="applyUser"    column="apply_user"    />
         <result property="applyTime"    column="apply_time"    />
@@ -69,10 +72,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="applyUserName"    column="applyUserName"    />
         <result property="realCreateName"    column="realCreateName"    />
         <result property="reviserName"    column="reviserName"    />
+        <result property="roleType"    column="role_type"    />
     </resultMap>
 
     <sql id="selectSysApplyInVo">
-        select apply_id, apply_type, document_type, project_id, project_name, company_name, debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks_out from sys_apply_in
+        select apply_id, apply_type, document_type, project_id, project_name, company_name, debtor_id,debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks_out,role_type from sys_apply_in
     </sql>
 
     <select id="selectSysApplyInList" parameterType="SysApplyIn" resultMap="SysApplyInResult">
@@ -91,6 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="realCreateBy != null  and realCreateBy != ''"> and real_create_by = #{realCreateBy}</if>
             <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+            <if test="roleType != null  and roleType != ''"> and role_type = #{roleType}</if>
         </where>
         order by create_time desc
     </select>
@@ -103,6 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.project_id,
         a.project_name,
         a.company_name,
+        a.debtor_id,
         a.debtor_name,
         a.apply_user,
         a.apply_time,
@@ -125,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.is_returned,
         a.is_received,
         a.remarks_out,
+        a.role_type,
         b.user_name as applyUserName,
         c.user_name as realCreateName,
         d.user_name as reviserName
@@ -139,7 +146,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and a.project_id = #{projectId}</if>
             <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
             <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
-            <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
+            <!--<if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>-->
+            <if test="debtorName != null  and debtorName != ''">
+                and a.debtor_name in
+                <foreach item="deb" collection="debtorName.split(',')" open="(" separator="," close=")">
+                    #{deb}
+                </foreach>
+            </if>
             <if test="applyUser != null  and applyUser != ''"> and a.apply_user = #{applyUser} or (a.real_create_by = #{applyUser} and a.approve_statu='0')</if>
             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
             <if test="approveUser != null  and approveUser != ''"> and a.approve_user = #{approveUser}</if>
@@ -158,10 +171,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         app.project_id,
         app.project_name,
         app.company_name,
+        app.debtor_id,
         app.debtor_name,
         app.apply_user,
         app.apply_time,
         app.approve_user,
+        app.role_type,
         IF
         ( WORK.approve_statu = 7 || WORK.approve_statu = 8 || WORK.approve_statu = 9, app.approve_statu, WORK.approve_statu ) AS approve_statu,
         app.real_create_by,
@@ -250,6 +265,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.update_by,
         a.reviser,
         a.update_time,
+        a.role_type,
         b.user_name as applyUserName,
         c.user_name as realCreateName,
         d.user_name as reviserName
@@ -294,6 +310,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">project_id,</if>
             <if test="projectName != null">project_name,</if>
             <if test="companyName != null">company_name,</if>
+            <if test="debtorId != null">debtor_id,</if>
             <if test="debtorName != null">debtor_name,</if>
             <if test="applyUser != null">apply_user,</if>
             <if test="applyTime != null">apply_time,</if>
@@ -317,6 +334,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isReturned != null">is_returned,</if>
             <if test="isReceived != null">is_received,</if>
             <if test="remarksOut != null">remarks_out,</if>
+            <if test="roleType != null">role_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="applyType != null">#{applyType},</if>
@@ -324,6 +342,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">#{projectId},</if>
             <if test="projectName != null">#{projectName},</if>
             <if test="companyName != null">#{companyName},</if>
+            <if test="debtorId != null">#{debtorId},</if>
             <if test="debtorName != null">#{debtorName},</if>
             <if test="applyUser != null">#{applyUser},</if>
             <if test="applyTime != null">#{applyTime},</if>
@@ -347,6 +366,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isReturned != null">#{isReturned},</if>
             <if test="isReceived != null">#{isReceived},</if>
             <if test="remarksOut != null">#{remarksOut},</if>
+            <if test="roleType != null">#{roleType},</if>
          </trim>
     </insert>
 
@@ -358,6 +378,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">project_id = #{projectId},</if>
             <if test="projectName != null">project_name = #{projectName},</if>
             <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="debtorId != null">debtor_id = #{debtorId},</if>
             <if test="debtorName != null">debtor_name = #{debtorName},</if>
             <if test="applyUser != null">apply_user = #{applyUser},</if>
             <if test="applyTime != null">apply_time = #{applyTime},</if>
@@ -381,6 +402,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isReturned != null">is_returned = #{isReturned},</if>
             <if test="isReceived != null">is_received = #{isReceived},</if>
             <if test="remarksOut != null">remarks_out = #{remarksOut},</if>
+            <if test="roleType != null">role_type = #{roleType},</if>
         </trim>
         where apply_id = #{applyId}
     </update>

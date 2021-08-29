@@ -17,7 +17,7 @@ ledao:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
-  port: 8000
+  port: 80
   servlet:
     # 应用的访问路径
     context-path: /
@@ -34,9 +34,8 @@ server:
 # 日志配置
 logging:
   level:
-    com.ledao.system.mapper: debug
+    com.ledao.system.mapper: error
     org.springframework: info
-    com.ledao.activity.mapper: debug
 
 # 用户配置
 user:
@@ -87,14 +86,14 @@ spring:
       charset: utf-8
       enabled: true
 
-  activemq:
-    broker-url: tcp://localhost:61616
-    user: admin
-    password: admin
-
-  jms:
-    #点对点时为false，订阅报时为true
-    pub-sub-domain: false
+#  activemq:
+#    broker-url: tcp://localhost:61616
+#    user: admin
+#    password: admin
+#
+#  jms:
+#    #点对点时为false，订阅报时为true
+#    pub-sub-domain: false
 
 # MyBatis
 mybatis:

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysTrainUserMapper">
+    
+    <resultMap type="SysTrainUser" id="SysTrainUserResult">
+        <result property="id"    column="id"    />
+        <result property="trainId"    column="train_id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
+        <result property="remark3"    column="remark3"    />
+    </resultMap>
+
+    <resultMap type="SysTrainUser" id="SysTrainUserDetailsResult">
+        <result property="id"    column="id"    />
+        <result property="trainId"    column="train_id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="userName"    column="user_name"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
+        <result property="remark3"    column="remark3"    />
+    </resultMap>
+
+    <sql id="selectSysTrainUserVo">
+        select id, train_id, login_name, del_flag, create_by, create_time, update_by, update_time, remark1, remark2, remark3 from sys_train_user
+    </sql>
+
+    <select id="selectSysTrainUserList" parameterType="SysTrainUser" resultMap="SysTrainUserDetailsResult">
+        SELECT
+        tr.id,
+        tr.train_id,
+        tr.login_name,
+        tr.del_flag,
+        tr.create_by,
+        tr.create_time,
+        tr.update_by,
+        tr.update_time,
+        tr.remark1,
+        tr.remark2,
+        tr.remark3,
+        u.user_name
+        FROM
+        sys_train_user tr LEFT JOIN sys_user u on tr.login_name = u.login_name
+        <where>  
+            <if test="trainId != null "> and tr.train_id = #{trainId}</if>
+            <if test="loginName != null  and loginName != ''"> and tr.login_name like concat('%', #{loginName}, '%')</if>
+            <if test="userName != null  and userName != ''"> and u.user_name like concat('%', #{userName}, '%')</if>
+            <if test="remark1 != null  and remark1 != ''"> and tr.remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and tr.remark2 = #{remark2}</if>
+            <if test="remark3 != null  and remark3 != ''"> and tr.remark3 = #{remark3}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysTrainUserById" parameterType="Long" resultMap="SysTrainUserResult">
+        <include refid="selectSysTrainUserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysTrainUser" parameterType="SysTrainUser" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_train_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trainId != null">train_id,</if>
+            <if test="loginName != null">login_name,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark1 != null">remark1,</if>
+            <if test="remark2 != null">remark2,</if>
+            <if test="remark3 != null">remark3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trainId != null">#{trainId},</if>
+            <if test="loginName != null">#{loginName},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark1 != null">#{remark1},</if>
+            <if test="remark2 != null">#{remark2},</if>
+            <if test="remark3 != null">#{remark3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTrainUser" parameterType="SysTrainUser">
+        update sys_train_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="trainId != null">train_id = #{trainId},</if>
+            <if test="loginName != null">login_name = #{loginName},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+            <if test="remark3 != null">remark3 = #{remark3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysTrainUserById" parameterType="Long">
+        delete from sys_train_user where id = #{id}
+    </delete>
+
+    <delete id="deleteSysTrainUserByIds" parameterType="String">
+        delete from sys_train_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

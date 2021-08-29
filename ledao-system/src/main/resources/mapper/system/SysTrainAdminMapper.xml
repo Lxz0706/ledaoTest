@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysTrainAdminMapper">
+    
+    <resultMap type="SysTrainAdmin" id="SysTrainAdminResult">
+        <result property="trainId"    column="train_id"    />
+        <result property="trainName"    column="train_name"    />
+        <result property="trainDep"    column="train_dep"    />
+        <result property="trainTeacher"    column="train_teacher"    />
+        <result property="trainPlace"    column="train_place"    />
+        <result property="trainType"    column="train_type"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="qrcodeStartTime"    column="qrcode_start_time"    />
+        <result property="qrcodeEndTime"    column="qrcode_end_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark1"    column="remark1"    />
+        <result property="remark2"    column="remark2"    />
+        <result property="remark3"    column="remark3"    />
+    </resultMap>
+
+    <sql id="selectSysTrainAdminVo">
+        select train_id, train_name, train_dep, train_teacher, train_place, train_type, start_date, end_date, start_time, end_time, qrcode_start_time, qrcode_end_time, del_flag, create_by, create_time, update_by, update_time, remark1, remark2, remark3 from sys_train_admin
+    </sql>
+
+    <select id="selectSysTrainAdminList" parameterType="SysTrainAdmin" resultMap="SysTrainAdminResult">
+        <include refid="selectSysTrainAdminVo"/>
+        <where>  
+            <if test="trainName != null  and trainName != ''"> and train_name like concat('%', #{trainName}, '%')</if>
+            <if test="trainDep != null  and trainDep != ''"> and train_dep = #{trainDep}</if>
+            <if test="trainTeacher != null  and trainTeacher != ''"> and train_teacher = #{trainTeacher}</if>
+            <if test="trainPlace != null  and trainPlace != ''"> and train_place = #{trainPlace}</if>
+            <if test="trainType != null  and trainType != ''"> and train_type = #{trainType}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="qrcodeStartTime != null "> and qrcode_start_time = #{qrcodeStartTime}</if>
+            <if test="qrcodeEndTime != null "> and qrcode_end_time = #{qrcodeEndTime}</if>
+            <if test="remark1 != null  and remark1 != ''"> and remark1 = #{remark1}</if>
+            <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
+            <if test="remark3 != null  and remark3 != ''"> and remark3 = #{remark3}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysTrainAdminById" parameterType="Long" resultMap="SysTrainAdminResult">
+        <include refid="selectSysTrainAdminVo"/>
+        where train_id = #{trainId}
+    </select>
+        
+    <insert id="insertSysTrainAdmin" parameterType="SysTrainAdmin" useGeneratedKeys="true" keyProperty="trainId">
+        insert into sys_train_admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trainName != null">train_name,</if>
+            <if test="trainDep != null">train_dep,</if>
+            <if test="trainTeacher != null">train_teacher,</if>
+            <if test="trainPlace != null">train_place,</if>
+            <if test="trainType != null">train_type,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="qrcodeStartTime != null">qrcode_start_time,</if>
+            <if test="qrcodeEndTime != null">qrcode_end_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark1 != null">remark1,</if>
+            <if test="remark2 != null">remark2,</if>
+            <if test="remark3 != null">remark3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trainName != null">#{trainName},</if>
+            <if test="trainDep != null">#{trainDep},</if>
+            <if test="trainTeacher != null">#{trainTeacher},</if>
+            <if test="trainPlace != null">#{trainPlace},</if>
+            <if test="trainType != null">#{trainType},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="qrcodeStartTime != null">#{qrcodeStartTime},</if>
+            <if test="qrcodeEndTime != null">#{qrcodeEndTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark1 != null">#{remark1},</if>
+            <if test="remark2 != null">#{remark2},</if>
+            <if test="remark3 != null">#{remark3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTrainAdmin" parameterType="SysTrainAdmin">
+        update sys_train_admin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="trainName != null">train_name = #{trainName},</if>
+            <if test="trainDep != null">train_dep = #{trainDep},</if>
+            <if test="trainTeacher != null">train_teacher = #{trainTeacher},</if>
+            <if test="trainPlace != null">train_place = #{trainPlace},</if>
+            <if test="trainType != null">train_type = #{trainType},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="qrcodeStartTime != null">qrcode_start_time = #{qrcodeStartTime},</if>
+            <if test="qrcodeEndTime != null">qrcode_end_time = #{qrcodeEndTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark1 != null">remark1 = #{remark1},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+            <if test="remark3 != null">remark3 = #{remark3},</if>
+        </trim>
+        where train_id = #{trainId}
+    </update>
+
+    <delete id="deleteSysTrainAdminById" parameterType="Long">
+        delete from sys_train_admin where train_id = #{trainId}
+    </delete>
+
+    <delete id="deleteSysTrainAdminByIds" parameterType="String">
+        delete from sys_train_admin where train_id in 
+        <foreach item="trainId" collection="array" open="(" separator="," close=")">
+            #{trainId}
+        </foreach>
+    </delete>
+    
+</mapper>

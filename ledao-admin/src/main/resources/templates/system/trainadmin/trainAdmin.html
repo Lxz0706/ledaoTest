@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('签到管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>培训类型：</label>
+                                <select name="trainType" th:with="type=${@dict.getType('sys_train_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>培训课程：</label>
+                                <input type="text" name="trainName"/>
+                            </li>
+                            <li>
+                                <label>培训讲师：</label>
+                                <input type="text" name="trainTeacher"/>
+                            </li>
+                            <!--<li class="select-time">
+                                <label>培训开始日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartDate]"/>
+                            </li>
+                            <li class="select-time">
+                                <label>培训结束日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEndDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEndDate]"/>
+                            </li>
+                            <li class="select-time">
+                                <label>培训开始时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartTime]"/>
+                            </li>
+                            <li class="select-time">
+                                <label>培训结束时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEndTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEndTime]"/>
+                            </li>
+                            <li class="select-time">
+                                <label>二维码有效开始时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginQrcodeStartTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endQrcodeStartTime]"/>
+                            </li>
+                            <li class="select-time">
+                                <label>二维码有效结束时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginQrcodeEndTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endQrcodeEndTime]"/>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:train:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:train:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:train:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:train:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:train:remove')}]];
+        var trainTypeDatas = [[${@dict.getType('sys_train_type')}]];
+        var prefix = ctx + "system/train";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "签到管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'trainId',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'trainName',
+                    title: '培训课程'
+                },
+                /*{
+                    field: 'trainDep',
+                    title: '创建部门'
+                },*/
+                {
+                    field: 'trainTeacher',
+                    title: '培训讲师'
+                },
+                {
+                    field: 'trainPlace',
+                    title: '培训地点'
+                },
+                {
+                    field: 'trainType',
+                    title: '培训类型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(trainTypeDatas, value);
+                    }
+                },
+                /*{
+                    field: 'startDate',
+                    title: '培训开始日期'
+                },
+                {
+                    field: 'endDate',
+                    title: '培训结束日期'
+                },*/
+                {
+                    field: 'startTime',
+                    title: '培训开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '培训结束时间'
+                },
+                /*{
+                    field: 'qrcodeStartTime',
+                    title: '二维码有效开始时间'
+                },
+                {
+                    field: 'qrcodeEndTime',
+                    title: '二维码有效结束时间'
+                },*/
+                /*{
+                    field: 'remark1',
+                    title: '预留字段1'
+                },
+                {
+                    field: 'remark2',
+                    title: '预留字段2'
+                },
+                {
+                    field: 'remark3',
+                    title: '预留字段3'
+                },*/
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="selectTrainUsers(\'' + row.trainId + '\')"><i class="fa fa-edit"></i>参会人员</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="getWxCode(\'' + row.trainId + '\')"><i class="fa fa-edit"></i>二维码</a> ');
+                        // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.trainId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.trainId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function selectTrainUsers(trainId){
+            var url = prefix + "/goTrainUser?trainId="+trainId;
+            $.modal.open("参会人员", url, '750', '600/2');
+        }
+
+        function getWxCode(trainId){
+            $.modal.alertWarning("开发中，配合小程序使用")
+        }
+    </script>
+</body>
+</html>

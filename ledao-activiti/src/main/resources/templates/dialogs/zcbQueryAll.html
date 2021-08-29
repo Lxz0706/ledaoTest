@@ -63,17 +63,20 @@
                     visible: false
                 },
                 {
-                    field: 'assetStatus',
-                    title: '资产包状态'
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'assetPackageName',
                     title: '资产包名称'
                 },
                 {
-                    field: 'no',
-                    title: '序号'
+                    field: 'assetStatus',
+                    title: '资产包状态'
                 }
+
                 /*,
 
                {

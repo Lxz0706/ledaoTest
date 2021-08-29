@@ -14,7 +14,7 @@
     <input name="applyTypeUnDone" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
-        <input name="applyType" th:field="*{applyType}" value="0" type="hidden">
+        <input name="applyType" id="applyType" th:field="*{applyType}" type="hidden">
 <!--        <input name="approveStatu" id="approveStatu" th:field="*{approveStatu}" type="hidden">-->
         <div class="form-group">
             <label class="col-sm-3 control-label">档案类别：</label>
@@ -84,7 +84,7 @@
                         data-none-selected-text="请选择" class="form-control m-b">
                     <option value="">请选择数据</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                            th:value="${dict.dictValue}"></option>
+                            th:value="${dict.dictValue}" th:field="*{isOut}"></option>
                 </select>
             </div>
         </div>
@@ -96,7 +96,7 @@
                         data-none-selected-text="请选择" class="form-control m-b">
                     <option value="">请选择数据</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                            th:value="${dict.dictValue}"></option>
+                            th:value="${dict.dictValue}" th:field="*{isReceive}"></option>
                 </select>
             </div>
         </div>
@@ -108,7 +108,7 @@
                         data-none-selected-text="请选择" class="form-control m-b">
                     <option value="">请选择数据</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                            th:value="${dict.dictValue}"></option>
+                            th:value="${dict.dictValue}" th:field="*{isReturned}"></option>
                 </select>
             </div>
         </div>
@@ -120,7 +120,7 @@
                         data-none-selected-text="请选择" class="form-control m-b">
                     <option value="">请选择数据</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                            th:value="${dict.dictValue}"></option>
+                            th:value="${dict.dictValue}" th:field="*{isReceived}"></option>
                 </select>
             </div>
         </div>
@@ -129,7 +129,7 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="planReturnTime" class="form-control required" placeholder="yyyy-MM-dd" type="text">
+                    <input name="planReturnTime" id="planReturnTime" th:value="${#dates.format(sysApplyIn.planReturnTime, 'yyyy-MM-dd')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
@@ -138,24 +138,36 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input disabled name="realReturnTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input disabled name="realReturnTime" th:value="${#dates.format(sysApplyIn.realReturnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">出库原因：</label>
+            <div class="col-sm-8">
+                <textarea name="outReason" id="outReason" class="form-control">[[*{outReason}]]</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea name="remarks" id="remarks" class="form-control">[[*{remarks}]]</textarea>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">文件列表：</label>
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" id="newAddOut" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
+<!--                <a class="btn btn-success" id="newAddOut" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">-->
+<!--                    <i class="fa fa-plus"></i> 添加-->
+<!--                </a>-->
                 <a id="editOut" class="btn btn-primary single" onclick="$.operate.edit()"
                    shiro:hasPermission="activity:documentFile:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a id="removeOut" class="btn btn-danger multiple" onclick="$.operate.removeAll()"
-                   shiro:hasPermission="activity:documentFile:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
+<!--                <a id="removeOut" class="btn btn-danger multiple" onclick="$.operate.removeAll()"-->
+<!--                   shiro:hasPermission="activity:documentFile:remove">-->
+<!--                    <i class="fa fa-remove"></i> 删除-->
+<!--                </a>-->
 
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -196,17 +208,21 @@
         var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
         var isReturn = document.getElementById("isReturn").value;
         var roleType = document.getElementById("roleType").value;
+        var applyType = document.getElementById("applyType").value;
     $(function () {
         // 管理员与档案管理员
         for(var i =0; i < roles.length;i++) {
             if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
                 showNames = true
-                $("#isOutShow").show()
-                $("#isReceiveShow").show()
-                $("#isReturnedShow").show()
-                $("#isReceivedShow").show()
-                $("select,input,textarea").attr("readonly","readonly");
-                $("#isOut").removeAttr("readonly")
+                if(applyType == "1") {
+                } else {
+                    $("#isOutShow").show()
+                    $("#isReceiveShow").show()
+                    $("#isReturnedShow").show()
+                    $("#isReceivedShow").show()
+                    $("select,input,textarea").attr("readonly","readonly");
+                    $("#isOut").removeAttr("readonly")
+                }
             }
         }
         if ("bg"==roleType){
@@ -217,21 +233,32 @@
             $("#planReturnTimeShow").show()
         }
         // 判断当前的状态
-        if(appStatu == "7" || appStatu == "8" || appStatu == "9") {
-            debugger
-            $("select,input,textarea").attr("readonly","readonly");
+        if(appStatu == "7" || appStatu == "8" || appStatu == "9" || appStatu == "3") {
+            // $("select,input,textarea").attr("readonly","readonly");
+            $("#companyName").attr("disabled", "disabled")
+            $("#isReturn").attr("disabled", "disabled")
+            $("#isOut").attr("disabled", "disabled")
+            $("#isReturned").attr("disabled", "disabled")
+            $("#isReceived").attr("disabled", "disabled")
+            $("#planReturnTime").attr("disabled", "disabled")
+            $("#isReceive").attr("disabled", "disabled")
+            $("#outReason").attr("disabled", "disabled")
+            $("#remarks").attr("disabled", "disabled")
+            $("#projectNameVal").attr("disabled", "disabled")
             $("#planReturnTimeShow").show()
             $("#realReturnTime").show()
             $("#isOutShow").show()
             $("#isReceiveShow").show()
             $("#isReturnedShow").show()
             $("#isReceivedShow").show()
+            $("a").attr("disabled",true);
+            $('.btn').removeAttr('onclick')
             if(appStatu == "7") {
-                $("#isReceive").removeAttr("readonly")
+                $("#isReceive").removeAttr("disabled");
             } else if (appStatu == "8") {
-                $("#isReturned").removeAttr("readonly")
-            } else if (appStatu == "9") {
-                $("#isReceived").removeAttr("readonly")
+                $("#isReturned").removeAttr("disabled");
+            } else if (appStatu == "9" && showNames) {
+                $("#isReceived").removeAttr("disabled");
             }
 
         }
@@ -386,69 +413,20 @@
                     }
                 },
                 {
-                    field: 'isReturn',
-                    title: '是否归还',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(isReturnDatas, value);
-                    }
-                },
-                {
-                    field: 'planReturnTime',
-                    title: '计划归还时间',
-                },
-                {
-                    field: 'realReturnTime',
-                    title: '实际归还时间',
-                },
-                {
-                    field: 'outReason',
-                    title: '出库原因'
-                },
-                // {
-                //     field: 'isOut',
-                //     title: '已出库',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isOutDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'isReceive',
-                //     title: '已收到',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isReceiveDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'isReturned',
-                //     title: '是否已还',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isReturnedDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'isReceived',
-                //     title: '归还接受',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isReceivedDatas, value);
-                //     }
-                // },
-                {
-                    field: 'remarks',
-                    title: '备注'
-                },
-                {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        debugger
-                        if((showNames && appStatu =="1") || (showNames && appStatu =="9") || (row.createBy == loginName && (appStatu == "0" || appStatu == "4" || appStatu == "2" || appStatu == "7" || appStatu == "8"))) {
+                        if((showNames && appStatu =="1") || (showNames && appStatu =="9") || (row.createBy == loginName && (appStatu == "0" || appStatu == "4" || appStatu == "2"))) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         }
-                        if(row.createBy == loginName && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if(applyType == 1) {
+                        } else {
+                            if(row.createBy == loginName && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
+                                actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            }
                         }
                         return actions.join('');
                     }
@@ -462,9 +440,12 @@
                 $("input").attr("readonly","readonly");
                 $("select").attr("disabled",true);
                 $("a").attr("disabled",true);
-                $('.btn').removeAttr('onclick')
-                $("#editOut").attr("onclick")
-                $("#editOut").removeAttr("disabled")
+                $('.btn').removeAttr('onclick');
+                $("#editOut").attr("onclick");
+                $("#editOut").removeAttr("disabled");
+                if(applyType == "1" && showNames) {
+                    $("#isReceived").removeAttr("disabled");
+                }
             } else {
                 $("input").attr("readonly","readonly");
                 $("select").attr("disabled",true);
@@ -476,7 +457,16 @@
                 $("input").attr("readonly","readonly");
                 $("select").attr("disabled",true);
                 $("a").attr("disabled",true);
+                $("textarea").attr("disabled",true);
                 $('.btn').removeAttr('onclick')
+            }
+        }
+
+        // applyTypeUnDone == "2" 是从我的待办入口进入的
+        if(applyTypeUnDone == "2" && showNames) {
+            if(isReturn == "0") {
+                $("#isOutShow").show()
+                $("#isOut").removeAttr("disabled")
             }
         }
     });

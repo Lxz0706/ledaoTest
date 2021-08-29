@@ -35,25 +35,6 @@
             </form>
         </div>
 
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:projectZck:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="system:projectZck:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
-                <i class="fa fa-backward"></i> 返回
-            </a>
-            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectZck:export">
-                <i class="fa fa-download"></i> 导出
-            </a>-->
-        </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
         </div>
@@ -73,6 +54,7 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "项目管理资产库",
+            singleSelect: true,
             columns: [{
                 checkbox: true
             },

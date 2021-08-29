@@ -152,13 +152,13 @@
         var dStatu = document.getElementById("documentStatu");
         var apag = document.getElementById("assetPag");
         var fileType = document.getElementById("fileType").value;
-        var fileScanTypeFormGroup = document.getElementById("fileScanTypeFormGroup")
+        var fileScanTypeFormGroup = document.getElementById("fileScanTypeFormGroup");
+        var applyType = "1";
         $(function () {
             if(fileType == "2") {
                 fileScanTypeFormGroup.style.display = "block";
             }
             for(var i = 0; i < roles.length; i++) {
-                debugger
                 if(applyType == "0" || applyType == "") {
                 } else {
                     if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {

@@ -1437,6 +1437,13 @@ var table = {
                 }
                 $.modal.closeLoading();
             },
+            // 仅用于关闭弹窗并刷新表格
+            successCallbackClose: function () {
+                var parent = window.parent;
+                $.modal.close();
+                parent.$.table.refresh();
+                parent.$.modal.msgSuccess('保存成功');
+            },
             // 成功回调执行事件（父窗体静默更新）
             successCallback: function (result) {
                 if (result.code == web_status.SUCCESS) {

@@ -434,6 +434,8 @@
                         $.modal.msgSuccess(result.msg);
                         $("#showTable").show();
                         $("#saveButton").hide();
+                        $("#isReturn").attr("disabled", "disabled")
+                        $("#planReturnTimeDate").attr("disabled", "disabled")
                         ids = result.data.applyId;
                         optionUrl = prefix + "/editOutList/" + ids;
                         init(ids)

@@ -27,7 +27,7 @@
             </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="roleTypeShow">
             <label class="col-sm-3 control-label">项目所属部门名称：</label>
             <div class="col-sm-8">
                 <select id="roleType" name="roleType"
@@ -116,6 +116,7 @@
         var documentTypeVal = document.getElementById("documentType").value;
         var projectName = document.getElementById("projectName");
         var debtorName = document.getElementById("debtorName");
+        var roleTypeShow = document.getElementById("roleTypeShow");
         var ids = document.getElementById("applyId").value;
         var applyType = document.getElementById("applyType").value;
         var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
@@ -133,9 +134,11 @@
         if(documentTypeVal == "0") {
             projectName.style.display = 'block'
             debtorName.style.display = 'block'
+            roleTypeShow.style.display = 'block'
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
+            roleTypeShow.style.display = 'none'
             showNames = true
         }
         var isNotChange = false
@@ -149,6 +152,11 @@
         if(appStatu == 0 || appStatu == 4 || appStatu == 2) {
             isNotChange = false
         } else {
+            // if(showNames && applyTypeUnDone == '2') {
+            //     isNotChange = false
+            // } else {
+            //     isNotChange = true
+            // }
             isNotChange = true
         }
         var options = {
@@ -298,7 +306,7 @@
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
                         if(!isNotChange) {
-                            if(applyTypeUnDone == "3") {
+                            if(applyTypeUnDone == "3" || applyTypeUnDone == "2") {
                                 if(seOrEd == "edse1") {
                                     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                                     actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
@@ -315,8 +323,7 @@
         };
         $.table.init(options);
 
-        if(applyTypeUnDone == "3") {
-            debugger
+        if(applyTypeUnDone == "3" || applyTypeUnDone =="2") {
             if(seOrEd == "edse0") {
                 $("input").attr("readonly","readonly");
                 $("select").attr("disabled",true);
@@ -324,7 +331,6 @@
                 $('.btn').removeAttr('onclick')
             }
         } else {
-            debugger
             if(isNotChange){
                 $("input").attr("readonly","readonly");
                 $("select").attr("disabled",true);
@@ -381,7 +387,6 @@
         }
 
         function selectPro(){
-            debugger
             var url = ctx + "applyIn/selectPro?roleType="+roleType;
             $.modal.open("项目选择", url, '750', '600/2');
         }

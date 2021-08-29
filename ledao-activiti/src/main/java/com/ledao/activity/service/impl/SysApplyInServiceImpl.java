@@ -560,14 +560,16 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     @Override
     public int editSave(SysApplyIn sysApplyIn) {
         sysApplyIn.setUpdateTime(new Date());
-        if ("7".equals(sysApplyIn.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){
+        SysApplyIn sin = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
+        if ("7".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){
             sysApplyIn.setApproveStatu("8");
         }
-        if ("8".equals(sysApplyIn.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturn())){
+        if ("8".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturned())){
             sysApplyIn.setApproveStatu("9");
         }
-        if ("9".equals(sysApplyIn.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturned())){
+        if ("9".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceived())){
             sysApplyIn.setApproveStatu("3");
+            sysApplyIn.setRealReturnTime(DateUtils.getNowDate());
         }
 	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
     }

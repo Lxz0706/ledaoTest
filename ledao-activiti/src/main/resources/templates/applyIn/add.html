@@ -22,7 +22,7 @@
                                 </select>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="roleTypeShow">
                 <label class="col-sm-3 control-label is-required">项目所属部门名称：</label>
                 <div class="col-sm-8">
                     <select name="roleType" id="roleType" onchange="changeRoleType()"
@@ -352,15 +352,19 @@
         function changeDocumentType(val) {
             var projectName = document.getElementById("projectName")
             var debtorName = document.getElementById("debtorName")
+            var roleTypeShow = document.getElementById("roleTypeShow")
             if(val === '0') {
                 projectName.style.display = "block"
                 debtorName.style.display = "block"
+                roleTypeShow.style.display = "block"
             } else if(val === '1') {
                 projectName.style.display = "none"
                 debtorName.style.display = "none"
+                roleTypeShow.style.display = "none"
             } else {
                 projectName.style.display = "block"
                 debtorName.style.display = "block"
+                roleTypeShow.style.display = "block"
             }
         }
 

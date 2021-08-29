@@ -13,8 +13,8 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
-                <input id="textReject" name="realCreateBy" class="form-control" type="textarea">
-<!--                <textarea id="textReject" class="form-control" style="width:90%; height:100%; max-width: 100%; max-height: 100%; min-height: 100px"/>-->
+<!--                <input id="textReject" name="realCreateBy" class="form-control" type="textarea">-->
+                <textarea id="textReject" name="realCreateBy" class="form-control" style="width:90%; height:100%; max-width: 100%; max-height: 100%; min-height: 100px"></textarea>
             </div>
         </div>
 
@@ -32,28 +32,22 @@
             var docId = document.getElementById("form-applyIn-add");
             var formData = new FormData(docId);
             var rejectmak = formData.get("realCreateBy");
-            // var rejectmak = $("#textReject").val();
             var applyType = formData.get("applyType");
             var id = document.getElementById("applyId").value;
             var approveStatu = document.getElementById("approveStatu").value;
             var data = {"applyId": id, "approveStatu": approveStatu,"applyType": applyType,"remarks": rejectmak}
-            $.ajax({
-                url: prefix + "/applyEditSave",
-                data: data,
-                type: "post",
-                dataType: "json",
-                success: function(result) {
-                    if(approveStatu == "6") {
-                        $.modal.confirm("确认通过本条数据吗?", function () {
+            var confirmName = approveStatu == "6" ? "通过" : "驳回";
+                $.modal.confirm("确认" + confirmName + "本条数据吗?", function () {
+                    $.ajax({
+                        url: prefix + "/applyEditSave",
+                        data: data,
+                        type: "post",
+                        dataType: "json",
+                        success: function (result) {
                             $.operate.successCallback(result);
-                        })
-                    } else {
-                        $.modal.confirm("确认驳回本条数据吗?", function () {
-                            $.operate.successCallback(result);
-                        })
-                    }
-                }
-            })
+                        }
+                    })
+                })
         }
     }
 

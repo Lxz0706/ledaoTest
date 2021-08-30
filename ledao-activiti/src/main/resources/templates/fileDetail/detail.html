@@ -95,6 +95,12 @@
             if(applyTypeUnDone == "3") {
                 $("#addFile").hide();
                 $("#deletFile").hide();
+            } else {
+                if(applyTypeUnDone == "no" && (approveStatu == "0" || approveStatu == "4" || approveStatu =="2")) {
+                } else {
+                    $("#addFile").hide();
+                    $("#deletFile").hide();
+                }
             }
             var options = {
                 url: prefix + "/list",

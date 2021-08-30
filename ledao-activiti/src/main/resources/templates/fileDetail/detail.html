@@ -10,6 +10,7 @@
                 <form id="formId">
                     <input name="documentFileId" id="documentFileId" th:value="*{documentFileId}" type="hidden">
                     <input name="approveStatu" id="approveStatu" th:value="*{approveStatu}" type="hidden">
+                    <input name="approveStatu" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
                     <!--<div class="select-list">
                         <ul>
                             <li>
@@ -56,7 +57,7 @@
                <!-- <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:detail:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>-->
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:detail:remove">
+                <a id="deletFile" class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:detail:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
 
@@ -73,6 +74,7 @@
         var prefix = ctx + "activity/fileDetail";
         var docfieldId = document.getElementById("documentFileId").value;
         var approveStatu = document.getElementById("approveStatu").value;
+        var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
         var delets = document.getElementById("delets");
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
@@ -89,6 +91,10 @@
             } else {
                 $("#addFile").attr("disabled",true);
                 $("#addFile").removeAttr("onclick");
+            }
+            if(applyTypeUnDone == "3") {
+                $("#addFile").hide();
+                $("#deletFile").hide();
             }
             var options = {
                 url: prefix + "/list",
@@ -155,8 +161,10 @@
                         } else if ('mp4' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
                         }
-                        if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2 || showNames) {
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if(!(applyTypeUnDone == "3")) {
+                            if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2 || showNames) {
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            }
                         }
                         return actions.join('');
                     }

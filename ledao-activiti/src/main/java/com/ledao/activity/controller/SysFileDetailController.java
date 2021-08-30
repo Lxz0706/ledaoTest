@@ -86,8 +86,9 @@ public class SysFileDetailController extends BaseController
         return "fileDetail/add";
     }
 
-    @GetMapping("/detail/{documentId}")
-    public String fileDetail(@PathVariable("documentId") Long documentId,ModelMap modelMap) {
+    @GetMapping("/detail/{documentId}/{applyTypeUnDone}")
+    public String fileDetail(@PathVariable("documentId") Long documentId,
+                             @PathVariable("applyTypeUnDone") String applyTypeUnDone, ModelMap modelMap) {
         SysDocumentFile df = sysDocumentFileService.selectSysDocumentFileById(documentId);
         SysApplyIn in = sysApplyInService.selectSysApplyInById(df.getApplyId());
 //        查看档案附件
@@ -97,6 +98,7 @@ public class SysFileDetailController extends BaseController
         modelMap.put("sysFileDetail",sysFileDetail);
         modelMap.put("documentFileId",documentId);
         modelMap.put("approveStatu",in.getApproveStatu());
+        modelMap.put("applyTypeUnDone",applyTypeUnDone);
         return "fileDetail/detail";
     }
 

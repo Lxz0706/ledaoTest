@@ -153,7 +153,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     #{deb}
                 </foreach>
             </if>
-            <if test="applyUser != null  and applyUser != ''"> and a.apply_user = #{applyUser} or (a.real_create_by = #{applyUser} and a.approve_statu='0')</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
+            </if>
+            <if test="params.endApplyTime != null and params.endApplyTime != ''"><!-- 结束时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &lt;= date_format(#{params.endApplyTime},'%Y%m%d')
+            </if>
+            <if test="applyUser != null  and applyUser != ''"> and (a.apply_user = #{applyUser} or (a.real_create_by = #{applyUser} and a.approve_statu='0'))</if>
             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
             <if test="approveUser != null  and approveUser != ''"> and a.approve_user = #{approveUser}</if>
             <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
@@ -239,6 +245,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="approveStatu != null  and approveStatu != ''"> and app.approve_statu = #{approveStatu}</if>
             <if test="realCreateBy != null  and realCreateBy != ''"> and app.real_create_by = #{realCreateBy}</if>
             <if test="creator != null  and creator != ''"> and app.creator = #{creator}</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
+                and date_format(app.apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
+            </if>
+            <if test="params.endApplyTime != null and params.endApplyTime != ''"><!-- 结束时间检索 -->
+                and date_format(app.apply_time,'%Y%m%d') &lt;= date_format(#{params.endApplyTime},'%Y%m%d')
+            </if>
             <if test="reviser != null  and reviser != ''"> and app.reviser = #{reviser}</if>
         </where>
         ORDER BY app.create_time desc

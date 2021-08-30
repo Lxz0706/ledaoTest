@@ -141,6 +141,7 @@ public class SysDocumentFileController extends BaseController
         f.setFileType(sysDocumentFile.getFileType());
         f.setCreateBy(loginName);
         f.setFileScanType(sysDocumentFile.getFileScanType());
+        f.setApplyId(sysDocumentFile.getApplyId());
         List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
         if (ss !=null && ss.size()>0){
             return AjaxResult.error("存在重复记录，请检查");

@@ -197,8 +197,12 @@
         var isReceiveDatas = [[${@dict.getType('sys_is_not')}]];
         var isReturnedDatas = [[${@dict.getType('sys_is_not')}]];
         var isReceivedDatas = [[${@dict.getType('sys_is_not')}]];
+        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var showNames = false
         var documentTypeVal = document.getElementById("documentType").value
+        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
         var projectName = document.getElementById("projectName")
         var debtorName = document.getElementById("debtorName")
         var applyIds = document.getElementById("applyId").value
@@ -361,7 +365,10 @@
                 {
                     field: 'documentStatu',
                     title: '档案状态',
-                    visible: showNames
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
+                    }
                 },
                 {
                     field: 'cabinetNo',
@@ -376,17 +383,26 @@
                 {
                     field: 'documentGetType',
                     title: '档案类型',
-                    visible: showNames
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType);
+                    }
                 },
                 {
                     field: 'fileGetType',
                     title: '文件类型',
-                    visible: showNames
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
+                    }
                 },
                 {
                     field: 'documentLevel',
                     title: '档案级别',
-                    visible: showNames
+                    visible: showNames,
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentLevelDictDatas, item.documentLevel));
+                    }
                 },
                 {
                     field: 'files',
@@ -486,6 +502,11 @@
             $("#projectNameVal").val("");
             $("#debtorNameVal").val("");
             $("#debtorNameTip").val("");
+        }
+
+        function strLength(value){
+            var str = $.common.nullToStr(value);
+            return str;
         }
 
         function selectDebtor(){

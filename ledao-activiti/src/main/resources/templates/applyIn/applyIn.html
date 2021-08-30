@@ -36,6 +36,12 @@
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
+                            <li class="select-time">
+                                <label>申请时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
+                            </li>
                             <li id="debtorName">
                                 <label>债务人名称：</label>
                                 <input type="text" name="debtorName"/>

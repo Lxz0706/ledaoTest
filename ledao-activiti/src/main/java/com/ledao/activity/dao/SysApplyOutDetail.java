@@ -118,6 +118,89 @@ public class SysApplyOutDetail extends BaseEntity
     @Excel(name = "修改人名称")
     private String reviser;
 
+    @Excel(name = "项目名称")
+    private String projectName;
+
+    /** 档案状态--字典项 */
+    @Excel(name = "档案状态--字典项")
+    private String documentStatu;
+
+    /** 柜号 */
+    @Excel(name = "柜号")
+    private String cabinetNo;
+
+    /** 档案袋编号 */
+    @Excel(name = "档案袋编号")
+    private String bagNo;
+
+    /** 档案类型--字典项 */
+    @Excel(name = "档案类型--字典项")
+    private String documentGetType;
+
+    /** 文件类型--字典项 */
+    @Excel(name = "文件类型--字典项")
+    private String fileGetType;
+
+    /** 档案级别 */
+    @Excel(name = "档案级别")
+    private String documentLevel;
+
+    public String getDocumentStatu() {
+        return documentStatu;
+    }
+
+    public void setDocumentStatu(String documentStatu) {
+        this.documentStatu = documentStatu;
+    }
+
+    public String getCabinetNo() {
+        return cabinetNo;
+    }
+
+    public void setCabinetNo(String cabinetNo) {
+        this.cabinetNo = cabinetNo;
+    }
+
+    public String getBagNo() {
+        return bagNo;
+    }
+
+    public void setBagNo(String bagNo) {
+        this.bagNo = bagNo;
+    }
+
+    public String getDocumentGetType() {
+        return documentGetType;
+    }
+
+    public void setDocumentGetType(String documentGetType) {
+        this.documentGetType = documentGetType;
+    }
+
+    public String getFileGetType() {
+        return fileGetType;
+    }
+
+    public void setFileGetType(String fileGetType) {
+        this.fileGetType = fileGetType;
+    }
+
+    public String getDocumentLevel() {
+        return documentLevel;
+    }
+
+    public void setDocumentLevel(String documentLevel) {
+        this.documentLevel = documentLevel;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
     public String getAssetNumber() {
         return assetNumber;
     }

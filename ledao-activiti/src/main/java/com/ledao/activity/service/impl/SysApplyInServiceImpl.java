@@ -130,7 +130,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 //获取申请人的个人信息
                 sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
                 //根据提交人查询是否存在直接主管
-                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && sysUser.getLoginName().equals(ShiroUtils.getLoginName())) {
+                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && "5".equals(sysApplyIn.getApproveStatu())) {
                     key = "document_rk_zg";
                     SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                     //动态设置审批人员

@@ -56,6 +56,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileScanType"    column="file_scan_type"    />
         <result property="counts"    column="counts"    />
         <result property="pages"    column="pages"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="documentStatu"    column="document_statu"    />
+        <result property="cabinetNo"    column="cabinet_no"    />
+        <result property="bagNo"    column="bag_no"    />
+        <result property="documentGetType"    column="document_get_type"    />
+        <result property="fileGetType"    column="file_get_type"    />
+        <result property="documentLevel"    column="document_level"    />
     </resultMap>
 
     <sql id="selectSysApplyOutDetailVo">
@@ -114,10 +121,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         file.file_type,
         file.file_scan_type,
         file.counts,
-        file.pages
+        file.pages,
+        file.document_statu,
+        file.cabinet_no,
+        file.bag_no,
+        file.document_get_type,
+        file.file_get_type,
+        file.document_level,
+        ap.project_name
         FROM
         sys_apply_out_detail od
         LEFT JOIN sys_document_file file ON od.document_id = file.document_id
+        LEFT JOIN sys_apply_in ap ON od.apply_id = ap.apply_id
         <where>
             <if test="applyId != null "> and od.apply_id = #{applyId}</if>
             <if test="documentId != null "> and od.document_id = #{documentId}</if>

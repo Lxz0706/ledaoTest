@@ -116,14 +116,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     public List<String> getApplyNextUser(SysApplyIn sysApplyIn){
         Map<String, Object> variables = new HashMap<>();
-        SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
         String key = "";
         String itemName = "";
-        SysUser sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
+        SysUser sysUser = ShiroUtils.getSysUser();
         List<String> users = new ArrayList<>();
         if (StringUtils.isNotNull(sysUser)) {
             //入库申请
-
+            SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
             if ("0".equals(sysApplyIn.getApplyType())) {
                 /*if ("5".equals(sysApplyIn.getApproveStatu())){
                     if (StringUtils.isNotEmpty(a.getRealCreateBy())){
@@ -131,7 +130,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     }
                 }*/
                 //获取申请人的个人信息
-
+                sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
                 //根据提交人查询是否存在直接主管
                 if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && "5".equals(sysApplyIn.getApproveStatu())) {
                     key = "document_rk_zg";
@@ -181,6 +180,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     users.addAll(js);
                 }else{
                     //判断是否存在直接主管
+                    if (StringUtils.isNotEmpty(a.getRealCreateBy()) && "0".equals(sysApplyIn.getApproveStatu())){
+                        sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
+                    }
                     if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
                         SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                         users.add(sysUser1.getLoginName());
@@ -416,22 +418,22 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 if("1".equals(sysApplyIn.getApplyType())){
 //                    出库，档案管理员进行出库确认
                     if ("1".equals(sysApplyInEntity.getApproveStatu())){
-                        boolean isAllNotReturn = true;
+//                        boolean isAllNotReturn = true;
                         if (!"0".equals(sysApplyInEntity.getIsOut())){
                             return AjaxResult.error("档案未出库，无法完成借出审批");
                         }
-                        if ("0".equals(sysApplyInEntity.getIsReturn())){
-                            isAllNotReturn = false;
-                        }
-                        if (isAllNotReturn){
-                            sysApplyIn.setApproveStatu("3");
-                            sysApplyInEntity.setApproveStatu("3");
-                            sysApplyInEntity.setApproveUser("");
-                        }else{
+//                        if ("0".equals(sysApplyInEntity.getIsReturn())){
+//                            isAllNotReturn = false;
+//                        }
+//                        if (isAllNotReturn){
+//                            sysApplyIn.setApproveStatu("3");
+//                            sysApplyInEntity.setApproveStatu("3");
+//                            sysApplyInEntity.setApproveUser("");
+//                        }else{
                             sysApplyIn.setApproveStatu("7");
                             sysApplyInEntity.setApproveStatu("7");
                             sysApplyInEntity.setApproveUser("");
-                        }
+//                        }
                     }else if ("9".equals(sysApplyInEntity.getApproveStatu())){
 
                         if (!"0".equals(sysApplyInEntity.getIsReceived())){
@@ -567,7 +569,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         sysApplyIn.setUpdateTime(new Date());
         SysApplyIn sin = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
         if ("7".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){
-            sysApplyIn.setApproveStatu("8");
+            if ("1".equals(sin.getIsReturn())){
+                sysApplyIn.setApproveStatu("3");
+            }else{
+                sysApplyIn.setApproveStatu("8");
+            }
         }
         if ("8".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturned())){
             sysApplyIn.setApproveStatu("9");

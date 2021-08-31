@@ -13,7 +13,7 @@
             </form>
         </div>
 
-        <div class="btn-group-sm" id="toolbar" role="group">
+        <!--<div class="btn-group-sm" id="toolbar" role="group">
             <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:zck:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
@@ -33,7 +33,7 @@
             <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:zck:list">
                 <i class="fa fa-backward"></i> 返回
             </a>
-        </div>
+        </div>-->
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
         </div>
@@ -75,7 +75,7 @@
                     field: 'projectName',
                     title: '借款人名称',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.id + "',\'" + row.projectName + '\')">' + value + '</a>';
+                        return $.table.tooltip(row.projectName,10);
                     },
                     sortable: true
                 },

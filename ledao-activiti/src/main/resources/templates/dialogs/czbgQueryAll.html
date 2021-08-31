@@ -67,16 +67,19 @@
                     title: 'ID',
                     visible: false
                 },
-                    {
-                        title: "序号",
-                        formatter: function (value, row, index) {
-                            return $.table.serialNumber(index);
-                        }
-                    },
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
                 {
                     field: 'projectName', 
                     title: '项目名称',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(row.projectName,10);
+                    }
                 },
                 {
                     field: 'projectStatus', 

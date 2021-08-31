@@ -73,7 +73,7 @@
                     field: 'zckName',
                     title: '资产包名称',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectZckId + "',\'" + row.zckName + '\')">' + value + '</a>';
+                        return $.table.tooltip(row.zckName,10);
                     }
                 },
                 /*

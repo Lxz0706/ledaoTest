@@ -78,11 +78,17 @@
                 },
                 {
                     field: 'projectZckName',
-                    title: '资产包名称'
+                    title: '资产包名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(row.projectZckName,10);
+                    }
                 },
                 {
                     field: 'projectName',
-                    title: '借款人名称'
+                    title: '借款人名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(row.projectName,10);
+                    }
                 },
                 {
                     field: 'totalPrice',

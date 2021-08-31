@@ -146,7 +146,7 @@ public class SysApplyInController extends BaseController
     public TableDataInfo docList(SysApplyIn sysApplyIn)
     {
         startPage();
-        List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(sysApplyIn);
         return getDataTable(list);
     }
 

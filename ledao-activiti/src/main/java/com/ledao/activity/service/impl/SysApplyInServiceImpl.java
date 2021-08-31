@@ -381,7 +381,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         }
         //撤回
         if("4".equals(sysApplyIn.getApproveStatu())) {
-            if (!sysApplyInEntity.getCreateBy().equals(loginUser)){
+            if (!sysApplyInEntity.getApplyUser().equals(loginUser)){
                 return AjaxResult.error("非创建人无法撤回");
             }
             if(!"5".equals(sysApplyInEntity.getApproveStatu())){

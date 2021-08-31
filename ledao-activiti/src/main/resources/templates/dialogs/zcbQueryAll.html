@@ -26,11 +26,11 @@
             </form>
         </div>
 
-        <div class="btn-group-sm" id="toolbar" role="group">
+        <!--<div class="btn-group-sm" id="toolbar" role="group">
             <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:zcb:export">
                 <i class="fa fa-download"></i> 导出
             </a>
-        </div>
+        </div>-->
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
         </div>
@@ -70,7 +70,10 @@
                 },
                 {
                     field: 'assetPackageName',
-                    title: '资产包名称'
+                    title: '资产包名称',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(row.assetPackageName,10);
+                    }
                 },
                 {
                     field: 'assetStatus',

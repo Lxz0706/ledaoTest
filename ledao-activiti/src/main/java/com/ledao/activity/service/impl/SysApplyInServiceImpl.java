@@ -75,6 +75,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     public SysApplyIn selectSysApplyInById(Long applyId)
     {
     	SysApplyIn applyIn = sysApplyInMapper.selectSysApplyInById(applyId);
+        SysUser u = userMapper.selectUserByLoginName(applyIn.getApplyUser());
+        applyIn.setApplyUserName(u.getUserName());
     	SysDocumentFile documentFile = new SysDocumentFile();
     	documentFile.setApplyId(applyId);
     	List<SysDocumentFile> documentFiles = documentFileMapper.selectSysDocumentFileList(documentFile);

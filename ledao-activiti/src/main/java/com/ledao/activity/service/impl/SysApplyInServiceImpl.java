@@ -116,13 +116,14 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     public List<String> getApplyNextUser(SysApplyIn sysApplyIn){
         Map<String, Object> variables = new HashMap<>();
+        SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
         String key = "";
         String itemName = "";
-        SysUser sysUser = ShiroUtils.getSysUser();
+        SysUser sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
         List<String> users = new ArrayList<>();
         if (StringUtils.isNotNull(sysUser)) {
             //入库申请
-            SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
+
             if ("0".equals(sysApplyIn.getApplyType())) {
                 /*if ("5".equals(sysApplyIn.getApproveStatu())){
                     if (StringUtils.isNotEmpty(a.getRealCreateBy())){
@@ -130,7 +131,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     }
                 }*/
                 //获取申请人的个人信息
-                sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
+
                 //根据提交人查询是否存在直接主管
                 if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && "5".equals(sysApplyIn.getApproveStatu())) {
                     key = "document_rk_zg";
@@ -143,7 +144,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     List<String> jls = getUsers("documentAdmin");
                     List<String> js = new ArrayList<>();
                     for (String n: jls){
-                        if (!n.equals(a.getApplyUser())){
+                        if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
                             js.add(n);
                         }
                     }
@@ -173,7 +174,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     List<String> jls = getUsers("documentAdmin");
                     List<String> js = new ArrayList<>();
                     for (String n: jls){
-                        if (!n.equals(a.getApplyUser())){
+                        if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
                             js.add(n);
                         }
                     }
@@ -286,7 +287,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         String delDocumentIds = "";
         for (SysApplyIn a:apps) {
             // 可提交审批的状态     0保存；4撤回;
-            if (!Arrays.asList(applyStatusList).contains(a.getApproveStatu()) || !a.getApplyUser().equals(ShiroUtils.getLoginName())){
+            if (!Arrays.asList(applyStatusList).contains(a.getApproveStatu())){
                 return AjaxResult.error("存在不可删除的申请");
             }
             SysDocumentFile d = new SysDocumentFile();
@@ -341,7 +342,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             if (!Arrays.asList(applyStatusList).contains(sysApplyInEntity.getApproveStatu())){
                 return AjaxResult.error("非待审批状态");
             }
-            if (!sysApplyInEntity.getCreateBy().equals(loginUser)){
+            if ((sysApplyInEntity.getCreateBy().equals(loginUser) && "0".equals(sysApplyInEntity.getApproveStatu()))||
+                    (!"0".equals(sysApplyInEntity.getApproveStatu())&& sysApplyInEntity.getApplyUser().equals(loginUser)) ){
+            }else{
                 return AjaxResult.error("非创建人无法提交审批");
             }
             if ("1".equals(sysApplyIn.getApplyType())){

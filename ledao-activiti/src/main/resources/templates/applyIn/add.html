@@ -62,7 +62,7 @@
                 <label class="col-sm-3 control-label">实际提交人：</label>
                 <div class="col-sm-8">
                     <input class="form-control" type="hidden" name="applyUser" id="realCreateBy">
-                    <input class="form-control" type="text" name="applyUserName" id="realCreateByName" onclick="selectUser()">
+                    <input autocomplete="off" class="form-control" type="text" name="applyUserName" id="realCreateByName" onclick="selectUser()">
                 </div>
             </div>
             <div class="form-group">
@@ -212,54 +212,54 @@
                             return strLength(item.pages);
                         }
                     },
-                    {
-                        field: 'documentStatu',
-                        title: '档案状态',
-                        visible: showNames,
-                        formatter: function(value, item, index) {
-                            return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
-                        }
-                    },
-                    {
-                        field: 'cabinetNo',
-                        title: '柜号',
-                        visible: showNames,
-                        formatter: function(value, item, index) {
-                            return strLength(item.cabinetNo);
-                        }
-                    },
-                    {
-                        field: 'bagNo',
-                        title: '档案袋编号',
-                        visible: showNames,
-                        formatter: function(value, item, index) {
-                            return strLength(item.bagNo);
-                        }
-                    },
-                    {
-                        field: 'documentGetType',
-                        title: '档案类型',
-                        visible: showNames,
-                        formatter: function(value, item, index) {
-                            return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
-                        }
-                    },
-                    {
-                        field: 'fileGetType',
-                        title: '文件类型',
-                        visible: showNames,
-                        formatter: function(value, item, index) {
-                            return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
-                        }
-                    },
-                    {
-                        field: 'documentLevel',
-                        title: '档案级别',
-                        visible: showNames,
-                        formatter: function(value, item, index) {
-                            return strLength($.table.selectDictLabel(documentLevelDictDatas, item.fileGetType));
-                        }
-                    },
+                    // {
+                    //     field: 'documentStatu',
+                    //     title: '档案状态',
+                    //     visible: showNames,
+                    //     formatter: function(value, item, index) {
+                    //         return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
+                    //     }
+                    // },
+                    // {
+                    //     field: 'cabinetNo',
+                    //     title: '柜号',
+                    //     visible: showNames,
+                    //     formatter: function(value, item, index) {
+                    //         return strLength(item.cabinetNo);
+                    //     }
+                    // },
+                    // {
+                    //     field: 'bagNo',
+                    //     title: '档案袋编号',
+                    //     visible: showNames,
+                    //     formatter: function(value, item, index) {
+                    //         return strLength(item.bagNo);
+                    //     }
+                    // },
+                    // {
+                    //     field: 'documentGetType',
+                    //     title: '档案类型',
+                    //     visible: showNames,
+                    //     formatter: function(value, item, index) {
+                    //         return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
+                    //     }
+                    // },
+                    // {
+                    //     field: 'fileGetType',
+                    //     title: '文件类型',
+                    //     visible: showNames,
+                    //     formatter: function(value, item, index) {
+                    //         return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
+                    //     }
+                    // },
+                    // {
+                    //     field: 'documentLevel',
+                    //     title: '档案级别',
+                    //     visible: showNames,
+                    //     formatter: function(value, item, index) {
+                    //         return strLength($.table.selectDictLabel(documentLevelDictDatas, item.fileGetType));
+                    //     }
+                    // },
                     {
                         field: 'fileNames',
                         title: '附件',

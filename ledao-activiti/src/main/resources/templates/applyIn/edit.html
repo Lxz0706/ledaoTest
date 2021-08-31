@@ -243,54 +243,54 @@
                         return strLength(item.pages);
                     }
                 },
-                // {
-                //     field: 'documentStatu',
-                //     title: '档案状态',
-                //     visible: showNames,
-                //     formatter: function(value, item, index) {
-                //         return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
-                //     }
-                // },
-                // {
-                //     field: 'cabinetNo',
-                //     title: '柜号',
-                //     visible: showNames,
-                //     formatter: function(value, item, index) {
-                //         return strLength(item.cabinetNo);
-                //     }
-                // },
-                // {
-                //     field: 'bagNo',
-                //     title: '档案袋编号',
-                //     visible: showNames,
-                //     formatter: function(value, item, index) {
-                //         return strLength(item.bagNo);
-                //     }
-                // },
-                // {
-                //     field: 'documentGetType',
-                //     title: '档案类型',
-                //     visible: showNames,
-                //     formatter: function(value, item, index) {
-                //         return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
-                //     }
-                // },
-                // {
-                //     field: 'fileGetType',
-                //     title: '文件类型',
-                //     visible: showNames,
-                //     formatter: function(value, item, index) {
-                //         return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
-                //     }
-                // },
-                // {
-                //     field: 'documentLevel',
-                //     title: '档案级别',
-                //     visible: showNames,
-                //     formatter: function(value, item, index) {
-                //         return strLength($.table.selectDictLabel(documentLevelDictDatas, item.documentLevel));
-                //     }
-                // },
+                {
+                    field: 'documentStatu',
+                    title: '档案状态',
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
+                    }
+                },
+                {
+                    field: 'cabinetNo',
+                    title: '柜号',
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    formatter: function(value, item, index) {
+                        return strLength(item.cabinetNo);
+                    }
+                },
+                {
+                    field: 'bagNo',
+                    title: '档案袋编号',
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    formatter: function(value, item, index) {
+                        return strLength(item.bagNo);
+                    }
+                },
+                {
+                    field: 'documentGetType',
+                    title: '档案类型',
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
+                    }
+                },
+                {
+                    field: 'fileGetType',
+                    title: '文件类型',
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
+                    }
+                },
+                {
+                    field: 'documentLevel',
+                    title: '档案级别',
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(documentLevelDictDatas, item.documentLevel));
+                    }
+                },
                 {
                     field: 'fileNames',
                     title: '附件',

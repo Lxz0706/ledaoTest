@@ -68,7 +68,7 @@
             <label class="col-sm-3 control-label">实际提交人：</label>
             <div class="col-sm-8">
 <!--                <input name="realCreateBy" th:field="*{realCreateBy}" class="form-control" type="text">-->
-                <input class="form-control" type="hidden" name="applyUser" id="realCreateBy">
+                <input class="form-control" th:field="*{applyUser}" type="hidden" name="applyUser" id="realCreateBy">
                 <input autocomplete="off" th:field="*{applyUserName}" class="form-control" type="text" name="applyUserName" id="realCreateByName" onclick="selectUser()">
             </div>
         </div>

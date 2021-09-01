@@ -182,6 +182,18 @@ public class SysMonomerLaw extends BaseEntity {
      */
     private String delFlag;
 
+    /**
+     * 项目名称
+     */
+    private String projectName;
+
+    /**
+     * 项目状态
+     */
+    private String projectStatus;
+
+    private String judicialRemarks;
+
     public void setMonomerLawId(Long monomerLawId) {
         this.monomerLawId = monomerLawId;
     }
@@ -406,6 +418,30 @@ public class SysMonomerLaw extends BaseEntity {
         return delFlag;
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectStatus() {
+        return projectStatus;
+    }
+
+    public void setProjectStatus(String projectStatus) {
+        this.projectStatus = projectStatus;
+    }
+
+    public String getJudicialRemarks() {
+        return judicialRemarks;
+    }
+
+    public void setJudicialRemarks(String judicialRemarks) {
+        this.judicialRemarks = judicialRemarks;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -441,6 +477,7 @@ public class SysMonomerLaw extends BaseEntity {
                 .append("reviser", getReviser())
                 .append("updateTime", getUpdateTime())
                 .append("delFlag", getDelFlag())
+                .append("judicialRemarks", getJudicialRemarks())
                 .toString();
     }
 }

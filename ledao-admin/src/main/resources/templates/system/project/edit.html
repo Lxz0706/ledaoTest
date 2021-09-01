@@ -624,42 +624,6 @@
         return arr;
     }
 
-    //$.initDataPlugin();
-
-    function getJsonArr(arr) {
-//定义需要的空数组
-        var newArr = [];
-//定义转换字符串后的数组
-        var newStringArr = [];
-        $.each(arr, function (i, v) {
-            var sArr = JSON.stringify(v);
-            if ($.inArray(sArr, newStringArr) == -1) {
-// 根据字符串数组push对象
-                newStringArr.push(sArr);
-                newArr.push(v)
-            }
-        });
-        return newArr;
-    }
-
-    function uniqueArray(array, key) {
-        var result = [array[0]];
-        for (var i = 1; i < array.length; i++) {
-            var item = array[i];
-            var repeat = false;
-            for (var j = 0; j < result.length; j++) {
-                if (item[key] == result[j][key]) {
-                    repeat = true;
-                    break;
-                }
-            }
-            if (!repeat) {
-                result.push(item);
-            }
-        }
-        return result;
-    }
-
 </script>
 </body>
 </html>

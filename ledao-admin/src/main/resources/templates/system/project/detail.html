@@ -130,46 +130,11 @@
 <th:block th:include="include :: footer"/>
 <script>
     $(function () {
-        var createBy = $("#createBy").val();
         var projectId = $("#projectId").val();
         var pId = $("#pId").val();
-        // var openTime = $("#openTime").val();
         if ($.common.isEmpty(pId)) {
             $("#back").hide();
         }
-        /*if ("true" == createBy) {
-           // $("#create1").show();
-            $.ajax({
-                type: 'post',
-                url: ctx + 'system/project/selectPCustomerByProjectId',
-                data: {'projectId': projectId},
-                dataType: "JSON",
-                success: function (result) {
-                    var arr = result.sysPcustomerList;
-                    var str = "<tr id=\"create1\"><td colspan=\"8\" style=\"text-align: center\" class=\"success\"><h3>成交信息</h3></td></tr>";
-                    var num = 0;
-                    for (var i = 0; i < result.sysPcustomerList.length; i++) {
-                        if ((num % 4) == 0) {
-                            str += '<tr>';
-                        }
-                        str += '<td class=\"col-sm-1 text-right\">';
-                        str += "<h5>";
-                        str += arr[i].customerLable;
-                        str += "：</h5></td>";
-                        str += "<td class=\"col-sm-1\">"
-                        str += arr[i].customerName;
-                        str += "</td>";
-                        num++;
-                        if ((num % 4) == 0) {
-                            str += '</tr>';
-                        }
-                    }
-                    $("#create1").after(str);
-                }
-            });
-        } else {
-            $("#create1").hide();
-        }*/
         $.ajax({
             type: 'post',
             url: ctx + 'system/project/selectPCustomerByProjectId',
@@ -212,26 +177,6 @@
         $.modal.opens('客户详情', url);
     }
 
-/*    function back() {
-        var projectZckId = $("#projectZckId").val();
-        var fwProjectType = $("#fwProjectType").val();
-        var otherFlag = $("#otherFlag").val();
-        var pId = $("#pId").val();
-        var url = '';
-        var title = '';
-        if ($.common.isNotEmpty(fwProjectType)) {
-            url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
-            if ("otherProject" == fwProjectType) {
-                title = '其他项目列表';
-            } else {
-                title = $("#zckName").val() + "列表";
-            }
-        } else {
-            url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val();
-            title = $("#zckName").val() + "列表";
-        }
-        $.modal.parentTab(title, url);
-    }*/
     function back() {
         var projectZckId = $("#projectZckId").val();
         var fwProjectType = $("#fwProjectType").val();

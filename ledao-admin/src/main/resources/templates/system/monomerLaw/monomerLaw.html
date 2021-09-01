@@ -10,146 +10,9 @@
             <form id="formId">
                 <div class="select-list">
                     <ul>
-                        <input type="text" name="projectId" id="projectId" th:value="*{projectId}"/>
-                        <input type="text" name="projectType" id="projectType" th:value="*{projectType}"/>
-                        <!-- <li>
-                             <label>项目id：</label>
-                             <input type="text" name="projectId"/>
-                         </li>
-                         <li>
-                             <label>项目类型：</label>
-                             <select name="projectType">
-                                 <option value="">所有</option>
-                                 <option value="-1">代码生成请选择字典属性</option>
-                             </select>
-                         </li>
-                         <li>
-                             <label>司法状态：</label>
-                             <select name="judicialStatus">
-                                 <option value="">所有</option>
-                                 <option value="-1">代码生成请选择字典属性</option>
-                             </select>
-                         </li>
-                         <li>
-                             <label>管辖法院：</label>
-                             <input type="text" name="competentCourt"/>
-                         </li>
-                         <li>
-                             <label>法官及联系方式：</label>
-                             <input type="text" name="judgeContact"/>
-                         </li>
-                         <li>
-                             <label>律所：</label>
-                             <input type="text" name="lawFirm"/>
-                         </li>
-                         <li>
-                             <label>律师及联系方式：</label>
-                             <input type="text" name="lawyerContact"/>
-                         </li>
-                         <li>
-                             <label>所属债权合同编号：</label>
-                             <input type="text" name="contractNo"/>
-                         </li>
-                         <li class="select-time">
-                             <label>诉讼时效起算日：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginLimitationAction]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endLimitationAction]"/>
-                         </li>
-                         <li>
-                             <label>查封标的：</label>
-                             <input type="text" name="sealUpSubjectMatter"/>
-                         </li>
-                         <li class="select-time">
-                             <label>查封日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSealUpDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSealUpDate]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>执行时效起算日：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginLimitationExecution]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endLimitationExecution]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>起诉立案日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDateFiling]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDateFiling]"/>
-                         </li>
-                         <li>
-                             <label>一审判决案号及日期：</label>
-                             <input type="text" name="firstInstance"/>
-                         </li>
-                         <li>
-                             <label>二审判决案号及日期：</label>
-                             <input type="text" name="secondInstance"/>
-                         </li>
-                         <li>
-                             <label>再审判决案号及日期：</label>
-                             <input type="text" name="retrial"/>
-                         </li>
-                         <li class="select-time">
-                             <label>执行立案日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginEnforcementFilingDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endEnforcementFilingDate]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>出具评估报告日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginAppraisalReportDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endAppraisalReportDate]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>第一次挂拍日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginFirstShotDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endFirstShotDate]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>第二次挂拍日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSecondShotDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSecondShotDate]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>变卖挂拍日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSellShotDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSellShotDate]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>拍卖成交日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSuccessfulBidderDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSuccessfulBidderDate]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>执行款到账日期：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPaymentReceivedDate]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endPaymentReceivedDate]"/>
-                         </li>
-                         <li>
-                             <label>创建人名称：</label>
-                             <input type="text" name="creator"/>
-                         </li>
-                         <li>
-                             <label>修改人名称：</label>
-                             <input type="text" name="reviser"/>
-                         </li>
-                         <li>
-                             <label>删除标志：</label>
-                             <input type="text" name="delFlag"/>
-                         </li>-->
-                        <!--<li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>-->
+                        <input type="hidden" name="projectId" id="projectId" th:value="*{projectId}"/>
+                        <input type="hidden" name="projectType" id="projectType" th:value="*{projectType}"/>
+                        <input name="projectStatus" id="projectStatus" type="hidden" th:value="*{projectStatus}"/>
                     </ul>
                 </div>
             </form>
@@ -167,7 +30,9 @@
                shiro:hasPermission="system:monomerLaw:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
-
+            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:bgczzck:list">
+                <i class="fa fa-backward"></i> 返回
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -197,127 +62,46 @@
                     visible: false
                 },
                 {
-                    field: 'projectId',
-                    title: '项目id'
+                    field: 'projectName',
+                    title: '项目名称'
                 },
                 {
-                    field: 'projectType',
-                    title: '项目类型'
-                },
-                {
-                    field: 'judicialStatus',
-                    title: '司法状态'
-                },
-                {
-                    field: 'competentCourt',
-                    title: '管辖法院'
-                },
-                {
-                    field: 'judgeContact',
-                    title: '法官及联系方式'
-                },
-                {
-                    field: 'lawFirm',
-                    title: '律所'
-                },
-                {
-                    field: 'lawyerContact',
-                    title: '律师及联系方式'
-                },
-                {
-                    field: 'contractNo',
-                    title: '所属债权合同编号'
-                },
-                {
-                    field: 'limitationAction',
-                    title: '诉讼时效起算日'
-                },
-                {
-                    field: 'openTime',
-                    title: '开庭时间'
-                },
-                {
-                    field: 'sealUpSubjectMatter',
-                    title: '查封标的'
-                },
-                {
-                    field: 'sealUpDate',
-                    title: '查封日期'
-                },
-                {
-                    field: 'limitationExecution',
-                    title: '执行时效起算日'
-                },
-                {
-                    field: 'dateFiling',
-                    title: '起诉立案日期'
-                },
-                {
-                    field: 'firstInstance',
-                    title: '一审判决案号及日期'
-                },
-                {
-                    field: 'secondInstance',
-                    title: '二审判决案号及日期'
-                },
-                {
-                    field: 'retrial',
-                    title: '再审判决案号及日期'
-                },
-                {
-                    field: 'enforcementFilingDate',
-                    title: '执行立案日期'
-                },
-                {
-                    field: 'appraisalReportDate',
-                    title: '出具评估报告日期'
-                },
-                {
-                    field: 'firstShotDate',
-                    title: '第一次挂拍日期'
-                },
-                {
-                    field: 'secondShotDate',
-                    title: '第二次挂拍日期'
-                },
-                {
-                    field: 'sellShotDate',
-                    title: '变卖挂拍日期'
-                },
-                {
-                    field: 'successfulBidderDate',
-                    title: '拍卖成交日期'
-                },
-                {
-                    field: 'paymentReceivedDate',
-                    title: '执行款到账日期'
-                },
-                {
-                    field: 'creator',
-                    title: '创建人名称'
-                },
-                {
-                    field: 'reviser',
-                    title: '修改人名称'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
+                    title: '司法情况',
                     formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.monomerLawId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.monomerLawId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.monomerLawId + "',\'" + 1 + '\')">司法情况详细</a>';
+                    }
+                },
+                {
+                    title: '诉讼及执行进展',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.monomerLawId + "',\'" + 2 + '\')">诉讼及执行进展详细</a>';
                     }
                 }]
         };
         $.table.init(options);
     });
 
+    function detail(id, index) {
+        var url = prefix + '/detail?monomerLawId=' + id + "&detailType=" + index;
+        var title = "";
+        if (1 == index) {
+            title = "司法情况详细";
+        } else if (2 == index) {
+            title = "诉讼及执行进展详细";
+        }
+        $.modal.parentTab(title, url);
+    }
+
     function add() {
         var projectId = $("#projectId").val();
         var projectType = $("#projectType").val();
         $.modal.open("添加" + table.options.modalName, prefix + "/add?projectId=" + projectId + "&projectType=" + projectType);
+    }
+
+    function back() {
+        var projectStatus = $("#projectStatus").val();
+        var url = ctx + 'system/bgczzck/selectByProjectStatus/' + projectStatus;
+        $.modal.parentTab(projectStatus + "列表", decodeURI(url));
     }
 </script>
 </body>

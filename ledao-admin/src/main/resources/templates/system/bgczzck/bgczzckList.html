@@ -189,8 +189,19 @@
     });
 
     function toMonomerLaw(id, projectName) {
-        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + id + "&projectType=2";
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + id + "&projectType=2" + "&projectStatus=" + $("#projectStatus").val();
         $.modal.parentTab(projectName + '法律信息', url);
+    }
+
+    /*资产库列表-详细*/
+    function detail(id, projectName) {
+        var url = prefix + '/detail/' + id;
+        if (projectName == '' || projectName == null) {
+            $.modal.openTab("重组并购项目信息库详情", url);
+        } else {
+            $.modal.openTab(projectName, url);
+        }
+
     }
 
     //控制显示的字数
@@ -216,17 +227,6 @@
             _text = "无";
             return _text;
         }
-    }
-
-    /*资产库列表-详细*/
-    function detail(id, projectName) {
-        var url = prefix + '/detail/' + id;
-        if (projectName == '' || projectName == null) {
-            $.modal.openTab("重组并购项目信息库详情", url);
-        } else {
-            $.modal.openTab(projectName, url);
-        }
-
     }
 
     function exportExcel() {

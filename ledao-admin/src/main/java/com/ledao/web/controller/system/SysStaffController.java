@@ -66,7 +66,6 @@ public class SysStaffController extends BaseController {
         startPage();
         List<SysStaff> list = sysStaffService.selectSysStaffList(sysStaff);
         for (SysStaff sysStaff1 : list) {
-            logger.info(sysStaff1.getContact1() + "======" + sysStaff1.getContact2());
             if (StringUtils.isNotEmpty(sysStaff1.getContact1()) && StringUtils.isNotEmpty(sysStaff1.getContact2())) {
                 sysStaff1.setContact1(sysStaff1.getContact1() + ";" + sysStaff1.getContact2());
             } else if (StringUtils.isNotEmpty(sysStaff1.getContact2()) && StringUtils.isEmpty(sysStaff1.getContact1())) {
@@ -163,7 +162,6 @@ public class SysStaffController extends BaseController {
     @PostMapping("/removeResume")
     @ResponseBody
     public AjaxResult removeResume(@RequestParam("staffId") Long staffId, @RequestParam("resumeUrls") String resumeUrls) {
-        logger.info("文件长度：========" + resumeUrls);
         SysStaff sysStaff = sysStaffService.selectSysStaffById(staffId);
         for (String string : resumeUrls.split(",")) {
             if (StringUtils.isNotNull(string)) {

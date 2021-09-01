@@ -6,6 +6,8 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-bgczzck-edit">
+        <input id="law" th:value="*{list}" type="hidden">
+        <input id="projectStatus" th:value="${sysBgczzck.projectStatus}" type="hidden">
         <table class="table table-border">
             <input id="projectId" th:field="${sysBgczzck.id}" type="hidden">
             <tr>
@@ -178,11 +180,13 @@
             </tr>
             <tr>
                 <td class="col-sm-1 text-right"><h5>估值依据：</h5></td>
-                <td class="col-sm-1"><span th:text="${sysBgczzck.valuationBasis}"/></td>
+                <td class="col-sm-1" colspan="7"><span th:text="${sysBgczzck.valuationBasis}"/></td>
+            </tr>
+            <tr>
                 <td class="col-sm-1 text-right"><h5>总价：</h5></td>
                 <td class="col-sm-1"><span th:text="${sysBgczzck.totalPrices}"/></td>
                 <td class="col-sm-1 text-right"><h5>备注：</h5></td>
-                <td class="col-sm-1"><span th:text="${sysBgczzck.projectValuationRemarks}"/></td>
+                <td class="col-sm-1" colspan="5"><span th:text="${sysBgczzck.projectValuationRemarks}"/></td>
             </tr>
             <tr>
                 <td colspan="8" style="text-align: center" class="success"><h3>退出计划</h3></td>
@@ -203,12 +207,24 @@
                 <td class="col-sm-1" colspan="3"><span th:text="${sysBgczzck.laterProjectRemark}"/></td>
             </tr>
         </table>
+        <div class="row">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回
+                </button>&nbsp;
+            </div>
+        </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
 
-<script>
+<script th:inline="javascript">
+    var prefix = ctx + "system/bgczzck";
     $(function () {
+        lawList();
+        customer();
+    })
+
+    function customer() {
         var projectId = $("#projectId").val();
         $.ajax({
             type: 'post',
@@ -244,11 +260,85 @@
                 $("#create1").after(str);
             }
         });
-    })
+    }
+
+    function lawList() {
+        $.ajax({
+            url: prefix + "/selectSysMonomerLawList",
+            data: {'projectId': $("#projectId").val(), 'projectType': $("#projectType").val()},
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                var law = result.rows;
+                var str = '';
+                for (var i = 0; i < law.length; i++) {
+                    str += '<tr><td colspan="8" style="text-align: center" class="success"><h3>司法情况</h3></td></tr>';
+                    str += '<tr>';
+                    str += '<td class="col-sm-1 text-right"><h5>司法状态：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].judicialStatus) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>管辖法院：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].competentCourt) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>法官及联系方式：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].judgeContact) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>律所：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].lawFirm) + '</td>';
+                    str += '</tr>';
+                    str += '<tr>';
+                    str += '<td class="col-sm-1 text-right"><h5>律师及联系方式：</h5></td><td class="col-sm-1" colspan="3">' + $.common.nullToStr(law[i].lawyerContact) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>备注：</h5></td><td class="col-sm-1" colspan="3">' + $.common.nullToStr(law[i].judicialRemarks) + '</td>';
+                    str += '</tr>';
+                    str += '<tr><td colspan="8" style="text-align: center" class="success"><h3>诉讼及执行进展</h3></td></tr>';
+                    str += '<tr>';
+                    str += '<td class="col-sm-1 text-right"><h5>所属债权合同编号：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].contractNo) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>诉讼时效起算日：</h5></td><td class="col-sm-1"><span>' + $.common.nullToStr(law[i].limitationAction) + '</span></td>';
+                    str += '<td class="col-sm-1 text-right"><h5>查封标的：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].sealUpSubjectMatter) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>查封日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].sealUpDate) + '</td>';
+                    str += '</tr>';
+                    str += '<tr>';
+                    str += '<td class="col-sm-1 text-right"><h5>执行时效起算日：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].limitationExecution) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>起诉立案日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].dateFiling) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>一审判决案号及日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].firstInstance) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>二审判决案号及日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].secondInstance) + '</td>';
+                    str += '</tr>';
+                    str += '<tr>';
+                    str += '<td class="col-sm-1 text-right"><h5>再审判决案号及日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].retrial) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>执行立案日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].enforcementFilingDate) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>出具评估报告日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].appraisalReportDate) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>第一次挂拍日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].firstShotDate) + '</td>';
+                    str += '</tr>';
+                    str += '<tr>';
+                    str += '<td class="col-sm-1 text-right"><h5>第二次挂拍日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].secondShotDate) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>变卖挂拍日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].sellShotDate) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>拍卖成交日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].successfulBidderDate) + '</td>';
+                    str += '<td class="col-sm-1 text-right"><h5>执行款到账日期：</h5></td><td class="col-sm-1">' + $.common.nullToStr(law[i].paymentReceivedDate) + '</td>';
+                    str += '</tr>';
+                    str += '<tr>';
+                    str += '<td class="col-sm-1 text-right"><h5>开庭时间：</h5></td><td class="col-sm-1" colspan="7">' + openTime(law[i].openTime) + '</td>';
+                    str += '</tr>'
+                }
+                $("#create1").after(str);
+            }
+
+        })
+    }
+
+    function openTime(openTime) {
+        var str = "";
+        var str1 = eval(openTime);
+        if ($.common.isNotEmpty(str1)) {
+            for (var i = 0; i < str1.length; i++) {
+                var parse = str1[i];
+                str += '<div class="input-group"><span>' + parse.type + '</span>:<span>' + parse.value + '</span>';
+            }
+        }
+        return str;
+    }
 
     function toCustomer(customerId) {
         var url = ctx + 'system/customer/detail/' + customerId;
         $.modal.opens('客户详情', url);
+    }
+
+    function back() {
+        var projectStatus = $("#projectStatus").val();
+        var url = prefix + '/selectByProjectStatus/' + projectStatus;
+        $.modal.parentTab(projectStatus+"列表", decodeURI(url));
     }
 </script>
 </body>

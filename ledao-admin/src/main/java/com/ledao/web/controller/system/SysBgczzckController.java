@@ -12,9 +12,7 @@ import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
-import com.ledao.system.service.ISysDictDataService;
-import com.ledao.system.service.ISysDictTypeService;
-import com.ledao.system.service.ISysPcustomerService;
+import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.service.ISysBgczzckService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
@@ -52,6 +49,9 @@ public class SysBgczzckController extends BaseController {
 
     @Autowired
     private ISysDictDataService sysDictDataService;
+
+    @Autowired
+    private ISysMonomerLawService sysMonomerLawService;
 
     @RequiresPermissions("system:bgczzck:view")
     @GetMapping()
@@ -257,16 +257,6 @@ public class SysBgczzckController extends BaseController {
         return getDataTable(list);
     }
 
-//    @RequiresPermissions("system:bgczzck:list")
-    @PostMapping("/listesDoc")
-    @ResponseBody
-    public TableDataInfo listesDoc(SysBgczzck sysBgczzck) {
-        startPage();
-//        sysBgczzck.setProjectName("");
-        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
-        return getDataTable(list);
-    }
-
     /**
      * 选择项目树
      */
@@ -311,5 +301,13 @@ public class SysBgczzckController extends BaseController {
         }
         map.put("sysPcustomerList", sysPcustomerList);
         return map;
+    }
+
+    @PostMapping("/selectSysMonomerLawList")
+    @ResponseBody
+    public TableDataInfo selectSysMonomerLawList(SysMonomerLaw sysMonomerLaw) {
+        //获取该项目下的法律信息
+        List<SysMonomerLaw> sysMonomerLawList = sysMonomerLawService.selectSysMonomerLawList(sysMonomerLaw);
+        return getDataTable(sysMonomerLawList);
     }
 }

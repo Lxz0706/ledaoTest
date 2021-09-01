@@ -1,290 +1,452 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改项目法律信息')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('修改项目法律信息')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-monomerLaw-edit" th:object="${sysMonomerLaw}">
-            <input name="monomerLawId" th:field="*{monomerLawId}" type="hidden">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">项目id：</label>
-                <div class="col-sm-8">
-                    <input name="projectId" th:field="*{projectId}" class="form-control" type="text">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-monomerLaw-edit" th:object="${sysMonomerLaw}">
+        <input name="monomerLawId" th:field="*{monomerLawId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">司法状态：</label>
+            <div class="col-sm-8">
+                <select name="judicialStatus" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_project_sfzt')}">
+                    <option value="">--请选择一条数据--</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                            th:field="*{judicialStatus}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">管辖法院：</label>
+            <div class="col-sm-8">
+                <input name="competentCourt" th:field="*{competentCourt}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">法官及联系方式：</label>
+            <div class="col-sm-8">
+                <input name="judgeContact" th:field="*{judgeContact}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">律所：</label>
+            <div class="col-sm-8">
+                <input name="lawFirm" th:field="*{lawFirm}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">律师及联系方式：</label>
+            <div class="col-sm-8">
+                <input name="lawyerContact" th:field="*{lawyerContact}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所属债权合同编号：</label>
+            <div class="col-sm-8">
+                <input name="contractNo" th:field="*{contractNo}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">诉讼时效起算日：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="limitationAction"
+                           th:value="${#dates.format(sysMonomerLaw.limitationAction, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">项目类型：</label>
-                <div class="col-sm-8">
-                    <select name="projectType" class="form-control m-b">
-                        <option value="">所有</option>
-                    </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开庭时间：</label>
+            <input name="openTime" id="openTime" type="hidden" th:field="*{openTime}">
+            <div class="col-sm-8" id="addNum">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">查封标的：</label>
+            <div class="col-sm-8">
+                <input name="sealUpSubjectMatter" th:field="*{sealUpSubjectMatter}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">查封日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="sealUpDate" th:value="${#dates.format(sysMonomerLaw.sealUpDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">司法状态：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box">
-                        <input type="radio" name="judicialStatus" value="">
-                        <label th:for="judicialStatus" th:text="未知"></label>
-                    </div>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行时效起算日：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="limitationExecution"
+                           th:value="${#dates.format(sysMonomerLaw.limitationExecution, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">管辖法院：</label>
-                <div class="col-sm-8">
-                    <input name="competentCourt" th:field="*{competentCourt}" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">起诉立案日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="dateFiling" th:value="${#dates.format(sysMonomerLaw.dateFiling, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">法官及联系方式：</label>
-                <div class="col-sm-8">
-                    <input name="judgeContact" th:field="*{judgeContact}" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">一审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <input name="firstInstance" th:field="*{firstInstance}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">二审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <input name="secondInstance" th:field="*{secondInstance}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">再审判决案号及日期：</label>
+            <div class="col-sm-8">
+                <input name="retrial" th:field="*{retrial}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行立案日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="enforcementFilingDate"
+                           th:value="${#dates.format(sysMonomerLaw.enforcementFilingDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">律所：</label>
-                <div class="col-sm-8">
-                    <input name="lawFirm" th:field="*{lawFirm}" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">出具评估报告日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="appraisalReportDate"
+                           th:value="${#dates.format(sysMonomerLaw.appraisalReportDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">律师及联系方式：</label>
-                <div class="col-sm-8">
-                    <input name="lawyerContact" th:field="*{lawyerContact}" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">第一次挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="firstShotDate" th:value="${#dates.format(sysMonomerLaw.firstShotDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">所属债权合同编号：</label>
-                <div class="col-sm-8">
-                    <input name="contractNo" th:field="*{contractNo}" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">第二次挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="secondShotDate" th:value="${#dates.format(sysMonomerLaw.secondShotDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">诉讼时效起算日：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="limitationAction" th:value="${#dates.format(sysMonomerLaw.limitationAction, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">变卖挂拍日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="sellShotDate" th:value="${#dates.format(sysMonomerLaw.sellShotDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">开庭时间：</label>
-                <div class="col-sm-8">
-                    <textarea name="openTime" class="form-control">[[*{openTime}]]</textarea>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">拍卖成交日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="successfulBidderDate"
+                           th:value="${#dates.format(sysMonomerLaw.successfulBidderDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">查封标的：</label>
-                <div class="col-sm-8">
-                    <input name="sealUpSubjectMatter" th:field="*{sealUpSubjectMatter}" class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行款到账日期：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="paymentReceivedDate"
+                           th:value="${#dates.format(sysMonomerLaw.paymentReceivedDate, 'yyyy-MM-dd')}"
+                           class="form-control" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">查封日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="sealUpDate" th:value="${#dates.format(sysMonomerLaw.sealUpDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">执行时效起算日：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="limitationExecution" th:value="${#dates.format(sysMonomerLaw.limitationExecution, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">起诉立案日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="dateFiling" th:value="${#dates.format(sysMonomerLaw.dateFiling, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">一审判决案号及日期：</label>
-                <div class="col-sm-8">
-                    <input name="firstInstance" th:field="*{firstInstance}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">二审判决案号及日期：</label>
-                <div class="col-sm-8">
-                    <input name="secondInstance" th:field="*{secondInstance}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">再审判决案号及日期：</label>
-                <div class="col-sm-8">
-                    <input name="retrial" th:field="*{retrial}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">执行立案日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="enforcementFilingDate" th:value="${#dates.format(sysMonomerLaw.enforcementFilingDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">出具评估报告日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="appraisalReportDate" th:value="${#dates.format(sysMonomerLaw.appraisalReportDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">第一次挂拍日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="firstShotDate" th:value="${#dates.format(sysMonomerLaw.firstShotDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">第二次挂拍日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="secondShotDate" th:value="${#dates.format(sysMonomerLaw.secondShotDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">变卖挂拍日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="sellShotDate" th:value="${#dates.format(sysMonomerLaw.sellShotDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">拍卖成交日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="successfulBidderDate" th:value="${#dates.format(sysMonomerLaw.successfulBidderDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">执行款到账日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="paymentReceivedDate" th:value="${#dates.format(sysMonomerLaw.paymentReceivedDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">创建人名称：</label>
-                <div class="col-sm-8">
-                    <input name="creator" th:field="*{creator}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">修改人名称：</label>
-                <div class="col-sm-8">
-                    <input name="reviser" th:field="*{reviser}" class="form-control" type="text">
-                </div>
-            </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "system/monomerLaw";
-        $("#form-monomerLaw-edit").validate({
-            focusCleanup: true
-        });
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/monomerLaw";
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-monomerLaw-edit').serialize());
+    $(function () {
+        var openTime = $("#openTime").val();
+        setOpenTime(openTime);
+    })
+    $("#form-monomerLaw-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-monomerLaw-edit').serialize());
+        }
+    }
+
+    $("input[name='limitationAction']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='sealUpDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='limitationExecution']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='dateFiling']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='enforcementFilingDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='appraisalReportDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='firstShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='secondShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='sellShotDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='successfulBidderDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='paymentReceivedDate']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    function setOpenTime(openTime) {
+        var str = "";
+        if ($.common.isNotEmpty(openTime)) {
+            var str1 = eval(openTime);
+            for (var i = 0; i < str1.length; i++) {
+                var parse = str1[i];
+                var ids = ['一审', '二审', '再审', '其他'];
+                str += "<div class=\"input-group\">";
+                if ('一审' == parse.type || '二审' == parse.type || '再审' == parse.type) {
+                    str += '<select onchange="typeChange(this)" class="form-control" style="width: 35%">';
+                    for (var j = 0; j < ids.length; j++) {
+                        if (ids[j] === parse.type) {
+                            str += '<option value ="' + ids[j] + '" selected>' + ids[j] + '</option>';
+                        } else {
+                            str += '<option value ="' + ids[j] + '">' + ids[j] + '</option>';
+                        }
+                    }
+                    str += '</select>';
+                } else {
+                    str += '<input value="' + parse.type + '" type="text" class="form-control">';
+                }
+                str += '<!--<span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->' +
+                    '<input name="openTimes" id="openTimes" value="' + parse.value + '"  style="width: 65%" class="form-control" placeholder="yyyy-MM-dd" type="text" autocomplete="off"></div>';
             }
         }
+        str += '<button class="btn btn-info" type="button" title="新增" id="addSaltIpGrpBtn" onclick="addSaltIpGrp(this)">' +
+            '<span class="glyphicon glyphicon-plus"></span></button>'
+        $("#addNum").html(str);
+        $.initDataPlugin();
+    }
 
-        $("input[name='limitationAction']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    var i = 0;
 
-        $("input[name='sealUpDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    function addSaltIpGrp(obj) {
+        i++;
+        html = '<div class="input-group">\n' +
+            ' <select class="form-control" onchange="typeChange(this)" style="width: 35%">\n' +
+            ' <option value="">--请选择--</option>                   <option value="一审">一审</option>\n' +
+            '                    <option value="二审">二审</option>\n' +
+            '                    <option value="再审">再审</option>\n' +
+            '                    <option value="其他">其他</option>\n' +
+            '                </select><!--<span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->\n' +
+            '<input name="openTimes" class="form-control" placeholder="yyyy-MM-dd" type="text" autocomplete="off" style="width: 65%">\n' +
+            '<button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delOpenTimes" ' +
+            'onclick="delete(this)"><span class="glyphicon glyphicon-minus"></span></button></div>';
+        $(html).insertBefore(obj);
+        $.initDataPlugin();
+    };
 
-        $("input[name='limitationExecution']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    $(document).on('click', '#delOpenTimes', function () {
+        var type = $(this).prev().prev().val();
+        var openTime = $("#openTime").val();
+        var str1 = eval(openTime);
+        var index;
+        for (var i = 0; i < str1.length; i++) {
+            if ($.common.isNotEmpty(type)) {
+                if (str1[i].type == type) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        str1.splice(index, 1);
+        $("#openTime").val(JSON.stringify(str1));
+        $(this).parent().remove();
+    });
 
-        $("input[name='dateFiling']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    function typeChange(obj) {
+        var value = $(obj).val();
+        if ('其他' == value) {
+            var str = '<input name="openType" class="form-control" type="text" style="width: 35%" onBlur="onBlur(this)">';
+            $(str).insertAfter(obj);
+            $(obj).hide();
+        } else {
+            var push = [];
+            var thisTime = $(obj).next().val();
+            var openTime = $("#openTime").val();
+            if ($.common.isNotEmpty(openTime)) {
+                var str1 = eval($("#openTime").val());
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(thisTime)) {
+                        if ($.common.equalsIgnoreCase(thisTime, str1[i].value)) {
+                            str1[i].type = $(obj).val();
+                        }
+                    }
+                    push.push(str1[i]);
+                }
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        }
+    }
 
-        $("input[name='enforcementFilingDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+    function onBlur(obj) {
+        var push = [];
+        var thisTime = $(obj).next().val();
+        if ($.common.isNotEmpty(thisTime)) {
+            var openTime = $("#openTime").val();
+            if ($.common.isNotEmpty(openTime)) {
+                var str1 = eval($("#openTime").val());
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(thisTime)) {
+                        if ($.common.equalsIgnoreCase(thisTime, str1[i].value)) {
+                            str1[i].type = $(obj).val();
+                        }
+                    }
+                    push.push(str1[i]);
+                }
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
+        }
+    }
 
-        $("input[name='appraisalReportDate']").datetimepicker({
+    $.initDataPlugin = function () {
+        $("input[name='openTimes']").datetimepicker({
             format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
+            minView: 'month',
+            autoclose: true,
+        }).on("hide", function (ev) {
+            var thisTime = $(this).val();
+            var type = $(this).prev().val();
+            var push = [];
+            var str = "";
+            var openTime = $("#openTime").val();
+            var str1 = eval(openTime);
+            if ($.common.isNotEmpty(str1)) {
+                for (var i = 0; i < str1.length; i++) {
+                    if ($.common.isNotEmpty(type)) {
+                        if ($.common.equalsIgnoreCase(type, str1[i].type)) {
+                            str1[i].value = thisTime;
+                        } else {
+                            str = '{"type":"' + type + '","value":"' + thisTime + '"}';
+                        }
+                    }
+                    if ($.common.isNotEmpty(str)) {
+                        push.push(JSON.parse(str));
+                    }
+                    push.push(str1[i]);
+                }
+            } else {
+                str = '{"type":"' + type + '","value":"' + thisTime + '"}';
+                push.push(JSON.parse(str));
+            }
+            $("#openTime").val(JSON.stringify(unique(push)));
         });
+    };
 
-        $("input[name='firstShotDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='secondShotDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='sellShotDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='successfulBidderDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-
-        $("input[name='paymentReceivedDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-    </script>
+    function unique(list) {
+        var arr = [];
+        for (var i = 0; i < list.length; i++) {
+            if (i == 0) arr.push(list[i]);
+            b = false;
+            if (arr.length > 0 && i > 0) {
+                for (var j = 0; j < arr.length; j++) {
+                    if (arr[j].type == list[i].type) {
+                        b = true;
+                        break;
+                    }
+                }
+                if (!b) {
+                    arr.push(list[i]);
+                }
+            }
+        }
+        return arr;
+    }
+</script>
 </body>
 </html>

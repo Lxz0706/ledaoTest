@@ -2,6 +2,11 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.*;
+import com.ledao.system.service.ISysBgczzckService;
+import com.ledao.system.service.ISysProjectService;
+import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.dao.SysMonomerLaw;
 import com.ledao.system.service.ISysMonomerLawService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
+import oshi.util.StringUtil;
 
 /**
  * 项目法律信息Controller
@@ -34,11 +39,21 @@ public class SysMonomerLawController extends BaseController {
     @Autowired
     private ISysMonomerLawService sysMonomerLawService;
 
+    @Autowired
+    private ISysZckService sysZckService;
+
+    @Autowired
+    private ISysBgczzckService sysBgczzckService;
+
+    @Autowired
+    private ISysProjectService sysProjectService;
+
     @GetMapping("/toMonomerLaw")
-    public String toMonomerLaw(Long projectId, String projectType, ModelMap modelMap) {
-        logger.info("进来了！！！！=========" + projectId);
+    public String toMonomerLaw(Long projectId, String projectType, String projectStatus, ModelMap modelMap) {
+        logger.info("123123");
         modelMap.put("projectId", projectId);
         modelMap.put("projectType", projectType);
+        modelMap.put("projectStatus", projectStatus);
         return prefix + "/monomerLaw";
     }
 
@@ -57,6 +72,28 @@ public class SysMonomerLawController extends BaseController {
     public TableDataInfo list(SysMonomerLaw sysMonomerLaw) {
         startPage();
         List<SysMonomerLaw> list = sysMonomerLawService.selectSysMonomerLawList(sysMonomerLaw);
+        for (SysMonomerLaw sysMonomerLaw1 : list) {
+            String projectName = "";
+            if (StringUtils.isNotNull(sysMonomerLaw1.getProjectId()) && StringUtils.isNotNull(sysMonomerLaw1.getProjectType())) {
+                if ("1".equals(sysMonomerLaw1.getProjectType())) {
+                    SysZck sysZck = sysZckService.selectSysZckById(sysMonomerLaw1.getProjectId());
+                    if (StringUtils.isNotNull(sysZck) && StringUtils.isNotEmpty(sysZck.getProjectName())) {
+                        projectName = sysZck.getProjectName();
+                    }
+                } else if ("2".equals(sysMonomerLaw1.getProjectType())) {
+                    SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(sysMonomerLaw1.getProjectId());
+                    if (StringUtils.isNotNull(sysBgczzck) && StringUtils.isNotEmpty(sysBgczzck.getProjectName())) {
+                        projectName = sysBgczzck.getProjectName();
+                    }
+                } else if ("3".equals(sysMonomerLaw1.getProjectType())) {
+                    SysProject sysProject = sysProjectService.selectSysProjectById(sysMonomerLaw1.getProjectId());
+                    if (StringUtils.isNotNull(sysProject) && StringUtils.isNotEmpty(sysProject.getProjectName())) {
+                        projectName = sysProject.getProjectName();
+                    }
+                }
+            }
+            sysMonomerLaw1.setProjectName(projectName);
+        }
         return getDataTable(list);
     }
 
@@ -124,5 +161,43 @@ public class SysMonomerLawController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(sysMonomerLawService.deleteSysMonomerLawByIds(ids));
+    }
+
+    @GetMapping("/detail")
+    public String detail(Long monomerLawId, Long detailType, ModelMap modelMap) {
+        String url = "";
+        SysMonomerLaw sysMonomerLaw = sysMonomerLawService.selectSysMonomerLawById(monomerLawId);
+        String projectName = "";
+        if (StringUtils.isNotNull(sysMonomerLaw.getProjectId()) && StringUtils.isNotNull(sysMonomerLaw.getProjectType())) {
+            if ("1".equals(sysMonomerLaw.getProjectType())) {
+                SysZck sysZck = sysZckService.selectSysZckById(sysMonomerLaw.getProjectId());
+                if (StringUtils.isNotNull(sysZck) && StringUtils.isNotEmpty(sysZck.getProjectName())) {
+                    projectName = sysZck.getProjectName();
+                }
+            } else if ("2".equals(sysMonomerLaw.getProjectType())) {
+                SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(sysMonomerLaw.getProjectId());
+                if (StringUtils.isNotNull(sysBgczzck)) {
+                    if (StringUtils.isNotEmpty(sysBgczzck.getProjectName())) {
+                        projectName = sysBgczzck.getProjectName();
+                    }
+                    if (StringUtils.isNotEmpty(sysBgczzck.getProjectStatus())) {
+                        sysMonomerLaw.setProjectStatus(sysBgczzck.getProjectStatus());
+                    }
+                }
+            } else if ("3".equals(sysMonomerLaw.getProjectType())) {
+                SysProject sysProject = sysProjectService.selectSysProjectById(sysMonomerLaw.getProjectId());
+                if (StringUtils.isNotNull(sysProject) && StringUtils.isNotEmpty(sysProject.getProjectName())) {
+                    projectName = sysProject.getProjectName();
+                }
+            }
+        }
+        sysMonomerLaw.setProjectName(projectName);
+        modelMap.put("sysMonomerLaw", sysMonomerLaw);
+        if (1 == detailType) {
+            url = "/detail1";
+        } else if (2 == detailType) {
+            url = "/detail2";
+        }
+        return prefix + url;
     }
 }

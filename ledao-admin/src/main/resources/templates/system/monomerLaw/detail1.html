@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('项目详细')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m-t" id="signupForm">
+        <input id="projectId" th:value="${sysMonomerLaw.projectId}" type="hidden">
+        <input id="projectName" th:value="${sysMonomerLaw.projectName}" type="hidden">
+        <input id="projectType" th:value="${sysMonomerLaw.projectType}" type="hidden">
+        <input id="projectStatus" th:value="${sysMonomerLaw.projectStatus}" type="hidden">
+        <input id="openTime" th:value="${sysMonomerLaw.openTime}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>司法状态：</h5></label>
+            <div class="form-control-static" th:text="${sysMonomerLaw.judicialStatus}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>管辖法院：</h5></label>
+            <div class="form-control-static" th:text="${sysMonomerLaw.competentCourt}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>法官及联系方式：</h5></label>
+            <div class="form-control-static" th:text="${sysMonomerLaw.judgeContact}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>律所：</h5></label>
+            <div class="form-control-static" th:text="${sysMonomerLaw.lawFirm}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>律师及联系方式：</h5></label>
+            <div class="form-control-static" th:text="${sysMonomerLaw.lawyerContact}"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><h5>开庭时间：</h5></label>
+            <div class="form-control-static" id="addNum"></div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回</button>&nbsp;
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script>
+    $(function () {
+        openTime($("#openTime").val());
+    })
+
+    function back() {
+        var projectId = $("#projectId").val();
+        var projectType = $("#projectType").val();
+        var projectName = $("#projectName").val();
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + projectId + "&projectType=" + projectType + "&projectStatus=" + $("#projectStatus").val();
+        $.modal.parentTab(projectName + '法律信息', url);
+    }
+
+    function openTime(openTime) {
+        var str = "";
+        var str1 = eval(openTime);
+        if ($.common.isNotEmpty(str1)) {
+            for (var i = 0; i < str1.length; i++) {
+                var parse = str1[i];
+                str += '<div class="input-group"><span>' + parse.type + '</span>:<span>' + parse.value + '</span>';
+            }
+        }
+        $("#addNum").html(str);
+    }
+</script>
+</body>
+</html>

@@ -13,6 +13,7 @@
                     <input name="companyName" id="companyName" th:field="*{companyName}" type="hidden">
                     <input name="projectName" id="projectName" th:field="*{projectName}" type="hidden">
                     <input name="debtorName" id="debtorName" th:field="*{debtorName}" type="hidden">
+                    <input name="documentStatu" id="documentStatu" value="1" type="hidden">
                     <div class="select-list">
                         <ul>
                             <!--<li>
@@ -211,7 +212,10 @@
                 },
                 {
                     field: 'debtorName',
-                    title: '债务人名称'
+                    title: '债务人名称',
+                    formatter: function(value, item, index) {
+                        return $.table.tooltip(item.debtorName,10);
+                    }
                 },
                 {
                     field: 'companyName',
@@ -222,7 +226,10 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目名称'
+                    title: '项目名称',
+                    formatter: function(value, item, index) {
+                        return $.table.tooltip(item.projectName,10);
+                    }
                 },
                 {
                     field: 'documentType',
@@ -233,11 +240,17 @@
                 },
                 {
                     field: 'assetNumber',
-                    title: '资产编号'
+                    title: '资产编号',
+                    formatter: function(value, item, index) {
+                        return $.table.tooltip(item.assetNumber,10);
+                    }
                 },
                 {
                     field: 'contractNo',
-                    title: '合同编号'
+                    title: '合同编号',
+                    formatter: function(value, item, index) {
+                        return $.table.tooltip(item.contractNo,10);
+                    }
                 },
                 {
                     field: 'dailyDocumentType',
@@ -248,7 +261,10 @@
                 },
                 {
                     field: 'fileName',
-                    title: '文件名称'
+                    title: '文件名称',
+                    formatter: function(value, item, index) {
+                        return $.table.tooltip(item.fileName,10);
+                    }
                 },
                 {
                     field: 'fileType',
@@ -261,7 +277,7 @@
                     field: 'fileScanType',
                     title: '扫描件类型',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType);
+                        return $.table.tooltip($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType),10);
                     }
                 },
                 {
@@ -318,14 +334,14 @@
                     field: 'remarks',
                     title: '备注'
                 },
-                {
-                    field: 'creator',
-                    title: '创建人名称'
-                },
-                {
-                    field: 'reviser',
-                    title: '修改人名称'
-                },
+                // {
+                //     field: 'creator',
+                //     title: '创建人名称'
+                // },
+                // {
+                //     field: 'reviserName',
+                //     title: '修改人名称'
+                // },
                 // {
                 //     title: '操作',
                 //     align: 'center',

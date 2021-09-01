@@ -570,10 +570,27 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         sysApplyIn.setUpdateTime(new Date());
         SysApplyIn sin = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
         if ("7".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){
+            SysApplyOutDetail sd = new SysApplyOutDetail();
+            sd.setApplyId(sysApplyIn.getApplyId());
+            List<SysApplyOutDetail> dfs =  sysApplyOutDetailMapper.selectSysApplyOutDetailList(sd);
             if ("1".equals(sin.getIsReturn())){
                 sysApplyIn.setApproveStatu("3");
+                //出库不归还
+                for (SysApplyOutDetail df:dfs) {
+                    SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                    sysDocumentFile.setDocumentStatu("2");
+                    sysDocumentFile.setDocumentId(df.getDocumentId());
+                    documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                }
             }else{
                 sysApplyIn.setApproveStatu("8");
+                //出库待归还
+                for (SysApplyOutDetail df:dfs) {
+                    SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                    sysDocumentFile.setDocumentStatu("0");
+                    sysDocumentFile.setDocumentId(df.getDocumentId());
+                    documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                }
             }
         }
         if ("8".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturned())){
@@ -582,6 +599,16 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         if ("9".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceived())){
             sysApplyIn.setApproveStatu("3");
             sysApplyIn.setRealReturnTime(DateUtils.getNowDate());
+            //已归还
+            SysApplyOutDetail sd = new SysApplyOutDetail();
+            sd.setApplyId(sysApplyIn.getApplyId());
+            List<SysApplyOutDetail> dfs =  sysApplyOutDetailMapper.selectSysApplyOutDetailList(sd);
+            for (SysApplyOutDetail df:dfs) {
+                SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                sysDocumentFile.setDocumentStatu("1");
+                sysDocumentFile.setDocumentId(df.getDocumentId());
+                documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+            }
         }
 	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
     }

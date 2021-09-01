@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.dao.SysDocumentFile;
+import com.ledao.activity.mapper.SysApplyInMapper;
+import com.ledao.activity.mapper.SysDocumentFileMapper;
 import com.ledao.common.config.Global;
 import com.ledao.common.constant.Constants;
 import com.ledao.common.core.dao.AjaxResult;
@@ -32,6 +36,10 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
 {
     @Autowired
     private SysFileDetailMapper sysFileDetailMapper;
+    @Autowired
+    private SysDocumentFileMapper sysDocumentFileMapper;
+    @Autowired
+    private SysApplyInMapper sysApplyInMapper;
 
     /**
      * 查询档案详情
@@ -93,12 +101,21 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
                 sysFileDetail.setFileType(FileUploadUtils.getExtension(file));
                 sysFileDetailMapper.insertSysFileDetail(sysFileDetail);
             }
-
+            //更新用户信息
+            SysDocumentFile ds = sysDocumentFileMapper.selectSysDocumentFileById(sysFileDetail.getDocumentFileId());
+            SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(ds.getApplyId());
+            updateApplyIn(ap);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
         return AjaxResult.success();
+    }
+
+    public int updateApplyIn(SysApplyIn ap){
+        ap.setReviser(ShiroUtils.getLoginName());
+        ap.setUpdateTime(DateUtils.getNowDate());
+        return sysApplyInMapper.updateSysApplyIn(ap);
     }
 
     /**
@@ -124,13 +141,18 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
     public int deleteSysFileDetailByIds(String ids)
     {
         String[] idArray = Convert.toStrArray(ids);
+        long doId = 0L;
         for (String id: idArray) {
             SysFileDetail SysFileDetail = new SysFileDetail();
             SysFileDetail.setFileId(Long.parseLong(id));
             SysFileDetail f = sysFileDetailMapper.selectSysFileDetailById(Long.parseLong(id));
             String url = f.getFileUrl().replace(Constants.RESOURCE_PREFIX,"");
+            doId = f.getDocumentFileId();
             FileUtils.deleteFile(Global.getProfile()+url);
         }
+        SysDocumentFile ds = sysDocumentFileMapper.selectSysDocumentFileById(doId);
+        SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(ds.getApplyId());
+        updateApplyIn(ap);
         return sysFileDetailMapper.deleteSysFileDetailByIds(Convert.toStrArray(ids));
     }
 
@@ -143,6 +165,10 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
     @Override
     public int deleteSysFileDetailById(Long fileId)
     {
+        SysFileDetail f = sysFileDetailMapper.selectSysFileDetailById(fileId);
+        SysDocumentFile ds = sysDocumentFileMapper.selectSysDocumentFileById(f.getDocumentFileId());
+        SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(ds.getApplyId());
+        updateApplyIn(ap);
         return sysFileDetailMapper.deleteSysFileDetailById(fileId);
     }
 }

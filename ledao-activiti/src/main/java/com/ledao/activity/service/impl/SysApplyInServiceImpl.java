@@ -566,6 +566,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Override
     public int editSave(SysApplyIn sysApplyIn) {
+        sysApplyIn.setReviser(ShiroUtils.getLoginName());
         sysApplyIn.setUpdateTime(new Date());
         SysApplyIn sin = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
         if ("7".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){

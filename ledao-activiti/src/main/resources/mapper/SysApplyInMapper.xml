@@ -291,6 +291,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
         <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
         <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+        <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
+            and date_format(a.apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
+        </if>
+        <if test="params.endApplyTime != null and params.endApplyTime != ''"><!-- 结束时间检索 -->
+            and date_format(a.apply_time,'%Y%m%d') &lt;= date_format(#{params.endApplyTime},'%Y%m%d')
+        </if>
         <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
         <if test="realCreateBy != null  and realCreateBy != ''"> and a.real_create_by = #{realCreateBy}</if>
         <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>

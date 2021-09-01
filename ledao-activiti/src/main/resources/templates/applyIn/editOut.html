@@ -230,6 +230,7 @@
                     $("#isReturnedShow").show()
                     $("#isReceivedShow").show()
                     $("select,input,textarea").attr("readonly","readonly");
+                    $("input").removeAttr("onclick");
                     $("#isOut").removeAttr("readonly")
                 }
             }
@@ -281,6 +282,10 @@
             debtorName.style.display = 'none'
         }
 
+        if (appStatu != 0){
+            $("#realCreateByName").attr("readonly","readonly");
+            $("#realCreateByName").removeAttr("onclick")
+        }
         if(appStatu == 0 || appStatu == 4 || appStatu == 2) {
             isNotChange = false
         } else {
@@ -467,6 +472,7 @@
         if(applyTypeUnDone == "3") {
             if(seOrEd == 'edse1') {
                 $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick");
                 $("select").attr("disabled",true);
                 $("a").attr("disabled",true);
                 $('.btn').removeAttr('onclick');
@@ -477,6 +483,7 @@
                 }
             } else {
                 $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick");
                 $("select").attr("disabled",true);
                 $("a").attr("disabled",true);
                 $('.btn').removeAttr('onclick')
@@ -484,6 +491,7 @@
         } else {
             if(isNotChange){
                 $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick");
                 $("select").attr("disabled",true);
                 $("a").attr("disabled",true);
                 $("textarea").attr("disabled",true);

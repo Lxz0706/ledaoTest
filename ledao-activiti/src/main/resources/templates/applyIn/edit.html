@@ -151,6 +151,10 @@
         //         isNotChange = true
         //     }
         // }
+        if (appStatu != 0){
+            $("#realCreateByName").attr("readonly","readonly");
+            $("#realCreateByName").removeAttr("onclick")
+        }
         if(appStatu == 0 || appStatu == 4 || appStatu == 2) {
             isNotChange = false
         } else {
@@ -338,17 +342,20 @@
         if(applyTypeUnDone == "3" || applyTypeUnDone =="2") {
             if(seOrEd == "edse0") {
                 $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick");
                 $("select").attr("disabled",true);
                 $("a").attr("disabled",true);
                 $('.btn').removeAttr('onclick')
             }
             if(showNames) {
                 $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick")
                 $("select").attr("disabled",true);
             }
         } else {
             if(isNotChange){
                 $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick")
                 $("select").attr("disabled",true);
                 $("a").attr("disabled",true);
                 $('.btn').removeAttr('onclick')

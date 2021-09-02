@@ -387,7 +387,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileGetType != null">file_get_type = #{fileGetType},</if>
             <if test="documentLevel != null">document_level = #{documentLevel},</if>
             <if test="fileIds != null">file_ids = #{fileIds},</if>
-            <if test="applyId != null">apply_id = #{applyId},</if>
             <if test="remarks != null">remarks = #{remarks},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="creator != null">creator = #{creator},</if>

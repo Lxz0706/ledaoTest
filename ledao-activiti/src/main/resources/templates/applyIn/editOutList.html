@@ -277,7 +277,7 @@
                     field: 'fileScanType',
                     title: '扫描件类型',
                     formatter: function(value, item, index) {
-                        return $.table.tooltip($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType),10);
+                        return $.table.tooltip(getDictStr($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType)),10);
                     }
                 },
                 {

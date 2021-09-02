@@ -354,7 +354,7 @@ public class SysApplyInController extends BaseController
         } else {
             sysApplyIn.setRealCreateBy(userName);
         }
-        sysApplyIn.setApplyTime(new Date());
+//        sysApplyIn.setApplyTime(new Date());
         sysApplyIn.setCreateBy(userName);
         sysApplyIn.setCreateTime(new Date());
         sysApplyIn.setApproveStatu("0");

@@ -131,7 +131,7 @@
                     field: 'debtorName',
                     title: '债务人名称',
                     formatter: function(value, item, index) {
-                        return strLength(item.debtorName);
+                        return $.table.tooltip(item.debtorName,10);
                     }
                 },
                 {

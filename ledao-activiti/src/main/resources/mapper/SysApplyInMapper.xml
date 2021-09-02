@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
             <if test="roleType != null  and roleType != ''"> and role_type = #{roleType}</if>
         </where>
-        order by create_time desc
+        order by create_time desc,apply_time desc
     </select>
 
     <select id="selectSysApplyInListUser" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
@@ -161,7 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
         </where>
-        order by create_time desc
+        order by a.create_time desc,a.apply_time desc
     </select>
     
     <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
@@ -249,7 +249,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="reviser != null  and reviser != ''"> and app.reviser = #{reviser}</if>
         </where>
-        ORDER BY app.create_time desc
+        ORDER BY app.create_time desc,app.apply_time desc
     </select>
 
     <select id="listUnDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
@@ -301,7 +301,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="realCreateBy != null  and realCreateBy != ''"> and a.real_create_by = #{realCreateBy}</if>
         <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
         <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
-        ORDER BY a.create_time desc
+        ORDER BY a.create_time desc,a.apply_time desc
     </select>
 
     <select id="selectSysApplyInById" parameterType="Long" resultMap="SysApplyInResult">

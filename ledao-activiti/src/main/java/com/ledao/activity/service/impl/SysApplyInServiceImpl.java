@@ -383,6 +383,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 }
             }
             List<String> users = getApplyNextUser(sysApplyIn);
+            sysApplyInEntity.setApplyTime(DateUtils.getNowDate());
             sysApplyInEntity.setApproveUser(String.join(",",users));
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
         }

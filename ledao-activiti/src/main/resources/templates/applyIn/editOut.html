@@ -363,7 +363,7 @@
                     field: 'fileScanType',
                     title: '扫描件类型',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType);
+                        return strLength($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType));
                     }
                 },
                 {
@@ -397,7 +397,7 @@
                     title: '档案类型',
                     visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType);
+                        return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
                     }
                 },
                 {

@@ -91,6 +91,15 @@ public class SysBgczzckController extends BaseController {
         return getDataTable(list);
     }
 
+    @PostMapping("/listesDoc")
+    @ResponseBody
+    public TableDataInfo listesDoc(SysBgczzck sysBgczzck) {
+        startPage();
+        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        return getDataTable(list);
+    }
+
+
     /**
      * 导出重组并购项目信息库列表
      */

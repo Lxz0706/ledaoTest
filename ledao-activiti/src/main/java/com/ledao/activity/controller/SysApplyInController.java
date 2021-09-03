@@ -349,12 +349,6 @@ public class SysApplyInController extends BaseController
     public AjaxResult addSave(SysApplyIn sysApplyIn)
     {
         String userName = ShiroUtils.getLoginName();
-        if (StringUtils.isEmpty(sysApplyIn.getApplyUser())){
-            sysApplyIn.setApplyUser(userName);
-        } else {
-            sysApplyIn.setRealCreateBy(userName);
-        }
-//        sysApplyIn.setApplyTime(new Date());
         sysApplyIn.setCreateBy(userName);
         sysApplyIn.setCreateTime(new Date());
         sysApplyIn.setApproveStatu("0");

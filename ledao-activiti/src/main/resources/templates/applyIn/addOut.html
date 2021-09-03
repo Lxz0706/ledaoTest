@@ -9,6 +9,8 @@
             <input name="roleType" id="roleType" th:value="*{roleType}" type="hidden">
     <form class="form-horizontal m" id="form-applyIn-add" th:object="${sysApplyIn}">
         <input name="applyType" value="1" type="hidden"/>
+<!--         待提交人-->
+        <input name="realCreateBy" id="realCreateBy" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
@@ -52,8 +54,8 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">实际提交人：</label>
             <div class="col-sm-8">
-                <input class="form-control" type="hidden" name="applyUser" id="realCreateBy">
-                <input autocomplete="off" class="form-control" type="text" name="applyUserName" id="realCreateByName" onclick="selectUser()">
+                <input class="form-control" type="hidden" name="applyUser" id="applyUser">
+                <input autocomplete="off" class="form-control" type="text" name="applyUserName" id="applyUserName" onclick="selectUser()">
             </div>
         </div>
         <div class="form-group">
@@ -204,6 +206,12 @@
         }
         if ("bg"==roleType){
             $("#debtorName").hide()
+        }
+
+        // 实际提交人 applyUser  待提交人 realCreateBy
+        if($("#applyUser").val() == "") {
+            $("#applyUser").val(loginName)
+            $("#realCreateBy").val(loginName)
         }
     })
 
@@ -474,7 +482,7 @@
     }
 
     function selectPro(){
-        var realCreate = $("#realCreateBy").val();
+        var realCreate = $("#applyUser").val();
         if(realCreate ==undefined || realCreate ==""){
             if (roleType == undefined || roleType == ""){
                 $.modal.alertError("无可选择项目");
@@ -587,7 +595,7 @@
 
     //人员树形选择器
     function selectUser() {
-        var url = ctx + "system/dept/selectLeaderDepUser?userId=" + $("#realCreateBy").val() + "&userName=" + $("#realCreateBy").val() + "&deptId=" + deptId;
+        var url = ctx + "system/dept/selectLeaderDepUser?userId=" + $("#applyUser").val() + "&userName=" + $("#applyUserName").val() + "&deptId=" + deptId;
         $.modal.open("人员选择", url, '750', '600/2');
     }
     function getDeviceBasics(row) {
@@ -597,8 +605,8 @@
             userName = row[i].userName + "," + userName;
             loginName = row[i].loginName + "," + loginName;
         }
-        $("#realCreateBy").val(loginName.substr(0, loginName.length - 1));
-        $("#realCreateByName").val(userName.substr(0, userName.length - 1));
+        $("#applyUser").val(loginName.substr(0, loginName.length - 1));
+        $("#applyUserName").val(userName.substr(0, userName.length - 1));
         layer.close(layer.index);
     }
 </script>

@@ -14,6 +14,8 @@
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
         <input name="applyType" id="applyType" th:field="*{applyType}" type="hidden">
+<!--        待提交人-->
+        <input name="realCreateBy" th:field="*{realCreateBy}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
@@ -67,9 +69,8 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">实际提交人：</label>
             <div class="col-sm-8">
-<!--                <input name="realCreateBy" th:field="*{realCreateBy}" class="form-control" type="text">-->
-                <input class="form-control" th:field="*{applyUser}" type="hidden" name="applyUser" id="realCreateBy">
-                <input autocomplete="off" th:field="*{applyUserName}" class="form-control" type="text" name="applyUserName" id="realCreateByName" onclick="selectUser()">
+                <input class="form-control" th:field="*{applyUser}" type="hidden" name="applyUser" id="applyUser">
+                <input autocomplete="off" th:field="*{applyUserName}" class="form-control" type="text" name="applyUserName" id="applyUserName" onclick="selectUser()">
             </div>
         </div>
         <div class="form-group">
@@ -84,7 +85,7 @@
                 <a class="btn btn-success" id="addClick" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+                <a class="btn btn-primary single disabled" id="editClick" onclick="$.operate.edit()"
                    shiro:hasPermission="activity:documentFile:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
@@ -113,7 +114,7 @@
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
-        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+        var loginNameUser = [[${@permission.getPrincipalProperty('loginName')}]];
         var showNames = false;
         var documentTypeVal = document.getElementById("documentType").value;
         var projectName = document.getElementById("projectName");
@@ -124,11 +125,19 @@
         var applyTypeUnDone = document.getElementById("applyTypeUnDone").value == "" ? "no" : document.getElementById("applyTypeUnDone").value;
         var seOrEd = document.getElementById("seOrEd").value;
         var roleType = document.getElementById("roleType").value;
-    $(function () {
         var appStatu = document.getElementById("appStatu").value;
+        // 实际提交人
+        var applyUser = document.getElementById("applyUser").value;
+        // 待提交人
+        var realCreateBy = document.getElementById("realCreateBy").value;
+        var showEdit = false
+        var showDelet = false
+        var showAllBut = false
+    $(function () {
+
 
         for(var i =0; i < roles.length;i++) {
-            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+            if(roles[i].roleKey == "documentAdmin" || "admin" == loginNameUser) {
                 showNames = true
             }
         }
@@ -141,7 +150,6 @@
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
             roleTypeShow.style.display = 'none'
-            showNames = true
         }
         var isNotChange = false
         // if(appStatu!=0 && appStatu != 4 && appStatu != 2){
@@ -152,8 +160,8 @@
         //     }
         // }
         if (appStatu != 0){
-            $("#realCreateByName").attr("readonly","readonly");
-            $("#realCreateByName").removeAttr("onclick")
+            $("#applyUserName").attr("readonly","readonly");
+            $("#applyUserName").removeAttr("onclick")
         }
         if(appStatu == 0 || appStatu == 4 || appStatu == 2) {
             isNotChange = false
@@ -165,6 +173,48 @@
             // }
             isNotChange = true
         }
+
+        // 入库修改画面的按钮显示逻辑
+        if(applyTypeUnDone == "2") {
+            if(applyType == "0") {
+                if(showNames) {
+                    $("#addClick").hide();
+                    $("#editClick").show();
+                    $("#deletClick").hide();
+                    showEdit = true
+                } else {
+                    $("#addClick").hide();
+                    $("#editClick").hide();
+                    $("#deletClick").hide();
+                }
+            } else {
+                $("#addClick").hide();
+                $("#editClick").hide();
+                $("#deletClick").hide();
+            }
+        } else if (applyTypeUnDone == "3") {
+            if(applyType == "0" || applyType == "1") {
+                $("#addClick").hide();
+                $("#editClick").hide();
+                $("#deletClick").hide();
+            }
+        } else {
+            if(applyType == "0" || applyType == "1") {
+                if((realCreateBy == applyUser || realCreateBy !== applyUser) && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
+                    $("#addClick").show();
+                    $("#editClick").show();
+                    $("#deletClick").show();
+                    showAllBut = true
+                } else {
+                    $("#addClick").hide();
+                    $("#editClick").hide();
+                    $("#deletClick").hide();
+                }
+            }
+        }
+        console.log('实际提交人',applyUser)
+        console.log('代提交人',realCreateBy)
+
         var options = {
             url: prefixDocumentFile + "/listDocApp",
             createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal + '/' + applyType + '/' + applyTypeUnDone,
@@ -213,7 +263,7 @@
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType));
                     },
-                    visible: showNames
+                    visible: documentTypeVal == "0" ? false : true
                 },
                 {
                     field: 'fileName',
@@ -316,23 +366,36 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        if(!isNotChange) {
-                            if(applyTypeUnDone == "3" || applyTypeUnDone == "2") {
-                                if(seOrEd == "edse1") {
-                                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                                    actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                                }
-                            } else {
-                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                                actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
-
-                            }
-                        }
-                        if(showNames && applyTypeUnDone == "2") {
-                            $("#addClick").hide()
-                            $("#deletClick").hide()
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        }
+                        // if(!isNotChange) {
+                        //     if(applyTypeUnDone == "3" || applyTypeUnDone == "2") {
+                        //         if(seOrEd == "edse1") {
+                        //             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        //             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        //         }
+                        //     } else {
+                        //         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        //         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        //
+                        //     }
+                        // }
+                        // if(showNames && applyTypeUnDone == "2") {
+                        //     $("#addClick").hide()
+                        //     $("#deletClick").hide()
+                        //     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        // }
+                        //     if(showBut) {
+                        //         $("#addClick").show()
+                        //         $("#editClick").show()
+                        //         $("#deletClick").show()
+                        if(showEdit) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        } else if(showAllBut) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        } else if(showDelet) {
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        } else {}
+                            // }
                         return actions.join('');
                     }
                 }]
@@ -426,8 +489,9 @@
             userName = row[i].userName + "," + userName;
             loginName = row[i].loginName + "," + loginName;
         }
-        $("#realCreateBy").val(loginName.substr(0, loginName.length - 1));
-        $("#realCreateByName").val(userName.substr(0, userName.length - 1));
+        $("#applyUser").val(loginName.substr(0, loginName.length - 1));
+        $("#applyUserName").val(userName.substr(0, userName.length - 1));
+        $("#realCreateBy").val(loginNameUser)
         layer.close(layer.index);
     }
     function getZcdSelected(row) {

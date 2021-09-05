@@ -192,6 +192,22 @@ public class SysDocumentFileController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysDocumentFile sysDocumentFile)
     {
+        String loginName = ShiroUtils.getLoginName();
+        SysDocumentFile f = new SysDocumentFile();
+        f.setAssetPag(sysDocumentFile.getAssetPag());
+        f.setAssetNumber(sysDocumentFile.getAssetNumber());
+        f.setBagNo(sysDocumentFile.getBagNo());
+        f.setDocumentType(sysDocumentFile.getDocumentType());
+        f.setDailyDocumentType(sysDocumentFile.getDailyDocumentType());
+        f.setFileName(sysDocumentFile.getFileName());
+        f.setFileType(sysDocumentFile.getFileType());
+        f.setCreateBy(loginName);
+        f.setFileScanType(sysDocumentFile.getFileScanType());
+        f.setApplyId(sysDocumentFile.getApplyId());
+        List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
+        if (ss !=null && ss.size()>0){
+            return AjaxResult.error("存在重复记录，请检查");
+        }
         AjaxResult res = toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
         SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
         ap.setReviser(ShiroUtils.getLoginName());

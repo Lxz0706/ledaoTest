@@ -114,6 +114,13 @@
                     }
                 },
                 {
+                    // field: 'manageTask',
+                    title: '处置任务',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectZckId + "',\'" + row.zckName + '\')">查看</a>';
+                    }
+                },
+                {
                     field: 'syhs',
                     title: '剩余债权户数'/*,
                     formatter:function (value,row,index) {
@@ -127,6 +134,12 @@
         };
         $.table.init(options);
     });
+    // 查看任务
+    function detailManageTask(id,name){
+        var url = '/system/managetask/managetask?proId=' + id + "&taskType=0";
+        $.modal.open("总任务列表", url);
+    }
+
 
 
     /*资产库列表-详细*/

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('处置回现任务列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <input name="proId" id="proId" th:value="*{proId}" type="hidden">
+                        <input name="taskType" id="taskType" th:value="*{taskType}" type="hidden">
+                        <!--<ul>
+                            <li class="select-time">
+                                <label>计划归还时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginPlanEndTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endPlanEndTime]"/>
+                            </li>
+                            <li>
+                                <label>计划归还金额：</label>
+                                <input type="text" name="planBackMoney"/>
+                            </li>
+                            <li class="select-time">
+                                <label>实际归还时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginRealEndTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endRealEndTime]"/>
+                            </li>
+                            <li>
+                                <label>实际归还金额：</label>
+                                <input type="text" name="realBackMoney"/>
+                            </li>
+                            <li>
+                                <label>预期天数：</label>
+                                <input type="text" name="overDay"/>
+                            </li>
+                            <li>
+                                <label>节点状态：</label>
+                                <input type="text" name="nodeStatu"/>
+                            </li>
+                            <li>
+                                <label>任务状态：</label>
+                                <input type="text" name="taskStatu"/>
+                            </li>
+                            <li>
+                                <label>备注：</label>
+                                <input type="text" name="remarks"/>
+                            </li>
+                            <li>
+                                <label>备用字段1：</label>
+                                <input type="text" name="remarks1"/>
+                            </li>
+                            <li>
+                                <label>备用字段2：</label>
+                                <input type="text" name="remarks2"/>
+                            </li>
+                            <li>
+                                <label>备用字段3：</label>
+                                <input type="text" name="remarks3"/>
+                            </li>
+                            <li>
+                                <label>创建人名称：</label>
+                                <input type="text" name="creator"/>
+                            </li>
+                            <li>
+                                <label>修改人名称：</label>
+                                <input type="text" name="reviser"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>-->
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:managetask:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:managetask:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:managetask:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:managetask:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:managetask:remove')}]];
+        var prefix = ctx + "system/managetask";
+        var proId = document.getElementById("proId").value;
+        var taskType = document.getElementById("taskType").value;
+        var taskStatuDictDatas = [[${@dict.getType('task_project_status')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add/"+proId+"/"+taskType,
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "处置回现任务",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                    {
+                        field: 'nodeStatu',
+                        title: '节点状态',
+                        visible: taskType=="1"
+                    },
+                    {
+                        field: 'planBeginTime',
+                        title: '预计开始时间'
+                    },
+                    {
+                        field: 'realBeginTime',
+                        title: '实际开始时间'
+                    },
+                    {
+                        field: 'planEndTime',
+                        title: '预计结束时间'
+                    },
+                    {
+                        field: 'realEndTime',
+                        title: '实际结束时间'
+                    },
+                    {
+                        field: 'planBackMoney',
+                        title: '预计回收金额'
+                    },
+                    {
+                        field: 'realBackMoney',
+                        title: '实际回收金额'
+                    },
+                    {
+                        field: 'overDay',
+                        title: '超时时长(天)'
+                    },
+
+                    {
+                        field: 'taskStatu',
+                        title: '状态',
+                        formatter: function(value, item, index) {
+                            return $.table.tooltip(getDictStr($.table.selectDictLabel(taskStatuDictDatas, item.taskStatu)),10);
+                        }
+                    },
+
+                /*
+                {
+                    field: 'nodeStatu',
+                    title: '节点状态'
+                }
+                {
+                    field: 'remarks',
+                    title: '备注'
+                },
+                {
+                    field: 'remarks1',
+                    title: '备用字段1'
+                },
+                {
+                    field: 'remarks2',
+                    title: '备用字段2'
+                },
+                {
+                    field: 'remarks3',
+                    title: '备用字段3'
+                },
+                {
+                    field: 'creator',
+                    title: '创建人名称'
+                },
+                {
+                    field: 'reviser',
+                    title: '修改人名称'
+                },*/
+                /*{
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }*/
+                ]
+            };
+            $.table.init(options);
+        });
+
+        function strLength(value){
+            var str = $.common.nullToStr(value);
+            return str;
+        }
+
+        function getDictStr(value){
+            return value.slice(15,value.length-7);
+        }
+    </script>
+</body>
+</html>

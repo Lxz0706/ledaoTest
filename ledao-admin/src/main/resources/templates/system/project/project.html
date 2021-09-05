@@ -131,6 +131,12 @@
                     }
                 },
                 {
+                    title: '处置任务',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + '\')">查看</a>';return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">查看</a>';
+                    }
+                },
+                {
                     field: 'projectManager',
                     title: '项目经理'
                 },
@@ -162,6 +168,12 @@
         var projectZckId = $("#projectZckId").val()
         var url = prefix + "/add?projectZckId=" + projectZckId;
         $.modal.open("添加项目", url);
+    }
+
+    // 查看任务
+    function detailManageTask(id,name){
+        var url = '/system/managetask/managetask?proId=' + id + "&taskType=1";
+        $.modal.open("总任务列表", url);
     }
 
 

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增处置回现任务')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-managetask-add">
+            <input name="proId" id="proId" th:value="*{proId}" type="hidden">
+            <input name="taskType" id="taskType" th:value="*{taskType}" type="hidden">
+            <div class="form-group" id="nodeStatuShow">
+                <label class="col-sm-3 control-label">节点状态：</label>
+                <div class="col-sm-8">
+                    <select id="nodeStatu" name="nodeStatu" th:with="type=${@dict.getType('subtask_project_ststus')}" onchange="nodeChange()"
+                            data-none-selected-text="请选择" class="form-control m-b">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="otherNode" hidden>
+                <label class="col-sm-3 control-label">其他：</label>
+                <div class="col-sm-8">
+                    <input name="remarks1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">预计开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="planBeginTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">实际开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="realBeginTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">预计结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="planEndTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">实际结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="realEndTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">预计回收金额：</label>
+                <div class="col-sm-8">
+                    <input name="planBackMoney" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">实际回收金额：</label>
+                <div class="col-sm-8">
+                    <input name="realBackMoney" class="form-control" type="text">
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">预期天数：</label>
+                <div class="col-sm-8">
+                    <input name="overDay" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务状态：</label>
+                <div class="col-sm-8">
+                    <input name="taskStatu" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="remarks" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用字段1：</label>
+                <div class="col-sm-8">
+                    <input name="remarks1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用字段2：</label>
+                <div class="col-sm-8">
+                    <input name="remarks2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备用字段3：</label>
+                <div class="col-sm-8">
+                    <input name="remarks3" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">创建人名称：</label>
+                <div class="col-sm-8">
+                    <input name="creator" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">修改人名称：</label>
+                <div class="col-sm-8">
+                    <input name="reviser" class="form-control" type="text">
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/managetask"
+        var taskType = document.getElementById("taskType").value;
+        $("#form-managetask-add").validate({
+            focusCleanup: true
+        });
+
+        $(function () {
+            if (taskType == '1'){
+                $("#nodeStatuShow").show();
+            }else{
+                $("#nodeStatuShow").hide();
+            }
+        })
+
+        function nodeChange(){
+            var nodeStatu = document.getElementById("nodeStatu").value;
+            if (nodeStatu == "other"){
+                $("#otherNode").show();
+            }else {
+                $("#otherNode").hide();
+            }
+        }
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-managetask-add').serialize());
+            }
+        }
+
+        $("input[name='planBeginTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='realBeginTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='planEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='realEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

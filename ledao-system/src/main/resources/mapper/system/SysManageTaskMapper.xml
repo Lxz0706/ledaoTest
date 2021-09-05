@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysManageTaskMapper">
+    
+    <resultMap type="SysManageTask" id="SysManageTaskResult">
+        <result property="id"    column="id"    />
+        <result property="proId"    column="pro_id"    />
+        <result property="taskType"    column="task_type"    />
+        <result property="planBeginTime"    column="plan_begin_time"    />
+        <result property="realBeginTime"    column="real_begin_time"    />
+        <result property="planEndTime"    column="plan_end_time"    />
+        <result property="realEndTime"    column="real_end_time"    />
+        <result property="planBackMoney"    column="plan_back_money"    />
+        <result property="realBackMoney"    column="real_back_money"    />
+        <result property="overDay"    column="over_day"    />
+        <result property="nodeStatu"    column="node_statu"    />
+        <result property="taskStatu"    column="task_statu"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="remarks1"    column="remarks1"    />
+        <result property="remarks2"    column="remarks2"    />
+        <result property="remarks3"    column="remarks3"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="reviser"    column="reviser"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysManageTaskVo">
+        select id, pro_id, task_type, plan_begin_time, real_begin_time, plan_end_time, real_end_time, plan_back_money, real_back_money, over_day, node_statu, task_statu, remarks, remarks1, remarks2, remarks3, create_by, creator, create_time, update_by, reviser, update_time from sys_manage_task
+    </sql>
+
+    <select id="selectSysManageTaskList" parameterType="SysManageTask" resultMap="SysManageTaskResult">
+        <include refid="selectSysManageTaskVo"/>
+        <where>  
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="taskType != null "> and task_type = #{taskType}</if>
+            <if test="planBeginTime != null "> and plan_begin_time = #{planBeginTime}</if>
+            <if test="realBeginTime != null "> and real_begin_time = #{realBeginTime}</if>
+            <if test="planEndTime != null "> and plan_end_time = #{planEndTime}</if>
+            <if test="realEndTime != null "> and real_end_time = #{realEndTime}</if>
+            <if test="planBackMoney != null "> and plan_back_money = #{planBackMoney}</if>
+            <if test="realBackMoney != null "> and real_back_money = #{realBackMoney}</if>
+            <if test="overDay != null "> and over_day = #{overDay}</if>
+            <if test="nodeStatu != null "> and node_statu = #{nodeStatu}</if>
+            <if test="taskStatu != null  and taskStatu != ''"> and task_statu = #{taskStatu}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="remarks1 != null  and remarks1 != ''"> and remarks1 = #{remarks1}</if>
+            <if test="remarks2 != null  and remarks2 != ''"> and remarks2 = #{remarks2}</if>
+            <if test="remarks3 != null  and remarks3 != ''"> and remarks3 = #{remarks3}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysManageTaskById" parameterType="Long" resultMap="SysManageTaskResult">
+        <include refid="selectSysManageTaskVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysManageTask" parameterType="SysManageTask" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_manage_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="proId != null">pro_id,</if>
+            <if test="taskType != null">task_type,</if>
+            <if test="planBeginTime != null">plan_begin_time,</if>
+            <if test="realBeginTime != null">real_begin_time,</if>
+            <if test="planEndTime != null">plan_end_time,</if>
+            <if test="realEndTime != null">real_end_time,</if>
+            <if test="planBackMoney != null">plan_back_money,</if>
+            <if test="realBackMoney != null">real_back_money,</if>
+            <if test="overDay != null">over_day,</if>
+            <if test="nodeStatu != null">node_statu,</if>
+            <if test="taskStatu != null">task_statu,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="remarks1 != null">remarks1,</if>
+            <if test="remarks2 != null">remarks2,</if>
+            <if test="remarks3 != null">remarks3,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="reviser != null">reviser,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="proId != null">#{proId},</if>
+            <if test="taskType != null">#{taskType},</if>
+            <if test="planBeginTime != null">#{planBeginTime},</if>
+            <if test="realBeginTime != null">#{realBeginTime},</if>
+            <if test="planEndTime != null">#{planEndTime},</if>
+            <if test="realEndTime != null">#{realEndTime},</if>
+            <if test="planBackMoney != null">#{planBackMoney},</if>
+            <if test="realBackMoney != null">#{realBackMoney},</if>
+            <if test="overDay != null">#{overDay},</if>
+            <if test="nodeStatu != null">#{nodeStatu},</if>
+            <if test="taskStatu != null">#{taskStatu},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="remarks1 != null">#{remarks1},</if>
+            <if test="remarks2 != null">#{remarks2},</if>
+            <if test="remarks3 != null">#{remarks3},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="reviser != null">#{reviser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManageTask" parameterType="SysManageTask">
+        update sys_manage_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="proId != null">pro_id = #{proId},</if>
+            <if test="taskType != null">task_type = #{taskType},</if>
+            <if test="planBeginTime != null">plan_begin_time = #{planBeginTime},</if>
+            <if test="realBeginTime != null">real_begin_time = #{realBeginTime},</if>
+            <if test="planEndTime != null">plan_end_time = #{planEndTime},</if>
+            <if test="realEndTime != null">real_end_time = #{realEndTime},</if>
+            <if test="planBackMoney != null">plan_back_money = #{planBackMoney},</if>
+            <if test="realBackMoney != null">real_back_money = #{realBackMoney},</if>
+            <if test="overDay != null">over_day = #{overDay},</if>
+            <if test="nodeStatu != null">node_statu = #{nodeStatu},</if>
+            <if test="taskStatu != null">task_statu = #{taskStatu},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="remarks1 != null">remarks1 = #{remarks1},</if>
+            <if test="remarks2 != null">remarks2 = #{remarks2},</if>
+            <if test="remarks3 != null">remarks3 = #{remarks3},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="reviser != null">reviser = #{reviser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysManageTaskById" parameterType="Long">
+        delete from sys_manage_task where id = #{id}
+    </delete>
+
+    <delete id="deleteSysManageTaskByIds" parameterType="String">
+        delete from sys_manage_task where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

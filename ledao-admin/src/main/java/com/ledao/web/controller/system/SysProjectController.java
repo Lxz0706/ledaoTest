@@ -529,7 +529,7 @@ public class SysProjectController extends BaseController {
         }
 
         String id = sb.deleteCharAt(sb.length() - 1).toString();
-
+        logger.info("删除的id：========" + id);
 
         //删除保证人
         List<SysProjectBail> sysProjectBailList = sysProjectBailService.selectSysProjectBailByProjectId(id);
@@ -596,7 +596,12 @@ public class SysProjectController extends BaseController {
     @ResponseBody
     public TableDataInfo projectList(SysProject sysProject) {
         StringBuffer sb = new StringBuffer();
-        List<SysProject> sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject);
+        List<SysProject> sysProjectsList = new ArrayList<>();
+        if (StringUtils.isNotNull(sysProject.getProjectId())) {
+            sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject);
+        } else {
+            sysProjectsList = sysProjectService.selectSysProjectList(sysProject);
+        }
         for (SysProject sysProject1 : sysProjectsList) {
             sb.append(sysProject1.getProjectId()).append(",");
         }
@@ -1337,14 +1342,12 @@ public class SysProjectController extends BaseController {
         modelMap.put("fwProjectType", fwProjectType);
         if (StringUtils.isNotEmpty(fwProjectType)) {
             if ("investmentProject".equals(fwProjectType)) {
-                modelMap.put("otherFlag", "N");
                 url = prefix + "/projectZck";
             } else if ("investment".equals(fwProjectType)) {
-                modelMap.put("otherFlag", "N");
                 url = prefix + "/investment";
             } else {
                 modelMap.put("otherFlag", "Y");
-                url = prefix + "/investmentProject";
+                url = prefix + "/projectList";
             }
         }
         return url;

@@ -131,10 +131,10 @@
 <script>
     $(function () {
         var projectId = $("#projectId").val();
-        var pId = $("#pId").val();
-        if ($.common.isEmpty(pId)) {
-            $("#back").hide();
-        }
+        var investmentProject = $("#investmentProject").val();
+        //if ($.common.isEmpty(investmentProject)) {
+           // $("#back").hide();
+       // }
         $.ajax({
             type: 'post',
             url: ctx + 'system/project/selectPCustomerByProjectId',
@@ -182,7 +182,7 @@
         var fwProjectType = $("#fwProjectType").val();
         var otherFlag = $("#otherFlag").val();
         var pId = $("#pId").val();
-        var url = url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
+        var url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;
         var title = '';
         if ($.common.isNotEmpty(fwProjectType)) {
             if ("otherProject" == fwProjectType) {

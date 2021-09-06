@@ -46,21 +46,23 @@
                 var str = '';
                 var row = result.rows;
                 for (var i in row) {
-                    str += '<div class="border col-sm-12" style="height: ' + winHeight + 'px;margin-left:auto; margin-right:auto;">';
-                    str += '<div class="col-sm-3" style="text-align: right;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
-                    str += '<lable style="font-weight: bold;font-size: 1.5em">资产包数量：' + $.common.returnNum(row[i].totalZck) + '</lable><br/>';
-                    str += '<lable style="font-weight: bold;font-size: 1.5em">已退出的资产包：' + $.common.returnNum(row[i].quitCount) + '</lable><br/>';
-                    str += '<lable style="font-weight: bold;font-size: 1.5em">处置回现总额：' + $.operate.numberFormatter(row[i].czhx, 0, '.', ',') + '</lable><br/>';
-                    str += '</div>'
-                    str += '<div class="col-sm-6" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
-                    str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictLable + "',\'" + row[i].projectZckType + '\')">' + row[i].dictLable + '</a><br/>';
-                    str += '</div>';
-                    str += '<div class="col-sm-3" style="display:inline-block;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
-                    str += '<lable style="font-weight: bold;font-size: 1.5em">处置中的资产包：' + $.common.returnNum(row[i].ongoingCount) + '</lable><br/>';
-                    str += '<lable style="font-weight: bold;font-size: 1.5em">剩余债权户数：' + $.common.returnNum(row[i].syhs) + '</lable><br/>';
-                    str += '<lable style="font-weight: bold;font-size: 1.5em">剩余债权本金余额：' + $.operate.numberFormatter(row[i].bjye, 0, '.', ',') + '</lable><br/>';
-                    str += '</div>'
-                    str += '</div>'
+                    if ($.common.isNotEmpty(row[i].dictLable)) {
+                        str += '<div class="border col-sm-12" style="height: ' + winHeight + 'px;margin-left:auto; margin-right:auto;">';
+                        str += '<div class="col-sm-3" style="text-align: right;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">资产包数量：' + $.common.returnNum(row[i].totalZck) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">已退出的资产包：' + $.common.returnNum(row[i].quitCount) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">处置回现总额：' + $.operate.numberFormatter(row[i].czhx, 0, '.', ',') + '</lable><br/>';
+                        str += '</div>'
+                        str += '<div class="col-sm-6" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+                        str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictLable + "',\'" + row[i].projectZckType + '\')">' + row[i].dictLable + '</a><br/>';
+                        str += '</div>';
+                        str += '<div class="col-sm-3" style="display:inline-block;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">处置中的资产包：' + $.common.returnNum(row[i].ongoingCount) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">剩余债权户数：' + $.common.returnNum(row[i].syhs) + '</lable><br/>';
+                        str += '<lable style="font-weight: bold;font-size: 1.5em">剩余债权本金余额：' + $.operate.numberFormatter(row[i].bjye, 0, '.', ',') + '</lable><br/>';
+                        str += '</div>'
+                        str += '</div>'
+                    }
                 }
                 $("#showList").html(str);
             }

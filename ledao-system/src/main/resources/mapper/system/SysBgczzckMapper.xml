@@ -467,6 +467,7 @@
         SELECT DISTINCT dict_sort,project_status FROM (SELECT a2.dict_label,a2.dict_sort,a1.project_status FROM
         sys_bgczzck	a1 INNER JOIN sys_dict_data a2 ON a1.project_status=a2.dict_value WHERE a2.dict_type='sys_dxdtxm_project_status') as temp ORDER BY dict_sort
     </select>
+
     <select id="selectByIds" parameterType="String" resultMap="SysBgczzckResult">
         <include refid="selectSysBgczzckVo"/>
         where id in

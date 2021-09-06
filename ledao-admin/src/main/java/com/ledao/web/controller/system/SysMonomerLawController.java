@@ -3,6 +3,7 @@ package com.ledao.web.controller.system;
 import java.util.List;
 
 import com.ledao.common.utils.StringUtils;
+import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysBgczzckService;
 import com.ledao.system.service.ISysProjectService;
@@ -128,6 +129,8 @@ public class SysMonomerLawController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysMonomerLaw sysMonomerLaw) {
+        sysMonomerLaw.setCreateBy(ShiroUtils.getLoginName());
+        sysMonomerLaw.setCreator(ShiroUtils.getSysUser().getUserName());
         return toAjax(sysMonomerLawService.insertSysMonomerLaw(sysMonomerLaw));
     }
 
@@ -149,6 +152,8 @@ public class SysMonomerLawController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysMonomerLaw sysMonomerLaw) {
+        sysMonomerLaw.setUpdateBy(ShiroUtils.getLoginName());
+        sysMonomerLaw.setReviser(ShiroUtils.getSysUser().getUserName());
         return toAjax(sysMonomerLawService.updateSysMonomerLaw(sysMonomerLaw));
     }
 
@@ -197,6 +202,8 @@ public class SysMonomerLawController extends BaseController {
             url = "/detail1";
         } else if (2 == detailType) {
             url = "/detail2";
+        } else {
+            url = "/detail";
         }
         return prefix + url;
     }

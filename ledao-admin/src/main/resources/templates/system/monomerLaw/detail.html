@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('项目详细')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <table class="table table-border">
+        <input id="projectId" th:value="${sysMonomerLaw.projectId}" type="hidden">
+        <input id="projectName" th:value="${sysMonomerLaw.projectName}" type="hidden">
+        <input id="projectType" th:value="${sysMonomerLaw.projectType}" type="hidden">
+        <input id="projectStatus" th:value="${sysMonomerLaw.projectStatus}" type="hidden">
+        <input id="openTime" th:field="${sysMonomerLaw.openTime}" type="hidden">
+        <tr>
+            <td colspan="8" style="text-align: center" class="success"><h3>司法情况</h3></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>司法状态：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.judicialStatus}"/></td>
+            <td class="col-sm-1 text-right"><h5>管辖法院：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.competentCourt}"/></td>
+            <td class="col-sm-1 text-right"><h5>法官及联系方式：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.judgeContact}"/></td>
+            <td class="col-sm-1 text-right"><h5>律所：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.lawFirm}"/></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>律师及联系方式：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.lawyerContact}"/></td>
+            <td class="col-sm-1 text-right"><h5>备注：</h5></td>
+            <td class="col-sm-1" colspan="5"><span th:text="${sysMonomerLaw.judicialRemarks}"/></td>
+        </tr>
+        <tr>
+            <td colspan="8" style="text-align: center" class="success"><h3>诉讼及执行进展</h3></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>所属债权合同编号：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.contractNo}"/></td>
+            <td class="col-sm-1 text-right"><h5>诉讼时效起算日：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.limitationAction, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>查封标的：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.sealUpSubjectMatter}"/></td>
+            <td class="col-sm-1 text-right"><h5>查封日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.sealUpDate, 'yyyy-MM-dd')}"/></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>执行时效起算日：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.limitationExecution, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>起诉立案日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.dateFiling, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>一审判决案号及日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.firstInstance}"/></td>
+            <td class="col-sm-1 text-right"><h5>二审判决案号及日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.secondInstance}"/></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>再审判决案号及日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysMonomerLaw.retrial}"/></td>
+            <td class="col-sm-1 text-right"><h5>执行立案日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.enforcementFilingDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>出具评估报告日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.appraisalReportDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>第一次挂拍日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.firstShotDate, 'yyyy-MM-dd')}"/></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>第二次挂拍日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.secondShotDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>变卖挂拍日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.sellShotDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>拍卖成交日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.successfulBidderDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1 text-right"><h5>执行款到账日期：</h5></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.paymentReceivedDate, 'yyyy-MM-dd')}"/></td>
+        </tr>
+        <tr>
+            <td class="col-sm-1 text-right"><h5>开庭时间：</h5></td>
+            <td class="col-sm-1" colspan="7" id="addNum"></td>
+        </tr>
+        <tr id="create1"></tr>
+    </table>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button id="back" type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回
+            </button>&nbsp;
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script>
+    $(function () {
+        openTime($("#openTime").val());
+    })
+
+    function back() {
+        var projectId = $("#projectId").val();
+        var projectType = $("#projectType").val();
+        var projectName = $("#projectName").val();
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + projectId + "&projectType=" + projectType + "&projectStatus=" + $("#projectStatus").val();
+        $.modal.parentTab(projectName + '法律信息', url);
+    }
+
+    function openTime(openTime) {
+        var str = "";
+        var str1 = eval(openTime);
+        if ($.common.isNotEmpty(str1)) {
+            for (var i = 0; i < str1.length; i++) {
+                var parse = str1[i];
+                str += '<div class="input-group"><span>' + parse.type + '</span>:<span>' + parse.value + '</span>';
+            }
+        }
+        $("#addNum").html(str);
+    }
+</script>
+</body>
+</html>

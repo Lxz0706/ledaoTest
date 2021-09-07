@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -69,7 +71,8 @@ public class WxQrCode {
      * 获取 二维码图片
      *
      */
-    public static String getminiqrQr(String accessToken,String uploadPath, HttpServletRequest request) {
+    public static String getminiqrQr(String accessToken, String uploadPath, HttpServletRequest request, HttpServletResponse response) {
+        ServletOutputStream out = null;
         String ctxPath = uploadPath;
         String fileName="twoCode.png";
         String bizPath = "files";
@@ -107,8 +110,8 @@ public class WxQrCode {
             // 发送请求参数
             JSONObject paramJson = new JSONObject();
             paramJson.put("scene", "1234567890");
-//            paramJson.put("page", "pages/index/index"); //小程序暂未发布我没有带page参数
-            paramJson.put("width", 430);
+//            paramJson.put("page", "pages/workFlow/index"); //小程序暂未发布我没有带page参数
+            paramJson.put("width", 150);
             paramJson.put("is_hyaline", true);
             paramJson.put("auto_color", true);
             /**
@@ -127,14 +130,22 @@ public class WxQrCode {
             //开始获取数据
             BufferedInputStream bis = new BufferedInputStream(httpURLConnection.getInputStream());
             OutputStream os = new FileOutputStream(new File(savePath));
-            int len;
+            out = response.getOutputStream();
+            //读取文件流
+            int len = 0;
+            byte[] buffer = new byte[1024 * 10];
+            while ((len = bis.read(buffer)) != -1){
+                out.write(buffer,0,len);
+            }
+            out.flush();
+            /*int len;
             byte[] arr = new byte[1024];
             while ((len = bis.read(arr)) != -1)
             {
                 os.write(arr, 0, len);
                 os.flush();
             }
-            os.close();
+            os.close();*/
         }
         catch (Exception e)
         {

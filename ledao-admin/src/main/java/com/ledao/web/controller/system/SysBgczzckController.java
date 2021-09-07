@@ -95,7 +95,7 @@ public class SysBgczzckController extends BaseController {
     @ResponseBody
     public TableDataInfo listesDoc(SysBgczzck sysBgczzck) {
         startPage();
-        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckListUseful(sysBgczzck);
         return getDataTable(list);
     }
 

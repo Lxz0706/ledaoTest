@@ -98,7 +98,7 @@ public class QRCodeUtil {
             //设置容错率最高
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             hints.put(EncodeHintType.MARGIN, 1);
-            // 1、生成二维码
+            // 1、
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             BitMatrix bitMatrix = multiFormatWriter.encode(content, BarcodeFormat.QR_CODE, size, size, hints);
             // 2、获取二维码宽高

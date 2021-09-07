@@ -22,6 +22,11 @@
         select id, asset_package_name, asset_status, create_by, create_time, update_by, update_time,team_members_id,team_members_name,evaluation_time from sys_zcb
     </sql>
 
+    <select id="selectZcbListUseful" parameterType="SysZcb" resultMap="SysZcbResult">
+        <include refid="selectSysZcbVo"/> where 	del_flag = '0'
+        AND asset_status != ''
+    </select>
+
     <select id="selectSysZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
         <include refid="selectSysZcbVo"/>
         <where>

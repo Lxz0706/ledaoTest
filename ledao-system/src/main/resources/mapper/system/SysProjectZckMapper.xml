@@ -36,6 +36,10 @@
         </where>
     </select>
 
+    <select id="selectSysProjectZckAll" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
+        <include refid="selectSysProjectZckVo"/> where del_flag = '0' and zck_status !=''
+    </select>
+
     <select id="selectSysProjectZckById" parameterType="Long" resultMap="SysProjectZckResult">
         <include refid="selectSysProjectZckVo"/>
         where project_zck_id = #{projectZckId} and del_flag='0'

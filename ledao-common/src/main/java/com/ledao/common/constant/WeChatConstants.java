@@ -21,11 +21,11 @@ public class WeChatConstants {
 	/**
 	 * 微信appid
 	 */
-	public static final String WXAPPID = "wxb24457badd68cf72";
+	public static final String WXAPPID = "wx9356d3274f830bf6";
 	/**
 	 * 微信secret
 	 */
-	public static final String WXSECRET = "a152a33defcff9c10f239a6072bdd028";
+	public static final String WXSECRET = "4e057cf274f71a19de6718aae0be04cb";
 	/**
 	 * 微信grant_type
 	 */

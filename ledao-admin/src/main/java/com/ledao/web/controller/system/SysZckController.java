@@ -516,24 +516,8 @@ public class SysZckController extends BaseController {
     @PostMapping("/listesDoc")
     @ResponseBody
     public TableDataInfo listesDoc(SysZcb sysZcb) {
-
-        /*SysZcb sz = new SysZcb();
-        if (StringUtils.isNotEmpty(sysZck.getZcbName())){
-            sz.setAssetPackageName(sysZck.getZcbName());
-            List<SysZcb> szs = sysZcbService.selectZcbList(sz);
-
-            if (szs==null || szs.size()==0){
-                return null;
-            }
-            sysZck.setZcbId(szs.get(0).getId());
-        }*/
         startPage();
-        List<SysZcb> list = sysZcbService.selectZcbList(sysZcb);
-        /*for (SysZck syszck : list) {
-            SysZcb sysZcb = sysZcbService.selectSysZcbById(syszck.getZcbId());
-            syszck.setZcbStatus(sysZcb.getAssetStatus());
-            syszck.setZcbName(sysZcb.getAssetPackageName());
-        }*/
+        List<SysZcb> list = sysZcbService.selectZcbListUseful(sysZcb);
         return getDataTable(list);
     }
 

@@ -149,4 +149,9 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
     public List<SysBgczzck> selectByIds(String ids) {
         return sysBgczzckMapper.selectByIds(Convert.toStrArray(ids));
     }
+
+    @Override
+    public List<SysBgczzck> selectSysBgczzckListUseful(SysBgczzck sysBgczzck) {
+        return sysBgczzckMapper.selectSysBgczzckListUseful(sysBgczzck);
+    }
 }

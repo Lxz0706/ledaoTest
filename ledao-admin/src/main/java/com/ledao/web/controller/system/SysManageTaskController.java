@@ -30,7 +30,7 @@ public class SysManageTaskController extends BaseController
     @Autowired
     private ISysManageTaskService sysManageTaskService;
 
-    @RequiresPermissions("system:managetask:view")
+//    @RequiresPermissions("system:managetask:view")
     @GetMapping("/managetask")
     public String managetask(@RequestParam("proId")String proId,@RequestParam("taskType")Long taskType, ModelMap mmap)
     {
@@ -42,7 +42,7 @@ public class SysManageTaskController extends BaseController
     /**
      * 查询处置回现任务列表
      */
-    @RequiresPermissions("system:managetask:list")
+//    @RequiresPermissions("system:managetask:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysManageTask sysManageTask)
@@ -55,7 +55,7 @@ public class SysManageTaskController extends BaseController
     /**
      * 导出处置回现任务列表
      */
-    @RequiresPermissions("system:managetask:export")
+//    @RequiresPermissions("system:managetask:export")
     @Log(title = "处置回现任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -80,7 +80,7 @@ public class SysManageTaskController extends BaseController
     /**
      * 新增保存处置回现任务
      */
-    @RequiresPermissions("system:managetask:add")
+//    @RequiresPermissions("system:managetask:add")
     @Log(title = "处置回现任务", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -103,7 +103,7 @@ public class SysManageTaskController extends BaseController
     /**
      * 修改保存处置回现任务
      */
-    @RequiresPermissions("system:managetask:edit")
+//    @RequiresPermissions("system:managetask:edit")
     @Log(title = "处置回现任务", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -115,7 +115,7 @@ public class SysManageTaskController extends BaseController
     /**
      * 删除处置回现任务
      */
-    @RequiresPermissions("system:managetask:remove")
+//    @RequiresPermissions("system:managetask:remove")
     @Log(title = "处置回现任务", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

@@ -40,6 +40,7 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:project:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
+    var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
     var prefix = ctx + "system/project";
 
     var fwProjectType = $("#fwProjectType").val();
@@ -47,6 +48,7 @@
     var otherFlag = $("#otherFlag").val();
 
     $(function () {
+        debugger
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -132,6 +134,7 @@
                 },
                 {
                     title: '处置任务',
+                    visible: showTask != "hidden",
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + '\')">查看</a>';return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">查看</a>';
                     }

@@ -79,4 +79,6 @@ public interface SysProjectZckMapper {
      * @return
      */
     public List<SysProjectZck> selectProjectZckGroupByType(String projectZckType);
+
+    List<SysProjectZck> selectSysProjectZckAll();
 }

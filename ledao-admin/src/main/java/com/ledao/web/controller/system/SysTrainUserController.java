@@ -1,6 +1,14 @@
 package com.ledao.web.controller.system;
 
+import java.io.IOException;
 import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.constant.WeChatConstants;
+import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.file.FileUtils;
+import com.ledao.common.utils.qrCode.WxQrCode;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +27,8 @@ import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 签到人员Controller
  * 
@@ -34,7 +44,7 @@ public class SysTrainUserController extends BaseController
     @Autowired
     private ISysTrainUserService sysTrainUserService;
 
-    @RequiresPermissions("system:trainuser:view")
+//    @RequiresPermissions("system:trainuser:view")
     @GetMapping()
     public String trainuser()
     {
@@ -44,7 +54,7 @@ public class SysTrainUserController extends BaseController
     /**
      * 查询签到人员列表
      */
-    @RequiresPermissions("system:trainuser:list")
+//    @RequiresPermissions("system:trainuser:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysTrainUser sysTrainUser)
@@ -63,32 +73,11 @@ public class SysTrainUserController extends BaseController
     @Value("${file.path.upload}")
     private String uploadPath;
 
-    *//**
-     * 接收二维码
-     * @param request
-     * @return
-     * @throws IOException
-     *//*
-    @GetMapping(value="/code")
-    public Object twoCode(HttpServletRequest request) throws IOException {
-        JSONObject data=new JSONObject();
-        String accessToken = null;
-        try{
-            accessToken = WxQrCode.getAccessToken(APIKEY,SECRETKEY);
-            System.out.println("accessToken;"+accessToken);
-            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken,uploadPath,request);
-            data.put("twoCodeUrl", twoCodeUrl);
-            return data;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }*/
 
     /**
      * 导出签到人员列表
      */
-    @RequiresPermissions("system:trainuser:export")
+//    @RequiresPermissions("system:trainuser:export")
     @Log(title = "签到人员", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -111,7 +100,7 @@ public class SysTrainUserController extends BaseController
     /**
      * 新增保存签到人员
      */
-    @RequiresPermissions("system:trainuser:add")
+//    @RequiresPermissions("system:trainuser:add")
     @Log(title = "签到人员", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -134,7 +123,7 @@ public class SysTrainUserController extends BaseController
     /**
      * 修改保存签到人员
      */
-    @RequiresPermissions("system:trainuser:edit")
+//    @RequiresPermissions("system:trainuser:edit")
     @Log(title = "签到人员", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -146,7 +135,7 @@ public class SysTrainUserController extends BaseController
     /**
      * 删除签到人员
      */
-    @RequiresPermissions("system:trainuser:remove")
+//    @RequiresPermissions("system:trainuser:remove")
     @Log(title = "签到人员", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

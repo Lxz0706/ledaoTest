@@ -106,4 +106,9 @@ public class SysZcbServiceImpl implements ISysZcbService {
     public List<SysZcb> selectZcbList(SysZcb sysZcb) {
         return sysZcbMapper.selectZcbList(sysZcb);
     }
+
+    @Override
+    public List<SysZcb> selectZcbListUseful(SysZcb sysZcb) {
+        return sysZcbMapper.selectZcbListUseful(sysZcb);
+    }
 }

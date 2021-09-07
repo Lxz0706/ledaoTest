@@ -157,69 +157,7 @@ public class SysProjectZckController extends BaseController {
     @ResponseBody
     public TableDataInfo listByTypeHab(SysProjectZck sysProjectZck) {
         startPage();
-        List<SysProjectZck> list = sysProjectZckService.selectSysProjectZckList(sysProjectZck);
-        for (SysProjectZck sysProjectZck1 : list) {
-            SysProject sysProject = new SysProject();
-            sysProject.setProjectZckId(sysProjectZck1.getProjectZckId());
-            List<SysProject> sysProjectList = sysProjectService.selectProject(sysProject);
-            for (SysProject sysProject1 : sysProjectList) {
-                //总本金余额
-                //sysProject1.setTotalPrincipalBalance(total(sysProject1));
-                SysProject sysProject3 = sysProjectService.selectTotalPrincipalBalanceByParentId(sysProject1.getProjectId());
-                if (StringUtils.isNotNull(sysProject3) && StringUtils.isNotNull(sysProject3.getTotalPrincipalBalance())) {
-                    sysProject1.setTotalPrincipalBalance(sysProject3.getTotalPrincipalBalance());
-                }
-                //现金回现
-                SysRecapture sysRecapture = sysRecaptureService.selectTotalRecaptureByProjectId(sysProject1.getProjectId());
-                if (StringUtils.isNotNull(sysRecapture) && StringUtils.isNotNull(sysRecapture.getTotalRecapture())) {
-                    sysProject1.setRecapture(sysRecapture.getTotalRecapture());
-                } else {
-                    sysProject1.setRecapture(new BigDecimal(0));
-                }
-
-                if (StringUtils.isNotNull(sysProject1.getRecapture()) && StringUtils.isNotNull(sysProject1.getTotalPrincipalBalance())) {
-                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) > -1) {
-                        //当回现>=总本金余额，本金余额=0，利息余额=利息-（回现-总本金余额）
-                        //利息
-                        if (sysProject1.getTotalInterest() == null) {
-                            sysProject1.setTotalInterest(new BigDecimal(0));
-                        }
-                        if (sysProject1.getTotalInterestBalance() == null) {
-                            sysProject1.setTotalInterestBalance(new BigDecimal(0));
-                        }
-                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest().subtract(sysProject1.getRecapture().subtract(sysProject1.getTotalPrincipalBalance())));
-                        sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
-                    }
-                    if (sysProject1.getRecapture().compareTo(sysProject1.getTotalPrincipalBalance()) == -1) {
-                        sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest());
-                        sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().subtract(sysProject1.getRecapture()));
-                    }
-                }
-
-                if (StringUtils.isNull(sysProjectZck1.getCzhx())) {
-                    sysProjectZck1.setCzhx(new BigDecimal(0));
-                }
-                if (StringUtils.isNull(sysProject1.getRecapture())) {
-                    sysProject1.setRecapture(new BigDecimal(0));
-                }
-                sysProjectZck1.setCzhx(sysProjectZck1.getCzhx().add(sysProject1.getRecapture()));
-                if (StringUtils.isNull(sysProjectZck1.getBjye())) {
-                    sysProjectZck1.setBjye(new BigDecimal(0));
-                }
-                if (StringUtils.isNull(sysProject1.getTotalPrincipalBalance())) {
-                    sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
-                }
-                sysProjectZck1.setBjye(sysProjectZck1.getBjye().add(sysProject1.getTotalPrincipalBalance()));
-            }
-            sysProject.setDebtStatus("处置中");
-            List<SysProject> sysProjectList1 = sysProjectService.selectProject(sysProject);
-            sysProjectZck1.setSyhs(Long.valueOf(sysProjectList1.size()));
-        }
-
-        String field = "zckStatus,syhs,zckName";
-        String sort = "asc,desc,desc";
-
-        SortListUtil.sort(list, field.split(","), sort.split(","));
+        List<SysProjectZck> list = sysProjectZckService.selectSysProjectZckAll(sysProjectZck);
         return getDataTable(list);
     }
 

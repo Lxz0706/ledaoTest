@@ -69,4 +69,6 @@ public interface SysZcbMapper {
      * 根据类型查询
      */
     public List<SysZcb> selectZcbList(SysZcb sysZcb);
+
+    List<SysZcb> selectZcbListUseful(SysZcb sysZcb);
 }

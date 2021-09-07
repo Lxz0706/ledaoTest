@@ -119,4 +119,10 @@ public class SysProjectZckServiceImpl implements ISysProjectZckService {
         return sysProjectZckMapper.selectSysProjectZckByType();
     }
 
+
+    @Override
+    public List<SysProjectZck> selectSysProjectZckAll(SysProjectZck sysProjectZck) {
+        return sysProjectZckMapper.selectSysProjectZckAll();
+    }
+
 }

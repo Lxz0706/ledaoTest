@@ -96,6 +96,11 @@
         update_by, update_time,remarks,comment,customer_id,customer from sys_bgczzck
     </sql>
 
+    <select id="selectSysBgczzckListUseful" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
+        <include refid="selectSysBgczzckVo"/> where del_flag = '0'
+        AND project_status != ''
+    </select>
+
     <select id="selectSysBgczzckList" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
         <include refid="selectSysBgczzckVo"/>
         <where>

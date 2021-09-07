@@ -79,4 +79,6 @@ public interface ISysProjectZckService {
      * @return
      */
     public List<SysProjectZck> selectSysProjectZckByType();
+
+    List<SysProjectZck> selectSysProjectZckAll(SysProjectZck sysProjectZck);
 }

@@ -197,7 +197,8 @@
         }
 
         function getWxCode(trainId){
-            $.modal.alertWarning("开发中，配合小程序使用")
+            var url = prefix + "/code";
+            $.modal.open("参会人员", url, '750', '600/2');
         }
     </script>
 </body>

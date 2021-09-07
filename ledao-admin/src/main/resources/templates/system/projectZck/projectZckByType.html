@@ -60,6 +60,7 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:projectZck:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
+    var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
     var prefix = ctx + "system/projectZck";
 
     $(function () {
@@ -116,6 +117,7 @@
                 {
                     // field: 'manageTask',
                     title: '处置任务',
+                    visible: showTask != "hidden",
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectZckId + "',\'" + row.zckName + '\')">查看</a>';
                     }

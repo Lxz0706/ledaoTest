@@ -68,4 +68,6 @@ public interface SysBgczzckMapper {
      * 根据id查询
      */
     public List<SysBgczzck> selectByIds(String[] ids);
+
+    List<SysBgczzck> selectSysBgczzckListUseful(SysBgczzck sysBgczzck);
 }

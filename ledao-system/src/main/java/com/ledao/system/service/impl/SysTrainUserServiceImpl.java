@@ -1,7 +1,15 @@
 package com.ledao.system.service.impl;
 
+import java.util.Date;
 import java.util.List;
+
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysTrainAdmin;
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.mapper.SysTrainAdminMapper;
+import com.ledao.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysTrainUserMapper;
@@ -20,6 +28,12 @@ public class SysTrainUserServiceImpl implements ISysTrainUserService
 {
     @Autowired
     private SysTrainUserMapper sysTrainUserMapper;
+
+    @Autowired
+    private SysTrainAdminMapper sysTrainAdminMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
 
     /**
      * 查询签到人员
@@ -52,10 +66,39 @@ public class SysTrainUserServiceImpl implements ISysTrainUserService
      * @return 结果
      */
     @Override
-    public int insertSysTrainUser(SysTrainUser sysTrainUser)
+    public AjaxResult insertSysTrainUser(SysTrainUser sysTrainUser)
     {
+        SysTrainAdmin trainAdmin = sysTrainAdminMapper.selectSysTrainAdminById(sysTrainUser.getTrainId());
+        if (trainAdmin==null){
+            return AjaxResult.error("未找到该会议");
+        }
+        long startTime = trainAdmin.getQrcodeStartTime().getTime();
+        long endTime = trainAdmin.getQrcodeEndTime().getTime();
+        long nowTime =DateUtils.getNowDate().getTime();
+        if (startTime-nowTime>0 || endTime - nowTime <0){
+            return AjaxResult.error("不在签到时间内");
+        }
+        if (StringUtils.isEmpty(sysTrainUser.getOpenId())){
+            return AjaxResult.error("未收到openid");
+        }
+        SysUser u = new SysUser();
+        u.setOpenId(sysTrainUser.getOpenId());
+        List<SysUser> us = userMapper.selectUserList(u);
+        if (us==null || us.size()==0){
+            return AjaxResult.error("当前用户未入库");
+        }
+        SysUser loUser = us.get(0);
+
+        SysTrainUser sysTrain = new SysTrainUser();
+        sysTrain.setLoginName(loUser.getLoginName());
+        List<SysTrainUser> trs =sysTrainUserMapper.selectSysTrainUserList(sysTrain);
+        if (trs!=null && trs.size()>0){
+            return AjaxResult.success("当前用户已签到");
+        }
+        sysTrainUser.setLoginName(loUser.getLoginName());
         sysTrainUser.setCreateTime(DateUtils.getNowDate());
-        return sysTrainUserMapper.insertSysTrainUser(sysTrainUser);
+        sysTrainUserMapper.insertSysTrainUser(sysTrainUser);
+        return AjaxResult.success();
     }
 
     /**

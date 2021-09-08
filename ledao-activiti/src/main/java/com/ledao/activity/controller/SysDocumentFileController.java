@@ -206,7 +206,12 @@ public class SysDocumentFileController extends BaseController
         f.setApplyId(sysDocumentFile.getApplyId());
         List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
         if (ss !=null && ss.size()>0){
-            return AjaxResult.error("存在重复记录，请检查");
+            for (SysDocumentFile df:ss) {
+                if (df.getDocumentId().longValue()!=sysDocumentFile.getDocumentId().longValue()){
+                    return AjaxResult.error("存在重复记录，请检查");
+                }
+            }
+
         }
         AjaxResult res = toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
         SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());

@@ -1,6 +1,8 @@
 package com.ledao.system.service;
 
 import java.util.List;
+
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.system.dao.SysTrainUser;
 
 /**
@@ -33,7 +35,7 @@ public interface ISysTrainUserService
      * @param sysTrainUser 签到人员
      * @return 结果
      */
-    public int insertSysTrainUser(SysTrainUser sysTrainUser);
+    public AjaxResult insertSysTrainUser(SysTrainUser sysTrainUser);
 
     /**
      * 修改签到人员

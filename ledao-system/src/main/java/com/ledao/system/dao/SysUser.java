@@ -155,6 +155,17 @@ public class SysUser extends BaseEntity {
 
     private String roleKey;
 
+    @Excel(name = "微信openId")
+    private String openId;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
     public SysUser() {
 
     }

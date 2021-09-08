@@ -131,13 +131,13 @@ public class SysTrainAdminController extends BaseController
      * @throws IOException
      */
     @GetMapping(value="/code")
-    public Object twoCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Object twoCode(Long trainId,HttpServletRequest request, HttpServletResponse response) throws IOException {
         JSONObject data=new JSONObject();
         String accessToken = null;
         try{
             accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
             System.out.println("accessToken;"+accessToken);
-            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),request,response);
+            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),request,response,trainId);
             data.put("twoCodeUrl", twoCodeUrl);
             return data;
         }catch (Exception e){

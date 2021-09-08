@@ -9,6 +9,8 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -106,7 +108,7 @@ public class SysTrainUserController extends BaseController
     @ResponseBody
     public AjaxResult addSave(SysTrainUser sysTrainUser)
     {
-        return toAjax(sysTrainUserService.insertSysTrainUser(sysTrainUser));
+        return sysTrainUserService.insertSysTrainUser(sysTrainUser);
     }
 
     /**

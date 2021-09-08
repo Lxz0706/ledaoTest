@@ -71,7 +71,7 @@ public class WxQrCode {
      * 获取 二维码图片
      *
      */
-    public static String getminiqrQr(String accessToken, String uploadPath, HttpServletRequest request, HttpServletResponse response) {
+    public static String getminiqrQr(String accessToken, String uploadPath, HttpServletRequest request, HttpServletResponse response,long trainId) {
         ServletOutputStream out = null;
         String ctxPath = uploadPath;
         String fileName="twoCode.png";
@@ -109,11 +109,12 @@ public class WxQrCode {
             PrintWriter printWriter = new PrintWriter(httpURLConnection.getOutputStream());
             // 发送请求参数
             JSONObject paramJson = new JSONObject();
-            paramJson.put("scene", "1234567890");
-//            paramJson.put("page", "pages/workFlow/index"); //小程序暂未发布我没有带page参数
+            paramJson.put("scene", "trainId");
+//            paramJson.put("page", "pages/mine/index"); //小程序暂未发布我没有带page参数
             paramJson.put("width", 150);
             paramJson.put("is_hyaline", true);
             paramJson.put("auto_color", true);
+//            paramJson.put("trainId",trainId);
             /**
              * line_color生效
              * paramJson.put("auto_color", false);
@@ -129,7 +130,7 @@ public class WxQrCode {
             printWriter.flush();
             //开始获取数据
             BufferedInputStream bis = new BufferedInputStream(httpURLConnection.getInputStream());
-            OutputStream os = new FileOutputStream(new File(savePath));
+//            OutputStream os = new FileOutputStream(new File(savePath));
             out = response.getOutputStream();
             //读取文件流
             int len = 0;
@@ -138,6 +139,8 @@ public class WxQrCode {
                 out.write(buffer,0,len);
             }
             out.flush();
+            out.close();
+            bis.close();
             /*int len;
             byte[] arr = new byte[1024];
             while ((len = bis.read(arr)) != -1)

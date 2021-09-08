@@ -1,5 +1,6 @@
 package com.ledao.system.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.system.dao.SysDictData;
@@ -80,6 +81,19 @@ public class SysManageTaskServiceImpl implements ISysManageTaskService
     public int updateSysManageTask(SysManageTask sysManageTask)
     {
         sysManageTask.setUpdateTime(DateUtils.getNowDate());
+        if (sysManageTask.getPlanEndTime()!=null && sysManageTask.getPlanEndTime() !=null){
+            long planEndTime = sysManageTask.getPlanEndTime().getTime();
+            long realEndTime = sysManageTask.getRealEndTime().getTime();
+            if (realEndTime-planEndTime>0){
+                sysManageTask.setTaskStatu("later");
+            }else if (realEndTime-planEndTime<0){
+                sysManageTask.setTaskStatu("preTime");
+            }else{
+                sysManageTask.setTaskStatu("onTime");
+            }
+        }else {
+            sysManageTask.setTaskStatu("");
+        }
         return sysManageTaskMapper.updateSysManageTask(sysManageTask);
     }
 

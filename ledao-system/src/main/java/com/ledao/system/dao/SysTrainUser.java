@@ -45,7 +45,25 @@ public class SysTrainUser extends BaseEntity
     @Excel(name = "预留字段3")
     private String remark3;
 
-    public void setId(Long id) 
+    private String openId;
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

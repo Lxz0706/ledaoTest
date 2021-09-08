@@ -1,14 +1,21 @@
 package com.ledao.activity.service.impl;
 
 import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import com.ledao.activity.mapper.SysApplyWorkflowMapper;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.dao.SysApplyWorkflow;
 import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.core.text.Convert;
+
+import javax.jms.Queue;
 
 /**
  * 档案出入库审批流程Service业务层处理
@@ -21,6 +28,9 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
 {
     @Autowired
     private SysApplyWorkflowMapper sysApplyWorkflowMapper;
+
+    @Autowired
+    private JmsMessagingTemplate jmsMessagingTemplate;
 
     /**
      * 查询档案出入库审批流程
@@ -57,6 +67,21 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
     {
         sysApplyWorkflow.setCreateTime(DateUtils.getNowDate());
         return sysApplyWorkflowMapper.insertSysApplyWorkflow(sysApplyWorkflow);
+    }
+
+    public AjaxResult sendLittleMsg(JSONObject parm){
+/*        JSONObject parm = new JSONObject();
+        parm.put("thing6","测试1");
+        parm.put("thing4","测试2");
+        parm.put("thing7","测试3");
+        parm.put("time4",DateUtils.getNowDate());*/
+
+        // 创建名称为zyQueue的队列
+        Queue queue = new ActiveMQQueue("zyQueueCommon");
+        String dataStr = JSONObject.toJSONString(parm);
+        // 向队列发送消息
+        jmsMessagingTemplate.convertAndSend(queue, dataStr);
+        return AjaxResult.success();
     }
 
     /**

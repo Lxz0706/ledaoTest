@@ -8,6 +8,8 @@ import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
+import com.ledao.system.mapper.SysRoleMapper;
+import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.*;
 
 import org.apache.activemq.command.ActiveMQQueue;
@@ -23,10 +25,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.jms.Queue;
 
@@ -67,6 +66,15 @@ public class TimedTask {
     
     @Autowired
 	private JmsMessagingTemplate jmsMessagingTemplate;
+
+    @Autowired
+    private SysRoleMapper roleMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
+
+    @Autowired
+    private ISysManageTaskService sysManageTaskService;
 
     public void timeTask() throws ParseException {
         //应收应付未收服务费消息提醒
@@ -110,30 +118,131 @@ public class TimedTask {
  		// 向队列发送消息
  		jmsMessagingTemplate.convertAndSend(queue, "这是一个队列消息！");
     }
+
+    private List<SysUser> getUsers(String roleKey){
+        List<SysUser> users = new ArrayList<>();
+        SysRole r = new SysRole();
+        r.setRoleKey(roleKey);
+        List<SysRole> ros = roleMapper.selectRoleList(r);
+        if (ros!=null && ros.size()>0){
+            SysUser userRoles = new SysUser();
+            userRoles.setRoleId(ros.get(0).getRoleId());
+            List<SysUser> us =  userMapper.selectAllocatedList(userRoles);
+            for (SysUser u: us) {
+                users.add(u);
+            }
+        }
+        return users;
+    }
+
+
+    /**
+     *投后总任务消息推送
+     * @throws ParseException
+     */
+    public void totalTask() throws ParseException {
+
+        List<SysUser> users = getUsers("thbManager");
+        for (SysUser u:users){
+            if (StringUtils.isNotEmpty(u.getOpenId())){
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                parm.put("thing16","测试1");
+                parm.put("thing20","测试2");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                parm.put("time4", sdf.format(new Date())+" 至 "+sdf.format(new Date()));
+                parm.put("thing1","任务名称测试");
+                parm.put("phrase7","任务状态测试");
+                parm.put("toUser",u.getOpenId());
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("ThQueueCommon");
+                String dataStr = JSONObject.toJSONString(parm);
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+            }
+        }
+    }
+
+    /**
+     *投后子任务消息推送
+     * @throws ParseException
+     */
+    public void subTask() throws ParseException {
+        List<String> idszck = new ArrayList<>();
+        List<String> idspro = new ArrayList<>();
+
+
+        SysProjectZck sysProjectZck = new SysProjectZck();
+        sysProjectZck.setProjectZckType("automaticSwitch");
+        List<SysProjectZck> zcks = sysProjectZckService.selectSysProjectZckList(sysProjectZck);
+        for (SysProjectZck zc:zcks){
+            SysProject sysProject = new SysProject();
+            sysProject.setProjectZckId(zc.getProjectZckId());
+            List<SysProject> pros = sysProjectService.selectSysProjectList(sysProject);
+            for (SysProject p: pros){
+                /*SysUser u = sysUserService.selectUserByUserName(p.getProjectManager());
+                if (StringUtils.isNotEmpty(u.getOpenId())){
+                    SysManageTask sysManageTask = new SysManageTask();
+                    sysManageTask.setProId(p.getpId());
+                    List<SysManageTask> tasks = sysManageTaskService.selectSysManageTaskList(sysManageTask);
+                    for (SysManageTask t:tasks) {
+
+                    }
+                }*/
+                idspro.add(String.valueOf(p.getProjectId()));
+            }
+            idszck.add(String.valueOf(zc.getProjectZckId()));
+        }
+
+        String idszckStr = String.join(",",idszck);
+        String idsproStr = String.join(",",idspro);
+        System.out.println(idszckStr);
+        System.out.println(idsproStr);
+
+
+        /*List<SysUser> users = getUsers("thbManager");
+        for (SysUser u:users){
+            if (StringUtils.isNotEmpty(u.getOpenId())){
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                parm.put("thing16","测试1");
+                parm.put("thing20","测试2");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                parm.put("time4", sdf.format(new Date())+" 至 "+sdf.format(new Date()));
+                parm.put("thing1","任务名称测试");
+                parm.put("phrase7","任务状态测试");
+                parm.put("toUser",u.getOpenId());
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("ThQueueCommon");
+                String dataStr = JSONObject.toJSONString(parm);
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+            }
+        }*/
+    }
     
     /**
      * 网拍线索消息提醒
      * @throws ParseException
      */
     public void racquetClues() throws ParseException {
-//    	EUser usereMaintainer = userService.get(eOperation.getMaintainerId());
-		
+
 		List<TemplateParam> paras=new ArrayList<TemplateParam>();  
-//		paras.add(new TemplateParam("keyword1",eOperation.getOrderId(),""));  //维修工单
-//		paras.add(new TemplateParam("keyword2",area,""));  //维修地址
-//		paras.add(new TemplateParam("keyword3",eOperation.getServiceTime(),"")); //完成时间 
-//		paras.add(new TemplateParam("keyword4",eOperation.getRemarks(),""));  //备注
-//		paras.add(new TemplateParam("keyword5",eMaintainer.getName(),""));  //维修工程师
-		
+
 		paras.add(new TemplateParam("keyword1","test1",""));  //维修工单
 		paras.add(new TemplateParam("keyword2","test2",""));  //维修地址
 		paras.add(new TemplateParam("keyword3","test3","")); //完成时间 
 		paras.add(new TemplateParam("keyword4","test4",""));  //备注
 		paras.add(new TemplateParam("keyword5","test5",""));  //维修工程师
+        JSONObject parm = new JSONObject();
+        parm.put("thing6","测试1");
+        parm.put("thing4","测试2");
+        parm.put("thing7","测试3");
+        parm.put("time4",DateUtils.getNowDate());
         
         // 创建名称为zyQueue的队列
  		Queue queue = new ActiveMQQueue("zyQueueCommon");
- 		String dataStr = JSONObject.toJSONString(paras);
+ 		String dataStr = JSONObject.toJSONString(parm);
  		// 向队列发送消息
  		jmsMessagingTemplate.convertAndSend(queue, dataStr);
     }

@@ -95,4 +95,6 @@ public interface SysApplyInMapper
     List<SysApplyIn> selectSysApplyInListUser(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> selectSysApplyInDocDetailList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn);
 }

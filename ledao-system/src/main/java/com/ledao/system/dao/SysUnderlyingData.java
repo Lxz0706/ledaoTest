@@ -60,6 +60,16 @@ public class SysUnderlyingData extends BaseEntity
     @Excel(name = "文件路径")
     private String fileUrl;
 
+    private String proType;
+
+    public String getProType() {
+        return proType;
+    }
+
+    public void setProType(String proType) {
+        this.proType = proType;
+    }
+
     public void setFileId(Long fileId)
     {
         this.fileId = fileId;

@@ -105,6 +105,13 @@ public class SysApplyInController extends BaseController
         return prefix + "/applyListByMe";
     }
 
+    @GetMapping("/inOutPage")
+    public String applyListByMe(Long documentId,ModelMap modelMap) {
+//        我的申请
+        modelMap.put("documentId",documentId);
+        return "docList/inOutPage";
+    }
+
     @GetMapping("/reject/{applyId}/{applyType}/{approveStatu}")
     public String reject(@PathVariable("applyId") String applyId,@PathVariable("applyType") String applyType,
                          @PathVariable("approveStatu") String approveStatu,ModelMap modelMap) {
@@ -150,6 +157,16 @@ public class SysApplyInController extends BaseController
         startPage();
         sysApplyIn.setApplyUser(ShiroUtils.getLoginName());
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(sysApplyIn);
+        return getDataTable(list);
+    }
+
+
+    @PostMapping("/listInOutDetail")
+    @ResponseBody
+    public TableDataInfo listInOutDetail(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        List<SysApplyIn> list = sysApplyInService.listInOutDetail(sysApplyIn);
         return getDataTable(list);
     }
 
@@ -488,7 +505,7 @@ public class SysApplyInController extends BaseController
     @GetMapping("/documentTypeListOpen")
     public String documentTypeListOpen()
     {
-        return prefix + "/documentTypeList";
+        return "docList/documentTypeList";
     }
 
     @GetMapping("/documentTypeListBack")
@@ -496,16 +513,16 @@ public class SysApplyInController extends BaseController
     {
         if ("0".equals(documentType)){
             mmap.put("documentType",documentType);
-            return prefix + "/documentDetailTypeList";
+            return "docList/documentDetailTypeList";
         }else{
-            return prefix + "/documentTypeList";
+            return "docList/documentTypeList";
         }
     }
 
     @GetMapping("/backDocumentTypeList")
     public String backDocumentTypeList()
     {
-        return prefix + "/documentTypeList";
+        return "docList/documentTypeList";
     }
 
     @GetMapping("/documentDetailTypeListOpen")
@@ -536,9 +553,6 @@ public class SysApplyInController extends BaseController
         if ("0".equals(docType)){
             startPage();
             sysDictDataList = sysDictDataService.selectDictDataByType("sys_project_type");
-        }else{
-            startPage();
-            sysDictDataList = sysDictDataService.selectDictDataByType("daily_document_type");
         }
         return getDataTable(sysDictDataList);
     }

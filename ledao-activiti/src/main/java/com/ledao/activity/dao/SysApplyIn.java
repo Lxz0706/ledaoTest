@@ -141,6 +141,16 @@ public class SysApplyIn extends BaseEntity
 
     private String projectZckType;
 
+    private long documentId;
+
+    public long getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(long documentId) {
+        this.documentId = documentId;
+    }
+
     public String getProjectZckType() {
         return projectZckType;
     }

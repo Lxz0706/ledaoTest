@@ -113,4 +113,6 @@ public interface ISysApplyInService
     String checkUserRole(SysUser u);
 
     List<SysApplyIn> selectSysApplyInDocDetailList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn);
 }

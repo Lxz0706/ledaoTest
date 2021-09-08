@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('底层资料')"/>
+    <style>
+        .border {
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="row" style="min-height: 80%;" id="showList"></div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:projectZck:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
+    var prefix = ctx + "system/underlyingdata";
+    $(function () {
+                var str = '';
+                var height = $(".row").height();
+                var winHeight = height / 2;
+                var lable1 = "投资";
+                var lable2 = "投后";
+                str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+                str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(0)">' + lable1 + '</a><br/>';
+                str += '</div>';
+                str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+                str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(1)">' + lable2 + '</a><br/>';
+                str += '</div>';
+                $("#showList").html(str);
+    });
+
+
+    /*资产库列表-详细*/
+    function detail(type) {
+
+        if (type == 0){
+            //投资
+
+        }else{
+            //投后
+            var url = prefix + '/documentDetailTypeListMu';
+            $.modal.parentTab("投后列表", url);
+        }
+
+    }
+
+    //查询
+    function jump() {
+        var data = $("#formId").serialize();
+        $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+    }
+
+</script>
+</body>
+</html>

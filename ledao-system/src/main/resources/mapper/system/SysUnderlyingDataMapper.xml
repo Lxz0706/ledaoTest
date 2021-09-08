@@ -44,6 +44,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
         </where>
     </select>
+
+    <select id="selectSysUnderlyingProDataList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
+        SELECT
+        a.file_id,
+        a.parent_id,
+        a.file_name,
+        a.file_type,
+        a.file_size,
+        a.downloadable_flag,
+        a.create_time,
+        a.createor,
+        a.preview_count,
+        a.downloads_count,
+        a.update_time,
+        a.updateor,
+        a.update_by,
+        a.project_id,
+        a.file_url,
+        a.create_by
+        FROM
+        sys_underlying_data a
+        LEFT JOIN sys_project b ON a.project_id = b.project_id
+        LEFT JOIN sys_project_zck zck ON b.project_zck_id = zck.project_zck_id
+        <where>
+            <if test="parentId != null "> and a.parent_id = #{parentId}</if>
+            <if test="fileName != null  and fileName != ''"> and a.file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''"> and a.file_type = #{fileType}</if>
+            <if test="fileSize != null "> and a.file_size = #{fileSize}</if>
+            <if test="downloadableFlag != null  and downloadableFlag != ''"> and a.downloadable_flag = #{downloadableFlag}</if>
+            <if test="createor != null  and createor != ''"> and a.createor = #{createor}</if>
+            <if test="previewCount != null "> and a.preview_count = #{previewCount}</if>
+            <if test="downloadsCount != null "> and a.downloads_count = #{downloadsCount}</if>
+            <if test="updateor != null  and updateor != ''"> and a.updateor = #{updateor}</if>
+            <if test="projectId != null  and projectId != ''"> and a.project_id = #{projectId}</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and a.file_url = #{fileUrl}</if>
+            <if test="proType != null  and proType != ''"> and zck.project_zck_type = #{proType}</if>
+            <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+        </where>
+        order by a.create_time desc
+    </select>
     
     <select id="selectSysUnderlyingDataById" parameterType="Long" resultMap="SysUnderlyingDataResult">
         <include refid="selectSysUnderlyingDataVo"/>

@@ -2,15 +2,15 @@ package com.ledao.web.controller.system;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ledao.common.config.Global;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysDocument;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysUser;
+import com.ledao.system.dao.*;
+import com.ledao.system.service.ISysDictDataService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.dao.SysUnderlyingData;
 import com.ledao.system.service.ISysUnderlyingDataService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
@@ -41,6 +40,9 @@ public class SysUnderlyingDataController extends BaseController
     @Autowired
     private ISysUnderlyingDataService sysUnderlyingDataService;
 
+    @Autowired
+    private ISysDictDataService sysDictDataService;
+
     @RequiresPermissions("system:underlyingdata:view")
     @GetMapping()
     public String underlyingdata()
@@ -58,6 +60,15 @@ public class SysUnderlyingDataController extends BaseController
     {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingDataList(sysUnderlyingData);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/listLying")
+    @ResponseBody
+    public TableDataInfo listLying(SysUnderlyingData sysUnderlyingData)
+    {
+        startPage();
+        List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingProDataList(sysUnderlyingData);
         return getDataTable(list);
     }
 
@@ -94,6 +105,35 @@ public class SysUnderlyingDataController extends BaseController
     {
         mmap.put("projectId",projectId);
         return prefix + "/underlyingDataLists";
+    }
+
+    @GetMapping("/muList")
+    public String muList()
+    {
+        return prefix + "/underLyingMn";
+    }
+
+    @GetMapping("/documentDetailTypeListMu")
+    public String documentDetailTypeListMu()
+    {
+        return prefix + "/documentDetailTypeList";
+    }
+
+    @GetMapping("/muUnderlyingDataListsMu")
+    public String muUnderlyingDataListsMu(String dataType, ModelMap mmap)
+    {
+        mmap.put("dataType",dataType);
+        return prefix + "/muUnderlyingDataLists";
+    }
+
+    @PostMapping("/documentDetailTypeList")
+    @ResponseBody
+    public TableDataInfo documentDetailTypeList() {
+        List<SysDictData> sysDictDataList = new ArrayList<>();
+//        项目类
+        startPage();
+        sysDictDataList = sysDictDataService.selectDictDataByType("sys_project_type");
+        return getDataTable(sysDictDataList);
     }
     /**
      * 新增保存文件管理

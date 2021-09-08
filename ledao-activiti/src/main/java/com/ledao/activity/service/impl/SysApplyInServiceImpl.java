@@ -751,6 +751,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
+    public List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.listInOutDetail(sysApplyIn);
+    }
+
+    @Override
     public int editSave(SysApplyIn sysApplyIn) {
         sysApplyIn.setReviser(ShiroUtils.getLoginName());
         sysApplyIn.setUpdateTime(new Date());

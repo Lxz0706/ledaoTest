@@ -268,6 +268,15 @@
                     }
                 },
                 {
+                    title: '出库信息查看',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="getInOutDetail(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>出库信息查看</a> ');
+                        return actions.join('');
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
@@ -297,6 +306,11 @@
     function strLength(value){
         var str = $.common.nullToStr(value);
         return str;
+    }
+
+    function getInOutDetail(documentId){
+        var url = prefix + '/inOutPage?documentId=' + documentId;
+        $.modal.open("查看出入库信息", url);
     }
 
     function submitHandler() {

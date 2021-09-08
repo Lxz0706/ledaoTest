@@ -65,4 +65,6 @@ public interface SysUnderlyingDataMapper
      * @return
      */
     List<SysUnderlyingData> selectSysUnderlyingDataByPid(Long projectId);
+
+    List<SysUnderlyingData> selectSysUnderlyingProDataList(SysUnderlyingData sysUnderlyingData);
 }

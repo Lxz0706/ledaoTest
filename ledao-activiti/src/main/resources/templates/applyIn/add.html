@@ -13,9 +13,6 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">档案类别：</label>
                 <div class="col-sm-8">
-                    <!-- <select name="documentType" class="form-control m-b">
-                        <option value="">所有</option>
-                    </select> -->
                     <select id="documentType" onchange="changeDocumentType(this.value)" name="documentType" th:with="type=${@dict.getType('sys_document_busi_type')}"
                                         data-none-selected-text="请选择" class="form-control m-b">
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -49,14 +46,14 @@
                                         data-none-selected-text="请选择" class="form-control m-b">
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
-                                </select>
+                    </select>
                 </div>
             </div>
             <div class="form-group" id="debtorName">
                 <label class="col-sm-3 control-label is-required">债务人名称：</label>
                 <div class="col-sm-8">
                     <input name="debtorId" id="debtorNameVal"  class="form-control" type="hidden">
-                    <input autocomplete="off" name="debtorName" id="debtorNameTip" class="form-control required" type="text" onclick="selectDebtor()">
+                    <input autocomplete="off" name="debtorName" disabled id="debtorNameTip" class="form-control required" type="text" onclick="selectDebtor()">
                 </div>
             </div>
             <div class="form-group">
@@ -111,6 +108,7 @@
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+        var userName = [[${@permission.getPrincipalProperty('userName')}]];
         var showNames = false;
         var documentTypeVal = document.getElementById("documentType").value;
         var prefix = ctx + "applyIn"
@@ -118,8 +116,10 @@
         var ids = '';
         var roleType = document.getElementById("roleType").value;
         var optionUrl = prefix + "/editDocumentModal/";
+        var showDocumentType = false;
         $(function () {
             $("#showTable").hide()
+            $("#applyUserName").val(userName)
             for(var i =0; i < roles.length;i++) {
                 if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
                     showNames = true
@@ -132,6 +132,12 @@
             if($("#applyUser").val() == "") {
                 $("#applyUser").val(loginName)
                 $("#realCreateBy").val(loginName)
+            }
+
+            if(documentTypeVal == 0) {
+                showDocumentType = true
+            } else {
+                showDocumentType = false
             }
         })
 
@@ -166,17 +172,22 @@
                     {
                         field: 'projectName',
                         title: '项目名称',
-                        visible: documentTypeVal == "0" ? true : false
+                        visible: showDocumentType
                     },
                     {
                         field: 'assetNumber',
                         title: '资产编号',
-                        visible: documentTypeVal == "0" ? true : false
+                        visible: showDocumentType
                     },
                     {
                         field: 'contractNo',
                         title: '合同编号',
-                        visible: documentTypeVal == "0" ? true : false
+                        visible: showDocumentType
+                    },
+                    {
+                        field: 'companyName',
+                        title: '公司名称',
+                        visible: !showDocumentType
                     },
                     {
                         field: 'dailyDocumentType',
@@ -353,6 +364,10 @@
             }
         }
 
+        function closeHandler() {
+            console.log('1111111111111111-----------')
+        }
+
         function changeDocumentType(val) {
             var projectName = document.getElementById("projectName")
             var debtorName = document.getElementById("debtorName")
@@ -361,14 +376,17 @@
                 projectName.style.display = "block"
                 debtorName.style.display = "block"
                 roleTypeShow.style.display = "block"
-            } else if(val === '1') {
+                showDocumentType = true
+            } else if(val === '1' || val === '2') {
                 projectName.style.display = "none"
                 debtorName.style.display = "none"
                 roleTypeShow.style.display = "none"
+                showDocumentType = false
             } else {
                 projectName.style.display = "block"
                 debtorName.style.display = "block"
                 roleTypeShow.style.display = "block"
+                showDocumentType = false
             }
         }
 

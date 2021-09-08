@@ -16,16 +16,6 @@
                     <input name="documentStatu" id="documentStatu" value="1" type="hidden">
                     <div class="select-list">
                         <ul>
-                            <!--<li>
-                                <label>档案类别：</label>
-                                <select id="documentType" name="documentType"
-                                        th:with="type=${@dict.getType('sys_document_busi_type')}"
-                                        data-none-selected-text="请选择">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>-->
                             <li id="assetNumber">
                                 <label>资产编号：</label>
                                 <input type="text" name="assetNumber" />
@@ -399,7 +389,7 @@
                 assetNumber.style.display = "block"
                 // contractNo.style.display = "block"
                 dailyDocumentType.style.display = "none"
-            } else if(val === '1') {
+            } else if(val === '1' || val === '2') {
                 // assetPag.style.display = "none"
                 assetNumber.style.display = "none"
                 // contractNo.style.display = "none"

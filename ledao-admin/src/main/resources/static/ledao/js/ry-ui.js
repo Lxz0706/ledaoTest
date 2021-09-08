@@ -901,6 +901,49 @@ var table = {
                     }
                 });
             },
+            closeOpen: function (title, url, width, height, callback) {
+                //如果是移动端，就使用自适应大小弹窗
+                if ($.common.isMobile()) {
+                    width = 'auto';
+                    height = 'auto';
+                }
+                if ($.common.isEmpty(title)) {
+                    title = false;
+                }
+                if ($.common.isEmpty(url)) {
+                    url = "/404.html";
+                }
+                if ($.common.isEmpty(width)) {
+                    width = 800;
+                }
+                if ($.common.isEmpty(height)) {
+                    height = ($(window).height() - 50);
+                }
+                if ($.common.isEmpty(callback)) {
+                    callback = function (index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.submitHandler(index, layero);
+                    }
+                }
+                layer.open({
+                    type: 2,
+                    area: [width + 'px', height + 'px'],
+                    fix: false,
+                    //不固定
+                    maxmin: true,
+                    shade: 0.3,
+                    title: title,
+                    content: url,
+                    btn: ['关闭'],
+                    // 弹层外区域关闭
+                    shadeClose: true,
+                    yes: function (index, layero) {
+                        //事件
+                        layer.close(index);
+                        $.table.refresh()
+                    }
+                });
+            },
             // 弹出层指定参数选项
             openOptions: function (options) {
                 var _url = $.common.isEmpty(options.url) ? "/404.html" : options.url;
@@ -1198,6 +1241,11 @@ var table = {
                     var url = table.options.cleanUrl;
                     $.operate.submit(url, "post", "json", "");
                 });
+            },
+            // 添加档案申请
+            addApplyIn: function (id) {
+                table.set();
+                $.modal.closeOpen("添加" + table.options.modalName, $.operate.addUrl(id));
             },
             // 添加信息
             add: function (id) {

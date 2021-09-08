@@ -134,8 +134,6 @@
         var showDelet = false
         var showAllBut = false
     $(function () {
-
-
         for(var i =0; i < roles.length;i++) {
             if(roles[i].roleKey == "documentAdmin" || "admin" == loginNameUser) {
                 showNames = true
@@ -212,8 +210,13 @@
                 }
             }
         }
-        console.log('实际提交人',applyUser)
-        console.log('代提交人',realCreateBy)
+
+        // 去除disable的input框必选
+        function lock() {
+            var txtArrs = $("input").prop("disabled")
+            console.log('txtArrs',txtArrs)
+        }
+        lock()
 
         var options = {
             url: prefixDocumentFile + "/listDocApp",
@@ -256,6 +259,11 @@
                     field: 'contractNo',
                     title: '合同编号',
                     visible: documentTypeVal == "0" ? true : false
+                },
+                {
+                    field: 'companyName',
+                    title: '公司名称',
+                    visible: documentTypeVal == "0" ? false : true
                 },
                 {
                     field: 'dailyDocumentType',

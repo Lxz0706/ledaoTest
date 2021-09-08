@@ -71,6 +71,9 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysDictDataService sysDictDataService;
 
+    @Autowired
+    private ISysUnderlyingDataService iSysUnderlyingDataService;
+
     @RequiresPermissions("system:project:view")
     @GetMapping()
     public String project() {
@@ -190,7 +193,12 @@ public class SysProjectController extends BaseController {
             if (sysProject1.getTotalInterestBalance() == null) {
                 sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest());
             }
-
+            // 底层资料
+            sysProject1.setIsFile(new Long(0));
+            List<SysUnderlyingData> files = iSysUnderlyingDataService.selectSysUnderlyingDataByPid(sysProject1.getProjectId());
+            if (files != null && files.size() > 0) {
+                sysProject1.setIsFile(new Long(1));
+            }
         }
         return getDataTable(list);
     }

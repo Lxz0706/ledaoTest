@@ -41,6 +41,7 @@
     var editFlag = [[${@permission.hasPermi('system:project:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
     var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
+    var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
     var prefix = ctx + "system/project";
 
     var fwProjectType = $("#fwProjectType").val();
@@ -133,10 +134,10 @@
                     }
                 },
                 {
-                    title: '处置回现',
+                    title: '处置任务',
                     visible: showTask != "hidden",
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">任务进度</a>';
+                        return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + '\')">查看</a>';return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">查看</a>';
                     }
                 },
                 {
@@ -152,6 +153,32 @@
                 {
                     field: 'debtStatus',
                     title: '债权状态'
+                },
+                {
+                    title: '底层资料',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        var fileShow = row.isFile;
+                        if (fileShow == 0) {
+                            actions.push('<a class="btn btn-success btn-xs ' + uploadFlag + '" href="javascript:void(0)" onclick="toUpload(' + row.projectId + ')"><i class="fa fa-edit"></i>上传</ a> ');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(' + row.projectId + ')"><i class="fa fa-search"></i>查看</a>');
+                        }
+                        // var fileType = row.fileType.toLowerCase();
+                        // if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
+                        //         || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
+                        //     actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        // } else if ('pdf' == fileType) {
+                        //     actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        // } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
+                        //     || 'png' == fileType || 'webp' == fileType) {
+                        //     actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>预览</a>');
+                        // } else if ('mp4' == fileType) {
+                        //     actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
+                        // }
+                        return actions.join('');
+                    }
                 }]
         };
         $.table.init(options);
@@ -243,6 +270,28 @@
         }
         $.modal.parentTab("投后部项目管理", url);
     }
+    function see(projectId) {
+        var url = ctx + "system/underlyingdata/list?projectId=" + projectId;
+        $.modal.parentTab("底层资料", url);
+    }
+    function toUpload(projectId) {
+        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId;
+        $.modal.open('上传底层资料', url);
+    }
+    function showImage(content, width, height) {
+        layer.open({
+            type: 1,
+            title: false, //不显示标题栏
+            shadeClose: true, //点击遮罩时关闭
+            area: [width + 'px', (height + 50) + 'px'],
+            shade: 0.8,
+            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+            moveType: 1, //拖拽模式，0或者1
+            content: content
+        });
+    };
+
+
 </script>
 </body>
 </html>

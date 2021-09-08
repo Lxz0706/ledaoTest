@@ -542,6 +542,8 @@ public class SysProject extends BaseEntity {
 
     private Long projectCount;
 
+    private Long isFile;
+
     public Long getProjectId() {
         return projectId;
     }
@@ -1302,6 +1304,14 @@ public class SysProject extends BaseEntity {
         this.projectCount = projectCount;
     }
 
+    public Long getIsFile() {
+        return isFile;
+    }
+
+    public void setIsFile(Long isFile) {
+        this.isFile = isFile;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1387,6 +1397,7 @@ public class SysProject extends BaseEntity {
                 .append("otherFlag", getOtherFlag())
                 .append("openTime", getOpenTime())
                 .append("totalPrincipalBalance", getTotalPrincipalBalance())
+                .append("isFile", getIsFile())
                 .toString();
     }
 }

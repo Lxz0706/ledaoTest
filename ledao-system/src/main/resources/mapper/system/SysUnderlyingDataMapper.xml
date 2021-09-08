@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysUnderlyingDataMapper">
+    
+    <resultMap type="SysUnderlyingData" id="SysUnderlyingDataResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileSize"    column="file_size"    />
+        <result property="downloadableFlag"    column="downloadable_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createor"    column="createor"    />
+        <result property="previewCount"    column="preview_count"    />
+        <result property="downloadsCount"    column="downloads_count"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateor"    column="updateor"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="fileUrl"    column="file_url"    />
+    </resultMap>
+
+    <sql id="selectSysUnderlyingDataVo">
+        select file_id, parent_id, file_name, file_type, file_size, downloadable_flag, create_time, createor, preview_count, downloads_count, update_time, updateor, update_by, project_id, file_url from sys_underlying_data
+    </sql>
+
+    <select id="selectSysUnderlyingDataList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
+        <include refid="selectSysUnderlyingDataVo"/>
+        <where>  
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
+            <if test="fileSize != null "> and file_size = #{fileSize}</if>
+            <if test="downloadableFlag != null  and downloadableFlag != ''"> and downloadable_flag = #{downloadableFlag}</if>
+            <if test="createor != null  and createor != ''"> and createor = #{createor}</if>
+            <if test="previewCount != null "> and preview_count = #{previewCount}</if>
+            <if test="downloadsCount != null "> and downloads_count = #{downloadsCount}</if>
+            <if test="updateor != null  and updateor != ''"> and updateor = #{updateor}</if>
+            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysUnderlyingDataById" parameterType="Long" resultMap="SysUnderlyingDataResult">
+        <include refid="selectSysUnderlyingDataVo"/>
+        where file_id = #{fileId}
+    </select>
+
+    <select id="selectSysUnderlyingDataByPid" parameterType="Long" resultMap="SysUnderlyingDataResult">
+        <include refid="selectSysUnderlyingDataVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertSysUnderlyingData" parameterType="SysUnderlyingData">
+        insert into sys_underlying_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileId != null">file_id,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="downloadableFlag != null">downloadable_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createor != null">createor,</if>
+            <if test="previewCount != null">preview_count,</if>
+            <if test="downloadsCount != null">downloads_count,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateor != null">updateor,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="fileUrl != null">file_url,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileId != null">#{fileId},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="downloadableFlag != null">#{downloadableFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createor != null">#{createor},</if>
+            <if test="previewCount != null">#{previewCount},</if>
+            <if test="downloadsCount != null">#{downloadsCount},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateor != null">#{updateor},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="fileUrl != null">#{fileUrl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysUnderlyingData" parameterType="SysUnderlyingData">
+        update sys_underlying_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="downloadableFlag != null">downloadable_flag = #{downloadableFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createor != null">createor = #{createor},</if>
+            <if test="previewCount != null">preview_count = #{previewCount},</if>
+            <if test="downloadsCount != null">downloads_count = #{downloadsCount},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateor != null">updateor = #{updateor},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="fileUrl != null">file_url = #{fileUrl},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteSysUnderlyingDataById" parameterType="Long">
+        delete from sys_underlying_data where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteSysUnderlyingDataByIds" parameterType="String">
+        delete from sys_underlying_data where file_id in 
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -108,9 +108,11 @@ public class SysUnderlyingDataController extends BaseController
         if (file.isEmpty()) {
             return error("请上传文件！");
         }
+
         String fileName = file.getOriginalFilename();
         sysUnderlyingData.setFileName(fileName.substring(0, fileName.indexOf(".")));
         sysUnderlyingData.setFileSize((double) file.getSize());
+        sysUnderlyingData.setCreateBy(ShiroUtils.getLoginName());
         sysUnderlyingData.setFileType(FileUploadUtils.getExtension(file));
         //获取各类型名称及其子集
         String baseDir = "";

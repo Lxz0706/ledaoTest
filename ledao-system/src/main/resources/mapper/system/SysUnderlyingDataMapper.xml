@@ -20,10 +20,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="projectId"    column="project_id"    />
         <result property="fileUrl"    column="file_url"    />
+        <result property="createBy"    column="create_by"    />
     </resultMap>
 
     <sql id="selectSysUnderlyingDataVo">
-        select file_id, parent_id, file_name, file_type, file_size, downloadable_flag, create_time, createor, preview_count, downloads_count, update_time, updateor, update_by, project_id, file_url from sys_underlying_data
+        select file_id, parent_id, file_name, file_type, file_size, downloadable_flag, create_time, createor, preview_count, downloads_count, update_time, updateor, update_by, project_id, file_url, create_by from sys_underlying_data
     </sql>
 
     <select id="selectSysUnderlyingDataList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
@@ -40,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateor != null  and updateor != ''"> and updateor = #{updateor}</if>
             <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
             <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
         </where>
     </select>
     
@@ -71,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="projectId != null">project_id,</if>
             <if test="fileUrl != null">file_url,</if>
+            <if test="createBy != null">create_by,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="fileId != null">#{fileId},</if>
@@ -88,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="projectId != null">#{projectId},</if>
             <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="createBy != null">#{createBy},</if>
          </trim>
     </insert>
 
@@ -108,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="projectId != null">project_id = #{projectId},</if>
             <if test="fileUrl != null">file_url = #{fileUrl},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
         </trim>
         where file_id = #{fileId}
     </update>

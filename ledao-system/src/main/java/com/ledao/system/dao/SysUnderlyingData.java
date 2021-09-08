@@ -60,7 +60,7 @@ public class SysUnderlyingData extends BaseEntity
     @Excel(name = "文件路径")
     private String fileUrl;
 
-    public void setFileId(Long fileId) 
+    public void setFileId(Long fileId)
     {
         this.fileId = fileId;
     }
@@ -163,6 +163,8 @@ public class SysUnderlyingData extends BaseEntity
         return fileUrl;
     }
 
+
+
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
     }
@@ -185,6 +187,7 @@ public class SysUnderlyingData extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("projectId", getProjectId())
             .append("fileUrl", getFileUrl())
+            .append("createBy", getCreateBy())
             .toString();
     }
 }

@@ -17,6 +17,10 @@
             <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:underlyingdata:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:underlyingdata:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
             <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:underlyingdata:list">
                 <i class="fa fa-backward"></i> 返回
             </a>
@@ -32,8 +36,9 @@
     var removeFlag = [[${@permission.hasPermi('system:underlyingdata:remove')}]];
     var detailFlag = [[${@permission.hasPermi('system:underlyingdata:detail')}]];
     var downLoadFlag = [[${@permission.hasPermi('system:underlyingdata:downLoad')}]];
-
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var prefix = ctx + "system/underlyingdata";
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
 
     $(function () {
         var options = {
@@ -44,7 +49,24 @@
             exportUrl: prefix + "/export",
             detailUrl: prefix + "/detail/{id}",
             modalName: "底层资料",
-            columns: [
+            columns: [{
+                checkbox: true,
+                visible: true,
+                formatter: function(value, row, index) {
+                    var showRemove = false;
+                    for(var i =0; i < roles.length;i++) {
+                        if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                            showRemove = true
+                        }
+                    }
+                    // 档案管理员可以删除所有人
+                    if (loginName == row.createBy || showRemove) {
+                        return {disabled : false,}
+                    } else {
+                        return {disabled : true}
+                    }
+                }
+            },
                 {
                     title: "序号",
                     formatter: function (value, row, index) {
@@ -92,8 +114,20 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         console.log("========="+row.fileUrl)
+                        console.log("========="+JSON.stringify(row))
                         var fileType = row.fileType.toLowerCase();
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+
+                        // 管理员与档案管理员
+                        var showRemove = false;
+                        for(var i =0; i < roles.length;i++) {
+                            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                                showRemove = true
+                            }
+                        }
+                        // 档案管理员可以删除所有人
+                        if (loginName == row.createBy || showRemove) {
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
                         actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
                         if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
                                 || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {

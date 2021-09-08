@@ -537,10 +537,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
                 }
 
-        ProcessInstance processInstance = processService.submitApply(a.getApplyUser(), a.getApplyId().toString(), itemName, a.getRemarks(), key, variables);
+        /*ProcessInstance processInstance = processService.submitApply(a.getApplyUser(), a.getApplyId().toString(), itemName, a.getRemarks(), key, variables);
         String processInstanceId = processInstance.getId();
         a.setInstanceId(processInstanceId); // 建立双向关系
-        sysApplyInMapper.updateSysApplyIn(a);
+        sysApplyInMapper.updateSysApplyIn(a);*/
         return users;
     }
 

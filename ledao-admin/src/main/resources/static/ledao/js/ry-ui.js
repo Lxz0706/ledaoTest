@@ -1277,6 +1277,26 @@ var table = {
                 var url = $.common.isEmpty(id) ? optionUrl.replace("{id}", "") : optionUrl.replace("{id}", id);
                 return url;
             },
+
+            // 去除disable的input&select框必选
+             lock: function () {
+                var txtSelect = $("select")
+                var txtInput = $("input")
+                var txtLabel = $("label")
+                for(var i =0;i < txtSelect.length;i++) {
+                    if(txtSelect[i].disabled) {
+                        $(txtSelect[i]).removeClass('required')
+                        $(txtLabel[i]).removeClass('is-required')
+                    }
+                }
+
+                for(var k=0;k < txtInput.length;k++) {
+                    if(txtInput[k].readOnly) {
+                        $(txtInput[k]).removeClass('required')
+                        $(txtLabel[k]).removeClass('is-required')
+                    }
+                }
+            },
             adds: function (id, ids) {
                 table.set();
                 $.modal.open("添加" + table.options.modalName, $.operate.addsUrl(id, ids));
@@ -1341,6 +1361,26 @@ var table = {
                 } else {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
+            },
+            // 查看信息
+            editLook:function (id) {
+                table.set();
+                if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                    var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                    if ($.common.isEmpty(row)) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    var url = table.options.updateUrl.replace("{id}", row[table.options.uniqueId]);
+                    $.modal.opens("修改" + table.options.modalName, url);
+                } else {
+                    $.modal.opens("修改" + table.options.modalName, $.operate.editUrl(id));
+                }
+            },
+            editApplyInAndOutLook: function (id,applyType,applyTypeUnDone,seOrEd) {
+                table.set();
+                var url = "edit/" + id + '/' + applyType + '/' + applyTypeUnDone + '/' + seOrEd
+                $.modal.opens("修改" + table.options.modalName, url);
             },
             editApplyInAndOut: function (id,applyType,applyTypeUnDone,seOrEd) {
                 table.set();

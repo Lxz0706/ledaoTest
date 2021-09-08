@@ -185,6 +185,7 @@
     var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
     var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
     var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+    var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
     var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
     var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
     var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
@@ -276,6 +277,9 @@
                 {
                     field: 'companyName',
                     title: '公司名称',
+                    // formatter: function (value, item, index) {
+                    //     return $.table.selectDictLabel(sysCompanyName, item.companyName);
+                    // },
                     visible: !showDocumentType
                 },
                 {
@@ -453,8 +457,6 @@
                         $.modal.msgSuccess(result.msg);
                         $("#showTable").show();
                         $("#saveButton").hide();
-                        $("#isReturn").attr("disabled", "disabled")
-                        $("#planReturnTimeDate").attr("disabled", "disabled")
                         ids = result.data.applyId;
                         optionUrl = prefix + "/editOutList/" + ids;
                         init(ids)

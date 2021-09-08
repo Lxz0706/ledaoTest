@@ -38,6 +38,12 @@
             <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                   th:value="${dict.dictValue}"></option>
         </select>
+        <select id="dailyDocumentTypeSelectContract" name="dailyDocumentType" th:with="type=${@dict.getType('contract_document_type')}"
+                data-none-selected-text="请选择" class="form-control m-b required" onchange="changeFileTypeVal(this.value)">
+          <option value="">请选择数据</option>
+          <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                  th:value="${dict.dictValue}"></option>
+        </select>
       </div>
     </div>
     <div class="form-group">
@@ -171,8 +177,8 @@
         $("#documentLevel").show();
       }
     }
-
   }
+
   if(documentTypeId == "0" || documentType == "0") {
       // apag.style.display = "block"
       aNumber.style.display = "block"
@@ -184,6 +190,13 @@
       cNo.style.display = "none"
       dailyDocumentType.style.display = "block"
   }
+
+  if(documentType == 1 || documentTypeId == 1) {
+    $('#dailyDocumentTypeSelectContract').hide()
+  } else if(documentType == 2 || documentTypeId == 2) {
+    $('#dailyDocumentTypeSelect').hide()
+  }
+
   $("#form-documentFile-add").validate({
     focusCleanup: true
   });

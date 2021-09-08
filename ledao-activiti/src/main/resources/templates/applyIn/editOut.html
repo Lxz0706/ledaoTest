@@ -204,6 +204,7 @@
         var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
         var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
         var showNames = false
         var documentTypeVal = document.getElementById("documentType").value
@@ -391,6 +392,9 @@
                 {
                     field: 'companyName',
                     title: '公司名称',
+                    // formatter: function (value, item, index) {
+                    //     return $.table.selectDictLabel(sysCompanyName, item.companyName);
+                    // },
                     visible: documentTypeVal == "0" ? false : true
                 },
                 {
@@ -565,6 +569,9 @@
             }
         }
 
+        // disabled删除必选项
+        $.operate.lock()
+
         // applyTypeUnDone == "2" 是从我的待办入口进入的
         if(applyTypeUnDone == "2" && showNames) {
             // if(isReturn == "0") {
@@ -669,9 +676,11 @@
         } else if (val == "1") {
             $("#realReturnTime").hide()
             $("#planReturnTimeShow").hide()
+            $("#planReturnTime").val('')
         } else {
             $("#realReturnTime").hide()
             $("#planReturnTimeShow").hide()
+            $("#planReturnTime").val('')
         }
     }
 

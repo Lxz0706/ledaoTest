@@ -113,6 +113,7 @@
         var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginNameUser = [[${@permission.getPrincipalProperty('loginName')}]];
         var showNames = false;
@@ -211,13 +212,6 @@
             }
         }
 
-        // 去除disable的input框必选
-        function lock() {
-            var txtArrs = $("input").prop("disabled")
-            console.log('txtArrs',txtArrs)
-        }
-        lock()
-
         var options = {
             url: prefixDocumentFile + "/listDocApp",
             createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal + '/' + applyType + '/' + applyTypeUnDone,
@@ -263,6 +257,9 @@
                 {
                     field: 'companyName',
                     title: '公司名称',
+                    formatter: function (value, item, index) {
+                        return strLength($.table.selectDictLabel(sysCompanyName, item.companyName));
+                    },
                     visible: documentTypeVal == "0" ? false : true
                 },
                 {
@@ -432,6 +429,8 @@
                 $('.btn').removeAttr('onclick')
             }
         }
+        // disabled删除必选项
+        $.operate.lock()
     });
 
     $("#form-applyIn-edit").validate({
@@ -451,6 +450,7 @@
             $("#debtorNameTip").val("");
             $("#debtorNameTip").attr("disabled", "disabled")
         }
+
 
     function strLength(value){
         var str = $.common.nullToStr(value);

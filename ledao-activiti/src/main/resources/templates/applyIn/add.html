@@ -106,6 +106,7 @@
         var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
         var userName = [[${@permission.getPrincipalProperty('userName')}]];
@@ -187,6 +188,9 @@
                     {
                         field: 'companyName',
                         title: '公司名称',
+                        formatter: function (value, item, index) {
+                            return strLength($.table.selectDictLabel(sysCompanyName, item.companyName));
+                        },
                         visible: !showDocumentType
                     },
                     {

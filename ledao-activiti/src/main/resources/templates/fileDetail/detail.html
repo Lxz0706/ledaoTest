@@ -96,9 +96,12 @@
                 $("#addFile").hide();
                 $("#deletFile").hide();
             } else if(applyTypeUnDone == "2") {
-
+                if(showNames) {
+                } else {
+                    $("#addFile").hide();
+                    $("#deletFile").hide();
+                }
             } else {
-                debugger
                 if(applyTypeUnDone == "no" && (approveStatu == "0" || approveStatu == "4" || approveStatu =="2")) {
                 } else {
                     $("#addFile").hide();
@@ -172,11 +175,16 @@
                             actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
                         }
                         if(!(applyTypeUnDone == "3")) {
-                            debugger
-                            if(showNames) {
-                            } else {
-                                if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2 || showNames) {
+                            if(applyTypeUnDone == "2") {
+                                if(showNames) {
                                     actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                                }
+                            } else {
+                                if(showNames) {
+                                } else {
+                                    if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2 || showNames) {
+                                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                                    }
                                 }
                             }
                         }

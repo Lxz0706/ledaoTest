@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
             <if test="roleType != null  and roleType != ''"> and role_type = #{roleType}</if>
         </where>
-        order by create_time desc,apply_time desc
+        order by update_time desc
     </select>
 
     <select id="selectSysApplyInListUser" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
@@ -162,7 +162,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
         </where>
-        order by a.create_time desc,a.apply_time desc
+        order by a.update_time desc
     </select>
     
     <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">

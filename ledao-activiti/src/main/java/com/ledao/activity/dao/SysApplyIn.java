@@ -136,6 +136,27 @@ public class SysApplyIn extends BaseEntity
     @Excel(name = "档案角色")
     private String roleType;
 
+    @Excel(name = "任务id")
+    private String taskId;
+
+    private String projectZckType;
+
+    public String getProjectZckType() {
+        return projectZckType;
+    }
+
+    public void setProjectZckType(String projectZckType) {
+        this.projectZckType = projectZckType;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
     public Long getDebtorId() {
         return debtorId;
     }

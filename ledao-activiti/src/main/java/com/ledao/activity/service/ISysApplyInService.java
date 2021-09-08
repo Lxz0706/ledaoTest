@@ -5,6 +5,8 @@ import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.system.dao.SysUser;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 档案入库申请Service接口
  * 
@@ -86,7 +88,7 @@ public interface ISysApplyInService
      * @param sysApplyIn
      * @return 结果
      */
-    AjaxResult applyEditSave(SysApplyIn sysApplyIn);
+    AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request);
 
     /**
      * 我的待办
@@ -109,4 +111,6 @@ public interface ISysApplyInService
      * @return
      */
     String checkUserRole(SysUser u);
+
+    List<SysApplyIn> selectSysApplyInDocDetailList(SysApplyIn sysApplyIn);
 }

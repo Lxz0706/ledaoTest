@@ -6,9 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.controller.ProcessDefinitionController;
 import com.ledao.activity.dao.*;
 import com.ledao.activity.mapper.*;
-import com.ledao.activity.service.IProcessService;
-import com.ledao.activity.service.ISysApplyWorkflowService;
-import com.ledao.activity.service.ISysDocumentFileService;
+import com.ledao.activity.service.*;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysRole;
@@ -17,7 +15,9 @@ import com.ledao.system.mapper.SysDocumentMapper;
 import com.ledao.system.mapper.SysRoleMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.mapper.SysZckMapper;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,12 @@ import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 档案入库申请Service业务层处理
@@ -73,6 +74,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private ISysApplyWorkflowService iSysApplyWorkflowService;
+
+    @Autowired
+    private IBizTodoItemService bizTodoItemService;
+
+    @Autowired
+    private TaskService taskService;
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
 
@@ -413,6 +420,18 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 iSysApplyWorkflowService.sendLittleMsg(parm);
             }
         }
+//        完成
+        /*if ("3".equals(sysApplyInEntity.getApproveStatu())){
+            SysUser us = userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser());
+            JSONObject parm = new JSONObject();
+            parm.put("toUser",us.getOpenId());
+//            parm.put("thing6",appName);
+            parm.put("thing4",userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
+            parm.put("time8",DateUtils.getNowDate());
+            parm.put("thing7",us.getUserName());
+            parm.put("time5",DateUtils.getNowDate());
+            iSysApplyWorkflowService.sendLittleMsg(parm);
+        }*/
     }
 
     public List<String> submitApplyInfo(SysApplyIn sysApplyIn){
@@ -545,7 +564,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
-    public AjaxResult applyEditSave(SysApplyIn sysApplyIn) {
+    public AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request) {
         log.info("开始调用工作流，审批状态{}",sysApplyIn.getApproveStatu());
         SysUser currentUser = ShiroUtils.getSysUser();
         String loginUser = currentUser.getLoginName();
@@ -600,12 +619,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         if (!"0".equals(sysApplyInEntity.getIsOut())){
                             return AjaxResult.error("档案未出库，无法完成借出审批");
                         }
-                            sysApplyIn.setApproveStatu("7");
-                            sysApplyInEntity.setApproveStatu("7");
-                            sysApplyInEntity.setApproveUser("");
-//                        }
+                        sysApplyIn.setApproveStatu("7");
+                        sysApplyInEntity.setApproveStatu("7");
+                        sysApplyInEntity.setApproveUser("");
                     }else if ("9".equals(sysApplyInEntity.getApproveStatu())){
-
                         if (!"0".equals(sysApplyInEntity.getIsReceived())){
                             return AjaxResult.error("档案未收到，无法完成借出审批");
                         }
@@ -641,6 +658,25 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     users = getApplyNextUser(sysApplyIn);
                     sysApplyInEntity.setApproveUser(String.join(",",users));
                     sysApplyInEntity.setApproveStatu("1");
+
+
+                    if (StringUtils.isNotEmpty(sysApplyInEntity.getInstanceId())){
+                        BizTodoItem bizTodoItem = new BizTodoItem();
+                        bizTodoItem.setInstanceId(sysApplyInEntity.getInstanceId());
+                        List<BizTodoItem>  bizs =bizTodoItemService.selectBizTodoItemList(bizTodoItem);
+                        if (bizs!=null && bizs.size()>0){
+                            //获取对应的流程id
+                            String taskId = bizs.get(0).getTaskId();
+                            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+                            key = task.getProcessDefinitionId().substring(0, task.getProcessDefinitionId().indexOf(":"));
+                            processService.complete(taskId, sysApplyInEntity.getInstanceId(), sysApplyInEntity.getCreator() + "提交入库申请", sysApplyInEntity.getRemarks(), key, new HashMap<String, Object>(), request);
+                        }
+                    }
+                    /*if (saveEntityBoolean) {
+                        sysWorkflowService.updateSysWorkflow(sysWorkFlowVo);
+                    }*/
+
+//                    bizTodoItemService.insertTodoItem(sysApplyInEntity.getInstanceId(),"档案入库申请","","document_rk_zg");
                 }
             }
             saveWorkFlow(sysApplyInEntity,workflow);
@@ -707,6 +743,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
         }
         return null;
+    }
+
+    @Override
+    public List<SysApplyIn> selectSysApplyInDocDetailList(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.selectSysApplyInDocDetailList(sysApplyIn);
     }
 
     @Override

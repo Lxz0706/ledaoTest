@@ -1,14 +1,13 @@
 package com.ledao.activity.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.ledao.activity.dao.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysDictData;
 import com.ledao.system.mapper.SysUserMapper;
+import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,8 @@ import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 档案入库申请Controller
@@ -55,6 +56,9 @@ public class SysApplyInController extends BaseController
 
     @Autowired
     private ISysApplyOutDetailService sysApplyOutDetailService;
+
+    @Autowired
+    private ISysDictDataService sysDictDataService;
 
     @GetMapping("/applyIn")
     public String applyIn()
@@ -127,6 +131,14 @@ public class SysApplyInController extends BaseController
         return "fileDetail/detail";
     }
 
+    @GetMapping("/documentFile")
+    public String documentFile(String dataType,String documentType,ModelMap mmap)
+    {
+        mmap.put("projectZckType",dataType);
+        mmap.put("documentType",documentType);
+        return "docList/docApplyIn";
+    }
+
     /**
      * 查询档案入库申请列表
      */
@@ -147,6 +159,15 @@ public class SysApplyInController extends BaseController
     {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(sysApplyIn);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/docListDetail")
+    @ResponseBody
+    public TableDataInfo docListDetail(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocDetailList(sysApplyIn);
         return getDataTable(list);
     }
 
@@ -458,10 +479,68 @@ public class SysApplyInController extends BaseController
     @Log(title = "档案状态修改", businessType = BusinessType.UPDATE)
     @PostMapping("/applyEditSave")
     @ResponseBody
-    public AjaxResult applyEditSave(SysApplyIn sysApplyIn)
+    public AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request)
     {
-        AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn);
+        AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn,request);
         return res;
+    }
+
+    @GetMapping("/documentTypeListOpen")
+    public String documentTypeListOpen()
+    {
+        return prefix + "/documentTypeList";
+    }
+
+    @GetMapping("/documentTypeListBack")
+    public String documentTypeListBack(String documentType,ModelMap mmap)
+    {
+        if ("0".equals(documentType)){
+            mmap.put("documentType",documentType);
+            return prefix + "/documentDetailTypeList";
+        }else{
+            return prefix + "/documentTypeList";
+        }
+    }
+
+    @GetMapping("/backDocumentTypeList")
+    public String backDocumentTypeList()
+    {
+        return prefix + "/documentTypeList";
+    }
+
+    @GetMapping("/documentDetailTypeListOpen")
+    public String documentDetailTypeListOpen(String docType, ModelMap mmap)
+    {
+        mmap.put("documentType",docType);
+        if ("0".equals(docType)){
+            return prefix + "/documentDetailTypeList";
+        }else{
+            return "docList/docApplyIn";
+        }
+    }
+
+
+    @PostMapping("/documentTypeList")
+    @ResponseBody
+    public TableDataInfo documentTypeList() {
+        startPage();
+        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType("sys_document_busi_type");
+        return getDataTable(sysDictDataList);
+    }
+
+    @PostMapping("/documentDetailTypeList/{docType}")
+    @ResponseBody
+    public TableDataInfo documentDetailTypeList(@PathVariable("docType")String docType) {
+        List<SysDictData> sysDictDataList = new ArrayList<>();
+//        项目类
+        if ("0".equals(docType)){
+            startPage();
+            sysDictDataList = sysDictDataService.selectDictDataByType("sys_project_type");
+        }else{
+            startPage();
+            sysDictDataList = sysDictDataService.selectDictDataByType("daily_document_type");
+        }
+        return getDataTable(sysDictDataList);
     }
     
     @PostMapping("/selectSysApplyWorkflowList")

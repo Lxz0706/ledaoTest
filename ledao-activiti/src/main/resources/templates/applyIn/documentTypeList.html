@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('档案库')"/>
+    <style>
+        .border {
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="row" style="min-height: 80%;" id="showList"></div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:projectZck:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
+    var prefix = ctx + "applyIn";
+    $(function () {
+        $.ajax({
+            url: prefix + "/documentTypeList",
+            data: {},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var row = result.rows;
+                var str = '';
+                var height = $(".row").height();
+                var winHeight = height / row.length;
+                for (var i in row) {
+                    str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+                    str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictValue + "',\'" + row[i].dictLabel + '\')">' + row[i].dictLabel + '</a><br/>';
+                    str += '</div>';
+                }
+                $("#showList").html(str);
+            }
+        })
+    });
+
+
+    /*资产库列表-详细*/
+    function detail(docType, zckName) {
+        var url = ctx + 'applyIn/documentDetailTypeListOpen?docType=' + docType;
+        $.modal.parentTab(zckName + "列表", url);
+    }
+
+    //查询
+    function jump() {
+        var data = $("#formId").serialize();
+        $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+    }
+
+</script>
+</body>
+</html>

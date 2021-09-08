@@ -297,7 +297,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
             <if test="documentId != null  and documentId != ''"> and f.document_id = #{documentId}</if>
         </where>
-        order by a.update_time desc
+        order by a.create_time desc
     </select>
     
     <select id="listDownByMe" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">

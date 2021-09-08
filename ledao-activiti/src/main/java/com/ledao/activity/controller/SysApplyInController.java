@@ -351,6 +351,8 @@ public class SysApplyInController extends BaseController
         String userName = ShiroUtils.getLoginName();
         sysApplyIn.setCreateBy(userName);
         sysApplyIn.setCreateTime(new Date());
+        sysApplyIn.setUpdateTime(new Date());
+        sysApplyIn.setReviser(userName);
         sysApplyIn.setApproveStatu("0");
         //            判断当有实际提交人时，获取实际提交人的直属领导
         if (StringUtils.isNotEmpty(sysApplyIn.getRealCreateBy())){

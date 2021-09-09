@@ -61,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
         <result property="projectName"    column="project_name"    />
+        <result property="dailyDocumentTypeContract"    column="daily_document_type_contract"    />
     </resultMap>
 
     <resultMap type="SysDocumentFile" id="SysDocumentFileResultUser">
@@ -157,6 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         f.create_time,
         f.update_by,
         f.reviser,
+        f.daily_document_type_contract,
         f.update_time ,
         ap.project_name
         FROM
@@ -181,6 +183,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyId != null  and applyId != ''"> and f.apply_id = #{applyId}</if>
             <if test="creator != null  and creator != ''"> and f.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and f.reviser = #{reviser}</if>
+            <if test="dailyDocumentTypeContract != null  and dailyDocumentTypeContract != ''"> and f.daily_document_type_contract = #{dailyDocumentTypeContract}</if>
         </where>
         order by f.create_time desc
     </select>
@@ -337,6 +340,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="reviser != null">reviser,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="dailyDocumentTypeContract != null">daily_document_type_contract,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="documentType != null">#{documentType},</if>
@@ -364,6 +368,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="reviser != null">#{reviser},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="dailyDocumentTypeContract != null">#{dailyDocumentTypeContract},</if>
          </trim>
     </insert>
 

@@ -126,6 +126,9 @@ public class SysDocumentFile extends BaseEntity
     @Excel(name = "债务人名称")
     private String debtorName;
 
+    @Excel(name = "合同经营类档案类型，字典项")
+    private String dailyDocumentTypeContract;
+
     public String getDocumentTypeVal() {
         return documentTypeVal;
     }
@@ -380,7 +383,15 @@ public class SysDocumentFile extends BaseEntity
         this.reviser = reviser;
     }
 
-    public String getReviser() 
+    public String getDailyDocumentTypeContract() {
+        return dailyDocumentTypeContract;
+    }
+
+    public void setDailyDocumentTypeContract(String dailyDocumentTypeContract) {
+        this.dailyDocumentTypeContract = dailyDocumentTypeContract;
+    }
+
+    public String getReviser()
     {
         return reviser;
     }
@@ -415,7 +426,8 @@ public class SysDocumentFile extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("reviser", getReviser())
             .append("updateTime", getUpdateTime())
-            .toString();
+            .append("dailyDocumentTypeContract", getDailyDocumentTypeContract())
+        .toString();
     }
 
 	public List<SysFileDetail> getFileDetails() {

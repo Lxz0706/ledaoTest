@@ -164,13 +164,15 @@ public class SysDocumentFileController extends BaseController
      */
     @GetMapping("/edit/{documentId}/{applyTypeUnDone}")
     public String edit(@PathVariable("documentId") Long documentId,
-                       @PathVariable("applyTypeUnDone") String applyTypeUnDone,ModelMap mmap)
+                       @PathVariable("applyTypeUnDone") String applyTypeUnDone,
+                       @PathVariable("dailyDocumentTypeContract") String dailyDocumentTypeContract,ModelMap mmap)
     {
         SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(documentId);
 //        sysDocumentFile.setCreatorName(ISysUserService.selectUserByLoginName(sysDocumentFile.getCreator()).getUserName());
 //        sysDocumentFile.setReviserName(ISysUserService.selectUserByLoginName(sysDocumentFile.getReviser()).getUserName());
         mmap.put("sysDocumentFile", sysDocumentFile);
         mmap.put("applyTypeUnDone", applyTypeUnDone);
+        mmap.put("dailyDocumentTypeContract", dailyDocumentTypeContract);
         return prefix + "/edit";
     }
 

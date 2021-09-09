@@ -180,11 +180,8 @@
                                     actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
                                 }
                             } else {
-                                if(showNames) {
-                                } else {
-                                    if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2 || showNames) {
-                                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                                    }
+                                if(approveStatu == 0 || approveStatu == 4 || approveStatu == 2) {
+                                    actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
                                 }
                             }
                         }

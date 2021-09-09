@@ -562,7 +562,7 @@ public class SysApplyInController extends BaseController
     {
         mmap.put("documentType",docType);
         if ("0".equals(docType)){
-            return prefix + "/documentDetailTypeList";
+            return "docList/documentDetailTypeList";
         }else{
             return "docList/docApplyIn";
         }

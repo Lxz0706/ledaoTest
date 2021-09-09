@@ -1,10 +1,15 @@
 package com.ledao.activity.controller;
 
+import java.io.IOException;
 import java.util.*;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.*;
 import com.ledao.activity.service.*;
+import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.system.dao.SysDictData;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.ISysDictDataService;
@@ -25,6 +30,7 @@ import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 档案入库申请Controller
@@ -476,6 +482,32 @@ public class SysApplyInController extends BaseController
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
         return prefix + "/edit";
+    }
+
+
+    /**
+     * 接收二维码
+     * @return
+     * @throws IOException
+     */
+    @GetMapping(value="/code")
+    public Object twoCode(Long documentId, HttpServletResponse response) throws IOException {
+        JSONObject data=new JSONObject();
+        String accessToken = null;
+        try{
+            JSONObject parmData = new JSONObject();
+            parmData.put("scene","documentId="+documentId);
+            parmData.put("url","");
+            String parm = parmData.toJSONString();
+            accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
+            System.out.println("accessToken;"+accessToken);
+            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
+            data.put("twoCodeUrl", twoCodeUrl);
+            return data;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

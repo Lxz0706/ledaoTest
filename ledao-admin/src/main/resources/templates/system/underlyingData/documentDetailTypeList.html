@@ -61,8 +61,7 @@
 
     /*资产库列表-详细*/
     function detail(dataType, zckName) {
-        debugger
-        var url = prefix + '/muUnderlyingDataListsMu?dataType=' + dataType;
+        var url = prefix + '/muUnderlyingDataListsMu?dataType=' + dataType+"&projectType=0";
         $.modal.parentTab(zckName + "列表", url);
     }
 

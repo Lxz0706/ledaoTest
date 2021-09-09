@@ -142,25 +142,36 @@ public class TimedTask {
      */
     public void totalTask() throws ParseException {
 
-        List<SysUser> users = getUsers("thbManager");
-        for (SysUser u:users){
-            if (StringUtils.isNotEmpty(u.getOpenId())){
-                //发送消息到投后部部门经理
-                JSONObject parm = new JSONObject();
-                parm.put("thing16","测试1");
-                parm.put("thing20","测试2");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                parm.put("time4", sdf.format(new Date())+" 至 "+sdf.format(new Date()));
-                parm.put("thing1","任务名称测试");
-                parm.put("phrase7","任务状态测试");
-                parm.put("toUser",u.getOpenId());
-                // 创建名称为投后队列
-                Queue queue = new ActiveMQQueue("ThQueueCommon");
-                String dataStr = JSONObject.toJSONString(parm);
-                // 向队列发送消息
-                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+        SysManageTask sysManageTask = new SysManageTask();
+        sysManageTask.setTaskType("0");
+        List<SysManageTask> task =  sysManageTaskService.selectSysManageTaskList(sysManageTask);
+        for (SysManageTask s: task){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+            String date = DateUtils.getPreMonth();
+            String planBeginDate =  dateFormat.format(s.getPlanBeginTime());
+            if (date.equals(planBeginDate)){
+                List<SysUser> users = getUsers("thbManager");
+                for (SysUser u:users){
+                    if (StringUtils.isNotEmpty(u.getOpenId())){
+                        //发送消息到投后部部门经理
+                        JSONObject parm = new JSONObject();
+                        parm.put("thing16","测试1");
+                        parm.put("thing20","测试2");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        parm.put("time4", sdf.format(new Date())+" 至 "+sdf.format(new Date()));
+                        parm.put("thing1","任务名称测试");
+                        parm.put("phrase7","任务状态测试");
+                        parm.put("toUser",u.getOpenId());
+                        // 创建名称为投后队列
+                        Queue queue = new ActiveMQQueue("ThQueueCommon");
+                        String dataStr = JSONObject.toJSONString(parm);
+                        // 向队列发送消息
+                        jmsMessagingTemplate.convertAndSend(queue, dataStr);
+                    }
+                }
             }
         }
+
     }
 
     /**

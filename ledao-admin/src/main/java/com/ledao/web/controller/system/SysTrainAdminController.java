@@ -39,7 +39,7 @@ public class SysTrainAdminController extends BaseController
     @Autowired
     private ISysTrainAdminService sysTrainAdminService;
 
-    @RequiresPermissions("system:train:view")
+//    @RequiresPermissions("system:train:view")
     @GetMapping()
     public String train()
     {
@@ -126,18 +126,21 @@ public class SysTrainAdminController extends BaseController
 
     /**
      * 接收二维码
-     * @param request
      * @return
      * @throws IOException
      */
     @GetMapping(value="/code")
-    public Object twoCode(Long trainId,HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Object twoCode(Long trainId, HttpServletResponse response) throws IOException {
         JSONObject data=new JSONObject();
         String accessToken = null;
         try{
+            JSONObject parmData = new JSONObject();
+            parmData.put("scene","trainId="+trainId);
+            parmData.put("url","");
+            String parm = parmData.toJSONString();
             accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
             System.out.println("accessToken;"+accessToken);
-            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),request,response,trainId);
+            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
             data.put("twoCodeUrl", twoCodeUrl);
             return data;
         }catch (Exception e){

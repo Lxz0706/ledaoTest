@@ -15,6 +15,7 @@ import com.ledao.system.mapper.SysDocumentMapper;
 import com.ledao.system.mapper.SysRoleMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.mapper.SysZckMapper;
+import com.ledao.system.service.ISysDictDataService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -77,6 +78,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private IBizTodoItemService bizTodoItemService;
+
+    @Autowired
+    private ISysDictDataService dictDataService;
 
     @Autowired
     private TaskService taskService;
@@ -410,13 +414,18 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 appName = "档案出库申请";
             }
             if (us!=null && StringUtils.isNotEmpty(us.getOpenId())){
+
                 JSONObject parm = new JSONObject();
                 parm.put("toUser",us.getOpenId());
                 parm.put("thing6",appName);
                 parm.put("thing4",userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
-                parm.put("time8",DateUtils.getNowDate());
-                parm.put("thing7",us.getUserName());
                 parm.put("time5",DateUtils.getNowDate());
+                parm.put("thing9",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
+                String thing14 = "-";
+                if (StringUtils.isNotEmpty(sysApplyInEntity.getRemarks())){
+                    thing14 = sysApplyInEntity.getRemarks();
+                }
+                parm.put("thing14",thing14);
                 iSysApplyWorkflowService.sendLittleMsg(parm);
             }
         }

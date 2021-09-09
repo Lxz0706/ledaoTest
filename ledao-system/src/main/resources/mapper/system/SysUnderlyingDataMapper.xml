@@ -65,12 +65,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.update_by,
         a.project_id,
         a.file_url,
-        a.create_by
+        a.create_by,
+        a.project_type
         FROM
         sys_underlying_data a
         LEFT JOIN sys_project b ON a.project_id = b.project_id
         LEFT JOIN sys_project_zck zck ON b.project_zck_id = zck.project_zck_id
         <where>
+            a.project_type = #{projectType}
             <if test="parentId != null "> and a.parent_id = #{parentId}</if>
             <if test="fileName != null  and fileName != ''"> and a.file_name like concat('%', #{fileName}, '%')</if>
             <if test="fileType != null  and fileType != ''"> and a.file_type = #{fileType}</if>
@@ -84,7 +86,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileUrl != null  and fileUrl != ''"> and a.file_url = #{fileUrl}</if>
             <if test="proType != null  and proType != ''"> and zck.project_zck_type = #{proType}</if>
             <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
-            <if test="projectType != null  and projectType != ''"> and a.project_type = #{projectType}</if>
         </where>
         order by a.create_time desc
     </select>

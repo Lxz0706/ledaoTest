@@ -453,4 +453,19 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         }
         return time;
     }
+    /**
+     *
+     * 描述:获取下一个月.
+     *
+     * @return
+     */
+    public static String getPreMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(cal.MONTH, 1);
+        SimpleDateFormat dft = new SimpleDateFormat("yyyyMM");
+        String preMonth = dft.format(cal.getTime());
+        return preMonth;
+    }
+
+
 }

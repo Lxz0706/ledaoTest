@@ -2,6 +2,7 @@ package com.ledao.common.utils.qrCode;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -71,7 +72,8 @@ public class WxQrCode {
      * 获取 二维码图片
      *
      */
-    public static String getminiqrQr(String accessToken, String uploadPath, HttpServletRequest request, HttpServletResponse response,long trainId) {
+    public static String getminiqrQr(String accessToken, String uploadPath, HttpServletResponse response,String parm) {
+        JSONObject job = JSON.parseObject(parm);
         ServletOutputStream out = null;
         String ctxPath = uploadPath;
         String fileName="twoCode.png";
@@ -109,7 +111,11 @@ public class WxQrCode {
             PrintWriter printWriter = new PrintWriter(httpURLConnection.getOutputStream());
             // 发送请求参数
             JSONObject paramJson = new JSONObject();
-            paramJson.put("scene", "trainId");
+            paramJson.put("scene", job.getString("scene"));
+            String page = job.getString("url");
+            if (StringUtils.isNotEmpty(page)){
+                paramJson.put("page", page); //小程序暂未发布我没有带page参数
+            }
 //            paramJson.put("page", "pages/mine/index"); //小程序暂未发布我没有带page参数
             paramJson.put("width", 150);
             paramJson.put("is_hyaline", true);

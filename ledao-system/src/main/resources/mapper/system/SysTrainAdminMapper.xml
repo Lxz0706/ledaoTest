@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="trainName != null  and trainName != ''"> and train_name like concat('%', #{trainName}, '%')</if>
             <if test="trainDep != null  and trainDep != ''"> and train_dep = #{trainDep}</if>
-            <if test="trainTeacher != null  and trainTeacher != ''"> and train_teacher = #{trainTeacher}</if>
+            <if test="trainTeacher != null  and trainTeacher != ''"> and train_teacher like concat('%', #{trainTeacher}, '%')</if>
             <if test="trainPlace != null  and trainPlace != ''"> and train_place = #{trainPlace}</if>
             <if test="trainType != null  and trainType != ''"> and train_type = #{trainType}</if>
             <if test="startDate != null "> and start_date = #{startDate}</if>
@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark2 != null  and remark2 != ''"> and remark2 = #{remark2}</if>
             <if test="remark3 != null  and remark3 != ''"> and remark3 = #{remark3}</if>
         </where>
+        order by create_time desc
     </select>
     
     <select id="selectSysTrainAdminById" parameterType="Long" resultMap="SysTrainAdminResult">

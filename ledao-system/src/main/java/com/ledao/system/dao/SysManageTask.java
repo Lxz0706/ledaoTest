@@ -25,7 +25,7 @@ public class SysManageTask extends BaseEntity
 
     /** 任务类型 总任务0，子任务1 */
     @Excel(name = "任务类型 总任务0，子任务1")
-    private Long taskType;
+    private String taskType;
 
     /** 预计开始时间 */
     @Excel(name = "预计开始时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -105,12 +105,12 @@ public class SysManageTask extends BaseEntity
     {
         return proId;
     }
-    public void setTaskType(Long taskType) 
+    public void setTaskType(String taskType)
     {
         this.taskType = taskType;
     }
 
-    public Long getTaskType() 
+    public String getTaskType()
     {
         return taskType;
     }

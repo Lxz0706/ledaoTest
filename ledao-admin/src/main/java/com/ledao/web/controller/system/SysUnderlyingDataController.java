@@ -122,9 +122,10 @@ public class SysUnderlyingDataController extends BaseController
     }
 
     @GetMapping("/muUnderlyingDataListsMu")
-    public String muUnderlyingDataListsMu(String dataType, ModelMap mmap)
+    public String muUnderlyingDataListsMu(String dataType, String projectType, ModelMap mmap)
     {
         mmap.put("dataType",dataType);
+        mmap.put("projectType",projectType);
         return prefix + "/muUnderlyingDataLists";
     }
 

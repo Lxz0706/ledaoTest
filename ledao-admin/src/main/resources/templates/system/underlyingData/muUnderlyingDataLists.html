@@ -9,6 +9,7 @@
         <div class="col-sm-12 search-collapse">
             <form id="formId">
                 <input name="proType" type="hidden" id="proType" th:value="${dataType}"/>
+                <input name="projectType" type="hidden" id="projectType" th:value="${projectType}"/>
             </form>
         </div>
 
@@ -298,8 +299,15 @@
     }
 
     function back() {
-        var url = ctx + "system/underlyingdata/documentDetailTypeListMu";
-        $.modal.parentTab("投后部项目管理", url);
+        var projectType = document.getElementById("projectType").value;
+        if (projectType == "0"){
+            var url = ctx + "system/underlyingdata/documentDetailTypeListMu";
+            $.modal.parentTab("投后部项目管理", url);
+        }else{
+            var url = ctx + "system/underlyingdata/muList";
+            $.modal.parentTab("投后部项目管理", url);
+        }
+
     }
 
 </script>

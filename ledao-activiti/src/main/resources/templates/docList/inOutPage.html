@@ -117,13 +117,13 @@
                     title: 'id',
                     visible: false
                 },
-                {
+                /*{
                     field: 'applyType',
                     title: '申请类型',
                     formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(applyTypeDictDatas, item.applyType);
 		            }
-                },
+                },*/
                 {
                     field: 'documentType',
                     title: '档案类别',
@@ -171,24 +171,24 @@
                     field: 'approveUser',
                     title: '下一节点审批人'
                 },*/
-                {
+                /*{
                     field: 'approveStatu',
                     title: '审批状态',
                     formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
 		            }
-                },
+                },*/
                 {
                     field: 'remarks',
                     title: '备注',
                     formatter: function(value, item, index) {
                         return $.table.tooltip(item.remarks,10);
                     }
-                },
-                {
+                }
+                /*{
                     field: 'reviserName',
                     title: '修改人名称'
-                }
+                }*/
                /* ,
                 {
                     title: '操作',

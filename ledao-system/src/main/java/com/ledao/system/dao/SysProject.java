@@ -542,6 +542,9 @@ public class SysProject extends BaseEntity {
 
     private Long projectCount;
 
+    /**
+     * 是否包含有底层资料信息
+     */
     private Long isFile;
 
     public Long getProjectId() {

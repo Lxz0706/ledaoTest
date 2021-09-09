@@ -2,6 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 import com.ledao.system.dao.SysUnderlyingData;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 底层资料Service接口
@@ -60,7 +61,7 @@ public interface ISysUnderlyingDataService
     public int deleteSysUnderlyingDataById(Long fileId);
 
 
-    public List<SysUnderlyingData> selectSysUnderlyingDataByPid(Long projectId);
+    public List<SysUnderlyingData> selectSysUnderlyingDataByPid(Long projectId,Long projectType);
 
     List<SysUnderlyingData> selectSysUnderlyingProDataList(SysUnderlyingData sysUnderlyingData);
 }

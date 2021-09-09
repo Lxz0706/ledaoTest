@@ -21,10 +21,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectId"    column="project_id"    />
         <result property="fileUrl"    column="file_url"    />
         <result property="createBy"    column="create_by"    />
+        <result property="remark"    column="remark"    />
+        <result property="projectType"    column="project_type"    />
     </resultMap>
 
     <sql id="selectSysUnderlyingDataVo">
-        select file_id, parent_id, file_name, file_type, file_size, downloadable_flag, create_time, createor, preview_count, downloads_count, update_time, updateor, update_by, project_id, file_url, create_by from sys_underlying_data
+        select file_id, parent_id, file_name, file_type, file_size, downloadable_flag, create_time, createor, preview_count, downloads_count, update_time, updateor, update_by, project_id, file_url, create_by, remark, project_type from sys_underlying_data
     </sql>
 
     <select id="selectSysUnderlyingDataList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
@@ -42,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
             <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
             <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="projectType != null  and projectType != ''"> and project_type = #{projectType}</if>
         </where>
     </select>
 
@@ -81,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileUrl != null  and fileUrl != ''"> and a.file_url = #{fileUrl}</if>
             <if test="proType != null  and proType != ''"> and zck.project_zck_type = #{proType}</if>
             <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+            <if test="projectType != null  and projectType != ''"> and a.project_type = #{projectType}</if>
         </where>
         order by a.create_time desc
     </select>
@@ -92,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysUnderlyingDataByPid" parameterType="Long" resultMap="SysUnderlyingDataResult">
         <include refid="selectSysUnderlyingDataVo"/>
-        where project_id = #{projectId}
+        where project_id = #{projectId} and project_type = #{projectType}
     </select>
         
     <insert id="insertSysUnderlyingData" parameterType="SysUnderlyingData">
@@ -114,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">project_id,</if>
             <if test="fileUrl != null">file_url,</if>
             <if test="createBy != null">create_by,</if>
+            <if test="projectType != null">project_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="fileId != null">#{fileId},</if>
@@ -132,6 +137,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">#{projectId},</if>
             <if test="fileUrl != null">#{fileUrl},</if>
             <if test="createBy != null">#{createBy},</if>
+            <if test="projectType != null">#{projectType},</if>
          </trim>
     </insert>
 
@@ -153,6 +159,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">project_id = #{projectId},</if>
             <if test="fileUrl != null">file_url = #{fileUrl},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
         </trim>
         where file_id = #{fileId}
     </update>

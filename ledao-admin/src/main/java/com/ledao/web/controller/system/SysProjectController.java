@@ -195,7 +195,7 @@ public class SysProjectController extends BaseController {
             }
             // 底层资料
             sysProject1.setIsFile(new Long(0));
-            List<SysUnderlyingData> files = iSysUnderlyingDataService.selectSysUnderlyingDataByPid(sysProject1.getProjectId());
+            List<SysUnderlyingData> files = iSysUnderlyingDataService.selectSysUnderlyingDataByPid(sysProject1.getProjectId(), new Long(0));
             if (files != null && files.size() > 0) {
                 sysProject1.setIsFile(new Long(1));
             }

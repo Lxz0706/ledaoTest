@@ -86,6 +86,7 @@
     var editFlag = [[${@permission.hasPermi('system:bgczzck:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:bgczzck:remove')}]];
     var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
+    var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
     var prefix = ctx + "system/bgczzck";
     $(function () {
         var options = {
@@ -183,6 +184,20 @@
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="toMonomerLaw(\'' + row.id + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
                     }
+                },
+                {
+                    title: '底层资料',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        var fileShow = row.isFile;
+                        if (fileShow == 0) {
+                            actions.push('<a class="btn btn-success btn-xs ' + uploadFlag + '" href="javascript:void(0)" onclick="toUpload(' + row.projectId + ')"><i class="fa fa-edit"></i>上传</ a> ');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(' + row.projectId + ')"><i class="fa fa-search"></i>查看</a>');
+                        }
+                        return actions.join('');
+                    }
                 }]
         };
         $.table.init(options);
@@ -260,6 +275,15 @@
     function back() {
         var url = prefix;
         $.modal.parentTab("大型单体项目", url);
+    }
+
+    function see(projectId) {
+        var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 1;
+        $.modal.parentTab("底层资料", url);
+    }
+    function toUpload(projectId) {
+        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 1;
+        $.modal.open('上传底层资料', url);
     }
 
 </script>

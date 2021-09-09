@@ -2,6 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 import com.ledao.system.dao.SysUnderlyingData;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 底层资料Mapper接口
@@ -64,7 +65,7 @@ public interface SysUnderlyingDataMapper
      * @param projectId
      * @return
      */
-    List<SysUnderlyingData> selectSysUnderlyingDataByPid(Long projectId);
+    List<SysUnderlyingData> selectSysUnderlyingDataByPid(@Param("projectId") Long projectId, @Param("projectType") Long projectType);
 
     List<SysUnderlyingData> selectSysUnderlyingProDataList(SysUnderlyingData sysUnderlyingData);
 }

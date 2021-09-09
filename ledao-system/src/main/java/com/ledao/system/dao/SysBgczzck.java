@@ -458,6 +458,11 @@ public class SysBgczzck extends BaseEntity {
      */
     private String customer;
 
+    /**
+     * 是否包含有底层资料信息
+     */
+    private Long isFile;
+
 
     public Long getId() {
         return id;
@@ -1108,6 +1113,14 @@ public class SysBgczzck extends BaseEntity {
         this.customer = customer;
     }
 
+    public Long getIsFile() {
+        return isFile;
+    }
+
+    public void setIsFile(Long isFile) {
+        this.isFile = isFile;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1180,6 +1193,7 @@ public class SysBgczzck extends BaseEntity {
                 .append("zoing", getZoing())
                 .append("customer", getCustomer())
                 .append("customerId", getCustomerId())
+                .append("isFile", getIsFile())
                 .toString();
     }
 }

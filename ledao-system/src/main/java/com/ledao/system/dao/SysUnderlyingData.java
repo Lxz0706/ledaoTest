@@ -60,6 +60,9 @@ public class SysUnderlyingData extends BaseEntity
     @Excel(name = "文件路径")
     private String fileUrl;
 
+    @Excel(name = "项目类型")
+    private Long projectType;
+
     private String proType;
 
     public String getProType() {
@@ -173,7 +176,13 @@ public class SysUnderlyingData extends BaseEntity
         return fileUrl;
     }
 
+    public Long getProjectType() {
+        return projectType;
+    }
 
+    public void setProjectType(Long projectType) {
+        this.projectType = projectType;
+    }
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
@@ -198,6 +207,7 @@ public class SysUnderlyingData extends BaseEntity
             .append("projectId", getProjectId())
             .append("fileUrl", getFileUrl())
             .append("createBy", getCreateBy())
+            .append("projectType", getProjectType())
             .toString();
     }
 }

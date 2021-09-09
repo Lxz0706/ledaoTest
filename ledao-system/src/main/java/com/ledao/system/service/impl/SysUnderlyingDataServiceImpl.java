@@ -96,8 +96,8 @@ public class SysUnderlyingDataServiceImpl implements ISysUnderlyingDataService
     }
 
     @Override
-    public List<SysUnderlyingData> selectSysUnderlyingDataByPid(Long projectId) {
-        return sysUnderlyingDataMapper.selectSysUnderlyingDataByPid(projectId);
+    public List<SysUnderlyingData> selectSysUnderlyingDataByPid(Long projectId,Long projectType) {
+        return sysUnderlyingDataMapper.selectSysUnderlyingDataByPid(projectId, projectType);
     }
 
     @Override

@@ -5,7 +5,9 @@ import java.util.List;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysUnderlyingData;
 import com.ledao.system.dao.SysZck;
+import com.ledao.system.mapper.SysUnderlyingDataMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
     @Autowired
     private SysBgczzckMapper sysBgczzckMapper;
 
+    @Autowired
+    private SysUnderlyingDataMapper sysUnderlyingDataMapper;
+
     /**
      * 查询重组并购项目信息库
      *
@@ -47,7 +52,16 @@ public class SysBgczzckServiceImpl implements ISysBgczzckService {
      */
     @Override
     public List<SysBgczzck> selectSysBgczzckList(SysBgczzck sysBgczzck) {
-        return sysBgczzckMapper.selectSysBgczzckList(sysBgczzck);
+        List<SysBgczzck> sysBgczzcks = sysBgczzckMapper.selectSysBgczzckList(sysBgczzck);
+        for (SysBgczzck sysBgczzck1 : sysBgczzcks) {
+            // 底层资料
+            sysBgczzck1.setIsFile(new Long(0));
+            List<SysUnderlyingData> files = sysUnderlyingDataMapper.selectSysUnderlyingDataByPid(sysBgczzck1.getId(), new Long(1));
+            if (files != null && files.size() > 0) {
+                sysBgczzck1.setIsFile(new Long(1));
+            }
+        }
+        return sysBgczzcks;
     }
 
     /**

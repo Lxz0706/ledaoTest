@@ -35,7 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/system/underlyingdata")
 public class SysUnderlyingDataController extends BaseController
 {
-    private String prefix = "system/underlyingdata";
+    private String prefix = "system/underlying";
 
     @Autowired
     private ISysUnderlyingDataService sysUnderlyingDataService;
@@ -47,7 +47,7 @@ public class SysUnderlyingDataController extends BaseController
     @GetMapping()
     public String underlyingdata()
     {
-        return prefix + "/underlyingdata";
+        return prefix + "/underlying";
     }
 
     /**

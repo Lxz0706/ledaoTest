@@ -27,12 +27,17 @@
                             <li id="dailyDocumentType">
                                 <label>种类：</label>
                                     <select id="dailyDocumentTypeSelect" name="dailyDocumentType" th:with="type=${@dict.getType('daily_document_type')}"
-                                            data-none-selected-text="请选择" >
+                                            data-none-selected-text="请选择">
                                         <option value="">请选择</option>
                                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                                 th:value="${dict.dictValue}" ></option>
                                     </select>
-<!--                                <input type="text" name="dailyDocumentType" />-->
+                                    <select id="dailyDocumentTypeSelectContract" name="dailyDocumentTypeContract" th:with="type=${@dict.getType('contract_document_type')}"
+                                            data-none-selected-text="请选择">
+                                        <option value="">请选择</option>
+                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                th:value="${dict.dictValue}"></option>
+                                    </select>
                             </li>
                             <li>
                                 <label>附件类型：</label>
@@ -169,6 +174,7 @@
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
         var companyNameDictDatas = [[${@dict.getType('sys_company_name')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
@@ -177,6 +183,7 @@
         var applyId = document.getElementById("applyId").value
         var showNames = false
         var documentType = document.getElementById("documentType").value;
+        var showDatilDocumentType = false;
         changeDocumentType(documentType);
 
         $(function() {
@@ -184,6 +191,14 @@
                 if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
                     showNames = true
                 }
+            }
+            // chenjie 21.9.10
+            if(documentType == 1) {
+                $('#dailyDocumentTypeSelectContract').hide()
+                showDatilDocumentType = true
+            } else {
+                $('#dailyDocumentTypeSelect').hide()
+                showDatilDocumentType = false
             }
             var options = {
                 url: prefix + "/list",
@@ -223,7 +238,7 @@
                 },
                 {
                     field: 'documentType',
-                    title: '档案种类',
+                    title: '档案类别',// chenjie 21.9.10 title 档案种类-》档案类别
                     formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
 		            }
@@ -244,10 +259,19 @@
                 },
                 {
                     field: 'dailyDocumentType',
-                    title: '档案类型',
+                    title: '种类', // chenjie 21.9.10 title 档案类型-》种类
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
-                    }
+                    },
+                    visible: documentType == "0" ? false : true && showDatilDocumentType
+                },
+                {
+                    field: 'dailyDocumentTypeContract',
+                    title: '种类', // chenjie 21.9.10 title 档案类型-》种类
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract);
+                    },
+                    visible: documentType == "0" ? false : true && !showDatilDocumentType
                 },
                 {
                     field: 'fileName',

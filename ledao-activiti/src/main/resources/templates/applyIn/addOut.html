@@ -279,26 +279,26 @@
                 {
                     field: 'companyName',
                     title: '公司名称',
-                    // formatter: function (value, item, index) {
-                    //     return $.table.selectDictLabel(sysCompanyName, item.companyName);
-                    // },
+                    formatter: function (value, item, index) {
+                        return $.table.selectDictLabel(sysCompanyName, item.companyName);
+                    },
                     visible: !showDocumentType
                 },
                 {
                     field: 'dailyDocumentType',
-                    title: '档案种类',
+                    title: '日常档案种类',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
-                    },
-                    visible: showDatilDocumentType
+                    }
+                    // visible: showDatilDocumentType
                 },
                 {
                     field: 'dailyDocumentTypeContract',
-                    title: '档案种类',
+                    title: '合同档案种类',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract);
-                    },
-                    visible: !showDatilDocumentType
+                    }
+                    // visible: !showDatilDocumentType
                 },
                 {
                     field: 'fileName',
@@ -620,9 +620,11 @@
         } else if (val == "1") {
             $("#realReturnTime").hide()
             $("#planReturnTimeShow").hide()
+            $('#planReturnTimeDate').val('')
         } else {
             $("#realReturnTime").hide()
             $("#planReturnTimeShow").hide()
+            $('#planReturnTimeDate').val('')
         }
     }
 

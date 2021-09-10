@@ -94,13 +94,16 @@
         var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+        var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
+        var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
         var showNames = false
         var documentTypeVal = document.getElementById("documentType").value
         var projectName = document.getElementById("projectName")
         var debtorName = document.getElementById("debtorName")
-        var ids = document.getElementById("applyId").value
+        var ids = document.getElementById("applyId").value;
+        var showDatilDocumentType = false;
     $(function () {
         var appStatu = document.getElementById("appStatu").value;
 
@@ -117,7 +120,13 @@
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
             showNames = true
+            if(documentTypeVal == 1) {
+                showDatilDocumentType = true
+            } else {
+                showDatilDocumentType = false
+            }
         }
+
         var isNotChange = false
         if(appStatu!=0 && appStatu != 4){
             isNotChange = false
@@ -166,6 +175,9 @@
                 {
                     field: 'companyName',
                     title: '公司名称',
+                    formatter: function (value, item, index) {
+                        return $.table.selectDictLabel(sysCompanyName, item.companyName);
+                    },
                     visible: documentTypeVal == "0" ? false : true
                 },
                 {
@@ -174,7 +186,15 @@
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
                     },
-                    visible: showNames
+                    visible: showNames && showDatilDocumentType
+                },
+                {
+                    field: 'dailyDocumentTypeContract',
+                    title: '种类',
+                    formatter: function(value, item, index) {
+                        return $.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract);
+                    },
+                    visible: showNames && !showDatilDocumentType
                 },
                 {
                     field: 'fileName',

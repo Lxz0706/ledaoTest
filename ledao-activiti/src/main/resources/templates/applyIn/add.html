@@ -102,6 +102,7 @@
         var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
         var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
         var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
         var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
         var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
@@ -118,6 +119,7 @@
         var roleType = document.getElementById("roleType").value;
         var optionUrl = prefix + "/editDocumentModal/";
         var showDocumentType = false;
+        var showDatilDocumentType = false;
         $(function () {
             $("#showTable").hide()
             $("#applyUserName").val(userName)
@@ -198,7 +200,16 @@
                         title: '种类',
                         formatter: function(value, item, index) {
                             return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
-                        }
+                        },
+                        visible: showDatilDocumentType
+                    },
+                    {
+                        field: 'dailyDocumentTypeContract',
+                        title: '种类',
+                        formatter: function(value, item, index) {
+                            return $.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract);
+                        },
+                        visible: !showDatilDocumentType
                     },
                     {
                         field: 'fileName',
@@ -368,10 +379,6 @@
             }
         }
 
-        function closeHandler() {
-            console.log('1111111111111111-----------')
-        }
-
         function changeDocumentType(val) {
             var projectName = document.getElementById("projectName")
             var debtorName = document.getElementById("debtorName")
@@ -386,6 +393,13 @@
                 debtorName.style.display = "none"
                 roleTypeShow.style.display = "none"
                 showDocumentType = false
+                // start chenjie 21.09.09  #75
+                if(val === '1') {
+                    showDatilDocumentType = true
+                } else {
+                    showDatilDocumentType = false
+                }
+                // end
             } else {
                 projectName.style.display = "block"
                 debtorName.style.display = "block"

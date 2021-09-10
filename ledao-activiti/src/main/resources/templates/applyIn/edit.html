@@ -111,6 +111,7 @@
         var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
         var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
         var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+        var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
         var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
@@ -134,6 +135,7 @@
         var showEdit = false
         var showDelet = false
         var showAllBut = false
+        var showDatilDocumentType = false
     $(function () {
         for(var i =0; i < roles.length;i++) {
             if(roles[i].roleKey == "documentAdmin" || "admin" == loginNameUser) {
@@ -149,6 +151,13 @@
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
             roleTypeShow.style.display = 'none'
+            // chenjie 21.9.9 #75
+            if(documentTypeVal == 1) {
+                showDatilDocumentType = true
+            } else {
+                showDatilDocumentType = false
+            }
+            // end
         }
         var isNotChange = false
         // if(appStatu!=0 && appStatu != 4 && appStatu != 2){
@@ -268,7 +277,15 @@
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType));
                     },
-                    visible: documentTypeVal == "0" ? false : true
+                    visible: documentTypeVal == "0" ? false : true && showDatilDocumentType
+                },
+                {
+                    field: 'dailyDocumentTypeContract',
+                    title: '种类',
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract));
+                    },
+                    visible: documentTypeVal == "0" ? false : true && !showDatilDocumentType
                 },
                 {
                     field: 'fileName',

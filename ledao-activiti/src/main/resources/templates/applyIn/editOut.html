@@ -188,6 +188,7 @@
         var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
         var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
         var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+        var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginNameUser = [[${@permission.getPrincipalProperty('loginName')}]];
         var editFlag = [[${@permission.hasPermi('activity:detail:edit')}]];
@@ -226,6 +227,7 @@
         var showEdit = false
         var showDelet = false
         var showAllBut = false
+        var showDatilDocumentType = false
     $(function () {
         // 管理员与档案管理员
         for(var i =0; i < roles.length;i++) {
@@ -239,7 +241,7 @@
                     $("#isReceivedShow").show()
                     $("select,input,textarea").attr("readonly","readonly");
                     $("input").removeAttr("onclick");
-                    $("#isOut").removeAttr("readonly")
+                    $("#isOut").removeAttr("readonly");
                 }
             }
         }
@@ -288,6 +290,13 @@
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
+            // chenjie 21.9.9 #75
+            if(documentTypeVal == 1) {
+                showDatilDocumentType = true
+            } else {
+                showDatilDocumentType = false
+            }
+            // end
         }
 
         if (appStatu != 0){
@@ -402,7 +411,16 @@
                     title: '档案种类',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
-                    }
+                    },
+                    visible: documentTypeVal == "0" ? false : true && showDatilDocumentType
+                },
+                {
+                    field: 'dailyDocumentTypeContract',
+                    title: '档案种类',
+                    formatter: function(value, item, index) {
+                        return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract));
+                    },
+                    visible: documentTypeVal == "0" ? false : true && !showDatilDocumentType
                 },
                 {
                     field: 'fileName',

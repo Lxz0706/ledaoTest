@@ -18,6 +18,12 @@
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                 th:value="${dict.dictValue}" th:field="*{dailyDocumentType}"></option>
                     </select>
+<!--                 chenjie   21.9.9  #75-->
+                    <select id="dailyDocumentTypeSelectContract" name="dailyDocumentTypeContract" th:with="type=${@dict.getType('contract_document_type')}"
+                            data-none-selected-text="请选择" class="form-control m-b" disabled>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                th:value="${dict.dictValue}" th:field="*{dailyDocumentTypeContract}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group" id="assetNumber" style="display: none">
@@ -62,13 +68,13 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label is-required">份数：</label>
                 <div class="col-sm-8">
-                    <input name="counts" th:field="*{counts}" class="form-control attr-number required" type="text">
+                    <input name="counts" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" th:field="*{counts}" class="form-control required" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label is-required">页数/时长：</label>
                 <div class="col-sm-8">
-                    <input name="pages" th:field="*{pages}" class="form-control attr-number required" type="text">
+                    <input name="pages" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" th:field="*{pages}" class="form-control required" type="text">
                 </div>
             </div>
             <div class="form-group" id="documentStatu" style="display: none">
@@ -179,12 +185,13 @@
                 aNumber.style.display = "block";
                 cNo.style.display = "block";
             } else {
+                if(documentTypeVal == "1") {
+                    $("#dailyDocumentTypeSelectContract").hide()
+                } else {
+                    $("#dailyDocumentTypeSelect").hide()
+                }
                 dailyDocumentType.style.display = "block";
             }
-
-            $(".attr-number").keyup(function(){
-                this.value=this.value.replace(/[^0-9]/i,"");
-            });
         })
         $("#form-documentFile-edit").validate({
             focusCleanup: true

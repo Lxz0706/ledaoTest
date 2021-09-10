@@ -102,11 +102,11 @@ public class SysUnderlyingDataController extends BaseController
      * 查询底层资料
      */
     @GetMapping("/list")
-    public String list(@RequestParam("projectId")String projectId, @RequestParam("projectType")String projectType, ModelMap mmap)
+    public String list(String projectId, String projectType, ModelMap mmap)
     {
         mmap.put("projectId",projectId);
         mmap.put("projectType",projectType);
-        return prefix + "/underlyingDataLists";
+        return "system/trainadmin/underlyingDataLists";
     }
 
     @GetMapping("/muList")

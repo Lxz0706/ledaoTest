@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="dailyDocumentTypeContract"    column="daily_document_type_contract"    />
     </resultMap>
 
     <resultMap type="SysDocumentFile" id="SysDocumentFileProResult">
@@ -93,6 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="realCreateName"    column="realCreateName"    />
         <result property="reviserName"    column="reviserName"    />
+        <result property="dailyDocumentTypeContract"    column="daily_document_type_contract"    />
     </resultMap>
 
     <resultMap type="SysDocumentFile" id="SysDocumentFileDetailResult">
@@ -125,6 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectName"    column="project_name"    />
         <result property="companyName"    column="company_name"    />
         <result property="debtorName"    column="debtor_name"    />
+        <result property="dailyDocumentTypeContract"    column="daily_document_type_contract"    />
     </resultMap>
 
     <sql id="selectSysDocumentFileVo">
@@ -243,6 +246,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         file.update_by,
         file.reviser,
         file.update_time,
+        file.daily_document_type_contract,
         app.company_name,
         app.project_name,
         app.debtor_name
@@ -305,6 +309,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             file.update_by,
             file.reviser,
             file.update_time,
+            file.daily_document_type_contract,
             b.user_name as creatorName,
             c.user_name as reviserName
         from sys_document_file file

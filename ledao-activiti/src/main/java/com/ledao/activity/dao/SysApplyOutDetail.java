@@ -147,6 +147,16 @@ public class SysApplyOutDetail extends BaseEntity
 
     private String companyName;
 
+    private String dailyDocumentTypeContract;
+
+    public String getDailyDocumentTypeContract() {
+        return dailyDocumentTypeContract;
+    }
+
+    public void setDailyDocumentTypeContract(String dailyDocumentTypeContract) {
+        this.dailyDocumentTypeContract = dailyDocumentTypeContract;
+    }
+
     public String getCompanyName() {
         return companyName;
     }

@@ -64,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileGetType"    column="file_get_type"    />
         <result property="documentLevel"    column="document_level"    />
         <result property="companyName"    column="company_name"    />
+        <result property="dailyDocumentTypeContract"    column="daily_document_type_contract"    />
     </resultMap>
 
     <sql id="selectSysApplyOutDetailVo">
@@ -129,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         file.document_get_type,
         file.file_get_type,
         file.document_level,
+        file.daily_document_type_contract,
         ap.project_name,
         ap.company_name
         FROM

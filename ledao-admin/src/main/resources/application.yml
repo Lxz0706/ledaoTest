@@ -9,15 +9,15 @@ ledao:
   # 实例演示开关
   demoEnabled: false
   # 文件路径 示例（ Windows配置D:/ledao/uploadPath，Linux配置 /home/ledao/uploadPath）
-  profile: C:/profile
-#  profile: /home/ledao/uploadPath/profile
+#  profile: C:/profile
+  profile: /home/ledao/uploadPath/profile
   # 获取ip地址开关
   addressEnabled: false
 
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
-  port: 80
+  port: 8000
   servlet:
     # 应用的访问路径
     context-path: /
@@ -34,8 +34,9 @@ server:
 # 日志配置
 logging:
   level:
-    com.ledao.system.mapper: error
+    com.ledao.system.mapper: debug
     org.springframework: info
+    com.ledao.activity.mapper: debug
 
 # 用户配置
 user:
@@ -86,14 +87,14 @@ spring:
       charset: utf-8
       enabled: true
 
-#  activemq:
-#    broker-url: tcp://localhost:61616
-#    user: admin
-#    password: admin
-#
-#  jms:
-#    #点对点时为false，订阅报时为true
-#    pub-sub-domain: false
+  activemq:
+    broker-url: tcp://139.196.186.29:61616
+    user: admin
+    password: admin
+
+  jms:
+    #点对点时为false，订阅报时为true
+    pub-sub-domain: false
 
 # MyBatis
 mybatis:

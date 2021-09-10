@@ -401,9 +401,9 @@
                 {
                     field: 'companyName',
                     title: '公司名称',
-                    // formatter: function (value, item, index) {
-                    //     return $.table.selectDictLabel(sysCompanyName, item.companyName);
-                    // },
+                    formatter: function (value, item, index) {
+                        return $.table.selectDictLabel(sysCompanyName, item.companyName);
+                    },
                     visible: documentTypeVal == "0" ? false : true
                 },
                 {

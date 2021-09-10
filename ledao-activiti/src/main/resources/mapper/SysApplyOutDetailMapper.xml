@@ -63,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="documentGetType"    column="document_get_type"    />
         <result property="fileGetType"    column="file_get_type"    />
         <result property="documentLevel"    column="document_level"    />
+        <result property="companyName"    column="company_name"    />
     </resultMap>
 
     <sql id="selectSysApplyOutDetailVo">
@@ -128,7 +129,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         file.document_get_type,
         file.file_get_type,
         file.document_level,
-        ap.project_name
+        ap.project_name,
+        ap.company_name
         FROM
         sys_apply_out_detail od
         LEFT JOIN sys_document_file file ON od.document_id = file.document_id

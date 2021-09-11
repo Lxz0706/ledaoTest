@@ -39,11 +39,13 @@
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var prefix = ctx + "system/underlyingdata";
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var projectId = document.getElementById("projectId").value;
+    var projectType = document.getElementById("projectType").value;
 
     $(function () {
         var options = {
             url: prefix + "/list",
-            createUrl: prefix + "/add/{id}",
+            createUrl: prefix + "/add/"+projectId+"/"+projectType,
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
@@ -286,7 +288,7 @@
 
     function add(projectId) {
         var projectId = $("#projectId").val();
-        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId;
+        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId+"&projectType="+projectType;
         $.modal.open('上传底层资料', url);
     }
 

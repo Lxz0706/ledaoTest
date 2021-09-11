@@ -1,81 +1,91 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('新增底层资料')" />
+    <th:block th:include="include :: header('新增档案详情')" />
 </head>
 <body class="white-bg">
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-underlyingdata-add">
-        <input name="projectId" type="hidden" th:value="${projectId}"/>
-        <input name="projectType" type="hidden" th:value="${projectType}"/>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">文件名称：</label>
-            <div class="col-sm-8">
-                <input name="file" id="file" type="file" multiple="multiple">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-detail-add">
+            <input name="projectId" type="hidden" th:value="${projectId}"/>
+            <input name="projectType" type="hidden" th:value="${projectType}"/>
+            <div class="form-group" id="processDefinitionDiv">
+                <label class="col-sm-3 control-label is-required">文件上传：</label>
+                <div class="col-sm-8">
+                    <input name="file" class="form-control form-documentFile-add required" multiple type="file">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">创建人名称：</label>
-            <div class="col-sm-8">
-                <input name="createor" class="form-control" type="text">
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">文件名称：</label>
+                <div class="col-sm-8">
+                    <input name="fileName" class="form-control" type="text">
+                </div>
             </div>
-        </div>
-    </form>
-</div>
-<th:block th:include="include :: footer" />
-<script type="text/javascript">
-    var prefix = ctx + "system/underlyingdata"
-    $("#form-underlyingdata-add").validate({
-        focusCleanup: true
-    });
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文件路径：</label>
+                <div class="col-sm-8">
+                    <input name="fileUrl" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">创建人名称：</label>
+                <div class="col-sm-8">
+                    <input name="creator" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">修改人名称：</label>
+                <div class="col-sm-8">
+                    <input name="reviser" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">下载次数：</label>
+                <div class="col-sm-8">
+                    <input name="downLoadCount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">下载次数：</label>
+                <div class="col-sm-8">
+                    <input name="viewCount" class="form-control" type="text">
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/underlyingdata"
+        $("#form-detail-add").validate({
+            focusCleanup: true
+        });
 
-    function submitHandler() {
-        var form = document.getElementById("form-underlyingdata-add")//先获到表单的JQ对象
-        formData = new FormData(form);
-        //formData.append("file", obj);
-        // 禁用按钮
-        // $.modal.disable();
-        var str = "";
-        $.ajax({
-            url: prefix + "/add",
-            type: "post",
-            data: formData,
-            processData: false,
-            contentType: false,
-            xhr: xhrOnProgress(function (e) {
-                $("#loaderCenter").show();
-                var percent = 100 * e.loaded / e.total; //文件上传百分比
-                $("#loader").html(parseInt(percent) + "%") //数字百分比
-                var loaderbox = document.getElementById('loader');
-                //进度条宽度百分比
-                loaderbox.style.width = parseInt(percent) + "%";
-                //str += parseInt(percent) + "%";
-            }),
-            success: function (result) {
-                $("#loaderCenter").hide();
-                //$.modal.closeLoading();
-                $.operate.successCallback(result);
+        function submitHandler() {
+           /* if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-detail-add').serialize());
+            }*/
+            if ($.validate.form()) {
+                // 处理自己的业务
+                var form = document.getElementById("form-detail-add");
+                var formdata = new FormData(form);
+                formdata.append("files", $('input[type=file]')[0]);
+                $.ajax({
+                    url: prefix + '/add',
+                    data: formdata,
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function(result) {
+                        $.operate.successCallback(result);
+                        $.modal.closeLoading();
+                        $.modal.enable();
+                    }
+                })
             }
-        })
-    }
-
-    // 上传进度
-    var xhrOnProgress = function (fun) {
-        xhrOnProgress.onprogress = fun; //绑定监听
-        //使用闭包实现监听绑
-        return function () {
-            //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
-            var xhr = $.ajaxSettings.xhr();
-            //判断监听函数是否为函数
-            if (typeof xhrOnProgress.onprogress !== 'function')
-                return xhr;
-            //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
-            if (xhrOnProgress.onprogress && xhr.upload) {
-                xhr.upload.onprogress = xhrOnProgress.onprogress;
-            }
-            return xhr;
         }
-    }
-</script>
+    </script>
 </body>
 </html>

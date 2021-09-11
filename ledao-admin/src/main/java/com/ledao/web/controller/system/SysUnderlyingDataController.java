@@ -106,7 +106,7 @@ public class SysUnderlyingDataController extends BaseController
     {
         mmap.put("projectId",projectId);
         mmap.put("projectType",projectType);
-        return "system/trainadmin/underlyingDataLists";
+        return "system/underlying/underlyingDataLists";
     }
 
     @GetMapping("/muList")
@@ -145,29 +145,9 @@ public class SysUnderlyingDataController extends BaseController
     @Log(title = "底层资料", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysUnderlyingData sysUnderlyingData, @RequestParam("file") MultipartFile file) {
-        StringBuffer userIds = new StringBuffer();
-        StringBuffer userNames = new StringBuffer();
-        if (file.isEmpty()) {
-            return error("请上传文件！");
-        }
-
-        String fileName = file.getOriginalFilename();
-        sysUnderlyingData.setFileName(fileName.substring(0, fileName.indexOf(".")));
-        sysUnderlyingData.setFileSize((double) file.getSize());
+    public AjaxResult addSave(SysUnderlyingData sysUnderlyingData, @RequestParam("file") MultipartFile[] files) {
         sysUnderlyingData.setCreateBy(ShiroUtils.getLoginName());
-        sysUnderlyingData.setFileType(FileUploadUtils.getExtension(file));
-        //获取各类型名称及其子集
-        String baseDir = "";
-        try {
-            String avatar = FileUploadUtils.upload(Global.getProfile() + "/underlyingdata" + baseDir, file, false);
-            sysUnderlyingData.setFileUrl(avatar);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        sysUnderlyingData.setCreateor(ShiroUtils.getSysUser().getUserName());
-        sysUnderlyingData.setCreateBy(ShiroUtils.getLoginName());
-        return toAjax(sysUnderlyingDataService.insertSysUnderlyingData(sysUnderlyingData));
+        return sysUnderlyingDataService.insertSysUnderlyingData(sysUnderlyingData,files);
     }
 
     /**

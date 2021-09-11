@@ -1,8 +1,11 @@
 package com.ledao.system.service;
 
 import java.util.List;
+
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.system.dao.SysUnderlyingData;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 底层资料Service接口
@@ -34,7 +37,7 @@ public interface ISysUnderlyingDataService
      * @param sysUnderlyingData 底层资料
      * @return 结果
      */
-    public int insertSysUnderlyingData(SysUnderlyingData sysUnderlyingData);
+    public AjaxResult insertSysUnderlyingData(SysUnderlyingData sysUnderlyingData, MultipartFile[] files);
 
     /**
      * 修改底层资料

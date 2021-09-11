@@ -9,49 +9,68 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <input name="appStatu" type="hidden" id="appStatu" th:value="*{appStatu}">
+    <input name="applyTypeUnDone" id="applyTypeUnDone" th:value="*{applyTypeUnDone}" type="hidden">
+    <input name="seOrEd" id="seOrEd" th:value="*{seOrEd}" type="hidden">
     <form class="form-horizontal m" id="form-applyIn-edit" th:object="${sysApplyIn}" enctype="multipart/form-data">
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
-         <input name="applyType" th:field="*{applyType}" type="hidden">
-         <div class="form-group">
-             <label class="col-sm-3 control-label">档案类别：</label>
-             <div class="col-sm-8">
-                  <select id="documentType"  name="documentType"
-                          th:with="type=${@dict.getType('sys_document_busi_type')}" data-none-selected-text="请选择"
-                          class="form-control m-b"
-                          disabled>                         
-                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
-                         th:field="*{documentType}">
-                 </option>
-             </select>
-             </div>
-         </div>
-         <div class="form-group" id="projectName" >
-             <label class="col-sm-3 control-label">项目名称：</label>
-             <div class="col-sm-8">
-                 <input name="projectName" th:field="*{projectName}" class="form-control" type="text">
-             </div>
-         </div>
-         <div class="form-group">
-             <label class="col-sm-3 control-label">公司名称：</label>
-             <div class="col-sm-8">
-                 <select id="companyName" name="companyName"
-                         th:with="type=${@dict.getType('sys_company_name')}"
-                         data-none-selected-text="请选择" class="form-control m-b">
-                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                             th:value="${dict.dictValue}" th:field="*{companyName}"></option>
-                 </select>
-             </div>
-         </div>
-        <div class="form-group" id="debtorName" >
-            <label class="col-sm-3 control-label">债务人名称：</label>
+        <input name="applyType" id="applyType" th:field="*{applyType}" type="hidden">
+        <!--        待提交人-->
+        <input name="realCreateBy" th:field="*{realCreateBy}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
-                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">
+                 <select id="documentType"  name="documentType"
+                         th:with="type=${@dict.getType('sys_document_busi_type')}" data-none-selected-text="请选择"
+                         class="form-control m-b"
+                         disabled>                         
+                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                        th:field="*{documentType}">
+                </option>
+            </select>
+            </div>
+        </div>
+        <div class="form-group" id="roleTypeShow">
+            <label class="col-sm-3 control-label is-required">项目所属部门名称：</label>
+            <div class="col-sm-8">
+                <select id="roleType" name="roleType"
+                        th:with="type=${@dict.getType('sys_doc_role')}" onchange="changeRoleType()"
+                        data-none-selected-text="请选择" class="form-control m-b required">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{roleType}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="projectName" >
+            <label class="col-sm-3 control-label is-required">项目名称：</label>
+            <div class="col-sm-8">
+                <input name="projectId" id="projectIdVal" th:field="*{projectId}" class="form-control required" required type="hidden">
+                <input autocomplete="off" name="projectName" id="projectNameVal" th:field="*{projectName}" class="form-control required" required type="text" onclick="selectPro()">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">公司名称：</label>
+            <div class="col-sm-8">
+                <select id="companyName" name="companyName"
+                        th:with="type=${@dict.getType('sys_company_name')}"
+                        data-none-selected-text="请选择" class="form-control m-b">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}" th:field="*{companyName}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="debtorName" >
+            <label class="col-sm-3 control-label is-required">债务人名称：</label>
+            <div class="col-sm-8">
+                <!--                <input name="debtorName" th:field="*{debtorName}" class="form-control" type="text">-->
+                <input name="debtorId" id="debtorNameVal" th:field="*{debtorId}"  class="form-control" type="hidden">
+                <input autocomplete="off" name="debtorName" id="debtorNameTip" th:field="*{debtorName}" class="form-control required" type="text" onclick="selectDebtor()">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">实际提交人：</label>
             <div class="col-sm-8">
-                <input disabled name="realCreateBy" th:field="*{realCreateBy}" class="form-control" type="text">
+                <input class="form-control" th:field="*{applyUser}" type="hidden" name="applyUser" id="applyUser">
+                <input autocomplete="off" th:field="*{applyUserName}" class="form-control" type="text" name="applyUserName" id="applyUserName" onclick="selectUser()">
             </div>
         </div>
         <div class="form-group">
@@ -63,17 +82,17 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">文件列表：</label>
             <div class="btn-group-sm" id="toolbar" role="group">
-               <!-- <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
+                <a class="btn btn-success" id="addClick" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+                <a class="btn btn-primary single disabled" id="editClick" onclick="$.operate.edit()"
                    shiro:hasPermission="activity:documentFile:edit">
                     <i class="fa fa-edit"></i> 修改
-                </a>-->
-               <!-- <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+                </a>
+                <a class="btn btn-danger multiple disabled" id="deletClick" onclick="$.operate.removeAll()"
                    shiro:hasPermission="activity:documentFile:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>-->
+                </a>
 
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -85,30 +104,41 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
 <script type="text/javascript" th:inline="javascript">
-        var prefix = ctx + "applyIn";
-        var prefixDocumentFile = ctx + "documentFile";
-        var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
-        var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
-        var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
-        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
-        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
-        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
-        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
-        var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
-        var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
-        var roles = [[${@permission.getPrincipalProperty('roles')}]];
-        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
-        var showNames = false
-        var documentTypeVal = document.getElementById("documentType").value
-        var projectName = document.getElementById("projectName")
-        var debtorName = document.getElementById("debtorName")
-        var ids = document.getElementById("applyId").value;
-        var showDatilDocumentType = false;
+    var prefix = ctx + "applyIn";
+    var prefixDocumentFile = ctx + "documentFile";
+    var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+    var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+    var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+    var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
+    var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+    var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
+    var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+    var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+    var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginNameUser = [[${@permission.getPrincipalProperty('loginName')}]];
+    var showNames = false;
+    var documentTypeVal = document.getElementById("documentType").value;
+    var projectName = document.getElementById("projectName");
+    var debtorName = document.getElementById("debtorName");
+    var roleTypeShow = document.getElementById("roleTypeShow");
+    var ids = document.getElementById("applyId").value;
+    var applyType = document.getElementById("applyType").value;
+    var applyTypeUnDone = document.getElementById("applyTypeUnDone").value == "" ? "no" : document.getElementById("applyTypeUnDone").value;
+    var seOrEd = document.getElementById("seOrEd").value;
+    var roleType = document.getElementById("roleType").value;
+    var appStatu = document.getElementById("appStatu").value;
+    // 实际提交人
+    var applyUser = document.getElementById("applyUser").value;
+    // 待提交人
+    var realCreateBy = document.getElementById("realCreateBy").value;
+    var showEdit = false
+    var showDelet = false
+    var showAllBut = false
+    var showDatilDocumentType = false
     $(function () {
-        var appStatu = document.getElementById("appStatu").value;
-
         for(var i =0; i < roles.length;i++) {
-            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+            if(roles[i].roleKey == "documentAdmin" || "admin" == loginNameUser) {
                 showNames = true
             }
         }
@@ -116,29 +146,85 @@
         if(documentTypeVal == "0") {
             projectName.style.display = 'block'
             debtorName.style.display = 'block'
+            roleTypeShow.style.display = 'block'
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
-            showNames = true
+            roleTypeShow.style.display = 'none'
+            // chenjie 21.9.9 #75
             if(documentTypeVal == 1) {
                 showDatilDocumentType = true
             } else {
                 showDatilDocumentType = false
             }
+            // end
+        }
+        var isNotChange = false
+        // if(appStatu!=0 && appStatu != 4 && appStatu != 2){
+        //     isNotChange = false
+        //     if((appStatu == 1 || appStatu == 5) && showNames){
+        //     }else{
+        //         isNotChange = true
+        //     }
+        // }
+        if (appStatu != 0){
+            $("#applyUserName").attr("readonly","readonly");
+            $("#applyUserName").removeAttr("onclick")
+        }
+        if(appStatu == 0 || appStatu == 4 || appStatu == 2) {
+            isNotChange = false
+        } else {
+            // if(showNames && applyTypeUnDone == '2') {
+            //     isNotChange = false
+            // } else {
+            //     isNotChange = true
+            // }
+            isNotChange = true
         }
 
-        var isNotChange = false
-        if(appStatu!=0 && appStatu != 4){
-            isNotChange = false
-            if((appStatu == 1 || appStatu == 5) && showNames){
-            }else{
-                isNotChange = true
+        // 入库修改画面的按钮显示逻辑
+        if(applyTypeUnDone == "2") {
+            if(applyType == "0") {
+                if(showNames) {
+                    $("#addClick").hide();
+                    $("#editClick").show();
+                    $("#deletClick").hide();
+                    showEdit = true
+                } else {
+                    $("#addClick").hide();
+                    $("#editClick").hide();
+                    $("#deletClick").hide();
+                }
+            } else {
+                $("#addClick").hide();
+                $("#editClick").hide();
+                $("#deletClick").hide();
+            }
+        } else if (applyTypeUnDone == "3") {
+            if(applyType == "0" || applyType == "1") {
+                $("#addClick").hide();
+                $("#editClick").hide();
+                $("#deletClick").hide();
+            }
+        } else {
+            if(applyType == "0" || applyType == "1") {
+                if((realCreateBy == applyUser || realCreateBy !== applyUser) && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
+                    $("#addClick").show();
+                    $("#editClick").show();
+                    $("#deletClick").show();
+                    showAllBut = true
+                } else {
+                    $("#addClick").hide();
+                    $("#editClick").hide();
+                    $("#deletClick").hide();
+                }
             }
         }
+
         var options = {
             url: prefixDocumentFile + "/listDocApp",
-            createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal,
-            updateUrl: prefixDocumentFile + "/edit/{id}",
+            createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal + '/' + applyType + '/' + applyTypeUnDone,
+            updateUrl: prefixDocumentFile + "/edit/{id}/" + applyTypeUnDone,
             removeUrl: prefixDocumentFile + "/remove",
             exportUrl: prefix + "/export",
             modalName: "档案",
@@ -157,6 +243,11 @@
                 //         return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
                 //     }
                 // },
+                /*{
+                    field: 'projectName',
+                    title: '项目名称',
+                    visible: documentTypeVal == "0" ? true : false
+                },*/
                 {
                     field: 'projectName',
                     title: '项目名称',
@@ -176,7 +267,7 @@
                     field: 'companyName',
                     title: '公司名称',
                     formatter: function (value, item, index) {
-                        return $.table.selectDictLabel(sysCompanyName, item.companyName);
+                        return strLength($.table.selectDictLabel(sysCompanyName, item.companyName));
                     },
                     visible: documentTypeVal == "0" ? false : true
                 },
@@ -184,17 +275,17 @@
                     field: 'dailyDocumentType',
                     title: '种类',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
+                        return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType));
                     },
-                    visible: showNames && showDatilDocumentType
+                    visible: documentTypeVal == "0" ? false : true && showDatilDocumentType
                 },
                 {
                     field: 'dailyDocumentTypeContract',
                     title: '种类',
                     formatter: function(value, item, index) {
-                        return $.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract);
+                        return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract));
                     },
-                    visible: showNames && !showDatilDocumentType
+                    visible: documentTypeVal == "0" ? false : true && !showDatilDocumentType
                 },
                 {
                     field: 'fileName',
@@ -204,8 +295,8 @@
                     field: 'fileType',
                     title: '附件类型',
                     formatter: function(value, item, index) {
-                                return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
-                            }
+                        return strLength($.table.selectDictLabel(documentFileTypeDictDatas, item.fileType));
+                    }
                 },
                 {
                     field: 'fileScanType',
@@ -231,7 +322,7 @@
                 {
                     field: 'documentStatu',
                     title: '档案状态',
-                    visible: showNames,
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
                     }
@@ -239,7 +330,7 @@
                 {
                     field: 'cabinetNo',
                     title: '柜号',
-                    visible: showNames,
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength(item.cabinetNo);
                     }
@@ -247,7 +338,7 @@
                 {
                     field: 'bagNo',
                     title: '档案袋编号',
-                    visible: showNames,
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength(item.bagNo);
                     }
@@ -255,7 +346,7 @@
                 {
                     field: 'documentGetType',
                     title: '档案类型',
-                    visible: showNames,
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
                     }
@@ -263,7 +354,7 @@
                 {
                     field: 'fileGetType',
                     title: '文件类型',
-                    visible: showNames,
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
                     }
@@ -271,7 +362,7 @@
                 {
                     field: 'documentLevel',
                     title: '档案级别',
-                    visible: showNames,
+                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(documentLevelDictDatas, item.documentLevel));
                     }
@@ -282,12 +373,15 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        console.log(row)
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>查看附件</a> ');
+                        if(row.fileNames == "") {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>添加附件</a> ');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addFile(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>查看附件</a> ');
+                        }
                         return actions.join('');
                     }
                 },
-                 {
+                {
                     field: 'erweima',
                     title: '二维码',
                     align: 'center',
@@ -313,39 +407,90 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        // if(!isNotChange) {
+                        //     if(applyTypeUnDone == "3" || applyTypeUnDone == "2") {
+                        //         if(seOrEd == "edse1") {
+                        //             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        //             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        //         }
+                        //     } else {
+                        //         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        //         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        //
+                        //     }
+                        // }
+                        // if(showNames && applyTypeUnDone == "2") {
+                        //     $("#addClick").hide()
+                        //     $("#deletClick").hide()
+                        //     actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        // }
+                        //     if(showBut) {
+                        //         $("#addClick").show()
+                        //         $("#editClick").show()
+                        //         $("#deletClick").show()
+                        if(showEdit) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        } else if(showAllBut) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\',\'' + applyTypeUnDone + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        } else if(showDelet) {
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        } else {}
+                        // }
                         return actions.join('');
-                    },
-                    visible: !isNotChange
+                    }
                 }]
         };
         $.table.init(options);
-        if(isNotChange){
-            $("input").attr("readonly","readonly");
-            $("select").attr("disabled",true);
-            $("a").attr("disabled",true);
-            $('.btn').removeAttr('onclick')
+
+        if(applyTypeUnDone == "3" || applyTypeUnDone =="2") {
+            if(seOrEd == "edse0") {
+                $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick");
+                $("select").attr("disabled",true);
+                $("a").attr("disabled",true);
+                $('.btn').removeAttr('onclick')
+            }
+            if(showNames) {
+                $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick")
+                $("select").attr("disabled",true);
+            }
+        } else {
+            if(isNotChange){
+                $("input").attr("readonly","readonly");
+                $("input").removeAttr("onclick")
+                $("select").attr("disabled",true);
+                $("a").attr("disabled",true);
+                $('.btn').removeAttr('onclick')
+            }
         }
+        // disabled删除必选项
+        $.operate.lock()
     });
 
     $("#form-applyIn-edit").validate({
         focusCleanup: true
     });
 
-    function showCode(documentId){
-        var url = prefix + "/code?documentId="+documentId;
-        $.modal.open("档案信息查看", url, '400', '400');
+    function changeRoleType(){
+        roleType = document.getElementById("roleType").value;
+        if ("bg"==roleType){
+            $("#debtorName").hide()
+        }else{
+            $("#debtorName").show()
+        }
+        $("#projectIdVal").val("");
+        $("#projectNameVal").val("");
+        $("#debtorNameVal").val("");
+        $("#debtorNameTip").val("");
+        $("#debtorNameTip").attr("disabled", "disabled")
     }
+
 
     function strLength(value){
         var str = $.common.nullToStr(value);
         return str;
-    }
-
-    function getInOutDetail(documentId){
-        var url = prefix + '/inOutPage?documentId=' + documentId;
-        $.modal.open("查看出入库信息", url);
     }
 
     function submitHandler() {
@@ -360,10 +505,83 @@
         autoclose: true
     });
 
-    function addFile (id) {
+    function addFile (id,applyTypeUnDone) {
         var detail = ctx + 'activity/fileDetail'
-        var url = detail + '/docDetail/' + id;
+        var url = detail + '/detail/' + id + "/" + applyTypeUnDone;
         $.modal.open("添加附件", url);
+    }
+
+    //人员树形选择器
+    function selectUser() {
+        var url = ctx + "system/dept/selectLeaderUser"
+        $.modal.open("人员选择", url, '750', '600/2');
+    }
+
+    function selectDebtor(){
+        var url = ctx + "applyIn/selectDebtor?zcbId=" + $("#projectIdVal").val()+"&roleType="+roleType;
+        $.modal.open("债务人选择", url, '750', '600/2');
+    }
+
+    function selectPro(){
+        var url = ctx + "applyIn/selectPro?roleType="+roleType;
+        $.modal.open("项目选择", url, '750', '600/2');
+    }
+    function getDeviceBasics(row) {
+        var userName = "";
+        var loginName = "";
+        for (var i = 0; i < row.length; i++) {
+            userName = row[i].userName + "," + userName;
+            loginName = row[i].loginName + "," + loginName;
+        }
+        $("#applyUser").val(loginName.substr(0, loginName.length - 1));
+        $("#applyUserName").val(userName.substr(0, userName.length - 1));
+        $("#realCreateBy").val(loginNameUser)
+        layer.close(layer.index);
+    }
+    function getZcdSelected(row) {
+        if (roleType == "inve"){
+            $("#projectIdVal").val(row[0].id);
+            $("#projectNameVal").val(row[0].assetPackageName);
+        }else if(roleType == "thb"){
+            $("#projectIdVal").val(row[0].projectZckId);
+            $("#projectNameVal").val(row[0].zckName);
+        }else if(roleType == "bg"){
+            $("#projectIdVal").val(row[0].id);
+            $("#projectNameVal").val(row[0].projectName);
+        }
+        if (row.length>0){
+            $("#debtorNameVal").val("");
+            $("#debtorNameTip").val("");
+            $("#debtorNameTip").removeAttr("disabled");
+        }
+        layer.close(layer.index);
+    }
+    /*  function getThbSelected(row) {
+          $("#projectIdVal").val(row[0].projectZckId);
+          $("#projectNameVal").val(row[0].zckName);
+          layer.close(layer.index);
+      }*/
+    function getDobtSelected(row){
+        if (roleType == "inve"){
+            $("#debtorNameVal").val(row[0].id);
+            $("#debtorNameTip").val(row[0].projectName);
+        }else if(roleType == "thb"){
+            $("#debtorNameVal").val(row[0].projectId);
+            $("#debtorNameTip").val(row[0].projectName);
+        }
+
+        layer.close(layer.index);
+    }
+
+
+    function showCode(documentId){
+        var url = prefix + "/code?documentId="+documentId;
+        $.modal.open("档案信息查看", url, '400', '400');
+    }
+
+    function getInOutDetail(documentId){
+        var url = prefix + '/inOutPage?documentId=' + documentId;
+        $.modal.open("查看出入库信息", url);
     }
 </script>
 </body>

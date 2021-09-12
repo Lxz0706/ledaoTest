@@ -101,6 +101,105 @@
           zqyx_customer_id, zqyx_customer_name, zqcj_customer_id, zqcj_customer_name, other_id, other_name,other_flag,open_time   from sys_project
     </sql>
 
+    <select id="selectSysProjectListNoLike" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            del_flag='0' and parent_id IS NULL
+            <if test="projectName != null">and project_name = #{projectName} </if>
+            <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
+            <if test="no != null  and no != ''">and no = #{no}</if>
+            <if test="borrower != null  and borrower != ''">and borrower = #{borrower}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="loanBank != null  and loanBank != ''">and loan_bank = #{loanBank}</if>
+            <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
+            <if test="principalBalance != null ">and principal_balance = #{principalBalance}</if>
+            <if test="interestBalance != null ">and interest_balance = #{interestBalance}</if>
+            <if test="principalInterestBalance != null ">and principal_interest_balance = #{principalInterestBalance}
+            </if>
+            <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
+            <if test="pledge !=null and pledge !=''">and pledge = #{pledge}</if>
+            <if test="collateral != null  and collateral != ''">and collateral = #{collateral}</if>
+            <if test="projectManagerId !=null and projectManagerId !=''">and project_manager_id = #{projectManagerId}
+            </if>
+            <if test="projectManager != null  and projectManager != ''">and project_manager = #{projectManager}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="judicialStatus != null  and judicialStatus != ''">and judicial_status = #{judicialStatus}</if>
+            <if test="competentCourt != null  and competentCourt != ''">and competent_court = #{competentCourt}</if>
+            <if test="judgeContact != null  and judgeContact != ''">and judge_contact = #{judgeContact}</if>
+            <if test="judicialRemarks != null  and judicialRemarks != ''">and judicial_remarks = #{judicialRemarks}</if>
+            <if test="collateralClaims != null  and collateralClaims != ''">and collateral_claims =
+                #{collateralClaims}
+            </if>
+            <if test="transactionType != null  and transactionType != ''">and transaction_type = #{transactionType}</if>
+            <if test="buyer != null  and buyer != ''">and buyer = #{buyer}</if>
+            <if test="buyerId != null ">and buyer_id = #{buyerId}</if>
+            <if test="buyerSources != null  and buyerSources != ''">and buyer_sources = #{buyerSources}</if>
+            <if test="buyerContact != null  and buyerContact != ''">and buyer_contact = #{buyerContact}</if>
+            <if test="contractNo != null  and contractNo != ''">and contract_no = #{contractNo}</if>
+            <if test="limitationAction != null ">and limitation_action = #{limitationAction}</if>
+            <if test="sealUpSubjectMatter != null  and sealUpSubjectMatter != ''">and seal_up_subject_matter =
+                #{sealUpSubjectMatter}
+            </if>
+            <if test="sealUpDate != null ">and seal_up_date = #{sealUpDate}</if>
+            <if test="limitationExecution != null ">and limitation_execution = #{limitationExecution}</if>
+            <if test="dateFiling != null ">and date_filing = #{dateFiling}</if>
+            <if test="firstInstance != null  and firstInstance != ''">and first_instance = #{firstInstance}</if>
+            <if test="secondInstance != null  and secondInstance != ''">and second_instance = #{secondInstance}</if>
+            <if test="retrial != null  and retrial != ''">and retrial = #{retrial}</if>
+            <if test="enforcementFilingDate != null ">and enforcement_filing_date = #{enforcementFilingDate}</if>
+            <if test="appraisalReportDate != null ">and appraisal_report_date = #{appraisalReportDate}</if>
+            <if test="firstShotDate != null ">and first_shot_date = #{firstShotDate}</if>
+            <if test="secondShotDate != null ">and second_shot_date = #{secondShotDate}</if>
+            <if test="sellShotDate != null ">and sell_shot_date = #{sellShotDate}</if>
+            <if test="successfulBidderDate != null ">and successful_bidder_date = #{successfulBidderDate}</if>
+            <if test="paymentReceivedDate != null ">and payment_received_date = #{paymentReceivedDate}</if>
+            <if test="parentId != null ">and parent_id = #{parentId}</if>
+            <if test="projectZckId != null and projectZckId != ''">and project_zck_id = #{projectZckId}</if>
+            <if test="lawyerContact != null and lawyerContact != ''">and lawyer_contact = #{lawyerContact}</if>
+            <if test="lawFirm != null and lawFirm != ''">and law_firm = #{lawFirm}</if>
+            <if test="debtStatus !=null and debtStatus !=''">and debt_status = #{debtStatus}</if>
+            <if test="customerLable != null  and customerLable != ''">and customer_lable = #{customerLable}</if>
+            <if test="assetSupplierId != null  and assetSupplierId != ''">and asset_supplier_id = #{assetSupplierId}
+            </if>
+            <if test="assetSupplierName != null  and assetSupplierName != ''">and asset_supplier_name like concat('%',
+                #{assetSupplierName}, '%')
+            </if>
+            <if test="fundingProviderId != null  and fundingProviderId != ''">and funding_provider_id =
+                #{fundingProviderId}
+            </if>
+            <if test="fundingProviderName != null  and fundingProviderName != ''">and funding_provider_name like
+                concat('%', #{fundingProviderName}, '%')
+            </if>
+            <if test="lawyerId != null  and lawyerId != ''">and lawyer_id = #{lawyerId}</if>
+            <if test="lawyerName != null  and lawyerName != ''">and lawyer_name like concat('%', #{lawyerName}, '%')
+            </if>
+            <if test="intermediaryId != null  and intermediaryId != ''">and intermediary_id = #{intermediaryId}</if>
+            <if test="intermediaryName != null  and intermediaryName != ''">and intermediary_name like concat('%',
+                #{intermediaryName}, '%')
+            </if>
+            <if test="wqyxCustomerId != null  and wqyxCustomerId != ''">and wqyx_customer_id = #{wqyxCustomerId}</if>
+            <if test="wqyxCustomerName != null  and wqyxCustomerName != ''">and wqyx_customer_name like concat('%',
+                #{wqyxCustomerName}, '%')
+            </if>
+            <if test="wqcjCustomerId != null  and wqcjCustomerId != ''">and wqcj_customer_id = #{wqcjCustomerId}</if>
+            <if test="wqcjCustomerName != null  and wqcjCustomerName != ''">and wqcj_customer_name like concat('%',
+                #{wqcjCustomerName}, '%')
+            </if>
+            <if test="zqyxCustomerId != null  and zqyxCustomerId != ''">and zqyx_customer_id = #{zqyxCustomerId}</if>
+            <if test="zqyxCustomerName != null  and zqyxCustomerName != ''">and zqyx_customer_name like concat('%',
+                #{zqyxCustomerName}, '%')
+            </if>
+            <if test="zqcjCustomerId != null  and zqcjCustomerId != ''">and zqcj_customer_id = #{zqcjCustomerId}</if>
+            <if test="zqcjCustomerName != null  and zqcjCustomerName != ''">and zqcj_customer_name like concat('%',
+                #{zqcjCustomerName}, '%')
+            </if>
+            <if test="otherId != null  and otherId != ''">and other_id = #{otherId}</if>
+            <if test="otherName != null  and otherName != ''">and other_name like concat('%', #{otherName}, '%')</if>
+            <if test="otherFlag != null  and otherFlag != ''">and other_flag = #{otherFlag}</if>
+        </where>
+        ORDER BY no asc
+    </select>
+
     <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         <where>

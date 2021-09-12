@@ -97,4 +97,6 @@ public interface SysZckMapper {
      * @return 结果
      */
     public List<SysZck> queryAll(SysZck sysZck);
+
+    List<SysZck> selectSysZckListNoLike(SysZck sysZck);
 }

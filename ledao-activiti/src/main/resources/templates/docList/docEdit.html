@@ -392,11 +392,11 @@
                     }
                 },
                 {
-                    title: '出库信息查看',
+                    title: '查看出库记录',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="getInOutDetail(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>出库信息查看</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="getInOutDetail(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>查看</a> ');
                         return actions.join('');
                     }
                 },
@@ -580,7 +580,7 @@
     }
 
     function getInOutDetail(documentId){
-        var url = prefix + '/inOutPage?documentId=' + documentId;
+        var url = prefix + '/inOutPage?documentId=' + documentId+"&documentType="+documentTypeVal;
         $.modal.open("查看出入库信息", url);
     }
 </script>

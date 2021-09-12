@@ -36,8 +36,16 @@
         </where>
     </select>
 
+    <select id="selectSysProjectZckAllNoLike" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
+        <include refid="selectSysProjectZckVo"/> where del_flag = '0' and zck_status !=''
+        <if test="zckName != null  and zckName != ''">and zck_name = #{zckName}</if>
+        <if test="zckStatus != null  and zckStatus != ''">and zck_status = #{zckStatus}</if>
+    </select>
+
     <select id="selectSysProjectZckAll" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
         <include refid="selectSysProjectZckVo"/> where del_flag = '0' and zck_status !=''
+        <if test="zckName != null  and zckName != ''">and zck_name like concat('%', #{zckName}, '%')</if>
+        <if test="zckStatus != null  and zckStatus != ''">and zck_status = #{zckStatus}</if>
     </select>
 
     <select id="selectSysProjectZckById" parameterType="Long" resultMap="SysProjectZckResult">

@@ -70,4 +70,6 @@ public interface SysBgczzckMapper {
     public List<SysBgczzck> selectByIds(String[] ids);
 
     List<SysBgczzck> selectSysBgczzckListUseful(SysBgczzck sysBgczzck);
+
+    List<SysBgczzck> selectSysBgczzckListUsefulNoLike(SysBgczzck sysBgczzck);
 }

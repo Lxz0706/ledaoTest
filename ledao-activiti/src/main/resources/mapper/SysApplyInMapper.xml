@@ -488,6 +488,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isReceived != null">is_received,</if>
             <if test="remarksOut != null">remarks_out,</if>
             <if test="roleType != null">role_type,</if>
+            <if test="inType != null">in_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="applyType != null">#{applyType},</if>
@@ -520,6 +521,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isReceived != null">#{isReceived},</if>
             <if test="remarksOut != null">#{remarksOut},</if>
             <if test="roleType != null">#{roleType},</if>
+            <if test="inType != null">#{inType},</if>
          </trim>
     </insert>
 

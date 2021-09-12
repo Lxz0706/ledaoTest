@@ -50,7 +50,7 @@ public class SysFileDetail extends BaseEntity
 
 	/** 档案id */
     @Excel(name = "档案id")
-    private Long documentFileId;
+    private long documentFileId;
 
     public String getFileType() {
         return fileType;
@@ -80,7 +80,7 @@ public class SysFileDetail extends BaseEntity
     	return documentFileId;
     }
     
-    public void setDocumentFileId(Long documentFileId) {
+    public void setDocumentFileId(long documentFileId) {
     	this.documentFileId = documentFileId;
     }
 

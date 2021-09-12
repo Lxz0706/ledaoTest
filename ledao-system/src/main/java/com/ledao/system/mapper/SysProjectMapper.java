@@ -107,4 +107,6 @@ public interface SysProjectMapper {
      * @return
      */
     public SysProject selectTotalPrincipalBalanceByParentId(Long projectId);
+
+    public List<SysProject>  selectSysProjectListNoLike(SysProject sysProject);
 }

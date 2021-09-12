@@ -118,6 +118,140 @@
         create_time, update_by, update_time,dzywqd_time, maximum_mortgage_amount,rental_situation, zoning,zcb_id,parent_id,gzjy,customer_id from sys_zck
     </sql>
 
+    <select id="selectSysZckListNoLike" parameterType="SysZck" resultMap="SysZckResult">
+        <include refid="selectSysZckVo"/>
+        <where>
+            del_flag='0'
+            <if test="id !=null and id != '' ">
+                and id in
+                <foreach item="id" collection="array" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="assetType != null  and assetType != ''">and asset_type like concat('%',
+                #{assetType}, '%')
+            </if>
+            <if test="assetStatus != null  and assetStatus != ''">
+                AND asset_status = #{assetStatus}
+            </if>
+            <if test="no != null ">and no =#{no }</if>
+            <if test="projectName != null  and projectName != ''">and project_name =#{projectName}
+            </if>
+            <if test="city != null  and city != ''">and city like concat ('%',#{city},'%')</if>
+            <if test="contractPrincipal != null ">and contract_principal = #{contractPrincipal}</if>
+            <if test="principalBalance != null and principalBalance !=''">and principal_balance like concat
+                ('%',${principalBalance},'%')
+            </if>
+            <if test="interestBalance != null ">and interest_balance = #{interestBalance}</if>
+            <if test="principalInterestBalance != null ">and principal_interest_balance = #{principalInterestBalance}
+            </if>
+            <if test="bxjsDate != null ">and bxjs_date = #{bxjsDate}</if>
+            <if test="loanBank != null  and loanBank != ''">and loan_bank = #{loanBank}</if>
+            <if test="loanContractNo != null  and loanContractNo != ''">and loan_contract_no = #{loanContractNo}</if>
+            <if test="loanTime != null ">and loan_time = #{loanTime}</if>
+            <if test="guarantor != null  and guarantor != ''">and guarantor like concat ('%',#{guarantor },'%')</if>
+            <if test="bzrZrrNumber != null ">and bzr_zrr_number = #{bzrZrrNumber}</if>
+            <if test="bzrFrNumber != null ">and bzr_fr_number = #{bzrFrNumber}</if>
+            <if test="guaranteeAmount != null ">and guarantee_amount = #{guaranteeAmount}</if>
+            <if test="guaranteeContractNo != null  and guaranteeContractNo != ''">and guarantee_contract_no =
+                #{guaranteeContractNo}
+            </if>
+            <if test="guaranteeContractSignTime != null ">and guarantee_contract_sign_time =
+                #{guaranteeContractSignTime}
+            </if>
+            <if test="maximumGuaranteeAmount != null ">and maximum_guarantee_amount = #{maximumGuaranteeAmount}</if>
+            <if test="maximumGuaranteeContract != null  and maximumGuaranteeContract != ''">and
+                maximum_guarantee_contract = #{maximumGuaranteeContract}
+            </if>
+            <if test="maximumGuaratnteeSignTime != null ">and maximum_guaratntee_sign_time =
+                #{maximumGuaratnteeSignTime}
+            </if>
+            <if test="zzqDateTime != null  and zzqDateTime != ''">and zzq_date_Time = #{zzqDateTime}</if>
+            <if test="guaranteeMode != null  and guaranteeMode != ''">and guarantee_mode = #{guaranteeMode}</if>
+            <if test="guaranteePeriod != null  and guaranteePeriod != ''">and guarantee_period = #{guaranteePeriod}</if>
+            <if test="guaranteeRemarks != null  and guaranteeRemarks != ''">and guarantee_remarks =
+                #{guaranteeRemarks}
+            </if>
+            <if test="assetNature != null  and assetNature != ''">and asset_nature = #{assetNature}</if>
+            <if test="address != null  and address != ''">and address = #{address}</if>
+            <if test="qsNo != null  and qsNo != ''">and qs_no = #{qsNo}</if>
+            <if test="area != null  and area != ''">and area = #{area}</if>
+            <if test="sealUp != null  and sealUp != ''">and seal_up = #{sealUp}</if>
+            <if test="mortgage != null  and mortgage != ''">and mortgage = #{mortgage}</if>
+            <if test="otherRemark != null  and otherRemark != ''">and other_remark = #{otherRemark}</if>
+            <if test="jkrIndustry != null  and jkrIndustry != ''">and jkr_industry = #{jkrIndustry}</if>
+            <if test="soe != null  and soe != ''">and soe = #{soe}</if>
+            <if test="operation != null  and operation != ''">and operation = #{operation}</if>
+            <if test="court != null  and court != ''">and court = #{court}</if>
+            <if test="litigation != null  and litigation != ''">and litigation = #{litigation}</if>
+            <if test="judicialRemark != null  and judicialRemark != ''">and judicial_remark = #{judicialRemark}</if>
+            <if test="dywAddress != null  and dywAddress != ''">and dyw_address = #{dywAddress}</if>
+            <if test="mortgageAmount != null ">and mortgage_amount = #{mortgageAmount}</if>
+            <if test="mortgageContractNo != null  and mortgageContractNo != ''">and mortgage_contract_no =
+                #{mortgageContractNo}
+            </if>
+            <if test="maximumMortgageContractNo != null  and maximumMortgageContractNo != ''">and
+                maximum_mortgage_contract_no = #{maximumMortgageContractNo}
+            </if>
+            <if test="zgeContractTime != null ">and zge_contract_time = #{zgeContractTime}</if>
+            <if test="dbzzqTime != null  and dbzzqTime != ''">and dbzzq_time = #{dbzzqTime}</if>
+            <if test="mortgagor != null  and mortgagor != ''">and mortgagor = #{mortgagor}</if>
+            <if test="zgeQsNo != null  and zgeQsNo != ''">and zge_qs_no = #{zgeQsNo}</if>
+            <if test="txQzNo != null  and txQzNo != ''">and tx_qz_no = #{txQzNo}</if>
+            <if test="caseNo != null  and caseNo != ''">and case_no = #{caseNo}</if>
+            <if test="mortgageRank != null  and mortgageRank != ''">and mortgage_rank like concat
+                ('%',#{mortgageRank },'%')
+            </if>
+            <if test="qxswMortgeageAmount != null ">and qxsw_mortgeage_amount = #{qxswMortgeageAmount}</if>
+            <if test="beforeOrAterAarrival != null  and beforeOrAterAarrival != ''">and before_or_ater_aarrival =
+                #{beforeOrAterAarrival}
+            </if>
+            <if test="rentalDetails != null  and rentalDetails != ''">and rental_details = #{rentalDetails}</if>
+            <if test="juveniles != null  and juveniles != ''">and juveniles = #{juveniles}</if>
+            <if test="onlyHouse != null  and onlyHouse != ''">and only_house = #{onlyHouse}</if>
+            <if test="tengfang != null  and tengfang != ''">and tengfang = #{tengfang}</if>
+            <if test="natureLand != null  and natureLand != ''">and nature_land like concat ('%',#{natureLand },'%')
+            </if>
+            <if test="sysynx != null  and sysynx != ''">and sysynx = #{sysynx}</if>
+            <if test="plotRatio != null  and plotRatio != ''">and plot_ratio = #{plotRatio}</if>
+            <if test="access != null  and access != ''">and access = #{access}</if>
+            <if test="landArea != null ">and land_area like concat ('%',#{landArea },'%')</if>
+            <if test="buildStructure != null  and buildStructure != ''">and build_structure = #{buildStructure}</if>
+            <if test="completionDate != null ">and completion_date = #{completionDate}</if>
+            <if test="floors != null  and floors != ''">and floors like concat ('%',#{floors },'%')</if>
+            <if test="collateType != null  and collateType != ''">and collate_type like concat
+                ('%',#{collateType },'%')
+            </if>
+            <if test="floorage != null ">and floorage like concat ('%',#{floorage },'%')</if>
+            <if test="landUnitPrice != null ">and land_unit_price = #{landUnitPrice}</if>
+            <if test="landTotalPrice != null ">and land_total_price = #{landTotalPrice}</if>
+            <if test="otherCollateralUnitPrice != null ">and other_collateral_unit_price = #{otherCollateralUnitPrice}
+            </if>
+            <if test="otherCollateralTotalPrice != null ">and other_collateral_total_price =
+                #{otherCollateralTotalPrice}
+            </if>
+            <if test="totalPrice != null ">and total_price like concat ('%',#{totalPrice },'%')</if>
+            <if test="valuationBasis != null  and valuationBasis != ''">and valuation_basis = #{valuationBasis}</if>
+            <if test="capValue != null  and capValue != ''">and cap_value like concat ('%',#{capValue },'%')</if>
+            <if test="dzywRemark != null  and dzywRemark != ''">and dzyw_remark = #{dzywRemark}</if>
+            <if test="borrowerWsqk != null  and borrowerWsqk != ''">and borrower_wsqk = #{borrowerWsqk}</if>
+            <if test="propertyClues != null  and propertyClues != ''">and property_clues = #{propertyClues}</if>
+            <if test="zhhknl != null ">and zhhknl = #{zhhknl}</if>
+            <if test="jkrgzRemark != null  and jkrgzRemark != ''">and jkrgz_remark = #{jkrgzRemark}</if>
+            <if test="price != null ">and price = #{price}</if>
+            <if test="desposalMode != null  and desposalMode != ''">and desposal_mode = #{desposalMode}</if>
+            <if test="desposalPrice != null ">and desposal_price = #{desposalPrice}</if>
+            <if test="customerId != null ">and customer_id = #{customerId}</if>
+            <if test="customer != null  and customer != ''">and customer = #{customer}</if>
+            <if test="dzywqdTime != null ">and dzywqd_time = #{dzywqdTime}</if>
+            <if test="maximumMortgageAmount != null ">and maximum_mortgage_amount = #{maximumMortgageAmount}</if>
+            <if test="rentalSituation != null  and rentalSituation != ''">and rental_situation = #{rentalSituation}</if>
+            <if test="zoning != null  and zoning != ''">and zoning = #{zoning}</if>
+            <if test="zcbId !=null and zcbId !=''">and zcb_id=#{zcbId}</if>
+            <if test="parentId !=null and parentId !=''">and parent_id=#{parentId}</if>
+        </where>
+        ORDER BY no
+    </select>
     <select id="selectSysZckList" parameterType="SysZck" resultMap="SysZckResult">
         <include refid="selectSysZckVo"/>
         <where>

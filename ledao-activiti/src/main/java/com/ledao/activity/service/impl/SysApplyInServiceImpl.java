@@ -3,33 +3,27 @@ package com.ledao.activity.service.impl;
 import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ledao.activity.controller.ProcessDefinitionController;
 import com.ledao.activity.dao.*;
 import com.ledao.activity.mapper.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysZck;
-import com.ledao.system.mapper.SysDocumentMapper;
-import com.ledao.system.mapper.SysRoleMapper;
-import com.ledao.system.mapper.SysUserMapper;
-import com.ledao.system.mapper.SysZckMapper;
+import com.ledao.common.utils.poi.ExcelUtil;
+import com.ledao.system.dao.*;
+import com.ledao.system.mapper.*;
 import com.ledao.system.service.ISysDictDataService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -84,6 +78,21 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private SysZcbMapper sysZcbMapper;
+    @Autowired
+    private SysZckMapper sysZckMapper;
+
+    @Autowired
+    private SysProjectZckMapper sysProjectZckMapper;
+
+    @Autowired
+    private SysProjectMapper sysProjectMapper;
+
+    @Autowired
+    private SysBgczzckMapper sysBgczzckMapper;
+
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
 
@@ -762,6 +771,373 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     @Override
     public List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn) {
         return sysApplyInMapper.listInOutDetail(sysApplyIn);
+    }
+
+    @Override
+    public AjaxResult importApplyIn(MultipartFile file) {
+        try {
+
+            //获取申请列表
+            String documentType = "";
+            MultipartFile file2 = file;
+            List<SysApplyInImport> ApplyList = new ArrayList<>();
+            List<SysApplyInImportDaily> ApplyListDaily = new ArrayList<>();
+            List<SysApplyInImportFile> filesList = new ArrayList<>();
+            List<SysApplyInImportFileDaily> filesListDaily = new ArrayList<>();
+            if ("项目类数据导入.xlsx".equals(file.getOriginalFilename())){
+                documentType = "0";
+                ExcelUtil ex = new ExcelUtil(SysApplyInImport.class);
+                ApplyList =  ex.importExcel("项目类",file.getInputStream());
+                //获取附件列表
+                ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFile.class);
+                filesList =  fileDetails.importExcel("档案信息",file2.getInputStream());
+            } else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
+                documentType = "1";
+                ExcelUtil ex = new ExcelUtil(SysApplyInImportDaily.class);
+                ApplyListDaily =  ex.importExcel("日常经营类",file.getInputStream());
+                //获取附件列表
+                ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFileDaily.class);
+                filesListDaily =  fileDetails.importExcel("档案信息",file2.getInputStream());
+            }else if("合同类数据导入.xlsx".equals(file.getOriginalFilename())){
+                documentType = "2";
+                ExcelUtil ex = new ExcelUtil(SysApplyInImportDaily.class);
+                ApplyListDaily =  ex.importExcel("合同类",file.getInputStream());
+                //获取附件列表
+                ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFileDaily.class);
+                filesListDaily =  fileDetails.importExcel("档案信息",file2.getInputStream());
+            }else{
+                return AjaxResult.error("上传文件错误，请重新上传");
+            }
+
+            //种类(companyName)
+            List<SysDictData> dailyDocumentType = dictDataService.selectDictDataByType("daily_document_type");
+
+            List<SysDictData> contractDocumentType = dictDataService.selectDictDataByType("contract_document_type");
+            //附件类型字典项(companyName)
+            List<SysDictData> companyNameDict = dictDataService.selectDictDataByType("sys_company_name");
+            //附件类型字典项(fileType)
+            List<SysDictData> documentFileTypeDict = dictDataService.selectDictDataByType("document_file_type");
+            //扫描件类型字典项(fileScanType)
+            List<SysDictData> documentScanTypeDict = dictDataService.selectDictDataByType("document_scan_type");
+            //档案状态字典项(documentStatu)
+            List<SysDictData> documentInStatusDict = dictDataService.selectDictDataByType("document_in_status");
+
+            List<SysDictData> busiDocumentTypeDict = dictDataService.selectDictDataByType("busi_document_type");
+            //文件类型字典项(fileGetType)
+            List<SysDictData> documentInTypeDict = dictDataService.selectDictDataByType("document_in_type");
+            //档案级别字典项(documentLevel)
+            List<SysDictData> documentLevelDict = dictDataService.selectDictDataByType("document_level");
+
+            for (SysApplyInImport s:ApplyList) {
+                for (SysDictData d : companyNameDict ) {
+                    if (d.getDictLabel().equals(s.getCompanyNameLab())){
+                        s.setCompanyName(d.getDictValue());
+                    }
+                }
+                SysUser appUser = userMapper.selectUserByUserName(s.getApplyUserLab());
+                s.setApplyUser(appUser!=null?appUser.getLoginName():s.getApplyUserLab());
+                appUser = userMapper.selectUserByUserName(s.getRealCreateNameLab());
+                s.setRealCreateName(appUser!=null?appUser.getLoginName():s.getRealCreateNameLab());
+                appUser = userMapper.selectUserByUserName(s.getReviserNameLab());
+                s.setReviserName(appUser!=null?appUser.getLoginName():s.getReviserNameLab());
+            }
+            for (SysApplyInImportDaily s:ApplyListDaily) {
+                for (SysDictData d : companyNameDict ) {
+                    if (d.getDictLabel().equals(s.getCompanyNameLab())){
+                        s.setCompanyName(d.getDictValue());
+                    }
+                }
+                SysUser appUser = userMapper.selectUserByUserName(s.getApplyUserLab());
+                s.setApplyUser(appUser!=null?appUser.getLoginName():s.getApplyUserLab());
+                appUser = userMapper.selectUserByUserName(s.getRealCreateNameLab());
+                s.setRealCreateName(appUser!=null?appUser.getLoginName():s.getRealCreateNameLab());
+                appUser = userMapper.selectUserByUserName(s.getReviserNameLab());
+                s.setReviserName(appUser!=null?appUser.getLoginName():s.getReviserNameLab());
+            }
+
+            //为附件匹配字典项
+            for (SysApplyInImportFileDaily f:filesListDaily) {
+                if ("1".equals(documentType)){
+                    for (SysDictData d : dailyDocumentType ) {
+                        if (d.getDictLabel().equals(f.getDailyDocumentTypeLab())){
+                            f.setDailyDocumentType(d.getDictValue());
+                        }
+                    }
+                }else{
+                    for (SysDictData d : contractDocumentType ) {
+                        if (d.getDictLabel().equals(f.getDailyDocumentTypeLab())){
+                            f.setDailyDocumentType(d.getDictValue());
+                        }
+                    }
+                }
+                for (SysDictData d : companyNameDict ) {
+                    if (d.getDictLabel().equals(f.getCompanyNameLab())){
+                        f.setCompanyName(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentFileTypeDict ) {
+                    if (d.getDictLabel().equals(f.getFileTypeLab())){
+                        f.setFileType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentScanTypeDict ) {
+                    if (d.getDictLabel().equals(f.getFileScanTypeLab())){
+                        f.setFileScanType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentInStatusDict ) {
+                    if (d.getDictLabel().equals(f.getDocumentStatuLab())){
+                        f.setDocumentStatu(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : busiDocumentTypeDict ) {
+                    if (d.getDictLabel().equals(f.getBusiDocumentTypeLab())){
+                        f.setBusiDocumentType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentInTypeDict ) {
+                    if (d.getDictLabel().equals(f.getFileGetTypeLab())){
+                        f.setFileGetType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentLevelDict ) {
+                    if (d.getDictLabel().equals(f.getDocumentLevelLab())){
+                        f.setDocumentLevel(d.getDictValue());
+                    }
+                }
+            }
+
+            //为附件匹配字典项
+            for (SysApplyInImportFile f:filesList) {
+                for (SysDictData d : companyNameDict ) {
+                    if (d.getDictLabel().equals(f.getCompanyNameLab())){
+                        f.setCompanyName(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentFileTypeDict ) {
+                    if (d.getDictLabel().equals(f.getFileTypeLab())){
+                        f.setFileType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentScanTypeDict ) {
+                    if (d.getDictLabel().equals(f.getFileScanTypeLab())){
+                        f.setFileScanType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentInStatusDict ) {
+                    if (d.getDictLabel().equals(f.getDocumentStatuLab())){
+                        f.setDocumentStatu(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : busiDocumentTypeDict ) {
+                    if (d.getDictLabel().equals(f.getBusiDocumentTypeLab())){
+                        f.setBusiDocumentType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentInTypeDict ) {
+                    if (d.getDictLabel().equals(f.getFileGetTypeLab())){
+                        f.setFileGetType(d.getDictValue());
+                    }
+                }
+                for (SysDictData d : documentLevelDict ) {
+                    if (d.getDictLabel().equals(f.getDocumentLevelLab())){
+                        f.setDocumentLevel(d.getDictValue());
+                    }
+                }
+            }
+            //将档案归类，每个档案归类到每个申请下面
+            for (SysApplyInImport apply:ApplyList) {
+                if ("0".equals(documentType)){
+                    List<SysApplyInImportFile> files = new ArrayList<>();
+                    for (SysApplyInImportFile fi:filesList){
+                        if (apply.getProjectName().equals(fi.getProjectName()) && apply.getCompanyNameLab().equals(fi.getCompanyNameLab())&&
+                                apply.getDebtorName().equals(fi.getDebtorName())){
+                            files.add(fi);
+                        }
+                    }
+                    apply.setFiles(files);
+                }
+            }
+            for (SysApplyInImportDaily apply:ApplyListDaily) {
+                List<SysApplyInImportFileDaily> filesD = new ArrayList<>();
+                for (SysApplyInImportFileDaily fi:filesListDaily){
+                    if (apply.getCompanyNameLab().equals(fi.getCompanyNameLab())){
+                        filesD.add(fi);
+                    }
+                }
+                apply.setFilesDaily(filesD);
+            }
+            //数据封装完成开始进行插入
+            if ("0".equals(documentType)){
+                for (SysApplyInImport apply:ApplyList) {
+                    SysApplyIn applyIn = new SysApplyIn();
+                    if ("投资部".equals(apply.getDepName())){
+                        SysZcb sysZcb = new SysZcb();
+                        sysZcb.setAssetPackageName(apply.getProjectName());
+                        List<SysZcb>  zcb = sysZcbMapper.selectSysZcbListNoLike(sysZcb);
+                        if (zcb!=null && zcb.size()>0){
+                            applyIn.setProjectName(zcb.get(0).getAssetPackageName());
+                            applyIn.setProjectId(zcb.get(0).getId());
+
+                            SysZck sysZck = new SysZck();
+                            sysZck.setProjectName(apply.getDebtorName());
+                            sysZck.setZcbId(zcb.get(0).getId());
+                            List<SysZck>  zcks = sysZckMapper.selectSysZckListNoLike(sysZck);
+                            if (zcks!=null && zcks.size()>0){
+                                applyIn.setDebtorName(zcks.get(0).getProjectName());
+                                applyIn.setDebtorId(zcks.get(0).getId());
+                                applyIn.setRoleType("inve");
+                                applyIn.setDocumentType(documentType);
+                                insertApply(apply,applyIn);
+                            }
+                        }
+
+                    }else if ("投后部".equals(apply.getDepName())){
+                        SysProjectZck sysProjectZck = new SysProjectZck();
+                        sysProjectZck.setZckName(apply.getProjectName());
+                        List<SysProjectZck> zcks = sysProjectZckMapper.selectSysProjectZckAllNoLike(sysProjectZck);
+                        if (zcks!=null && zcks.size()>0){
+                            applyIn.setProjectName(zcks.get(0).getZckName());
+                            applyIn.setProjectId(zcks.get(0).getProjectZckId());
+
+                            SysProject sysProject = new SysProject();
+                            sysProject.setProjectZckId(zcks.get(0).getProjectZckId());
+                            sysProject.setProjectName(apply.getDebtorName());
+                            List<SysProject>  pros = sysProjectMapper.selectSysProjectListNoLike(sysProject);
+                            if (pros!=null && pros.size()>0){
+                                applyIn.setDebtorName(pros.get(0).getProjectName());
+                                applyIn.setDebtorId(pros.get(0).getProjectId());
+                                applyIn.setDocumentType(documentType);
+                                applyIn.setRoleType("thb");
+                                insertApply(apply,applyIn);
+                            }
+                        }
+                    }else if ("大型单体".equals(apply.getDepName())){
+                        SysBgczzck sysBgczzck = new SysBgczzck();
+                        sysBgczzck.setProjectName(apply.getProjectName());
+                        List<SysBgczzck> zcks = sysBgczzckMapper.selectSysBgczzckListUsefulNoLike(sysBgczzck);
+                        if (zcks!=null && zcks.size()>0){
+                            applyIn.setProjectName(zcks.get(0).getProjectName());
+                            applyIn.setProjectId(zcks.get(0).getId());
+                            applyIn.setDocumentType(documentType);
+
+                            applyIn.setRoleType("bg");
+                            insertApply(apply,applyIn);
+
+                        }
+                    }
+                }
+            }else{
+                for (SysApplyInImportDaily apply:ApplyListDaily) {
+                    SysApplyIn applyIn = new SysApplyIn();
+                    applyIn.setDocumentType(documentType);
+                    insertApplyDaily(apply,applyIn);
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+        return AjaxResult.success();
+    }
+
+    public int insertApply(SysApplyInImport apply,SysApplyIn applyIn){
+        applyIn.setApplyUser(apply.getApplyUser());
+        applyIn.setApplyTime(apply.getApplyTime());
+        applyIn.setApproveStatu("3");
+        applyIn.setReviserName(apply.getReviserName());
+        applyIn.setRealCreateBy(apply.getRealCreateName());
+        applyIn.setCompanyName(apply.getCompanyName());
+        applyIn.setRemarks(apply.getRemark());
+
+        applyIn.setInType("import");
+        applyIn.setApplyType("0");
+        applyIn.setCreateTime(new Date());
+        applyIn.setUpdateTime(new Date());
+        sysApplyInMapper.insertSysApplyIn(applyIn);
+        for (SysApplyInImportFile f :apply.getFiles()) {
+            SysDocumentFile doc = new SysDocumentFile();
+            doc.setApplyId(applyIn.getApplyId());
+            doc.setAssetNumber(f.getAssetNumber());
+            doc.setContractNo(f.getContractNo());
+            doc.setFileName(f.getFileName());
+            doc.setFileType(f.getFileType());
+            doc.setFileScanType(f.getFileScanType());
+            doc.setCounts(f.getCounts());
+            doc.setPages(f.getPages());
+            doc.setDocumentStatu(f.getDocumentStatu());
+            doc.setCabinetNo(f.getCabinetNo());
+            doc.setBagNo(f.getBagNo());
+            doc.setFileGetType(f.getFileGetType());
+            doc.setDocumentType(applyIn.getDocumentType());
+            doc.setDocumentLevel(f.getDocumentLevel());
+            doc.setCreateTime(new Date());
+            doc.setUpdateTime(new Date());
+            doc.setCreateBy(ShiroUtils.getLoginName());
+            documentFileMapper.insertSysDocumentFile(doc);
+            SysFileDetail fileDetail = new SysFileDetail();
+            fileDetail.setCreateTime(new Date());
+            fileDetail.setUpdateTime(new Date());
+            fileDetail.setCreateBy(ShiroUtils.getLoginName());
+            fileDetail.setDocumentFileId(doc.getDocumentId());
+            fileDetail.setFileUrl(f.getFileUrl());
+            fileDetail.setFileType(f.getFileDetailType());
+            fileDetail.setFileName(f.getFileUrl().substring(f.getFileUrl().lastIndexOf("\\")+1));
+            fileDetailMapper.insertSysFileDetail(fileDetail);
+        }
+        return 0;
+    }
+
+    public int insertApplyDaily(SysApplyInImportDaily apply,SysApplyIn applyIn){
+        applyIn.setApplyUser(apply.getApplyUser());
+        applyIn.setApplyTime(apply.getApplyTime());
+        applyIn.setApproveStatu("3");
+        applyIn.setReviserName(apply.getReviserName());
+        applyIn.setRealCreateBy(apply.getRealCreateName());
+        applyIn.setCompanyName(apply.getCompanyName());
+        applyIn.setRemarks(apply.getRemark());
+
+        applyIn.setInType("import");
+        applyIn.setApplyType("0");
+        applyIn.setCreateTime(new Date());
+        applyIn.setUpdateTime(new Date());
+        sysApplyInMapper.insertSysApplyIn(applyIn);
+        for (SysApplyInImportFileDaily f :apply.getFilesDaily()) {
+            SysDocumentFile doc = new SysDocumentFile();
+            doc.setApplyId(applyIn.getApplyId());
+            doc.setFileName(f.getFileName());
+            doc.setFileType(f.getFileType());
+            doc.setFileScanType(f.getFileScanType());
+            if ("1".equals(applyIn.getDocumentType())){
+                doc.setDailyDocumentType(f.getDailyDocumentType());
+            }else{
+                doc.setDailyDocumentTypeContract(f.getDailyDocumentType());
+            }
+            doc.setCounts(f.getCounts());
+            doc.setPages(f.getPages());
+            doc.setDocumentStatu(f.getDocumentStatu());
+            doc.setCabinetNo(f.getCabinetNo());
+            doc.setBagNo(f.getBagNo());
+            doc.setFileGetType(f.getFileGetType());
+            doc.setDocumentType(applyIn.getDocumentType());
+            doc.setDocumentLevel(f.getDocumentLevel());
+            doc.setCreateTime(new Date());
+            doc.setUpdateTime(new Date());
+            doc.setCreateBy(ShiroUtils.getLoginName());
+            documentFileMapper.insertSysDocumentFile(doc);
+            SysFileDetail fileDetail = new SysFileDetail();
+            fileDetail.setCreateTime(new Date());
+            fileDetail.setUpdateTime(new Date());
+            fileDetail.setCreateBy(ShiroUtils.getLoginName());
+            fileDetail.setDocumentFileId(doc.getDocumentId());
+            fileDetail.setFileUrl(f.getFileUrl());
+            fileDetail.setFileType(f.getFileDetailType());
+            fileDetail.setFileName(f.getFileUrl().substring(f.getFileUrl().lastIndexOf("\\")+1));
+            fileDetailMapper.insertSysFileDetail(fileDetail);
+        }
+        return 0;
     }
 
     @Override

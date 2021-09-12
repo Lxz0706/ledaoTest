@@ -9,7 +9,9 @@
             <div class="col-sm-12 search-collapse">
 
                 <form id="formId">
+
                     <input name="documentId" id="documentId" th:value="*{documentId}" type="hidden">
+                    <input name="documentType" id="documentType" th:value="*{documentType}" type="hidden">
                     <!-- <div class="select-list">
                          <ul>
                              <li>
@@ -83,6 +85,8 @@
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
         // var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
+        var documentType = document.getElementById("documentType").value;
+        var showPro = false;
         var showNames = false;
         // 通过参数
         var adopt = '6';
@@ -95,6 +99,14 @@
         var prefix = ctx + "applyIn";
 
         $(function() {
+            if (documentType==0){
+                showPro = true;
+                $("#projectName").show();
+                $("#debtorName").show();
+            }else{
+                $("#projectName").hide();
+                $("#debtorName").hide();
+            }
             for(var i =0; i < roles.length;i++) {
                 if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
                     showNames = true
@@ -136,7 +148,8 @@
                     title: '项目名称',
                     formatter: function(value, item, index) {
                         return $.table.tooltip(item.projectName,10);
-                    }
+                    },
+                    visible: showPro
                 },
                 {
                     field: 'companyName',
@@ -150,7 +163,8 @@
                     title: '债务人名称',
                     formatter: function(value, item, index) {
                         return strLength(item.debtorName);
-                    }
+                    },
+                    visible: showPro
                 },
                 {
                     field: 'applyUserName',

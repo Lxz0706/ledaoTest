@@ -146,6 +146,17 @@ public class TimedTask {
         sysManageTask.setTaskType("0");
         List<SysManageTask> task =  sysManageTaskService.selectSysManageTaskList(sysManageTask);
         for (SysManageTask s: task){
+            if (s.getRealEndTime()==null){
+                long planEndTime = sysManageTask.getPlanEndTime().getTime();
+                long realEndTime = sysManageTask.getRealEndTime().getTime();
+                if (realEndTime-planEndTime>0){
+                    long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());
+                    sysManageTask.setOverDay(days);
+                    sysManageTask.setTaskStatu("later");
+                    sysManageTaskService.updateSysManageTask(sysManageTask);
+                }
+
+            }
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
             String date = DateUtils.getPreMonth();
             String planBeginDate =  dateFormat.format(s.getPlanBeginTime());

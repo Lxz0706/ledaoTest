@@ -4,6 +4,7 @@ import java.util.List;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.system.dao.SysUser;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -115,4 +116,6 @@ public interface ISysApplyInService
     List<SysApplyIn> selectSysApplyInDocDetailList(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn);
+
+    AjaxResult importApplyIn(MultipartFile file);
 }

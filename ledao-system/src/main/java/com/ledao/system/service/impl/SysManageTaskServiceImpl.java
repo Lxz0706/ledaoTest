@@ -85,6 +85,8 @@ public class SysManageTaskServiceImpl implements ISysManageTaskService
             long planEndTime = sysManageTask.getPlanEndTime().getTime();
             long realEndTime = sysManageTask.getRealEndTime().getTime();
             if (realEndTime-planEndTime>0){
+                long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());
+                sysManageTask.setOverDay(days);
                 sysManageTask.setTaskStatu("later");
             }else if (realEndTime-planEndTime<0){
                 sysManageTask.setTaskStatu("preTime");

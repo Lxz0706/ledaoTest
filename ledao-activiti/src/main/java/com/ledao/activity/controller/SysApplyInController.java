@@ -28,9 +28,11 @@ import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * 档案入库申请Controller
@@ -112,10 +114,46 @@ public class SysApplyInController extends BaseController
     }
 
     @GetMapping("/inOutPage")
-    public String applyListByMe(Long documentId,ModelMap modelMap) {
+    public String applyListByMe(Long documentId,String documentType,ModelMap modelMap) {
 //        我的申请
         modelMap.put("documentId",documentId);
+        modelMap.put("documentType",documentType);
         return "docList/inOutPage";
+    }
+
+    @Log(title = "历史数据迁移", businessType = BusinessType.INSERT)
+    @PostMapping("/importApplyIn")
+    @ResponseBody
+    public AjaxResult importApplyIn(@RequestParam("file") MultipartFile file )
+    {
+        return  sysApplyInService.importApplyIn(file);
+        /*String loginName = ShiroUtils.getLoginName();
+        SysDocumentFile f = new SysDocumentFile();
+        f.setAssetPag(sysDocumentFile.getAssetPag());
+        f.setAssetNumber(sysDocumentFile.getAssetNumber());
+        f.setBagNo(sysDocumentFile.getBagNo());
+        f.setDocumentType(sysDocumentFile.getDocumentType());
+        f.setDailyDocumentType(sysDocumentFile.getDailyDocumentType());
+        f.setFileName(sysDocumentFile.getFileName());
+        f.setFileType(sysDocumentFile.getFileType());
+        f.setCreateBy(loginName);
+        f.setFileScanType(sysDocumentFile.getFileScanType());
+        f.setApplyId(sysDocumentFile.getApplyId());
+        f.setDailyDocumentTypeContract(sysDocumentFile.getDailyDocumentTypeContract());
+        List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
+        if (ss !=null && ss.size()>0){
+            return AjaxResult.error("存在重复记录，请检查");
+        }
+        if (StringUtils.isNotEmpty(sysDocumentFile.getDocumentTypeVal())){
+            sysDocumentFile.setDocumentType(sysDocumentFile.getDocumentTypeVal());
+        }
+        sysDocumentFile.setReviser(loginName);
+        sysDocumentFile.setCreateBy(loginName);
+        sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
+        SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
+        ap.setReviser(ShiroUtils.getLoginName());
+        sysApplyInService.updateSysApplyIn(ap);*/
+//        return toAjax(true);
     }
 
     @GetMapping("/reject/{applyId}/{applyType}/{approveStatu}")

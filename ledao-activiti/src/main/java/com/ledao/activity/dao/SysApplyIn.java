@@ -27,7 +27,7 @@ public class SysApplyIn extends BaseEntity
     private String applyType;
 
     /** 档案种类，字典项：业务、日常经营 */
-    @Excel(name = "档案种类，字典项：业务、日常经营")
+    @Excel(name = "档案类别，字典项：业务、日常经营")
     private String documentType;
 
     /** 项目id */
@@ -142,6 +142,16 @@ public class SysApplyIn extends BaseEntity
     private String projectZckType;
 
     private long documentId;
+
+    private String inType;
+
+    public String getInType() {
+        return inType;
+    }
+
+    public void setInType(String inType) {
+        this.inType = inType;
+    }
 
     public long getDocumentId() {
         return documentId;

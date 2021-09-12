@@ -25,8 +25,21 @@
     <select id="selectZcbListUseful" parameterType="SysZcb" resultMap="SysZcbResult">
         <include refid="selectSysZcbVo"/> where 	del_flag = '0'
         AND asset_status != ''
+        <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name = #{assetPackageName} </if>
+        <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
     </select>
 
+    <select id="selectSysZcbListNoLike" parameterType="SysZcb" resultMap="SysZcbResult">
+        <include refid="selectSysZcbVo"/>
+        <where>
+            del_flag='0'
+            <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name = #{assetPackageName} </if>
+            <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
+            <if test="teamMembersId != null  and teamMembersId != ''">and team_members_id like
+                concat('%',#{teamMembersId},'%')
+            </if>
+        </where>
+    </select>
     <select id="selectSysZcbList" parameterType="SysZcb" resultMap="SysZcbResult">
         <include refid="selectSysZcbVo"/>
         <where>

@@ -96,9 +96,26 @@
         update_by, update_time,remarks,comment,customer_id,customer from sys_bgczzck
     </sql>
 
+
+    <select id="selectSysBgczzckListUsefulNoLike" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
+        <include refid="selectSysBgczzckVo"/> where del_flag = '0'
+        AND project_status != ''
+        <if test="projectName != null  and projectName != ''">and project_name = #{projectName}
+        </if>
+        <if test="projectStatus != null  and projectStatus != ''">and project_status like
+            concat('%',#{projectStatus},'%')
+        </if>
+    </select>
+
     <select id="selectSysBgczzckListUseful" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
         <include refid="selectSysBgczzckVo"/> where del_flag = '0'
         AND project_status != ''
+        <if test="projectName != null  and projectName != ''">and project_name like concat('%',
+            #{projectName},'%')
+        </if>
+        <if test="projectStatus != null  and projectStatus != ''">and project_status like
+            concat('%',#{projectStatus},'%')
+        </if>
     </select>
 
     <select id="selectSysBgczzckList" parameterType="SysBgczzck" resultMap="SysBgczzckResult">

@@ -71,4 +71,6 @@ public interface SysZcbMapper {
     public List<SysZcb> selectZcbList(SysZcb sysZcb);
 
     List<SysZcb> selectZcbListUseful(SysZcb sysZcb);
+
+    List<SysZcb> selectSysZcbListNoLike(SysZcb sysZcb);
 }

@@ -1,6 +1,8 @@
 package com.ledao.web.controller.system;
 
 import java.util.List;
+
+import com.ledao.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,14 @@ public class SysJournalCommentController extends BaseController
     @GetMapping()
     public String comment()
     {
+        return prefix + "/comment";
+    }
+
+    @RequiresPermissions("system:comment:viewList")
+    @GetMapping("/commentList")
+    public String commentList(Long id, ModelMap mmap)
+    {
+        mmap.put("id",id);
         return prefix + "/comment";
     }
 
@@ -86,6 +96,7 @@ public class SysJournalCommentController extends BaseController
     @ResponseBody
     public AjaxResult addSave(SysJournalComment sysJournalComment)
     {
+        sysJournalComment.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(sysJournalCommentService.insertSysJournalComment(sysJournalComment));
     }
 

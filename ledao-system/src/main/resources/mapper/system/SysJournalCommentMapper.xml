@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="userName"    column="user_name"    />
     </resultMap>
 
     <sql id="selectSysJournalCommentVo">
@@ -25,17 +26,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectSysJournalCommentList" parameterType="SysJournalComment" resultMap="SysJournalCommentResult">
-        <include refid="selectSysJournalCommentVo"/>
+        SELECT
+        com.*,
+        u.user_name
+        FROM
+        sys_journal_comment com
+        LEFT JOIN sys_user u ON com.create_by = u.login_name
         <where>  
-            <if test="journalId != null  and journalId != ''"> and journal_id = #{journalId}</if>
-            <if test="parentId != null  and parentId != ''"> and parent_id = #{parentId}</if>
-            <if test="workDetail != null  and workDetail != ''"> and work_detail = #{workDetail}</if>
-            <if test="remarks1 != null  and remarks1 != ''"> and remarks1 = #{remarks1}</if>
-            <if test="remarks2 != null  and remarks2 != ''"> and remarks2 = #{remarks2}</if>
-            <if test="remarks3 != null  and remarks3 != ''"> and remarks3 = #{remarks3}</if>
-            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
-            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+            <if test="journalId != null  and journalId != ''"> and com.journal_id = #{journalId}</if>
+            <if test="parentId != null  and parentId != ''"> and com.parent_id = #{parentId}</if>
+            <if test="workDetail != null  and workDetail != ''"> and com.work_detail = #{workDetail}</if>
+            <if test="remarks1 != null  and remarks1 != ''"> and com.remarks1 = #{remarks1}</if>
+            <if test="remarks2 != null  and remarks2 != ''"> and com.remarks2 = #{remarks2}</if>
+            <if test="remarks3 != null  and remarks3 != ''"> and com.remarks3 = #{remarks3}</if>
+            <if test="creator != null  and creator != ''"> and com.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and com.reviser = #{reviser}</if>
         </where>
+        order by com.create_time desc
     </select>
     
     <select id="selectSysJournalCommentById" parameterType="Long" resultMap="SysJournalCommentResult">

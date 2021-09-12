@@ -50,7 +50,17 @@ public class SysJournalComment extends BaseEntity
     @Excel(name = "修改人名称")
     private String reviser;
 
-    public void setId(Long id) 
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

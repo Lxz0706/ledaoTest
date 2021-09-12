@@ -70,7 +70,7 @@
                 </form>
             </div>
 
-            <!--<div class="btn-group-sm" id="toolbar" role="group">
+            <div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:journal:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
@@ -81,7 +81,7 @@
                     <i class="fa fa-remove"></i> 删除
                 </a>
 
-            </div>-->
+            </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
@@ -134,7 +134,7 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)"><i class="fa fa-edit"></i>查看</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " onclick="showComment((\'' + row.id + '\'))" href="javascript:void(0)"><i class="fa fa-edit"></i>查看</a> ');
                         return actions.join('');
                     }
                 },
@@ -187,6 +187,11 @@
             minView: "month",
             autoclose: true
         });
+
+        function showComment(id){
+            var url = '/system/comment/commentList?id=' + id;
+            $.modal.open("评论列表", url);
+        }
     </script>
 </body>
 </html>

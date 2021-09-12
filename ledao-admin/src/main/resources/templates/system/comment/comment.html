@@ -8,7 +8,8 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
-                    <div class="select-list">
+                    <input name="id" id="id" th:value="*{id}" type="hidden">
+                    <!--<div class="select-list">
                         <ul>
                             <li>
                                 <label>日志：</label>
@@ -47,7 +48,7 @@
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
-                    </div>
+                    </div>-->
                 </form>
             </div>
 
@@ -90,19 +91,16 @@
                     title: 'id',
                     visible: false
                 },
-                {
+                /*{
                     field: 'journalId',
                     title: '日志'
                 },
                 {
                     field: 'parentId',
                     title: '父评论id'
-                },
-                {
-                    field: 'workDetail',
-                    title: '日志内容'
-                },
-                {
+                },*/
+
+                /*{
                     field: 'remarks1',
                     title: '预备字段1'
                 },
@@ -113,11 +111,22 @@
                 {
                     field: 'remarks3',
                     title: '预备字段3'
+                },*/
+
+                {
+                    field: 'userName',
+                    title: '评论人'
+
                 },
                 {
-                    field: 'creator',
-                    title: '创建人名称'
+                    field: 'createTime',
+                    title: '评论时间'
                 },
+                {
+                    field: 'workDetail',
+                        title: '评论内容'
+                }
+                /*,
                 {
                     field: 'reviser',
                     title: '修改人名称'
@@ -131,7 +140,8 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
-                }]
+                }*/
+                ]
             };
             $.table.init(options);
         });

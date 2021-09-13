@@ -148,7 +148,7 @@ public class TimedTask {
         for (SysManageTask s: task){
             if (s.getRealEndTime()==null){
                 long planEndTime = sysManageTask.getPlanEndTime().getTime();
-                long realEndTime = sysManageTask.getRealEndTime().getTime();
+                long realEndTime = (new Date()).getTime();
                 if (realEndTime-planEndTime>0){
                     long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());
                     sysManageTask.setOverDay(days);

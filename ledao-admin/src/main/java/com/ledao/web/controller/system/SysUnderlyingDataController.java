@@ -11,6 +11,7 @@ import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysDictDataService;
+import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,9 @@ public class SysUnderlyingDataController extends BaseController
     @Autowired
     private ISysDictDataService sysDictDataService;
 
+    @Autowired
+    private ISysUserService iSysUserService;
+
     @RequiresPermissions("system:underlyingdata:view")
     @GetMapping()
     public String underlyingdata()
@@ -53,7 +57,7 @@ public class SysUnderlyingDataController extends BaseController
     /**
      * 查询底层资料列表
      */
-    @RequiresPermissions("system:underlyingdata:list")
+//    @RequiresPermissions("system:underlyingdata:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysUnderlyingData sysUnderlyingData)
@@ -90,7 +94,7 @@ public class SysUnderlyingDataController extends BaseController
      * 新增底层资料
      */
     @GetMapping("/add")
-    public String add(@RequestParam("projectId")String projectId, @RequestParam("projectType")String projectType, ModelMap mmap)
+    public String add(@RequestParam("projectId")long projectId, @RequestParam("projectType")String projectType, ModelMap mmap)
     {
         mmap.put("projectId",projectId);
         mmap.put("projectType",projectType);
@@ -102,10 +106,12 @@ public class SysUnderlyingDataController extends BaseController
      * 查询底层资料
      */
     @GetMapping("/list")
-    public String list(String projectId, String projectType, ModelMap mmap)
+    public String list(String projectId, String projectType, String projectZckType,String projectManagerId,ModelMap mmap)
     {
         mmap.put("projectId",projectId);
+        mmap.put("projectZckType",projectZckType);
         mmap.put("projectType",projectType);
+        mmap.put("projectManagerId",projectManagerId);
         return "system/underlying/underlyingDataLists";
     }
 
@@ -141,7 +147,7 @@ public class SysUnderlyingDataController extends BaseController
     /**
      * 新增保存文件管理
      */
-    @RequiresPermissions("system:underlyingdata:add")
+//    @RequiresPermissions("system:underlyingdata:add")
     @Log(title = "底层资料", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -200,6 +206,20 @@ public class SysUnderlyingDataController extends BaseController
         }
         sysUnderlyingDataService.updateSysUnderlyingData(sysUnderlyingData1);
         return AjaxResult.success();
+    }
+
+    @PostMapping("/checkUserAllow")
+    @ResponseBody
+    public AjaxResult checkUserAllow(String projectManagerId) {
+        SysUser u = ShiroUtils.getSysUser();
+        if (u.getUserId().equals(projectManagerId)){
+           return AjaxResult.success();
+        }
+        SysUser user = iSysUserService.selectUserById(u.getDirectorId());
+        if (u.getUserId() == user.getUserId()){
+            return AjaxResult.success();
+        }
+        return AjaxResult.error();
     }
 
     /**

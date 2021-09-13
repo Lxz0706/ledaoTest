@@ -42,6 +42,7 @@
     var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
     var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
     var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
+    var userId = [[${@permission.getPrincipalProperty('userId')}]];
     var prefix = ctx + "system/project";
 
     var fwProjectType = $("#fwProjectType").val();
@@ -49,7 +50,6 @@
     var otherFlag = $("#otherFlag").val();
 
     $(function () {
-        debugger
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -161,9 +161,9 @@
                         var actions = [];
                         var fileShow = row.isFile;
                         if (fileShow == 0) {
-                            actions.push('<a class="btn btn-success btn-xs ' + uploadFlag + '" href="javascript:void(0)" onclick="toUpload(' + row.projectId + ')"><i class="fa fa-edit"></i>上传</ a> ');
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toUpload(\'' + row.projectId + '\',\''+row.projectManagerId+'\',\''+row.projectZckType+'\')"><i class="fa fa-edit"></i>上传</ a> ');
                         } else {
-                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(' + row.projectId + ')"><i class="fa fa-search"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(\'' + row.projectId + '\',\''+row.projectManagerId+ '\',\''+row.projectZckType+'\')"><i class="fa fa-search"></i>查看</a>');
                         }
                         return actions.join('');
                     }
@@ -258,13 +258,20 @@
         }
         $.modal.parentTab("投后部项目管理", url);
     }
-    function see(projectId) {
-        var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0;
-        $.modal.parentTab("底层资料", url);
+    function see(projectId,projectManagerId,zckType) {
+        var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0+"&projectZckType="+zckType+"&projectManagerId="+projectManagerId;
+        $.modal.open("底层资料", url);
     }
-    function toUpload(projectId) {
-        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 0;
-        $.modal.open('上传底层资料', url);
+    function toUpload(projectId,projectManagerId,zckType) {
+        if (userId == projectManagerId && zckType == "automaticSwitch"){
+            var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 0;
+            $.modal.open('上传底层资料', url);
+        }else if(zckType == "serve"){
+            var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 0;
+            $.modal.open('上传底层资料', url);
+        }else{
+            $.modal.alertError("无法上传");
+        }
     }
     function showImage(content, width, height) {
         layer.open({

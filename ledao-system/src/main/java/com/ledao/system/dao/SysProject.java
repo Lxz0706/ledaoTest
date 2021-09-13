@@ -556,6 +556,15 @@ public class SysProject extends BaseEntity {
      * 应诉主体
      */
     private String lawsuit;
+    private String projectZckType;
+
+    public String getProjectZckType() {
+        return projectZckType;
+    }
+
+    public void setProjectZckType(String projectZckType) {
+        this.projectZckType = projectZckType;
+    }
 
     public Long getProjectId() {
         return projectId;

@@ -1,6 +1,6 @@
 package com.ledao.common.utils.http;
 
-  
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,9 +18,7 @@ import javax.net.ssl.TrustManager;
 import com.alibaba.fastjson.JSONObject;
 
 
-
-  
-public class CommonUtil {  
+public class CommonUtil {
      
 	public static boolean isEmptyList(java.util.List<?> list) {
 		if(null == list || list.isEmpty() ||list.size() ==0 ){
@@ -30,7 +28,7 @@ public class CommonUtil {
 		}
 	}
 	
-    public static JSONObject httpsRequest(String requestUrl, String requestMethod, String outputStr) {   
+    public static JSONObject httpsRequest(String requestUrl, String requestMethod, String outputStr) {
           
         JSONObject jsonObject = null;  
         StringBuffer buffer = new StringBuffer();    
@@ -80,7 +78,7 @@ public class CommonUtil {
             inputStream.close();    
             inputStream = null;    
             httpUrlConn.disconnect();    
-            jsonObject = JSONObject.parseObject(buffer.toString());    
+            jsonObject = JSONObject.parseObject(buffer.toString());
         } catch (ConnectException ce) {    
             ce.printStackTrace();  
         } catch (Exception e) {    

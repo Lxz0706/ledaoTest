@@ -3,10 +3,10 @@ package com.ledao.activity.controller;
 import java.io.IOException;
 import java.util.*;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.constant.WeChatConstants;
+import com.ledao.common.json.JSONObject;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
@@ -14,7 +14,6 @@ import com.ledao.system.dao.SysDictData;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -121,6 +120,11 @@ public class SysApplyInController extends BaseController
         return "docList/inOutPage";
     }
 
+    @GetMapping("/importApplyInImport")
+    public String importApplyInImport() {
+        return "docList/docImport";
+    }
+
     @Log(title = "历史数据迁移", businessType = BusinessType.INSERT)
     @PostMapping("/importApplyIn")
     @ResponseBody
@@ -183,10 +187,11 @@ public class SysApplyInController extends BaseController
     }
 
     @GetMapping("/documentFile")
-    public String documentFile(String dataType,String documentType,ModelMap mmap)
+    public String documentFile(String dataType,String documentType,String roleType,ModelMap mmap)
     {
         mmap.put("projectZckType",dataType);
         mmap.put("documentType",documentType);
+        mmap.put("roleType",roleType);
         return "docList/docApplyIn";
     }
 
@@ -536,7 +541,7 @@ public class SysApplyInController extends BaseController
             JSONObject parmData = new JSONObject();
             parmData.put("scene","documentId="+documentId);
             parmData.put("url","");
-            String parm = parmData.toJSONString();
+            String parm = parmData.toString();
             accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
             System.out.println("accessToken;"+accessToken);
             String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
@@ -579,11 +584,15 @@ public class SysApplyInController extends BaseController
     }
 
     @GetMapping("/documentTypeListBack")
-    public String documentTypeListBack(String documentType,ModelMap mmap)
+    public String documentTypeListBack(String documentType,String roleType,ModelMap mmap)
     {
+        mmap.put("roleType",roleType);
         if ("0".equals(documentType)){
             mmap.put("documentType",documentType);
-            return "docList/documentDetailTypeList";
+            if ("thb".equals(roleType)){
+                return "docList/documentDetailTypeList";
+            }
+            return "docList/docProTypeMu";
         }else{
             return "docList/documentTypeList";
         }
@@ -600,6 +609,18 @@ public class SysApplyInController extends BaseController
     {
         mmap.put("documentType",docType);
         if ("0".equals(docType)){
+            return "docList/docProTypeMu";
+        }else{
+            return "docList/docApplyIn";
+        }
+    }
+
+    @GetMapping("/docProTypeMu")
+    public String docProTypeMu(String roleType, ModelMap mmap)
+    {
+        mmap.put("roleType",roleType);
+        mmap.put("documentType","0");
+        if ("thb".equals(roleType)){
             return "docList/documentDetailTypeList";
         }else{
             return "docList/docApplyIn";

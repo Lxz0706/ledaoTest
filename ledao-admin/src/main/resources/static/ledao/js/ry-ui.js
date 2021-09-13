@@ -1449,6 +1449,29 @@ var table = {
                 };
                 $.ajax(config)
             },
+
+            uploadCheck:function (url,data,callback) {
+                debugger
+                var config = {
+                    url: url,
+                    type: "post",
+                    dataType: "json",
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function (result) {
+                        debugger
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        console.log(result)
+                        // $.operate.successCallback(result);
+                    }
+                };
+                $.ajax(config)
+            },
             // 保存信息 弹出提示框
             saveModal: function (url, data, callback) {
                 var config = {

@@ -10,6 +10,8 @@
             <form id="formId">
                 <input name="projectId" type="hidden" id="projectId" th:value="${projectId}"/>
                 <input type="hidden" name="projectType" id="projectType" th:value="*{projectType}"/>
+                <input type="hidden" name="projectZckType" id="projectZckType" th:value="*{projectZckType}"/>
+                <input type="hidden" name="projectManagerId" id="projectManagerId" th:value="*{projectManagerId}"/>
             </form>
         </div>
 
@@ -17,13 +19,13 @@
             <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:underlyingdata:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+            <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                shiro:hasPermission="system:underlyingdata:remove">
                 <i class="fa fa-remove"></i> 删除
-            </a>
-            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:underlyingdata:list">
+            </a>-->
+            <!--<a class="btn btn-info" onclick="back()" shiro:hasPermission="system:underlyingdata:list">
                 <i class="fa fa-backward"></i> 返回
-            </a>
+            </a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -41,6 +43,10 @@
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
     var projectId = document.getElementById("projectId").value;
     var projectType = document.getElementById("projectType").value;
+    var projectZckType = document.getElementById("projectZckType").value;
+    var userId = [[${@permission.getPrincipalProperty('userId')}]];
+
+    var projectManagerId = document.getElementById("projectManagerId").value;
 
     $(function () {
         var options = {
@@ -84,7 +90,7 @@
                     title: '文件类型'
                 },
                 {
-                    field: 'createor',
+                    field: 'createorName',
                     title: '创建人名称'
                 },
                 {
@@ -127,10 +133,8 @@
                             }
                         }
                         // 档案管理员可以删除所有人
-                        if (loginName == row.createBy || showRemove) {
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        }
-                        actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteFile(\'' + row.fileId +"',\'" + row.createBy + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
                         if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
                                 || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
@@ -148,76 +152,202 @@
         };
         $.table.init(options);
     });
+
     function playVideo(fileId, url, type) {
-        $.ajax({
-            url: prefix + '/previewCount',
-            data: {'fileId': fileId},
-            type: 'post',
-            dataType: 'json',
-            success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
-            }
-        })
-        showVideo('<video controls="controls" autoplay="autoplay" height=\'100%\' width=\'100%\'>' +
-            '  <source src="' + url + '" type="video/mp4" />\n' +
-            '  <source src="' + url + '" type="video/ogg" />\n' +
-            '  <source src="' + url + '" type="video/webm" />\n' +
-            '  <object data="' + url + '">\n' +
-            '    <embed src="' + url + '" />\n' +
-            '  </object>\n' +
-            '</video>'
-        );
+        if (projectType == 0) {
+            $.ajax({
+                url: prefix + '/checkUserAllow',
+                data: {'projectManagerId': projectManagerId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 500) {
+                        $.modal.alertWarning("无法下载");
+                        return;
+                    } else {
+                        $.ajax({
+                            url: prefix + '/previewCount',
+                            data: {'fileId': fileId},
+                            type: 'post',
+                            dataType: 'json',
+                            success: function (result) {
+                                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                            }
+                        })
+                        showVideo('<video controls="controls" autoplay="autoplay" height=\'100%\' width=\'100%\'>' +
+                            '  <source src="' + url + '" type="video/mp4" />\n' +
+                            '  <source src="' + url + '" type="video/ogg" />\n' +
+                            '  <source src="' + url + '" type="video/webm" />\n' +
+                            '  <object data="' + url + '">\n' +
+                            '    <embed src="' + url + '" />\n' +
+                            '  </object>\n' +
+                            '</video>'
+                        );
+                    }
+                }
+            })
+        }else{
+            $.ajax({
+                url: prefix + '/previewCount',
+                data: {'fileId': fileId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                }
+            })
+            showVideo('<video controls="controls" autoplay="autoplay" height=\'100%\' width=\'100%\'>' +
+                '  <source src="' + url + '" type="video/mp4" />\n' +
+                '  <source src="' + url + '" type="video/ogg" />\n' +
+                '  <source src="' + url + '" type="video/webm" />\n' +
+                '  <object data="' + url + '">\n' +
+                '    <embed src="' + url + '" />\n' +
+                '  </object>\n' +
+                '</video>'
+            );
+        }
     }
 
     function showVideo(content) {
-        layer.open({
-            type: 1,
-            title: false, //不显示标题栏
-            shadeClose: true, //点击遮罩时关闭
-            area: ['780px', '460px'],
-            shade: 0.8,
-            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
-            moveType: 1, //拖拽模式，0或者1
-            content: content
-        });
+        if (projectType == 0) {
+            $.ajax({
+                url: prefix + '/checkUserAllow',
+                data: {'projectManagerId': projectManagerId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 500) {
+                        $.modal.alertWarning("无法预览");
+                        return;
+                    } else {
+                        layer.open({
+                            type: 1,
+                            title: false, //不显示标题栏
+                            shadeClose: true, //点击遮罩时关闭
+                            area: ['780px', '460px'],
+                            shade: 0.8,
+                            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+                            moveType: 1, //拖拽模式，0或者1
+                            content: content
+                        });
+                    }
+                }
+            })
+        }else{
+            layer.open({
+                type: 1,
+                title: false, //不显示标题栏
+                shadeClose: true, //点击遮罩时关闭
+                area: ['780px', '460px'],
+                shade: 0.8,
+                id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+                moveType: 1, //拖拽模式，0或者1
+                content: content
+            });
+        }
     }
 
     function jpgToPdf(fileId, url, type) {
-        $.ajax({
-            url: prefix + '/previewCount',
-            data: {'fileId': fileId},
-            type: 'post',
-            dataType: 'json',
-            success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
-            }
-        });
-        var img = new Image();
-        img.src = url;
-        var height = img.height; // 原图片大小
-        var width = img.width; //原图片大小
+        if (projectType == 0) {
+            $.ajax({
+                url: prefix + '/checkUserAllow',
+                data: {'projectManagerId': projectManagerId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 500) {
+                        $.modal.alertWarning("无法预览");
+                        return;
+                    } else {
+                        $.ajax({
+                            url: prefix + '/previewCount',
+                            data: {'fileId': fileId},
+                            type: 'post',
+                            dataType: 'json',
+                            success: function (result) {
+                                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                            }
+                        });
+                        var img = new Image();
+                        img.src = url;
+                        var height = img.height; // 原图片大小
+                        var width = img.width; //原图片大小
 
-        var winHeight = $(window).height() - 80;  // 浏览器可视部分高度
-        var winWidth = $(window).width() - 100;  // 浏览器可视部分宽度
+                        var winHeight = $(window).height() - 80;  // 浏览器可视部分高度
+                        var winWidth = $(window).width() - 100;  // 浏览器可视部分宽度
 
-        // 如果图片高度或者宽度大于限定的高度或者宽度则进行等比例尺寸压缩
-        if (height > winHeight || width > winWidth) {
-            // 1.原图片宽高比例 大于等于 图片框宽高比例
-            if (winWidth / winHeight <= width / height) {
-                width = winWidth;   //以框的宽度为标准
-                height = winWidth * (height / width);
-            }
+                        // 如果图片高度或者宽度大于限定的高度或者宽度则进行等比例尺寸压缩
+                        if (height > winHeight || width > winWidth) {
+                            // 1.原图片宽高比例 大于等于 图片框宽高比例
+                            if (winWidth / winHeight <= width / height) {
+                                width = winWidth;   //以框的宽度为标准
+                                height = winWidth * (height / width);
+                            }
 
-            // 2.原图片宽高比例 小于 图片框宽高比例
-            if (winWidth / winHeight > width / height) {
-                width = winHeight * (width / height);
-                height = winHeight;   //以框的高度为标准
+                            // 2.原图片宽高比例 小于 图片框宽高比例
+                            if (winWidth / winHeight > width / height) {
+                                width = winHeight * (width / height);
+                                height = winHeight;   //以框的高度为标准
+                            }
+                        }
+                        var imgHtml = "<img src='" + img.src + "' width='" + width + "px' height='" + height + "px' />";
+                        $.table.previewImg(url.split(','));
+                        //showImage(imgHtml, width, height);
+                        /*if (img.complete) {
+                        console.log("12312312")
+                        // 打印
+                        showImage(imgHtml, width, height);
+                        //showImage('<img src="' + url + '" alt="x" width="' + width + 'px" height="' + height + 'px">');
+                    } else {
+                        console.log("jyfdas")
+                        // 加载完成执行
+                        img.onload = function () {
+                            console.log("asdasd");
+                            console.log(img.src);
+                            // 打印
+                            // showImage('<img src="' + url + '" alt="x">');
+                            showImage('<img src="' + img.src + '" alt="x">', width, height);
+                        };
+                    }*/
+                    }
+                }
+            })
+        }else{
+            $.ajax({
+                url: prefix + '/previewCount',
+                data: {'fileId': fileId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                }
+            });
+            var img = new Image();
+            img.src = url;
+            var height = img.height; // 原图片大小
+            var width = img.width; //原图片大小
+
+            var winHeight = $(window).height() - 80;  // 浏览器可视部分高度
+            var winWidth = $(window).width() - 100;  // 浏览器可视部分宽度
+
+            // 如果图片高度或者宽度大于限定的高度或者宽度则进行等比例尺寸压缩
+            if (height > winHeight || width > winWidth) {
+                // 1.原图片宽高比例 大于等于 图片框宽高比例
+                if (winWidth / winHeight <= width / height) {
+                    width = winWidth;   //以框的宽度为标准
+                    height = winWidth * (height / width);
+                }
+
+                // 2.原图片宽高比例 小于 图片框宽高比例
+                if (winWidth / winHeight > width / height) {
+                    width = winHeight * (width / height);
+                    height = winHeight;   //以框的高度为标准
+                }
             }
-        }
-        var imgHtml = "<img src='" + img.src + "' width='" + width + "px' height='" + height + "px' />";
-        $.table.previewImg(url.split(','));
-        //showImage(imgHtml, width, height);
-        /*if (img.complete) {
+            var imgHtml = "<img src='" + img.src + "' width='" + width + "px' height='" + height + "px' />";
+            $.table.previewImg(url.split(','));
+            //showImage(imgHtml, width, height);
+            /*if (img.complete) {
             console.log("12312312")
             // 打印
             showImage(imgHtml, width, height);
@@ -233,63 +363,188 @@
                 showImage('<img src="' + img.src + '" alt="x">', width, height);
             };
         }*/
+        }
     }
 
     function showImage(content, width, height) {
-        layer.open({
-            type: 1,
-            title: false, //不显示标题栏
-            shadeClose: true, //点击遮罩时关闭
-            area: [width + 'px', (height + 50) + 'px'],
-            shade: 0.8,
-            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
-            moveType: 1, //拖拽模式，0或者1
-            content: content
-        });
+        if (projectType == 0) {
+            $.ajax({
+                url: prefix + '/checkUserAllow',
+                data: {'projectManagerId': projectManagerId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 500) {
+                        $.modal.alertWarning("无法预览");
+                        return;
+                    } else {
+                        layer.open({
+                            type: 1,
+                            title: false, //不显示标题栏
+                            shadeClose: true, //点击遮罩时关闭
+                            area: [width + 'px', (height + 50) + 'px'],
+                            shade: 0.8,
+                            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+                            moveType: 1, //拖拽模式，0或者1
+                            content: content
+                        });
+                    }
+                }
+            })
+        }else{
+            layer.open({
+                type: 1,
+                title: false, //不显示标题栏
+                shadeClose: true, //点击遮罩时关闭
+                area: [width + 'px', (height + 50) + 'px'],
+                shade: 0.8,
+                id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+                moveType: 1, //拖拽模式，0或者1
+                content: content
+            });
+        }
     };
 
     function toPdf1(fileId, url) {
-        $.ajax({
-            url: prefix + '/previewCount',
-            data: {'fileId': fileId},
-            type: 'post',
-            dataType: 'json',
-            success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
-            }
-        })
+        if (projectType == 0) {
+            $.ajax({
+                url: prefix + '/checkUserAllow',
+                data: {'projectManagerId': projectManagerId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 500) {
+                        $.modal.alertWarning("无法预览");
+                        return;
+                    } else {
+                        $.ajax({
+                            url: prefix + '/previewCount',
+                            data: {'fileId': fileId},
+                            type: 'post',
+                            dataType: 'json',
+                            success: function (result) {
+                                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                            }
+                        })
+                    }
+                }
+            })
+        }else{
+            $.ajax({
+                url: prefix + '/previewCount',
+                data: {'fileId': fileId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                }
+            })
+        }
     }
 
     function toPdf(fileId, url) {
-        $.ajax({
-            url: prefix + '/previewCount',
-            data: {'fileId': fileId},
-            type: 'post',
-            dataType: 'json',
-            success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
-            }
-        })
-        window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+        if (projectType == 0) {
+            $.ajax({
+                url: prefix + '/checkUserAllow',
+                data: {'projectManagerId': projectManagerId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 500) {
+                        $.modal.alertWarning("无法预览");
+                        return;
+                    } else {
+                        $.ajax({
+                            url: prefix + '/previewCount',
+                            data: {'fileId': fileId},
+                            type: 'post',
+                            dataType: 'json',
+                            success: function (result) {
+                                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                            }
+                        })
+                        window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+                    }
+                }
+            })
+        }else{
+            $.ajax({
+                url: prefix + '/previewCount',
+                data: {'fileId': fileId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                }
+            })
+            window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
+        }
     }
 
     function downLoad(fileId, fileName) {
-        $.ajax({
-            url: prefix + '/updateDownLoadCount',
-            data: {'fileId': fileId},
-            type: 'post',
-            dataType: 'json',
-            success: function (result) {
-                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
-            }
-        })
-        window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+        if (projectType == 0) {
+            $.ajax({
+                url: prefix + '/checkUserAllow',
+                data: {'projectManagerId': projectManagerId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 500) {
+                        $.modal.alertWarning("无法下载");
+                        return;
+                    } else {
+                        $.ajax({
+                            url: prefix + '/updateDownLoadCount',
+                            data: {'fileId': fileId},
+                            type: 'post',
+                            dataType: 'json',
+                            success: function (result) {
+                                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                            }
+                        })
+                        window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+                    }
+                }
+            })
+        }else{
+            $.ajax({
+                url: prefix + '/updateDownLoadCount',
+                data: {'fileId': fileId},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+                }
+            })
+            window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+        }
     }
 
-    function add(projectId) {
+    function add() {
         var projectId = $("#projectId").val();
-        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId+"&projectType="+projectType;
-        $.modal.open('上传底层资料', url);
+        if (projectType == 0){
+            if (userId == projectManagerId && projectZckType == "automaticSwitch"){
+
+                var url = ctx + 'system/underlyingdata/add?projectId=' + projectId+"&projectType="+projectType;
+                $.modal.open('上传底层资料', url);
+            }else if(projectZckType == "serve"){
+                var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + projectType;
+                $.modal.open('上传底层资料', url);
+            }else{
+                $.modal.alertError("无法上传");
+            }
+        }else{
+            var url = ctx + 'system/underlyingdata/add?projectId='+projectId+"&projectType="+projectType;
+            $.modal.open('上传底层资料', url);
+        }
+    }
+
+    function deleteFile(id,createBy){
+        if (loginName == createBy){
+            $.operate.remove(id);
+        }else{
+            $.modal.alertError("无法删除");
+        }
     }
 
     function onLoadSuccess(data) {
@@ -300,10 +555,10 @@
         }
     }
 
-    function back() {
-        var url = ctx + "system/project";
+   /* function back() {
+        var url = ctx + "/system/projectZck/projectList?projectZckId=17&projectZckType=automaticSwitch";
         $.modal.parentTab("投后部项目管理", url);
-    }
+    }*/
 
 </script>
 </body>

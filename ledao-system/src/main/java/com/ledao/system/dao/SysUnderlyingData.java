@@ -65,6 +65,26 @@ public class SysUnderlyingData extends BaseEntity
 
     private String proType;
 
+    private String proName;
+
+    private String createorName;
+
+    public String getCreateorName() {
+        return createorName;
+    }
+
+    public void setCreateorName(String createorName) {
+        this.createorName = createorName;
+    }
+
+    public String getProName() {
+        return proName;
+    }
+
+    public void setProName(String proName) {
+        this.proName = proName;
+    }
+
     public String getProType() {
         return proType;
     }

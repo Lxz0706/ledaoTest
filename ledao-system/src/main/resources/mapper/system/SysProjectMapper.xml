@@ -88,6 +88,7 @@
         <result property="openTime" column="open_time"/>
         <result property="sue" column="sue"/>
         <result property="lawsuit" column="lawsuit"/>
+        <result property="projectZckType" column="project_zck_type"/>
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -585,13 +586,17 @@
     </delete>
 
     <select id="selectProject" parameterType="SysProject" resultMap="SysProjectResult">
-        <include refid="selectSysProjectVo"/>
+        SELECT
+        zck.project_zck_type,
+        pro.*
+        FROM
+        sys_project pro LEFT JOIN sys_project_zck zck on pro.project_zck_id = zck.project_zck_id
         <where>
-            del_flag='0' and parent_id IS NULL
-            <if test="projectZckId != null ">and project_zck_id = #{projectZckId}</if>
-            <if test="projectId != null ">and project_id = #{projectId}</if>
-            <if test="debtStatus != null ">and debt_status = #{debtStatus}</if>
-            <if test="projectName != null ">and project_name like concat ('%', #{projectName},'%')</if>
+            pro.del_flag='0' and pro.parent_id IS NULL
+            <if test="projectZckId != null ">and pro.project_zck_id = #{projectZckId}</if>
+            <if test="projectId != null ">and pro.project_id = #{projectId}</if>
+            <if test="debtStatus != null ">and pro.debt_status = #{debtStatus}</if>
+            <if test="projectName != null ">and pro.project_name like concat ('%', #{projectName},'%')</if>
             <if test="otherFlag != null  and otherFlag != ''">and other_flag = #{otherFlag}</if>
         </where>
         order by no asc

@@ -121,9 +121,10 @@
                 approveUrl: ctx + "applyIn/applyEditSave",
                 rejectUrl: prefix + "/reject/{id}",
                 modalName: "我的代办列表",
-                columns: [{
+                columns: [
+                   /* {
                     checkbox: true
-                },
+                },*/
                 {
                     field: 'applyId',
                     title: 'id',
@@ -185,13 +186,17 @@
                     field: 'approveUser',
                     title: '下一节点审批人'
                 },*/
-                /*{
+                {
                     field: 'approveStatu',
                     title: '审批状态',
                     formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
 		            }
-                },*/
+                },
+                {
+                    field: 'realReturnTime',
+                    title: '实际归还时间',
+                },
                 {
                     field: 'remarks',
                     title: '备注',

@@ -10,6 +10,31 @@
             <form id="formId">
                 <input name="proType" type="hidden" id="proType" th:value="${dataType}"/>
                 <input name="projectType" type="hidden" id="projectType" th:value="${projectType}"/>
+                <div class="select-list">
+                <ul>
+                    <li id="projectName">
+                        <label>项目名称：</label>
+                        <input type="text" name="proName"/>
+                    </li>
+                    <li id="fileName">
+                        <label>文件名称：</label>
+                        <input type="text" name="fileName"/>
+                    </li>
+                    <li id="createorName">
+                        <label>创建人：</label>
+                        <input type="text" name="createorName"/>
+                    </li>
+                    <li id="createTime">
+<!--                        <label>时间：</label>-->
+                        <label>时间：</label>
+                        <input type="text" style="display: inline-block" class="time-input" name="createTime" placeholder="开始时间" />
+                    </li>
+                    <li>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </li>
+                </ul>
+                </div>
             </form>
         </div>
 
@@ -74,6 +99,10 @@
                     }
                 },
                 {
+                    field: 'proName',
+                    title: '项目名称'
+                },
+                {
                     field: 'fileName',
                     title: '文件名称'
                 },
@@ -82,7 +111,7 @@
                     title: '文件类型'
                 },
                 {
-                    field: 'createor',
+                    field: 'createorName',
                     title: '创建人名称'
                 },
                 {

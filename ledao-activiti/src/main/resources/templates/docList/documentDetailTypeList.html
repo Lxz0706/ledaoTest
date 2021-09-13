@@ -19,6 +19,7 @@
         </div>-->
         <form id="formId">
             <input name="documentType" id="documentType" th:value="*{documentType}" type="hidden">
+            <input name="roleType" id="roleType" th:value="*{roleType}" type="hidden">
         </form>
         <a class="btn btn-info" onclick="back()">
             <i class="fa fa-backward"></i> 返回
@@ -32,6 +33,7 @@
     var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
     var prefix = ctx + "applyIn";
     var documentType = document.getElementById("documentType").value;
+    var roleType = document.getElementById("roleType").value;
     $(function () {
         $.ajax({
             url: prefix + "/documentDetailTypeList/"+documentType,
@@ -54,14 +56,14 @@
     });
 
     function back() {
-        var url = prefix+"/backDocumentTypeList";
+        var url = prefix+"/documentDetailTypeListOpen?docType=0";
         $.modal.parentTab("档案类型", url);
     }
 
 
     /*资产库列表-详细*/
     function detail(dataType, zckName) {
-        var url = ctx + 'applyIn/documentFile?dataType=' + dataType+"&documentType="+documentType;
+        var url = ctx + 'applyIn/documentFile?dataType=' + dataType+"&documentType="+documentType+"&roleType="+roleType;
         $.modal.parentTab(zckName + "列表", url);
     }
 

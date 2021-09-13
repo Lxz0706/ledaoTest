@@ -10,6 +10,7 @@
                 <form id="formId">
                     <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
                     <input name="documentType" id="documentType" th:value="*{documentType}" type="hidden">
+                    <input name="roleType" id="roleType" th:value="*{roleType}" type="hidden">
                     <div class="select-list">
                         <ul>
                         	<input name="applyType" value="0" type="hidden"/>
@@ -91,6 +92,7 @@
         var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
         var prefix = ctx + "applyIn";
         var documentType = document.getElementById("documentType").value;
+        var roleType = document.getElementById("roleType").value;
         var showPro = false;
 
         $(function() {
@@ -111,9 +113,10 @@
                 submitUrl: ctx + "applyIn/applyEditSave",
                 modalName: "档案入库申请",
                 status: "In",
-                columns: [{
+                columns: [
+                   /* {
                     checkbox: true
-                },
+                },*/
                 {
                     field: 'applyId',
                     title: 'id',
@@ -204,7 +207,7 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.editLook(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>查看</a> ');
                         return actions.join('');
                     }
                 }]
@@ -213,7 +216,7 @@
         });
 
         function back() {
-            var url = prefix+"/documentTypeListBack?documentType="+documentType;
+            var url = prefix+"/documentTypeListBack?documentType="+documentType+"&roleType="+roleType;
             $.modal.parentTab("档案类型", url);
         }
 

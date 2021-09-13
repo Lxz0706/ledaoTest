@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createBy"    column="create_by"    />
         <result property="remark"    column="remark"    />
         <result property="projectType"    column="project_type"    />
+        <result property="createorName"    column="user_name"    />
     </resultMap>
 
     <sql id="selectSysUnderlyingDataVo">
@@ -30,21 +31,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectSysUnderlyingDataList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
-        <include refid="selectSysUnderlyingDataVo"/>
+        SELECT
+        a.file_id,
+        a.parent_id,
+        a.file_name,
+        a.file_type,
+        a.file_size,
+        a.downloadable_flag,
+        a.create_time,
+        a.createor,
+        a.preview_count,
+        a.downloads_count,
+        a.update_time,
+        a.updateor,
+        a.update_by,
+        a.project_id,
+        a.file_url,
+        a.create_by,
+        a.remark,
+        a.project_type ,
+        u.user_name
+        FROM
+        sys_underlying_data a
+        LEFT JOIN sys_user u ON a.create_by = u.login_name
         <where>  
-            <if test="parentId != null "> and parent_id = #{parentId}</if>
-            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
-            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
-            <if test="fileSize != null "> and file_size = #{fileSize}</if>
-            <if test="downloadableFlag != null  and downloadableFlag != ''"> and downloadable_flag = #{downloadableFlag}</if>
-            <if test="createor != null  and createor != ''"> and createor = #{createor}</if>
-            <if test="previewCount != null "> and preview_count = #{previewCount}</if>
-            <if test="downloadsCount != null "> and downloads_count = #{downloadsCount}</if>
-            <if test="updateor != null  and updateor != ''"> and updateor = #{updateor}</if>
-            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
-            <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
-            <if test="projectType != null  and projectType != ''"> and project_type = #{projectType}</if>
+            <if test="parentId != null "> and a.parent_id = #{parentId}</if>
+            <if test="fileName != null  and fileName != ''"> and a.file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''"> and a.file_type = #{fileType}</if>
+            <if test="fileSize != null "> and a.file_size = #{fileSize}</if>
+            <if test="downloadableFlag != null  and downloadableFlag != ''"> and a.downloadable_flag = #{downloadableFlag}</if>
+            <if test="createor != null  and createor != ''"> and a.createor = #{createor}</if>
+            <if test="previewCount != null "> and a.preview_count = #{previewCount}</if>
+            <if test="downloadsCount != null "> and a.downloads_count = #{downloadsCount}</if>
+            <if test="updateor != null  and updateor != ''"> and a.updateor = #{updateor}</if>
+            <if test="projectId != null  and projectId != ''"> and a.project_id = #{projectId}</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and a.file_url = #{fileUrl}</if>
+            <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+            <if test="projectType != null  and projectType != ''"> and a.project_type = #{projectType}</if>
         </where>
     </select>
 
@@ -66,14 +89,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.project_id,
         a.file_url,
         a.create_by,
-        a.project_type
+        a.project_type,
+        u.user_name
         FROM
         sys_underlying_data a
+        left join sys_user u on a.create_by = u.login_name
         LEFT JOIN sys_project b ON a.project_id = b.project_id
-        LEFT JOIN sys_project_zck zck ON b.project_zck_id = zck.project_zck_id
+        LEFT JOIN sys_bgczzck zck ON a.project_id = zck.id
         <where>
             a.project_type = #{projectType}
             <if test="parentId != null "> and a.parent_id = #{parentId}</if>
+            <if test="createTime != null "> and date_format(a.create_time,'%Y%m%d') = date_format(#{createTime},'%Y%m%d')</if>
+            <if test="createorName != null and createorName != ''"> and u.user_name like concat('%', #{createorName}, '%')</if>
             <if test="fileName != null  and fileName != ''"> and a.file_name like concat('%', #{fileName}, '%')</if>
             <if test="fileType != null  and fileType != ''"> and a.file_type = #{fileType}</if>
             <if test="fileSize != null "> and a.file_size = #{fileSize}</if>
@@ -84,8 +111,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateor != null  and updateor != ''"> and a.updateor = #{updateor}</if>
             <if test="projectId != null  and projectId != ''"> and a.project_id = #{projectId}</if>
             <if test="fileUrl != null  and fileUrl != ''"> and a.file_url = #{fileUrl}</if>
-            <if test="proType != null  and proType != ''"> and zck.project_zck_type = #{proType}</if>
+            <if test="proType != null  and proType != ''"> and a.project_type = #{proType}</if>
             <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+            <if test="proName != null  and proName != '' and projectType ==0"> and b.project_name like concat('%', #{proName}, '%')</if>
+            <if test="proName != null  and proName != '' and projectType ==1"> and zck.project_name like concat('%', #{proName}, '%')</if>
         </where>
         order by a.create_time desc
     </select>

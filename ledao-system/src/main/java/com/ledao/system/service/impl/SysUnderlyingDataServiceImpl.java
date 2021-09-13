@@ -8,6 +8,12 @@ import com.ledao.common.config.Global;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.system.dao.SysBgczzck;
+import com.ledao.system.dao.SysProject;
+import com.ledao.system.dao.SysProjectZck;
+import com.ledao.system.mapper.SysBgczzckMapper;
+import com.ledao.system.mapper.SysProjectMapper;
+import com.ledao.system.mapper.SysProjectZckMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysUnderlyingDataMapper;
@@ -27,6 +33,12 @@ public class SysUnderlyingDataServiceImpl implements ISysUnderlyingDataService
 {
     @Autowired
     private SysUnderlyingDataMapper sysUnderlyingDataMapper;
+
+    @Autowired
+    private SysProjectMapper sysProjectMapper;
+
+    @Autowired
+    private SysBgczzckMapper sysBgczzckMapper;
 
     /**
      * 查询底层资料
@@ -142,6 +154,17 @@ public class SysUnderlyingDataServiceImpl implements ISysUnderlyingDataService
 
     @Override
     public List<SysUnderlyingData> selectSysUnderlyingProDataList(SysUnderlyingData sysUnderlyingData) {
-        return sysUnderlyingDataMapper.selectSysUnderlyingProDataList(sysUnderlyingData);
+        List<SysUnderlyingData> sly = sysUnderlyingDataMapper.selectSysUnderlyingProDataList(sysUnderlyingData);
+        for (SysUnderlyingData s: sly) {
+            //投后
+            if (0==s.getProjectType()){
+                SysProject pro = sysProjectMapper.selectSysProjectById(s.getProjectId());
+                s.setProName(pro!=null?pro.getProjectName():"");
+            }else{
+                SysBgczzck pro = sysBgczzckMapper.selectSysBgczzckById(s.getProjectId());
+                s.setProName(pro!=null?pro.getProjectName():"");
+            }
+        }
+        return sly;
     }
 }

@@ -228,9 +228,10 @@
             removeUrl: prefixDocumentFile + "/remove",
             exportUrl: prefix + "/export",
             modalName: "档案",
-            columns: [{
+            columns: [
+               /* {
                 checkbox: true
-            },
+            },*/
                 {
                     field: 'documentId',
                     title: 'id',
@@ -322,7 +323,7 @@
                 {
                     field: 'documentStatu',
                     title: '档案状态',
-                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    // visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
                     }
@@ -330,7 +331,7 @@
                 {
                     field: 'cabinetNo',
                     title: '柜号',
-                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    // visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength(item.cabinetNo);
                     }
@@ -338,7 +339,7 @@
                 {
                     field: 'bagNo',
                     title: '档案袋编号',
-                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    // visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength(item.bagNo);
                     }
@@ -346,7 +347,7 @@
                 {
                     field: 'documentGetType',
                     title: '档案类型',
-                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    // visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
                     }
@@ -354,7 +355,7 @@
                 {
                     field: 'fileGetType',
                     title: '文件类型',
-                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    // visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
                     }
@@ -362,7 +363,7 @@
                 {
                     field: 'documentLevel',
                     title: '档案级别',
-                    visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
+                    // visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
                     formatter: function(value, item, index) {
                         return strLength($.table.selectDictLabel(documentLevelDictDatas, item.documentLevel));
                     }
@@ -399,14 +400,15 @@
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="getInOutDetail(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>查看</a> ');
                         return actions.join('');
                     }
-                },
+                }
+                /*,
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
+                        /!* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.documentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.documentId + '\')"><i class="fa fa-remove"></i>删除</a>'); *!/
                         // if(!isNotChange) {
                         //     if(applyTypeUnDone == "3" || applyTypeUnDone == "2") {
                         //         if(seOrEd == "edse1") {
@@ -439,7 +441,8 @@
                         // }
                         return actions.join('');
                     }
-                }]
+                }*/
+                ]
         };
         $.table.init(options);
 
@@ -576,12 +579,12 @@
 
     function showCode(documentId){
         var url = prefix + "/code?documentId="+documentId;
-        $.modal.open("档案信息查看", url, '400', '400');
+        $.modal.opens("档案信息查看", url, '400', '400');
     }
 
     function getInOutDetail(documentId){
         var url = prefix + '/inOutPage?documentId=' + documentId+"&documentType="+documentTypeVal;
-        $.modal.open("查看出入库信息", url);
+        $.modal.opens("查看出入库信息", url);
     }
 </script>
 </body>

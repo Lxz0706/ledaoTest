@@ -7,6 +7,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
             <form id="formId">
                 <div class="select-list">
                     <ul>
@@ -30,7 +31,7 @@
                shiro:hasPermission="system:monomerLaw:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
-            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:bgczzck:list">
+            <a class="btn btn-info" onclick="back()">
                 <i class="fa fa-backward"></i> 返回
             </a>
         </div>
@@ -53,6 +54,8 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "项目法律信息",
+            sortName: "monomerLawId",
+            sortOrder: "desc",
             columns: [{
                 checkbox: true
             },
@@ -62,9 +65,15 @@
                     visible: false
                 },
                 {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                /*{
                     field: 'projectName',
                     title: '项目名称'
-                },
+                },*/
                 {
                     title: '司法情况',
                     formatter: function (value, row, index) {
@@ -91,7 +100,7 @@
     });
 
     function detail(id, index) {
-        var url = prefix + '/detail?monomerLawId=' + id + "&detailType=" + index;
+        var url = prefix + '/detail?monomerLawId=' + id + "&detailType=" + index + "&fwProjectType=" + $("#fwProjectType").val();
         var title = "";
         if (1 == index) {
             title = "司法情况详细";
@@ -111,7 +120,8 @@
 
     function back() {
         var projectStatus = $("#projectStatus").val();
-        var url = ctx + 'system/bgczzck/selectByProjectStatus/' + projectStatus;
+        var fwProjectType = $("#fwProjectType").val();
+        var url = ctx + 'system/bgczzck/selectByProjectStatus?projectStatus=' + projectStatus + "&fwProjectType=" + fwProjectType;
         $.modal.parentTab(projectStatus + "列表", decodeURI(url));
     }
 </script>

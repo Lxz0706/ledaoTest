@@ -165,15 +165,17 @@
         var zcbId = $("#zcbId").val();
         var parentId = $("#id").val();
         $.operate.adds(zcbId, parentId);
+        var url = prefix + "/add?zcbId=" + zcbId + "&parentId=" + parentId;
+        $.modal.open("添加" + table.options.modalName, url);
     }
 
     /*资产库列表-详细*/
     function detail(id, projectName) {
         var url = prefix + '/detail/' + id;
         if (projectName == '' || projectName == null) {
-            $.modal.openTab("资产库详情", url);
+            $.modal.parentTab("资产库详情", url);
         } else {
-            $.modal.openTab(projectName, url);
+            $.modal.parentTab(projectName, url);
         }
     }
 

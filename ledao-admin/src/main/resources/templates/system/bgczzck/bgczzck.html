@@ -1,77 +1,87 @@
 ﻿<!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('重组并购项目信息库列表')" />
+    <th:block th:include="include :: header('重组并购项目信息库列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
+<div class="container-div">
+    <div class="row">
 
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                项目名称：<input type="text" name="projectName" id="projectName"/>
-                            </li>
-                            <!--<li>
-                                <label>项目状态：</label>
-                                <input type="text" name="projectStatus"/>
-                            </li>-->
-                            <li>
-                                签署协议名称：<input type="text" name="projectYxzName"/>
-                            </li>
-                            <li>
-                                协议名称：
-                                <select name="agreementName" th:with="type=${@dict.getType('sys_bgzc_xymc')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                            <li class="select-time">
-                                <label>付息日： </label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                       name="beginTime"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                       name="endTime"/>
-                            </li>
-                            <li>
-                                <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
-                                <button onclick="$.form.reset()" class="btn btn-danger" type="button">重置</button>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+        <div class="col-sm-12 search-collapse">
 
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+            <form id="formId">
+                <div class="select-list">
+                    <input id="fwProjectType" name="fwProjectType" th:value="*{fwProjectType}" type="hidden">
+                    <ul>
+                        <li>
+                            项目名称：<input type="text" name="projectName" id="projectName"/>
+                        </li>
+                        <!--<li>
+                            <label>项目状态：</label>
+                            <input type="text" name="projectStatus"/>
+                        </li>-->
+                        <li>
+                            签署协议名称：<input type="text" name="projectYxzName"/>
+                        </li>
+                        <li>
+                            协议名称：
+                            <select name="agreementName" th:with="type=${@dict.getType('sys_bgzc_xymc')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                        <li class="select-time">
+                            <label>付息日： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="beginTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="endTime"/>
+                        </li>
+                        <li>
+                            <button type="button" onclick="jump()" class="btn btn-primary">查询</button>
+                            <button onclick="$.form.reset()" class="btn btn-danger" type="button">重置</button>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-info" id="back" onclick="back()">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:bgczzck:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:bgczzck:remove')}]];
-        var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
-        var prefix = ctx + "system/bgczzck";
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                detailUrl: prefix + "/detail/{id}",
-                importUrl: prefix + "/importData",
-                importTemplateUrl: prefix + "/importTemplate",
-                modalName: "重组并购项目信息库",
-                columns: [{
-                    checkbox: true
-                },
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:bgczzck:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:bgczzck:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
+    var prefix = ctx + "system/bgczzck";
+    var fwProjectType = $("#fwProjectType").val();
+    $(function () {
+        if ($.common.isEmpty(fwProjectType)) {
+            $("#back").hide();
+        }
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "重组并购项目信息库",
+            columns: [{
+                checkbox: true
+            },
                 {
                     field: 'id',
                     title: 'ID',
@@ -80,25 +90,30 @@
                 {
                     field: 'dictLabel',
                     title: '项目状态',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detail(\'' + row.dictLabel + '\')">' + value + '</a>';
                     }
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        /*资产库列表-详细*/
-        function detail(projectStatus) {
-            var url = prefix + '/selectByProjectStatus/' + projectStatus;
-            $.modal.parentTab(projectStatus+"列表", decodeURI(url));
-        }
+    /*资产库列表-详细*/
+    function detail(projectStatus) {
+        var url = prefix + '/selectByProjectStatus?projectStatus=' + projectStatus + "&fwProjectType=" + fwProjectType;
+        $.modal.parentTab(projectStatus + "列表", decodeURI(url));
+    }
 
-        //查询
-        function jump(){
-            var data = $("#formId").serialize();
-            $.operate.gets(prefix + "/queryAll", data,"查询界面");
-        }
-    </script>
+    //查询
+    function jump() {
+        var data = $("#formId").serialize();
+        $.operate.gets(prefix + "/queryAll", data, "查询界面");
+    }
+
+    function back() {
+        var url = ctx + 'system/project/toFwProject';
+        $.modal.parentTab('法务部项目', url);
+    }
+</script>
 </body>
 </html>

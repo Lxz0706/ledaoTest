@@ -16,19 +16,19 @@
         <input id="pId" th:field="${sysProject.pId}" type="hidden">
         <input id="openTime" th:field="${sysProject.openTime}" type="hidden">
         <tr>
-            <td colspan="8" style="text-align: center" class="success"><h3>债权情况</h3></td>
+            <td colspan="8" style="text-align: center" class="success"><h3 id="name"></h3></td>
         </tr>
-        <tr>
+        <tr id="otherFalse1">
             <td class="col-sm-1 text-right"><h5>序号:</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.no}"/></td>
-            <td class="col-sm-1 text-right"><h5>借款人名称：</h5></td>
+            <td class="col-sm-1 text-right"><h5 id="projectName"></h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.projectName}"/></td>
             <td class="col-sm-1 text-right"><h5>城市/名称:</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.city}"/></td>
             <td class="col-sm-1 text-right"><h5>放款银行：</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.loanBank}"/></td>
         </tr>
-        <tr>
+        <tr id="otherFalse2">
             <td class="col-sm-1 text-right"><h5>合同本金（元）：</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.contractPrincipals}"/></td>
             <td class="col-sm-1 text-right"><h5>本金余额（元）：</h5></td>
@@ -38,19 +38,35 @@
             <td class="col-sm-1 text-right"><h5>本息余额（元）：</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.principalInterestBalances}"/></td>
         </tr>
-        <tr>
+        <tr id="otherFalse3">
             <td class="col-sm-1 text-right"><h5>保证人：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysProject.guarantor}"/></td>
+            <td class="col-sm-1" colspan="3"><span th:text="${sysProject.guarantor}"/></td>
             <td class="col-sm-1 text-right"><h5>抵押物：</h5></td>
-            <td class="col-sm-1"><span th:text="${sysProject.collateral}"/></td>
+            <td class="col-sm-1" colspan="3"><span th:text="${sysProject.collateral}"/></td>
+        </tr>
+        <tr id="otherFalse4">
             <td class="col-sm-1 text-right"><h5>质押物：</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.pledge}"/></td>
             <td class="col-sm-1 text-right"><h5>项目经理：</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.projectManager}"/></td>
-        </tr>
-        <tr>
             <td class="col-sm-1 text-right"><h5>债权状态</h5></td>
-            <td class="col-sm-1" colspan="7"><span th:text="${sysProject.debtStatus}"/></td>
+            <td class="col-sm-1" colspan="3"><span th:text="${sysProject.debtStatus}"/></td>
+        </tr>
+        <tr id="otherTrue">
+            <td class="col-sm-1 text-right"><h5>序号:</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.no}"/></td>
+            <td class="col-sm-1 text-right"><h5>项目案件名称：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.projectName}"/></td>
+            <td class="col-sm-1 text-right"><h5>涉诉金额（元）：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.principalBalances}"/></td>
+            <td class="col-sm-1 text-right"><h5>公司负责人：</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.projectManager}"/></td>
+        </tr>
+        <tr id="otherTrue2">
+            <td class="col-sm-1 text-right"><h5>应诉主体:</h5></td>
+            <td class="col-sm-1"><span th:text="${sysProject.lawsuit}"/></td>
+            <td class="col-sm-1 text-right"><h5>起诉主体：</h5></td>
+            <td class="col-sm-1" colspan="5"><span th:text="${sysProject.sue}"/></td>
         </tr>
         <tr>
             <td colspan="8" style="text-align: center" class="success"><h3>司法情况</h3></td>
@@ -69,7 +85,7 @@
             <td class="col-sm-1 text-right"><h5>律师及联系方式：</h5></td>
             <td class="col-sm-1"><span th:text="${sysProject.lawyerContact}"/></td>
             <td class="col-sm-1 text-right"><h5>备注：</h5></td>
-            <td class="col-sm-1" colspan="4"><span th:text="${sysProject.judicialRemarks}"/></td>
+            <td class="col-sm-1" colspan="5"><span th:text="${sysProject.judicialRemarks}"/></td>
         </tr>
         <tr>
             <td colspan="8" style="text-align: center" class="success"><h3>诉讼及执行进展</h3></td>
@@ -131,10 +147,31 @@
 <script>
     $(function () {
         var projectId = $("#projectId").val();
-        var investmentProject = $("#investmentProject").val();
-        //if ($.common.isEmpty(investmentProject)) {
-           // $("#back").hide();
-       // }
+        var fwProjectType = $("#fwProjectType").val();
+
+        if ($.common.isNotEmpty(fwProjectType)) {
+            $("#name").html("案件情况");
+            $("#projectName").html("项目案件名称：");
+            if ($.common.equalsIgnoreCase("otherProject", fwProjectType)) {
+                $("#otherFalse1").css("display", "none");
+                $("#otherFalse2").css("display", "none");
+                $("#otherFalse3").css("display", "none");
+                $("#otherFalse4").css("display", "none");
+            } else {
+                $("#otherTrue").css("display", "none");
+                $("#otherTrue2").css("display", "none");
+            }
+        } else {
+            customerList(projectId);
+            $("#projectName").html("借款人名称：");
+            $("#name").html("债权情况");
+            $("#otherTrue").css("display", "none");
+            $("#otherTrue2").css("display", "none");
+        }
+        openTime($("#openTime").val());
+    })
+
+    function customerList(projectId) {
         $.ajax({
             type: 'post',
             url: ctx + 'system/project/selectPCustomerByProjectId',
@@ -169,8 +206,7 @@
                 $("#create1").after(str);
             }
         });
-        openTime($("#openTime").val());
-    })
+    }
 
     function toCustomer(customerId) {
         var url = ctx + 'system/customer/detail/' + customerId;

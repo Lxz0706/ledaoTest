@@ -128,7 +128,9 @@
     function add() {
         var projectManagementId = $("#projectManagementId").val();
         var project = $("#project").val();
-        $.operate.adds(projectManagementId, project);
+        //$.operate.adds(projectManagementId, project);
+        var url = prefix + "/add?projectManagementId=" + projectManagementId + "&project=" + project;
+        $.modal.open("添加" + table.options.modalName, url);
     }
 
     function back() {
@@ -154,9 +156,9 @@
                 title = zckName + "列表";
             } else {
                 if ("服务类项目" == type) {
-                    url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+                    url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType?projectType=' + type;
                 } else if ("自投类项目" == type) {
-                    url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectTypes/' + type;
+                    url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectTypes?projectType=' + type;
                 }
                 title = type + "列表";
             }

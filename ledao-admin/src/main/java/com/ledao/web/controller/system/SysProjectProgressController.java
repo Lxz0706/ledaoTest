@@ -143,21 +143,11 @@ public class SysProjectProgressController extends BaseController {
         return util.exportExcel(list, "progress");
     }
 
-    /*    *//**
-     * 新增【请填写功能名称】
-     *//*
-    @GetMapping("/add/{projectManagementId}")
-    public String add(@PathVariable("projectManagementId") String projectManagementId, ModelMap modelMap) {
-        logger.info("111111111");
-        modelMap.put("projectManagementId", projectManagementId);
-        return prefix + "/add";
-    }*/
-
     /**
      * 新增【请填写功能名称】
      */
-    @GetMapping("/adds/{projectManagementId}/{project}")
-    public String adds(@PathVariable("projectManagementId") String projectManagementId, @PathVariable("project") String project, ModelMap modelMap) {
+    @GetMapping("/add")
+    public String add(String projectManagementId, String project, ModelMap modelMap) {
         modelMap.put("projectManagementId", projectManagementId);
         modelMap.put("project", project);
         return prefix + "/add";

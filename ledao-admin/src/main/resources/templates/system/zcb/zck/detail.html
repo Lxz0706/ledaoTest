@@ -288,7 +288,23 @@
             <td class="col-sm-1sys" colspan="8"><span th:text="${sysZck.customer}"/></td>
         </tr>-->
     </table>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回
+            </button>&nbsp;
+        </div>
+    </div>
 </div>
 <th:block th:include="include :: footer"/>
+<script>
+    var prefix = ctx + "system/zcb/zck";
+    const projectName = '[[${sysZck.projectName}]]';
+    const id = '[[${sysZck.id}]]';
+    const zcbId = '[[${sysZck.zcbId}]]';
+    function back(){
+        var url = prefix + '/toZckList?id=' + id + "&zcbId=" + zcbId;
+        $.modal.parentTab(projectName + "列表", url);
+    }
+</script>
 </body>
 </html>

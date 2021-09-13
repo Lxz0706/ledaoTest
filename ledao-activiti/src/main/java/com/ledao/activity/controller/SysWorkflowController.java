@@ -194,6 +194,7 @@ public class SysWorkflowController extends BaseController {
     @ResponseBody
     public TableDataInfo taskList(SysWorkFlowVo sysWorkFlowVo) {
         //  sysWorkFlowVo.setWorkFlowType("document-rk");
+        logger.info("流程类型：========" + sysWorkFlowVo.getWorkFlowType());
         List<SysWorkFlowVo> list = sysWorkflowService.findTodoTasks(sysWorkFlowVo, ShiroUtils.getLoginName());
         return getDataTable(list);
     }

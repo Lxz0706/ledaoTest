@@ -18,57 +18,82 @@
                     <label class="col-sm-2 control-label"><h5>序号：</h5></label>
                     <div class="form-control-static" th:text="${sysProject.no}"></div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>借款人名称：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.projectName}">
+                <div id="otherFalse">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5 id="projectName"></h5></label>
+                        <div class="form-control-static" th:text="${sysProject.projectName}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>城市/名称：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.city}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>放款银行：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.loanBank}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>合同本金（元）：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.contractPrincipals}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>本金余额（元）：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.principalBalances}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>利息余额（元）：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.interestBalances}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>本息余额（元）：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.principalInterestBalances}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>保证人：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.guarantor}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>抵押物：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.collateral}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>质押物：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.pledge}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>项目经理：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.projectManager}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>债权状态：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.debtStatus}"></div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>城市/名称：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.city}">
+                <div id="otherTrue">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>项目案件名称：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.projectName}">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>放款银行：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.loanBank}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>涉诉金额（元）：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.principalBalances}"></div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>合同本金（元）：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.contractPrincipals}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>公司负责人：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.projectManager}"></div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>本金余额（元）：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.principalBalances}"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>利息余额（元）：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.interestBalances}"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>本息余额（元）：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.principalInterestBalances}"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>保证人：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.guarantor}"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>抵押物：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.collateral}"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>质押物：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.pledge}"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>项目经理：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.projectManager}"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"><h5>债权状态：</h5></label>
-                    <div class="form-control-static" th:text="${sysProject.debtStatus}"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>应诉主体：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.lawsuit}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><h5>起诉主体：</h5></label>
+                        <div class="form-control-static" th:text="${sysProject.sue}"></div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -81,9 +106,23 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script>
+    var fwProjectType = $("#fwProjectType").val();
+    $(function () {
+        if ($.common.isNotEmpty(fwProjectType)) {
+            $("#projectName").html("项目案件名称：");
+            if ($.common.equalsIgnoreCase("otherProject", fwProjectType)) {
+                $("#otherFalse").css("display", "none");
+            } else {
+                $("#otherTrue").css("display", "none");
+            }
+        } else {
+            $("#projectName").html("借款人名称：");
+            $("#otherTrue").css("display", "none");
+        }
+    })
+
     function back() {
         var projectZckId = $("#projectZckId").val();
-        var fwProjectType = $("#fwProjectType").val();
         var otherFlag = $("#otherFlag").val();
         var pId = $("#pId").val();
         var url = url = ctx + 'system/project/toProjectList?projectId=' + pId + "&projectZckId=" + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + otherFlag + "&fwProjectType=" + fwProjectType;

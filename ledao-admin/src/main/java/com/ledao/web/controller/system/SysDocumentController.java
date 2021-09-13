@@ -86,8 +86,8 @@ public class SysDocumentController extends BaseController {
         return getDataTable(sysDictDataList);
     }
 
-    @GetMapping("/toDocumentByType/{type}")
-    public String toDocumentByType(@PathVariable("type") String type, ModelMap modelMap) {
+    @GetMapping("/toDocumentByType")
+    public String toDocumentByType(String type, ModelMap modelMap) {
         modelMap.put("type", type);
         List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType(type + "_type");
         if (sysDictDataList.size() > 0) {
@@ -97,8 +97,8 @@ public class SysDocumentController extends BaseController {
         }
     }
 
-    @GetMapping("/toBackByType/{type}")
-    public String toBackByType(@PathVariable("type") String type, ModelMap modelMap) {
+    @GetMapping("/toBackByType")
+    public String toBackByType(String type, ModelMap modelMap) {
         modelMap.put("type", type);
         List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType(type + "_type");
         if (sysDictDataList.size() > 0) {
@@ -108,15 +108,15 @@ public class SysDocumentController extends BaseController {
         }
     }
 
-    @GetMapping("/toDocumentType/{type}/{documentType}")
-    public String toDocumentType(@PathVariable("type") String type, @PathVariable("documentType") String documentType, ModelMap modelMap) {
+    @GetMapping("/toDocumentType")
+    public String toDocumentType(String type, String documentType, ModelMap modelMap) {
         modelMap.put("type", type);
         modelMap.put("documentType", documentType);
         return prefix + "/documentByTypes";
     }
 
-    @GetMapping("/toDocumentByTypes/{type}")
-    public String toDocumentByTypes(@PathVariable("type") String type, ModelMap modelMap) {
+    @GetMapping("/toDocumentByTypes")
+    public String toDocumentByTypes(String type, ModelMap modelMap) {
         modelMap.put("type", type);
         return prefix + "/documentByType";
     }
@@ -204,14 +204,8 @@ public class SysDocumentController extends BaseController {
     /**
      * 新增文件管理
      */
-    @GetMapping(value = {"/add", "/add/{type}"})
-    public String add(@PathVariable(value = "type", required = false) String type, ModelMap modelMap) {
-        modelMap.put("documentType", type);
-        return prefix + "/add";
-    }
-
-    @GetMapping("/adds/{documentType}/{subsetType}")
-    public String adds(@PathVariable(value = "documentType") String documentType, @PathVariable("subsetType") String subsetType, ModelMap modelMap) {
+    @GetMapping(value = {"/add"})
+    public String add(String documentType, String subsetType, ModelMap modelMap) {
         modelMap.put("documentType", documentType);
         modelMap.put("subsetType", subsetType);
         return prefix + "/add";
@@ -271,6 +265,7 @@ public class SysDocumentController extends BaseController {
         String baseDir = "";
         try {
             String avatar = FileUploadUtils.upload(Global.getProfile() + "/document" + baseDir, file, false);
+            logger.info("上传的路径：======" + avatar);
             sysDocument.setFileUrl(avatar);
         } catch (IOException e) {
             e.printStackTrace();

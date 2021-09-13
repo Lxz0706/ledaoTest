@@ -27,7 +27,7 @@
                shiro:hasPermission="system:project:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
-            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+            <a class="btn btn-info" onclick="back()">
                 <i class="fa fa-backward"></i> 返回
             </a>
             <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:project:export">
@@ -164,8 +164,8 @@
     function add() {
         var projectZckId = $("#projectZckId").val();
         //$.operate.add(projectZckId);
-        var url = prefix + "/add?projectZckId=" + projectZckId + "&otherFlag=" + $("#otherFlag").val();
-        $.modal.open("添加项目", url);
+        var url = prefix + "/add?projectZckId=" + projectZckId + "&otherFlag=" + $("#otherFlag").val() + "&fwProjectType=" + fwProjectType;
+        $.modal.open("添加" + table.options.modalName, url);
     }
 
 

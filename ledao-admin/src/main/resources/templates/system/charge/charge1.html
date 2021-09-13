@@ -185,7 +185,7 @@
 
     function back() {
         var type = $("#type").val();
-        var url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType/' + type;
+        var url = ctx + 'system/projectmanagent/selectSysProjectmanagentListByProjectType?projectType=' + type;
         $.modal.parentTab(type + "列表", url);
     }
 </script>

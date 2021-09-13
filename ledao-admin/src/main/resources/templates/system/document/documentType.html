@@ -78,9 +78,9 @@
         var documentType = $("#documentType").val();
         var url;
         if ("无" == type) {
-            url = prefix + "/toDocumentByTypes/" + documentType;
+            url = prefix + "/toDocumentByTypes?type=" + documentType;
         } else {
-            url = prefix + "/toDocumentType/" + type + "/" + documentType;
+            url = prefix + "/toDocumentType?type=" + type + "&documentType=" + documentType;
         }
         //var url = prefix + "/toDocumentByType/" + type;
         $.modal.parentTab(type + "列表", url);

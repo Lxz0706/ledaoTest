@@ -61,8 +61,8 @@ public class SysZcbController extends BaseController {
     }
 
     @RequiresPermissions("system:zcb:list")
-    @GetMapping({"/selectZcbByAssetStatus/{assetStatus}"})
-    public String selectZcbByAssetStatus(@PathVariable("assetStatus") String assetStatus, ModelMap modelMap) {
+    @GetMapping({"/selectZcbByAssetStatus"})
+    public String selectZcbByAssetStatus(String assetStatus, ModelMap modelMap) {
         modelMap.put("assetStatus", assetStatus);
         return "system/zcb/zcbList";
     }

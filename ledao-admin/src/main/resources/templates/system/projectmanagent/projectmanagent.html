@@ -132,9 +132,9 @@
     function projectType(value) {
         var url = "";
         if ("服务类项目" == value) {
-            url = prefix + '/selectSysProjectmanagentListByProjectType/' + value;
+            url = prefix + '/selectSysProjectmanagentListByProjectType?projectType=' + value;
         } else if ("自投类项目" == value) {
-            url = prefix + '/selectSysProjectmanagentListByProjectTypes/' + value;
+            url = prefix + '/selectSysProjectmanagentListByProjectTypes?projectType=' + value;
         }
         $.modal.parentTab(value + "列表", url);
     }

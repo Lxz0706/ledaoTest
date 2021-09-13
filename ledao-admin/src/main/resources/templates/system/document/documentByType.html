@@ -112,7 +112,6 @@
                     align: 'left',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        console.log("========="+row.fileUrl)
                         var fileType = row.fileType.toLowerCase();
                         if ("Y" == row.isAdmin) {
                             actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
@@ -280,7 +279,9 @@
 
     function add() {
         var type = $("#documentType").val();
-        $.operate.add(type);
+        var url=prefix+"/add?documentType="+type
+        $.modal.open("添加" + table.options.modalName, url);
+        //$.operate.add(type);
     }
 
     function onLoadSuccess(data) {
@@ -293,7 +294,7 @@
 
     function back() {
         var documentType = $("#documentType").val();
-        var url = prefix + "/toBackByType/" + documentType;
+        var url = prefix + "/toBackByType?type=" + documentType;
         $.modal.parentTab("文档管理", url);
     }
 

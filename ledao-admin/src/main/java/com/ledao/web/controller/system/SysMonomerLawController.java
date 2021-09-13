@@ -5,9 +5,7 @@ import java.util.List;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
-import com.ledao.system.service.ISysBgczzckService;
-import com.ledao.system.service.ISysProjectService;
-import com.ledao.system.service.ISysZckService;
+import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.service.ISysMonomerLawService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
@@ -49,16 +46,22 @@ public class SysMonomerLawController extends BaseController {
     @Autowired
     private ISysProjectService sysProjectService;
 
+    @Autowired
+    private ISysNoticeService sysNoticeService;
+
+    @Autowired
+    private ISysUserService sysUserService;
+
     @GetMapping("/toMonomerLaw")
-    public String toMonomerLaw(Long projectId, String projectType, String projectStatus, ModelMap modelMap) {
-        logger.info("123123");
+    public String toMonomerLaw(Long projectId, String projectType, String projectStatus, String fwProjectType, ModelMap modelMap) {
         modelMap.put("projectId", projectId);
         modelMap.put("projectType", projectType);
         modelMap.put("projectStatus", projectStatus);
+        modelMap.put("fwProjectType", fwProjectType);
         return prefix + "/monomerLaw";
     }
 
-    @RequiresPermissions("system:monomerLaw:view")
+    //@RequiresPermissions("system:monomerLaw:view")
     @GetMapping()
     public String monomerLaw() {
         return prefix + "/monomerLaw";
@@ -67,7 +70,7 @@ public class SysMonomerLawController extends BaseController {
     /**
      * 查询项目法律信息列表
      */
-    @RequiresPermissions("system:monomerLaw:list")
+    //@RequiresPermissions("system:monomerLaw:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysMonomerLaw sysMonomerLaw) {
@@ -101,7 +104,7 @@ public class SysMonomerLawController extends BaseController {
     /**
      * 导出项目法律信息列表
      */
-    @RequiresPermissions("system:monomerLaw:export")
+    //@RequiresPermissions("system:monomerLaw:export")
     @Log(title = "项目法律信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -124,7 +127,7 @@ public class SysMonomerLawController extends BaseController {
     /**
      * 新增保存项目法律信息
      */
-    @RequiresPermissions("system:monomerLaw:add")
+    //@RequiresPermissions("system:monomerLaw:add")
     @Log(title = "项目法律信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -147,20 +150,68 @@ public class SysMonomerLawController extends BaseController {
     /**
      * 修改保存项目法律信息
      */
-    @RequiresPermissions("system:monomerLaw:edit")
+    //@RequiresPermissions("system:monomerLaw:edit")
     @Log(title = "项目法律信息", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysMonomerLaw sysMonomerLaw) {
         sysMonomerLaw.setUpdateBy(ShiroUtils.getLoginName());
         sysMonomerLaw.setReviser(ShiroUtils.getSysUser().getUserName());
+        SysMonomerLaw sysMonomerLaw1 = sysMonomerLawService.selectSysMonomerLawById(sysMonomerLaw.getMonomerLawId());
+        SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(sysMonomerLaw1.getProjectId());
+        logger.info("司法状态：-----"+sysBgczzck.getProjectName());
+        if (!sysMonomerLaw.getJudicialStatus().equals(sysMonomerLaw1.getJudicialStatus())) {
+            StringBuffer idSb = new StringBuffer();
+            StringBuffer nameSb = new StringBuffer();
+            //获取风控部经理
+            List<SysUser> sysUserList = getUserList("fkbjl");
+            for (SysUser sysUser1 : sysUserList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
+            //获取并购重组经理
+            List<SysUser> sysUserList1 = getUserList("bgczManager");
+            for (SysUser sysUser1 : sysUserList1) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+            SysNotice sysNotice = new SysNotice();
+            sysNotice.setNoticeTitle(sysBgczzck.getProjectName() + "司法状态更改为" + sysMonomerLaw.getJudicialStatus());
+            sysNotice.setStatus("0");
+            sysNotice.setNoticeType("3");
+            sysNotice.setReceiverId(idSb.toString());
+            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setCreateBy(ShiroUtils.getLoginName());
+            sysNotice.setShareDeptAndUser(nameSb.toString());
+            sysNoticeService.insertNotice(sysNotice);
+        }
         return toAjax(sysMonomerLawService.updateSysMonomerLaw(sysMonomerLaw));
+    }
+
+    public List<SysUser> getUserList(String roleKey) {
+        SysUser sysUser = new SysUser();
+        sysUser.setRoleKey(roleKey);
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                        sysUser.setFormalFlag("0");
+                    }
+                }
+            }
+        }
+        List<SysUser> sysUserList = sysUserService.selectUserByRoleKey(sysUser);
+        return sysUserList;
     }
 
     /**
      * 删除项目法律信息
      */
-    @RequiresPermissions("system:monomerLaw:remove")
+    //@RequiresPermissions("system:monomerLaw:remove")
     @Log(title = "项目法律信息", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -169,7 +220,7 @@ public class SysMonomerLawController extends BaseController {
     }
 
     @GetMapping("/detail")
-    public String detail(Long monomerLawId, Long detailType, ModelMap modelMap) {
+    public String detail(Long monomerLawId, Long detailType, String fwProjectType, ModelMap modelMap) {
         String url = "";
         SysMonomerLaw sysMonomerLaw = sysMonomerLawService.selectSysMonomerLawById(monomerLawId);
         String projectName = "";
@@ -198,6 +249,7 @@ public class SysMonomerLawController extends BaseController {
         }
         sysMonomerLaw.setProjectName(projectName);
         modelMap.put("sysMonomerLaw", sysMonomerLaw);
+        modelMap.put("fwProjectType", fwProjectType);
         if (1 == detailType) {
             url = "/detail1";
         } else if (2 == detailType) {

@@ -53,41 +53,56 @@ public class SysBgczzckController extends BaseController {
     @Autowired
     private ISysMonomerLawService sysMonomerLawService;
 
-    @RequiresPermissions("system:bgczzck:view")
+    //@RequiresPermissions("system:bgczzck:view")
     @GetMapping()
-    public String bgczzck() {
+    public String bgczzck(String fwProjectType, ModelMap modelMap) {
+        modelMap.put("fwProjectType", fwProjectType);
         return prefix + "/bgczzck";
     }
 
     /**
      * 查询重组并购项目信息库列表
      */
-    @RequiresPermissions("system:bgczzck:list")
+    //@RequiresPermissions("system:bgczzck:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list() {
+    public TableDataInfo list(SysBgczzck sysBgczzck) {
         startPage();
-        List<SysDictData> sysDictDataList = sysDictDataService.selectDictDataByType("sys_dxdtxm_project_status");
+        List<SysDictData> sysDictDataList = new ArrayList<>();
+        if (StringUtils.isEmpty(sysBgczzck.getFwProjectType())) {
+            sysDictDataList = sysDictDataService.selectDictDataByType("sys_dxdtxm_project_status");
+        } else {
+            SysDictData sysDictData = new SysDictData();
+            sysDictData.setDictLabel("投资中");
+            sysDictDataList = sysDictDataService.selectDictDataList(sysDictData);
+        }
         return getDataTable(sysDictDataList);
     }
 
     /**
      * 根据项目状态查询项目
      */
-    @RequiresPermissions("system:bgczzck:list")
-    @GetMapping(value = {"/selectByProjectStatus/{projectStatus}", "/selectByProjectStatus"})
-    public String selectZcbByAssetStatus(@PathVariable(value = "projectStatus", required = false) String projectStatus, ModelMap modelMap, SysBgczzck sysBgczzck) {
+    //@RequiresPermissions("system:bgczzck:list")
+    @GetMapping(value = {"/selectByProjectStatus"})
+    public String selectZcbByAssetStatus(String projectStatus, String fwProjectType, ModelMap modelMap, SysBgczzck sysBgczzck) {
         modelMap.put("projectStatus", projectStatus);
+        modelMap.put("fwProjectType", fwProjectType);
         modelMap.put("sysBgczzck", sysBgczzck);
         return "system/bgczzck/bgczzckList";
     }
 
-    @RequiresPermissions("system:bgczzck:list")
+    //@RequiresPermissions("system:bgczzck:list")
     @PostMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(SysBgczzck sysBgczzck) {
         startPage();
         List<SysBgczzck> list = sysBgczzckService.selectSysBgczzckList(sysBgczzck);
+        for (SysBgczzck sysBgczzck1 : list) {
+            SysMonomerLaw sysMonomerLaw = new SysMonomerLaw();
+            sysMonomerLaw.setProjectId(sysBgczzck1.getId());
+            List<SysMonomerLaw> sysMonomerLawList = sysMonomerLawService.selectSysMonomerLawList(sysMonomerLaw);
+            sysBgczzck1.setLawSize(Long.valueOf(sysMonomerLawList.size()));
+        }
         return getDataTable(list);
     }
 
@@ -134,7 +149,7 @@ public class SysBgczzckController extends BaseController {
     /**
      * 新增保存重组并购项目信息库
      */
-    @RequiresPermissions("system:bgczzck:add")
+    //@RequiresPermissions("system:bgczzck:add")
     @Log(title = "重组并购项目信息库", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -156,7 +171,7 @@ public class SysBgczzckController extends BaseController {
     /**
      * 修改保存重组并购项目信息库
      */
-    @RequiresPermissions("system:bgczzck:edit")
+    //@RequiresPermissions("system:bgczzck:edit")
     @Log(title = "重组并购项目信息库", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -168,7 +183,7 @@ public class SysBgczzckController extends BaseController {
     /**
      * 删除重组并购项目信息库
      */
-    @RequiresPermissions("system:bgczzck:remove")
+    //@RequiresPermissions("system:bgczzck:remove")
     @Log(title = "重组并购项目信息库", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -179,10 +194,10 @@ public class SysBgczzckController extends BaseController {
     /**
      * 查看详细
      */
-    @RequiresPermissions("system:bgczzck:detail")
+    //@RequiresPermissions("system:bgczzck:detail")
     @Log(title = "重组并购项目信息库", businessType = BusinessType.DETAIL)
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+    @GetMapping("/detail")
+    public String detail(Long id, String fwProjectType, ModelMap mmap) {
         SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(id);
         DecimalFormat decimalFormat = new DecimalFormat("###,###.00");
         if (StringUtils.isNotNull(sysBgczzck.getAcquisitionCost())) {
@@ -227,11 +242,12 @@ public class SysBgczzckController extends BaseController {
             sysBgczzck.setCashBackAmount(decimalFormat.format(new BigDecimal(sysBgczzck.getCashBackAmount())));
         }
         mmap.put("sysBgczzck", sysBgczzck);
+        mmap.put("fwProjectType", fwProjectType);
         return prefix + "/detail";
     }
 
     @Log(title = "重组并购项目信息库", businessType = BusinessType.IMPORT)
-    @RequiresPermissions("system:bgczzck:import")
+    //@RequiresPermissions("system:bgczzck:import")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
@@ -242,7 +258,7 @@ public class SysBgczzckController extends BaseController {
         return AjaxResult.success(message);
     }
 
-    @RequiresPermissions("system:bgczzck:view")
+    // @RequiresPermissions("system:bgczzck:view")
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate() {
@@ -250,14 +266,14 @@ public class SysBgczzckController extends BaseController {
         return util.importTemplateExcel("重组并购项目信息库");
     }
 
-    @RequiresPermissions("system:bgczzck:list")
+    // @RequiresPermissions("system:bgczzck:list")
     @GetMapping({"/queryAll"})
     public String queryAll(ModelMap modelMap, SysBgczzck sysBgczzck) {
         modelMap.put("sysBgczzck", sysBgczzck);
         return "system/bgczzck/queryAll";
     }
 
-    @RequiresPermissions("system:bgczzck:list")
+    //@RequiresPermissions("system:bgczzck:list")
     @PostMapping("/listes")
     @ResponseBody
     public TableDataInfo listes(SysBgczzck sysBgczzck) {

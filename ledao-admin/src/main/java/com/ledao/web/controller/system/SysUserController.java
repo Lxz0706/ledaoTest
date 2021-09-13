@@ -178,12 +178,33 @@ public class SysUserController extends BaseController {
         List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument);
         for (SysDocument sysDocument1 : sysDocumentList) {
             for (String string : sysDocument1.getShareDeptId().split(",")) {
-                if (string.equals(user.getDeptId().toString())) {
-                    SysDocument sysDocument2 = new SysDocument();
-                    sysDocument2.setFileId(sysDocument1.getFileId());
-                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
-                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
-                    sysDocumentService.updateSysDocument(sysDocument2);
+                if (StringUtils.isNotEmpty(string)) {
+                    List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
+                    //查询子集
+                    if (deptList.size() > 0) {
+                        for (SysDept sysDept : deptList) {
+                            if (StringUtils.isNotNull(sysDept) && StringUtils.isNotNull(sysDept.getDeptId())) {
+                                if (sysDept.getDeptId().equals(user.getDeptId().toString())) {
+                                    SysDocument sysDocument2 = new SysDocument();
+                                    sysDocument2.setFileId(sysDocument1.getFileId());
+                                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                                    sysDocumentService.updateSysDocument(sysDocument2);
+                                }
+                            }
+                        }
+                    } else {
+                        SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+                        if (string.equals(sysDept.getParentId().toString())) {
+                            SysDocument sysDocument2 = new SysDocument();
+                            sysDocument2.setFileId(sysDocument1.getFileId());
+                            sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                            sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                            sysDocumentService.updateSysDocument(sysDocument2);
+                        }
+
+                    }
+
                 }
             }
         }
@@ -194,12 +215,30 @@ public class SysUserController extends BaseController {
         for (SysNotice sysNotice1 : sysNoticeList) {
             if (StringUtils.isNotEmpty(sysNotice1.getShareDeptId())) {
                 for (String string : sysNotice1.getShareDeptId().split(",")) {
-                    if (string.equals(user.getDeptId().toString())) {
-                        SysNotice sysNotice2 = new SysNotice();
-                        sysNotice2.setNoticeId(sysNotice1.getNoticeId());
-                        sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
-                        sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
-                        sysNoticeService.updateNotice(sysNotice2);
+                    if (StringUtils.isNotEmpty(string)) {
+                        List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
+                        if (deptList.size() > 0) {
+                            for (SysDept sysDept : deptList) {
+                                if (StringUtils.isNotNull(sysDept) && StringUtils.isNotNull(sysDept.getDeptId())) {
+                                    if (sysDept.getDeptId().equals(user.getDeptId().toString())) {
+                                        SysNotice sysNotice2 = new SysNotice();
+                                        sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                                        sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                                        sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                                        sysNoticeService.updateNotice(sysNotice2);
+                                    }
+                                }
+                            }
+                        } else {
+                            SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+                            if (string.equals(sysDept.getParentId().toString())) {
+                                SysNotice sysNotice2 = new SysNotice();
+                                sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                                sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                                sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                                sysNoticeService.updateNotice(sysNotice2);
+                            }
+                        }
                     }
                 }
             }
@@ -248,12 +287,33 @@ public class SysUserController extends BaseController {
         List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument);
         for (SysDocument sysDocument1 : sysDocumentList) {
             for (String string : sysDocument1.getShareDeptId().split(",")) {
-                if (string.equals(user.getDeptId().toString())) {
-                    SysDocument sysDocument2 = new SysDocument();
-                    sysDocument2.setFileId(sysDocument1.getFileId());
-                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
-                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
-                    sysDocumentService.updateSysDocument(sysDocument2);
+                if (StringUtils.isNotEmpty(string)) {
+                    List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
+                    //查询子集
+                    if (deptList.size() > 0) {
+                        for (SysDept sysDept : deptList) {
+                            if (StringUtils.isNotNull(sysDept) && StringUtils.isNotNull(sysDept.getDeptId())) {
+                                if (sysDept.getDeptId().equals(user.getDeptId().toString())) {
+                                    SysDocument sysDocument2 = new SysDocument();
+                                    sysDocument2.setFileId(sysDocument1.getFileId());
+                                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                                    sysDocumentService.updateSysDocument(sysDocument2);
+                                }
+                            }
+                        }
+                    } else {
+                        SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+                        if (string.equals(sysDept.getParentId().toString())) {
+                            SysDocument sysDocument2 = new SysDocument();
+                            sysDocument2.setFileId(sysDocument1.getFileId());
+                            sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                            sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                            sysDocumentService.updateSysDocument(sysDocument2);
+                        }
+
+                    }
+
                 }
             }
         }
@@ -264,17 +324,34 @@ public class SysUserController extends BaseController {
         for (SysNotice sysNotice1 : sysNoticeList) {
             if (StringUtils.isNotEmpty(sysNotice1.getShareDeptId())) {
                 for (String string : sysNotice1.getShareDeptId().split(",")) {
-                    if (string.equals(user.getDeptId().toString())) {
-                        SysNotice sysNotice2 = new SysNotice();
-                        sysNotice2.setNoticeId(sysNotice1.getNoticeId());
-                        sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
-                        sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
-                        sysNoticeService.updateNotice(sysNotice2);
+                    if (StringUtils.isNotEmpty(string)) {
+                        List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
+                        if (deptList.size() > 0) {
+                            for (SysDept sysDept : deptList) {
+                                if (StringUtils.isNotNull(sysDept) && StringUtils.isNotNull(sysDept.getDeptId())) {
+                                    if (sysDept.getDeptId().equals(user.getDeptId().toString())) {
+                                        SysNotice sysNotice2 = new SysNotice();
+                                        sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                                        sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                                        sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                                        sysNoticeService.updateNotice(sysNotice2);
+                                    }
+                                }
+                            }
+                        } else {
+                            SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+                            if (string.equals(sysDept.getParentId().toString())) {
+                                SysNotice sysNotice2 = new SysNotice();
+                                sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                                sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                                sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                                sysNoticeService.updateNotice(sysNotice2);
+                            }
+                        }
                     }
                 }
             }
         }
-
         user.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(userService.updateUser(user));
     }
@@ -367,32 +444,33 @@ public class SysUserController extends BaseController {
     public String checkEmailUnique(SysUser user) {
         return userService.checkEmailUnique(user);
     }
-    
+
     /**
-     *微信获取openid
+     * 微信获取openid
+     *
      * @param openid
      * @return
      */
     @PostMapping("/getOpenid")
     @ResponseBody
-    public  AjaxResult getOpenid(String jsCode){
-    	JSONObject jsonResult;
-		try {
+    public AjaxResult getOpenid(String jsCode) {
+        JSONObject jsonResult;
+        try {
 //			String requestUrl="https://api.weixin.qq.com/sns/jscode2session?appid="+Global.getConfig("wxAppid")+"&secret="+Global.getConfig("wxSecret")+"&js_code="+jsCode+"&grant_type="+Global.getConfig("wxGrant_type");  
-			String requestUrl="https://api.weixin.qq.com/sns/jscode2session?appid="+WeChatConstants.WXAPPID+"&secret="+WeChatConstants.WXSECRET+"&js_code="+jsCode+"&grant_type="+WeChatConstants.WXGRANT_TYPE;  
-			jsonResult = CommonUtil.httpsRequest(requestUrl, "GET", null);  
-			System.out.println("返回的jsonResult"+jsonResult);
-			if(jsonResult!=null){  
-				System.out.println(jsonResult.toString());
-				String openid=jsonResult.getString("openid");  
-				return AjaxResult.success(openid);
-			}else{  
-				return AjaxResult.error("openid获取失败");     
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return AjaxResult.error("openid获取失败");       
-		}
+            String requestUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=" + WeChatConstants.WXAPPID + "&secret=" + WeChatConstants.WXSECRET + "&js_code=" + jsCode + "&grant_type=" + WeChatConstants.WXGRANT_TYPE;
+            jsonResult = CommonUtil.httpsRequest(requestUrl, "GET", null);
+            System.out.println("返回的jsonResult" + jsonResult);
+            if (jsonResult != null) {
+                System.out.println(jsonResult.toString());
+                String openid = jsonResult.getString("openid");
+                return AjaxResult.success(openid);
+            } else {
+                return AjaxResult.error("openid获取失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("openid获取失败");
+        }
     }
 
     /**
@@ -411,7 +489,8 @@ public class SysUserController extends BaseController {
      * 选择人员树
      */
     @GetMapping("/selectUserTree")
-    public String selectUserTree(String selectedUserIds, String selectedUserNames, String selectedDeptIds, String selectedDeptNames,
+    public String selectUserTree(String selectedUserIds, String selectedUserNames, String selectedDeptIds, String
+            selectedDeptNames,
                                  Boolean multiSelectFlag, ModelMap mmap, Boolean deptId, Boolean checkFlag) {
         mmap.put("dept", deptService.selectDeptById((long) 100));
         mmap.put("selectedUserIds", selectedUserIds);

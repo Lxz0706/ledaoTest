@@ -547,6 +547,16 @@ public class SysProject extends BaseEntity {
      */
     private Long isFile;
 
+    /**
+     * 起诉主体
+     */
+    private String sue;
+
+    /**
+     * 应诉主体
+     */
+    private String lawsuit;
+
     public Long getProjectId() {
         return projectId;
     }
@@ -1315,6 +1325,22 @@ public class SysProject extends BaseEntity {
         this.isFile = isFile;
     }
 
+    public String getSue() {
+        return sue;
+    }
+
+    public void setSue(String sue) {
+        this.sue = sue;
+    }
+
+    public String getLawsuit() {
+        return lawsuit;
+    }
+
+    public void setLawsuit(String lawsuit) {
+        this.lawsuit = lawsuit;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1401,6 +1427,8 @@ public class SysProject extends BaseEntity {
                 .append("openTime", getOpenTime())
                 .append("totalPrincipalBalance", getTotalPrincipalBalance())
                 .append("isFile", getIsFile())
+                .append("sue", getSue())
+                .append("lawsuit", getLawsuit())
                 .toString();
     }
 }

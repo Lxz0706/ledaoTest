@@ -142,7 +142,7 @@
         });
         /*资产库列表-详细*/
         function detail(assetStatus) {
-            var url = prefix + '/selectZcbByAssetStatus/' + assetStatus;
+            var url = prefix + '/selectZcbByAssetStatus?assetStatus=' + assetStatus;
             $.modal.parentTab(assetStatus+"列表", url);
         }
 

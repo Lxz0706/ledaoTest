@@ -105,7 +105,7 @@ public class SysZckController extends BaseController {
         return getDataTable(list);
     }
 
-//    @RequiresPermissions("system:zck:list")
+    //    @RequiresPermissions("system:zck:list")
     @PostMapping("/listDoc")
     @ResponseBody
     public TableDataInfo listDoc(SysZck sysZck) {
@@ -152,8 +152,8 @@ public class SysZckController extends BaseController {
     }
 
     @RequiresPermissions("system:zck:list")
-    @GetMapping({"/zckList/{id}/{zcbId}"})
-    public String selectZcbByAssetStatus(@PathVariable("id") Long id, @PathVariable("zcbId") Long zcbId, ModelMap modelMap) {
+    @GetMapping({"/toZckList"})
+    public String selectZcbByAssetStatus(Long id, Long zcbId, ModelMap modelMap) {
         modelMap.put("id", id);
         modelMap.put("zcbId", zcbId);
         modelMap.put("projectName", sysZckService.selectSysZckById(id).getProjectName());
@@ -298,19 +298,10 @@ public class SysZckController extends BaseController {
     /**
      * 新增资产信息库
      */
-    @GetMapping("/add/{zcbId}")
-    public String add(@PathVariable("zcbId") String zcbId, ModelMap mmap) {
-        mmap.put("zcbId", zcbId);
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增资产信息库
-     */
-    @GetMapping("/adds/{zcbId}/{parentId}")
-    public String adds(@PathVariable("zcbId") String zcbId, @PathVariable("parentId") String parentId, ModelMap mmap) {
-        mmap.put("zcbId", zcbId);
+    @GetMapping("/add")
+    public String add(String zcbId,String parentId, ModelMap mmap) {
         mmap.put("parentId", parentId);
+        mmap.put("zcbId", zcbId);
         return prefix + "/add";
     }
 
@@ -512,7 +503,7 @@ public class SysZckController extends BaseController {
         return getDataTable(list);
     }
 
-//    @RequiresPermissions("system:zck:list")
+    //    @RequiresPermissions("system:zck:list")
     @PostMapping("/listesDoc")
     @ResponseBody
     public TableDataInfo listesDoc(SysZcb sysZcb) {

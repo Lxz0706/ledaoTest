@@ -5,6 +5,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
     <table class="table table-border">
         <input id="projectId" th:value="${sysMonomerLaw.projectId}" type="hidden">
         <input id="projectName" th:value="${sysMonomerLaw.projectName}" type="hidden">
@@ -45,7 +46,8 @@
         </tr>
         <tr>
             <td class="col-sm-1 text-right"><h5>执行时效起算日：</h5></td>
-            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.limitationExecution, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.limitationExecution, 'yyyy-MM-dd')}"/>
+            </td>
             <td class="col-sm-1 text-right"><h5>起诉立案日期：</h5></td>
             <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.dateFiling, 'yyyy-MM-dd')}"/></td>
             <td class="col-sm-1 text-right"><h5>一审判决案号及日期：</h5></td>
@@ -57,9 +59,11 @@
             <td class="col-sm-1 text-right"><h5>再审判决案号及日期：</h5></td>
             <td class="col-sm-1"><span th:text="${sysMonomerLaw.retrial}"/></td>
             <td class="col-sm-1 text-right"><h5>执行立案日期：</h5></td>
-            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.enforcementFilingDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.enforcementFilingDate, 'yyyy-MM-dd')}"/>
+            </td>
             <td class="col-sm-1 text-right"><h5>出具评估报告日期：</h5></td>
-            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.appraisalReportDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.appraisalReportDate, 'yyyy-MM-dd')}"/>
+            </td>
             <td class="col-sm-1 text-right"><h5>第一次挂拍日期：</h5></td>
             <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.firstShotDate, 'yyyy-MM-dd')}"/></td>
         </tr>
@@ -69,9 +73,11 @@
             <td class="col-sm-1 text-right"><h5>变卖挂拍日期：</h5></td>
             <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.sellShotDate, 'yyyy-MM-dd')}"/></td>
             <td class="col-sm-1 text-right"><h5>拍卖成交日期：</h5></td>
-            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.successfulBidderDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.successfulBidderDate, 'yyyy-MM-dd')}"/>
+            </td>
             <td class="col-sm-1 text-right"><h5>执行款到账日期：</h5></td>
-            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.paymentReceivedDate, 'yyyy-MM-dd')}"/></td>
+            <td class="col-sm-1"><span th:text="${#dates.format(sysMonomerLaw.paymentReceivedDate, 'yyyy-MM-dd')}"/>
+            </td>
         </tr>
         <tr>
             <td class="col-sm-1 text-right"><h5>开庭时间：</h5></td>
@@ -96,7 +102,10 @@
         var projectId = $("#projectId").val();
         var projectType = $("#projectType").val();
         var projectName = $("#projectName").val();
-        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + projectId + "&projectType=" + projectType + "&projectStatus=" + $("#projectStatus").val();
+        var fwProjectType = $("#fwProjectType").val();
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + projectId + "&projectType=" + projectType
+            + "&projectStatus=" + $("#projectStatus").val() + "&fwProjectType=" + fwProjectType;
+        ;
         $.modal.parentTab(projectName + '法律信息', url);
     }
 

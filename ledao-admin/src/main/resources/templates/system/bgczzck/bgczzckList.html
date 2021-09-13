@@ -15,6 +15,7 @@
                     <input type="hidden" name="projectYxzName" th:value="${sysBgczzck.projectYxzName}"/>
                     <input type="hidden" name="agreementName" th:value="${sysBgczzck.agreementName}"/>
                     <input name="projectStatus" id="projectStatus" type="hidden" th:value="*{projectStatus}"/>
+                    <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
                     <!--<ul>
                         <li>
                             项目名称：<input type="text" name="projectName"/>
@@ -87,8 +88,9 @@
     var removeFlag = [[${@permission.hasPermi('system:bgczzck:remove')}]];
     var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
     var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
+    var fwProjectType = $("#fwProjectType").val();
     var prefix = ctx + "system/bgczzck";
-    $(function () {
+    /*$(function () {
         var options = {
             url: prefix + "/lists",
             createUrl: prefix + "/add",
@@ -201,16 +203,206 @@
                 }]
         };
         $.table.init(options);
+    });*/
+
+    $(function () {
+        if ($.common.isEmpty(fwProjectType)) {
+            toBgczzckTrue();
+        } else {
+            toBgczzckFalse();
+        }
     });
 
+    function toBgczzckTrue() {
+        var options = {
+            url: prefix + "/lists",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "重组并购项目信息库",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
+                    field: 'projectStatus',
+                    title: '项目状态'
+                },
+                {
+                    field: 'spvName',
+                    title: 'SPV名称'
+                },
+                {
+                    field: 'city',
+                    title: '城市/地区'
+                },
+                {
+                    field: 'contractPrincipal',
+                    title: '合同本金',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'principalBalance',
+                    title: '本金余额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'interestBalance',
+                    title: '利息余额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'principalInterestBalance',
+                    title: '本息余额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
+                },
+                {
+                    field: 'finalParty',
+                    title: '融资人名称'
+                },
+                {
+                    field: 'finalAgreementNo',
+                    title: '融资协议编号'
+                },
+                {
+                    field: 'finalTerm',
+                    title: '融资期限'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        //actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="detail(\'' + row.id + "',\'" + row.projectName + '\')"><i class="fa fa-search"></i>详细</a>');
+                        //actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                },
+                {
+                    field: 'legalProgress',
+                    title: '法律进度',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="toMonomerLaw(\'' + row.id + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
+                    }
+                },
+                {
+                    title: '底层资料',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        var fileShow = row.isFile;
+                        if (fileShow == 0) {
+                            actions.push('<a class="btn btn-success btn-xs ' + uploadFlag + '" href="javascript:void(0)" onclick="toUpload(' + row.id + ')"><i class="fa fa-edit"></i>上传</ a> ');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(' + row.id + ')"><i class="fa fa-search"></i>查看</a>');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function toBgczzckFalse() {
+        var options = {
+            url: prefix + "/lists",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "重组并购项目信息库",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
+                    field: 'projectStatus',
+                    title: '项目状态'
+                },
+                {
+                    field: 'spvName',
+                    title: 'SPV名称'
+                },
+                {
+                    field: 'legalProgress',
+                    title: '法律进度',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="toMonomerLaw(\'' + row.id + "',\'" + row.projectName + '\')">' + strLength(value) + '</a>';
+                    }
+                },
+                {
+                    field: 'lawSize',
+                    title: '司法情况详细',
+                    formatter: function (value, row, index) {
+                        if (value == 0) {
+                            return '<a href="javascript:void(0)" onclick="toMonomerLaw(\'' + row.id + "',\'" + row.projectName + '\')">无</a>';
+                        } else {
+                            return '<a href="javascript:void(0)" onclick="toLaw(\'' + row.id + "',\'" + row.projectName + '\')">司法情况详细</a>';
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="detail(\'' + row.id + "',\'" + row.projectName + '\')"><i class="fa fa-search"></i>详细</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+
     function toMonomerLaw(id, projectName) {
-        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + id + "&projectType=2" + "&projectStatus=" + $("#projectStatus").val();
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + id + "&projectType=2" + "&projectStatus=" + $("#projectStatus").val() + "&fwProjectType=" + $("#fwProjectType").val();
         $.modal.parentTab(projectName + '法律信息', url);
     }
 
     /*资产库列表-详细*/
     function detail(id, projectName) {
-        var url = prefix + '/detail/' + id;
+        var url = prefix + '/detail?id=' + id + "&fwProjectType=" + $("#fwProjectType").val();
         if (projectName == '' || projectName == null) {
             $.modal.openTab("重组并购项目信息库详情", url);
         } else {
@@ -273,9 +465,41 @@
     }
 
     function back() {
-        var url = prefix;
+        var url = "";
+        var fwProjectType = $("#fwProjectType").val();
+        if ($.common.isNotEmpty(fwProjectType)) {
+            url = ctx + 'system/project/toFwProject';
+            //url = prefix + "?fwProjectType=" + fwProjectType;
+        } else {
+            url = prefix;
+        }
         $.modal.parentTab("大型单体项目", url);
     }
+
+    /*
+    * 司法情况详细
+    * */
+    function toLaw(projectId) {
+        $.ajax({
+            url: prefix + "/selectSysMonomerLawList",
+            data: {'projectId': projectId},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var list = result.rows;
+                list.sort((a, b) => {
+                    return b['monomerLawId'] - a['monomerLawId']
+                });
+                lawDetail(list[0].monomerLawId);
+            }
+        })
+    }
+
+    function lawDetail(monomerLawId) {
+        var url = ctx + 'system/monomerLaw/detail?monomerLawId=' + monomerLawId + "&detailType=1&fwProjectType=trues";
+        $.modal.opens('司法情况详细', url);
+    }
+
 
     function see(projectId) {
         var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 1;

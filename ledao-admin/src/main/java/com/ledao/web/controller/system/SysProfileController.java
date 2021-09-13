@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ import com.ledao.framework.shiro.service.SysPasswordService;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysUserService;
+
+import java.io.File;
 
 /**
  * 个人信息 业务处理
@@ -105,7 +108,6 @@ public class SysProfileController extends BaseController {
     public String avatar(ModelMap mmap) {
         SysUser user = ShiroUtils.getSysUser();
         SysUser sysUser = userService.selectUserById(user.getUserId());
-        log.info(":======" + sysUser.getAvatar());
         mmap.put("user", userService.selectUserById(user.getUserId()));
         return prefix + "/avatar";
     }

@@ -86,26 +86,32 @@
         <result property="otherName" column="other_name"/>
         <result property="otherFlag" column="other_flag"/>
         <result property="openTime" column="open_time"/>
+        <result property="sue" column="sue"/>
+        <result property="lawsuit" column="lawsuit"/>
     </resultMap>
 
     <sql id="selectSysProjectVo">
-        select project_id, project_name,project_zck_id, asset_status, no, borrower, city, loan_bank, contract_principal,
-        principal_balance, interest_balance, principal_interest_balance, guarantor,pledge, collateral,project_manager_id, project_manager, user_id,
-        judicial_status, competent_court, judge_contact, judicial_remarks, collateral_claims, transaction_type, buyer, buyer_id,
-        buyer_sources, buyer_contact, contract_no, limitation_action, seal_up_subject_matter, seal_up_date, limitation_execution,
-        date_filing, first_instance, second_instance, retrial, enforcement_filing_date, appraisal_report_date, first_shot_date,
-        second_shot_date, sell_shot_date, successful_bidder_date, payment_received_date, del_flag, parent_id, create_by, create_time,
-        update_by, update_time,project_zck_id,law_firm,lawyer_contact,debt_status, potential_customers, potential_customers_id, seizure, ageing, limitation
-         ,deal_customer_id,deal_customer_name,customer_lable, asset_supplier_id, asset_supplier_name, funding_provider_id, funding_provider_name,
-          lawyer_id, lawyer_name, intermediary_id, intermediary_name, wqyx_customer_id, wqyx_customer_name, wqcj_customer_id, wqcj_customer_name,
-          zqyx_customer_id, zqyx_customer_name, zqcj_customer_id, zqcj_customer_name, other_id, other_name,other_flag,open_time   from sys_project
+        select project_id,
+               project_name,
+               project_zck_id,
+               asset_status, no, borrower, city, loan_bank, contract_principal,
+            principal_balance, interest_balance, principal_interest_balance, guarantor, pledge, collateral, project_manager_id, project_manager, user_id,
+            judicial_status, competent_court, judge_contact, judicial_remarks, collateral_claims, transaction_type, buyer, buyer_id,
+            buyer_sources, buyer_contact, contract_no, limitation_action, seal_up_subject_matter, seal_up_date, limitation_execution,
+            date_filing, first_instance, second_instance, retrial, enforcement_filing_date, appraisal_report_date, first_shot_date,
+            second_shot_date, sell_shot_date, successful_bidder_date, payment_received_date, del_flag, parent_id, create_by, create_time,
+            update_by, update_time, project_zck_id, law_firm, lawyer_contact, debt_status, potential_customers, potential_customers_id, seizure, ageing, limitation
+                , deal_customer_id, deal_customer_name, customer_lable, asset_supplier_id, asset_supplier_name, funding_provider_id, funding_provider_name,
+            lawyer_id, lawyer_name, intermediary_id, intermediary_name, wqyx_customer_id, wqyx_customer_name, wqcj_customer_id, wqcj_customer_name,
+            zqyx_customer_id, zqyx_customer_name, zqcj_customer_id, zqcj_customer_name, other_id, other_name, other_flag, open_time, lawsuit, sue
+        from sys_project
     </sql>
 
     <select id="selectSysProjectListNoLike" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         <where>
             del_flag='0' and parent_id IS NULL
-            <if test="projectName != null">and project_name = #{projectName} </if>
+            <if test="projectName != null">and project_name = #{projectName}</if>
             <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
             <if test="no != null  and no != ''">and no = #{no}</if>
             <if test="borrower != null  and borrower != ''">and borrower = #{borrower}</if>
@@ -387,6 +393,8 @@
             <if test="otherName != null">other_name,</if>
             <if test="otherFlag != null">other_flag,</if>
             <if test="openTime != null">open_time,</if>
+            <if test="sue !=null">sue,</if>
+            <if test="lawsuit !=null">lawsuit,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
@@ -469,6 +477,8 @@
             <if test="otherName != null">#{otherName},</if>
             <if test="otherFlag != null">#{otherFlag},</if>
             <if test="openTime != null">#{openTime},</if>
+            <if test="sue !=null">#{sue},</if>
+            <if test="lawsuit !=null">#{lawsuit},</if>
         </trim>
     </insert>
 
@@ -555,12 +565,16 @@
             <if test="otherName != null">other_name = #{otherName},</if>
             <if test="otherFlag != null">other_flag = #{otherFlag},</if>
             <if test="openTime != null">open_time = #{openTime},</if>
+            <if test="sue !=null">sue = #{sue},</if>
+            <if test="lawsuit !=null">lawsuit = #{lawsuit},</if>
         </trim>
         where project_id = #{projectId}
     </update>
 
     <delete id="deleteSysProjectById" parameterType="Long">
-        update sys_project set del_flag = '2' where project_id = #{projectId}
+        update sys_project
+        set del_flag = '2'
+        where project_id = #{projectId}
     </delete>
 
     <delete id="deleteSysProjectByIds" parameterType="String">
@@ -584,9 +598,13 @@
     </select>
 
     <select id="selectSysProjectByParentId" parameterType="SysProject" resultMap="SysProjectResult">
-        SELECT project_id FROM (SELECT t1.project_id, IF ( FIND_IN_SET(parent_id, @pids) > 0, @pids := CONCAT(@pids, ',', project_id), 0) AS ischild,del_flag
-        FROM (SELECT project_id, parent_id,del_flag FROM sys_project t ORDER BY parent_id, project_id) t1,
-        (SELECT @pids := #{projectId}) t2) t3 WHERE ischild != 0 AND del_flag='0' OR project_id =#{projectId}
+        SELECT project_id
+        FROM (SELECT t1.project_id,
+                     IF(FIND_IN_SET(parent_id, @pids) > 0, @pids := CONCAT(@pids, ',', project_id), 0) AS ischild,
+                     del_flag
+              FROM (SELECT project_id, parent_id, del_flag FROM sys_project t ORDER BY parent_id, project_id) t1,
+                   (SELECT @pids := #{projectId}) t2) t3
+        WHERE ischild != 0 AND del_flag='0' OR project_id =#{projectId}
     </select>
 
     <select id="selectSysProjectByProjectId" parameterType="String" resultMap="SysProjectResult">
@@ -618,11 +636,19 @@
     </select>
 
     <select id="selectTotalPrincipalBalanceByParentId" parameterType="Long" resultMap="SysProjectResult">
-        SELECT SUM(principal_balance) as totalPrincipalBalance FROM sys_project WHERE del_flag='0' AND project_id IN
-        (SELECT project_id FROM (SELECT t1.project_id, IF ( FIND_IN_SET(parent_id, @pids) > 0,
-        @pids := CONCAT(@pids, ',', project_id), 0) AS ischild,del_flag
-        FROM (SELECT project_id, parent_id,del_flag FROM sys_project t ORDER BY parent_id, project_id) t1,
-        (SELECT @pids := #{projectId}) t2) t3 WHERE ischild != 0 AND del_flag='0' OR project_id =#{projectId});
+        SELECT SUM(principal_balance) as totalPrincipalBalance
+        FROM sys_project
+        WHERE del_flag = '0'
+          AND project_id IN
+              (SELECT project_id
+               FROM (SELECT t1.project_id,
+                            IF(FIND_IN_SET(parent_id, @pids) > 0,
+                               @pids := CONCAT(@pids, ',', project_id), 0) AS ischild,
+                            del_flag
+                     FROM (SELECT project_id, parent_id, del_flag FROM sys_project t ORDER BY parent_id, project_id) t1,
+                          (SELECT @pids := #{projectId}) t2) t3
+               WHERE ischild
+            != 0 AND del_flag='0' OR project_id =#{projectId});
     </select>
 
 </mapper>

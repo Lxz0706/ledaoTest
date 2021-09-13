@@ -131,7 +131,8 @@
     });
 
     function progress(id) {
-        var url = ctx + 'system/progress/progressLists?projectManagementId=' + id+ "&project=N";;
+        var url = ctx + 'system/progress/progressLists?projectManagementId=' + id + "&project=N";
+        ;
         $.modal.parentTab("进度情况列表", url);
     }
 
@@ -162,7 +163,9 @@
 
     function add() {
         var projectType = $("#projectType").val();
-        $.operate.add(projectType);
+        var url = prefix + "/add?projectType=" + projectType;
+        $.modal.open("添加" + table.options.modalName, url);
+        //$.operate.add(projectType);
     }
 
     function toThou(str) {
@@ -171,7 +174,7 @@
     }
 
     function back() {
-        // var url = ctx + "system/projectmanagent/selectSysProjectmanagentListByProjectType/" + $("#projectType").val();
+        // var url = ctx + "system/projectmanagent/selectSysProjectmanagentListByProjectType?projectType=" + $("#projectType").val();
         var url = ctx + "system/projectmanagent";
         $.modal.parentTab("投后部项目管理", url);
     }

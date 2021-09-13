@@ -5,6 +5,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
     <form class="form-horizontal m-t" id="signupForm">
         <input id="projectId" th:value="${sysMonomerLaw.projectId}" type="hidden">
         <input id="projectName" th:value="${sysMonomerLaw.projectName}" type="hidden">
@@ -94,7 +95,8 @@
         var projectId = $("#projectId").val();
         var projectType = $("#projectType").val();
         var projectName = $("#projectName").val();
-        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + projectId + "&projectType=" + projectType;
+        var fwProjectType = $("#fwProjectType").val();
+        var url = ctx + "system/monomerLaw/toMonomerLaw?projectId=" + projectId + "&projectType=" + projectType + "&fwProjectType=" + fwProjectType;
         $.modal.parentTab(projectName + '法律信息', url);
     }
 </script>

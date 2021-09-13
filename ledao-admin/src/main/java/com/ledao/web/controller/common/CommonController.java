@@ -244,7 +244,7 @@ public class CommonController {
         byte[] b = new byte[1024];
         try {
             //获取当前地址下的文件
-            File file = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/profile")) + url);
+            File file = new File(Global.getProfile().substring(0, Global.getProfile().indexOf("/profile")) + url);
             if (!file.exists()) {
                 throw new RuntimeException("源文件不存在");
             }
@@ -252,7 +252,7 @@ public class CommonController {
             //默认转pdf,excel转html
             String suffix = ".pdf";
             if ("txt".equals(oldSuffix)) {
-                charsetEnc(Global.getProfile().substring(0,Global.getProfile().indexOf("/profile")) + url, "UTF-8");
+                charsetEnc(Global.getProfile().substring(0, Global.getProfile().indexOf("/profile")) + url, "UTF-8");
             }
             if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
                 suffix = ".html";
@@ -260,7 +260,7 @@ public class CommonController {
 
             //转换的文件存放位置
             newUrl = url.replace("." + oldSuffix, suffix);
-            File newFile = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/profile")) + newUrl);
+            File newFile = new File(Global.getProfile().substring(0, Global.getProfile().indexOf("/profile")) + newUrl);
 
             converter.convert(file).to(newFile).execute();
             ServletOutputStream outputStream = response.getOutputStream();
@@ -289,8 +289,9 @@ public class CommonController {
         response.setCharacterEncoding("UTF-8");
         byte[] b = new byte[1024];
         try {
+            log.info("存放地址：=====" + Global.getProfile() + "-------" + url);
             //获取当前地址下的文件
-            File file = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/")) + url);
+            File file = new File(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + url);
             if (!file.exists()) {
                 throw new RuntimeException("源文件不存在");
             }
@@ -298,7 +299,7 @@ public class CommonController {
             //默认转pdf,excel转html
             String suffix = ".pdf";
             if ("txt".equals(oldSuffix)) {
-                charsetEnc(Global.getProfile().substring(0,Global.getProfile().indexOf("/")) + url, "UTF-8");
+                charsetEnc(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + url, "UTF-8");
             }
             if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
                 suffix = ".html";
@@ -306,7 +307,7 @@ public class CommonController {
 
             //转换的文件存放位置
             newUrl = url.replace("." + oldSuffix, suffix);
-            File newFile = new File(Global.getProfile().substring(0,Global.getProfile().indexOf("/")) + newUrl);
+            File newFile = new File(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + newUrl);
 
             converter.convert(file).to(newFile).execute();
             ServletOutputStream outputStream = response.getOutputStream();

@@ -165,7 +165,7 @@
     /*资产库列表-详细*/
     function detail(id, projectName) {
         var zcbId = $("#zcbId").val();
-        var url = prefix + '/zckList/' + id + "/" + zcbId;
+        var url = prefix + '/toZckList?id=' + id + "&zcbId=" + zcbId;
         $.modal.parentTab(projectName + "列表", url);
     }
 
@@ -197,7 +197,7 @@
     }
 
     function back() {
-        var url = ctx + 'system/zcb/selectZcbByAssetStatus/' + $("#assetStatus").val();
+        var url = ctx + 'system/zcb/selectZcbByAssetStatus?assetStatus=' + $("#assetStatus").val();
         $.modal.parentTab($("#assetStatus").val() + "列表", url);
     }
 </script>

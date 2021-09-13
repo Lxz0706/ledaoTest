@@ -103,8 +103,9 @@ public class ProcessController extends BaseController {
         ProcessDefinition pd = pdq.processDefinitionId(processDefinitionId).singleResult();
 
         String resourceName = pd.getDiagramResourceName();
-
+        System.out.println("=========="+resourceName);
         if (resourceName.endsWith(".png") && StringUtils.isEmpty(pProcessInstanceId) == false) {
+            System.out.println("123123123");
             getActivitiProccessImage(pProcessInstanceId, response);
             //ProcessDiagramGenerator.generateDiagram(pde, "png", getRuntimeService().getActiveActivityIds(processInstanceId));
         } else {

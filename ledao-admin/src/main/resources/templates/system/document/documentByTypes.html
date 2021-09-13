@@ -285,7 +285,10 @@
     function add() {
         var documentType = $("#documentType").val();
         var subsetType = $("#subsetType").val();
-        $.operate.adds(documentType, subsetType);
+        var url= prefix +"/add?documentType="+documentType+"&subsetType="+subsetType;
+        $.modal.open("添加" + table.options.modalName, url);
+        //$.operate.adds(documentType, subsetType);
+
     }
 
     function onLoadSuccess(data) {
@@ -300,7 +303,7 @@
         /*var url = prefix + "/toList";
         $.modal.parentTab("文档管理", url);*/
         var documentType = $("#documentType").val();
-        var url = prefix + "/toBackByType/" + documentType;
+        var url = prefix + "/toBackByType?type=" + documentType;
         $.modal.parentTab("文档管理", url);
     }
 

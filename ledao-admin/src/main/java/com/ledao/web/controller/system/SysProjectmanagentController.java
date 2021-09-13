@@ -178,15 +178,15 @@ public class SysProjectmanagentController extends BaseController {
     }
 
     @RequiresPermissions("system:projectmanagent:list")
-    @GetMapping({"/selectSysProjectmanagentListByProjectType/{projectType}"})
-    public String selectSysProjectmanagentListByProjectType(@PathVariable("projectType") String projectType, ModelMap modelMap) {
+    @GetMapping({"/selectSysProjectmanagentListByProjectType"})
+    public String selectSysProjectmanagentListByProjectType(String projectType, ModelMap modelMap) {
         modelMap.put("projectType", projectType);
         return "system/projectmanagent/projectmanagentList";
     }
 
     @RequiresPermissions("system:projectmanagent:list")
-    @GetMapping({"/selectSysProjectmanagentListByProjectTypes/{projectType}"})
-    public String selectSysProjectmanagentListByProjectTypes(@PathVariable("projectType") String projectType, ModelMap modelMap) {
+    @GetMapping({"/selectSysProjectmanagentListByProjectTypes"})
+    public String selectSysProjectmanagentListByProjectTypes(String projectType, ModelMap modelMap) {
         modelMap.put("projectType", projectType);
         return "system/projectmanagent/projectmanagentLists";
     }
@@ -316,8 +316,8 @@ public class SysProjectmanagentController extends BaseController {
     /**
      * 新增【请填写功能名称】列表
      */
-    @GetMapping("/add/{projectType}")
-    public String add(@PathVariable("projectType") String projectType, ModelMap mmap) {
+    @GetMapping("/add")
+    public String add(String projectType, ModelMap mmap) {
         mmap.put("projectType", projectType);
         return prefix + "/add";
     }

@@ -39,7 +39,7 @@
                shiro:hasPermission="system:projectZck:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
-            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+            <a class="btn btn-info" onclick="back()">
                 <i class="fa fa-backward"></i> 返回
             </a>
         </div>
@@ -91,7 +91,7 @@
                     field: 'endTime',
                     title: '处置结束时间'
                 },
-                {
+                /*{
                     field: 'bjye',
                     title: '本金余额总额',
                     formatter: function (value, row, index) {
@@ -104,7 +104,7 @@
                     formatter: function (value, row, index) {
                         return $.operate.numberFormatter(value, 3, '.', ',');
                     }
-                },
+                },*/
                 {
                     field: 'syhs',
                     title: '剩余债权户数'

@@ -9,7 +9,6 @@
         <div class="col-sm-12 search-collapse">
             <input type="hidden" name="zckName" id="zckName" th:value="*{zckName}"/>
             <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
-            <input name="otherFlag" id="otherFlag" th:value="*{otherFlag}" type="hidden">
             <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
             <form id="formId">
                 <input name="projectZckId" id="projectZckId" th:value="*{projectZckId}" type="hidden"/>
@@ -22,7 +21,7 @@
             <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:project:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+            <a class="btn btn-primary single disabled" onclick="edit()"
                shiro:hasPermission="system:project:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
@@ -30,7 +29,7 @@
                shiro:hasPermission="system:project:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
-            <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:project:list">
+            <a class="btn btn-info" onclick="back()">
                 <i class="fa fa-backward"></i> 返回
             </a>
             <!--<a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="system:project:export">
@@ -48,9 +47,9 @@
     var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
     var detailFlag = [[${@permission.hasPermi('system:project:detail')}]];
     var prefix = ctx + "system/project";
+    var fwProjectType = $("#fwProjectType").val();
 
     $(function () {
-        var fwProjectType = $("#fwProjectType").val();
         if ($.common.isNotEmpty(fwProjectType)) {
             if ("investmentProject" == fwProjectType) {
                 fwThProject();
@@ -112,66 +111,6 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        //actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.projectId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="detail(\'' + row.projectId + "',\'" + 5 + '\')"><i class="fa fa-search"></i>详细</a>');
-                        //actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.projectId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }]
-        };
-        $.table.init(options);
-    }
-
-    function fwThProject() {
-        var options = {
-            url: prefix + "/projectList",
-            createUrl: prefix + "/add",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
-            detailUrl: prefix + "/detail/{id}/{ids}",
-            modalName: "投后部项目管理",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: 'projectId',
-                    title: '项目ID',
-                    visible: false
-                },
-                {
-                    field: 'projectName',
-                    title: '借款人名称'
-                },
-                {
-                    title: '债权情况详细',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + 1 + '\')">债权情况详细</a>';
-                    }
-                },
-                {
-                    title: '司法情况详细',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + 2 + '\')">司法情况详细</a>';
-                    }
-                },
-                {
-                    title: '诉讼及执行进展详细',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + 4 + '\')">诉讼及执行进展详细</a>';
-                    }
-                },
-                {
-                    title: '成交信息',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + 3 + '\')">成交信息详细</a>';
-                    }
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
                         actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="detail(\'' + row.projectId + "',\'" + 5 + '\')"><i class="fa fa-search"></i>详细</a>');
                         return actions.join('');
                     }
@@ -189,6 +128,8 @@
             exportUrl: prefix + "/export",
             detailUrl: prefix + "/detail/{id}/{ids}",
             modalName: "投后部项目管理",
+            sortOrder: 'desc',
+            sortName: 'no',
             columns: [{
                 checkbox: true
             },
@@ -203,19 +144,11 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目案件'
+                    title: '项目案件名称'
                 },
                 {
                     field: 'projectManager',
                     title: '项目经理'
-                },
-                {
-                    field: 'debtStatus',
-                    title: '债权状态'
-                },
-                {
-                    field: 'judicialStatus',
-                    title: '司法状态'
                 },
                 {
                     title: '案件情况详细',
@@ -271,19 +204,19 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目案件名称'
+                    title: '项目案件'
                 },
                 {
                     field: 'projectManager',
                     title: '公司负责人'
                 },
                 {
-                    field: 'projectManager',
+                    field: 'lawsuit',
                     title: '应诉主体'
                 },
                 {
-                    field: 'projectManager',
-                    title: '诉讼主体'
+                    field: 'sue',
+                    title: '起诉主体'
                 },
                 {
                     field: 'judicialStatus',
@@ -324,9 +257,14 @@
     function add() {
         var projectZckId = $("#projectZckId").val();
         var parentId = $("#projectId").val();
-        //$.operate.adds(projectZckId, parentId);
-        var url = prefix + "/add?projectZckId=" + projectZckId + "&parentId=" + parentId+ "&otherFlag=" + $("#otherFlag").val();
-        $.modal.open("添加项目", url);
+        var url = prefix + "/add?projectZckId=" + projectZckId + "&parentId=" + parentId + "&otherFlag=" + $("#otherFlag").val() + "&fwProjectType=" + fwProjectType;
+        $.modal.open("添加" + table.options.modalName, url);
+    }
+
+    function edit() {
+        var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        var url = prefix + "/edit?projectId=" + id + "&fwProjectType=" + fwProjectType;
+        $.modal.open("修改" + table.options.modalName, url);
     }
 
 

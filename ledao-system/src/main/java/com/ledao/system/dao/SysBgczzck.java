@@ -463,6 +463,12 @@ public class SysBgczzck extends BaseEntity {
      */
     private Long isFile;
 
+    private String fwProjectType;
+
+    /**
+     * 司法情况
+     */
+    private Long lawSize;
 
     public Long getId() {
         return id;
@@ -1119,6 +1125,22 @@ public class SysBgczzck extends BaseEntity {
 
     public void setIsFile(Long isFile) {
         this.isFile = isFile;
+    }
+
+    public String getFwProjectType() {
+        return fwProjectType;
+    }
+
+    public void setFwProjectType(String fwProjectType) {
+        this.fwProjectType = fwProjectType;
+    }
+
+    public Long getLawSize() {
+        return lawSize;
+    }
+
+    public void setLawSize(Long lawSize) {
+        this.lawSize = lawSize;
     }
 
     @Override

@@ -74,6 +74,9 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysUnderlyingDataService iSysUnderlyingDataService;
 
+    @Autowired
+    private ISysUserService sysUserService;
+
     @RequiresPermissions("system:project:view")
     @GetMapping()
     public String project() {
@@ -500,17 +503,56 @@ public class SysProjectController extends BaseController {
             }
         }
 
-        /*//监控司法状态
-        SysProject sysProject1 = sysProjectService.selectSysProjectById(sysProject.getProjectId());
-        if (!sysProject.getJudicialStatus().equals(sysProject1.getJudicialStatus())) {
-            SysNotice sysNotice = new SysNotice();
-            sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
-            sysNotice.setStatus("0");
-            sysNotice.setNoticeType("3");
-            sysNoticeService.insertNotice(sysNotice);
-        }*/
+        StringBuffer idSb = new StringBuffer();
+        StringBuffer nameSb = new StringBuffer();
+        //获取风控部经理
+        List<SysUser> sysUserList = getUserList("fkbjl");
+        for (SysUser sysUser1 : sysUserList) {
+            idSb.append(sysUser1.getUserId()).append(",");
+            nameSb.append(sysUser1.getUserName()).append(",");
+        }
+
+        //获取投后部项目经理
+        List<SysUser> sysUserList1 = getUserList("thbManager");
+        for (SysUser sysUser1 : sysUserList1) {
+            idSb.append(sysUser1.getUserId()).append(",");
+            nameSb.append(sysUser1.getUserName()).append(",");
+        }
+        if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
+            nameSb.append(sysProject.getProjectManager());
+            SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
+            idSb.append(sysUser.getUserId());
+        }
+        SysNotice sysNotice = new SysNotice();
+        sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
+        sysNotice.setStatus("0");
+        sysNotice.setNoticeType("3");
+        sysNotice.setReceiverId(idSb.toString());
+        sysNotice.setReceiver(nameSb.toString());
+        sysNotice.setCreateBy(ShiroUtils.getLoginName());
+        sysNotice.setShareDeptAndUser(nameSb.toString());
+        sysNoticeService.insertNotice(sysNotice);
 
         return toAjax(sysProjectService.updateSysProject(sysProject));
+    }
+
+    public List<SysUser> getUserList(String roleKey) {
+        SysUser sysUser = new SysUser();
+        sysUser.setRoleKey(roleKey);
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                        sysUser.setFormalFlag("0");
+                    }
+                }
+            }
+        }
+        List<SysUser> sysUserList = sysUserService.selectUserByRoleKey(sysUser);
+        return sysUserList;
     }
 
     /**
@@ -537,7 +579,6 @@ public class SysProjectController extends BaseController {
         }
 
         String id = sb.deleteCharAt(sb.length() - 1).toString();
-        logger.info("删除的id：========" + id);
 
         //删除保证人
         List<SysProjectBail> sysProjectBailList = sysProjectBailService.selectSysProjectBailByProjectId(id);
@@ -1353,6 +1394,9 @@ public class SysProjectController extends BaseController {
                 url = prefix + "/projectZck";
             } else if ("investment".equals(fwProjectType)) {
                 url = prefix + "/investment";
+                modelMap.put("projectStatus", "投资中");
+                modelMap.put("sysBgczzck", new SysBgczzck());
+                url = "system/bgczzck/bgczzckList";
             } else {
                 modelMap.put("otherFlag", "Y");
                 url = prefix + "/projectList";

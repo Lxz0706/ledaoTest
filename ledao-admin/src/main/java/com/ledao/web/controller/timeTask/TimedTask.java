@@ -320,6 +320,7 @@ public class TimedTask {
                         sysNotice.setReceiverId(sysUser.getUserId().toString());
                         sysNotice.setReceiver(sysUser.getUserName());
                         sysNotice.setCreateBy(sysUser.getLoginName());
+                        sysNotice.setShareDeptAndUser(sysUser.getUserName());
                         sysNoticeService.insertNotice(sysNotice);
                     }
                 }
@@ -376,6 +377,7 @@ public class TimedTask {
                             sysNotice.setReceiverId(sysUser.getUserId().toString());
                             sysNotice.setReceiver(sysUser.getUserName());
                             sysNotice.setCreateBy(sysUser.getLoginName());
+                            sysNotice.setShareDeptAndUser(sysUser.getUserName());
                             sysNoticeService.insertNotice(sysNotice);
                         }
                     }
@@ -410,9 +412,11 @@ public class TimedTask {
                                     if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
                                         sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
                                         sysNotice.setReceiver(sysProject1.getProjectManager());
+                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager());
                                     } else {
                                         sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
                                         sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
                                     }
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
@@ -440,9 +444,11 @@ public class TimedTask {
                                     if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
                                         sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
                                         sysNotice.setReceiver(sysProject1.getProjectManager());
+                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager());
                                     } else {
                                         sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId() + "," + sysUser2.getUserId());
                                         sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName() + "," + sysUser2.getUserName());
+                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager() + "," + sysUser1.getUserName() + "," + sysUser2.getUserName());
                                     }
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
@@ -467,9 +473,11 @@ public class TimedTask {
                                     if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
                                         sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
                                         sysNotice.setReceiver(sysProject1.getProjectManager());
+                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager());
                                     } else {
                                         sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
                                         sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
                                     }
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
@@ -576,6 +584,7 @@ public class TimedTask {
                         sysNotice.setReceiver(sysUser.getUserName());
                         sysNotice.setReceiverId(sysUser.getUserId().toString());
                         sysNotice.setCreateBy(sysUser.getLoginName());
+                        sysNotice.setShareDeptAndUser(sysUser.getUserName());
                         sysNoticeService.insertNotice(sysNotice);
                     }
                 } else {

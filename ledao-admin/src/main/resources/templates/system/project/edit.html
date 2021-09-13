@@ -7,113 +7,121 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <input name="fwProjectType" id="fwProjectType" type="hidden" th:value="${fwProjectType}">
     <form class="form-horizontal m" id="form-project-edit" th:object="${sysProject}">
         <input id="createBy" th:field="*{isCreate}" type="hidden">
         <input name="projectId" th:field="*{projectId}" type="hidden">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">项目名称：</label>
-            <div class="col-sm-8">
-                <input name="projectName" th:field="*{projectName}" class="form-control" type="text">
-            </div>
-        </div>
-        <!--<div class="form-group">
-            <label class="col-sm-3 control-label">资产包状态：</label>
-            <div class="col-sm-8">
-                <div class="radio-box">
-                    <input type="radio" name="assetStatus" value="">
-                    <label th:for="assetStatus" th:text="未知"></label>
-                </div>
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-            </div>
-        </div>-->
         <div class="form-group">
             <label class="col-sm-3 control-label">序号：</label>
             <div class="col-sm-8">
                 <input name="no" th:field="*{no}" class="form-control" type="text">
             </div>
         </div>
-        <!--<div class="form-group">
-            <label class="col-sm-3 control-label">借款人名称：</label>
-            <div class="col-sm-8">
-                <input name="borrower" th:field="*{borrower}" class="form-control" type="text">
-            </div>
-        </div>-->
         <div class="form-group">
-            <label class="col-sm-3 control-label">城市/地区：</label>
+            <label class="col-sm-3 control-label" id="projectName"></label>
             <div class="col-sm-8">
-                <input name="city" th:field="*{city}" class="form-control" type="text">
+                <input name="projectName" th:field="*{projectName}" class="form-control" type="text">
+            </div>
+        </div>
+        <div id="otherFalse">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">城市/地区：</label>
+                <div class="col-sm-8">
+                    <input name="city" th:field="*{city}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">放款银行：</label>
+                <div class="col-sm-8">
+                    <input name="loanBank" th:field="*{loanBank}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">合同本金(元)：</label>
+                <div class="col-sm-8">
+                    <input name="contractPrincipal" th:field="*{contractPrincipal}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">本金余额(元)：</label>
+                <div class="col-sm-8">
+                    <input name="principalBalance" th:field="*{principalBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">利息余额(元)：</label>
+                <div class="col-sm-8">
+                    <input name="interestBalance" th:field="*{interestBalance}" class="form-control" type="text"
+                           required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">本息余额(元)：</label>
+                <div class="col-sm-8">
+                    <input name="principalInterestBalance" th:field="*{principalInterestBalance}" class="form-control"
+                           type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">保证人：</label>
+                <div class="col-sm-8">
+                    <textarea name="guarantor" class="form-control">[[*{guarantor}]]</textarea>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：保证人1;保证人2;保证人3(每个保证人之间请用英文状态下的";"分隔)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">抵押物：</label>
+                <div class="col-sm-8">
+                    <textarea name="collateral" class="form-control">[[*{collateral}]]</textarea>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：抵押物1;抵押物2;抵押物3(每个抵押物之间请用英文状态下的";"分隔)</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">质押物：</label>
+                <div class="col-sm-8">
+                    <textarea name="pledge" class="form-control">[[*{pledge}]]</textarea>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：质押物1;质押物2;质押物3(每个质押物之间请用英文状态下的";"分隔)</span>
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">放款银行：</label>
+            <label class="col-sm-3 control-label" id="projectManagers"></label>
             <div class="col-sm-8">
-                <input name="loanBank" th:field="*{loanBank}" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">合同本金(元)：</label>
-            <div class="col-sm-8">
-                <input name="contractPrincipal" th:field="*{contractPrincipal}" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">本金余额(元)：</label>
-            <div class="col-sm-8">
-                <input name="principalBalance" th:field="*{principalBalance}" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">利息余额(元)：</label>
-            <div class="col-sm-8">
-                <input name="interestBalance" th:field="*{interestBalance}" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">本息余额(元)：</label>
-            <div class="col-sm-8">
-                <input name="principalInterestBalance" th:field="*{principalInterestBalance}" class="form-control"
+                <input name="projectManager" id="projectManager" th:field="*{projectManager}" class="form-control"
                        type="text">
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">保证人：</label>
-            <div class="col-sm-8">
-                <textarea name="guarantor" class="form-control">[[*{guarantor}]]</textarea>
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：保证人1;保证人2;保证人3(每个保证人之间请用英文状态下的";"分隔)</span>
+        <div id="otherTrue">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">涉诉金额(元)：</label>
+                <div class="col-sm-8">
+                    <input name="principalBalance" class="form-control" type="text" th:field="*{principalBalance}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">应诉主体：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="lawsuit" id="lawsuit" th:field="*{lawsuit}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">起诉主体：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="sue" id="sue" th:field="*{sue}">
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">抵押物：</label>
-            <div class="col-sm-8">
-                <textarea name="collateral" class="form-control">[[*{collateral}]]</textarea>
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：抵押物1;抵押物2;抵押物3(每个抵押物之间请用英文状态下的";"分隔)</span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">质押物：</label>
-            <div class="col-sm-8">
-                <textarea name="pledge" class="form-control">[[*{pledge}]]</textarea>
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：质押物1;质押物2;质押物3(每个质押物之间请用英文状态下的";"分隔)</span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">项目经理：</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="hidden" name="projectManagerId" id="projectManagerId"
-                       th:field="*{projectManagerId}">
-                <input name="projectManager" id="projectManager" th:field="*{projectManager}" class="form-control"
-                       type="text" onclick="selectUserTree()">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">债权状态：</label>
-            <div class="col-sm-8">
-                <select name="debtStatus" class="form-control m-b"
-                        th:with="type=${@dict.getType('sys_project_debtStatus')}">
-                    <option value="">--请选择一条数据--</option>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
-                            th:field="*{debtStatus}"></option>
-                </select>
+        <div id="otherFalse1">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">债权状态：</label>
+                <div class="col-sm-8">
+                    <select name="debtStatus" class="form-control m-b"
+                            th:with="type=${@dict.getType('sys_project_debtStatus')}">
+                        <option value="">--请选择一条数据--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                th:field="*{debtStatus}"></option>
+                    </select>
+                </div>
             </div>
         </div>
         <input name="userId" th:field="*{userId}" class="form-control" type="hidden">
@@ -160,18 +168,6 @@
                 <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：张三1385188xxxx</span>
             </div>
         </div>
-        <!--<div class="form-group">
-            <label class="col-sm-3 control-label">司法状态备注：</label>
-            <div class="col-sm-8">
-                <input name="judicialRemarks" th:field="*{judicialRemarks}" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">抵押物/债权：</label>
-            <div class="col-sm-8">
-                <textarea name="collateralClaims" class="form-control">[[*{collateralClaims}]]</textarea>
-            </div>
-        </div>-->
         <div class="form-group">
             <label class="col-sm-3 control-label">所属债权合同编号：</label>
             <div class="col-sm-8">
@@ -344,6 +340,7 @@
 <th:block th:include="include :: datetimepicker-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script type="text/javascript">
+    var fwProjectType = $("#fwProjectType").val();
 
     $(function () {
         var openTime = $("#openTime").val();
@@ -352,6 +349,21 @@
             $("#create").show();
         } else {
             $("#create").hide();
+        }
+        if ($.common.isNotEmpty(fwProjectType)) {
+            $("#projectName").html("项目案件：");
+            if ($.common.equalsIgnoreCase("otherProject", fwProjectType)) {
+                $("#otherFalse").css("display", "none");
+                $("#otherFalse1").css("display", "none");
+                $("#projectManagers").html("公司负责人：");
+            } else {
+                $("#otherTrue").css("display", "none");
+                $("#projectManagers").html("项目经理：");
+            }
+        } else {
+            $("#projectName").html("项目名称：");
+            $("#otherTrue").css("display", "none");
+            $("#projectManagers").html("项目经理：");
         }
         setOpenTime(openTime);
     })
@@ -394,6 +406,7 @@
 
     function submitHandler() {
         if ($.validate.form()) {
+            $('form').find('div:hidden').find(':input').attr('disabled', 'disabled');
             var data = $('#form-project-edit').serializeArray()
             var seizure = $("input[id='seizure']").is(':checked') == true ? 0 : 1;
             var ageing = $("input[id='ageing']").is(':checked') == true ? 0 : 1;

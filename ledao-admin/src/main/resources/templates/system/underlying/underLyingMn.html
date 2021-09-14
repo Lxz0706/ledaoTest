@@ -19,19 +19,43 @@
     var editFlag = [[${@permission.hasPermi('system:projectZck:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
     var prefix = ctx + "system/underlyingdata";
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    var showTotal = false;
+    var showBg = false;
+    var showThb = false;
+
     $(function () {
-                var str = '';
-                var height = $(".row").height();
-                var winHeight = height / 2;
-                var lable1 = "投资";
-                var lable2 = "投后";
-                str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
-                str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(0)">' + lable1 + '</a><br/>';
-                str += '</div>';
-                str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
-                str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(1)">' + lable2 + '</a><br/>';
-                str += '</div>';
-                $("#showList").html(str);
+        var showRemove = false;
+        for(var i =0; i < roles.length;i++) {
+            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                showTotal = true
+            }
+            if (roles[i].roleKey == "investmentCommon" || roles[i].roleKey == "investmentManager2" ||
+                roles[i].roleKey == "investmentManager" || roles[i].roleKey == "tzbzz"){
+                showBg = true
+            }
+            if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" ||
+                roles[i].roleKey == "thbzz" || roles[i].roleKey == "thbCommon"){
+                showThb = true
+            }
+        }
+        var str = '';
+        var height = $(".row").height();
+        var winHeight = height / 2;
+        var lable1 = "大型单体";
+        var lable2 = "投后";
+        if (showTotal || showBg){
+            str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+            str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(0)">' + lable1 + '</a><br/>';
+            str += '</div>';
+        }
+        if (showTotal || showThb) {
+            str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+            str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(1)">' + lable2 + '</a><br/>';
+            str += '</div>';
+        }
+        $("#showList").html(str);
     });
 
 

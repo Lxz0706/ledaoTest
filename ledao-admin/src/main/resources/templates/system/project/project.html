@@ -263,6 +263,7 @@
         $.modal.open("底层资料", url);
     }
     function toUpload(projectId,projectManagerId,zckType) {
+        debugger
         if (userId == projectManagerId && zckType == "automaticSwitch"){
             var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 0;
             $.modal.open('上传底层资料', url);

@@ -182,7 +182,7 @@ public class SysUnderlyingDataController extends BaseController
     /**
      * 删除底层资料
      */
-    @RequiresPermissions("system:underlyingdata:remove")
+//    @RequiresPermissions("system:underlyingdata:remove")
     @Log(title = "底层资料", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

@@ -99,7 +99,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             a.project_type = #{projectType}
             <if test="parentId != null "> and a.parent_id = #{parentId}</if>
-            <if test="createTime != null "> and date_format(a.create_time,'%Y%m%d') = date_format(#{createTime},'%Y%m%d')</if>
+            <if test="params.startTime != null and params.startTime != ''"><!-- 开始时间检索 -->
+                and date_format(a.create_time,'%Y%m%d') &gt;= date_format(#{params.startTime},'%Y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(a.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
+            </if>
             <if test="createorName != null and createorName != ''"> and u.user_name like concat('%', #{createorName}, '%')</if>
             <if test="fileName != null  and fileName != ''"> and a.file_name like concat('%', #{fileName}, '%')</if>
             <if test="fileType != null  and fileType != ''"> and a.file_type = #{fileType}</if>

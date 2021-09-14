@@ -28,7 +28,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:underlyingdata:add">
+            <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 添加
             </a>
             <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
@@ -69,8 +69,9 @@
             exportUrl: prefix + "/export",
             detailUrl: prefix + "/detail/{id}",
             modalName: "底层资料",
-            columns: [{
-                checkbox: true,
+            columns: [
+               /* {
+                // checkbox: true,
                 visible: true,
                 formatter: function(value, row, index) {
                     var showRemove = false;
@@ -86,7 +87,7 @@
                         return {disabled : true}
                     }
                 }
-            },
+            },*/
                 {
                     title: "序号",
                     formatter: function (value, row, index) {
@@ -95,7 +96,10 @@
                 },
                 {
                     field: 'fileName',
-                    title: '文件名称'
+                    title: '文件名称',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value,10);
+                    }
                 },
                 {
                     field: 'fileType',
@@ -133,8 +137,6 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        console.log("========="+row.fileUrl)
-                        console.log("========="+JSON.stringify(row))
                         var fileType = row.fileType.toLowerCase();
 
                         // 管理员与档案管理员12
@@ -174,7 +176,7 @@
                 dataType: 'json',
                 success: function (result) {
                     if (result.code == 500) {
-                        $.modal.alertWarning("无法下载");
+                        $.modal.alertWarning("无法播放");
                         return;
                     } else {
                         $.ajax({
@@ -536,7 +538,6 @@
         var projectId = $("#projectId").val();
         if (projectType == 0){
             if (userId == projectManagerId && projectZckType == "automaticSwitch"){
-
                 var url = ctx + 'system/underlyingdata/add?projectId=' + projectId+"&projectType="+projectType;
                 $.modal.open('上传底层资料', url);
             }else if(projectZckType == "serve"){
@@ -565,6 +566,10 @@
                 $.table.hideColumn("shareDeptAndUser");
             }
         }
+    }
+
+    function submitHandler() {
+        $.operate.successCallbackClose()
     }
 
    /* function back() {

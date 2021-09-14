@@ -166,12 +166,17 @@ public class TimedTask {
                     if (StringUtils.isNotEmpty(u.getOpenId())){
                         //发送消息到投后部部门经理
                         JSONObject parm = new JSONObject();
+                        //发布人
                         parm.put("thing16","测试1");
-                        parm.put("thing20","测试2");
+//                        计划时间
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         parm.put("time4", sdf.format(new Date())+" 至 "+sdf.format(new Date()));
+//                        任务名称
                         parm.put("thing1","任务名称测试");
-                        parm.put("phrase7","任务状态测试");
+//                        任务状态
+                        parm.put("phrase7","测试2");
+//                        任务接收人
+                        parm.put("thing23","任务状态测试");
                         parm.put("toUser",u.getOpenId());
                         // 创建名称为投后队列
                         Queue queue = new ActiveMQQueue("ThQueueCommon");

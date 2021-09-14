@@ -215,6 +215,7 @@ public class SysUnderlyingDataController extends BaseController
         if (u.getUserId()==projectManagerId){
            return AjaxResult.success();
         }
+        System.out.print("");
         SysUser user = iSysUserService.selectUserById(projectManagerId);
         if (u.getUserId() == user.getDirectorId()){
             return AjaxResult.success();

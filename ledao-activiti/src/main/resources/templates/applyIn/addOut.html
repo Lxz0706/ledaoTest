@@ -286,19 +286,19 @@
                 },
                 {
                     field: 'dailyDocumentType',
-                    title: '日常档案种类',
+                    title: '种类',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
-                    }
-                    // visible: showDatilDocumentType
+                    },
+                    visible: showDatilDocumentType
                 },
                 {
                     field: 'dailyDocumentTypeContract',
-                    title: '合同档案种类',
+                    title: '种类',
                     formatter: function(value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract);
-                    }
-                    // visible: !showDatilDocumentType
+                    },
+                    visible: !showDatilDocumentType
                 },
                 {
                     field: 'fileName',

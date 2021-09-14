@@ -210,13 +210,13 @@ public class SysUnderlyingDataController extends BaseController
 
     @PostMapping("/checkUserAllow")
     @ResponseBody
-    public AjaxResult checkUserAllow(String projectManagerId) {
+    public AjaxResult checkUserAllow(long projectManagerId) {
         SysUser u = ShiroUtils.getSysUser();
-        if (u.getUserId().equals(projectManagerId)){
+        if (u.getUserId()==projectManagerId){
            return AjaxResult.success();
         }
-        SysUser user = iSysUserService.selectUserById(u.getDirectorId());
-        if (u.getUserId() == user.getUserId()){
+        SysUser user = iSysUserService.selectUserById(projectManagerId);
+        if (u.getUserId() == user.getDirectorId()){
             return AjaxResult.success();
         }
         return AjaxResult.error();

@@ -1047,7 +1047,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         applyIn.setApplyUser(apply.getApplyUser());
         applyIn.setApplyTime(apply.getApplyTime());
         applyIn.setApproveStatu("3");
-        applyIn.setReviserName(apply.getReviserName());
+        applyIn.setReviser(apply.getReviserName());
         applyIn.setRealCreateBy(apply.getRealCreateName());
         applyIn.setCompanyName(apply.getCompanyName());
         applyIn.setRemarks(apply.getRemark());
@@ -1064,6 +1064,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             doc.setContractNo(f.getContractNo());
             doc.setFileName(f.getFileName());
             doc.setFileType(f.getFileType());
+            doc.setDocumentGetType(f.getBusiDocumentType());
             doc.setFileScanType(f.getFileScanType());
             doc.setCounts(f.getCounts());
             doc.setPages(f.getPages());
@@ -1094,7 +1095,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         applyIn.setApplyUser(apply.getApplyUser());
         applyIn.setApplyTime(apply.getApplyTime());
         applyIn.setApproveStatu("3");
-        applyIn.setReviserName(apply.getReviserName());
+        applyIn.setReviser(apply.getReviserName());
         applyIn.setRealCreateBy(apply.getRealCreateName());
         applyIn.setCompanyName(apply.getCompanyName());
         applyIn.setRemarks(apply.getRemark());
@@ -1115,6 +1116,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }else{
                 doc.setDailyDocumentTypeContract(f.getDailyDocumentType());
             }
+            doc.setDocumentGetType(f.getBusiDocumentType());
             doc.setCounts(f.getCounts());
             doc.setPages(f.getPages());
             doc.setDocumentStatu(f.getDocumentStatu());

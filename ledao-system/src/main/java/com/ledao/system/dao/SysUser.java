@@ -158,6 +158,26 @@ public class SysUser extends BaseEntity {
     @Excel(name = "微信openId")
     private String openId;
 
+    private String unionId;
+
+    private String comOpenId;
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
+    public String getComOpenId() {
+        return comOpenId;
+    }
+
+    public void setComOpenId(String comOpenId) {
+        this.comOpenId = comOpenId;
+    }
+
     public String getOpenId() {
         return openId;
     }

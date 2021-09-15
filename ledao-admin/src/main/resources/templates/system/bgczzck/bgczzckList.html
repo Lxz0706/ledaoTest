@@ -89,6 +89,8 @@
     var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
     var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
     var fwProjectType = $("#fwProjectType").val();
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var showUnderLying = false;
     var prefix = ctx + "system/bgczzck";
     /*$(function () {
         var options = {
@@ -207,6 +209,12 @@
     });*/
 
     $(function () {
+        for(var i =0; i < roles.length;i++) {
+            if (roles[i].roleKey == "investmentCommon" || roles[i].roleKey == "investmentManager2" ||
+                roles[i].roleKey == "investmentManager" || roles[i].roleKey == "tzbzz"){
+                showUnderLying = true
+            }
+        }
         if ($.common.isEmpty(fwProjectType)) {
             toBgczzckTrue();
         } else {
@@ -215,6 +223,7 @@
     });
 
     function toBgczzckTrue() {
+
         var options = {
             url: prefix + "/lists",
             createUrl: prefix + "/add",
@@ -323,7 +332,8 @@
                             actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(' + row.id + ')"><i class="fa fa-search"></i>查看</a>');
                         }
                         return actions.join('');
-                    }
+                    },
+                    visible: showUnderLying
                 }]
         };
         $.table.init(options);
@@ -507,8 +517,8 @@
         $.modal.open("底层资料", url);
     }
     function toUpload(projectId) {
-        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 1;
-        $.modal.open('上传底层资料', url);
+        var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 1;
+        $.modal.open("底层资料", url);
     }
 
 </script>

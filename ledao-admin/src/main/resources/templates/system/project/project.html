@@ -44,12 +44,21 @@
     var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
     var userId = [[${@permission.getPrincipalProperty('userId')}]];
     var prefix = ctx + "system/project";
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var showUnderLying = false;
 
     var fwProjectType = $("#fwProjectType").val();
     var projectZckType = $("#projectZckType").val();
     var otherFlag = $("#otherFlag").val();
 
     $(function () {
+
+        for(var i =0; i < roles.length;i++) {
+            if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" ||
+                roles[i].roleKey == "thbzz" || roles[i].roleKey == "thbCommon"){
+                showUnderLying = true
+            }
+        }
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -166,7 +175,8 @@
                             actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(\'' + row.projectId + '\',\''+row.projectManagerId+ '\',\''+row.projectZckType+'\')"><i class="fa fa-search"></i>查看</a>');
                         }
                         return actions.join('');
-                    }
+                    },
+                    visible: showUnderLying
                 }]
         };
         $.table.init(options);
@@ -263,13 +273,12 @@
         $.modal.open("底层资料", url);
     }
     function toUpload(projectId,projectManagerId,zckType) {
-        debugger
         if (userId == projectManagerId && zckType == "automaticSwitch"){
-            var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 0;
-            $.modal.open('上传底层资料', url);
+            var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0+"&projectZckType="+zckType+"&projectManagerId="+projectManagerId;
+            $.modal.open("底层资料", url);
         }else if(zckType == "serve"){
-            var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + 0;
-            $.modal.open('上传底层资料', url);
+            var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0+"&projectZckType="+zckType+"&projectManagerId="+projectManagerId;
+            $.modal.open("底层资料", url);
         }else{
             $.modal.alertError("无法上传");
         }

@@ -12,7 +12,7 @@
             <form id="formId">
                 <div class="select-list">
                     <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
-                    <ul>
+                    <!--<ul>
                         <li>
                             <label>借款人名称：</label>
                             <input type="text" name="projectName"/>
@@ -22,7 +22,7 @@
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
-                    </ul>
+                    </ul>-->
                 </div>
             </form>
         </div>
@@ -120,7 +120,7 @@
 
     /*资产库列表-详细*/
     function detail(id, zckName) {
-        var url = prefix + '/projectList?projectZckId=' + id + "&projectZckType=" + $("#projectZckType").val() + "&otherFlag=" + $("#otherFlag").val()+ "&fwProjectType=" + $("#fwProjectType").val();
+        var url = ctx + 'system/projectZck/projectList?projectZckId=' + id + "&projectZckType=" + $("#projectZckType").val()+ "&otherFlag=" + $("#otherFlag").val()+ "&fwProjectType=" + $("#fwProjectType").val();;
         $.modal.parentTab(zckName + "列表", url);
     }
 

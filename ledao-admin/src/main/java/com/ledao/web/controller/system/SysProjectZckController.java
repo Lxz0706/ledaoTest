@@ -281,7 +281,8 @@ public class SysProjectZckController extends BaseController {
         modelMap.put("otherFlag", otherFlag);
         if (StringUtils.isNotEmpty(fwProjectType)) {
             if ("investmentProject".equals(fwProjectType)) {
-                url = "system/project/projectList";
+                //url = "system/project/projectList";
+                url = "system/project/project";
             } else {
                 url = "system/project/investmentProject";
             }

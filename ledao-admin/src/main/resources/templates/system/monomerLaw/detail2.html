@@ -85,12 +85,20 @@
     </form>
     <div class="row">
         <div class="col-sm-offset-5 col-sm-10">
-            <button type="button" class="btn btn-info" onclick="back()"><i class="fa fa-backward"></i>返 回</button>&nbsp;
+            <button type="button" class="btn btn-info" id="back" onclick="back()"><i class="fa fa-backward"></i>返 回</button>&nbsp;
         </div>
     </div>
 </div>
 <th:block th:include="include :: footer"/>
 <script>
+
+    $(function () {
+        var fwProjectType = $("#fwProjectType").val();
+        if ($.common.equalsIgnoreCase("trues", fwProjectType)) {
+            $("#back").hide();
+        }
+    })
+
     function back() {
         var projectId = $("#projectId").val();
         var projectType = $("#projectType").val();

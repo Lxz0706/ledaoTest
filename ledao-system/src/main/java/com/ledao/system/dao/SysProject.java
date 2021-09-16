@@ -37,7 +37,7 @@ public class SysProject extends BaseEntity {
     /**
      * 序号
      */
-    @Excel(name = "序号")
+    @Excel(name = "序号", cellType = Excel.ColumnType.NUMERIC)
     private Long no;
 
     /**

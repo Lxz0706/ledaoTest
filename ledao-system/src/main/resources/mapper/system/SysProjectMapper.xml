@@ -620,6 +620,7 @@
                 #{projectId}
             </foreach>
         </where>
+        order  by  no asc
     </select>
 
     <select id="selectSysProjectByProjectZckId" parameterType="String" resultMap="SysProjectResult">

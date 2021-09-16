@@ -19,7 +19,7 @@
             <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:project:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+            <a class="btn btn-primary single disabled" onclick="edit()"
                shiro:hasPermission="system:project:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
@@ -53,6 +53,58 @@
 
     $(function () {
 
+        if ($.common.isNotEmpty(fwProjectType)) {
+            if ("investmentProject" == fwProjectType) {
+                fwThProject();
+            } else {
+                fwQtProject();
+            }
+        } else {
+            thProject();
+        }
+    });
+
+    function  fwThProject(){
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "投后部项目管理",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'projectId',
+                    title: '项目ID',
+                    visible: false
+                },
+                {
+                    field: 'no',
+                    title: '序号'
+                },
+                {
+                    field: 'projectName',
+                    title: '借款人名称',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + row.projectName + '\')">' + $.table.tooltip(value, 15) + '</a>';
+                    },
+                    sortable: true
+                },
+                {
+                    field: 'projectManager',
+                    title: '项目经理'
+                },
+                {
+                    field: 'debtStatus',
+                    title: '债权状态'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function thProject(){
         for(var i =0; i < roles.length;i++) {
             if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" ||
                 roles[i].roleKey == "thbzz" || roles[i].roleKey == "thbCommon"){
@@ -180,7 +232,7 @@
                 }]
         };
         $.table.init(options);
-    });
+    }
 
     //控制显示的字数
     function strLength(value) {
@@ -296,6 +348,11 @@
         });
     };
 
+    function edit() {
+        var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        var url = prefix + "/edit?projectId=" + id + "&fwProjectType=" + fwProjectType;
+        $.modal.open("修改" + table.options.modalName, url);
+    }
 
 </script>
 </body>

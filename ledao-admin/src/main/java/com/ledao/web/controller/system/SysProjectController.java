@@ -223,10 +223,11 @@ public class SysProjectController extends BaseController {
      * 新增投后部项目管理
      */
     @GetMapping("/add")
-    public String add(String projectZckId, String parentId, String otherFlag, ModelMap mmap) {
+    public String add(String projectZckId, String parentId, String otherFlag, String fwProjectType, ModelMap mmap) {
         mmap.put("projectZckId", projectZckId);
         mmap.put("parentId", parentId);
         mmap.put("otherFlag", otherFlag);
+        mmap.put("fwProjectType", fwProjectType);
         return prefix + "/add";
     }
 
@@ -267,11 +268,7 @@ public class SysProjectController extends BaseController {
                 sysProject.setParentId(map.get(sysProject.getProjectName()));
             }
         }
-       /* if (StringUtils.isNotNull(list)) {
-            for (SysProject sysproject : list) {
-                sysProject.setParentId(sysproject.getProjectId());
-            }
-        }*/
+
         sysProject.setCreateBy(ShiroUtils.getLoginName());
         sysProject.setDelFlag("0");
         sysProjectService.insertSysProject(sysProject);
@@ -321,20 +318,6 @@ public class SysProjectController extends BaseController {
         }
 
         //关联项目
-/*        if (StringUtils.isNotNull(sysProject.getBuyerId()) && StringUtils.isNotNull(sysProject.getBuyer())) {
-            SysItem sysItem = new SysItem();
-            for (String string1 : sysProject.getBuyerId().split(",")) {
-                sysItem.setCustomerId(Long.valueOf(string1));
-                sysItem.setProjectId(sysProject.getProjectId());
-                sysItem.setProjectName(sysProject.getProjectName());
-                List<SysItem> sysItemList = sysItemService.selectSysItemList(sysItem);
-                if (sysItemList.size() > 0) {
-                    return error("该客户已关联此项目");
-                } else {
-                    sysItemService.insertSysItem(sysItem);
-                }
-            }
-        }*/
         if (StringUtils.isNotNull(sysProject.getBuyer())) {
             for (String string1 : sysProject.getBuyer().split(",")) {
                 SysCustomer sysCustomer = new SysCustomer();
@@ -347,14 +330,47 @@ public class SysProjectController extends BaseController {
             }
         }
 
+        //司法状态提醒
+        if (StringUtils.isNotEmpty(sysProject.getJudicialStatus())) {
+            StringBuffer idSb = new StringBuffer();
+            StringBuffer nameSb = new StringBuffer();
+            //获取风控部经理
+            List<SysUser> sysUserList = getUserList("fkbjl");
+            for (SysUser sysUser1 : sysUserList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
+            //获取投后部项目经理
+            List<SysUser> sysUserList1 = getUserList("thbManager");
+            for (SysUser sysUser1 : sysUserList1) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+            if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
+                nameSb.append(sysProject.getProjectManager());
+                SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
+                idSb.append(sysUser.getUserId());
+            }
+            SysNotice sysNotice = new SysNotice();
+            sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
+            sysNotice.setStatus("0");
+            sysNotice.setNoticeType("3");
+            sysNotice.setReceiverId(idSb.toString());
+            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setCreateBy(ShiroUtils.getLoginName());
+            sysNotice.setShareDeptAndUser(nameSb.toString());
+            sysNoticeService.insertNotice(sysNotice);
+        }
+
         return toAjax(Integer.parseInt(String.valueOf(sysProject.getProjectId())));
     }
 
     /**
      * 修改投后部项目管理
      */
-    @GetMapping("/edit/{projectId}")
-    public String edit(@PathVariable("projectId") Long projectId, ModelMap mmap) {
+    @GetMapping("/edit")
+    public String edit(Long projectId, String fwProjectType, ModelMap mmap) {
         SysProject sysProject = sysProjectService.selectSysProjectById(projectId);
 
         SysUser currentUser = ShiroUtils.getSysUser();
@@ -375,6 +391,7 @@ public class SysProjectController extends BaseController {
             }
         }
         mmap.put("sysProject", sysProject);
+        mmap.put("fwProjectType", fwProjectType);
         return prefix + "/edit";
     }
 
@@ -502,37 +519,46 @@ public class SysProjectController extends BaseController {
                 }
             }
         }
+        SysProject sysProject1 = sysProjectService.selectSysProjectById(sysProject.getProjectId());
+        if (!sysProject.getJudicialStatus().equals(sysProject1.getJudicialStatus())) {
+            StringBuffer idSb = new StringBuffer();
+            StringBuffer nameSb = new StringBuffer();
+            //获取风控部经理
+            List<SysUser> sysUserList = getUserList("fkbjl");
+            for (SysUser sysUser1 : sysUserList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
 
-        StringBuffer idSb = new StringBuffer();
-        StringBuffer nameSb = new StringBuffer();
-        //获取风控部经理
-        List<SysUser> sysUserList = getUserList("fkbjl");
-        for (SysUser sysUser1 : sysUserList) {
-            idSb.append(sysUser1.getUserId()).append(",");
-            nameSb.append(sysUser1.getUserName()).append(",");
-        }
+            //获取投后部项目经理
+            List<SysUser> sysUserList1 = getUserList("thbManager");
+            for (SysUser sysUser1 : sysUserList1) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
 
-        //获取投后部项目经理
-        List<SysUser> sysUserList1 = getUserList("thbManager");
-        for (SysUser sysUser1 : sysUserList1) {
-            idSb.append(sysUser1.getUserId()).append(",");
-            nameSb.append(sysUser1.getUserName()).append(",");
+            //获取项目经理
+            if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
+                SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
+                if (StringUtils.isNotNull(sysUser)) {
+                    if (StringUtils.isNotNull(sysUser.getUserId())) {
+                        idSb.append(sysUser.getUserId());
+                    }
+                    if (StringUtils.isNotEmpty(sysUser.getUserName())) {
+                        nameSb.append(sysUser.getUserName());
+                    }
+                }
+            }
+            SysNotice sysNotice = new SysNotice();
+            sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
+            sysNotice.setStatus("0");
+            sysNotice.setNoticeType("3");
+            sysNotice.setReceiverId(idSb.toString());
+            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setCreateBy(ShiroUtils.getLoginName());
+            sysNotice.setShareDeptAndUser(nameSb.toString());
+            sysNoticeService.insertNotice(sysNotice);
         }
-        if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
-            nameSb.append(sysProject.getProjectManager());
-            SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
-            idSb.append(sysUser.getUserId());
-        }
-        SysNotice sysNotice = new SysNotice();
-        sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
-        sysNotice.setStatus("0");
-        sysNotice.setNoticeType("3");
-        sysNotice.setReceiverId(idSb.toString());
-        sysNotice.setReceiver(nameSb.toString());
-        sysNotice.setCreateBy(ShiroUtils.getLoginName());
-        sysNotice.setShareDeptAndUser(nameSb.toString());
-        sysNoticeService.insertNotice(sysNotice);
-
         return toAjax(sysProjectService.updateSysProject(sysProject));
     }
 

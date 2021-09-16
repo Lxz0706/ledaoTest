@@ -6,13 +6,13 @@ spring:
     druid:
       # 主库数据源  h41925377s.wicp.vip
       master:
-        url: jdbc:mysql://h41925377s.wicp.vip:3306/lxzTest?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
+        url: jdbc:mysql://localhost:3306/ldhb?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
         username: root
         password: 123456
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
-        enabled: false
+        enabled: true
         url: jdbc:mysql://localhost:3306/spider_data?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
         username: root
         password: 123456

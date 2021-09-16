@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <input type="hidden" name="zckName" id="zckName" th:value="*{zckName}"/>
-            <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="hidden">
+            <input name="fwProjectType" id="fwProjectType" th:value="*{fwProjectType}" type="text">
             <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
             <form id="formId">
                 <input name="projectZckId" id="projectZckId" th:value="*{projectZckId}" type="hidden"/>
@@ -128,8 +128,6 @@
             exportUrl: prefix + "/export",
             detailUrl: prefix + "/detail/{id}/{ids}",
             modalName: "投后部项目管理",
-            sortOrder: 'desc',
-            sortName: 'no',
             columns: [{
                 checkbox: true
             },
@@ -207,8 +205,11 @@
                     title: '项目案件'
                 },
                 {
-                    field: 'projectManager',
-                    title: '公司负责人'
+                    field: 'principalBalance',
+                    title: '涉诉金额',
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
+                    }
                 },
                 {
                     field: 'lawsuit',
@@ -223,10 +224,8 @@
                     title: '司法状态'
                 },
                 {
-                    title: '案件情况详细',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + 1 + '\')">案件情况详细</a>';
-                    }
+                    field: 'projectManager',
+                    title: '公司负责人'
                 },
                 {
                     title: '司法情况详细',
@@ -358,7 +357,8 @@
         var url = '';
         if ($.common.isNotEmpty(fwProjectType)) {
             if ("investmentProject" == fwProjectType) {
-                url = ctx + 'system/project/toProjectZckByType?projectZckType=' + $("#projectZckType").val() + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
+                //url = ctx + 'system/project/toProjectZckByType?projectZckType=' + $("#projectZckType").val() + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
+                url = ctx + 'system/projectZck/projectList?projectZckId=' + projectZckId + "&projectZckType=" + $("#projectZckType").val() + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
             } else {
                 url = ctx + 'system/project/toFwProject';
             }

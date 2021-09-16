@@ -32,7 +32,7 @@
     });
 
     var height = $(".row").height();
-    var winHeight = height / 3;
+    var winHeight = height / 2;
     var lineHeight = winHeight / 6;
     var paddingTop = winHeight / 3;
 
@@ -42,6 +42,10 @@
             data: {},
             dataType: 'json',
             type: 'post',
+            beforeSend: function () {
+                $.modal.loading("正在努力地加载数据中，请稍候.....");
+                $.modal.disable();
+            },
             success: function (result) {
                 var str = '';
                 var row = result.rows;
@@ -54,7 +58,7 @@
                         //str += '<lable style="font-weight: bold;font-size: 1.5em">处置回现总额：' + $.operate.numberFormatter(row[i].czhx, 0, '.', ',') + '</lable><br/>';
                         //str += '</div>'
                         str += '<div class="col-sm-8" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
-                        str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:1.3em;" onclick="detail(\'' + row[i].dictLable + "',\'" + row[i].projectZckType + '\')">' + row[i].dictLable + '</a><br/>';
+                        str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:1em;" onclick="detail(\'' + row[i].dictLable + "',\'" + row[i].projectZckType + '\')">' + row[i].dictLable + '</a><br/>';
                         str += '</div>';
                         str += '<div class="col-sm-4" style="display:inline-block;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
                         str += '<lable style="font-weight: bold;font-size: 1.5em">处置中的资产包：' + $.common.returnNum(row[i].ongoingCount) + '</lable><br/>';
@@ -64,6 +68,8 @@
                         str += '</div>'
                     }
                 }
+                $.modal.closeLoading();
+                $.modal.enable();
                 $("#showList").html(str);
             }
         })

@@ -134,6 +134,33 @@ public class SysMonomerLawController extends BaseController {
     public AjaxResult addSave(SysMonomerLaw sysMonomerLaw) {
         sysMonomerLaw.setCreateBy(ShiroUtils.getLoginName());
         sysMonomerLaw.setCreator(ShiroUtils.getSysUser().getUserName());
+        SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(sysMonomerLaw.getProjectId());
+        if (StringUtils.isNotEmpty(sysMonomerLaw.getJudicialStatus())) {
+            StringBuffer idSb = new StringBuffer();
+            StringBuffer nameSb = new StringBuffer();
+            //获取风控部经理
+            List<SysUser> sysUserList = getUserList("fkbjl");
+            for (SysUser sysUser1 : sysUserList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
+            //获取并购重组经理
+            List<SysUser> sysUserList1 = getUserList("bgczManager");
+            for (SysUser sysUser1 : sysUserList1) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+            SysNotice sysNotice = new SysNotice();
+            sysNotice.setNoticeTitle(sysBgczzck.getProjectName() + "司法状态更改为" + sysMonomerLaw.getJudicialStatus());
+            sysNotice.setStatus("0");
+            sysNotice.setNoticeType("3");
+            sysNotice.setReceiverId(idSb.toString());
+            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setCreateBy(ShiroUtils.getLoginName());
+            sysNotice.setShareDeptAndUser(nameSb.toString());
+            sysNoticeService.insertNotice(sysNotice);
+        }
         return toAjax(sysMonomerLawService.insertSysMonomerLaw(sysMonomerLaw));
     }
 
@@ -159,7 +186,7 @@ public class SysMonomerLawController extends BaseController {
         sysMonomerLaw.setReviser(ShiroUtils.getSysUser().getUserName());
         SysMonomerLaw sysMonomerLaw1 = sysMonomerLawService.selectSysMonomerLawById(sysMonomerLaw.getMonomerLawId());
         SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(sysMonomerLaw1.getProjectId());
-        logger.info("司法状态：-----"+sysBgczzck.getProjectName());
+        //司法状态提醒
         if (!sysMonomerLaw.getJudicialStatus().equals(sysMonomerLaw1.getJudicialStatus())) {
             StringBuffer idSb = new StringBuffer();
             StringBuffer nameSb = new StringBuffer();

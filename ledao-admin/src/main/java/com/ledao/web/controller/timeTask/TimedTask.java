@@ -1,11 +1,16 @@
 package com.ledao.web.controller.timeTask;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.message.Template;
 import com.ledao.common.message.TemplateParam;
+import com.ledao.common.message.WechatMessageUtil;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.http.CommonUtil;
+import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
 import com.ledao.system.mapper.SysRoleMapper;
@@ -76,6 +81,12 @@ public class TimedTask {
     @Autowired
     private ISysManageTaskService sysManageTaskService;
 
+    @Autowired
+    private ISysConfigService configService;
+
+    @Autowired
+    private ISysDictDataService sysDictDataService;
+
     public void timeTask() throws ParseException {
         //应收应付未收服务费消息提醒
           projectUncollectedMoney();
@@ -103,6 +114,70 @@ public class TimedTask {
         System.out.print("新建消息");
         sysNoticeService.insertNotice(sysNotice);
     }
+
+
+    /**
+     * 获取公众号的unionid及openid
+     */
+    public void getWeChatComOpenid(){
+        String accessToken = null;
+        try {
+            accessToken = configService.getWechatComAccessToken();
+            com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken,"");
+            List<String> openIds = new ArrayList<>();
+            Map m = (Map) res.get("data");
+            openIds = (List<String>) m.get("openid");
+//            WechatMessageUtil.batchGetUserUnionId(accessToken,openIds);
+            String batchUrl = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
+            String url = batchUrl.replace("ACCESS_TOKEN", accessToken);
+
+       /* MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("access_token", accessToken);
+        URI batchUri = HttpUtils.getURIwithParams(batchUrl, params);*/
+
+
+            int maxCount = 100;
+            int cout = openIds.size()/maxCount;
+            if (openIds.size()%maxCount!=0){
+                cout++;
+            }
+            if (openIds.size()<maxCount){
+                maxCount = openIds.size();
+            }
+            for(int j=0;j<cout;j++){
+                JSONObject request = new JSONObject();
+                JSONArray openidList = new JSONArray();
+                for (int i=0;i<maxCount;i++){
+                    if (3*j+i == openIds.size()){
+                        continue;
+                    }
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("lang", "zh_CN");
+                    jsonObject.put("openid", openIds.get(maxCount*j+i));
+                    openidList.add(jsonObject);
+                }
+                request.put("user_list", openidList);
+                JSONObject jsonResult = CommonUtil.wxMessageModeSendUrl(request, url);
+                JSONArray data = (JSONArray) jsonResult.get("user_info_list");
+                for(int i=0;i<data.size();i++) {
+                    String openid = (String) data.getJSONObject(i).get("openid");
+                    String unionid = (String) data.getJSONObject(i).get("unionid");
+                    SysUser use = new SysUser();
+                    use.setUnionId(unionid);
+                    List<SysUser> uList = userMapper.selectUserList(use);
+                    if (uList!=null && uList.size()>0){
+                        SysUser newUser =  uList.get(0);
+                        if (StringUtils.isEmpty(newUser.getUnionId())){
+                            newUser.setComOpenId(openid);
+                            userMapper.updateUser(newUser);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     /**
      * 项目流转表消息推送
@@ -118,6 +193,7 @@ public class TimedTask {
  		// 向队列发送消息
  		jmsMessagingTemplate.convertAndSend(queue, "这是一个队列消息！");
     }
+
 
     private List<SysUser> getUsers(String roleKey){
         List<SysUser> users = new ArrayList<>();
@@ -146,48 +222,73 @@ public class TimedTask {
         sysManageTask.setTaskType("0");
         List<SysManageTask> task =  sysManageTaskService.selectSysManageTaskList(sysManageTask);
         for (SysManageTask s: task){
-            if (s.getRealEndTime()==null){
-                long planEndTime = sysManageTask.getPlanEndTime().getTime();
+            if (s.getRealEndTime()==null && s.getPlanEndTime()!=null){
+                long planEndTime = s.getPlanEndTime().getTime();
                 long realEndTime = (new Date()).getTime();
                 if (realEndTime-planEndTime>0){
-                    long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());
-                    sysManageTask.setOverDay(days);
-                    sysManageTask.setTaskStatu("later");
-                    sysManageTaskService.updateSysManageTask(sysManageTask);
+                    long days = DateUtils.differentDays(s.getPlanEndTime(),new Date());
+                    s.setOverDay(days);
+                    s.setTaskStatu("later");
+                    sysManageTaskService.updateTask(s);
                 }
-
             }
+            //向许凯、江辉发送消息推送总任务
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
             String date = DateUtils.getPreMonth();
             String planBeginDate =  dateFormat.format(s.getPlanBeginTime());
             if (date.equals(planBeginDate)){
-                List<SysUser> users = getUsers("thbManager");
-                for (SysUser u:users){
-                    if (StringUtils.isNotEmpty(u.getOpenId())){
-                        //发送消息到投后部部门经理
-                        JSONObject parm = new JSONObject();
-                        //发布人
-                        parm.put("thing16","测试1");
-//                        计划时间
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        parm.put("time4", sdf.format(new Date())+" 至 "+sdf.format(new Date()));
-//                        任务名称
-                        parm.put("thing1","任务名称测试");
-//                        任务状态
-                        parm.put("phrase7","测试2");
-//                        任务接收人
-                        parm.put("thing23","任务状态测试");
-                        parm.put("toUser",u.getOpenId());
-                        // 创建名称为投后队列
-                        Queue queue = new ActiveMQQueue("ThQueueCommon");
-                        String dataStr = JSONObject.toJSONString(parm);
-                        // 向队列发送消息
-                        jmsMessagingTemplate.convertAndSend(queue, dataStr);
-                    }
-                }
+//                List<SysUser> users = getUsers("thbManager");
+                List<SysUser> users = new ArrayList<>();
+                users.add(userMapper.selectUserByLoginName("xukai"));
+                users.add(userMapper.selectUserByLoginName("jianghui"));
+                sendTaskMsg(users,s);
             }
         }
+    }
 
+    private void sendTaskMsg(List<SysUser> users,SysManageTask s){
+        for (SysUser u:users){
+            if (StringUtils.isNotEmpty(u.getComOpenId())){
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                //发布人
+                parm.put("first","您有一个任务提醒");
+                parm.put("word1","回收金额"+s.getPlanBackMoney());
+//                        计划时间
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                parm.put("word2", sdf.format(s.getPlanBeginTime())+" 至 "+sdf.format(s.getPlanEndTime()));
+//                        任务名称
+                parm.put("word3","许凯");
+//                        任务状态
+                parm.put("word4",s.getTaskStatu());
+                if ("0".equals(s.getTaskType())){
+                    parm.put("word5",s.getZckName());
+                }else {
+                    parm.put("word5",s.getProjectName()+"--"+s.getNodeStatu());
+                }
+
+//                        任务接收人
+                parm.put("toUser",u.getComOpenId());
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken",accessToken);
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("ThQueueCommon");
+                String dataStr = JSONObject.toJSONString(parm);
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+                stadingTime();
+            }
+
+        }
+    }
+
+    private void stadingTime(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                System.out.println("-------设定要指定任务--------");
+            }
+        }, 2000);
     }
 
     /**
@@ -195,57 +296,29 @@ public class TimedTask {
      * @throws ParseException
      */
     public void subTask() throws ParseException {
-        List<String> idszck = new ArrayList<>();
-        List<String> idspro = new ArrayList<>();
-
-
         SysProjectZck sysProjectZck = new SysProjectZck();
-        sysProjectZck.setProjectZckType("automaticSwitch");
-        List<SysProjectZck> zcks = sysProjectZckService.selectSysProjectZckList(sysProjectZck);
+        List<SysProjectZck> zcks = sysProjectZckService.selectSysProjectZckAll(sysProjectZck);
         for (SysProjectZck zc:zcks){
             SysProject sysProject = new SysProject();
             sysProject.setProjectZckId(zc.getProjectZckId());
             List<SysProject> pros = sysProjectService.selectSysProjectList(sysProject);
             for (SysProject p: pros){
-                /*SysUser u = sysUserService.selectUserByUserName(p.getProjectManager());
-                if (StringUtils.isNotEmpty(u.getOpenId())){
-                    SysManageTask sysManageTask = new SysManageTask();
-                    sysManageTask.setProId(p.getpId());
-                    List<SysManageTask> tasks = sysManageTaskService.selectSysManageTaskList(sysManageTask);
-                    for (SysManageTask t:tasks) {
-
+                SysManageTask sysManageTask = new SysManageTask();
+                sysManageTask.setProId(p.getProjectId());
+                sysManageTask.setTaskType("1");
+                List<SysManageTask> tasks = sysManageTaskService.selectSysManageTaskList(sysManageTask);
+                for (SysManageTask t:tasks) {
+                    //子任务，只对未成功的预计结束-15天的件进行消息推送，推送对象。项目经理、徐凯、江辉
+                    if (StringUtils.isNull(t.getRealEndTime()) && DateUtils.differentDays(t.getPlanEndTime(),new Date())>15){
+                        List<SysUser> users = new ArrayList<>();
+                        users.add(userMapper.selectUserByLoginName("xukai"));
+                        users.add(userMapper.selectUserByLoginName("jianghui"));
+                        users.add(userMapper.selectUserById(p.getProjectManagerId()));
+                        sendTaskMsg(users,t);
                     }
-                }*/
-                idspro.add(String.valueOf(p.getProjectId()));
+                }
             }
-            idszck.add(String.valueOf(zc.getProjectZckId()));
         }
-
-        String idszckStr = String.join(",",idszck);
-        String idsproStr = String.join(",",idspro);
-        System.out.println(idszckStr);
-        System.out.println(idsproStr);
-
-
-        /*List<SysUser> users = getUsers("thbManager");
-        for (SysUser u:users){
-            if (StringUtils.isNotEmpty(u.getOpenId())){
-                //发送消息到投后部部门经理
-                JSONObject parm = new JSONObject();
-                parm.put("thing16","测试1");
-                parm.put("thing20","测试2");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                parm.put("time4", sdf.format(new Date())+" 至 "+sdf.format(new Date()));
-                parm.put("thing1","任务名称测试");
-                parm.put("phrase7","任务状态测试");
-                parm.put("toUser",u.getOpenId());
-                // 创建名称为投后队列
-                Queue queue = new ActiveMQQueue("ThQueueCommon");
-                String dataStr = JSONObject.toJSONString(parm);
-                // 向队列发送消息
-                jmsMessagingTemplate.convertAndSend(queue, dataStr);
-            }
-        }*/
     }
     
     /**
@@ -603,7 +676,93 @@ public class TimedTask {
     }
 
     public static void main(String[] args) throws ParseException {
-        int year = DateUtils.yearDateDiff("2020-10-04", "2021-07-01");
-        System.out.print(year);
+        /*int year = DateUtils.yearDateDiff("2020-10-04", "2021-07-01");
+        System.out.print(year);*/
+        testJson();
+    }
+
+    public static void testJson(){
+        List<String> strs = new ArrayList<>();
+        strs.add("1111111111");
+        strs.add("2222222222");
+        strs.add("333333333");
+        strs.add("4444444444");
+        strs.add("555555555");
+        strs.add("6666666666");
+        strs.add("777777777777");
+        strs.add("88888888");
+
+        int cout = strs.size()/3;
+        if (strs.size()%3!=0){
+            cout++;
+        }
+
+        for(int j=0;j<cout;j++){
+            for (int i=0;i<3;i++){
+                if (3*j+i == strs.size()){
+                    continue;
+                }
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("lang", "zh_CN");
+                jsonObject.put("openid", strs.get(3*j+i));
+                System.out.println(jsonObject.toJSONString());
+            }
+        }
+
+
+        /*JSONObject data1 = new JSONObject();
+        data1.put("openid","111111111111");
+        data1.put("unionid","432fewf");
+        JSONObject data2 = new JSONObject();
+        data2.put("openid","222222222");
+        data2.put("unionid","432fewf");
+        JSONObject data3 = new JSONObject();
+        data3.put("openid","3333333333333");
+        data3.put("unionid","432fewf");
+        JSONObject data4 = new JSONObject();
+        data4.put("openid","444444444444");
+        data4.put("unionid","432fewf");
+        JSONObject data5 = new JSONObject();
+        data5.put("openid","55555555555555");
+        data5.put("unionid","432fewf");
+        JSONArray jarr = new JSONArray();
+        jarr.add(data1);
+        jarr.add(data2);
+        jarr.add(data3);
+        jarr.add(data4);
+        jarr.add(data5);
+        String jsonStr = JSONArray.toJSONString(jarr);
+        System.out.println(jsonStr);
+
+        JSONArray data = jarr;
+
+        int cout=data.size()/2;
+        for(int j=0;j<cout;j++){
+            for (int i=0;i<2;i++){
+                String openid = (String) data.getJSONObject(i).get("openid");
+                String unionid = (String) data.getJSONObject(i).get("unionid");
+                System.out.println(openid);
+                System.out.println(unionid);
+            }
+        }*/
+
+
+
+       /* for(int i=0;i<data.size();i++) {
+            String openid = (String) data.getJSONObject(i).get("openid");
+            String unionid = (String) data.getJSONObject(i).get("unionid");
+            System.out.println(openid);
+            System.out.println(unionid);
+            *//*SysUser use = new SysUser();
+            use.setUnionId(unionid);
+            List<SysUser> uList = userMapper.selectUnallocatedList(use);
+            if (uList!=null && uList.size()>0){
+                SysUser newUser =  uList.get(0);
+                if (StringUtils.isEmpty(newUser.getUnionId())){
+                    newUser.setComOpenId(openid);
+                    userMapper.updateUser(newUser);
+                }
+            }*//*
+        }*/
     }
 }

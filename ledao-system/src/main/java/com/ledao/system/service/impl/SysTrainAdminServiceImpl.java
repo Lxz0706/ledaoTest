@@ -54,6 +54,12 @@ public class SysTrainAdminServiceImpl implements ISysTrainAdminService
     @Override
     public int insertSysTrainAdmin(SysTrainAdmin sysTrainAdmin)
     {
+        if (sysTrainAdmin.getQrcodeStartTime()==null){
+            sysTrainAdmin.setQrcodeStartTime(DateUtils.getMoreMinute(-10,sysTrainAdmin.getStartTime()));
+        }
+        if (sysTrainAdmin.getQrcodeEndTime()==null){
+            sysTrainAdmin.setQrcodeEndTime(DateUtils.getMoreMinute(20,sysTrainAdmin.getEndTime()));
+        }
         sysTrainAdmin.setCreateTime(DateUtils.getNowDate());
         return sysTrainAdminMapper.insertSysTrainAdmin(sysTrainAdmin);
     }

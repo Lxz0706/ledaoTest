@@ -467,5 +467,18 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return preMonth;
     }
 
+    /**
+     * 计算时间往后多少分钟
+     * @param hour
+     * @param date
+     * @return
+     */
+    public static Date getMoreMinute(int minute,Date date) {
+        long curren = date.getTime();
+        curren += minute * 60 * 1000;
+        Date da = new Date(curren);
+        return da;
+    }
+
 
 }

@@ -193,12 +193,12 @@
 
         function selectTrainUsers(trainId){
             var url = prefix + "/goTrainUser?trainId="+trainId;
-            $.modal.open("参会人员", url, '750', '600/2');
+            $.modal.opens("参会人员", url, '750', '600/2');
         }
 
         function getWxCode(trainId){
             var url = prefix + "/code?trainId="+trainId;
-            $.modal.open("参会人员", url, '400', '400');
+            $.modal.opens("会议二维码", url, '400', '400');
         }
     </script>
 </body>

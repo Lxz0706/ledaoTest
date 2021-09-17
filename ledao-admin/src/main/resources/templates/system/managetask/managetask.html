@@ -102,8 +102,12 @@
         var proId = document.getElementById("proId").value;
         var taskType = document.getElementById("taskType").value;
         var taskStatuDictDatas = [[${@dict.getType('task_project_status')}]];
+        var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
 
         $(function() {
+            if (loginName != "xukai" && loginName != "admin"){
+                $("#toolbar").hide()
+            }
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add/"+proId+"/"+taskType,
@@ -150,7 +154,14 @@
                     },
                     {
                         field: 'overDay',
-                        title: '超时时长(天)'
+                        title: '超时时长(天)',
+                        formatter: function(value, item, index) {
+                            if (value == 0){
+                                return "-";
+                            }else{
+                                return item.overDay;
+                            }
+                        }
                     },
 
                     {
@@ -213,6 +224,7 @@
         function getDictStr(value){
             return value.slice(15,value.length-7);
         }
+
     </script>
 </body>
 </html>

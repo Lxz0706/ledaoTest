@@ -40,12 +40,14 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:project:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:project:remove')}]];
-    var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
+    // var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
     var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
     var userId = [[${@permission.getPrincipalProperty('userId')}]];
     var prefix = ctx + "system/project";
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var showUnderLying = false;
+    var isUser = false;
 
     var fwProjectType = $("#fwProjectType").val();
     var projectZckType = $("#projectZckType").val();
@@ -196,9 +198,12 @@
                 },
                 {
                     title: '处置任务',
-                    visible: showTask != "hidden",
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + '\')">查看</a>';return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">查看</a>';
+                         if (userId == row.projectManagerId || loginName == 'xukai'){
+                             return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">任务进度</a>';
+                         }else{
+                             return '-';
+                         }
                     }
                 },
                 {
@@ -253,7 +258,7 @@
     // 查看任务
     function detailManageTask(id,name){
         var url = '/system/managetask/managetask?proId=' + id + "&taskType=1";
-        $.modal.open("总任务列表", url);
+        $.modal.opens("总任务列表", url);
     }
 
 

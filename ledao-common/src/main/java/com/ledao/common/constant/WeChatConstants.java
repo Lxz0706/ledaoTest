@@ -26,8 +26,17 @@ public class WeChatConstants {
 	 * 微信secret
 	 */
 	public static final String WXSECRET = "4e057cf274f71a19de6718aae0be04cb";
+
 	/**
-	 * 微信grant_type
+	 * 微信公众号appid
+	 */
+	public static final String WXAPPIDCOM = "wxb9dd64c92c3fc50f";
+	/**
+	 * 微信公众号secret
+	 */
+	public static final String WXSECRETCOM = "077941d0cac981488cd1028ecfb400a9";
+	/**
+	 * 微信公众号grant_type
 	 */
 	public static final String WXGRANT_TYPE = "authorization_code";
 

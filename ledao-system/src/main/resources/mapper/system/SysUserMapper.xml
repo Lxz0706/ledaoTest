@@ -54,7 +54,7 @@
     </resultMap>
 
     <sql id="selectUserVo">
-        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email,u.open_id,
+        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email,u.open_id,u.com_open_id,
         u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip,
         u.login_date, u.create_time, u.remark,u.director_id, u.director,
        		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,

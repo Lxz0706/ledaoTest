@@ -15,6 +15,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -148,7 +149,28 @@ public class CommonUtil {
             e.printStackTrace();  
         }  
         return result;  
-    }  
+    }
+
+    public static JSONObject wxMessageModeSendUrl(JSONObject template, String url) {
+        /*String tmpurl = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=ACCESS_TOKEN";
+        String url = tmpurl.replace("ACCESS_TOKEN", token);*/
+        JSONObject jsonResult = CommonUtil.httpsRequest(url, "POST", com.alibaba.fastjson.JSONObject.toJSON(template).toString());
+        try {
+            /*if(jsonResult!=null){
+                int errorCode=jsonResult.getInteger("errcode");
+                String errorMessage=jsonResult.getString("errmsg");
+                if(errorCode==0){
+                    return jsonResult;
+                }else{
+                    System.err.print(jsonResult);
+                    return jsonResult;
+                }
+            }*/
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonResult;
+    }
       
     public static String httpsRequestForStr(String requestUrl, String requestMethod, String outputStr) {   
           

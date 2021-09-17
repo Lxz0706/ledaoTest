@@ -3,6 +3,9 @@ package com.ledao.system.service.impl;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
+import com.ledao.common.constant.WeChatConstants;
+import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.qrCode.WxQrCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.constant.Constants;
@@ -149,6 +152,66 @@ public class SysConfigServiceImpl implements ISysConfigService {
             return UserConstants.CONFIG_KEY_NOT_UNIQUE;
         }
         return UserConstants.CONFIG_KEY_UNIQUE;
+    }
+
+    @Override
+    public String getWechatComAccessToken() {
+        String accessToken = "";
+        try {
+            SysConfig config = new SysConfig();
+            config.setConfigKey("weChatAccessToken");
+            List<SysConfig> confs = configMapper.selectConfigList(config);
+            boolean needSave = false;
+            if (confs!=null&& confs.size()>0){
+                if ((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90){
+                    accessToken = confs.get(0).getConfigValue();
+                }else{
+                    needSave = true;
+                    String[] delId = {confs.get(0).getConfigId().toString()};
+                    configMapper.deleteConfigByIds(delId);
+                }
+            }else{
+                needSave = true;
+            }
+            if (needSave){
+                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
+                config.setConfigValue(accessToken);
+                configMapper.insertConfig(config);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accessToken;
+    }
+
+    @Override
+    public String getWechatAccessToken() {
+        String accessToken = "";
+        try {
+            SysConfig config = new SysConfig();
+            config.setConfigKey("weChatAccessToken");
+            List<SysConfig> confs = configMapper.selectConfigList(config);
+            boolean needSave = false;
+            if (confs!=null&& confs.size()>0){
+                if ((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90){
+                    accessToken = confs.get(0).getConfigValue();
+                }else{
+                    needSave = true;
+                    String[] delId = {confs.get(0).getConfigId().toString()};
+                    configMapper.deleteConfigByIds(delId);
+                }
+            }else{
+                needSave = true;
+            }
+            if (needSave){
+                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXSECRET,WeChatConstants.WXAPPIDCOM);
+                config.setConfigValue(accessToken);
+                configMapper.insertConfig(config);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accessToken;
     }
 
     /**

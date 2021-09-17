@@ -7,11 +7,13 @@ import com.ledao.activity.dao.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.json.JSONObject;
+import com.ledao.common.message.WechatMessageUtil;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.system.dao.SysDictData;
 import com.ledao.system.mapper.SysUserMapper;
+import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,9 @@ public class SysApplyInController extends BaseController
 
     @Autowired
     private ISysDictDataService sysDictDataService;
+
+    @Autowired
+    private ISysConfigService configService;
 
     @GetMapping("/applyIn")
     public String applyIn()
@@ -542,8 +547,15 @@ public class SysApplyInController extends BaseController
             parmData.put("scene","documentId="+documentId);
             parmData.put("url","");
             String parm = parmData.toString();
-            accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
-            System.out.println("accessToken;"+accessToken);
+            /*accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
+            System.out.println("accessToken;"+accessToken);*/
+            accessToken = configService.getWechatAccessToken();
+            com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken,"");
+            List<String> openIds = new ArrayList<>();
+//            openIds = (List<String>) res.get("data.openId");
+            Map m = (Map) res.get("data");
+            openIds = (List<String>) m.get("openid");
+            WechatMessageUtil.batchGetUserUnionId(accessToken,openIds);
             String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
             data.put("twoCodeUrl", twoCodeUrl);
             return data;

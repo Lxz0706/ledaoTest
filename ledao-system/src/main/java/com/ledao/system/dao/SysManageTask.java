@@ -87,7 +87,27 @@ public class SysManageTask extends BaseEntity
     @Excel(name = "修改人名称")
     private String reviser;
 
-    public void setId(Long id) 
+    private String zckName;
+
+    private String projectName;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getZckName() {
+        return zckName;
+    }
+
+    public void setZckName(String zckName) {
+        this.zckName = zckName;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

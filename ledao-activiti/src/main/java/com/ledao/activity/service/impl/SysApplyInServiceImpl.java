@@ -11,7 +11,9 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.system.dao.*;
 import com.ledao.system.mapper.*;
+import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDictDataService;
+import com.ledao.system.service.impl.SysConfigServiceImpl;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -92,6 +94,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private SysBgczzckMapper sysBgczzckMapper;
+
+    @Autowired
+    private ISysConfigService configService;
 
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
@@ -404,11 +409,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         }
 //        List<String> users = getApplyNextUser(sysApplyIn);
         List<String> users = submitApplyInfo(sysApplyIn);
-        sendMsg(users,sysApplyInEntity);
         sysApplyInEntity.setApplyTime(DateUtils.getNowDate());
         sysApplyInEntity.setApproveUser(String.join(",",users));
         sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
         sysApplyInEntity.setUpdateTime(new Date());
+        sendMsg(users,sysApplyInEntity);
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
         return AjaxResult.success();
     }
@@ -424,17 +429,28 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
             if (us!=null && StringUtils.isNotEmpty(us.getOpenId())){
 
+                String first = "";
+                if ("2".equals(sysApplyInEntity.getApproveStatu())){
+                    first = "您的申请被拒绝";
+                }else if ("3".equals(sysApplyInEntity.getApproveStatu())){
+                    first = "您提交的申请已处理";
+                } else{
+                    first = "您有一条流程需要审批";
+                }
                 JSONObject parm = new JSONObject();
-                parm.put("toUser",us.getOpenId());
-                parm.put("thing6",appName);
-                parm.put("thing4",userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
-                parm.put("time5",DateUtils.getNowDate());
-                parm.put("thing9",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
+                parm.put("first",first);
+                parm.put("toUser",us.getComOpenId());
+                parm.put("word1",appName);
+                parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
+                parm.put("word3",sysApplyInEntity.getApplyTime());
                 String thing14 = "-";
                 if (StringUtils.isNotEmpty(sysApplyInEntity.getRemarks())){
                     thing14 = sysApplyInEntity.getRemarks();
                 }
-                parm.put("thing14",thing14);
+//                thing14 = "申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试请测试";
+                parm.put("word5",thing14);
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken",accessToken);
                 iSysApplyWorkflowService.sendLittleMsg(parm);
             }
         }
@@ -595,6 +611,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
         String key = "";
         Map<String, Object> variables = new HashMap<>();
+        List<String> users = new ArrayList<>();
 
         //提交审批，寻找下一审批人
         if("5".equals(sysApplyIn.getApproveStatu())) {
@@ -619,8 +636,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             workflow.setRemarks(sysApplyIn.getRemarks());
             sysApplyInEntity.setRemarks(null);
             saveWorkFlow(sysApplyInEntity,workflow);
+            users.add(sysApplyInEntity.getApplyUser());
+            sendMsg(users,sysApplyInEntity);
         }
-        List<String> users = new ArrayList<>();
+
         //同意审批
         if("6".equals(sysApplyIn.getApproveStatu())){
             List<SysRole> ros = currentUser.getRoles();
@@ -698,6 +717,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 }
             }
             saveWorkFlow(sysApplyInEntity,workflow);
+            if ("3".equals(sysApplyInEntity.getApproveStatu()) || "2".equals(sysApplyInEntity.getApproveStatu())){
+                users.add(sysApplyInEntity.getApplyUser());
+            }
             sendMsg(users,sysApplyInEntity);
         }
         sysApplyInEntity.setUpdateTime(new Date());

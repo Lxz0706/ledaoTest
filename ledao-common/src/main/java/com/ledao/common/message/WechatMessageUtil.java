@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.List;
 
+@Component
 public class WechatMessageUtil {
 
     /**
@@ -39,7 +41,7 @@ public class WechatMessageUtil {
      * @param nextOpenId
      * @return
      */
-    private String getAllUser(String accessToken, String nextOpenId) {
+    public static JSONObject getAllUser(String accessToken, String nextOpenId) {
         /*String getAllUserUrl = "https://api.weixin.qq.com/cgi-bin/user/get";
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("access_token", accessToken);
@@ -53,28 +55,49 @@ public class WechatMessageUtil {
         String tmpurl = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
         String url = tmpurl.replace("ACCESS_TOKEN", accessToken);
         String fulUrl = url.replace("NEXT_OPENID",nextOpenId);
-        JSONObject jsonResult = CommonUtil.httpsRequest(url, "GET", null);
-        return jsonResult.toJSONString();
+        JSONObject jsonResult = CommonUtil.httpsRequest(fulUrl, "GET", null);
+        return jsonResult;
     }
 
 
-    private void batchGetUserUnionId(String accessToken, List<String> openIds) {
+    public static void batchGetUserUnionId(String accessToken, List<String> openIds) {
         String batchUrl = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
         String url = batchUrl.replace("ACCESS_TOKEN", accessToken);
-        JSONObject jsonResult = CommonUtil.httpsRequest(url, "POST", null);
+
        /* MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("access_token", accessToken);
         URI batchUri = HttpUtils.getURIwithParams(batchUrl, params);*/
         JSONObject request = new JSONObject();
         JSONArray openidList = new JSONArray();
 
-        for (String openId : openIds) {
+        int cout = openIds.size()/100;
+        for(int j=0;j<cout;j++){
+            for (int i=0;i<100;i++){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("lang", "zh_CN");
+                jsonObject.put("openid", openIds.get(100*j+i));
+                openidList.add(jsonObject);
+            }
+            request.put("user_list", openidList);
+            JSONObject jsonResult = CommonUtil.wxMessageModeSendUrl(request, url);
+            JSONArray data = (JSONArray) jsonResult.get("user_info_list");
+            for(int i=0;i<data.size();i++) {
+                String openid = (String) data.getJSONObject(i).get("openid");
+                String unionid = (String) data.getJSONObject(i).get("unionid");
+            }
+        }
+
+       /* for (String openId : openIds) {
+            if (cout==100){
+                continue;
+            }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("lang", "zh_CN");
             jsonObject.put("openid", openId);
             openidList.add(jsonObject);
-        }
-        request.put("user_list", openidList);
+            cout++;
+        }*/
+
 //        WxUsersFromServer users = this.restTemplate.postForObject(batchUri, request, WxUsersFromServer.class);
 //        if (users != null) {
             /*users.getUser_info_list().forEach(item -> {

@@ -60,7 +60,8 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:projectZck:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
-    var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
+    // var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var prefix = ctx + "system/projectZck";
 
     $(function () {
@@ -117,10 +118,10 @@
                 {
                     // field: 'manageTask',
                     title: '处置回现',
-                    visible: showTask != "hidden",
+                    visible: loginName == "xukai",
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectZckId + "',\'" + row.zckName + '\')">任务进度</a>';
-                    }
+                    },
                 },
                 {
                     field: 'syhs',

@@ -68,6 +68,21 @@ public class SysManageTaskServiceImpl implements ISysManageTaskService
     public int insertSysManageTask(SysManageTask sysManageTask)
     {
         sysManageTask.setCreateTime(DateUtils.getNowDate());
+        if (sysManageTask.getPlanEndTime()!=null && sysManageTask.getRealEndTime() !=null){
+            long planEndTime = sysManageTask.getPlanEndTime().getTime();
+            long realEndTime = sysManageTask.getRealEndTime().getTime();
+            if (realEndTime-planEndTime>0){
+                long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());
+                sysManageTask.setOverDay(days);
+                sysManageTask.setTaskStatu("later");
+            }else if (realEndTime-planEndTime<0){
+                sysManageTask.setTaskStatu("preTime");
+            }else{
+                sysManageTask.setTaskStatu("onTime");
+            }
+        }else {
+            sysManageTask.setTaskStatu("");
+        }
         return sysManageTaskMapper.insertSysManageTask(sysManageTask);
     }
 
@@ -84,13 +99,15 @@ public class SysManageTaskServiceImpl implements ISysManageTaskService
         if (sysManageTask.getPlanEndTime()!=null && sysManageTask.getPlanEndTime() !=null){
             long planEndTime = sysManageTask.getPlanEndTime().getTime();
             long realEndTime = sysManageTask.getRealEndTime().getTime();
+            long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());
             if (realEndTime-planEndTime>0){
-                long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());
                 sysManageTask.setOverDay(days);
                 sysManageTask.setTaskStatu("later");
             }else if (realEndTime-planEndTime<0){
+                sysManageTask.setOverDay(0L);
                 sysManageTask.setTaskStatu("preTime");
             }else{
+                sysManageTask.setOverDay(0L);
                 sysManageTask.setTaskStatu("onTime");
             }
         }else {
@@ -121,5 +138,10 @@ public class SysManageTaskServiceImpl implements ISysManageTaskService
     public int deleteSysManageTaskById(Long id)
     {
         return sysManageTaskMapper.deleteSysManageTaskById(id);
+    }
+
+    @Override
+    public int updateTask(SysManageTask s) {
+        return sysManageTaskMapper.updateSysManageTask(s);
     }
 }

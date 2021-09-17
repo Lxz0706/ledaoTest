@@ -70,4 +70,8 @@ public interface ISysConfigService
      * @return 结果
      */
     public String checkConfigKeyUnique(SysConfig config);
+
+    String getWechatComAccessToken();
+
+    String getWechatAccessToken();
 }

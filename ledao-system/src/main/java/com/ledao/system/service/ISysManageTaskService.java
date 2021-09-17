@@ -58,4 +58,6 @@ public interface ISysManageTaskService
      * @return 结果
      */
     public int deleteSysManageTaskById(Long id);
+
+    int updateTask(SysManageTask s);
 }

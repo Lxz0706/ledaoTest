@@ -27,6 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="zckName"    column="zck_name"    />
+        <result property="projectName"    column="project_name"    />
     </resultMap>
 
     <sql id="selectSysManageTaskVo">
@@ -34,25 +36,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectSysManageTaskList" parameterType="SysManageTask" resultMap="SysManageTaskResult">
-        <include refid="selectSysManageTaskVo"/>
+        SELECT
+        a.id,
+        a.pro_id,
+        a.task_type,
+        a.plan_begin_time,
+        a.real_begin_time,
+        a.plan_end_time,
+        a.real_end_time,
+        a.plan_back_money,
+        a.real_back_money,
+        a.over_day,
+        a.node_statu,
+        a.task_statu,
+        a.remarks,
+        a.remarks1,
+        a.remarks2,
+        a.remarks3,
+        a.create_by,
+        a.creator,
+        a.create_time,
+        a.update_by,
+        a.reviser,
+        a.update_time,
+        b.zck_name,
+        c.project_name
+        FROM
+        sys_manage_task a
+        LEFT JOIN sys_project_zck b on a.pro_id = b.project_zck_id
+        LEFT JOIN sys_project c ON a.pro_id = c.project_id
         <where>  
-            <if test="proId != null "> and pro_id = #{proId}</if>
-            <if test="taskType != null "> and task_type = #{taskType}</if>
-            <if test="planBeginTime != null "> and plan_begin_time = #{planBeginTime}</if>
-            <if test="realBeginTime != null "> and real_begin_time = #{realBeginTime}</if>
-            <if test="planEndTime != null "> and plan_end_time = #{planEndTime}</if>
-            <if test="realEndTime != null "> and real_end_time = #{realEndTime}</if>
-            <if test="planBackMoney != null "> and plan_back_money = #{planBackMoney}</if>
-            <if test="realBackMoney != null "> and real_back_money = #{realBackMoney}</if>
-            <if test="overDay != null "> and over_day = #{overDay}</if>
-            <if test="nodeStatu != null "> and node_statu = #{nodeStatu}</if>
-            <if test="taskStatu != null  and taskStatu != ''"> and task_statu = #{taskStatu}</if>
-            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
-            <if test="remarks1 != null  and remarks1 != ''"> and remarks1 = #{remarks1}</if>
-            <if test="remarks2 != null  and remarks2 != ''"> and remarks2 = #{remarks2}</if>
-            <if test="remarks3 != null  and remarks3 != ''"> and remarks3 = #{remarks3}</if>
-            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
-            <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+            <if test="proId != null "> and a.pro_id = #{proId}</if>
+            <if test="taskType != null "> and a.task_type = #{taskType}</if>
+            <if test="planBeginTime != null "> and a.plan_begin_time = #{planBeginTime}</if>
+            <if test="realBeginTime != null "> and a.real_begin_time = #{realBeginTime}</if>
+            <if test="planEndTime != null "> and a.plan_end_time = #{planEndTime}</if>
+            <if test="realEndTime != null "> and a.real_end_time = #{realEndTime}</if>
+            <if test="planBackMoney != null "> and a.plan_back_money = #{planBackMoney}</if>
+            <if test="realBackMoney != null "> and a.real_back_money = #{realBackMoney}</if>
+            <if test="overDay != null "> and a.over_day = #{overDay}</if>
+            <if test="nodeStatu != null "> and a.node_statu = #{nodeStatu}</if>
+            <if test="taskStatu != null  and taskStatu != ''"> and a.task_statu = #{taskStatu}</if>
+            <if test="remarks != null  and remarks != ''"> and a.remarks = #{remarks}</if>
+            <if test="remarks1 != null  and remarks1 != ''"> and a.remarks1 = #{remarks1}</if>
+            <if test="remarks2 != null  and remarks2 != ''"> and a.remarks2 = #{remarks2}</if>
+            <if test="remarks3 != null  and remarks3 != ''"> and a.remarks3 = #{remarks3}</if>
+            <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
         </where>
     </select>
     

@@ -86,7 +86,7 @@ public class SysProjectController extends BaseController {
     /**
      * 查询投后部项目管理列表
      */
-    @RequiresPermissions("system:project:list")
+   // @RequiresPermissions("system:project:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysProject sysProject) {
@@ -646,7 +646,7 @@ public class SysProjectController extends BaseController {
         return toAjax(sysProjectService.deleteSysProjectByIds(id));
     }
 
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @GetMapping("/toProjectList")
     public String selectZcbByAssetStatus(Long projectId, Long projectZckId, String fwProjectType, String otherFlag, String projectZckType, ModelMap modelMap) {
         modelMap.put("projectId", projectId);
@@ -666,7 +666,7 @@ public class SysProjectController extends BaseController {
      * @param sysProject
      * @return 结果
      */
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @PostMapping("/projectList")
     @ResponseBody
     public TableDataInfo projectList(SysProject sysProject) {
@@ -689,7 +689,7 @@ public class SysProjectController extends BaseController {
     /**
      * 查看详细
      */
-    @RequiresPermissions("system:project:detail")
+    //@RequiresPermissions("system:project:detail")
     @Log(title = "项目管理", businessType = BusinessType.DETAIL)
     @GetMapping("/detail")
     public String detail(Long id, Long ids, Long pId, String projectZckType, String fwProjectType, String otherFlag, ModelMap mmap) {
@@ -755,7 +755,7 @@ public class SysProjectController extends BaseController {
         return prefix + url;
     }
 
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @PostMapping("/selectPCustomerByProjectId")
     @ResponseBody
     public Map<String, Object> selectPCustomerByProjectId(String projectId) {
@@ -807,14 +807,14 @@ public class SysProjectController extends BaseController {
     /**
      * 查询所有
      */
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @GetMapping({"/queryAll"})
     public String queryAll(ModelMap modelMap, SysProject sysProject) {
         modelMap.put("sysProject", sysProject);
         return "system/project/queryAll";
     }
 
-    @RequiresPermissions("system:project:export")
+    //@RequiresPermissions("system:project:export")
     @Log(title = "项目", businessType = BusinessType.EXPORT)
     @PostMapping("/export1")
     @ResponseBody
@@ -834,7 +834,7 @@ public class SysProjectController extends BaseController {
         return util.exportExcel(sysProjectList, "项目");
     }
 
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @PostMapping("/lists")
     @ResponseBody
     public TableDataInfo lists(SysProject sysProject) {
@@ -964,7 +964,7 @@ public class SysProjectController extends BaseController {
         return prefix + "/tree";
     }
 
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @PostMapping("/treeList")
     @ResponseBody
     public TableDataInfo treeList(SysProject sysProject) {
@@ -1132,7 +1132,7 @@ public class SysProjectController extends BaseController {
         return "system/project/treeList";
     }
 
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @PostMapping("/treeListes")
     @ResponseBody
     public TableDataInfo treeListes(SysProject sysProject) {
@@ -1258,7 +1258,7 @@ public class SysProjectController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("system:project:list")
+    //@RequiresPermissions("system:project:list")
     @PostMapping("/treeListByProjectId")
     @ResponseBody
     public Map<String, Object> treeListByProjectId(String projectId) {

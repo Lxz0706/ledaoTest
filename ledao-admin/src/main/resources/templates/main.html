@@ -488,13 +488,13 @@
     };
 
     function toDocumentByType(type, label) {
-        var url = "/system/document/toDocumentByType/" + type;
+        var url = "/system/document/toDocumentByType?type=" + type;
         $.modal.openTab(label + "列表", url);
     }
 
     //下载文件
     function downLoad(fileName) {
-        window.location.href = "/common/download/resource?resource=C:" + fileName + "&delete=" + true;
+        window.location.href = "/common/download/resource?resource=" + fileName + "&delete=" + true;
     }
 
     document.addEventListener('DOMContentLoaded', function () {

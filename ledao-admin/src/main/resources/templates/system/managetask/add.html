@@ -14,16 +14,15 @@
                 <div class="col-sm-8">
                     <select id="nodeStatu" name="nodeStatu" th:with="type=${@dict.getType('subtask_project_ststus')}" onchange="nodeChange()"
                             data-none-selected-text="请选择" class="form-control m-b">
-                        <option value="">--请选择一条数据--</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                 th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
             </div>
             <div class="form-group" id="otherNode" hidden>
-                <label class="col-sm-3 control-label">其他：</label>
+                <label class="col-sm-3 control-label is-required">其他：</label>
                 <div class="col-sm-8">
-                    <input name="remarks1" class="form-control" type="text">
+                    <input name="remarks1" class="form-control required" type="text">
                 </div>
             </div>
 
@@ -158,29 +157,134 @@
             }
         }
 
-        $("input[name='planBeginTime']").datetimepicker({
+        /*$("input[name='planBeginTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate: new Date()
+        });*/
+
+        /*$("input[name='realBeginTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate: new Date()
+        });*/
+
+        /*$("input[name='planEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate:$("input[name='planEndTime']").value
+        });*/
+
+        /*$("input[name='realEndTime']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
             autoclose: true
-        });
+        });*/
+
+        var sdate = '2018-07-04';
+        var edate;
+        var obj = ['2018-07-12','2018-07-13','2018-07-20'];//禁用日期可以从数据库查
+        $.fn.datetimepicker.dates['zdy'] = {
+            days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+            daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+            daysMin:  ["日", "一", "二", "三", "四", "五", "六"],
+            months: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+            monthsShort: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+            today: "今天",
+            format:"yyyy-mm-dd",
+            titleFormat:"yyyy-mm-",
+            weekStart:1,
+            suffix: [],
+            meridiem: ["上午", "下午"]
+        };
+
+        $("input[name='planBeginTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate:new Date(),
+            minView:2,
+            maxView:3,
+            onRenderDay: function(date) {
+                //       alert(date);
+                var date1 = date.getFullYear()+'-'
+                    +(date.getMonth()<9?'0'+(date.getMonth()+1):date.getMonth()+1)
+                    +'-'
+                    +(date.getDate()<10?'0'+(date.getDate()-1):date.getDate()-1);
+            }
+        }).on('changeDate', function(ev){
+            //   alert($("#startDate").val());
+            $("input[name='planEndTime']").datetimepicker('remove');
+            $("input[name='planEndTime']").val('');
+            var sdate=$("input[name='planBeginTime']").val();
+            var edate;
+            for(var o in obj){
+                if(new Date(sdate)<=new Date(obj[o])){
+                    var date = new Date(obj[o])
+                    var ndate = +date+24*60*60*1000;
+                    var leaveTime = new Date(ndate);
+                    edate = leaveTime.getFullYear()+'-'+(leaveTime.getMonth()+1)+'-'+leaveTime.getDate();
+
+                    break;
+                }
+            }
+            $("input[name='planEndTime']").datetimepicker({
+                format: "yyyy-mm-dd",
+                minView: "month",
+                autoclose: true,
+                startDate:sdate,
+                endDate:edate,
+                minView:2,
+                maxView:3
+            }).on('changeDate', function(ev){
+                //               alert(o+++"~~")
+            });
+        })
 
         $("input[name='realBeginTime']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
-            autoclose: true
-        });
+            autoclose: true,
+            startDate:new Date(),
+            minView:2,
+            maxView:3,
+            onRenderDay: function(date) {
+                var date1 = date.getFullYear()+'-'
+                    +(date.getMonth()<9?'0'+(date.getMonth()+1):date.getMonth()+1)
+                    +'-'
+                    +(date.getDate()<10?'0'+(date.getDate()-1):date.getDate()-1);
+            }
+        }).on('changeDate', function(ev){
+            $("input[name='realEndTime']").datetimepicker('remove');
+            $("input[name='realEndTime']").val('');
+            var sdate=$("input[name='realBeginTime']").val();
+            var edate;
+            for(var o in obj){
+                if(new Date(sdate)<=new Date(obj[o])){
+                    var date = new Date(obj[o])
+                    var ndate = +date+24*60*60*1000;
+                    var leaveTime = new Date(ndate);
+                    edate = leaveTime.getFullYear()+'-'+(leaveTime.getMonth()+1)+'-'+leaveTime.getDate();
+                    break;
+                }
+            }
+            $("input[name='realEndTime']").datetimepicker({
+                format: "yyyy-mm-dd",
+                minView: "month",
+                autoclose: true,
+                startDate:sdate,
+                endDate:edate,
+                minView:2,
+                maxView:3
+            }).on('changeDate', function(ev){
+                //               alert(o+++"~~")
+            });
+        })
 
-        $("input[name='planEndTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
 
-        $("input[name='realEndTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
     </script>
 </body>
 </html>

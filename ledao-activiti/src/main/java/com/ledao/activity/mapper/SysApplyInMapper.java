@@ -97,4 +97,10 @@ public interface SysApplyInMapper
     List<SysApplyIn> selectSysApplyInDocDetailList(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> selectSysApplyInDocDetailZcbList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> selectSysApplyInDocByPNameDetailList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> selectSysApplyInDailyDetailList(SysApplyIn sysApplyIn);
 }

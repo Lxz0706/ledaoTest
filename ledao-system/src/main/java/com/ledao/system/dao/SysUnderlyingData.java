@@ -67,6 +67,16 @@ public class SysUnderlyingData extends BaseEntity
 
     private String proName;
 
+    private String zckName;
+
+    public String getZckName() {
+        return zckName;
+    }
+
+    public void setZckName(String zckName) {
+        this.zckName = zckName;
+    }
+
     private String createorName;
 
     public String getCreateorName() {

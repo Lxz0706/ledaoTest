@@ -8,8 +8,9 @@
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <form id="formId">
-                <input name="proType" type="hidden" id="proType" th:value="${dataType}"/>
+                <input name="proType" type="hidden" id="proType" th:value="${proType}"/>
                 <input name="projectType" type="hidden" id="projectType" th:value="${projectType}"/>
+                <input name="zckName" type="hidden" id="zckName" th:value="${zckName}"/>
                 <div class="select-list">
                 <ul>
                     <li id="projectName">
@@ -80,7 +81,7 @@
             }
         }
         var options = {
-            url: prefix + "/listLying",
+            url: prefix + "/listLyingNoLikeDetail",
             createUrl: prefix + "/add/{id}",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -105,6 +106,10 @@
                     formatter: function (value, row, index) {
                         return $.table.serialNumber(index);
                     }
+                },
+                {
+                    field: 'zckName',
+                    title: '资产包'
                 },
                 {
                     field: 'proName',
@@ -544,7 +549,7 @@
                                 $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                             }
                         })
-                        window.location.href = ctx + "common/download/resource?resource=" + fileName + "&delete=" + true;
+                        window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
                     }
                 }
             })
@@ -558,7 +563,7 @@
                     $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                 }
             })
-            window.location.href = ctx + "common/download/resource?resource=" + fileName + "&delete=" + true;
+            window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
         }
     }
 
@@ -578,14 +583,9 @@
 
     function back() {
         var projectType = document.getElementById("projectType").value;
-        if (projectType == "0"){
-            var url = ctx + "system/underlyingdata/documentDetailTypeListMu";
-            $.modal.parentTab("投后部项目管理", url);
-        }else{
-            var url = ctx + "system/underlyingdata/muList";
-            $.modal.parentTab("投后部项目管理", url);
-        }
-
+        var proType = document.getElementById("proType").value;
+        var url = ctx + "system/underlyingdata/muUnderlyingDataListsMu?proType="+proType+"&projectType="+projectType;
+        $.modal.parentTab("底层资料管理", url);
     }
 
 </script>

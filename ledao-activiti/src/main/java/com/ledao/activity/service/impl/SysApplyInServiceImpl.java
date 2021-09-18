@@ -1065,6 +1065,21 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         return AjaxResult.success();
     }
 
+    @Override
+    public List<SysApplyIn> selectSysApplyInDocDetailZcbList(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.selectSysApplyInDocDetailZcbList(sysApplyIn);
+    }
+
+    @Override
+    public List<SysApplyIn> selectSysApplyInDocByPNameDetailList(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.selectSysApplyInDocByPNameDetailList(sysApplyIn);
+    }
+
+    @Override
+    public List<SysApplyIn> selectSysApplyInDailyDetailList(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.selectSysApplyInDailyDetailList(sysApplyIn);
+    }
+
     public int insertApply(SysApplyInImport apply,SysApplyIn applyIn){
         applyIn.setApplyUser(apply.getApplyUser());
         applyIn.setApplyTime(apply.getApplyTime());

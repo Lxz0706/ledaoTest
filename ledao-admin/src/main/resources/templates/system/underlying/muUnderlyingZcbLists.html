@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('底层资料列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input name="proType" type="hidden" id="proType" th:value="${proType}"/>
+                <input name="projectType" type="hidden" id="projectType" th:value="${projectType}"/>
+                <div class="select-list">
+                <ul>
+                    <li id="projectName">
+                        <label>资产包名称：</label>
+                        <input type="text" name="zckName"/>
+                    </li>
+                    <!--<li id="fileName">
+                        <label>文件名称：</label>
+                        <input type="text" name="fileName"/>
+                    </li>
+                    <li id="createorName">
+                        <label>创建人：</label>
+                        <input type="text" name="createorName"/>
+                    </li>-->
+                   <!-- <li id="createTime">
+&lt;!&ndash;                        <label>时间：</label>&ndash;&gt;
+                        <label>时间：</label>
+                        <input type="text" style="display: inline-block" class="time-input" name="createTime" placeholder="开始时间" />
+                    </li>-->
+                    <!--<li class="select-time">
+                        <label>创建时间：</label>
+                        <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[startTime]"/>
+                        <span>-</span>
+                        <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                    </li>-->
+                    <li>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </li>
+                </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+           <!-- <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:underlyingdata:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>-->
+<!--            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:underlyingdata:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>-->
+            <a class="btn btn-info" onclick="back()">
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:underlyingdata:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:underlyingdata:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:underlyingdata:detail')}]];
+    var downLoadFlag = [[${@permission.hasPermi('system:underlyingdata:downLoad')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    var prefix = ctx + "system/underlyingdata";
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var proType = document.getElementById("proType").value;
+    var projectType = document.getElementById("projectType").value;
+    var showRemove = false;
+
+    $(function () {
+
+        for(var i =0; i < roles.length;i++) {
+            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                showRemove = true
+            }
+        }
+        var options = {
+            url: prefix + "/listLyingNoLike",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            modalName: "底层资料",
+            columns: [
+                /*{
+                checkbox: true,
+                visible: true,
+                formatter: function(value, row, index) {
+                    // 档案管理员可以删除所有人
+                    if (loginName == row.createBy || showRemove) {
+                        return {disabled : false,}
+                    } else {
+                        return {disabled : true}
+                    }
+                }
+            },*/
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'zckName',
+                    title: '资产包',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.zckName + '\')">' + value + '</a>';
+                    }
+                }/*,
+                {
+                    field: 'fileName',
+                    title: '文件名称',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value,10);
+                    }
+                },
+                {
+                    field: 'fileType',
+                    title: '文件类型'
+                },
+                {
+                    field: 'createorName',
+                    title: '创建人名称'
+                },
+                {
+                    title: '创建时间',
+                    field: 'createTime',
+                    formatter: function (value, row, index) {
+                        return $.table.dateTimeFormatter(value);
+                    }
+                },
+                {
+                    field: 'previewCount',
+                    title: '预览次数',
+                    align: 'center',
+                    formatter: function (value) {
+                        return $.common.returnNum(value);
+                    }
+                },
+                {
+                    field: 'downloadsCount',
+                    title: '下载次数',
+                    align: 'center',
+                    formatter: function (value) {
+                        return $.common.returnNum(value);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var fileType = row.fileType.toLowerCase();
+
+                        // 管理员与档案管理员
+                        var showRemove = false;
+                        for(var i =0; i < roles.length;i++) {
+                            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                                showRemove = true
+                            }
+                        }
+                        // 档案管理员可以删除所有人
+                        // if (loginName == row.createBy || showRemove) {
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteFile(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        // }
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
+                        if ('doc' == fileType || 'docx' == fileType /!*|| 'xls' == fileType
+                                || 'xlsx' == fileType*!/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('pdf' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + row.fileUrl + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
+                            || 'png' == fileType || 'webp' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('mp4' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
+                        }
+                        return actions.join('');
+                    }
+                }*/
+                ]
+        };
+        $.table.init(options);
+    });
+    function detail(zckName){
+        var url = prefix+"/muUnderlyingDataListsZcbMu?projectType="+projectType+"&zckName="+zckName+"&proType="+proType;
+        $.modal.parentTab(zckName, url);
+    }
+
+    function add(projectId) {
+        var projectId = $("#projectId").val();
+        var url = ctx + 'system/underlyingdata/add?projectId=' + projectId;
+        $.modal.open('上传底层资料', url);
+    }
+
+    function onLoadSuccess(data) {
+        for (var i in data.rows) {
+            if ("N" == data.rows[i].isAdmin) {
+                $.table.hideColumn("shareDeptAndUser");
+            }
+        }
+    }
+
+    function back() {
+        var projectType = document.getElementById("projectType").value;
+        if (projectType == "0"){
+            var url = ctx + "system/underlyingdata/documentDetailTypeListMu";
+            $.modal.parentTab("投后部项目管理", url);
+        }else{
+            var url = ctx + "system/underlyingdata/muList";
+            $.modal.parentTab("投后部项目管理", url);
+        }
+
+    }
+
+</script>
+</body>
+</html>

@@ -96,7 +96,7 @@ public class SysManageTaskServiceImpl implements ISysManageTaskService
     public int updateSysManageTask(SysManageTask sysManageTask)
     {
         sysManageTask.setUpdateTime(DateUtils.getNowDate());
-        if (sysManageTask.getPlanEndTime()!=null && sysManageTask.getPlanEndTime() !=null){
+        if (sysManageTask.getPlanEndTime()!=null && sysManageTask.getRealEndTime() !=null){
             long planEndTime = sysManageTask.getPlanEndTime().getTime();
             long realEndTime = sysManageTask.getRealEndTime().getTime();
             long days = DateUtils.differentDays(sysManageTask.getPlanEndTime(),sysManageTask.getRealEndTime());

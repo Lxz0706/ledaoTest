@@ -6,12 +6,14 @@ import java.util.*;
 import com.ledao.activity.dao.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.constant.WeChatConstants;
+import com.ledao.common.core.text.Convert;
 import com.ledao.common.json.JSONObject;
 import com.ledao.common.message.WechatMessageUtil;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.system.dao.SysDictData;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDictDataService;
@@ -197,7 +199,7 @@ public class SysApplyInController extends BaseController
         mmap.put("projectZckType",dataType);
         mmap.put("documentType",documentType);
         mmap.put("roleType",roleType);
-        return "docList/docApplyIn";
+        return "docList/docApplyInZcb";
     }
 
     /**
@@ -209,7 +211,18 @@ public class SysApplyInController extends BaseController
     public TableDataInfo list(SysApplyIn sysApplyIn)
     {
         startPage();
-        sysApplyIn.setApplyUser(ShiroUtils.getLoginName());
+        boolean isfileAdmin = false;
+        SysUser u = ShiroUtils.getSysUser();
+        for (SysRole r: u.getRoles()){
+            if ("documentAdmin".equals(r.getRoleKey())){
+                isfileAdmin = true;
+                continue;
+            }
+        }
+        if ("1".equals(sysApplyIn.getApplyType()) && isfileAdmin){
+        }else{
+            sysApplyIn.setApplyUser(ShiroUtils.getLoginName());
+        }
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(sysApplyIn);
         return getDataTable(list);
     }
@@ -239,6 +252,33 @@ public class SysApplyInController extends BaseController
     {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocDetailList(sysApplyIn);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/docListDailyDetail")
+    @ResponseBody
+    public TableDataInfo docListDailyDetail(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInDailyDetailList(sysApplyIn);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/docListDetailByPName")
+    @ResponseBody
+    public TableDataInfo docListDetailByPName(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocByPNameDetailList(sysApplyIn);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/docListDetailZcb")
+    @ResponseBody
+    public TableDataInfo docListDetailZcb(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocDetailZcbList(sysApplyIn);
         return getDataTable(list);
     }
 
@@ -574,7 +614,12 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysApplyIn sysApplyIn)
     {
-        return toAjax(sysApplyInService.editSave(sysApplyIn));
+        SysApplyIn sysapp = sysApplyInService.selectSysApplyInById(sysApplyIn.getApplyId());
+        if (sysapp.getApplyUser().equals(ShiroUtils.getLoginName())){
+            return toAjax(sysApplyInService.editSave(sysApplyIn));
+        }else{
+            return AjaxResult.error("不可操作");
+        }
     }
 
     /**
@@ -585,8 +630,13 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request)
     {
-        AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn,request);
-        return res;
+        SysApplyIn sysapp = sysApplyInService.selectSysApplyInById(sysApplyIn.getApplyId());
+        if (sysapp.getApplyUser().equals(ShiroUtils.getLoginName())){
+            AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn,request);
+            return res;
+        }else{
+            return AjaxResult.error("不可操作");
+        }
     }
 
     @GetMapping("/documentTypeListOpen")
@@ -623,7 +673,7 @@ public class SysApplyInController extends BaseController
         if ("0".equals(docType)){
             return "docList/docProTypeMu";
         }else{
-            return "docList/docApplyIn";
+            return "docList/docApplyInDaily";
         }
     }
 
@@ -634,9 +684,36 @@ public class SysApplyInController extends BaseController
         mmap.put("documentType","0");
         if ("thb".equals(roleType)){
             return "docList/documentDetailTypeList";
-        }else{
+        }else if ("bg".equals(roleType)){
             return "docList/docApplyIn";
+        }else{
+            return "docList/docApplyInZcb";
         }
+    }
+
+
+
+    @GetMapping("/docApplyInZcbDetail")
+    public String docApplyInZcbDetail(String roleType, String documentType,String projectName,String projectZckType, ModelMap mmap)
+    {
+        mmap.put("projectZckType",projectZckType);
+        mmap.put("roleType",roleType);
+        mmap.put("documentType",documentType);
+        mmap.put("projectName",projectName);
+        if ("thb".equals(roleType)){
+            return "docList/docApplyInZcbDetail";
+        }else{
+            return "docList/docApplyInZcbDetail";
+        }
+    }
+
+    @GetMapping("/docApplyInDailyDetail")
+    public String docApplyInDailyDetail(String roleType, String documentType,String companyName, ModelMap mmap)
+    {
+        mmap.put("roleType",roleType);
+        mmap.put("documentType",documentType);
+        mmap.put("companyName",companyName);
+        return "docList/docApplyInDailyDetail";
     }
 
 
@@ -677,6 +754,14 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
+        String loginName = ShiroUtils.getLoginName();
+        String[] idsArr = Convert.toStrArray(ids);
+        for (String id:idsArr) {
+            SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(Long.parseLong(id));
+            if (sysApplyIn==null || !loginName.equals(sysApplyIn.getApplyUser())){
+                return AjaxResult.error("不可操作");
+            }
+        }
         AjaxResult res = sysApplyInService.deleteSysApplyInByIds(ids);
         return res;
     }

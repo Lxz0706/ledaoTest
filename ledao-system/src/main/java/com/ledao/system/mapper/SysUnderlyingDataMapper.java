@@ -68,4 +68,8 @@ public interface SysUnderlyingDataMapper
     List<SysUnderlyingData> selectSysUnderlyingDataByPid(@Param("projectId") Long projectId, @Param("projectType") Long projectType);
 
     List<SysUnderlyingData> selectSysUnderlyingProDataList(SysUnderlyingData sysUnderlyingData);
+
+    List<SysUnderlyingData> selectSysUnderlyingNoLikeDataList(SysUnderlyingData sysUnderlyingData);
+
+    List<SysUnderlyingData> selectSysUnderlyingNoLikeDetailDataList(SysUnderlyingData sysUnderlyingData);
 }

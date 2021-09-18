@@ -118,4 +118,10 @@ public interface ISysApplyInService
     List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn);
 
     AjaxResult importApplyIn(MultipartFile file);
+
+    List<SysApplyIn> selectSysApplyInDocDetailZcbList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> selectSysApplyInDocByPNameDetailList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> selectSysApplyInDailyDetailList(SysApplyIn sysApplyIn);
 }

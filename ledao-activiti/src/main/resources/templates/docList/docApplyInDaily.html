@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('档案入库申请列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
+                    <input name="documentType" id="documentType" th:value="*{documentType}" type="hidden">
+                    <input name="roleType" id="roleType" th:value="*{roleType}" type="hidden">
+                    <div class="select-list">
+                        <ul>
+                        	<input name="applyType" value="0" type="hidden"/>
+                            <input name="approveStatu" value="3" type="hidden"/>
+                            <!--<li>
+                                <label>档案类别：</label>
+                                <select id="documentType" name="documentType"
+                                        th:with="type=${@dict.getType('sys_document_busi_type')}"
+                                        data-none-selected-text="请选择"
+                                        onchange="changeDocumentType(this.value)">
+                                    <option value="">&#45;&#45;请选择数据&#45;&#45;</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>-->
+                            <li>
+                                <label>公司名称：</label>
+                                <select id="companyName" name="companyName"
+                                        th:with="type=${@dict.getType('sys_company_name')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">--请选择数据--</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <!--<li class="select-time">
+                                <label>申请时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
+                            </li>
+                            <li>
+                                <label>实际提交人：</label>
+                                <input type="text" name="applyUserName"/>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-info" onclick="back()" >
+                    <i class="fa fa-backward"></i> 返回
+                </a>
+                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:applyIn:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>-->
+                <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:applyIn:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+<!--                <a class="btn btn-danger single disabled" onclick="$.operate.applyBack()" shiro:hasPermission="activity:applyIn:applyBack">-->
+<!--                    <i class="fa fa-remove"></i> 撤回-->
+<!--                </a>-->
+<!--                <a class="btn btn-primary single disabled" onclick="$.operate.applySubmit()" shiro:hasPermission="activity:applyIn:applySubmit">-->
+<!--                    <i class="fa fa-user"></i> 提交审批-->
+<!--                </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
+        var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
+        var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+        var prefix = ctx + "applyIn";
+        var documentType = document.getElementById("documentType").value;
+        var roleType = document.getElementById("roleType").value;
+        var showPro = false;
+
+        $(function() {
+            var options = {
+                url: prefix + "/docListDailyDetail",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/docEdit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                submitUrl: ctx + "applyIn/applyEditSave",
+                modalName: "档案入库申请",
+                status: "In",
+                columns: [
+                   /* {
+                    checkbox: true
+                },*/
+                /*{
+                    field: 'applyId',
+                    title: 'id',
+                    visible: false
+                },*/
+                /*{
+                    field: 'documentType',
+                    title: '档案类别',
+                    formatter: function(value, item, index) {
+		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
+		            }
+                },*/
+                /*{
+                    field: 'projectName',
+                    title: '项目名称',
+                    formatter: function(value, item, index) {
+                        return $.table.tooltip(item.projectName,10);
+                    },
+                    visible: showPro
+                },*/
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'companyName',
+                    title: '公司名称',
+                    formatter: function(value, item, index) {
+		            	// return $.table.tooltip(getDictStr($.table.selectDictLabel(companyDictDatas, item.companyName)),10);
+                        var lable = $.table.selectDictLabel(companyDictDatas, item.companyName);
+                        var lableStr ='';
+                        if (lable!=''&& lable!= undefined){
+                            lableStr = lable.substring(15,lable.length-7);
+                            return '<a href="javascript:void(0)" onclick="detail(\'' + item.companyName  + "',\'" + lableStr + '\')">' + lable + '</a>';
+                        }else{
+                            return lable;
+                        }
+
+
+		            }
+                }
+                /*,
+                {
+                    field: 'debtorName',
+                    title: '债务人名称',
+                    formatter: function(value, item, index) {
+                        return strLength(item.debtorName);
+                    },
+                    visible: showPro
+                },
+                {
+                    field: 'applyUserName',
+                    title: '实际提交人'
+                },
+                {
+                    field: 'realCreateName',
+                    title: '代提交人',
+                    formatter: function(value, item, index) {
+                        return strLength(item.realCreateName);
+                    }
+                },
+                {
+                    field: 'applyTime',
+                    title: '申请时间'
+                },
+                // {
+                //     field: 'approveUser',
+                //     title: '下一节点审批人',
+                //     formatter: function(value, item, index) {
+                //         return strLength(item.approveUser);
+                //     }
+                // },
+                {
+                    field: 'approveStatu',
+                    title: '审批状态',
+                    formatter: function(value, item, index) {
+		            	return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
+		            }
+                },
+                {
+                    field: 'remarks',
+                    title: '备注',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value,10);
+                    }
+                },
+                {
+                    field: 'reviserName',
+                    title: '修改人名称'
+                },
+               /!* {
+                    field: 'erweima',
+                    title: '二维码',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)"><i class="fa fa-edit"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                },*!/
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.editLook(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                }*/
+                ]
+            };
+            $.table.init(options);
+        });
+
+        function detail(companyName,lable){
+            var url = prefix+"/docApplyInDailyDetail?documentType="+documentType+"&roleType="+roleType+"&companyName="+companyName;
+            $.modal.parentTab(lable, url);
+        }
+
+        function back() {
+            var url = prefix+"/documentTypeListBack?documentType="+documentType+"&roleType="+roleType;
+            $.modal.parentTab("档案类型", url);
+        }
+
+        function getDictStr(value){
+            return value.slice(15,value.length-7);
+        }
+        function strLength(value){
+            var str = $.common.nullToStr(value);
+            return str;
+        }
+        function selectSysApplyWorkflowList(applyId){
+        	 var url = prefix+'/applyProcess/historyList/'+applyId;
+        	 $.modal.open("查看审批历史", url, 800, $(window).height() - 50);
+        }
+        function applyEditSave(){
+        }
+        function changeDocumentType(val) {
+            var projectName = document.getElementById("projectName")
+            var debtorName = document.getElementById("debtorName")
+            if(val === '0') {
+                projectName.style.display = "block"
+                debtorName.style.display = "block"
+            } else if(val === '1' || val === '2') {
+                projectName.style.display = "none"
+                debtorName.style.display = "none"
+            } else {
+                projectName.style.display = "block"
+                debtorName.style.display = "block"
+            }
+        }
+    </script>
+</body>
+</html>

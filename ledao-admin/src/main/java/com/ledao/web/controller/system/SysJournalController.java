@@ -1,6 +1,12 @@
 package com.ledao.web.controller.system;
 
 import java.util.List;
+
+import com.ledao.framework.util.ShiroUtils;
+import com.ledao.system.dao.SysDept;
+import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,8 +39,10 @@ public class SysJournalController extends BaseController
 
     @Autowired
     private ISysJournalService sysJournalService;
+    @Autowired
+    private ISysDeptService sysDeptService;
 
-    @RequiresPermissions("system:journal:view")
+//    @RequiresPermissions("system:journal:view")
     @GetMapping()
     public String journal()
     {
@@ -44,12 +52,24 @@ public class SysJournalController extends BaseController
     /**
      * 查询日志列表
      */
-    @RequiresPermissions("system:journal:list")
+//    @RequiresPermissions("system:journal:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysJournal sysJournal)
     {
         startPage();
+        SysUser user = ShiroUtils.getSysUser();
+        List<SysRole> getRoles = user.getRoles();
+        boolean isZjl = false;
+        for (SysRole sysRole : getRoles) {
+            if ("zjl".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey())) {
+                isZjl = true;
+            }
+        }
+        if (!isZjl){
+            SysDept dept = sysDeptService.selectDeptById(user.getDeptId());
+            sysJournal.setDeptId(dept.getDeptId());
+        }
         List<SysJournal> list = sysJournalService.selectSysJournalList(sysJournal);
         return getDataTable(list);
     }
@@ -57,7 +77,7 @@ public class SysJournalController extends BaseController
     /**
      * 导出日志列表
      */
-    @RequiresPermissions("system:journal:export")
+//    @RequiresPermissions("system:journal:export")
     @Log(title = "日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -80,7 +100,7 @@ public class SysJournalController extends BaseController
     /**
      * 新增保存日志
      */
-    @RequiresPermissions("system:journal:add")
+//    @RequiresPermissions("system:journal:add")
     @Log(title = "日志", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -103,7 +123,7 @@ public class SysJournalController extends BaseController
     /**
      * 修改保存日志
      */
-    @RequiresPermissions("system:journal:edit")
+//    @RequiresPermissions("system:journal:edit")
     @Log(title = "日志", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -115,7 +135,7 @@ public class SysJournalController extends BaseController
     /**
      * 删除日志
      */
-    @RequiresPermissions("system:journal:remove")
+//    @RequiresPermissions("system:journal:remove")
     @Log(title = "日志", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

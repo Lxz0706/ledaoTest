@@ -165,6 +165,143 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by a.update_time desc
     </select>
 
+    <select id="selectSysApplyInDocDetailZcbList" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
+        SELECT
+        distinct a.project_name
+        FROM
+        sys_apply_in a
+        LEFT JOIN sys_user b ON a.apply_user = b.login_name
+        LEFT JOIN sys_user c ON a.real_create_by = c.login_name
+        LEFT JOIN sys_user d ON a.reviser = d.login_name
+        LEFT JOIN sys_project_zck ack  on a.project_id = ack.project_zck_id
+        <where>
+            <if test="applyType != null  and applyType != ''"> and a.apply_type = #{applyType}</if>
+            <if test="documentType != null  and documentType != ''"> and a.document_type = #{documentType}</if>
+            <if test="projectId != null "> and a.project_id = #{projectId}</if>
+            <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
+            <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
+            </if>
+            <if test="params.endApplyTime != null and params.endApplyTime != ''"><!-- 结束时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &lt;= date_format(#{params.endApplyTime},'%Y%m%d')
+            </if>
+            <if test="applyUser != null  and applyUser != ''"> and (a.apply_user = #{applyUser} or (a.real_create_by = #{applyUser} and a.approve_statu='0'))</if>
+            <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+            <if test="approveUser != null  and approveUser != ''"> and a.approve_user = #{approveUser}</if>
+            <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
+            <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
+            <if test="roleType != null  and roleType != ''"> and a.role_type = #{roleType}</if>
+            <if test="projectZckType != null  and projectZckType != ''"> and ack.project_zck_type = #{projectZckType}</if>
+        </where>
+        order by a.update_time desc
+    </select>
+
+    <select id="selectSysApplyInDailyDetailList" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
+        SELECT
+        distinct a.company_name
+        FROM
+        sys_apply_in a
+        LEFT JOIN sys_user b ON a.apply_user = b.login_name
+        LEFT JOIN sys_user c ON a.real_create_by = c.login_name
+        LEFT JOIN sys_user d ON a.reviser = d.login_name
+        LEFT JOIN sys_project_zck ack  on a.project_id = ack.project_zck_id
+        <where>
+            <if test="applyType != null  and applyType != ''"> and a.apply_type = #{applyType}</if>
+            <if test="documentType != null  and documentType != ''"> and a.document_type = #{documentType}</if>
+            <if test="projectId != null "> and a.project_id = #{projectId}</if>
+            <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
+            <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
+            </if>
+            <if test="params.endApplyTime != null and params.endApplyTime != ''"><!-- 结束时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &lt;= date_format(#{params.endApplyTime},'%Y%m%d')
+            </if>
+            <if test="applyUser != null  and applyUser != ''"> and (a.apply_user = #{applyUser} or (a.real_create_by = #{applyUser} and a.approve_statu='0'))</if>
+            <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+            <if test="approveUser != null  and approveUser != ''"> and a.approve_user = #{approveUser}</if>
+            <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
+            <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
+            <if test="roleType != null  and roleType != ''"> and a.role_type = #{roleType}</if>
+            <if test="projectZckType != null  and projectZckType != ''"> and ack.project_zck_type = #{projectZckType}</if>
+        </where>
+        order by a.update_time desc
+    </select>
+
+    <select id="selectSysApplyInDocByPNameDetailList" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
+        SELECT
+        a.apply_id,
+        a.apply_type,
+        a.document_type,
+        a.project_id,
+        a.project_name,
+        a.company_name,
+        a.debtor_id,
+        a.debtor_name,
+        a.instance_id,
+        a.apply_user,
+        a.apply_time,
+        a.approve_user,
+        a.approve_statu,
+        a.real_create_by,
+        a.remarks,
+        a.create_by,
+        a.creator,
+        a.create_time,
+        a.update_by,
+        a.reviser,
+        a.update_time,
+        a.is_return,
+        a.plan_return_time,
+        a.real_return_time,
+        a.out_reason,
+        a.is_out,
+        a.is_receive,
+        a.is_returned,
+        a.is_received,
+        a.remarks_out,
+        a.role_type,
+        b.user_name as applyUserName,
+        c.user_name as realCreateName,
+        d.user_name as reviserName
+        FROM
+        sys_apply_in a
+        LEFT JOIN sys_user b ON a.apply_user = b.login_name
+        LEFT JOIN sys_user c ON a.real_create_by = c.login_name
+        LEFT JOIN sys_user d ON a.reviser = d.login_name
+        LEFT JOIN sys_project_zck ack  on a.project_id = ack.project_zck_id
+        <where>
+            <if test="applyType != null  and applyType != ''"> and a.apply_type = #{applyType}</if>
+            <if test="documentType != null  and documentType != ''"> and a.document_type = #{documentType}</if>
+            <if test="projectId != null "> and a.project_id = #{projectId}</if>
+            <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
+            <if test="projectName != null  and projectName != ''"> and a.project_name = #{projectName}</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
+            <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
+            </if>
+            <if test="params.endApplyTime != null and params.endApplyTime != ''"><!-- 结束时间检索 -->
+                and date_format(apply_time,'%Y%m%d') &lt;= date_format(#{params.endApplyTime},'%Y%m%d')
+            </if>
+            <if test="applyUser != null  and applyUser != ''"> and (a.apply_user = #{applyUser} or (a.real_create_by = #{applyUser} and a.approve_statu='0'))</if>
+            <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+            <if test="approveUser != null  and approveUser != ''"> and a.approve_user = #{approveUser}</if>
+            <if test="approveStatu != null  and approveStatu != ''"> and a.approve_statu = #{approveStatu}</if>
+            <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
+            <if test="roleType != null  and roleType != ''"> and a.role_type = #{roleType}</if>
+            <if test="projectZckType != null  and projectZckType != ''"> and ack.project_zck_type = #{projectZckType}</if>
+        </where>
+        order by a.update_time desc
+    </select>
     <select id="selectSysApplyInDocDetailList" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
         SELECT
         a.apply_id,

@@ -67,4 +67,8 @@ public interface ISysUnderlyingDataService
     public List<SysUnderlyingData> selectSysUnderlyingDataByPid(Long projectId,Long projectType);
 
     List<SysUnderlyingData> selectSysUnderlyingProDataList(SysUnderlyingData sysUnderlyingData);
+
+    List<SysUnderlyingData> selectSysUnderlyingNoLikeDataList(SysUnderlyingData sysUnderlyingData);
+
+    List<SysUnderlyingData> selectSysUnderlyingNoLikeDetailDataList(SysUnderlyingData sysUnderlyingData);
 }

@@ -71,15 +71,15 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:journal:add">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:journal:add">
                     <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:journal:edit">
+                </a>-->
+                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:journal:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
                     <i class="fa fa-remove"></i> 删除
-                </a>
+                </a>-->
 
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -113,8 +113,12 @@
                     field: 'createTime',
                     title: '日期'
                 },
-                {
+              /*  {
                     field: 'depId',
+                    title: '部门'
+                },*/
+                {
+                    field: 'deptName',
                     title: '部门'
                 },
                 {
@@ -122,7 +126,7 @@
                     title: '项目'
                 },
                 {
-                    field: 'creator',
+                    field: 'userName',
                     title: '创建人名称'
                 },
                 {
@@ -182,11 +186,11 @@
             $.table.init(options);
         });
 
-        $("input[name='createTime']").datetimepicker({
+        /*$("input[name='createTime']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
             autoclose: true
-        });
+        });*/
 
         function showComment(id){
             var url = '/system/comment/commentList?id=' + id;

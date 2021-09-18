@@ -76,6 +76,24 @@ public class SysUnderlyingDataController extends BaseController
         return getDataTable(list);
     }
 
+    @PostMapping("/listLyingNoLikeDetail")
+    @ResponseBody
+    public TableDataInfo listLyingNoLikeDetail(SysUnderlyingData sysUnderlyingData)
+    {
+        startPage();
+        List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingNoLikeDetailDataList(sysUnderlyingData);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/listLyingNoLike")
+    @ResponseBody
+    public TableDataInfo listLyingNoLike(SysUnderlyingData sysUnderlyingData)
+    {
+        startPage();
+        List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingNoLikeDataList(sysUnderlyingData);
+        return getDataTable(list);
+    }
+
     /**
      * 导出底层资料列表
      */
@@ -128,11 +146,24 @@ public class SysUnderlyingDataController extends BaseController
     }
 
     @GetMapping("/muUnderlyingDataListsMu")
-    public String muUnderlyingDataListsMu(String dataType, String projectType, ModelMap mmap)
+    public String muUnderlyingDataListsMu(String proType, String projectType, ModelMap mmap)
     {
-        mmap.put("dataType",dataType);
+        mmap.put("proType",proType);
         mmap.put("projectType",projectType);
-        return prefix + "/muUnderlyingDataLists";
+        if ("0".equals(projectType)){
+            return prefix + "/muUnderlyingZcbLists";
+        }else{
+            return prefix + "/muUnderlyingDataLists";
+        }
+    }
+
+    @GetMapping("/muUnderlyingDataListsZcbMu")
+    public String muUnderlyingDataListsZcbMu( String projectType,String zckName, String proType,ModelMap mmap)
+    {
+        mmap.put("zckName",zckName);
+        mmap.put("proType",proType);
+        mmap.put("projectType",projectType);
+        return prefix + "/muUnderlyingZcbDetailLists";
     }
 
     @PostMapping("/documentDetailTypeList")

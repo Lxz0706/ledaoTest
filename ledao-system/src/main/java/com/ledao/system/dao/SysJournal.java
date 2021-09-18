@@ -22,6 +22,10 @@ public class SysJournal extends BaseEntity
     @Excel(name = "部门id")
     private String depId;
 
+    private String deptName;
+
+    private String userName;
+
     /** 项目id */
     @Excel(name = "项目id")
     private String proId;
@@ -58,7 +62,33 @@ public class SysJournal extends BaseEntity
     @Excel(name = "修改人名称")
     private String reviser;
 
-    public void setId(Long id) 
+    private long deptId;
+
+    public long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(long deptId) {
+        this.deptId = deptId;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

@@ -615,7 +615,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
-    public AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request) {
+    public AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request) throws RuntimeException{
         log.info("开始调用工作流，审批状态{}",sysApplyIn.getApproveStatu());
         SysUser currentUser = ShiroUtils.getSysUser();
         String loginUser = currentUser.getLoginName();
@@ -623,6 +623,30 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         if (sysApplyInEntity==null || sysApplyInEntity.getApplyId()==null){
             return AjaxResult.error("无该申请");
         }
+        String appUser = sysApplyInEntity.getApproveUser();
+        if (!"0".equals(sysApplyInEntity.getApproveStatu()) && !"2".equals(sysApplyInEntity.getApproveStatu())
+                && !"4".equals(sysApplyInEntity.getApproveStatu())){
+            boolean isAppUser = false;
+            if (StringUtils.isNotEmpty(appUser)){
+                if (appUser.contains(",")){
+                    String[] apps = appUser.split(",");
+                    for (String a:apps) {
+                        if (a.equals(loginUser)){
+                            isAppUser = true;
+                        }
+                    }
+                }else if (appUser.equals(loginUser)){
+                    isAppUser = true;
+                }
+            }
+            if (!isAppUser){
+                return AjaxResult.error("非审批人，无法操作");
+            }
+        }
+        if (("2".equals(sysApplyInEntity.getApproveStatu()) || "4".equals(sysApplyInEntity.getApproveStatu())) && !loginUser.equals(sysApplyInEntity.getApplyUser())){
+            return AjaxResult.error("非审批人，无法操作");
+        }
+
         SysApplyWorkflow workflow = new SysApplyWorkflow();
         workflow.setRemarks(sysApplyIn.getRemarks());
 

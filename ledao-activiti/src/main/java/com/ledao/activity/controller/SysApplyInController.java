@@ -74,6 +74,8 @@ public class SysApplyInController extends BaseController
     @Autowired
     private ISysConfigService configService;
 
+    private List<Long> applyIds = new ArrayList<>();
+
     @GetMapping("/applyIn")
     public String applyIn()
     {
@@ -623,9 +625,16 @@ public class SysApplyInController extends BaseController
     @Log(title = "档案状态修改", businessType = BusinessType.UPDATE)
     @PostMapping("/applyEditSave")
     @ResponseBody
-    public AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request)
+    public synchronized AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request)
     {
-        AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn,request);
+        AjaxResult res = new AjaxResult();
+        try {
+            res = sysApplyInService.applyEditSave(sysApplyIn,request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+//            applyIds.remove(sysApplyIn.getApplyId());
+        }
         return res;
     }
 

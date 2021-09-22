@@ -210,7 +210,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     SysApplyWorkflow workflow = new SysApplyWorkflow();
                     workflow.setApplyId(sysApplyIn.getApplyId());
                     List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
-                    if (workflows!=null){
+                    if (workflows!=null && workflows.size()>0){
                         SysUser u = userMapper.selectUserByLoginName(workflows.get(0).getApproveUser());
                         for (SysRole r:u.getRoles()) {
                             if ("flgw".equals(r.getRoleKey())){

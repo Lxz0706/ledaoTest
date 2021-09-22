@@ -87,7 +87,6 @@
     var editFlag = [[${@permission.hasPermi('system:bgczzck:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:bgczzck:remove')}]];
     var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
-    var uploadFlag = [[${@permission.hasPermi('system:underlyingdata:upload')}]];
     var fwProjectType = $("#fwProjectType").val();
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
     var showUnderLying = false;
@@ -212,7 +211,7 @@
                         var actions = [];
                         var fileShow = row.isFile;
                         if (fileShow == 0) {
-                            actions.push('<a class="btn btn-success btn-xs ' + uploadFlag + '" href="javascript:void(0)" onclick="toUpload(' + row.id + ')"><i class="fa fa-edit"></i>上传</ a> ');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="toUpload(' + row.id + ')"><i class="fa fa-edit"></i>上传</ a> ');
                         } else {
                             actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(' + row.id + ')"><i class="fa fa-search"></i>查看</a>');
                         }

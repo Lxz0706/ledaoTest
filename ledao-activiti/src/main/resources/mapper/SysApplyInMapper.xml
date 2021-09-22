@@ -498,6 +498,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
         workflow.create_time = b.create_time
         AND workflow.apply_id = b.apply_id
+        and workflow.approve_user=#{applyUser}
         ) WORK ON app.apply_id = WORK.apply_id
         LEFT JOIN sys_user ub on app.apply_user=ub.login_name
         LEFT JOIN sys_user uc ON app.real_create_by = uc.login_name

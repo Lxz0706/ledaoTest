@@ -30,7 +30,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="planBeginTime" th:value="${#dates.format(sysManageTask.planBeginTime, 'yyyy-MM-dd')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
+                        <input autocomplete="off" name="planBeginTime" th:value="${#dates.format(sysManageTask.planBeginTime, 'yyyy-MM-dd')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="planEndTime" th:value="${#dates.format(sysManageTask.planEndTime, 'yyyy-MM-dd')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
+                        <input autocomplete="off" name="planEndTime" th:value="${#dates.format(sysManageTask.planEndTime, 'yyyy-MM-dd')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="realBeginTime" th:value="${#dates.format(sysManageTask.realBeginTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input autocomplete="off" name="realBeginTime" th:value="${#dates.format(sysManageTask.realBeginTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="realEndTime" th:value="${#dates.format(sysManageTask.realEndTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input autocomplete="off" name="realEndTime" th:value="${#dates.format(sysManageTask.realEndTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>

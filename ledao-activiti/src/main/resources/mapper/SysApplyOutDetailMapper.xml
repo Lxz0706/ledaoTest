@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="eleDocumentStatu"    column="ele_document_statu"    />
     </resultMap>
     <resultMap type="SysApplyOutDetail" id="SysApplyOutDocDetailResult">
         <result property="outDetailId"    column="out_detail_id"    />
@@ -65,10 +66,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="documentLevel"    column="document_level"    />
         <result property="companyName"    column="company_name"    />
         <result property="dailyDocumentTypeContract"    column="daily_document_type_contract"    />
+        <result property="eleDocumentStatu"    column="ele_document_statu"    />
     </resultMap>
 
     <sql id="selectSysApplyOutDetailVo">
-        select out_detail_id, apply_id, document_id, is_page, is_elec, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_apply_out_detail
+        select ele_document_statu,out_detail_id, apply_id, document_id, is_page, is_elec, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks, create_by, creator, create_time, update_by, reviser, update_time from sys_apply_out_detail
     </sql>
 
     <select id="selectSysApplyOutDetailList" parameterType="SysApplyOutDetail" resultMap="SysApplyOutDetailResult">
@@ -89,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
             <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and reviser = #{reviser}</if>
+            <if test="eleDocumentStatu != null  and eleDocumentStatu != ''"> and ele_document_statu = #{eleDocumentStatu}</if>
         </where>
         order by create_time desc
     </select>
@@ -115,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         od.update_by,
         od.reviser,
         od.update_time,
+        od.ele_document_statu,
         file.asset_number,
         file.contract_no,
         file.asset_pag,
@@ -194,6 +198,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="reviser != null">reviser,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="eleDocumentStatu != null">ele_document_statu,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="applyId != null">#{applyId},</if>
@@ -215,6 +220,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="reviser != null">#{reviser},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="eleDocumentStatu != null">#{eleDocumentStatu},</if>
          </trim>
     </insert>
 
@@ -240,6 +246,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="reviser != null">reviser = #{reviser},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="eleDocumentStatu != null">ele_document_statu = #{eleDocumentStatu},</if>
         </trim>
         where out_detail_id = #{outDetailId}
     </update>

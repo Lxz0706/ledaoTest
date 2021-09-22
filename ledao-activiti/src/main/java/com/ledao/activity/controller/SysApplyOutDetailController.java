@@ -1,6 +1,9 @@
 package com.ledao.activity.controller;
 
 import java.util.List;
+
+import com.ledao.activity.dao.SysDocumentFile;
+import com.ledao.activity.service.ISysDocumentFileService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +36,9 @@ public class SysApplyOutDetailController extends BaseController
 
     @Autowired
     private ISysApplyOutDetailService sysApplyOutDetailService;
+
+    @Autowired
+    private ISysDocumentFileService sysDocumentFileService;
 
     @RequiresPermissions("activity:outFiledetail:view")
     @GetMapping()
@@ -144,6 +150,14 @@ public class SysApplyOutDetailController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysApplyOutDetail sysApplyOutDetail)
     {
+        if ("1".equals(sysApplyOutDetail.getIsElec())){
+            //纸质版出库时，需要判断当前档案是否在库，纸质1，电子0
+            SysApplyOutDetail model = sysApplyOutDetailService.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
+            SysDocumentFile doc = sysDocumentFileService.selectSysDocumentFileById(model.getDocumentId());
+            if (!"1".equals(doc.getDocumentStatu())){
+                return AjaxResult.error("当前档案纸质文件不在库");
+            }
+        }
         return toAjax(sysApplyOutDetailService.updateSysApplyOutDetail(sysApplyOutDetail));
     }
 

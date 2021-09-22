@@ -149,6 +149,16 @@ public class SysApplyOutDetail extends BaseEntity
 
     private String dailyDocumentTypeContract;
 
+    private String eleDocumentStatu;
+
+    public String getEleDocumentStatu() {
+        return eleDocumentStatu;
+    }
+
+    public void setEleDocumentStatu(String eleDocumentStatu) {
+        this.eleDocumentStatu = eleDocumentStatu;
+    }
+
     public String getDailyDocumentTypeContract() {
         return dailyDocumentTypeContract;
     }

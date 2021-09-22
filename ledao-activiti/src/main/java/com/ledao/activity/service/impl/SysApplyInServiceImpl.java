@@ -410,7 +410,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     if (desApOuts!=null && desApOuts.size()>0){
                         for (SysApplyOutDetail out:desApOuts) {
                             SysApplyIn app = sysApplyInMapper.selectSysApplyInById(out.getApplyId());
-                            if (app!=null && ("1".equals(app.getApproveStatu()) || "5".equals(app.getApproveStatu()))){
+                            if ("1".equals(out.getIsElec()) && app!=null && ("1".equals(app.getApproveStatu()) || "5".equals(app.getApproveStatu()))){
                                 return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
                             }
                         }
@@ -1246,19 +1246,23 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 sysApplyIn.setApproveStatu("3");
                 //出库不归还
                 for (SysApplyOutDetail df:dfs) {
-                    SysDocumentFile sysDocumentFile = new SysDocumentFile();
-                    sysDocumentFile.setDocumentStatu("2");
-                    sysDocumentFile.setDocumentId(df.getDocumentId());
-                    documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                    if ("1".equals(df.getIsElec())){
+                        SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                        sysDocumentFile.setDocumentStatu("2");
+                        sysDocumentFile.setDocumentId(df.getDocumentId());
+                        documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                    }
                 }
             }else{
                 sysApplyIn.setApproveStatu("8");
                 //出库待归还
                 for (SysApplyOutDetail df:dfs) {
-                    SysDocumentFile sysDocumentFile = new SysDocumentFile();
-                    sysDocumentFile.setDocumentStatu("0");
-                    sysDocumentFile.setDocumentId(df.getDocumentId());
-                    documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                    if ("1".equals(df.getIsElec())){
+                        SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                        sysDocumentFile.setDocumentStatu("0");
+                        sysDocumentFile.setDocumentId(df.getDocumentId());
+                        documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                    }
                 }
             }
         }
@@ -1273,10 +1277,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             sd.setApplyId(sysApplyIn.getApplyId());
             List<SysApplyOutDetail> dfs =  sysApplyOutDetailMapper.selectSysApplyOutDetailList(sd);
             for (SysApplyOutDetail df:dfs) {
-                SysDocumentFile sysDocumentFile = new SysDocumentFile();
-                sysDocumentFile.setDocumentStatu("1");
-                sysDocumentFile.setDocumentId(df.getDocumentId());
-                documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                if ("1".equals(df.getIsElec())){
+                    SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                    sysDocumentFile.setDocumentStatu("1");
+                    sysDocumentFile.setDocumentId(df.getDocumentId());
+                    documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                }
             }
         }
 	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);

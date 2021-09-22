@@ -476,7 +476,7 @@
                                 $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                             }
                         })
-                        window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+                        window.location.href = prefix + "/download/resource?resource=" + fileUrl + "&delete=" + false;
                     }
                 }
             })
@@ -490,7 +490,7 @@
                     $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                 }
             })
-            window.location.href = ctx + "common/download/resource?resource=C:" + fileName + "&delete=" + true;
+            window.location.href = prefix + "/download/resource?resource=" + fileUrl + "&delete=" + false;
         }
     }
 

@@ -495,7 +495,7 @@
         }
     }
 
-    function downLoad(fileId, fileName) {
+    function downLoad(fileId, fileUrl) {
         if (projectType == 0 && projectZckType == "automaticSwitch") {
             $.ajax({
                 url: prefix + '/checkUserAllow',
@@ -516,7 +516,7 @@
                                 $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                             }
                         })
-                        window.location.href = ctx + "common/download/resource?resource=" + fileName + "&delete=" + true;
+                        window.location.href = prefix + "/download/resource?resource=" + fileUrl + "&delete=" + false;
                     }
                 }
             })
@@ -530,7 +530,8 @@
                     $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                 }
             })
-            window.location.href = ctx + "common/download/resource?resource=" + fileName + "&delete=" + true;
+            debugger
+            window.location.href = prefix + "/download/resource?resource=" + fileUrl + "&delete=" + false;
         }
     }
 

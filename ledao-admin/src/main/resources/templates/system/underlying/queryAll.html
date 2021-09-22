@@ -180,8 +180,8 @@
         window.open(ctx + "common/officeToPdf?url=" + encodeURIComponent(url));
     }
 
-    function downLoad(fileName) {
-        window.location.href = ctx + "common/download/resource?resource=" + fileName + "&delete=" + true;
+    function downLoad(fileUrl) {
+        window.location.href = prefix + "/download/resource?resource=" + fileUrl + "&delete=" + false;
     }
 
     function add() {

@@ -386,6 +386,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         if (!Arrays.asList(applyStatusList).contains(sysApplyInEntity.getApproveStatu())){
             return AjaxResult.error("非待审批状态");
         }
+
         if ((sysApplyInEntity.getCreateBy().equals(loginUser) && "0".equals(sysApplyInEntity.getApproveStatu()))||
                 (!"0".equals(sysApplyInEntity.getApproveStatu())&& sysApplyInEntity.getApplyUser().equals(loginUser)) ){
         }else{
@@ -401,6 +402,18 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     /////////////
                     if (StringUtils.isEmpty(d.getIsElec())){
                         return AjaxResult.error("档案借出信息填写不完整，请补充之后提交");
+                    }
+                    //判断所有的审批中和待审批的附件，不能出库
+                    SysApplyOutDetail det = new SysApplyOutDetail();
+                    det.setDocumentId(d.getDocumentId());
+                    List<SysApplyOutDetail> desApOuts = sysApplyOutDetailMapper.selectSysApplyOutDetailList(det);
+                    if (desApOuts!=null && desApOuts.size()>0){
+                        for (SysApplyOutDetail out:desApOuts) {
+                            SysApplyIn app = sysApplyInMapper.selectSysApplyInById(out.getApplyId());
+                            if (app!=null && ("1".equals(app.getApproveStatu()) || "5".equals(app.getApproveStatu()))){
+                                return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
+                            }
+                        }
                     }
                 }
             }else{

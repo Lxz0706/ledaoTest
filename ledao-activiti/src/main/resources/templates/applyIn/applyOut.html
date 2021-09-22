@@ -86,9 +86,17 @@
     var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
     var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
     var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    var showNames = false;
     var prefix = ctx + "applyIn";
 
     $(function() {
+        for(var i =0; i < roles.length;i++) {
+            if(roles[i].roleKey == "documentAdmin") {
+                showNames = true
+            }
+        }
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/addOut",
@@ -181,7 +189,10 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        if(row.approveStatu == 0 || row.approveStatu == 4){
+                        if(showNames && row.applyUser != loginName){
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.editLook(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                            actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="selectSysApplyWorkflowList(\'' + row.applyId + '\')"><i class="fa fa-list"></i> 审批历史</a> ');
+                        }else if(row.approveStatu == 0 || row.approveStatu == 4){
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-primary btn-xs " href="javascript:void(0)" onclick="$.operate.applySubmit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>提交审批</a> ');
                         }else if(row.approveStatu == 3 || row.approveStatu == 1) {

@@ -86,21 +86,24 @@ public class SysUnderlyingDataServiceImpl implements ISysUnderlyingDataService
         }
 
         for (MultipartFile file : muFs) {
-            SysUnderlyingData sysFile = new SysUnderlyingData();
-            String fileName = file.getOriginalFilename();
-            sysFile.setFileName(fileName);
-            sysFile.setFileSize((double) file.getSize());
-            sysFile.setCreateBy(sysUnderlyingData.getCreateBy());
-            sysFile.setCreateTime(DateUtils.getNowDate());
-            sysFile.setCreateor(sysUnderlyingData.getCreateBy());
-            sysFile.setFileType(FileUploadUtils.getExtension(file));
-            sysFile.setProjectId(sysUnderlyingData.getProjectId());
-            sysFile.setProjectType(sysUnderlyingData.getProjectType());
-            //获取各类型名称及其子集
-            String baseDir = "";
             try {
-                String avatar = FileUploadUtils.upload(Global.getProfile() + "/underlyingdata" + baseDir, file, false);
-                sysFile.setFileUrl(avatar);
+                //获取各类型名称及其子集
+                SysUnderlyingData sysFile = new SysUnderlyingData();
+                String baseDir = "";
+                String filePath = Global.getUploadPathUnderLying();
+
+                String fileName = FileUploadUtils.upload(filePath, file, true);
+                sysFile.setFileUrl(fileName);
+
+                sysFile.setFileName(file.getResource().getFilename());
+                sysFile.setFileSize((double) file.getSize());
+                sysFile.setCreateBy(sysUnderlyingData.getCreateBy());
+                sysFile.setCreateTime(DateUtils.getNowDate());
+                sysFile.setCreateor(sysUnderlyingData.getCreateBy());
+                sysFile.setFileType(FileUploadUtils.getExtension(file));
+                sysFile.setProjectId(sysUnderlyingData.getProjectId());
+                sysFile.setProjectType(sysUnderlyingData.getProjectType());
+
                 sysUnderlyingDataMapper.insertSysUnderlyingData(sysFile);
             } catch (IOException e) {
                 e.printStackTrace();

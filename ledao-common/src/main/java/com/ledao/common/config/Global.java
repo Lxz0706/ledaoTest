@@ -109,4 +109,8 @@ public class Global {
     public static String getUploadPath() {
         return getProfile() + "/upload";
     }
+
+    public static String getUploadPathUnderLying() {
+        return getProfile() + "/upload/underLying";
+    }
 }

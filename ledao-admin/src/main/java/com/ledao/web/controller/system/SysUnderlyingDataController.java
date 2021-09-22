@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ledao.common.config.Global;
+import com.ledao.common.constant.Constants;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.file.FileUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
@@ -23,6 +25,9 @@ import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 底层资料Controller
@@ -189,6 +194,32 @@ public class SysUnderlyingDataController extends BaseController
     public AjaxResult addSave(SysUnderlyingData sysUnderlyingData, @RequestParam("file") MultipartFile[] files) {
         sysUnderlyingData.setCreateBy(ShiroUtils.getLoginName());
         return sysUnderlyingDataService.insertSysUnderlyingData(sysUnderlyingData,files);
+    }
+
+    /**
+     * 本地资源通用下载
+     */
+    @GetMapping("/download/resource")
+    public void resourceDownload(String resource, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        SysUnderlyingData sysUnderlyingData = new SysUnderlyingData();
+        sysUnderlyingData.setFileUrl(resource);
+        List<SysUnderlyingData>  unds =  sysUnderlyingDataService.selectSysUnderlyingDataList(sysUnderlyingData);
+        String downloadName = "";
+        if (unds!=null && unds.size()>0){
+            downloadName = unds.get(0).getFileName();
+        }
+        // 本地资源路径
+        String localPath = Global.getProfile();
+        // 数据库资源地址
+        String downloadPath = localPath + StringUtils.substringAfter(resource, Constants.RESOURCE_PREFIX);
+        // 下载名称
+//        String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition",
+                "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, downloadName));
+        FileUtils.writeBytes(downloadPath, response.getOutputStream());
     }
 
     /**

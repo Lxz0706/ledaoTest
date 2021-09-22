@@ -10,8 +10,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
-import com.ledao.system.service.ISysDictDataService;
-import com.ledao.system.service.ISysUserService;
+import com.ledao.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.service.ISysUnderlyingDataService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
@@ -46,6 +44,12 @@ public class SysUnderlyingDataController extends BaseController
 
     @Autowired
     private ISysUserService iSysUserService;
+
+    @Autowired
+    private ISysProjectService sysProjectService;
+
+    @Autowired
+    private ISysProjectZckService sysProjectZckService;
 
     @RequiresPermissions("system:underlyingdata:view")
     @GetMapping()
@@ -250,6 +254,36 @@ public class SysUnderlyingDataController extends BaseController
         SysUser user = iSysUserService.selectUserById(projectManagerId);
         if (u.getUserId() == user.getDirectorId()){
             return AjaxResult.success();
+        }
+        return AjaxResult.error();
+    }
+
+    @PostMapping("/checkUserSee")
+    @ResponseBody
+    public AjaxResult checkUserSee(long fileId) {
+        SysUser user = ShiroUtils.getSysUser();
+        SysUnderlyingData sd = sysUnderlyingDataService.selectSysUnderlyingDataById(fileId);
+        if (sd.getProjectType()==0){
+            SysProject pro = sysProjectService.selectSysProjectById(sd.getProjectId());
+            SysProjectZck zck = sysProjectZckService.selectSysProjectZckById(pro.getProjectZckId());
+            if ("serve".equals(zck.getProjectZckType())){
+                List<SysRole> getRoles = user.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if ("thbManager".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey()) || "tzbzz".equals(sysRole.getRoleKey())) {
+                        return AjaxResult.success();
+                    }
+                }
+            }else{
+                if (pro.getProjectManagerId().longValue()==user.getUserId().longValue()){
+                    return AjaxResult.success();
+                }else{
+                    SysUser leaderUser = iSysUserService.selectUserById(pro.getProjectManagerId());
+                    if (leaderUser.getDirectorId().longValue() == user.getUserId().longValue()){
+                        return AjaxResult.success();
+                    }
+                }
+            }
+
         }
         return AjaxResult.error();
     }

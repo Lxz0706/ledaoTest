@@ -10,10 +10,10 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
-                            <li class="select-time">
+                            <!--<li class="select-time">
                                 <label>日期：</label>
                                 <input type="text" class="time-input"  name="createTime"/>
-                            </li>
+                            </li>-->
                             <li>
                                 <label>部门：</label>
                                 <input type="text" name="depId"/>
@@ -23,7 +23,7 @@
                                 <input type="text" name="proId"/>
                             </li>
                             <li class="select-time">
-                                <label>申请时间：</label>
+                                <label>日期：</label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
@@ -101,8 +101,15 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "日志",
-                columns: [{
+                columns: [
+                    /*{
                     checkbox: true
+                },*/
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'id',
@@ -194,7 +201,7 @@
 
         function showComment(id){
             var url = '/system/comment/commentList?id=' + id;
-            $.modal.open("评论列表", url);
+            $.modal.opens("评论列表", url);
         }
     </script>
 </body>

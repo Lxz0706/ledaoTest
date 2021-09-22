@@ -142,11 +142,15 @@
                 showNames = true
             }
         }
-
         if(documentTypeVal == "0") {
             projectName.style.display = 'block'
             debtorName.style.display = 'block'
             roleTypeShow.style.display = 'block'
+            if ("bg"==roleType){
+                $("#debtorName").hide()
+            }else{
+                $("#debtorName").show()
+            }
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
@@ -159,6 +163,7 @@
             }
             // end
         }
+
         var isNotChange = false
         // if(appStatu!=0 && appStatu != 4 && appStatu != 2){
         //     isNotChange = false

@@ -10,10 +10,11 @@
             <input name="proId" id="proId" th:value="*{proId}" type="hidden">
             <input name="taskType" id="taskType" th:value="*{taskType}" type="hidden">
             <div class="form-group" id="nodeStatuShow">
-                <label class="col-sm-3 control-label">节点状态：</label>
+                <label class="col-sm-3 control-label is-required">节点状态：</label>
                 <div class="col-sm-8">
                     <select id="nodeStatu" name="nodeStatu" th:with="type=${@dict.getType('subtask_project_ststus')}" onchange="nodeChange()"
-                            data-none-selected-text="请选择" class="form-control m-b">
+                            data-none-selected-text="请选择" class="form-control m-b required">
+                        <option value="">--请选择数据--</option>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                 th:value="${dict.dictValue}"></option>
                     </select>
@@ -283,6 +284,38 @@
                 //               alert(o+++"~~")
             });
         })
+
+        var realBeginTime=$("input[name='realBeginTime']").val();
+        if (realBeginTime == undefined || realBeginTime == ""){
+            realBeginTime = new Date();
+        }
+        $("input[name='realEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate:realBeginTime,
+            endDate:edate,
+            minView:2,
+            maxView:3
+        }).on('changeDate', function(ev){
+            //               alert(o+++"~~")
+        });
+
+        var planBeginTime=$("input[name='planBeginTime']").val();
+        if (planBeginTime == undefined || planBeginTime == ""){
+            planBeginTime = new Date();
+        }
+        $("input[name='planEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate:planBeginTime,
+            endDate:edate,
+            minView:2,
+            maxView:3
+        }).on('changeDate', function(ev){
+            //               alert(o+++"~~")
+        });
 
 
     </script>

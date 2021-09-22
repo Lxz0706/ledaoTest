@@ -10,6 +10,7 @@
             <form id="formId">
                 <input name="proType" type="hidden" id="proType" th:value="${proType}"/>
                 <input name="projectType" type="hidden" id="projectType" th:value="${projectType}"/>
+                <input type="hidden" name="projectZckType" id="projectZckType" th:value="*{proType}"/>
                 <input name="zckName" type="hidden" id="zckName" th:value="${zckName}"/>
                 <div class="select-list">
                 <ul>
@@ -69,8 +70,11 @@
     var detailFlag = [[${@permission.hasPermi('system:underlyingdata:detail')}]];
     var downLoadFlag = [[${@permission.hasPermi('system:underlyingdata:downLoad')}]];
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    var projectType = document.getElementById("projectType").value;
+    var projectZckType = document.getElementById("projectZckType").value;
     var prefix = ctx + "system/underlyingdata";
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var userId = [[${@permission.getPrincipalProperty('userId')}]];
     var showRemove = false;
 
     $(function () {
@@ -172,7 +176,7 @@
                         }
                         // 档案管理员可以删除所有人
                         // if (loginName == row.createBy || showRemove) {
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteFile(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteFile(\'' + row.fileId + "',\'" + row.createBy +'\')"><i class="fa fa-remove"></i>删除</a>');
                         // }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
                         if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
@@ -195,8 +199,8 @@
     function playVideo(fileId, url, type) {
         if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
-                url: prefix + '/checkUserAllow',
-                data: {'projectManagerId': projectManagerId},
+                url: prefix + '/checkUserSee',
+                data: {'fileId': fileId},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {
@@ -248,6 +252,7 @@
     }
 
     function deleteFile(id,createBy){
+        debugger
         if (loginName == createBy || showRemove){
             $.operate.remove(id);
         }else{
@@ -256,49 +261,22 @@
     }
 
     function showVideo(content) {
-        if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
-            $.ajax({
-                url: prefix + '/checkUserAllow',
-                data: {'projectManagerId': projectManagerId},
-                type: 'post',
-                dataType: 'json',
-                success: function (result) {
-                    if (result.code == 500) {
-                        $.modal.alertWarning("无法播放");
-                        return;
-                    } else {
-                            layer.open({
-                                type: 1,
-                                title: false, //不显示标题栏
-                                shadeClose: true, //点击遮罩时关闭
-                                area: ['780px', '460px'],
-                                shade: 0.8,
-                                id: 'LAY_showImage_001', //设定一个id，防止重复弹出
-                                moveType: 1, //拖拽模式，0或者1
-                                content: content
-                            });
-                    }
-                }
-            })
-        }else{
-            layer.open({
-                type: 1,
-                title: false, //不显示标题栏
-                shadeClose: true, //点击遮罩时关闭
-                area: ['780px', '460px'],
-                shade: 0.8,
-                id: 'LAY_showImage_001', //设定一个id，防止重复弹出
-                moveType: 1, //拖拽模式，0或者1
-                content: content
-            });
-        }
+        layer.open({
+            type: 1,
+            title: false, //不显示标题栏
+            shadeClose: true, //点击遮罩时关闭
+            area: ['780px', '460px'],
+            shade: 0.8,
+            id: 'LAY_showImage_001', //设定一个id，防止重复弹出
+            moveType: 1, //拖拽模式，0或者1
+            content: content
+        });
     }
 
     function jpgToPdf(fileId, url, type) {
-        if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
-                url: prefix + '/checkUserAllow',
-                data: {'projectManagerId': projectManagerId},
+                url: prefix + '/checkUserSee',
+                data: {'fileId': fileId},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {
@@ -359,65 +337,13 @@
                     }
                 }
             })
-        }else{
-            $.ajax({
-                url: prefix + '/previewCount',
-                data: {'fileId': fileId},
-                type: 'post',
-                dataType: 'json',
-                success: function (result) {
-                    $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
-                }
-            });
-            var img = new Image();
-            img.src = url;
-            var height = img.height; // 原图片大小
-            var width = img.width; //原图片大小
-
-            var winHeight = $(window).height() - 80;  // 浏览器可视部分高度
-            var winWidth = $(window).width() - 100;  // 浏览器可视部分宽度
-
-            // 如果图片高度或者宽度大于限定的高度或者宽度则进行等比例尺寸压缩
-            if (height > winHeight || width > winWidth) {
-                // 1.原图片宽高比例 大于等于 图片框宽高比例
-                if (winWidth / winHeight <= width / height) {
-                    width = winWidth;   //以框的宽度为标准
-                    height = winWidth * (height / width);
-                }
-
-                // 2.原图片宽高比例 小于 图片框宽高比例
-                if (winWidth / winHeight > width / height) {
-                    width = winHeight * (width / height);
-                    height = winHeight;   //以框的高度为标准
-                }
-            }
-            var imgHtml = "<img src='" + img.src + "' width='" + width + "px' height='" + height + "px' />";
-            $.table.previewImg(url.split(','));
-            //showImage(imgHtml, width, height);
-            /*if (img.complete) {
-                console.log("12312312")
-                // 打印
-                showImage(imgHtml, width, height);
-                //showImage('<img src="' + url + '" alt="x" width="' + width + 'px" height="' + height + 'px">');
-            } else {
-                console.log("jyfdas")
-                // 加载完成执行
-                img.onload = function () {
-                    console.log("asdasd");
-                    console.log(img.src);
-                    // 打印
-                    // showImage('<img src="' + url + '" alt="x">');
-                    showImage('<img src="' + img.src + '" alt="x">', width, height);
-                };
-            }*/
-        }
     }
 
     function showImage(content, width, height) {
         if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
                 url: prefix + '/checkUserAllow',
-                data: {'projectManagerId': projectManagerId},
+                data: {'projectManagerId': userId},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {
@@ -455,8 +381,8 @@
     function toPdf1(fileId, url) {
         if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
-                url: prefix + '/checkUserAllow',
-                data: {'projectManagerId': projectManagerId},
+                url: prefix + '/checkUserSee',
+                data: {'fileId': fileId},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {
@@ -492,8 +418,8 @@
     function toPdf(fileId, url) {
         if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
-                url: prefix + '/checkUserAllow',
-                data: {'projectManagerId': projectManagerId},
+                url: prefix + '/checkUserSee',
+                data: {'fileId': fileId},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {
@@ -529,10 +455,11 @@
     }
 
     function downLoad(fileId, fileName) {
+        debugger
         if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
-                url: prefix + '/checkUserAllow',
-                data: {'projectManagerId': projectManagerId},
+                url: prefix + '/checkUserSee',
+                data: {'fileId': fileId},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {

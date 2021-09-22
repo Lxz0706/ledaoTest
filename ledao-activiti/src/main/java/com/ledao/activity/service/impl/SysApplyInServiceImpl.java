@@ -206,14 +206,31 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     List<String> jls = getUsers("zjl");
                     users.addAll(jls);
                 }else if(ids.contains("zjl")){
-                    List<String> jls = getUsers("documentAdmin");
-                    List<String> js = new ArrayList<>();
-                    for (String n: jls){
-                        if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
-                            js.add(n);
+                    boolean isNormalWork = false;
+                    SysApplyWorkflow workflow = new SysApplyWorkflow();
+                    workflow.setApplyId(sysApplyIn.getApplyId());
+                    List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
+                    if (workflows!=null){
+                        SysUser u = userMapper.selectUserByLoginName(workflows.get(0).getApproveUser());
+                        for (SysRole r:u.getRoles()) {
+                            if ("flgw".equals(r.getRoleKey())){
+                                isNormalWork = true;
+                            }
                         }
                     }
-                    users.addAll(js);
+                    if (isNormalWork){
+                        List<String> jls = getUsers("documentAdmin");
+                        List<String> js = new ArrayList<>();
+                        for (String n: jls){
+                            if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
+                                js.add(n);
+                            }
+                        }
+                        users.addAll(js);
+                    }else{
+                        List<String> jls = getUsers("flgw");
+                        users.addAll(jls);
+                    }
                 }else{
                     //判断是否存在直接主管
                     if (StringUtils.isNotEmpty(a.getRealCreateBy()) && "0".equals(sysApplyIn.getApproveStatu())){

@@ -222,10 +222,13 @@
 
   function changeFileTypeVal(val) {
     var fileScanTypeFormGroup = document.getElementById("fileScanTypeFormGroup")
+    var fileScanType = document.getElementById("fileScanType").value;
+    debugger
     if(val === '2') {
       fileScanTypeFormGroup.style.display = "block"
     } else {
       fileScanTypeFormGroup.style.display = "none"
+      document.getElementById("fileScanType").value = "";
     }
   }
 </script>

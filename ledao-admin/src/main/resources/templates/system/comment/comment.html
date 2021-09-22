@@ -52,7 +52,7 @@
                 </form>
             </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:comment:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
@@ -63,7 +63,7 @@
                     <i class="fa fa-remove"></i> 删除
                 </a>
 
-            </div>
+            </div>-->
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
@@ -83,8 +83,15 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "日志评论",
-                columns: [{
+                columns: [
+                    /*{
                     checkbox: true
+                },*/
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
                 {
                     field: 'id',

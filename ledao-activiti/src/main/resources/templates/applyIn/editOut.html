@@ -245,9 +245,6 @@
                 }
             }
         }
-        if ("bg"==roleType){
-            $("#debtorName").hide()
-        }
         if (isReturn == "0") {
             $("#realReturnTime").show()
             $("#planReturnTimeShow").show()
@@ -287,6 +284,9 @@
         if(documentTypeVal == "0") {
             projectName.style.display = 'block'
             debtorName.style.display = 'block'
+            if ("bg"==roleType){
+                $("#debtorName").hide()
+            }
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'

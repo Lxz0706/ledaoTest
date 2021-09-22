@@ -163,7 +163,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
             List<SysConfig> confs = configMapper.selectConfigList(config);
             boolean needSave = false;
             if (confs!=null&& confs.size()>0){
-                if ((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90){
+                if ((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90 && StringUtils.isNotEmpty(confs.get(0).getConfigValue())){
                     accessToken = confs.get(0).getConfigValue();
                 }else{
                     needSave = true;

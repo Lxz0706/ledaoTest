@@ -614,12 +614,7 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysApplyIn sysApplyIn)
     {
-        SysApplyIn sysapp = sysApplyInService.selectSysApplyInById(sysApplyIn.getApplyId());
-        if (sysapp.getApplyUser().equals(ShiroUtils.getLoginName())){
-            return toAjax(sysApplyInService.editSave(sysApplyIn));
-        }else{
-            return AjaxResult.error("不可操作");
-        }
+        return toAjax(sysApplyInService.editSave(sysApplyIn));
     }
 
     /**
@@ -630,13 +625,8 @@ public class SysApplyInController extends BaseController
     @ResponseBody
     public AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request)
     {
-        SysApplyIn sysapp = sysApplyInService.selectSysApplyInById(sysApplyIn.getApplyId());
-        if (sysapp.getApplyUser().equals(ShiroUtils.getLoginName())){
-            AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn,request);
-            return res;
-        }else{
-            return AjaxResult.error("不可操作");
-        }
+        AjaxResult res = sysApplyInService.applyEditSave(sysApplyIn,request);
+        return res;
     }
 
     @GetMapping("/documentTypeListOpen")

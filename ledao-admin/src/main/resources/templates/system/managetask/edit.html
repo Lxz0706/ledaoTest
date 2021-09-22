@@ -63,9 +63,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">预计回收金额：</label>
+                <label class="col-sm-3 control-label is-required">预计回收金额：</label>
                 <div class="col-sm-8">
-                    <input name="planBackMoney" th:field="*{planBackMoney}" class="form-control" type="text">
+                    <input name="planBackMoney" th:field="*{planBackMoney}" class="form-control required" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -232,6 +232,35 @@
                 //               alert(o+++"~~")
             });
         })
+
+        var realBeginTime=$("input[name='realBeginTime']").val();
+        if (realBeginTime == undefined || realBeginTime == ""){
+            realBeginTime = new Date();
+        }
+        $("input[name='realEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate:realBeginTime,
+            endDate:edate,
+            minView:2,
+            maxView:3
+        }).on('changeDate', function(ev){
+            //               alert(o+++"~~")
+        });
+
+        var planBeginTime=$("input[name='planBeginTime']").val();
+        $("input[name='planEndTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true,
+            startDate:planBeginTime,
+            endDate:edate,
+            minView:2,
+            maxView:3
+        }).on('changeDate', function(ev){
+            //               alert(o+++"~~")
+        });
     </script>
 </body>
 </html>

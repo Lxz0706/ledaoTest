@@ -120,7 +120,7 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="planReturnTime" id="planReturnTimeDate" class="form-control required" placeholder="yyyy-MM-dd" type="text">
+                    <input autocomplete="off" name="planReturnTime" id="planReturnTimeDate" class="form-control required" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
@@ -603,7 +603,8 @@
     $("input[name='planReturnTime']").datetimepicker({
         format: "yyyy-mm-dd",
         minView: "month",
-        autoclose: true
+        autoclose: true,
+        startDate: new Date()
     });
 
     // 实际归还时间

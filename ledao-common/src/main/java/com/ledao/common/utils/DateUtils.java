@@ -480,5 +480,46 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return da;
     }
 
+    /**
+     * 根据日期判断是星期几
+     * @param dt
+     * @return
+     */
+    public static String getWeekOfDate(Date dt) {
+        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dt);
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (w < 0)
+            w = 0;
+        return weekDays[w];
+    }
+
+    /**
+     * 判断该日期是否是该月的最后一天
+     *
+     * @param date
+     *            需要判断的日期
+     * @return
+     */
+    public static boolean isLastDayOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_MONTH) == calendar
+                .getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * 获取未来 第 past 天的日期
+     * @param past
+     * @return
+     */
+    public static Date getFetureDate(int past) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + past);
+        Date today = calendar.getTime();
+        return today;
+    }
+
 
 }

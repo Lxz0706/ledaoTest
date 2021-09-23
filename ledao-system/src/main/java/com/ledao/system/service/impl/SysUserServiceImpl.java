@@ -509,4 +509,9 @@ public class SysUserServiceImpl implements ISysUserService {
     public List<SysUser> selectUserByRoleKey(SysUser sysUser) {
         return userMapper.selectUserByRoleKey(sysUser);
     }
+
+    @Override
+    public List<SysUser> selectAllUserDepRole() {
+        return userMapper.selectAllUserDepRole();
+    }
 }

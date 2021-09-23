@@ -342,8 +342,8 @@ public class CommonController {
      */
     public static void charsetEnc(String fileUrl, String code) throws Exception {
         String context = "";
-        String cs = codeString(fileUrl);
-        InputStreamReader is = new InputStreamReader(new FileInputStream(fileUrl), cs);
+//        String cs = codeString(fileUrl);
+        InputStreamReader is = new InputStreamReader(new FileInputStream(fileUrl), "UTF-8");
         BufferedReader bdf = new BufferedReader(is);
         String str = null;
         while ((str = bdf.readLine()) != null) {

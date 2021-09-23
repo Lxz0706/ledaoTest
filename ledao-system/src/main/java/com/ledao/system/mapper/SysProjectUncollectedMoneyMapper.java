@@ -58,4 +58,6 @@ public interface SysProjectUncollectedMoneyMapper
      * @return 结果
      */
     public int deleteSysProjectUncollectedMoneyByIds(String[] ids);
+
+    List<SysProjectUncollectedMoney> selectSysProjectUncollectedMoneyByTimeList(SysProjectUncollectedMoney sysProjectUncollectedMoney);
 }

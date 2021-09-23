@@ -44,6 +44,15 @@
         <result property="status" column="dept_status"/>
     </resultMap>
 
+    <resultMap id="allUserDepRoleResult" type="SysUser">
+        <result property="roleKey" column="role_key"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="loginName" column="login_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="comOpenId" column="com_open_id"/>
+    </resultMap>
+
     <resultMap id="RoleResult" type="SysRole">
         <id property="roleId" column="role_id"/>
         <result property="roleName" column="role_name"/>
@@ -126,6 +135,21 @@
         <if test="formalFlag != null  and formalFlag != ''">and u.formal_flag = #{formalFlag}</if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}
+    </select>
+
+    <select id="selectAllUserDepRole" parameterType="SysUser" resultMap="allUserDepRoleResult">
+        SELECT
+            r.role_key,
+            b.dept_id,
+            b.dept_name,
+            a.login_name,
+            a.user_name,
+            a.com_open_id
+        FROM
+            sys_user a
+                LEFT JOIN sys_dept b ON a.dept_id = b.dept_id
+                LEFT JOIN sys_user_role c on a.user_id = c.user_id
+                LEFT JOIN sys_role r on c.role_id=r.role_id
     </select>
 
     <select id="selectUnallocatedList" parameterType="SysUser" resultMap="SysUserResult">

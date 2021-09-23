@@ -153,4 +153,6 @@ public interface SysUserMapper {
      * @return
      */
     public List<SysUser> selectUserByRoleKey(SysUser sysUser);
+
+    List<SysUser> selectAllUserDepRole();
 }

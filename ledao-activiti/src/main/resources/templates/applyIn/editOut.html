@@ -280,6 +280,29 @@
                 $("#isReceived").removeAttr("disabled");
             }
 
+        } else if(showNames && applyUser != loginNameUser) {
+            $("#companyName").attr("disabled", "disabled")
+            $("#isReturn").attr("disabled", "disabled")
+            $("#isOut").attr("disabled", "disabled")
+            $("#isReturned").attr("disabled", "disabled")
+            $("#isReceived").attr("disabled", "disabled")
+            $("#planReturnTime").attr("disabled", "disabled")
+            $("#isReceive").attr("disabled", "disabled")
+            $("#outReason").attr("disabled", "disabled")
+            $("#remarks").attr("disabled", "disabled")
+            $("#projectNameVal").attr("disabled", "disabled")
+            $("#debtorNameTip").attr("disabled", "disabled")
+            $("#applyUser").attr("disabled", "disabled")
+            $("#applyUserName").attr("disabled","disabled");
+            $("#planReturnTimeShow").show()
+            $("#realReturnTime").show()
+            $("#isOutShow").show()
+            $("#isReceiveShow").show()
+            $("#isReturnedShow").show()
+            $("#isReceivedShow").show()
+            $("#toolbar").hide()
+            $("a").attr("disabled",true);
+            $('.btn').removeAttr('onclick')
         }
         if(documentTypeVal == "0") {
             projectName.style.display = 'block'
@@ -542,14 +565,15 @@
                         //         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         //     }
                         // }
-                        if(showEdit) {
+                    if(showNames && applyUser != loginNameUser) {}
+                       else if(showEdit) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         } else if(showAllBut) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         } else if(showDelet) {
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        } else {}
+                        }
                         return actions.join('');
                     }
                 }]
@@ -718,7 +742,8 @@
     $("input[name='planReturnTime']").datetimepicker({
         format: "yyyy-mm-dd",
         minView: "month",
-        autoclose: true
+        autoclose: true,
+        startDate: new Date()
     });
 
     // 实际归还时间

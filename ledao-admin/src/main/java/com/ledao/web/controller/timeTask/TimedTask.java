@@ -90,6 +90,9 @@ public class TimedTask {
     @Autowired
     private ISysDictDataService sysDictDataService;
 
+    @Autowired
+    private ISysProjectProgressService sysProjectProgressService;
+
 
 
     public void timeTask() throws ParseException {
@@ -181,6 +184,41 @@ public class TimedTask {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 周五将日志推送给小组长
+     */
+    public void sendJourToXzz(){
+        SysUser sysUser = new SysUser();
+        sysUser.setRoleKey("thbzz");
+        List<SysUser>  users = sysUserService.selectUserByRoleKey(sysUser);
+        List<String> loginNames = new ArrayList<>();
+        for (SysUser u:users) {
+            loginNames.add(u.getLoginName());
+        }
+        String date = DateUtils.formatDateByPattern(new Date(),"yyyyMMdd");
+        SysJournal sj = new SysJournal();
+        sj.getParams().put("beginTime",date);;
+        List<SysJournal>  jours = sysJournalService.selectSysJournalList(sj);
+        for (SysJournal j:jours) {
+            if (loginNames.contains(j.getCreateBy()) && StringUtils.isNotEmpty(j.getProId())){
+                SysUser user = sysUserService.selectUserByLoginName(j.getCreateBy());
+                SysProject sysProject = new SysProject();
+                sysProject.setProjectId(Long.valueOf(j.getProId()));
+                sysProject.setProjectManagerId(user.getUserId());
+                List<SysProject> pros = sysProjectService.selectSysProjectList(sysProject);
+                if (pros!=null && pros.size()>0){
+//                    pros.get(0).getProjectId();
+                    SysProjectProgress pro = new SysProjectProgress();
+                    pro.setProjectManagementId(pros.get(0).getProjectId());
+                    pro.setProgress(j.getWorkDetail());
+                    pro.setDelFlag("0");
+                    pro.setProject("Y");
+                    sysProjectProgressService.insertSysProjectProgress(pro);
+                }
+            }
         }
     }
     
@@ -318,7 +356,7 @@ public class TimedTask {
                 if (StringUtils.isNotNull(u.getComOpenId())){
                     SysJournal sj = new SysJournal();
                     sj.setCreateBy(u.getLoginName());
-                    sj.getParams().put("beginTime",date);;
+                    sj.getParams().put("beginTime",date);
                     List<SysJournal>  jours = sysJournalService.selectSysJournalList(sj);
                     if (jours==null || jours.size()==0){
                         if ( "信息部".equals(u.getDeptName()) && "thbManager2".equals(u.getRoleKey())){

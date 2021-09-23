@@ -211,6 +211,7 @@
         <include refid="selectSysProjectVo"/>
         <where>
             del_flag = '0'
+            <if test="projectId != null ">and project_id = #{projectId}</if>
             <if test="projectName != null">and project_name like concat ('%', #{projectName},'%')</if>
             <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
             <if test="no != null  and no != ''">and no = #{no}</if>

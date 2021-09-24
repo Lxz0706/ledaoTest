@@ -468,6 +468,19 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
+     * 获取当前月后的第几个有的月份
+     * @param com
+     * @return
+     */
+    public static String getPreMonthByCount(int com) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(cal.MONTH, com);
+        SimpleDateFormat dft = new SimpleDateFormat("yyyyMM");
+        String preMonth = dft.format(cal.getTime());
+        return preMonth;
+    }
+
+    /**
      * 计算时间往后多少分钟
      * @param hour
      * @param date

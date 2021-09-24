@@ -446,12 +446,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         sysApplyInEntity.setApproveUser(String.join(",",users));
         sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
         sysApplyInEntity.setUpdateTime(new Date());
-        sendMsg(users,sysApplyInEntity);
+        sendMsg(users,sysApplyInEntity,"");
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
         return AjaxResult.success();
     }
 
-    public void sendMsg(List<String> users,SysApplyIn sysApplyInEntity){
+    public void sendMsg(List<String> users,SysApplyIn sysApplyInEntity,String refuseReason){
         for (String u : users){
             SysUser us = userMapper.selectUserByLoginName(u);
             String appName = "";
@@ -462,24 +462,27 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
             if (us!=null && StringUtils.isNotEmpty(us.getComOpenId())){
 
+                JSONObject parm = new JSONObject();
                 String first = "";
+                String thing14 = "-";
+                if (StringUtils.isNotEmpty(sysApplyInEntity.getRemarks())){
+                    thing14 = sysApplyInEntity.getRemarks();
+                }
                 if ("2".equals(sysApplyInEntity.getApproveStatu())){
                     first = "您的申请被拒绝";
+                    thing14 = "拒绝原因："+refuseReason;
                 }else if ("3".equals(sysApplyInEntity.getApproveStatu())){
                     first = "您提交的申请已处理";
                 } else{
                     first = "您有一条流程需要审批";
                 }
-                JSONObject parm = new JSONObject();
+
                 parm.put("first",first);
                 parm.put("toUser",us.getComOpenId());
                 parm.put("word1",appName);
                 parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
                 parm.put("word3",sysApplyInEntity.getApplyTime());
-                String thing14 = "-";
-                if (StringUtils.isNotEmpty(sysApplyInEntity.getRemarks())){
-                    thing14 = sysApplyInEntity.getRemarks();
-                }
+
 //                thing14 = "申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试请测试";
                 parm.put("word5",thing14);
                 String accessToken = configService.getWechatComAccessToken();
@@ -561,9 +564,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         users.addAll(js);
                     }else{
                         //判断是否存在直接主管
-                        if (StringUtils.isNotEmpty(a.getRealCreateBy()) && "0".equals(sysApplyIn.getApproveStatu())){
-                            sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
-                        }
+                        sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
                         if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
                             SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                             users.add(sysUser1.getLoginName());
@@ -694,7 +695,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             sysApplyInEntity.setRemarks(null);
             saveWorkFlow(sysApplyInEntity,workflow);
             users.add(sysApplyInEntity.getApplyUser());
-            sendMsg(users,sysApplyInEntity);
+            String refuseReason = sysApplyIn.getRemarks();
+            sendMsg(users,sysApplyInEntity,refuseReason);
         }
 
         //同意审批
@@ -774,10 +776,21 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 }
             }
             saveWorkFlow(sysApplyInEntity,workflow);
-            if ("3".equals(sysApplyInEntity.getApproveStatu()) || "2".equals(sysApplyInEntity.getApproveStatu())){
+            if ("2".equals(sysApplyInEntity.getApproveStatu())){
                 users.add(sysApplyInEntity.getApplyUser());
+            } else if ("3".equals(sysApplyInEntity.getApproveStatu())){
+                users.add(sysApplyInEntity.getApplyUser());
+                if ("0".equals(sysApplyInEntity.getApplyType())){
+                    //入库申请，审批的同时，发送给yangxu，xulinyi，qianwanping
+                    users.add("yangxudong");
+                    users.add("xulinyi");
+                    users.add("qianwanping");
+                }else if ("1".equals(sysApplyInEntity.getApplyType())){
+                    users.add("xulinyi");
+                    users.add("qianwanping");
+                }
             }
-            sendMsg(users,sysApplyInEntity);
+            sendMsg(users,sysApplyInEntity,"");
         }
         sysApplyInEntity.setUpdateTime(new Date());
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);

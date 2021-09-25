@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="deptName"    column="dept_name"    />
         <result property="userName"    column="user_name"    />
+        <result property="projectName"    column="project_Name"    />
     </resultMap>
 
     <sql id="selectSysJournalVo">
@@ -31,10 +32,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysJournalList" parameterType="SysJournal" resultMap="SysJournalResult">
         SELECT
         a.id,
-        c.dept_name,
+        pro.project_name,
         b.user_name,
         a.dep_id,
         a.pro_id,
+        c.dept_name,
         a.work_detail,
         a.shared,
         a.modular_order,
@@ -48,8 +50,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.reviser,
         a.update_time
         FROM
-        sys_journal a LEFT JOIN sys_user b on a.create_by = b.login_name
-        LEFT JOIN sys_dept c on b.dept_id = c.dept_id
+        sys_journal a
+        LEFT JOIN sys_project pro on a.pro_id= pro.project_id
+        LEFT JOIN sys_user b ON a.create_by = b.login_name
+        LEFT JOIN sys_dept c ON b.dept_id = c.dept_id
         <where>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and date_format(a.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
@@ -59,6 +63,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="createTime != null  and createTime != ''">
                 and date_format(a.create_time,'%Y%m%d') = date_format(#{createTime},'%Y%m%d')
+            </if>
+            <if test="projectName != null  and projectName != ''">and pro.project_name like concat('%',
+                #{projectName}, '%')
+            </if>
+            <if test="deptName != null  and deptName != ''">and c.dept_name like concat('%',
+                #{deptName}, '%')
             </if>
             <if test="depId != null  and depId != ''"> and a.dep_id = #{depId}</if>
             <if test="proId != null  and proId != ''"> and a.pro_id = #{proId}</if>

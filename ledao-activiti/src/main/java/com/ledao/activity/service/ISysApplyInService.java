@@ -124,4 +124,6 @@ public interface ISysApplyInService
     List<SysApplyIn> selectSysApplyInDocByPNameDetailList(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> selectSysApplyInDailyDetailList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> docListDobtDetailByPName(SysApplyIn sysApplyIn);
 }

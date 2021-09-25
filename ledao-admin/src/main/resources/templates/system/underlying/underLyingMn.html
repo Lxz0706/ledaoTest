@@ -62,10 +62,9 @@
 
     /*资产库列表-详细*/
     function detail(type) {
-
         if (type == 0){
             //投资
-            var url = prefix + '/muUnderlyingDataListsMu?dataType=&projectType=1';
+            var url = prefix + '/muUnderlyingProDataListsMu?dataType=&projectType=1';
             $.modal.parentTab("投资列表", url);
         }else{
             //投后

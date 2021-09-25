@@ -25,6 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectType"    column="project_type"    />
         <result property="createorName"    column="user_name"    />
         <result property="zckName"    column="zck_name"    />
+        <result property="proName"    column="project_name"    />
+        <result property="projectZckId"    column="project_zck_id"    />
     </resultMap>
 
     <sql id="selectSysUnderlyingDataVo">
@@ -74,10 +76,77 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+    <select id="selectSysUnderlyingProList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
+        SELECT DISTINCT
+        a.project_id,
+        b.project_name
+        FROM
+        sys_underlying_data a
+        LEFT JOIN sys_bgczzck b on a.project_id = b.id
+        <where>
+            <if test="parentId != null "> and a.parent_id = #{parentId}</if>
+            <if test="fileName != null  and fileName != ''"> and a.file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''"> and a.file_type = #{fileType}</if>
+            <if test="fileSize != null "> and a.file_size = #{fileSize}</if>
+            <if test="downloadableFlag != null  and downloadableFlag != ''"> and a.downloadable_flag = #{downloadableFlag}</if>
+            <if test="createor != null  and createor != ''"> and a.createor = #{createor}</if>
+            <if test="previewCount != null "> and a.preview_count = #{previewCount}</if>
+            <if test="downloadsCount != null "> and a.downloads_count = #{downloadsCount}</if>
+            <if test="updateor != null  and updateor != ''"> and a.updateor = #{updateor}</if>
+            <if test="projectId != null  and projectId != ''"> and a.project_id = #{projectId}</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and a.file_url = #{fileUrl}</if>
+            <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+            <if test="projectType != null  and projectType != ''"> and a.project_type = #{projectType}</if>
+            <if test="proName != null  and proName != ''"> and b.project_name like concat('%', #{proName}, '%')</if>
+        </where>
+        order by a.create_time desc
+    </select>
 
+
+
+
+    <select id="selectSysUnderlyingDebtList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
+        SELECT
+        distinct b.project_name,
+        b.project_id
+        FROM
+        sys_underlying_data a
+        left join sys_user u on a.create_by = u.login_name
+        LEFT JOIN sys_project b ON a.project_id = b.project_id
+        LEFT JOIN sys_project_zck ack ON b.project_zck_id = ack.project_zck_id
+        <where>
+            a.project_type = #{projectType}
+            <if test="parentId != null "> and a.parent_id = #{parentId}</if>
+            <if test="params.startTime != null and params.startTime != ''"><!-- 开始时间检索 -->
+                and date_format(a.create_time,'%Y%m%d') &gt;= date_format(#{params.startTime},'%Y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(a.create_time,'%Y%m%d') &lt;= date_format(#{params.endTime},'%Y%m%d')
+            </if>
+            <if test="createorName != null and createorName != ''"> and u.user_name like concat('%', #{createorName}, '%')</if>
+            <if test="fileName != null  and fileName != ''"> and a.file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileType != null  and fileType != ''"> and a.file_type = #{fileType}</if>
+            <if test="fileSize != null "> and a.file_size = #{fileSize}</if>
+            <if test="downloadableFlag != null  and downloadableFlag != ''"> and a.downloadable_flag = #{downloadableFlag}</if>
+            <if test="createor != null  and createor != ''"> and a.createor = #{createor}</if>
+            <if test="previewCount != null "> and a.preview_count = #{previewCount}</if>
+            <if test="downloadsCount != null "> and a.downloads_count = #{downloadsCount}</if>
+            <if test="updateor != null  and updateor != ''"> and a.updateor = #{updateor}</if>
+            <if test="projectId != null  and projectId != ''"> and a.project_id = #{projectId}</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and a.file_url = #{fileUrl}</if>
+            <if test="proType != null  and proType != ''"> and ack.project_zck_type = #{proType}</if>
+            <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+            <if test="zckName != null  and zckName != ''"> and ack.zck_name like concat('%', #{zckName}, '%')</if>
+            <if test="proName != null  and proName != '' and projectType ==0"> and b.project_name like concat('%', #{proName}, '%')</if>
+            <if test="proName != null  and proName != '' and projectType ==1"> and ack.project_name like concat('%', #{proName}, '%')</if>
+            <if test="projectZckId != null  and projectZckId != ''"> and ack.project_zck_id = #{projectZckId}</if>
+        </where>
+        order by a.create_time desc
+    </select>
     <select id="selectSysUnderlyingNoLikeDataList" parameterType="SysUnderlyingData" resultMap="SysUnderlyingDataResult">
         SELECT
-        distinct ack.zck_name
+        distinct ack.zck_name,
+        ack.project_zck_id
         FROM
         sys_underlying_data a
         left join sys_user u on a.create_by = u.login_name

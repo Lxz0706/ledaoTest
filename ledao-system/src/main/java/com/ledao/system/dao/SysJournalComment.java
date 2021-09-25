@@ -1,9 +1,13 @@
 package com.ledao.system.dao;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 日志评论对象 sys_journal_comment
@@ -18,6 +22,9 @@ public class SysJournalComment extends BaseEntity
     /** id */
     private Long id;
 
+    /** id */
+    private String no;
+
     /** 日志 */
     @Excel(name = "日志")
     private String journalId;
@@ -29,6 +36,10 @@ public class SysJournalComment extends BaseEntity
     /** 日志内容 */
     @Excel(name = "日志内容")
     private String workDetail;
+
+    /** 日志内容 */
+    @Excel(name = "日志内容")
+    private String chatDetail;
 
     /** 预备字段1 */
     @Excel(name = "预备字段1")
@@ -51,6 +62,43 @@ public class SysJournalComment extends BaseEntity
     private String reviser;
 
     private String userName;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTimeComment;
+
+    public Date getCreateTimeComment() {
+        return createTimeComment;
+    }
+
+    public void setCreateTimeComment(Date createTimeComment) {
+        this.createTimeComment = createTimeComment;
+    }
+
+    public String getChatDetail() {
+        return chatDetail;
+    }
+
+    public void setChatDetail(String chatDetail) {
+        this.chatDetail = chatDetail;
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
+
+    private List<SysJournalComment> details;
+
+    public List<SysJournalComment> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<SysJournalComment> details) {
+        this.details = details;
+    }
 
     public String getUserName() {
         return userName;

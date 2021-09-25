@@ -11,7 +11,8 @@
                     <input name="projectZckType" id="projectZckType" th:value="*{projectZckType}" type="hidden">
                     <input name="documentType" id="documentType" th:value="*{documentType}" type="hidden">
                     <input name="roleType" id="roleType" th:value="*{roleType}" type="hidden">
-                    <input name="projectName" id="projectName" th:value="*{projectName}" type="text">
+                    <input name="projectName" id="projectName" th:value="*{projectName}" type="hidden">
+                    <input name="debtorName" id="debtorName" th:value="*{debtorName}" type="hidden">
                     <div class="select-list">
                         <ul>
                         	<input name="applyType" value="0" type="hidden"/>
@@ -31,7 +32,7 @@
                                 <label>项目名称：</label>
                                 <input type="text" name="projectName"/>
                             </li>-->
-                            <li>
+                            <li class="companyNameShow">
                                 <label>公司名称：</label>
                                 <select id="companyName" name="companyName"
                                         th:with="type=${@dict.getType('sys_company_name')}"
@@ -47,9 +48,9 @@
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
                             </li>
-                            <li id="debtorName">
-                                <label>债务人名称：</label>
-                                <input type="text" name="debtorName"/>
+                            <li id="fileName">
+                                <label>文件名称：</label>
+                                <input type="text" name="fileName"/>
                             </li>
                             <li>
                                 <label>实际提交人：</label>
@@ -94,19 +95,27 @@
         var prefix = ctx + "applyIn";
         var documentType = document.getElementById("documentType").value;
         var roleType = document.getElementById("roleType").value;
+        var projectZckType = document.getElementById("projectZckType").value;
+        var projectName = document.getElementById("projectName").value;
+        //非项目类，隐藏资产包，债务人
         var showPro = false;
+        var showDebt = false;
+        var proNameLableShow = "";
 
         $(function() {
+            if (roleType=="bg"){
+                proNameLableShow = "项目名称";
+                showDebt = false;
+            }else{
+                proNameLableShow = "资产包名称";
+                showDebt = true;
+            }
             if (documentType==0){
                 showPro = true;
-                $("#projectName").show();
-                $("#debtorName").show();
             }else{
-                $("#projectName").hide();
-                $("#debtorName").hide();
             }
             var options = {
-                url: prefix + "/docListDetail",
+                url: prefix + "/docListDetailByPName",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/docEdit/{id}",
                 removeUrl: prefix + "/remove",
@@ -130,9 +139,16 @@
 		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
 		            }
                 },*/
+
+                    {
+                        title: "序号",
+                        formatter: function (value, row, index) {
+                            return $.table.serialNumber(index);
+                        }
+                    },
                 {
                     field: 'projectName',
-                    title: '项目名称',
+                    title: proNameLableShow,
                     formatter: function(value, item, index) {
                         return $.table.tooltip(item.projectName,10);
                     },
@@ -151,7 +167,7 @@
                     formatter: function(value, item, index) {
                         return strLength(item.debtorName);
                     },
-                    visible: showPro
+                    visible: showPro && showDebt
                 },
                 {
                     field: 'applyUserName',
@@ -217,8 +233,14 @@
         });
 
         function back() {
-            var url = prefix+"/documentTypeListBack?documentType="+documentType+"&roleType="+roleType;
-            $.modal.parentTab("档案类型", url);
+            if (roleType == "thb" || roleType == "inve"){
+                var url = prefix+"/docApplyInZcbDetail?documentType="+documentType+"&roleType="+roleType+"&projectName="+projectName+"&projectZckType="+projectZckType;
+                $.modal.parentTab("档案类型", url);
+            }else{
+                var url = prefix+"/docProTypeMu?documentType="+documentType+"&roleType="+roleType;
+                $.modal.parentTab("档案类型", url);
+            }
+
         }
 
         function getDictStr(value){
@@ -235,16 +257,16 @@
         function applyEditSave(){
         }
         function changeDocumentType(val) {
-            var projectName = document.getElementById("projectName")
+            // var projectName = document.getElementById("projectName")
             var debtorName = document.getElementById("debtorName")
             if(val === '0') {
-                projectName.style.display = "block"
+                // projectName.style.display = "block"
                 debtorName.style.display = "block"
             } else if(val === '1' || val === '2') {
-                projectName.style.display = "none"
+                // projectName.style.display = "none"
                 debtorName.style.display = "none"
             } else {
-                projectName.style.display = "block"
+                // projectName.style.display = "block"
                 debtorName.style.display = "block"
             }
         }

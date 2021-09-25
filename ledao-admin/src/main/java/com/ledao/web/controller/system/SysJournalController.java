@@ -62,8 +62,9 @@ public class SysJournalController extends BaseController
         List<SysRole> getRoles = user.getRoles();
         boolean isZjl = false;
         for (SysRole sysRole : getRoles) {
-            if ("zjl".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey())) {
+            if ("zjl".equals(sysRole.getRoleKey()) || "admin".equals(user.getLoginName())) {
                 isZjl = true;
+                continue;
             }
         }
         if (!isZjl){
@@ -73,6 +74,7 @@ public class SysJournalController extends BaseController
         List<SysJournal> list = sysJournalService.selectSysJournalList(sysJournal);
         return getDataTable(list);
     }
+
 
     /**
      * 导出日志列表

@@ -69,6 +69,16 @@ public class SysUnderlyingData extends BaseEntity
 
     private String zckName;
 
+    private String projectZckId;
+
+    public String getProjectZckId() {
+        return projectZckId;
+    }
+
+    public void setProjectZckId(String projectZckId) {
+        this.projectZckId = projectZckId;
+    }
+
     public String getZckName() {
         return zckName;
     }

@@ -1,5 +1,6 @@
 package com.ledao.system.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.ledao.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +94,27 @@ public class SysJournalCommentServiceImpl implements ISysJournalCommentService
     public int deleteSysJournalCommentById(Long id)
     {
         return sysJournalCommentMapper.deleteSysJournalCommentById(id);
+    }
+
+    @Override
+    public List<SysJournalComment> selectSysJournalCommentListNoParent(SysJournalComment sysJournalComment) {
+        List<SysJournalComment> comTotals = new ArrayList<>();
+        List<SysJournalComment> comments = sysJournalCommentMapper.selectSysJournalCommentListNoParent(sysJournalComment);
+        for (int i=0;i< comments.size();i++) {
+            comments.get(i).setNo(String.valueOf(i+1));
+            comTotals.add(comments.get(i));
+            SysJournalComment s = new SysJournalComment();
+            s.setParentId(comments.get(i).getId().toString());
+            List<SysJournalComment> details = sysJournalCommentMapper.selectSysJournalCommentList(s);
+//            com.setDetails(details);
+            for (SysJournalComment c: details) {
+                c.setWorkDetail(c.getChatDetail());
+                c.setNo(null);
+                c.setCreateTime(c.getCreateTimeComment());
+                c.setUserName(c.getUserName()+" 回复：");
+                comTotals.add(c);
+            }
+        }
+        return comTotals;
     }
 }

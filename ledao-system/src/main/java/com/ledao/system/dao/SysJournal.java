@@ -30,6 +30,8 @@ public class SysJournal extends BaseEntity
     @Excel(name = "项目id")
     private String proId;
 
+    private String projectName;
+
     /** 日志内容 */
     @Excel(name = "日志内容")
     private String workDetail;
@@ -63,6 +65,14 @@ public class SysJournal extends BaseEntity
     private String reviser;
 
     private long deptId;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public long getDeptId() {
         return deptId;

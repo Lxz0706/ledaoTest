@@ -100,6 +100,16 @@ public class SysJournalCommentController extends BaseController
         return toAjax(sysJournalCommentService.insertSysJournalComment(sysJournalComment));
     }
 
+    @PostMapping("/listCommentDtail")
+    @ResponseBody
+    public TableDataInfo listCommentDtail(SysJournalComment sysJournalComment)
+    {
+        List<SysJournalComment> list = sysJournalCommentService.selectSysJournalCommentListNoParent(sysJournalComment);
+        return getDataTable(list);
+    }
+
+
+
     /**
      * 修改日志评论
      */

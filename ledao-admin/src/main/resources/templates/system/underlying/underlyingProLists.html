@@ -8,34 +8,34 @@
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <form id="formId">
-                <input name="proType" type="hidden" id="proType" th:value="${dataType}"/>
+                <input name="proType" type="hidden" id="proType" th:value="${proType}"/>
                 <input name="projectType" type="hidden" id="projectType" th:value="${projectType}"/>
                 <input name="projectId" type="hidden" id="projectId" th:value="${projectId}"/>
                 <div class="select-list">
                 <ul>
-                    <!--<li id="projectName">
+                    <li id="projectName">
                         <label>项目名称：</label>
                         <input type="text" name="proName"/>
-                    </li>-->
-                    <li id="fileName">
+                    </li>
+                    <!--<li id="fileName">
                         <label>文件名称：</label>
                         <input type="text" name="fileName"/>
                     </li>
                     <li id="createorName">
                         <label>创建人：</label>
                         <input type="text" name="createorName"/>
-                    </li>
+                    </li>-->
                    <!-- <li id="createTime">
 &lt;!&ndash;                        <label>时间：</label>&ndash;&gt;
                         <label>时间：</label>
                         <input type="text" style="display: inline-block" class="time-input" name="createTime" placeholder="开始时间" />
                     </li>-->
-                    <li class="select-time">
+                  <!--  <li class="select-time">
                         <label>创建时间：</label>
                         <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[startTime]"/>
                         <span>-</span>
                         <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
-                    </li>
+                    </li>-->
                     <li>
                         <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                         <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -70,9 +70,9 @@
     var downLoadFlag = [[${@permission.hasPermi('system:underlyingdata:downLoad')}]];
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var prefix = ctx + "system/underlyingdata";
-    var projectType = document.getElementById("projectType").value;
-    var proType = document.getElementById("proType").value;
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var proType = document.getElementById("proType").value;
+    var projectType = document.getElementById("projectType").value;
     var showRemove = false;
 
     $(function () {
@@ -83,7 +83,7 @@
             }
         }
         var options = {
-            url: prefix + "/listLying",
+            url: prefix + "/listLyingPros",
             createUrl: prefix + "/add/{id}",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -110,12 +110,18 @@
                     }
                 },
                 {
+                    field: 'projectId',
+                    title: 'projectId',
+                    visible: false
+                },
+                {
                     field: 'proName',
                     title: '项目名称',
                     formatter: function(value, row, index) {
-                        return $.table.tooltip(value,10);
-                    }
-                },
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.projectId + "',\'" + row.proName +'\')">' + value + '</a>';
+                    },
+                }
+                /*,
                 {
                     field: 'fileName',
                     title: '文件名称',
@@ -173,8 +179,8 @@
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteFile(\'' + row.fileId + "',\'" + row.createBy +'\')"><i class="fa fa-remove"></i>删除</a>');
                         // }
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
-                        if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
-                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
+                        if ('doc' == fileType || 'docx' == fileType /!*|| 'xls' == fileType
+                                || 'xlsx' == fileType*!/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                         } else if ('pdf' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + row.fileUrl + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
@@ -186,10 +192,16 @@
                         }
                         return actions.join('');
                     }
-                }]
+                }*/
+                ]
         };
         $.table.init(options);
     });
+
+    function detail(projectId,proName){
+        var url = prefix+"/muUnderlyingDataListsMu?projectId="+projectId+"&proType="+proType+"&projectType="+projectType;
+        $.modal.parentTab(proName, url);
+    }
     function playVideo(fileId, url, type) {
         if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
@@ -559,7 +571,7 @@
             var url = ctx + "system/underlyingdata/documentDetailTypeListMu";
             $.modal.parentTab("投后部项目管理", url);
         }else{
-            var url = ctx + "system/underlyingdata/muUnderlyingProDataListsMu?dataType="+proType+"&projectType="+projectType;
+            var url = ctx + "system/underlyingdata/muList";
             $.modal.parentTab("投后部项目管理", url);
         }
 

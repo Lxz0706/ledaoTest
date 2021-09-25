@@ -27,7 +27,7 @@
                                 </select>
                             </li>-->
                             <li id="projectName">
-                                <label>资产包名称：</label>
+                                <label id="proNameLable"></label>
                                 <input type="text" name="projectName"/>
                             </li>
                             <!--<li>
@@ -95,8 +95,16 @@
         var roleType = document.getElementById("roleType").value;
         var projectZckType = document.getElementById("projectZckType").value;
         var showPro = false;
+        var proNameLableShow = "";
 
         $(function() {
+            if (roleType=="bg"){
+                document.getElementById('proNameLable').innerHTML = "项目名称：";
+                proNameLableShow = "项目名称";
+            }else{
+                document.getElementById('proNameLable').innerHTML = "资产包名称：";
+                proNameLableShow = "资产包名称";
+            }
             if (documentType==0){
                 showPro = true;
                 $("#projectName").show();
@@ -138,7 +146,7 @@
                 },
                 {
                     field: 'projectName',
-                    title: '资产包名称',
+                    title: proNameLableShow,
                     formatter: function(value, item, index) {
                         // return $.table.tooltip(item.projectName,10);
                         return '<a href="javascript:void(0)" onclick="detail(\'' + item.projectName  + '\')">' + value + '</a>';

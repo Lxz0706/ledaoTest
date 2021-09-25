@@ -1,7 +1,10 @@
 package com.ledao.system.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
+import com.ledao.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysJournalMapper;
@@ -20,6 +23,9 @@ public class SysJournalServiceImpl implements ISysJournalService
 {
     @Autowired
     private SysJournalMapper sysJournalMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
 
     /**
      * 查询日志
@@ -42,7 +48,18 @@ public class SysJournalServiceImpl implements ISysJournalService
     @Override
     public List<SysJournal> selectSysJournalList(SysJournal sysJournal)
     {
-        return sysJournalMapper.selectSysJournalList(sysJournal);
+        List<SysJournal> sj = sysJournalMapper.selectSysJournalList(sysJournal);
+        for (SysJournal s:sj) {
+            List<String> userNames = new ArrayList<>();
+            if (StringUtils.isNotEmpty(s.getShared())){
+                String[] shares = s.getShared().split(",");
+                for (String userId:shares) {
+                    userNames.add(userMapper.selectUserById(Long.valueOf(userId)).getUserName());
+                }
+            }
+            s.setShared(String.join(",",userNames));
+        }
+        return sj;
     }
 
     /**

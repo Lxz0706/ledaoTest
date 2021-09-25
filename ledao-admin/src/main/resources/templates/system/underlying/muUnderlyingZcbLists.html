@@ -109,10 +109,15 @@
                     }
                 },
                 {
+                    field: 'projectZckId',
+                    title: 'projectZckId',
+                    visible: false
+                },
+                {
                     field: 'zckName',
                     title: '资产包',
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.zckName + '\')">' + value + '</a>';
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.zckName + "',\'" + row.projectZckId +'\')">' + value + '</a>';
                     }
                 }/*,
                 {
@@ -190,8 +195,8 @@
         };
         $.table.init(options);
     });
-    function detail(zckName){
-        var url = prefix+"/muUnderlyingDataListsZcbMu?projectType="+projectType+"&zckName="+zckName+"&proType="+proType;
+    function detail(zckName,projectZckId){
+        var url = prefix+"/muUnderlyingDataPro?projectType="+projectType+"&projectZckId="+projectZckId+"&proType="+proType;
         $.modal.parentTab(zckName, url);
     }
 

@@ -58,4 +58,6 @@ public interface ISysJournalCommentService
      * @return 结果
      */
     public int deleteSysJournalCommentById(Long id);
+
+    List<SysJournalComment> selectSysJournalCommentListNoParent(SysJournalComment sysJournalComment);
 }

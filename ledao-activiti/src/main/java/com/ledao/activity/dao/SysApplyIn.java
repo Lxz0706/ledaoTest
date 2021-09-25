@@ -145,6 +145,16 @@ public class SysApplyIn extends BaseEntity
 
     private String inType;
 
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     public String getInType() {
         return inType;
     }

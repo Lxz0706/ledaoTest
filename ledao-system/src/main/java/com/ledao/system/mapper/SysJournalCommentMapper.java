@@ -58,4 +58,6 @@ public interface SysJournalCommentMapper
      * @return 结果
      */
     public int deleteSysJournalCommentByIds(String[] ids);
+
+    List<SysJournalComment> selectSysJournalCommentListNoParent(SysJournalComment sysJournalComment);
 }

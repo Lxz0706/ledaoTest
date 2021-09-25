@@ -8,17 +8,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="journalId"    column="journal_id"    />
         <result property="parentId"    column="parent_id"    />
-        <result property="workDetail"    column="work_detail"    />
         <result property="remarks1"    column="remarks1"    />
         <result property="remarks2"    column="remarks2"    />
         <result property="remarks3"    column="remarks3"    />
         <result property="createBy"    column="create_by"    />
         <result property="creator"    column="creator"    />
-        <result property="createTime"    column="create_time"    />
+        <result property="createTimeComment"    column="create_time_comment"    />
         <result property="updateBy"    column="update_by"    />
         <result property="reviser"    column="reviser"    />
         <result property="updateTime"    column="update_time"    />
         <result property="userName"    column="user_name"    />
+        <result property="chatDetail"    column="chat_detail"    />
     </resultMap>
 
     <sql id="selectSysJournalCommentVo">
@@ -43,6 +43,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviser != null  and reviser != ''"> and com.reviser = #{reviser}</if>
         </where>
         order by com.create_time desc
+    </select>
+
+    <select id="selectSysJournalCommentListNoParent" parameterType="SysJournalComment" resultMap="SysJournalCommentResult">
+        SELECT
+            b.user_name,
+            a.id,
+            a.journal_id,
+            a.parent_id,
+            a.chat_detail,
+            a.remarks1,
+            a.remarks2,
+            a.remarks3,
+            a.create_by,
+            a.creator,
+            a.create_time_comment,
+            a.update_by,
+            a.reviser,
+            a.update_time
+        FROM
+            sys_journal_comment a
+                LEFT JOIN sys_user b on a.create_by=b.login_name
+        where a.journal_id = #{journalId} and a.remarks1 = '0' order by a.create_time_comment desc
     </select>
     
     <select id="selectSysJournalCommentById" parameterType="Long" resultMap="SysJournalCommentResult">

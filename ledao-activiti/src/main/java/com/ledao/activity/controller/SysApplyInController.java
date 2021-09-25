@@ -257,12 +257,23 @@ public class SysApplyInController extends BaseController
         return getDataTable(list);
     }
 
+
     @PostMapping("/docListDailyDetail")
     @ResponseBody
     public TableDataInfo docListDailyDetail(SysApplyIn sysApplyIn)
     {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInDailyDetailList(sysApplyIn);
+        return getDataTable(list);
+    }
+
+
+    @PostMapping("/docListDobtDetailByPName")
+    @ResponseBody
+    public TableDataInfo docListDobtDetailByPName(SysApplyIn sysApplyIn)
+    {
+        startPage();
+        List<SysApplyIn> list = sysApplyInService.docListDobtDetailByPName(sysApplyIn);
         return getDataTable(list);
     }
 
@@ -581,7 +592,7 @@ public class SysApplyInController extends BaseController
      * @throws IOException
      */
     @GetMapping(value="/code")
-    public Object twoCode(Long documentId, HttpServletResponse response) throws IOException {
+    public Object twoCode(Long documentId, HttpServletResponse response) throws Exception {
         JSONObject data=new JSONObject();
         String accessToken = null;
         try{
@@ -592,6 +603,9 @@ public class SysApplyInController extends BaseController
             /*accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
             System.out.println("accessToken;"+accessToken);*/
             accessToken = configService.getWechatAccessToken();
+            if (StringUtils.isEmpty(accessToken)){
+                throw new RuntimeException("获取accessToken失败");
+            }
             com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken,"");
             List<String> openIds = new ArrayList<>();
 //            openIds = (List<String>) res.get("data.openId");
@@ -684,8 +698,10 @@ public class SysApplyInController extends BaseController
         if ("thb".equals(roleType)){
             return "docList/documentDetailTypeList";
         }else if ("bg".equals(roleType)){
-            return "docList/docApplyIn";
+            //大型单体的项目类/资产包页面
+            return "docList/docApplyInZcb";
         }else{
+            //投资的项目类/资产包页面
             return "docList/docApplyInZcb";
         }
     }
@@ -699,11 +715,24 @@ public class SysApplyInController extends BaseController
         mmap.put("roleType",roleType);
         mmap.put("documentType",documentType);
         mmap.put("projectName",projectName);
-        if ("thb".equals(roleType)){
-            return "docList/docApplyInZcbDetail";
+        if ("bg".equals(roleType)){
+            return "docList/docApplyInZcbDebtDetail";
         }else{
             return "docList/docApplyInZcbDetail";
         }
+//        return "docList/docApplyInZcbDebtDetail";
+    }
+
+    @GetMapping("/docApplyInZcbDebtDetail")
+    public String docApplyInZcbDebtDetail(String roleType, String documentType,String projectName,String projectZckType,String debtorName, ModelMap mmap)
+    {
+        mmap.put("projectZckType",projectZckType);
+        mmap.put("roleType",roleType);
+        mmap.put("documentType",documentType);
+        mmap.put("projectName",projectName);
+        mmap.put("debtorName",debtorName);
+        //投资详情展示页面
+        return "docList/docApplyInZcbDebtDetail";
     }
 
     @GetMapping("/docApplyInDailyDetail")

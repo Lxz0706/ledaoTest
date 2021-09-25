@@ -103,4 +103,6 @@ public interface SysApplyInMapper
     List<SysApplyIn> selectSysApplyInDocByPNameDetailList(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> selectSysApplyInDailyDetailList(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> docListDobtDetailByPName(SysApplyIn sysApplyIn);
 }

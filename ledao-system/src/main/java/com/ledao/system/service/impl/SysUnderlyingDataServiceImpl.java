@@ -177,6 +177,11 @@ public class SysUnderlyingDataServiceImpl implements ISysUnderlyingDataService
         return sly;
     }
 
+    /**
+     * 投后项目
+     * @param sysUnderlyingData
+     * @return
+     */
     @Override
     public List<SysUnderlyingData> selectSysUnderlyingNoLikeDetailDataList(SysUnderlyingData sysUnderlyingData) {
         List<SysUnderlyingData> sly = sysUnderlyingDataMapper.selectSysUnderlyingNoLikeDetailDataList(sysUnderlyingData);
@@ -190,6 +195,23 @@ public class SysUnderlyingDataServiceImpl implements ISysUnderlyingDataService
                 s.setProName(pro!=null?pro.getProjectName():"");
             }
         }
+        return sly;
+    }
+
+    /**
+     * 大型单体项目
+     * @param sysUnderlyingData
+     * @return
+     */
+    @Override
+    public List<SysUnderlyingData> selectSysUnderlyingProList(SysUnderlyingData sysUnderlyingData) {
+        List<SysUnderlyingData> sly = sysUnderlyingDataMapper.selectSysUnderlyingProList(sysUnderlyingData);
+        return sly;
+    }
+
+    @Override
+    public List<SysUnderlyingData> selectSysUnderlyingDebtList(SysUnderlyingData sysUnderlyingData) {
+        List<SysUnderlyingData> sly = sysUnderlyingDataMapper.selectSysUnderlyingDebtList(sysUnderlyingData);
         return sly;
     }
 }

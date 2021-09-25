@@ -11,13 +11,14 @@
                 <input name="proType" type="hidden" id="proType" th:value="${proType}"/>
                 <input name="projectType" type="hidden" id="projectType" th:value="${projectType}"/>
                 <input type="hidden" name="projectZckType" id="projectZckType" th:value="*{proType}"/>
-                <input name="zckName" type="hidden" id="zckName" th:value="${zckName}"/>
+                <input name="projectId" type="hidden" id="projectId" th:value="${projectId}"/>
+                <input name="projectZckId" type="hidden" id="projectZckId" th:value="${projectZckId}"/>
                 <div class="select-list">
                 <ul>
-                    <li id="projectName">
-                        <label>项目名称：</label>
+                   <!-- <li id="projectName">
+                        <label>债务人名称：</label>
                         <input type="text" name="proName"/>
-                    </li>
+                    </li>-->
                     <li id="fileName">
                         <label>文件名称：</label>
                         <input type="text" name="fileName"/>
@@ -117,7 +118,7 @@
                 },
                 {
                     field: 'proName',
-                    title: '项目名称',
+                    title: '债务人名称',
                     formatter: function(value, row, index) {
                         return $.table.tooltip(value,10);
                     }
@@ -440,8 +441,7 @@
         }
     }
 
-    function downLoad(fileId, fileName) {
-        debugger
+    function downLoad(fileId, fileUrl) {
         if (projectType == 0 && projectZckType == "automaticSwitch" && !showRemove) {
             $.ajax({
                 url: prefix + '/checkUserSee',
@@ -462,7 +462,7 @@
                                 $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
                             }
                         })
-                        window.location.href = prefix + "/download/resource?resource=" + fileName + "&delete=" + false;
+                        window.location.href = prefix + "/download/resource?resource=" + fileUrl + "&delete=" + false;
                     }
                 }
             })
@@ -497,7 +497,8 @@
     function back() {
         var projectType = document.getElementById("projectType").value;
         var proType = document.getElementById("proType").value;
-        var url = ctx + "system/underlyingdata/muUnderlyingDataListsMu?proType="+proType+"&projectType="+projectType;
+        var projectZckId = document.getElementById("projectZckId").value;
+        var url = ctx + "system/underlyingdata/muUnderlyingDataPro?projectType="+projectType+"&projectZckId="+projectZckId+"&proType="+proType;
         $.modal.parentTab("底层资料管理", url);
     }
 

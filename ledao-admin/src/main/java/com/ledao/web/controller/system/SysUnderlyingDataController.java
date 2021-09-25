@@ -85,6 +85,20 @@ public class SysUnderlyingDataController extends BaseController
         return getDataTable(list);
     }
 
+    /**
+     * 底层资料大型单体显示项目列表
+     * @param sysUnderlyingData
+     * @return
+     */
+    @PostMapping("/listLyingPros")
+    @ResponseBody
+    public TableDataInfo listLyingPros(SysUnderlyingData sysUnderlyingData)
+    {
+        startPage();
+        List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingProList(sysUnderlyingData);
+        return getDataTable(list);
+    }
+
     @PostMapping("/listLyingNoLikeDetail")
     @ResponseBody
     public TableDataInfo listLyingNoLikeDetail(SysUnderlyingData sysUnderlyingData)
@@ -100,6 +114,20 @@ public class SysUnderlyingDataController extends BaseController
     {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingNoLikeDataList(sysUnderlyingData);
+        return getDataTable(list);
+    }
+
+    /**
+     * 投后部获取债务人信息
+     * @param sysUnderlyingData
+     * @return
+     */
+    @PostMapping("/listLyingDebt")
+    @ResponseBody
+    public TableDataInfo listLyingDebt(SysUnderlyingData sysUnderlyingData)
+    {
+        startPage();
+        List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingDebtList(sysUnderlyingData);
         return getDataTable(list);
     }
 
@@ -155,8 +183,9 @@ public class SysUnderlyingDataController extends BaseController
     }
 
     @GetMapping("/muUnderlyingDataListsMu")
-    public String muUnderlyingDataListsMu(String proType, String projectType, ModelMap mmap)
+    public String muUnderlyingDataListsMu(String projectId,String proType, String projectType, ModelMap mmap)
     {
+        mmap.put("projectId",projectId);
         mmap.put("proType",proType);
         mmap.put("projectType",projectType);
         if ("0".equals(projectType)){
@@ -166,13 +195,35 @@ public class SysUnderlyingDataController extends BaseController
         }
     }
 
-    @GetMapping("/muUnderlyingDataListsZcbMu")
-    public String muUnderlyingDataListsZcbMu( String projectType,String zckName, String proType,ModelMap mmap)
+    @GetMapping("/muUnderlyingProDataListsMu")
+    public String muUnderlyingProDataListsMu(String projectId,String proType, String projectType, ModelMap mmap)
     {
-        mmap.put("zckName",zckName);
+        mmap.put("proType",proType);
+        mmap.put("projectType",projectType);
+        if ("0".equals(projectType)){
+            return prefix + "/muUnderlyingZcbLists";
+        }else{
+            return prefix + "/underlyingProLists";
+        }
+    }
+
+    @GetMapping("/muUnderlyingDataListsZcbMu")
+    public String muUnderlyingDataListsZcbMu( String projectType,String projectId,String projectZckId, String proType,ModelMap mmap)
+    {
+        mmap.put("projectId",projectId);
+        mmap.put("projectZckId",projectZckId);
         mmap.put("proType",proType);
         mmap.put("projectType",projectType);
         return prefix + "/muUnderlyingZcbDetailLists";
+    }
+
+    @GetMapping("/muUnderlyingDataPro")
+    public String muUnderlyingDataPro( String projectType,String projectZckId, String proType,ModelMap mmap)
+    {
+        mmap.put("projectZckId",projectZckId);
+        mmap.put("proType",proType);
+        mmap.put("projectType",projectType);
+        return prefix + "/muUnderlyingZcbProLists";
     }
 
     @PostMapping("/documentDetailTypeList")
@@ -294,13 +345,16 @@ public class SysUnderlyingDataController extends BaseController
     public AjaxResult checkUserSee(long fileId) {
         SysUser user = ShiroUtils.getSysUser();
         SysUnderlyingData sd = sysUnderlyingDataService.selectSysUnderlyingDataById(fileId);
+        if ("admin".equals(user.getLoginName())){
+            return AjaxResult.success();
+        }
         if (sd.getProjectType()==0){
             SysProject pro = sysProjectService.selectSysProjectById(sd.getProjectId());
             SysProjectZck zck = sysProjectZckService.selectSysProjectZckById(pro.getProjectZckId());
             if ("serve".equals(zck.getProjectZckType())){
                 List<SysRole> getRoles = user.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if ("thbManager".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey()) || "tzbzz".equals(sysRole.getRoleKey())) {
+                    if ("thbManager".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey()) || "thbzz".equals(sysRole.getRoleKey())||"thbCommon".equals(sysRole.getRoleKey())) {
                         return AjaxResult.success();
                     }
                 }

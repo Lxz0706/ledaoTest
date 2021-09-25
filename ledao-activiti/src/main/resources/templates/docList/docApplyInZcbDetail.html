@@ -31,30 +31,30 @@
                                 <label>项目名称：</label>
                                 <input type="text" name="projectName"/>
                             </li>-->
-                            <li>
+                           <!-- <li>
                                 <label>公司名称：</label>
                                 <select id="companyName" name="companyName"
                                         th:with="type=${@dict.getType('sys_company_name')}"
                                         data-none-selected-text="请选择">
-                                    <option value="">--请选择数据--</option>
+                                    <option value="">&#45;&#45;请选择数据&#45;&#45;</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
-                            <li class="select-time">
+                            </li>-->
+                            <!--<li class="select-time">
                                 <label>申请时间：</label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
-                            </li>
+                            </li>-->
                             <li id="debtorName">
                                 <label>债务人名称：</label>
                                 <input type="text" name="debtorName"/>
                             </li>
-                            <li>
+                            <!--<li>
                                 <label>实际提交人：</label>
                                 <input type="text" name="applyUserName"/>
-                            </li>
+                            </li>-->
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -95,6 +95,7 @@
         var documentType = document.getElementById("documentType").value;
         var roleType = document.getElementById("roleType").value;
         var projectZckType = document.getElementById("projectZckType").value;
+        var projectName = document.getElementById("projectName").value;
         var showPro = false;
 
         $(function() {
@@ -107,7 +108,7 @@
                 $("#debtorName").hide();
             }
             var options = {
-                url: prefix + "/docListDetailByPName",
+                url: prefix + "/docListDobtDetailByPName",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/docEdit/{id}",
                 removeUrl: prefix + "/remove",
@@ -119,11 +120,11 @@
                    /* {
                     checkbox: true
                 },*/
-                {
+                /*{
                     field: 'applyId',
                     title: 'id',
                     visible: false
-                },
+                },*/
                 /*{
                     field: 'documentType',
                     title: '档案类别',
@@ -131,7 +132,7 @@
 		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
 		            }
                 },*/
-                {
+                /*{
                     field: 'projectName',
                     title: '资产包名称',
                     formatter: function(value, item, index) {
@@ -144,15 +145,23 @@
                     formatter: function(value, item, index) {
 		            	return $.table.tooltip(getDictStr($.table.selectDictLabel(companyDictDatas, item.companyName)),10);
 		            }
-                },
+                },*/
+                    {
+                        title: "序号",
+                        formatter: function (value, row, index) {
+                            return $.table.serialNumber(index);
+                        }
+                    },
                 {
                     field: 'debtorName',
                     title: '债务人名称',
                     formatter: function(value, item, index) {
-                        return strLength(item.debtorName);
+                        // return $.table.tooltip(item.projectName,10);
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + item.debtorName  + '\')">' + value + '</a>';
                     },
                     visible: showPro
-                },
+                }
+                /*,
                 {
                     field: 'applyUserName',
                     title: '实际提交人'
@@ -193,7 +202,7 @@
                     field: 'reviserName',
                     title: '修改人名称'
                 },
-               /* {
+               /!* {
                     field: 'erweima',
                     title: '二维码',
                     align: 'center',
@@ -202,7 +211,7 @@
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)"><i class="fa fa-edit"></i>查看</a> ');
                         return actions.join('');
                     }
-                },*/
+                },*!/
                 {
                     title: '操作',
                     align: 'center',
@@ -211,7 +220,8 @@
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.editLook(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>查看</a> ');
                         return actions.join('');
                     }
-                }]
+                }*/
+                ]
             };
             $.table.init(options);
         });
@@ -220,11 +230,19 @@
             if (roleType == "thb"){
                 var url = prefix+"/documentFile?documentType="+documentType+"&roleType="+roleType+"&dataType="+projectZckType;
                 $.modal.parentTab("档案类型", url);
+            }else if(roleType == "inve"){
+                var url = prefix+"/docProTypeMu?roleType="+roleType+"&documentType="+documentType;
+                $.modal.parentTab("档案类型", url);
             }else{
-                var url = prefix+"/docProTypeMu?documentType="+documentType+"&roleType="+roleType;
+                var url = prefix+"/docApplyInZcbDetail?documentType="+documentType+"&roleType="+roleType;
                 $.modal.parentTab("档案类型", url);
             }
 
+        }
+
+        function detail(debtorName){
+            var url = prefix+"/docApplyInZcbDebtDetail?documentType="+documentType+"&roleType="+roleType+"&projectName="+projectName+"&projectZckType="+projectZckType+"&debtorName="+debtorName;
+            $.modal.parentTab(projectName, url);
         }
 
         function getDictStr(value){

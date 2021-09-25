@@ -72,4 +72,8 @@ public interface SysUnderlyingDataMapper
     List<SysUnderlyingData> selectSysUnderlyingNoLikeDataList(SysUnderlyingData sysUnderlyingData);
 
     List<SysUnderlyingData> selectSysUnderlyingNoLikeDetailDataList(SysUnderlyingData sysUnderlyingData);
+
+    List<SysUnderlyingData> selectSysUnderlyingProList(SysUnderlyingData sysUnderlyingData);
+
+    List<SysUnderlyingData> selectSysUnderlyingDebtList(SysUnderlyingData sysUnderlyingData);
 }

@@ -479,7 +479,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
                 parm.put("first",first);
                 parm.put("toUser",us.getComOpenId());
-                parm.put("word1",appName);
+                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getLoginName());
                 parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
                 parm.put("word3",sysApplyInEntity.getApplyTime());
 
@@ -1150,6 +1150,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         return sysApplyInMapper.selectSysApplyInDailyDetailList(sysApplyIn);
     }
 
+    @Override
+    public List<SysApplyIn> docListDobtDetailByPName(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.docListDobtDetailByPName(sysApplyIn);
+    }
+
     public int insertApply(SysApplyInImport apply,SysApplyIn applyIn){
         applyIn.setApplyUser(apply.getApplyUser());
         applyIn.setApplyTime(apply.getApplyTime());
@@ -1280,10 +1285,29 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         documentFileMapper.updateSysDocumentFile(sysDocumentFile);
                     }
                 }
+                List<String> users = new ArrayList<>();
+                SysApplyWorkflow workflow = new SysApplyWorkflow();
+                workflow.setApplyId(sysApplyIn.getApplyId());
+                workflow.setApproveStatu("7");
+                List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
+                if (workflows!=null && workflows.size()>0){
+                    users.add(workflows.get(0).getCreateBy());
+                    sendMsg(users,sysApplyIn,"");
+                }
+
             }
         }
         if ("8".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturned())){
             sysApplyIn.setApproveStatu("9");
+            List<String> users = new ArrayList<>();
+            SysApplyWorkflow workflow = new SysApplyWorkflow();
+            workflow.setApplyId(sysApplyIn.getApplyId());
+            workflow.setApproveStatu("7");
+            List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
+            if (workflows!=null && workflows.size()>0){
+                users.add(workflows.get(0).getCreateBy());
+                sendMsg(users,sysApplyIn,"");
+            }
         }
         if ("9".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceived())){
             sysApplyIn.setApproveStatu("3");
@@ -1300,7 +1324,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     documentFileMapper.updateSysDocumentFile(sysDocumentFile);
                 }
             }
+            List<String> users = new ArrayList<>();
+            users.add(sysApplyIn.getApplyUser());
+            sendMsg(users,sysApplyIn,"");
         }
+
 	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
     }
 }

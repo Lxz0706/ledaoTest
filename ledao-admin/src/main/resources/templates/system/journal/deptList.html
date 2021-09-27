@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('日志列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:journal:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>-->
+                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:journal:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:journal:remove')}]];
+        var prefix = ctx + "system/journal";
+
+        $(function() {
+            var options = {
+                url: prefix + "/deptList",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "日志",
+                columns: [
+                    /*{
+                    checkbox: true
+                },*/
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'deptName',
+                    title: '部门',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.deptId + "',\'" + row.deptName + '\')">' + row.deptName + '</a>';
+                    }
+                }
+                ]
+            };
+            $.table.init(options);
+        });
+
+        /*$("input[name='createTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });*/
+
+        function detail(deptId,deptName){
+            var url = prefix+"/userListByDepId?parentId="+deptId;
+            $.modal.parentTab(deptName, url);
+        }
+
+        function showComment(id){
+            var url = '/system/comment/commentList?id=' + id;
+            $.modal.opens("评论列表", url);
+        }
+    </script>
+</body>
+</html>

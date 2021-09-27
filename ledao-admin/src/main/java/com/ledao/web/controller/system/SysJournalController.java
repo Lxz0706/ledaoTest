@@ -42,11 +42,39 @@ public class SysJournalController extends BaseController
     @Autowired
     private ISysDeptService sysDeptService;
 
+    @Autowired
+    private ISysDeptService deptService;
+
 //    @RequiresPermissions("system:journal:view")
     @GetMapping()
     public String journal()
     {
+        return prefix + "/deptList";
+    }
+
+
+    @GetMapping("/jouralListByLoginName")
+    public String jouralListByLoginName(String loginName,Long parentId,ModelMap mmap)
+    {
+        mmap.put("loginName",loginName);
+        mmap.put("parentId",parentId);
         return prefix + "/journal";
+    }
+
+    @GetMapping("/userListByDepId")
+    public String userListByDepId(Long parentId,ModelMap mmap)
+    {
+        mmap.put("parentId",parentId);
+        return prefix+ "/userListByDept";
+    }
+
+    @PostMapping("/userListByDepParentId")
+    @ResponseBody
+    public TableDataInfo userListByDepParentId(SysDept dept)
+    {
+        startPage();
+        List<SysUser> deps = deptService.selectUserListByDepId(dept);
+        return getDataTable(deps);
     }
 
     /**
@@ -73,6 +101,17 @@ public class SysJournalController extends BaseController
         }
         List<SysJournal> list = sysJournalService.selectSysJournalList(sysJournal);
         return getDataTable(list);
+    }
+
+    @PostMapping("/deptList")
+    @ResponseBody
+    public TableDataInfo deptList()
+    {
+        SysDept dept = new SysDept();
+        Long parendId = 100L;
+        dept.setParentId(parendId);
+        List<SysDept> deps = deptService.selectDeptOneLevelList(dept);
+        return getDataTable(deps);
     }
 
 

@@ -9,15 +9,9 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input name="createBy" id="createBy" th:value="*{loginName}" type="hidden">
+                        <input name="parentId" id="parentId" th:value="*{parentId}" type="hidden">
                         <ul>
-                            <!--<li class="select-time">
-                                <label>日期：</label>
-                                <input type="text" class="time-input"  name="createTime"/>
-                            </li>-->
-                            <li>
-                                <label>部门：</label>
-                                <input type="text" name="deptName"/>
-                            </li>
                             <li>
                                 <label>项目：</label>
                                 <input type="text" name="projectName"/>
@@ -28,39 +22,6 @@
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
                             </li>
-
-                            <!--<li>
-                                <label>日志内容：</label>
-                                <input type="text" name="workDetail"/>
-                            </li>
-                            <li>
-                                <label>分享人：</label>
-                                <input type="text" name="shared"/>
-                            </li>
-                            <li>
-                                <label>模块顺序：</label>
-                                <input type="text" name="modularOrder"/>
-                            </li>
-                            <li>
-                                <label>预备字段1：</label>
-                                <input type="text" name="remarks1"/>
-                            </li>
-                            <li>
-                                <label>预备字段2：</label>
-                                <input type="text" name="remarks2"/>
-                            </li>
-                            <li>
-                                <label>预备字段3：</label>
-                                <input type="text" name="remarks3"/>
-                            </li>
-                            <li>
-                                <label>创建人名称：</label>
-                                <input type="text" name="creator"/>
-                            </li>
-                            <li>
-                                <label>修改人名称：</label>
-                                <input type="text" name="reviser"/>
-                            </li>-->
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -71,15 +32,9 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:journal:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>-->
-                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
-                    <i class="fa fa-edit"></i> 修改
+                <a class="btn btn-info" onclick="back()" >
+                    <i class="fa fa-backward"></i> 返回
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
-                    <i class="fa fa-remove"></i> 删除
-                </a>-->
 
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -91,6 +46,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:journal:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:journal:remove')}]];
+        var parentId = document.getElementById("parentId").value;
         var prefix = ctx + "system/journal";
 
         $(function() {
@@ -198,6 +154,11 @@
             minView: "month",
             autoclose: true
         });*/
+
+        function back(){
+            var url = prefix+"/userListByDepId?parentId="+parentId;
+            $.modal.parentTab("人员列表", url);
+        }
 
         function showComment(id){
             var url = '/system/comment/commentList?id=' + id;

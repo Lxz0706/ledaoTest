@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('日志列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <input name="parentId" id="parentId" th:value="*{parentId}" type="hidden">
+                    <ul>
+                        <li>
+                            <label>姓名：</label>
+                            <input type="text" name="userName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-info" onclick="back()" >
+                <i class="fa fa-backward"></i> 返回
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:journal:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:journal:remove')}]];
+    var prefix = ctx + "system/journal";
+    var parentId = document.getElementById("parentId").value;
+
+    $(function() {
+        var options = {
+            url: prefix + "/userListByDepParentId",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "日志",
+            columns: [
+                /*{
+                checkbox: true
+            },*/
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'userName',
+                    title: '人员',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.loginName + "',\'" + row.userName + '\')">' + row.userName + '</a>';
+                    }
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+    /*$("input[name='createTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });*/
+
+    function detail(loginName,userName){
+        var url = prefix+"/jouralListByLoginName?loginName="+loginName+"&parentId="+parentId;
+        $.modal.parentTab(userName, url);
+    }
+
+    function back(){
+        var url = prefix;
+        $.modal.parentTab("部门列表", url);
+    }
+
+    function showComment(id){
+        var url = '/system/comment/commentList?id=' + id;
+        $.modal.opens("评论列表", url);
+    }
+</script>
+</body>
+</html>

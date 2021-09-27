@@ -29,6 +29,8 @@ public class SysDept extends BaseEntity {
      */
     private String ancestors;
 
+    private String userName;
+
     /**
      * 部门名称
      */
@@ -78,6 +80,14 @@ public class SysDept extends BaseEntity {
      * 是否正式部门（0正式 1测试）
      */
     private String formalFlag;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Long getDeptId() {
         return deptId;

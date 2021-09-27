@@ -5,6 +5,7 @@ import java.util.List;
 import com.ledao.common.core.dao.Ztree;
 import com.ledao.system.dao.SysDept;
 import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 部门管理 服务层
@@ -115,4 +116,8 @@ public interface ISysDeptService {
      * @return 结果
      */
     public List<SysDept> selectDeptByParentId(Long parentId);
+
+    List<SysUser> selectUserListByDepId(SysDept dept);
+
+    List<SysDept> selectDeptOneLevelList(SysDept dept);
 }

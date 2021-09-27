@@ -72,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="depId != null  and depId != ''"> and a.dep_id = #{depId}</if>
             <if test="proId != null  and proId != ''"> and a.pro_id = #{proId}</if>
+            <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
             <if test="workDetail != null  and workDetail != ''"> and a.work_detail = #{workDetail}</if>
             <if test="shared != null  and shared != ''"> and a.shared = #{shared}</if>
             <if test="modularOrder != null "> and a.modular_order = #{modularOrder}</if>

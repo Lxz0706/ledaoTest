@@ -190,22 +190,23 @@
                     }
                 },
                 {
+                    title: '处置任务',
+                    formatter: function (value, row, index) {
+                        if (userId == row.projectManagerId || loginName == 'xukai'){
+                            return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">任务进度</a>';
+                        }else{
+                            return '-';
+                        }
+                    }
+                },
+                {
                     field: 'recapture',
                     title: '处置回现',
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
                     }
                 },
-                {
-                    title: '处置任务',
-                    formatter: function (value, row, index) {
-                         if (userId == row.projectManagerId || loginName == 'xukai'){
-                             return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">任务进度</a>';
-                         }else{
-                             return '-';
-                         }
-                    }
-                },
+
                 {
                     field: 'projectManager',
                     title: '项目经理'

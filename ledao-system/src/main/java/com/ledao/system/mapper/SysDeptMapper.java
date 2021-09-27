@@ -122,4 +122,6 @@ public interface SysDeptMapper {
      * @return 结果
      */
     public List<SysDept> selectDeptByParentId(Long parentId);
+
+    List<SysDept> selectDeptOneLevelList(SysDept dept);
 }

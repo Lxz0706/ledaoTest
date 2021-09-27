@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.mapper.SysUserMapper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ import com.ledao.system.service.ISysDeptService;
 public class SysDeptServiceImpl implements ISysDeptService {
     @Autowired
     private SysDeptMapper deptMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
 
     /**
      * 查询部门管理数据
@@ -287,5 +292,19 @@ public class SysDeptServiceImpl implements ISysDeptService {
     @Override
     public List<SysDept> selectDeptByParentId(Long parentId) {
         return deptMapper.selectDeptByParentId(parentId);
+    }
+
+    @Override
+    public List<SysUser> selectUserListByDepId(SysDept dept) {
+            SysUser u = new SysUser();
+            u.setDeptId(dept.getParentId());
+            u.setUserName(dept.getUserName());
+            List<SysUser> users = userMapper.selectUserList(u);
+        return users;
+    }
+
+    @Override
+    public List<SysDept> selectDeptOneLevelList(SysDept dept) {
+        return deptMapper.selectDeptOneLevelList(dept);
     }
 }

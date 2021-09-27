@@ -534,5 +534,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return today;
     }
 
+    /**
+     * 判断date2是否在date1后面
+     * @param past
+     * @return
+     */
+    public static boolean isTimeEaily(Date date1,Date date2) {
+        return date2.getTime()-date1.getTime()>0;
+    }
+
 
 }

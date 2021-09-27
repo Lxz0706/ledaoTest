@@ -5,8 +5,12 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.constant.WeChatConstants;
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
+import com.ledao.system.dao.SysDept;
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +43,7 @@ public class SysTrainAdminController extends BaseController
     @Autowired
     private ISysTrainAdminService sysTrainAdminService;
 
+
 //    @RequiresPermissions("system:train:view")
     @GetMapping()
     public String train()
@@ -58,6 +63,8 @@ public class SysTrainAdminController extends BaseController
         List<SysTrainAdmin> list = sysTrainAdminService.selectSysTrainAdminList(sysTrainAdmin);
         return getDataTable(list);
     }
+
+
 
     /**
      * 导出签到管理列表
@@ -89,6 +96,7 @@ public class SysTrainAdminController extends BaseController
         return prefix + "/trainUser";
     }
 
+
     /**
      * 新增保存签到管理
      */
@@ -98,6 +106,9 @@ public class SysTrainAdminController extends BaseController
     @ResponseBody
     public AjaxResult addSave(SysTrainAdmin sysTrainAdmin)
     {
+        if(!DateUtils.isTimeEaily(sysTrainAdmin.getStartTime(),sysTrainAdmin.getEndTime())){
+            return AjaxResult.error("结束时间不能早于开始时间！");
+        }
         return toAjax(sysTrainAdminService.insertSysTrainAdmin(sysTrainAdmin));
     }
 

@@ -377,18 +377,17 @@ public class TimedTask {
                     sj.getParams().put("beginTime",date);
                     List<SysJournal>  jours = sysJournalService.selectSysJournalList(sj);
                     if (jours==null || jours.size()==0){
-                        if ( "信息部".equals(u.getDeptName()) && "thbManager2".equals(u.getRoleKey())){
-                            if (isWeekEndDay){
-
+                        if (isWeekEndDay){
+                            if (( "信息部".equals(u.getDeptName()) && "thbManager2".equals(u.getRoleKey()))
+                            ){
                                 List<SysUser> us = new ArrayList<>();
                                 us.add(u);
-                                sendJournalTask(us,parmStr);
+                                sendDailyJournalTask(us,parmStr);
                             }
-                        }else if(("重组并购".equals(u.getDeptName()) && "bgczManager".equals(u.getRoleKey()))
-                                || ("重组并购".equals(u.getDeptName()) && "bgczCommon".equals(u.getRoleKey()))){
+                        }else if( ( "法律风控部".equals(u.getDeptName()) && "flgw".equals(u.getRoleKey()))){
                             List<SysUser> us = new ArrayList<>();
                             us.add(u);
-                            sendJournalTask(us,parmStr);
+                            sendDailyJournalTask(us,parmStr);
                         }
                     }
                 }
@@ -435,6 +434,42 @@ public class TimedTask {
      * 日志推送公共方法
      * @param
      */
+    private void sendDailyJournalTask(List<SysUser> us,Map<String,String> parmStr){
+        for (SysUser u:us) {
+            if (StringUtils.isNotEmpty(u.getComOpenId()) && !"n".equals(u.getIsDailyRemind())){
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                //发布人
+                parm.put("first",parmStr.get("first"));
+                parm.put("word1",parmStr.get("word1"));
+//                        计划时间
+                parm.put("word2", StringUtils.isNotEmpty(parmStr.get("word2"))?parmStr.get("word2"):"-");
+//                        任务名称
+                parm.put("word3",StringUtils.isNotEmpty(parmStr.get("word3"))?parmStr.get("word3"):"-");
+//                        任务状态
+                parm.put("word4",StringUtils.isNotEmpty(parmStr.get("word4"))?parmStr.get("word4"):"-");
+                parm.put("word5","-");
+
+//                        任务接收人
+                parm.put("toUser",u.getComOpenId());
+//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken",accessToken);
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("ThQueueCommon");
+                String dataStr = JSONObject.toJSONString(parm);
+                System.out.println("--------------------推送日报填写提醒给："+u.getLoginName()+"----------------------");
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+                stadingTime();
+            }
+        }
+    }
+
+    /**
+     * 日志推送公共方法
+     * @param
+     */
     private void sendJournalTask(List<SysUser> us,Map<String,String> parmStr){
         for (SysUser u:us) {
             if (StringUtils.isNotEmpty(u.getComOpenId())){
@@ -452,8 +487,8 @@ public class TimedTask {
                 parm.put("word5","-");
 
 //                        任务接收人
-//                parm.put("toUser",u.getComOpenId());
-                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+                parm.put("toUser",u.getComOpenId());
+//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken",accessToken);
                 // 创建名称为投后队列
@@ -488,8 +523,8 @@ public class TimedTask {
                 }
 
 //                        任务接收人
-//                parm.put("toUser",u.getComOpenId());
-                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+                parm.put("toUser",u.getComOpenId());
+//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken",accessToken);
                 // 创建名称为投后队列

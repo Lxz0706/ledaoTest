@@ -479,7 +479,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
                 parm.put("first",first);
                 parm.put("toUser",us.getComOpenId());
-                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getLoginName());
+                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
                 parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
                 parm.put("word3",sysApplyInEntity.getApplyTime());
 

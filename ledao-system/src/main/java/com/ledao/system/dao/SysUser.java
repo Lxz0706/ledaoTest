@@ -164,6 +164,16 @@ public class SysUser extends BaseEntity {
 
     private String deptName;
 
+    private String isDailyRemind;
+
+    public String getIsDailyRemind() {
+        return isDailyRemind;
+    }
+
+    public void setIsDailyRemind(String isDailyRemind) {
+        this.isDailyRemind = isDailyRemind;
+    }
+
     public String getDeptName() {
         return deptName;
     }

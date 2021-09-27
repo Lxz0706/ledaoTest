@@ -30,6 +30,7 @@
         <result property="remark" column="remark"/>
         <result property="directorId" column="director_id"/>
         <result property="director" column="director"/>
+        <result property="isDailyRemind" column="is_daily_remind"/>
         <result property="formalFlag" column="formal_flag"/>
         <association property="dept" column="dept_id" javaType="SysDept" resultMap="deptResult"/>
         <collection property="roles" javaType="java.util.List" resultMap="RoleResult"/>
@@ -51,6 +52,7 @@
         <result property="loginName" column="login_name"/>
         <result property="userName" column="user_name"/>
         <result property="comOpenId" column="com_open_id"/>
+        <result property="isDailyRemind" column="is_daily_remind"/>
     </resultMap>
 
     <resultMap id="RoleResult" type="SysRole">
@@ -63,7 +65,7 @@
     </resultMap>
 
     <sql id="selectUserVo">
-        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email,u.open_id,u.com_open_id,
+        select  u.is_daily_remind, u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email,u.open_id,u.com_open_id,
         u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip,
         u.login_date, u.create_time, u.remark,u.director_id, u.director,
        		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
@@ -144,7 +146,8 @@
             b.dept_name,
             a.login_name,
             a.user_name,
-            a.com_open_id
+            a.com_open_id,
+            a.is_daily_remind
         FROM
             sys_user a
                 LEFT JOIN sys_dept b ON a.dept_id = b.dept_id

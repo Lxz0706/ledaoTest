@@ -102,6 +102,8 @@ public class SysJournalCommentServiceImpl implements ISysJournalCommentService
         List<SysJournalComment> comments = sysJournalCommentMapper.selectSysJournalCommentListNoParent(sysJournalComment);
         for (int i=0;i< comments.size();i++) {
             comments.get(i).setNo(String.valueOf(i+1));
+            comments.get(i).setWorkDetail(comments.get(i).getChatDetail());
+            comments.get(i).setCreateTime(comments.get(i).getCreateTimeComment());
             comTotals.add(comments.get(i));
             SysJournalComment s = new SysJournalComment();
             s.setParentId(comments.get(i).getId().toString());

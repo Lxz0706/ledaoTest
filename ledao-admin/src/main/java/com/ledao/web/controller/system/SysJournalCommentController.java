@@ -36,14 +36,14 @@ public class SysJournalCommentController extends BaseController
     @Autowired
     private ISysJournalCommentService sysJournalCommentService;
 
-    @RequiresPermissions("system:comment:view")
+//    @RequiresPermissions("system:comment:view")
     @GetMapping()
     public String comment()
     {
         return prefix + "/comment";
     }
 
-    @RequiresPermissions("system:comment:viewList")
+//    @RequiresPermissions("system:comment:viewList")
     @GetMapping("/commentList")
     public String commentList(Long id, ModelMap mmap)
     {
@@ -54,7 +54,7 @@ public class SysJournalCommentController extends BaseController
     /**
      * 查询日志评论列表
      */
-    @RequiresPermissions("system:comment:list")
+//    @RequiresPermissions("system:comment:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysJournalComment sysJournalComment)
@@ -67,7 +67,7 @@ public class SysJournalCommentController extends BaseController
     /**
      * 导出日志评论列表
      */
-    @RequiresPermissions("system:comment:export")
+//    @RequiresPermissions("system:comment:export")
     @Log(title = "日志评论", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -90,7 +90,7 @@ public class SysJournalCommentController extends BaseController
     /**
      * 新增保存日志评论
      */
-    @RequiresPermissions("system:comment:add")
+//    @RequiresPermissions("system:comment:add")
     @Log(title = "日志评论", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -124,7 +124,7 @@ public class SysJournalCommentController extends BaseController
     /**
      * 修改保存日志评论
      */
-    @RequiresPermissions("system:comment:edit")
+//    @RequiresPermissions("system:comment:edit")
     @Log(title = "日志评论", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -136,7 +136,7 @@ public class SysJournalCommentController extends BaseController
     /**
      * 删除日志评论
      */
-    @RequiresPermissions("system:comment:remove")
+//    @RequiresPermissions("system:comment:remove")
     @Log(title = "日志评论", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

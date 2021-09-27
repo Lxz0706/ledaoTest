@@ -111,10 +111,14 @@ public class SysJournalController extends BaseController
         SysUser user = ShiroUtils.getSysUser();
         List<SysRole> getRoles = user.getRoles();
         boolean isZjl = false;
-        for (SysRole sysRole : getRoles) {
-            if ("zjl".equals(sysRole.getRoleKey()) || "admin".equals(user.getLoginName())) {
-                isZjl = true;
-                continue;
+        if ("admin".equals(user.getLoginName())){
+            isZjl=true;
+        }else{
+            for (SysRole sysRole : getRoles) {
+                if ("zjl".equals(sysRole.getRoleKey())) {
+                    isZjl = true;
+                    continue;
+                }
             }
         }
         SysDept dept = new SysDept();

@@ -80,9 +80,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remarks2 != null  and remarks2 != ''"> and a.remarks2 = #{remarks2}</if>
             <if test="remarks3 != null  and remarks3 != ''"> and a.remarks3 = #{remarks3}</if>
             <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
-            <if test="deptId != null  and deptId != ''"> and c.dept_id = #{deptId}</if>
             <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
         </where>
+        order by  a.create_time DESC
     </select>
     
     <select id="selectSysJournalById" parameterType="Long" resultMap="SysJournalResult">

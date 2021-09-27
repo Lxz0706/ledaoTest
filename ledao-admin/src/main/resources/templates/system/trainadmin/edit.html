@@ -9,9 +9,9 @@
         <form class="form-horizontal m" id="form-train-edit" th:object="${sysTrainAdmin}">
             <input name="trainId" th:field="*{trainId}" type="hidden">
             <div class="form-group">
-                <label class="col-sm-3 control-label">课程名称：</label>
+                <label class="col-sm-3 control-label is-required">课程名称：</label>
                 <div class="col-sm-8">
-                    <textarea name="trainName" class="form-control">[[*{trainName}]]</textarea>
+                    <textarea name="trainName" class="form-control required">[[*{trainName}]]</textarea>
                 </div>
             </div>
            <!-- <div class="form-group">
@@ -21,15 +21,15 @@
                 </div>
             </div>-->
             <div class="form-group">
-                <label class="col-sm-3 control-label">培训讲师：</label>
+                <label class="col-sm-3 control-label  is-required">培训讲师：</label>
                 <div class="col-sm-8">
-                    <textarea name="trainTeacher" class="form-control">[[*{trainTeacher}]]</textarea>
+                    <textarea name="trainTeacher" class="form-control required">[[*{trainTeacher}]]</textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">培训地点：</label>
+                <label class="col-sm-3 control-label  is-required">培训地点：</label>
                 <div class="col-sm-8">
-                    <textarea name="trainPlace" class="form-control">[[*{trainPlace}]]</textarea>
+                    <textarea name="trainPlace" class="form-control required">[[*{trainPlace}]]</textarea>
                 </div>
             </div>
             <div class="form-group">    
@@ -59,20 +59,20 @@
                 </div>
             </div>-->
             <div class="form-group">    
-                <label class="col-sm-3 control-label">培训开始时间：</label>
+                <label class="col-sm-3 control-label is-required">培训开始时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="startTime" th:value="${#dates.format(sysTrainAdmin.startTime, 'yyyy-MM-dd HH:mm')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="startTime" th:value="${#dates.format(sysTrainAdmin.startTime, 'yyyy-MM-dd HH:mm')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">培训结束时间：</label>
+                <label class="col-sm-3 control-label is-required">培训结束时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="endTime" th:value="${#dates.format(sysTrainAdmin.endTime, 'yyyy-MM-dd HH:mm')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="endTime" th:value="${#dates.format(sysTrainAdmin.endTime, 'yyyy-MM-dd HH:mm')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>

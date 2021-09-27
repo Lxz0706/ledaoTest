@@ -109,6 +109,15 @@ public class SysTrainAdminController extends BaseController
         if(!DateUtils.isTimeEaily(sysTrainAdmin.getStartTime(),sysTrainAdmin.getEndTime())){
             return AjaxResult.error("结束时间不能早于开始时间！");
         }
+        if (sysTrainAdmin.getQrcodeStartTime()==null){
+            sysTrainAdmin.setQrcodeStartTime(DateUtils.getMoreMinute(-10,sysTrainAdmin.getStartTime()));
+        }
+        if (sysTrainAdmin.getQrcodeEndTime()==null){
+            sysTrainAdmin.setQrcodeEndTime(DateUtils.getMoreMinute(30,sysTrainAdmin.getStartTime()));
+        }
+        if(!DateUtils.isTimeEaily(sysTrainAdmin.getQrcodeStartTime(),sysTrainAdmin.getQrcodeEndTime())){
+            return AjaxResult.error("二维码有效结束时间不能早于开始时间！");
+        }
         return toAjax(sysTrainAdminService.insertSysTrainAdmin(sysTrainAdmin));
     }
 
@@ -132,6 +141,18 @@ public class SysTrainAdminController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysTrainAdmin sysTrainAdmin)
     {
+        if(!DateUtils.isTimeEaily(sysTrainAdmin.getStartTime(),sysTrainAdmin.getEndTime())){
+            return AjaxResult.error("结束时间不能早于开始时间！");
+        }
+        if (sysTrainAdmin.getQrcodeStartTime()==null){
+            sysTrainAdmin.setQrcodeStartTime(DateUtils.getMoreMinute(-10,sysTrainAdmin.getStartTime()));
+        }
+        if (sysTrainAdmin.getQrcodeEndTime()==null){
+            sysTrainAdmin.setQrcodeEndTime(DateUtils.getMoreMinute(30,sysTrainAdmin.getStartTime()));
+        }
+        if(!DateUtils.isTimeEaily(sysTrainAdmin.getQrcodeStartTime(),sysTrainAdmin.getQrcodeEndTime())){
+            return AjaxResult.error("二维码有效结束时间不能早于开始时间！");
+        }
         return toAjax(sysTrainAdminService.updateSysTrainAdmin(sysTrainAdmin));
     }
 

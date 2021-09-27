@@ -211,7 +211,7 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listPro(SysProject sysProject) {
         startPage();
         List<SysProject> list = sysProjectService.selectProject(sysProject);
-        for (SysProject sysProject1 : list) {
+        /*for (SysProject sysProject1 : list) {
             StringBuffer sb = new StringBuffer();
             StringBuffer sb1 = new StringBuffer();
             StringBuffer sb2 = new StringBuffer();
@@ -321,7 +321,7 @@ public class SysProjectController extends BaseController {
             if (files != null && files.size() > 0) {
                 sysProject1.setIsFile(new Long(1));
             }
-        }
+        }*/
         return getDataTable(list);
     }
 

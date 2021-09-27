@@ -10,6 +10,18 @@
             <input type="hidden" id="assetStatus" th:value="已收购">
             <form id="formId">
                 <input type="hidden" id="zcbId" name="zcbId" th:value="*{proId}">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>债务人名称：</label>
+                            <input type="text" name="projectName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
             </form>
         </div>
 

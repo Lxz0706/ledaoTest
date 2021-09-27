@@ -124,7 +124,7 @@ public class SysZckController extends BaseController {
             }
         }*/
         List<SysZck> list = sysZckService.selectSysZck(sysZck);
-        for (SysZck sysZck1 : list) {
+        /*for (SysZck sysZck1 : list) {
             SysZck sysZck3 = new SysZck();
             sysZck3.setId(sysZck1.getId());
             List<SysZck> list1 = sysZckService.selectSysZckByParentId(sysZck1);
@@ -147,7 +147,7 @@ public class SysZckController extends BaseController {
                 }
                 sysZck1.setTotalPrice1(sysZck1.getTotalPrice1().add(sysZck4.getTotalPrice()));
             }
-        }
+        }*/
         return getDataTable(list);
     }
 

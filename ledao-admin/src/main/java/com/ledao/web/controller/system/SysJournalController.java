@@ -1,5 +1,6 @@
 package com.ledao.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ledao.framework.util.ShiroUtils;
@@ -86,7 +87,7 @@ public class SysJournalController extends BaseController
     public TableDataInfo list(SysJournal sysJournal)
     {
         startPage();
-        SysUser user = ShiroUtils.getSysUser();
+        /*SysUser user = ShiroUtils.getSysUser();
         List<SysRole> getRoles = user.getRoles();
         boolean isZjl = false;
         for (SysRole sysRole : getRoles) {
@@ -98,7 +99,7 @@ public class SysJournalController extends BaseController
         if (!isZjl){
             SysDept dept = sysDeptService.selectDeptById(user.getDeptId());
             sysJournal.setDeptId(dept.getDeptId());
-        }
+        }*/
         List<SysJournal> list = sysJournalService.selectSysJournalList(sysJournal);
         return getDataTable(list);
     }
@@ -107,11 +108,35 @@ public class SysJournalController extends BaseController
     @ResponseBody
     public TableDataInfo deptList()
     {
+        SysUser user = ShiroUtils.getSysUser();
+        List<SysRole> getRoles = user.getRoles();
+        boolean isZjl = false;
+        for (SysRole sysRole : getRoles) {
+            if ("zjl".equals(sysRole.getRoleKey()) || "admin".equals(user.getLoginName())) {
+                isZjl = true;
+                continue;
+            }
+        }
         SysDept dept = new SysDept();
         Long parendId = 100L;
         dept.setParentId(parendId);
         List<SysDept> deps = deptService.selectDeptOneLevelList(dept);
-        return getDataTable(deps);
+        if (isZjl){
+            return getDataTable(deps);
+        }else{
+            List<SysDept> dts = new ArrayList<>();
+            SysDept deptNew = deptService.selectDeptById(user.getDeptId());
+            for (SysDept d:deps) {
+                String[] depstra = deptNew.getAncestors().split(",");
+                for (String ds:depstra) {
+                    if(ds.equals(d.getDeptId().toString())){
+                        dts.add(d);
+                        return getDataTable(dts);
+                    }
+                }
+            }
+            return getDataTable(deps);
+        }
     }
 
 

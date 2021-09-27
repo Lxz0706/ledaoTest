@@ -1259,6 +1259,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         sysApplyIn.setReviser(ShiroUtils.getLoginName());
         sysApplyIn.setUpdateTime(new Date());
         SysApplyIn sin = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
+        sysApplyIn.setApplyUser(sin.getApplyUser());
         if ("7".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){
             SysApplyOutDetail sd = new SysApplyOutDetail();
             sd.setApplyId(sysApplyIn.getApplyId());

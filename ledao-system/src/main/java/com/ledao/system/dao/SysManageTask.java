@@ -1,5 +1,6 @@
 package com.ledao.system.dao;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
@@ -45,11 +46,11 @@ public class SysManageTask extends BaseEntity
 
     /** 预计回收金额 */
     @Excel(name = "预计回收金额")
-    private Long planBackMoney;
+    private BigDecimal planBackMoney;
 
     /** 实际回收金额 */
     @Excel(name = "实际回收金额")
-    private Long realBackMoney;
+    private BigDecimal realBackMoney;
 
     /** 超时时长(天) */
     @Excel(name = "超时时长(天)")
@@ -90,6 +91,22 @@ public class SysManageTask extends BaseEntity
     private String zckName;
 
     private String projectName;
+
+    public BigDecimal getPlanBackMoney() {
+        return planBackMoney;
+    }
+
+    public void setPlanBackMoney(BigDecimal planBackMoney) {
+        this.planBackMoney = planBackMoney;
+    }
+
+    public BigDecimal getRealBackMoney() {
+        return realBackMoney;
+    }
+
+    public void setRealBackMoney(BigDecimal realBackMoney) {
+        this.realBackMoney = realBackMoney;
+    }
 
     public String getProjectName() {
         return projectName;
@@ -169,24 +186,6 @@ public class SysManageTask extends BaseEntity
     public Date getRealEndTime() 
     {
         return realEndTime;
-    }
-    public void setPlanBackMoney(Long planBackMoney) 
-    {
-        this.planBackMoney = planBackMoney;
-    }
-
-    public Long getPlanBackMoney() 
-    {
-        return planBackMoney;
-    }
-    public void setRealBackMoney(Long realBackMoney) 
-    {
-        this.realBackMoney = realBackMoney;
-    }
-
-    public Long getRealBackMoney() 
-    {
-        return realBackMoney;
     }
     public void setOverDay(Long overDay) 
     {

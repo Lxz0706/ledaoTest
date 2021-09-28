@@ -131,6 +131,10 @@ public class SysJournalController extends BaseController
             List<SysDept> dts = new ArrayList<>();
             SysDept deptNew = deptService.selectDeptById(user.getDeptId());
             for (SysDept d:deps) {
+                if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())){
+                    dts.add(d);
+                    return getDataTable(dts);
+                }
                 String[] depstra = deptNew.getAncestors().split(",");
                 for (String ds:depstra) {
                     if(ds.equals(d.getDeptId().toString())){
@@ -139,7 +143,7 @@ public class SysJournalController extends BaseController
                     }
                 }
             }
-            return getDataTable(deps);
+            return getDataTable(dts);
         }
     }
 

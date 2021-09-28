@@ -146,11 +146,25 @@
                     },
                     {
                         field: 'planBackMoney',
-                        title: '预计回收金额'
+                        title: '预计回收金额',
+                        formatter: function(value, item, index) {
+                            if (item.planBackMoney == null){
+                                return 0.000;
+                            }else{
+                                return item.planBackMoney.toFixed(3);
+                            }
+                        }
                     },
                     {
                         field: 'realBackMoney',
-                        title: '实际回收金额'
+                        title: '实际回收金额',
+                        formatter: function(value, item, index) {
+                            if (item.realBackMoney == null){
+                                return 0.000;
+                            }else{
+                                return item.realBackMoney.toFixed(3);
+                            }
+                        }
                     },
                     {
                         field: 'overDay',

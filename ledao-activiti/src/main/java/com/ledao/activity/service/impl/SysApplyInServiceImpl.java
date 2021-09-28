@@ -879,21 +879,21 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             if ("项目类数据导入.xlsx".equals(file.getOriginalFilename())){
                 documentType = "0";
                 ExcelUtil ex = new ExcelUtil(SysApplyInImport.class);
-                ApplyList =  ex.importExcel("项目类",file.getInputStream());
+                ApplyList =  ex.importExcel("申请信息",file.getInputStream());
                 //获取附件列表
                 ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFile.class);
                 filesList =  fileDetails.importExcel("档案信息",file2.getInputStream());
             } else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
                 documentType = "1";
                 ExcelUtil ex = new ExcelUtil(SysApplyInImportDaily.class);
-                ApplyListDaily =  ex.importExcel("日常经营类",file.getInputStream());
+                ApplyListDaily =  ex.importExcel("申请信息",file.getInputStream());
                 //获取附件列表
                 ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFileDaily.class);
                 filesListDaily =  fileDetails.importExcel("档案信息",file2.getInputStream());
-            }else if("合同类数据导入.xlsx".equals(file.getOriginalFilename())){
+            }else if("知识产权类数据导入.xlsx".equals(file.getOriginalFilename())){
                 documentType = "2";
                 ExcelUtil ex = new ExcelUtil(SysApplyInImportDaily.class);
-                ApplyListDaily =  ex.importExcel("合同类",file.getInputStream());
+                ApplyListDaily =  ex.importExcel("申请信息",file.getInputStream());
                 //获取附件列表
                 ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFileDaily.class);
                 filesListDaily =  fileDetails.importExcel("档案信息",file2.getInputStream());

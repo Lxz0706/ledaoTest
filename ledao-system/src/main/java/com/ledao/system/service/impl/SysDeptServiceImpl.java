@@ -299,6 +299,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
             SysUser u = new SysUser();
             u.setDeptId(dept.getParentId());
             u.setUserName(dept.getUserName());
+        u.setStatus("0");
             List<SysUser> users = userMapper.selectUserList(u);
         return users;
     }

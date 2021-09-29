@@ -111,11 +111,14 @@ public class SysJournalController extends BaseController
         SysUser user = ShiroUtils.getSysUser();
         List<SysRole> getRoles = user.getRoles();
         boolean isZjl = false;
-        if ("admin".equals(user.getLoginName())){
+        if ("admin".equals(user.getLoginName()) || "xulinyi".equals(user.getLoginName())
+                ||"lixiangzhen".equals(user.getLoginName()) || "weicaixuan".equals(user.getLoginName())){
+            //允许查看所有日志的账号
             isZjl=true;
         }else{
             for (SysRole sysRole : getRoles) {
                 if ("zjl".equals(sysRole.getRoleKey())) {
+                    //允许查看所有日志的角色
                     isZjl = true;
                     continue;
                 }

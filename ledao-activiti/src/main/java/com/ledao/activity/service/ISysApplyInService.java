@@ -117,7 +117,7 @@ public interface ISysApplyInService
 
     List<SysApplyIn> listInOutDetail(SysApplyIn sysApplyIn);
 
-    AjaxResult importApplyIn(MultipartFile file);
+    AjaxResult importApplyIn(MultipartFile file) throws Exception;
 
     List<SysApplyIn> selectSysApplyInDocDetailZcbList(SysApplyIn sysApplyIn);
 

@@ -65,13 +65,13 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label is-required">预计回收金额：</label>
                 <div class="col-sm-8">
-                    <input name="planBackMoney" onkeyup="this.value=this.value.replace(/[^\d^\.]+/g,'')" th:field="*{planBackMoney}" class="form-control required" type="text">
+                    <input name="planBackMoney" onkeyup="planMoney(this)" th:field="*{planBackMoney}" class="form-control required" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">实际回收金额：</label>
                 <div class="col-sm-8">
-                    <input name="realBackMoney" onkeyup="this.value=this.value.replace(/[^\d^\.]+/g,'')" th:field="*{realBackMoney}" class="form-control" type="text">
+                    <input name="realBackMoney" onkeyup="planMoney(this)" th:field="*{realBackMoney}" class="form-control" type="text">
                 </div>
             </div>
         </form>
@@ -232,6 +232,19 @@
                 //               alert(o+++"~~")
             });
         })
+
+        function planMoney(obj) {
+            //先把非数字的都替换掉，除了数字和.
+            obj.value = obj.value.replace(/[^\d.]/g,"");
+            //保证只有出现一个.而没有多个.
+            obj.value = obj.value.replace(/\.{2,}/g,".");
+            //必须保证第一个为数字而不是.
+            obj.value = obj.value.replace(/^\./g,"");
+            //保证.只出现一次，而不能出现两次以上
+            obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            //只能输入两个小数
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d).*$/,'$1$2.$3');
+        }
 
         var realBeginTime=$("input[name='realBeginTime']").val();
         if (realBeginTime == undefined || realBeginTime == ""){

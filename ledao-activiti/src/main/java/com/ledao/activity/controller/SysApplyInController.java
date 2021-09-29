@@ -137,36 +137,12 @@ public class SysApplyInController extends BaseController
     @Log(title = "历史数据迁移", businessType = BusinessType.INSERT)
     @PostMapping("/importApplyIn")
     @ResponseBody
-    public AjaxResult importApplyIn(@RequestParam("file") MultipartFile file )
-    {
-        return  sysApplyInService.importApplyIn(file);
-        /*String loginName = ShiroUtils.getLoginName();
-        SysDocumentFile f = new SysDocumentFile();
-        f.setAssetPag(sysDocumentFile.getAssetPag());
-        f.setAssetNumber(sysDocumentFile.getAssetNumber());
-        f.setBagNo(sysDocumentFile.getBagNo());
-        f.setDocumentType(sysDocumentFile.getDocumentType());
-        f.setDailyDocumentType(sysDocumentFile.getDailyDocumentType());
-        f.setFileName(sysDocumentFile.getFileName());
-        f.setFileType(sysDocumentFile.getFileType());
-        f.setCreateBy(loginName);
-        f.setFileScanType(sysDocumentFile.getFileScanType());
-        f.setApplyId(sysDocumentFile.getApplyId());
-        f.setDailyDocumentTypeContract(sysDocumentFile.getDailyDocumentTypeContract());
-        List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
-        if (ss !=null && ss.size()>0){
-            return AjaxResult.error("存在重复记录，请检查");
+    public AjaxResult importApplyIn(@RequestParam("file") MultipartFile file ) {
+        try{
+            return sysApplyInService.importApplyIn(file);
+        }catch (Exception e){
+            return   AjaxResult.error("导入失败 "+e.getMessage(),e);
         }
-        if (StringUtils.isNotEmpty(sysDocumentFile.getDocumentTypeVal())){
-            sysDocumentFile.setDocumentType(sysDocumentFile.getDocumentTypeVal());
-        }
-        sysDocumentFile.setReviser(loginName);
-        sysDocumentFile.setCreateBy(loginName);
-        sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
-        SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
-        ap.setReviser(ShiroUtils.getLoginName());
-        sysApplyInService.updateSysApplyIn(ap);*/
-//        return toAjax(true);
     }
 
     @GetMapping("/reject/{applyId}/{applyType}/{approveStatu}")

@@ -866,8 +866,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
-    public AjaxResult importApplyIn(MultipartFile file) {
-        try {
+    public AjaxResult importApplyIn(MultipartFile file) throws Exception{
 
             //获取申请列表
             String documentType = "";
@@ -876,14 +875,31 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             List<SysApplyInImportDaily> ApplyListDaily = new ArrayList<>();
             List<SysApplyInImportFile> filesList = new ArrayList<>();
             List<SysApplyInImportFileDaily> filesListDaily = new ArrayList<>();
-            if ("项目类数据导入.xlsx".equals(file.getOriginalFilename())){
-                documentType = "0";
+            if ("项目类数据导入.xlsx".equals(file.getOriginalFilename()) || "日常经营类数据导入.xlsx".equals(file.getOriginalFilename())
+                    || "知识产权类数据导入.xlsx".equals(file.getOriginalFilename())){
+                if ("项目类数据导入.xlsx".equals(file.getOriginalFilename())){
+                    documentType = "0";
+                }else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
+                    documentType = "1";
+                }else if("知识产权类数据导入.xlsx".equals(file.getOriginalFilename())){
+                    documentType = "2";
+                }
+
                 ExcelUtil ex = new ExcelUtil(SysApplyInImport.class);
-                ApplyList =  ex.importExcel("申请信息",file.getInputStream());
+                try {
+                    ApplyList =  ex.importExcel("申请信息",file.getInputStream());
+                } catch (Exception e) {
+                    throw new RuntimeException("获取申请信息失败！"+e);
+                }
                 //获取附件列表
                 ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFile.class);
-                filesList =  fileDetails.importExcel("档案信息",file2.getInputStream());
-            } else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
+                try {
+                    filesList =  fileDetails.importExcel("档案信息",file2.getInputStream());
+                } catch (Exception e) {
+                    throw new RuntimeException("获取档案信息失败！"+e);
+                }
+            }
+            /*else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
                 documentType = "1";
                 ExcelUtil ex = new ExcelUtil(SysApplyInImportDaily.class);
                 ApplyListDaily =  ex.importExcel("申请信息",file.getInputStream());
@@ -897,7 +913,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 //获取附件列表
                 ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFileDaily.class);
                 filesListDaily =  fileDetails.importExcel("档案信息",file2.getInputStream());
-            }else{
+            }*/
+            else{
                 return AjaxResult.error("上传文件错误，请重新上传");
             }
 
@@ -1126,12 +1143,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     insertApplyDaily(apply,applyIn);
                 }
             }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
         return AjaxResult.success();
     }
 

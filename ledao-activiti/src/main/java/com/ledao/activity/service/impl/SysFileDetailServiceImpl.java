@@ -62,7 +62,13 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
     @Override
     public List<SysFileDetail> selectSysFileDetailList(SysFileDetail sysFileDetail)
     {
-        return sysFileDetailMapper.selectSysFileDetailList(sysFileDetail);
+        List<SysFileDetail> fis =sysFileDetailMapper.selectSysFileDetailList(sysFileDetail);
+        for (SysFileDetail f: fis ) {
+            if (StringUtils.isNotEmpty(f.getFileName()) ){
+                f.setFileName(f.getFileName().substring(f.getFileName().lastIndexOf("/")+1));
+            }
+        }
+        return fis;
     }
 
     /**

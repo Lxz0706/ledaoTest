@@ -74,7 +74,19 @@ public class SysJournalController extends BaseController
     public TableDataInfo userListByDepParentId(SysDept dept)
     {
         startPage();
-        List<SysUser> deps = deptService.selectUserListByDepId(dept);
+        SysUser sysUser = new SysUser();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                        sysUser.setFormalFlag("0");
+                    }
+                }
+            }
+        }
+        List<SysUser> deps = deptService.selectUserListByDepId(dept,sysUser);
         return getDataTable(deps);
     }
 

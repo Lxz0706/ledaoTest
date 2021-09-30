@@ -31,17 +31,17 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 档案入库申请Service业务层处理
- * 
+ *
  * @author lxz
  * @date 2021-08-04
  */
 @Service
 @Transactional
-public class SysApplyInServiceImpl implements ISysApplyInService 
+public class SysApplyInServiceImpl implements ISysApplyInService
 {
     @Autowired
     private SysApplyInMapper sysApplyInMapper;
-    
+
     @Autowired
     private SysApplyWorkflowMapper sysApplyWorkflowMapper;
 
@@ -50,10 +50,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private SysUserMapper userMapper;
-    
+
     @Autowired
     private SysDocumentFileMapper documentFileMapper;
-    
+
     @Autowired
     private SysFileDetailMapper fileDetailMapper;
 
@@ -103,32 +103,32 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     /**
      * 查询档案入库申请
-     * 
+     *
      * @param applyId 档案入库申请ID
      * @return 档案入库申请
      */
     @Override
     public SysApplyIn selectSysApplyInById(Long applyId)
     {
-    	SysApplyIn applyIn = sysApplyInMapper.selectSysApplyInById(applyId);
+        SysApplyIn applyIn = sysApplyInMapper.selectSysApplyInById(applyId);
         SysUser u = userMapper.selectUserByLoginName(applyIn.getApplyUser());
         applyIn.setApplyUserName(u.getUserName());
-    	SysDocumentFile documentFile = new SysDocumentFile();
-    	documentFile.setApplyId(applyId);
-    	List<SysDocumentFile> documentFiles = documentFileMapper.selectSysDocumentFileList(documentFile);
-    	for (SysDocumentFile sysDocumentFile : documentFiles) {
-			SysFileDetail detail = new SysFileDetail();
-			detail.setDocumentFileId(sysDocumentFile.getDocumentId());
-			List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
-			sysDocumentFile.setFileDetails(details);
-		}
-    	applyIn.setDocumentFiles(documentFiles);
+        SysDocumentFile documentFile = new SysDocumentFile();
+        documentFile.setApplyId(applyId);
+        List<SysDocumentFile> documentFiles = documentFileMapper.selectSysDocumentFileList(documentFile);
+        for (SysDocumentFile sysDocumentFile : documentFiles) {
+            SysFileDetail detail = new SysFileDetail();
+            detail.setDocumentFileId(sysDocumentFile.getDocumentId());
+            List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
+            sysDocumentFile.setFileDetails(details);
+        }
+        applyIn.setDocumentFiles(documentFiles);
         return applyIn;
     }
 
     /**
      * 查询档案入库申请列表
-     * 
+     *
      * @param sysApplyIn 档案入库申请
      * @return 档案入库申请
      */
@@ -140,14 +140,14 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     /**
      * 新增档案入库申请
-     * 
+     *
      * @param sysApplyIn 档案入库申请
      * @return 结果
      */
     @Override
     public int insertSysApplyIn(SysApplyIn sysApplyIn)
     {
-    	return sysApplyInMapper.insertSysApplyIn(sysApplyIn);
+        return sysApplyInMapper.insertSysApplyIn(sysApplyIn);
     }
 
     public List<String> getApplyNextUser(SysApplyIn sysApplyIn){
@@ -316,7 +316,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     /**
      * 修改档案入库申请
-     * 
+     *
      * @param sysApplyIn 档案入库申请
      * @return 结果
      */
@@ -329,7 +329,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     /**
      * 删除档案入库申请对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -361,7 +361,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     /**
      * 删除档案入库申请信息
-     * 
+     *
      * @param applyId 档案入库申请ID
      * @return 结果
      */
@@ -374,13 +374,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     /**
      * 查询自己的工作流
      */
-	@Override
-	public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn) {
-		return sysApplyInMapper.listDownByMe(sysApplyIn);
-	}
+    @Override
+    public List<SysApplyIn> listDownByMe(SysApplyIn sysApplyIn) {
+        return sysApplyInMapper.listDownByMe(sysApplyIn);
+    }
 
-	public AjaxResult submitApply(SysApplyIn sysApplyInEntity,SysApplyIn sysApplyIn){
-	    String loginUser = ShiroUtils.getLoginName();
+    public AjaxResult submitApply(SysApplyIn sysApplyInEntity,SysApplyIn sysApplyIn){
+        String loginUser = ShiroUtils.getLoginName();
         String[] applyStatusList = {"0","4","2"};
         // 可提交审批的状态     0保存；4撤回；2拒绝
         if (!Arrays.asList(applyStatusList).contains(sysApplyInEntity.getApproveStatu())){
@@ -505,71 +505,71 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     public List<String> submitApplyInfo(SysApplyIn sysApplyIn){
-            Map<String, Object> variables = new HashMap<>();
-            String key = "";
-            String itemName = "";
-            SysUser sysUser = ShiroUtils.getSysUser();
-            List<String> users = new ArrayList<>();
-                //入库申请
-                SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
-                if ("0".equals(sysApplyIn.getApplyType())) {
-                    //获取申请人的个人信息
-                    sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
-                    //根据提交人查询是否存在直接主管
-                    if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && "5".equals(sysApplyIn.getApproveStatu())) {
-                        key = "document_rk_zg";
-                        SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
-                        //动态设置审批人员
-                        variables.put("userId", sysUser1.getLoginName());
-                        users.add(sysUser1.getLoginName());
-                    } else {
-                        //没有直接审批人，转到档案管理员下
-                        List<String> jls = getUsers("documentAdmin");
-                        List<String> js = new ArrayList<>();
-                        for (String n: jls){
-                            if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
-                                js.add(n);
-                            }
-                        }
-                        users.addAll(js);
-                        key = "document_rk_zgNo";
+        Map<String, Object> variables = new HashMap<>();
+        String key = "";
+        String itemName = "";
+        SysUser sysUser = ShiroUtils.getSysUser();
+        List<String> users = new ArrayList<>();
+        //入库申请
+        SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
+        if ("0".equals(sysApplyIn.getApplyType())) {
+            //获取申请人的个人信息
+            sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
+            //根据提交人查询是否存在直接主管
+            if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && "5".equals(sysApplyIn.getApproveStatu())) {
+                key = "document_rk_zg";
+                SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
+                //动态设置审批人员
+                variables.put("userId", sysUser1.getLoginName());
+                users.add(sysUser1.getLoginName());
+            } else {
+                //没有直接审批人，转到档案管理员下
+                List<String> jls = getUsers("documentAdmin");
+                List<String> js = new ArrayList<>();
+                for (String n: jls){
+                    if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
+                        js.add(n);
                     }
-                    itemName = sysApplyIn.getCreator() + "提交的入库申请";
-                } else {
-                    itemName = sysApplyIn.getCreator() + "提交的出库申请";
+                }
+                users.addAll(js);
+                key = "document_rk_zgNo";
+            }
+            itemName = sysApplyIn.getCreator() + "提交的入库申请";
+        } else {
+            itemName = sysApplyIn.getCreator() + "提交的出库申请";
 
-                    List<String> userList = new ArrayList<>();
-                    userList.add("yangxu");
-                    userList.add("yangxudong");
-                    variables.put("assigneeList", userList);
+            List<String> userList = new ArrayList<>();
+            userList.add("yangxu");
+            userList.add("yangxudong");
+            variables.put("assigneeList", userList);
 
-                    List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
-                    List<String> ids = new ArrayList<>();
-                    for (SysRole r:rflgw) {
-                        ids.add(r.getRoleKey());
-                    }
+            List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
+            List<String> ids = new ArrayList<>();
+            for (SysRole r:rflgw) {
+                ids.add(r.getRoleKey());
+            }
 //                当前操作人为法律顾问
-                    if(ids.contains("flgw")){
-                        //发给总经理
-                        List<String> jls = getUsers("zjl");
-                        users.addAll(jls);
-                    }else if(ids.contains("zjl")){
-                        List<String> jls = getUsers("documentAdmin");
-                        List<String> js = new ArrayList<>();
-                        for (String n: jls){
-                            if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
-                                js.add(n);
-                            }
-                        }
-                        users.addAll(js);
-                    }else{
-                        //判断是否存在直接主管
-                        sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
-                        if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
-                            SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
-                            users.add(sysUser1.getLoginName());
-                            //                    SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
-                            //判断是否存在二级主管
+            if(ids.contains("flgw")){
+                //发给总经理
+                List<String> jls = getUsers("zjl");
+                users.addAll(jls);
+            }else if(ids.contains("zjl")){
+                List<String> jls = getUsers("documentAdmin");
+                List<String> js = new ArrayList<>();
+                for (String n: jls){
+                    if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
+                        js.add(n);
+                    }
+                }
+                users.addAll(js);
+            }else{
+                //判断是否存在直接主管
+                sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
+                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
+                    SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
+                    users.add(sysUser1.getLoginName());
+                    //                    SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
+                    //判断是否存在二级主管
                     /*if (StringUtils.isNotEmpty(sysUser1.getDirector()) && StringUtils.isNotEmpty(sysUser1.getDirectorId().toString())) {
                         //判断是否存在三级主管
                         SysUser sysUser2 = userMapper.selectUserById(sysUser1.getDirectorId());
@@ -607,22 +607,22 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                             key = "document_zjzg";
                         }*//*
                     }*/
-                        } else {
+                } else {
                     /*if ("否".equals(entity.getDocumentRevertFlag())) {
                         key = "document_ghNo";
                     } else {
                         key = "document_gh";
                     }*/
-                            //没有直属领导，直接提交给法律顾问
-                            //没有直接审批人，转到档案管理员下
-                            //没有直接审批人，转到档案管理员下
-                            List<String> jls = getUsers("flgw");
-                            users.addAll(jls);
-                        }
-                    }
-
-
+                    //没有直属领导，直接提交给法律顾问
+                    //没有直接审批人，转到档案管理员下
+                    //没有直接审批人，转到档案管理员下
+                    List<String> jls = getUsers("flgw");
+                    users.addAll(jls);
                 }
+            }
+
+
+        }
 
         /*ProcessInstance processInstance = processService.submitApply(a.getApplyUser(), a.getApplyId().toString(), itemName, a.getRemarks(), key, variables);
         String processInstanceId = processInstance.getId();
@@ -798,7 +798,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     private int saveWorkFlow(SysApplyIn sysApplyIn,SysApplyWorkflow workflow){
-	    if("1".equals(sysApplyIn.getApproveStatu())){
+        if("1".equals(sysApplyIn.getApproveStatu())){
             workflow.setApproveStatu("6");
         }else{
             workflow.setApproveStatu(sysApplyIn.getApproveStatu());
@@ -831,7 +831,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Override
     public String checkUserRole(SysUser u) {
-	    //投后部---投后部项目 0
+        //投后部---投后部项目 0
         String[] stbList = new String[] { "thbManager", "thbManager2", "thbzz", "thbCommon"};
         List<String> stbs = Arrays.asList(stbList);
         //并购重组---大型单体 1
@@ -866,7 +866,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     }
 
     @Override
-    public AjaxResult importApplyIn(MultipartFile file) throws Exception{
+    public AjaxResult importApplyIn(MultipartFile file) {
+        try {
 
             //获取申请列表
             String documentType = "";
@@ -875,31 +876,14 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             List<SysApplyInImportDaily> ApplyListDaily = new ArrayList<>();
             List<SysApplyInImportFile> filesList = new ArrayList<>();
             List<SysApplyInImportFileDaily> filesListDaily = new ArrayList<>();
-            if ("项目类数据导入.xlsx".equals(file.getOriginalFilename()) || "日常经营类数据导入.xlsx".equals(file.getOriginalFilename())
-                    || "知识产权类数据导入.xlsx".equals(file.getOriginalFilename())){
-                if ("项目类数据导入.xlsx".equals(file.getOriginalFilename())){
-                    documentType = "0";
-                }else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
-                    documentType = "1";
-                }else if("知识产权类数据导入.xlsx".equals(file.getOriginalFilename())){
-                    documentType = "2";
-                }
-
+            if ("项目类数据导入.xlsx".equals(file.getOriginalFilename())){
+                documentType = "0";
                 ExcelUtil ex = new ExcelUtil(SysApplyInImport.class);
-                try {
-                    ApplyList =  ex.importExcel("申请信息",file.getInputStream());
-                } catch (Exception e) {
-                    throw new RuntimeException("获取申请信息失败！"+e);
-                }
+                ApplyList =  ex.importExcel("申请信息",file.getInputStream());
                 //获取附件列表
                 ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFile.class);
-                try {
-                    filesList =  fileDetails.importExcel("档案信息",file2.getInputStream());
-                } catch (Exception e) {
-                    throw new RuntimeException("获取档案信息失败！"+e);
-                }
-            }
-            /*else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
+                filesList =  fileDetails.importExcel("档案信息",file2.getInputStream());
+            } else if ("日常经营类数据导入.xlsx".equals(file.getOriginalFilename())){
                 documentType = "1";
                 ExcelUtil ex = new ExcelUtil(SysApplyInImportDaily.class);
                 ApplyListDaily =  ex.importExcel("申请信息",file.getInputStream());
@@ -913,8 +897,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 //获取附件列表
                 ExcelUtil fileDetails = new ExcelUtil(SysApplyInImportFileDaily.class);
                 filesListDaily =  fileDetails.importExcel("档案信息",file2.getInputStream());
-            }*/
-            else{
+            }else{
                 return AjaxResult.error("上传文件错误，请重新上传");
             }
 
@@ -1143,6 +1126,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     insertApplyDaily(apply,applyIn);
                 }
             }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
         return AjaxResult.success();
     }
 
@@ -1341,6 +1330,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             sendMsg(users,sysApplyIn,"");
         }
 
-	    return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
+        return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
     }
 }

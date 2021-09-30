@@ -77,7 +77,7 @@
     </sql>
 
     <select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
-        select u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,
+        select u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,u.com_open_id,
         u.password, u.sex, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,
         d.dept_name, d.leader,u.director_id, u.director, u.formal_flag from sys_user u
         left join sys_dept d on u.dept_id = d.dept_id
@@ -121,7 +121,7 @@
     </select>
 
     <select id="selectAllocatedList" parameterType="SysUser" resultMap="SysUserResult">
-        select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,
+        select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,u.com_open_id,
         u.status, u.create_time,u.director_id, u.director, u.formal_flag
         from sys_user u
         left join sys_dept d on u.dept_id = d.dept_id

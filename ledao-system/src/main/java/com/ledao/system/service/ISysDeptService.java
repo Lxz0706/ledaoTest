@@ -117,7 +117,7 @@ public interface ISysDeptService {
      */
     public List<SysDept> selectDeptByParentId(Long parentId);
 
-    List<SysUser> selectUserListByDepId(SysDept dept);
+    List<SysUser> selectUserListByDepId(SysDept dept,SysUser sysUser);
 
     List<SysDept> selectDeptOneLevelList(SysDept dept);
 }

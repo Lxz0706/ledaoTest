@@ -295,11 +295,12 @@ public class SysDeptServiceImpl implements ISysDeptService {
     }
 
     @Override
-    public List<SysUser> selectUserListByDepId(SysDept dept) {
+    public List<SysUser> selectUserListByDepId(SysDept dept,SysUser sysUser) {
             SysUser u = new SysUser();
             u.setDeptId(dept.getParentId());
             u.setUserName(dept.getUserName());
         u.setStatus("0");
+        u.setFormalFlag(sysUser.getFormalFlag());
             List<SysUser> users = userMapper.selectUserList(u);
         return users;
     }

@@ -93,6 +93,9 @@ public class TimedTask {
     @Autowired
     private ISysProjectProgressService sysProjectProgressService;
 
+    @Autowired
+    private IJudicialUpdataService judicialUpdataService;
+
 
 
     public void timeTask() throws ParseException {
@@ -583,24 +586,33 @@ public class TimedTask {
      */
     public void racquetClues() throws ParseException {
 
-		List<TemplateParam> paras=new ArrayList<TemplateParam>();  
+        JudicialUpdata jud = new JudicialUpdata();
+        List<JudicialUpdata> list = judicialUpdataService.selectJudicialUpdataList(jud);
 
-		paras.add(new TemplateParam("keyword1","test1",""));  //维修工单
-		paras.add(new TemplateParam("keyword2","test2",""));  //维修地址
-		paras.add(new TemplateParam("keyword3","test3","")); //完成时间 
-		paras.add(new TemplateParam("keyword4","test4",""));  //备注
-		paras.add(new TemplateParam("keyword5","test5",""));  //维修工程师
-        JSONObject parm = new JSONObject();
-        parm.put("thing6","测试1");
-        parm.put("thing4","测试2");
-        parm.put("thing7","测试3");
-        parm.put("time4",DateUtils.getNowDate());
-        
-        // 创建名称为zyQueue的队列
- 		Queue queue = new ActiveMQQueue("zyQueueCommon");
- 		String dataStr = JSONObject.toJSONString(parm);
- 		// 向队列发送消息
- 		jmsMessagingTemplate.convertAndSend(queue, dataStr);
+        Map<String,String> parmStr = new HashMap<>();
+        List<SysUser> usersAll = new ArrayList<>();
+        parmStr.put("first","您有一个网拍线索消息提醒");
+        /*users.add(sysUserService.selectUserByLoginName("wangziyuan"));
+        users.add(sysUserService.selectUserByLoginName("zhangyi"));
+        users.add(sysUserService.selectUserByLoginName("jianghui"));*/
+//        SysUser u = sysUserService.selectUserByLoginName(mon.getCreateBy());
+//        users.add(u);
+//        users.add(sysUserService.selectUserById(u.getDirectorId()));
+//        SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
+        parmStr.put("word1","此次变更数量为："+list.size());
+        parmStr.put("word2","-");
+        parmStr.put("word3","-");
+        parmStr.put("word4", "-");
+        System.out.println(parmStr);
+        List<SysUser> users = getUsers("thbManager");
+        usersAll.addAll(users);
+        List<SysUser> users2 = getUsers("thbManager2");
+        usersAll.addAll(users2);
+        List<SysUser> users3 = getUsers("thbzz");
+        usersAll.addAll(users3);
+        List<SysUser> users4 = getUsers("thbCommon");
+        usersAll.addAll(users4);
+        sendJournalTask(usersAll,parmStr);
     }
 
     public void ss() {

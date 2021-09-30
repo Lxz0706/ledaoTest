@@ -259,7 +259,7 @@ public class TimedTask {
                 users.add(sysUserService.selectUserById(u.getDirectorId()));
                 SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
                 parmStr.put("word1",manage.getProjectManagementName());
-                parmStr.put("word2","截止日期" +DateUtils.formatDateByPattern(mon.getTime(),"yyyy-MM-dd HH:mm"));
+                parmStr.put("word2","截止日期" +DateUtils.formatDateByPattern(mon.getTime(),"yyyy-MM-dd"));
                 parmStr.put("word3","-");
                 parmStr.put("word4", mon.getFundType()+"/" +mon.getAmountMoney());
                 System.out.println(parmStr);
@@ -301,9 +301,9 @@ public class TimedTask {
                 users.add(sysUserService.selectUserById(u.getDirectorId()));
                 SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
                 parmStr.put("word1",manage.getProjectManagementName());
-                parmStr.put("word2","截止日期" +DateUtils.formatDateByPattern(mon.getPaidDate(),"yyyy-MM-dd HH:mm"));
+                parmStr.put("word2","截止日期" +DateUtils.formatDateByPattern(mon.getPaidDate(),"yyyy-MM-dd"));
                 parmStr.put("word3","-");
-                parmStr.put("word4", mon.getFundType()+"/" +mon.getPaidDate());
+                parmStr.put("word4", mon.getFundType()+"/" +mon.getAmountPaid());
                 System.out.println(parmStr);
                 sendJournalTask(users,parmStr);
             }
@@ -368,7 +368,7 @@ public class TimedTask {
             String date = DateUtils.formatDateByPattern(new Date(),"yyyyMMdd");
             List<SysUser> users = sysUserService.selectAllUserDepRole();
             Map<String,String> parmStr = new HashMap<>();
-            parmStr.put("first","您有一个任务提醒");
+            parmStr.put("first","您有一个日志任务提醒");
             parmStr.put("word1","您的日志未填写，请及时完成");
             for (SysUser u :users){
                 if (StringUtils.isNotNull(u.getComOpenId())){
@@ -515,7 +515,7 @@ public class TimedTask {
 //                        任务名称
                 parm.put("word3","许凯");
 //                        任务状态
-                parm.put("word4",s.getTaskStatu());
+                parm.put("word4",StringUtils.isNotEmpty(s.getTaskStatu())?sysDictDataService.selectDictLabel("manage_task",s.getTaskStatu()):"-");
                 if ("0".equals(s.getTaskType())){
                     parm.put("word5",s.getZckName());
                 }else {

@@ -27,8 +27,11 @@
 
     $(function () {
         var showRemove = false;
+        if("admin" == loginName){
+            showTotal = true;
+        }
         for(var i =0; i < roles.length;i++) {
-            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+            if(roles[i].roleKey == "documentAdmin") {
                 showTotal = true
             }
             if (roles[i].roleKey == "investmentCommon" || roles[i].roleKey == "investmentManager2" ||

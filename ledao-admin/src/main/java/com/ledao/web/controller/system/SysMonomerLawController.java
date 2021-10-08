@@ -1,7 +1,11 @@
 package com.ledao.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
@@ -51,6 +55,9 @@ public class SysMonomerLawController extends BaseController {
 
     @Autowired
     private ISysUserService sysUserService;
+
+    @Autowired
+    private ISysApplyWorkflowService iSysApplyWorkflowService;
 
     @GetMapping("/toMonomerLaw")
     public String toMonomerLaw(Long projectId, String projectType, String projectStatus, String fwProjectType, ModelMap modelMap) {
@@ -212,6 +219,20 @@ public class SysMonomerLawController extends BaseController {
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
             sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
+
+            try {
+                System.out.println("法务状态变更消息推送");
+                List<SysUser> us = new ArrayList<>();
+                us.addAll(sysUserList);
+                us.addAll(sysUserList1);
+                Map<String,String> parmStr = new HashMap<>();
+                parmStr.put("first","您有一个法务工作提醒");
+                parmStr.put("word1",sysNotice.getNoticeTitle());
+                iSysApplyWorkflowService.sendTaskMsg(us,parmStr);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
         return toAjax(sysMonomerLawService.updateSysMonomerLaw(sysMonomerLaw));
     }

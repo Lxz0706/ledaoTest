@@ -1,10 +1,16 @@
 package com.ledao.activity.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysUser;
+import com.ledao.system.service.ISysConfigService;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
@@ -31,6 +37,9 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
 
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
+
+    @Autowired
+    private ISysConfigService configService;
 
     /**
      * 查询档案出入库审批流程
@@ -82,6 +91,43 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
         // 向队列发送消息
         jmsMessagingTemplate.convertAndSend(queue, dataStr);
         return AjaxResult.success();
+    }
+
+    @Override
+    public void sendTaskMsg(List<SysUser> us, Map<String, String> parmStr) {
+        for (SysUser u:us) {
+            if (StringUtils.isNotEmpty(u.getComOpenId())){
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                //发布人
+                parm.put("first",parmStr.get("first"));
+                parm.put("word1",parmStr.get("word1"));
+//                        计划时间
+                parm.put("word2", StringUtils.isNotEmpty(parmStr.get("word2"))?parmStr.get("word2"):"-");
+//                        任务名称
+                parm.put("word3",StringUtils.isNotEmpty(parmStr.get("word3"))?parmStr.get("word3"):"-");
+//                        任务状态
+                parm.put("word4",StringUtils.isNotEmpty(parmStr.get("word4"))?parmStr.get("word4"):"-");
+                parm.put("word5","-");
+
+//                        任务接收人
+                parm.put("toUser",u.getComOpenId());
+//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken",accessToken);
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("ThQueueCommon");
+                String dataStr = JSONObject.toJSONString(parm);
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    public void run() {
+                        System.out.println("-------设定要指定任务--------");
+                    }
+                }, 2000);
+            }
+        }
     }
 
     /**

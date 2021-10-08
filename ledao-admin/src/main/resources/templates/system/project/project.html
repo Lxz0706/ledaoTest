@@ -113,6 +113,9 @@
                 showUnderLying = true
             }
         }
+        if("admin" == loginName){
+            showUnderLying = true;
+        }
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -192,7 +195,7 @@
                 {
                     title: '处置任务',
                     formatter: function (value, row, index) {
-                        if (userId == row.projectManagerId || loginName == 'xukai'){
+                        if (userId == row.projectManagerId || loginName == 'xukai'|| loginName == 'admin'){
                             return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">任务进度</a>';
                         }else{
                             return '-';
@@ -331,7 +334,7 @@
         $.modal.open("底层资料", url);
     }
     function toUpload(projectId,projectManagerId,zckType) {
-        if (userId == projectManagerId && zckType == "automaticSwitch"){
+        if ((userId == projectManagerId && zckType == "automaticSwitch") || zckType == "serve" || "admin" == loginName){
             var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0+"&projectZckType="+zckType+"&projectManagerId="+projectManagerId;
             $.modal.open("底层资料", url);
         }else if(zckType == "serve"){

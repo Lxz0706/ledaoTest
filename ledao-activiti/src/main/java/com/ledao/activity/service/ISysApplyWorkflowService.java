@@ -1,11 +1,13 @@
 package com.ledao.activity.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.dao.SysApplyWorkflow;
 import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.system.dao.SysUser;
 
 /**
  * 档案出入库审批流程Service接口
@@ -71,4 +73,6 @@ public interface ISysApplyWorkflowService
 	public List<SysApplyWorkflow> selectSysApplyWorkflowList(SysApplyIn sysApplyIn);
 
 	public AjaxResult sendLittleMsg(JSONObject parm);
+
+    void sendTaskMsg(List<SysUser> us, Map<String, String> parmStr);
 }

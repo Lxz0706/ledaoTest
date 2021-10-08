@@ -118,7 +118,7 @@
                 {
                     // field: 'manageTask',
                     title: '处置回现',
-                    visible: loginName == "xukai",
+                    visible: loginName == "xukai" || loginName == "admin",
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectZckId + "',\'" + row.zckName + '\')">任务进度</a>';
                     },

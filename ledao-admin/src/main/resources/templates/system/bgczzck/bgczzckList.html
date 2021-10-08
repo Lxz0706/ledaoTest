@@ -89,10 +89,14 @@
     var detailFlag = [[${@permission.hasPermi('system:bgczzck:detail')}]];
     var fwProjectType = $("#fwProjectType").val();
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var showUnderLying = false;
     var prefix = ctx + "system/bgczzck";
 
     $(function () {
+        if("admin" == loginName){
+            showUnderLying = true;
+        }
         for(var i =0; i < roles.length;i++) {
             if (roles[i].roleKey == "investmentCommon" || roles[i].roleKey == "investmentManager2" ||
                 roles[i].roleKey == "investmentManager" || roles[i].roleKey == "tzbzz" || roles[i].roleKey == "bgczCommon" || roles[i].roleKey == "bgczManager"){

@@ -7,7 +7,9 @@ import java.util.List;
 import com.ledao.common.config.Global;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.file.FileUtils;
 import com.ledao.system.dao.SysBgczzck;
 import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectZck;
@@ -135,6 +137,16 @@ public class SysUnderlyingDataServiceImpl implements ISysUnderlyingDataService
     @Override
     public int deleteSysUnderlyingDataByIds(String ids)
     {
+        for (String id : ids.split(",")) {
+            SysUnderlyingData sysUnderly = sysUnderlyingDataMapper.selectSysUnderlyingDataById(Long.valueOf(id));
+            if (sysUnderly!=null){
+                String filePath = Global.getUploadPathUnderLying();
+                if (StringUtils.isNotEmpty(sysUnderly.getFileUrl()) && sysUnderly.getFileUrl().contains("/profile/upload/underLying")){
+                    String url = sysUnderly.getFileUrl().split("/profile/upload/underLying")[1];
+                    FileUtils.deleteFile(filePath+url);
+                }
+            }
+        }
         return sysUnderlyingDataMapper.deleteSysUnderlyingDataByIds(Convert.toStrArray(ids));
     }
 

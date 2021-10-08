@@ -84,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
         </where>
+        order by a.create_time desc
     </select>
     
     <select id="selectSysManageTaskById" parameterType="Long" resultMap="SysManageTaskResult">

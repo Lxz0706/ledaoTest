@@ -141,8 +141,11 @@
 
                         // 管理员与档案管理员12
                         var showRemove = false;
+                        if ("admin" == loginName){
+                            showRemove = true
+                        }
                         for(var i =0; i < roles.length;i++) {
-                            if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                            if(roles[i].roleKey == "documentAdmin") {
                                 showRemove = true
                             }
                         }
@@ -538,7 +541,7 @@
     function add() {
         var projectId = $("#projectId").val();
         if (projectType == 0){
-            if (userId == projectManagerId && projectZckType == "automaticSwitch"){
+            if ((userId == projectManagerId && projectZckType == "automaticSwitch")||projectZckType == "serve"||loginName == "admin"){
                 var url = ctx + 'system/underlyingdata/add?projectId=' + projectId+"&projectType="+projectType;
                 $.modal.open('上传底层资料', url);
             }else if(projectZckType == "serve"){

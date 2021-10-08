@@ -29,22 +29,22 @@
             </form>
         </div>-->
 
-        <!--        <div class="btn-group-sm" id="toolbar" role="group">
-                    <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
-                        <i class="fa fa-plus"></i> 添加
-                    </a>
-                    <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-                       shiro:hasPermission="system:projectZck:edit">
-                        <i class="fa fa-edit"></i> 修改
-                    </a>
-                    <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-                       shiro:hasPermission="system:projectZck:remove">
-                        <i class="fa fa-remove"></i> 删除
-                    </a>
-                    <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:projectZck:export">
-                        <i class="fa fa-download"></i> 导出
-                    </a>
-                </div>-->
+<!--        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:projectZck:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:projectZck:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="updateManagerId()">
+                <i class="fa fa-download"></i> 修复
+            </a>
+        </div>-->
         <!-- <div class="col-sm-12 select-table table-striped">
              <table id="bootstrap-table"></table>
          </div>-->
@@ -128,7 +128,7 @@
                 var str = '';
                 var row = result.rows;
                 for (var i in row) {
-                    if($.common.isNotEmpty(row[i].dictLable)){
+                    if ($.common.isNotEmpty(row[i].dictLable)) {
                         str += '<div class="border col-sm-12" style="height: ' + winHeight + 'px;margin-left:auto; margin-right:auto;">';
                         str += '<div class="col-sm-3" style="text-align: right;height: ' + winHeight + 'px;line-height: ' + lineHeight + 'px;padding-top: ' + paddingTop + 'px">';
                         str += '<lable style="font-weight: bold;font-size: 1.5em">资产包数量：' + $.common.returnNum(row[i].totalZck) + '</lable><br/>';
@@ -163,6 +163,17 @@
     function jump() {
         var data = $("#formId").serialize();
         $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+    }
+
+    function updateManagerId() {
+        $.ajax({
+            url: ctx + "system/project/updateManagerId",
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                console.log(result);
+            }
+        })
     }
 
 </script>

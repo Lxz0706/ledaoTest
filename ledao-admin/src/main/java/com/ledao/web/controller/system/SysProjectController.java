@@ -86,7 +86,7 @@ public class SysProjectController extends BaseController {
     /**
      * 查询投后部项目管理列表
      */
-   // @RequiresPermissions("system:project:list")
+    // @RequiresPermissions("system:project:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysProject sysProject) {
@@ -388,6 +388,16 @@ public class SysProjectController extends BaseController {
             }
         }
 
+        //将项目经理id存入数据库
+        if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
+            SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
+            if (StringUtils.isNotNull(sysUser)) {
+                if (StringUtils.isNotNull(sysUser.getUserId())) {
+                    sysProject.setProjectManagerId(sysUser.getUserId());
+                }
+            }
+        }
+
         sysProject.setCreateBy(ShiroUtils.getLoginName());
         sysProject.setDelFlag("0");
         sysProjectService.insertSysProject(sysProject);
@@ -677,6 +687,16 @@ public class SysProjectController extends BaseController {
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
             sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
+        }
+
+        //将项目经理id存入数据库
+        if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
+            SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
+            if (StringUtils.isNotNull(sysUser)) {
+                if (StringUtils.isNotNull(sysUser.getUserId())) {
+                    sysProject.setProjectManagerId(sysUser.getUserId());
+                }
+            }
         }
         return toAjax(sysProjectService.updateSysProject(sysProject));
     }
@@ -1556,5 +1576,25 @@ public class SysProjectController extends BaseController {
         modelMap.put("fwProjectType", fwProjectType);
         modelMap.put("otherFlag", otherFlag);
         return prefix + "/projectZckByType";
+    }
+
+    @PostMapping("/updateManagerId")
+    @ResponseBody
+    public AjaxResult updateManagerId() {
+        SysProject sysProject = new SysProject();
+        List<SysProject> sysProjectList = sysProjectService.selectSysProjectList(sysProject);
+        for (SysProject sysProject1 : sysProjectList) {
+            //将项目经理id存入数据库
+            if (StringUtils.isNotEmpty(sysProject1.getProjectManager())) {
+                SysUser sysUser = sysUserService.selectUserByUserName(sysProject1.getProjectManager());
+                if (StringUtils.isNotNull(sysUser)) {
+                    if (StringUtils.isNotNull(sysUser.getUserId())) {
+                        sysProject1.setProjectManagerId(sysUser.getUserId());
+                    }
+                }
+            }
+            sysProjectService.updateSysProject(sysProject1);
+        }
+        return AjaxResult.success("成功修复历史数据！");
     }
 }

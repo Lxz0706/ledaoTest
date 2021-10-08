@@ -582,12 +582,12 @@ public class SysApplyInController extends BaseController
             if (StringUtils.isEmpty(accessToken)){
                 throw new RuntimeException("获取accessToken失败");
             }
-            com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken,"");
+/*            com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken,"");
             List<String> openIds = new ArrayList<>();
 //            openIds = (List<String>) res.get("data.openId");
             Map m = (Map) res.get("data");
             openIds = (List<String>) m.get("openid");
-            WechatMessageUtil.batchGetUserUnionId(accessToken,openIds);
+            WechatMessageUtil.batchGetUserUnionId(accessToken,openIds);*/
             String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
             data.put("twoCodeUrl", twoCodeUrl);
             return data;

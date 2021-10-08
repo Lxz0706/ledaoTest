@@ -189,11 +189,11 @@ public class SysConfigServiceImpl implements ISysConfigService {
         String accessToken = "";
         try {
             SysConfig config = new SysConfig();
-            config.setConfigKey("weChatAccessToken");
+            config.setConfigKey("weChatLittleAccessToken");
             List<SysConfig> confs = configMapper.selectConfigList(config);
             boolean needSave = false;
             if (confs!=null&& confs.size()>0){
-                if ((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90){
+                if (((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90) && StringUtils.isNotEmpty(confs.get(0).getConfigValue())){
                     accessToken = confs.get(0).getConfigValue();
                 }else{
                     needSave = true;
@@ -204,7 +204,8 @@ public class SysConfigServiceImpl implements ISysConfigService {
                 needSave = true;
             }
             if (needSave){
-                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXSECRET,WeChatConstants.WXAPPIDCOM);
+                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
+//                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXSECRET,WeChatConstants.WXAPPIDCOM);
                 config.setConfigValue(accessToken);
                 configMapper.insertConfig(config);
             }

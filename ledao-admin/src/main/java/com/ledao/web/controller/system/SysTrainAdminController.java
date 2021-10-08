@@ -6,10 +6,12 @@ import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.system.dao.SysDept;
 import com.ledao.system.dao.SysUser;
+import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class SysTrainAdminController extends BaseController
 
     @Autowired
     private ISysTrainAdminService sysTrainAdminService;
+
+    @Autowired
+    private ISysConfigService configService;
 
 
 //    @RequiresPermissions("system:train:view")
@@ -170,7 +175,11 @@ public class SysTrainAdminController extends BaseController
             parmData.put("scene","trainId="+trainId);
             parmData.put("url","");
             String parm = parmData.toJSONString();
-            accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
+//            accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
+            accessToken = configService.getWechatAccessToken();
+            if (StringUtils.isEmpty(accessToken)){
+                throw new RuntimeException("获取accessToken失败");
+            }
             System.out.println("accessToken;"+accessToken);
             String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
             data.put("twoCodeUrl", twoCodeUrl);

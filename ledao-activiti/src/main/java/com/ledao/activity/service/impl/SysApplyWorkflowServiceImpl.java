@@ -116,7 +116,7 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken",accessToken);
                 // 创建名称为投后队列
-                Queue queue = new ActiveMQQueue("ThQueueCommon");
+                Queue queue = new ActiveMQQueue("ThQueueCommonUsal");
                 String dataStr = JSONObject.toJSONString(parm);
                 // 向队列发送消息
                 jmsMessagingTemplate.convertAndSend(queue, dataStr);

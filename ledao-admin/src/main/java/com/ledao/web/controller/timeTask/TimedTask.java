@@ -3,6 +3,8 @@ package com.ledao.web.controller.timeTask;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.message.Template;
 import com.ledao.common.message.TemplateParam;
@@ -95,6 +97,9 @@ public class TimedTask {
 
     @Autowired
     private IJudicialUpdataService judicialUpdataService;
+
+    @Autowired
+    private ISysApplyInService sysApplyInService;
 
 
 
@@ -262,9 +267,8 @@ public class TimedTask {
                 users.add(sysUserService.selectUserById(u.getDirectorId()));
                 SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
                 parmStr.put("word1",manage.getProjectManagementName());
-                parmStr.put("word2","截止日期" +DateUtils.formatDateByPattern(mon.getTime(),"yyyy-MM-dd"));
-                parmStr.put("word3","-");
-                parmStr.put("word4", mon.getFundType()+"/" +mon.getAmountMoney());
+                parmStr.put("word2","-");
+                parmStr.put("word3","截止日期" +DateUtils.formatDateByPattern(mon.getTime(),"yyyy-MM-dd")+","+mon.getFundType()+"/" +mon.getAmountMoney());
                 System.out.println(parmStr);
                 sendJournalTask(users,parmStr);
             }
@@ -304,9 +308,8 @@ public class TimedTask {
                 users.add(sysUserService.selectUserById(u.getDirectorId()));
                 SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
                 parmStr.put("word1",manage.getProjectManagementName());
-                parmStr.put("word2","截止日期" +DateUtils.formatDateByPattern(mon.getPaidDate(),"yyyy-MM-dd"));
-                parmStr.put("word3","-");
-                parmStr.put("word4", mon.getFundType()+"/" +mon.getAmountPaid());
+                parmStr.put("word2","-");
+                parmStr.put("word3","截止日期" +DateUtils.formatDateByPattern(mon.getPaidDate(),"yyyy-MM-dd")+","+mon.getFundType()+"/" +mon.getAmountPaid());
                 System.out.println(parmStr);
                 sendJournalTask(users,parmStr);
             }
@@ -349,6 +352,21 @@ public class TimedTask {
                 }
             }
         }
+
+        //查询超时未归还
+        Map<String,String> parmStr = new HashMap<>();
+        parmStr.put("first","您有一个档案超时未归还提醒");
+        parmStr.put("word1","档案超时未还提醒");
+        parmStr.put("word2","请及时归还档案");
+        List<SysApplyIn> sysApply = new ArrayList<>();
+        List<SysApplyIn> sysApplyIn = sysApplyInService.selectNotReturned();
+        List<SysUser> users = new ArrayList<>();
+        for (SysApplyIn sysApp:sysApplyIn) {
+            if((new Date().getTime()-sysApp.getPlanReturnTime().getTime())%3==0){
+                users.add(sysUserService.selectUserByLoginName(sysApp.getApplyUser()));
+            }
+        }
+        sendDailyUsalTask(users,parmStr);
     }
 
     /**
@@ -356,6 +374,12 @@ public class TimedTask {
      * @throws ParseException
      */
     public void dailyWorkTask() throws ParseException {
+        try {
+            dailyTask();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         //判断是否是周五
         boolean isWeekEndDay = false;
         boolean isWeekRest = false;
@@ -372,7 +396,8 @@ public class TimedTask {
             List<SysUser> users = sysUserService.selectAllUserDepRole();
             Map<String,String> parmStr = new HashMap<>();
             parmStr.put("first","您有一个日志任务提醒");
-            parmStr.put("word1","您的日志未填写，请及时完成");
+            parmStr.put("word1","日志未填写提醒");
+            parmStr.put("word2","请及时填写日志");
             for (SysUser u :users){
                 if (StringUtils.isNotNull(u.getComOpenId())){
                     SysJournal sj = new SysJournal();
@@ -385,12 +410,12 @@ public class TimedTask {
                             ){
                                 List<SysUser> us = new ArrayList<>();
                                 us.add(u);
-                                sendDailyJournalTask(us,parmStr);
+                                sendDailyUsalTask(us,parmStr);
                             }
                         }else if( ( "法律风控部".equals(u.getDeptName()) && "flgw".equals(u.getRoleKey()))){
                             List<SysUser> us = new ArrayList<>();
                             us.add(u);
-                            sendDailyJournalTask(us,parmStr);
+                            sendDailyUsalTask(us,parmStr);
                         }
                     }
                 }
@@ -473,6 +498,43 @@ public class TimedTask {
      * 日志推送公共方法
      * @param
      */
+    private void sendDailyUsalTask(List<SysUser> us,Map<String,String> parmStr){
+        for (SysUser u:us) {
+//            if (StringUtils.isNotEmpty(u.getComOpenId()) && !"n".equals(u.getIsDailyRemind())){
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                //发布人
+                parm.put("first",parmStr.get("first"));
+                parm.put("word1",parmStr.get("word1"));
+//                        计划时间
+                parm.put("word2", StringUtils.isNotEmpty(parmStr.get("word2"))?parmStr.get("word2"):"-");
+//                        任务名称
+                parm.put("word3",StringUtils.isNotEmpty(parmStr.get("word3"))?parmStr.get("word3"):"-");
+//                        任务状态
+                parm.put("word4",StringUtils.isNotEmpty(parmStr.get("word4"))?parmStr.get("word4"):"-");
+                parm.put("word5","-");
+
+//                        任务接收人
+//                parm.put("toUser",u.getComOpenId());
+                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+                parm.put("url","common/journalInfo/journal");
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken",accessToken);
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("ThQueueCommonUsal");
+                String dataStr = JSONObject.toJSONString(parm);
+                System.out.println("--------------------推送提醒给："+u.getLoginName()+"----------------------");
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+                stadingTime();
+//            }
+        }
+    }
+
+    /**
+     * 日志推送公共方法
+     * @param
+     */
     private void sendJournalTask(List<SysUser> us,Map<String,String> parmStr){
         for (SysUser u:us) {
             if (StringUtils.isNotEmpty(u.getComOpenId())){
@@ -490,8 +552,8 @@ public class TimedTask {
                 parm.put("word5","-");
 
 //                        任务接收人
-                parm.put("toUser",u.getComOpenId());
-//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+//                parm.put("toUser",u.getComOpenId());
+                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken",accessToken);
                 // 创建名称为投后队列
@@ -511,23 +573,25 @@ public class TimedTask {
                 JSONObject parm = new JSONObject();
                 //发布人
                 parm.put("first","您有一个任务提醒");
-                parm.put("word1","回收金额"+s.getPlanBackMoney());
-//                        计划时间
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                parm.put("word2", sdf.format(s.getPlanBeginTime())+" 至 "+sdf.format(s.getPlanEndTime()));
-//                        任务名称
-                parm.put("word3","许凯");
-//                        任务状态
-                parm.put("word4",StringUtils.isNotEmpty(s.getTaskStatu())?sysDictDataService.selectDictLabel("manage_task",s.getTaskStatu()):"-");
                 if ("0".equals(s.getTaskType())){
-                    parm.put("word5",s.getZckName());
+                    parm.put("word1",s.getZckName());
                 }else {
-                    parm.put("word5",s.getProjectName()+"--"+s.getNodeStatu());
+                    parm.put("word1",s.getProjectName());
                 }
 
+//                        计划时间
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                parm.put("word2", sdf.format(s.getPlanBeginTime())+" 至 "+sdf.format(s.getPlanEndTime())+(StringUtils.isNotEmpty(s.getNodeStatu())?"("+s.getNodeStatu()+")":""));
+                parm.put("word3","回收金额"+s.getPlanBackMoney());
+                //                        任务名称
+//                parm.put("word3","许凯");
+//                        任务状态
+                parm.put("word4",StringUtils.isNotEmpty(s.getTaskStatu())?sysDictDataService.selectDictLabel("manage_task",s.getTaskStatu()):"-");
+
+
 //                        任务接收人
-                parm.put("toUser",u.getComOpenId());
-//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+//                parm.put("toUser",u.getComOpenId());
+                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken",accessToken);
                 // 创建名称为投后队列
@@ -612,7 +676,7 @@ public class TimedTask {
         usersAll.addAll(users3);
         List<SysUser> users4 = getUsers("thbCommon");
         usersAll.addAll(users4);
-        sendJournalTask(usersAll,parmStr);
+        sendDailyUsalTask(usersAll,parmStr);
     }
 
     public void ss() {

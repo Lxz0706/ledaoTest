@@ -126,4 +126,6 @@ public interface ISysApplyInService
     List<SysApplyIn> selectSysApplyInDailyDetailList(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> docListDobtDetailByPName(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> selectNotReturned();
 }

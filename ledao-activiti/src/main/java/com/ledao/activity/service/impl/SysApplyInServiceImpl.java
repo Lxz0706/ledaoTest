@@ -16,9 +16,11 @@ import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.impl.SysConfigServiceImpl;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ import com.ledao.common.utils.DateUtils;
 import com.ledao.framework.util.ShiroUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.jms.Queue;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -97,6 +100,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     @Autowired
     private ISysConfigService configService;
+
+    @Autowired
+    private JmsMessagingTemplate jmsMessagingTemplate;
 
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
@@ -453,6 +459,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
     public void sendMsg(List<String> users,SysApplyIn sysApplyInEntity,String refuseReason){
         for (String u : users){
+            System.out.println("================档案相关消息推送，发送消息给: "+u);
             SysUser us = userMapper.selectUserByLoginName(u);
             String appName = "";
             if ("0".equals(sysApplyInEntity.getApplyType())){
@@ -718,6 +725,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         sysApplyIn.setApproveStatu("7");
                         sysApplyInEntity.setApproveStatu("7");
                         sysApplyInEntity.setApproveUser("");
+                        users.add(sysApplyInEntity.getApplyUser());
+                        users.add("qianwanping");
+                        users.add("xunlinyi");
                     }else if ("9".equals(sysApplyInEntity.getApproveStatu())){
                         if (!"0".equals(sysApplyInEntity.getIsReceived())){
                             return AjaxResult.error("档案未收到，无法完成借出审批");
@@ -1155,6 +1165,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         return sysApplyInMapper.docListDobtDetailByPName(sysApplyIn);
     }
 
+    @Override
+    public List<SysApplyIn> selectNotReturned() {
+        return sysApplyInMapper.selectNotReturned();
+    }
+
     public int insertApply(SysApplyInImport apply,SysApplyIn applyIn){
         applyIn.setApplyUser(apply.getApplyUser());
         applyIn.setApplyTime(apply.getApplyTime());
@@ -1293,7 +1308,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
                 if (workflows!=null && workflows.size()>0){
                     users.add(workflows.get(0).getCreateBy());
-                    sendMsg(users,sysApplyIn,"");
+                    sendUsalMsg(users,sysApplyIn,"");
                 }
 
             }
@@ -1307,7 +1322,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
             if (workflows!=null && workflows.size()>0){
                 users.add(workflows.get(0).getCreateBy());
-                sendMsg(users,sysApplyIn,"");
+                sendUsalMsg(users,sysApplyIn,"");
             }
         }
         if ("9".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceived())){
@@ -1327,9 +1342,39 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
             List<String> users = new ArrayList<>();
             users.add(sysApplyIn.getApplyUser());
-            sendMsg(users,sysApplyIn,"");
+            sendUsalMsg(users,sysApplyIn,"");
         }
 
         return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
     }
+
+    public void sendUsalMsg(List<String> users,SysApplyIn sysApplyInEntity,String refuseReason){
+        for (String u : users){
+            System.out.println("================档案相关消息推送，发送消息给: "+u);
+            SysUser us = userMapper.selectUserByLoginName(u);
+            String appName = "";
+            if ("0".equals(sysApplyInEntity.getApplyType())){
+                appName = "档案入库申请";
+            }else{
+                appName = "档案出库申请";
+            }
+            if (us!=null && StringUtils.isNotEmpty(us.getComOpenId())){
+
+                JSONObject parm = new JSONObject();
+                String first = "您的申请被拒绝";
+
+                parm.put("first",first);
+                parm.put("toUser",us.getComOpenId());
+                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
+                parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
+                parm.put("word3",sysApplyInEntity.getApplyTime());
+
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken",accessToken);
+                Queue queue = new ActiveMQQueue("ThQueueCommonUsal");
+                String dataStr = JSONObject.toJSONString(parm);
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+            }
+        }
 }

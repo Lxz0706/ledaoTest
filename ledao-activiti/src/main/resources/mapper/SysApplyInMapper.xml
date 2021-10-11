@@ -100,6 +100,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by update_time desc
     </select>
 
+    <select id="selectNotReturned"  resultMap="SysApplyInResult">
+        SELECT
+            *
+        FROM
+            sys_apply_in a
+        WHERE
+            a.apply_type = '1'
+          AND a.is_return = '0'
+          and a.real_return_time is null
+          and a.approve_statu = '8'
+          and DATE_FORMAT(NOW(),'%Y%m%d')&gt;DATE_FORMAT(a.update_time,'%Y%m%d')
+    </select>
+
     <select id="selectSysApplyInListUser" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">
         SELECT
         a.apply_id,

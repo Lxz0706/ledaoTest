@@ -105,4 +105,6 @@ public interface SysApplyInMapper
     List<SysApplyIn> selectSysApplyInDailyDetailList(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> docListDobtDetailByPName(SysApplyIn sysApplyIn);
+
+    List<SysApplyIn> selectNotReturned();
 }

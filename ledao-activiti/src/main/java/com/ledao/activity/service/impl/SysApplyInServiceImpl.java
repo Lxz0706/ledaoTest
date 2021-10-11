@@ -1275,6 +1275,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         sysApplyIn.setUpdateTime(new Date());
         SysApplyIn sin = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
         sysApplyIn.setApplyUser(sin.getApplyUser());
+        JSONObject parm = new JSONObject();
         if ("7".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceive())){
             SysApplyOutDetail sd = new SysApplyOutDetail();
             sd.setApplyId(sysApplyIn.getApplyId());
@@ -1308,7 +1309,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
                 if (workflows!=null && workflows.size()>0){
                     users.add(workflows.get(0).getCreateBy());
-                    sendUsalMsg(users,sysApplyIn,"");
+                    parm.put("word1","档案已确认接收");
+                    parm.put("word2","-");
+                    parm.put("word5","-");
+                    sendUsalMsg(users,sysApplyIn,parm);
                 }
 
             }
@@ -1322,7 +1326,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
             if (workflows!=null && workflows.size()>0){
                 users.add(workflows.get(0).getCreateBy());
-                sendUsalMsg(users,sysApplyIn,"");
+                parm.put("word1","档案已归还");
+                parm.put("word2","-");
+                parm.put("word5","档案已归还，请确认");
+                sendUsalMsg(users,sysApplyIn,parm);
             }
         }
         if ("9".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceived())){
@@ -1342,32 +1349,30 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             }
             List<String> users = new ArrayList<>();
             users.add(sysApplyIn.getApplyUser());
-            sendUsalMsg(users,sysApplyIn,"");
+            parm.put("word1","档案已归还");
+            parm.put("word2","-");
+            parm.put("word5","档案归还已确认");
+            sendUsalMsg(users,sysApplyIn,parm);
         }
 
         return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
     }
 
-    public void sendUsalMsg(List<String> users,SysApplyIn sysApplyInEntity,String refuseReason){
+    public void sendUsalMsg(List<String> users,SysApplyIn sysApplyInEntity,JSONObject parm){
         for (String u : users){
             System.out.println("================档案相关消息推送，发送消息给: "+u);
             SysUser us = userMapper.selectUserByLoginName(u);
-            String appName = "";
-            if ("0".equals(sysApplyInEntity.getApplyType())){
-                appName = "档案入库申请";
-            }else{
-                appName = "档案出库申请";
-            }
-            if (us!=null && StringUtils.isNotEmpty(us.getComOpenId())){
+//            if (us!=null && StringUtils.isNotEmpty(us.getComOpenId())){
 
-                JSONObject parm = new JSONObject();
-                String first = "您的申请被拒绝";
+//                JSONObject parm = new JSONObject();
+                String first = "档案出库信息确认";
 
                 parm.put("first",first);
-                parm.put("toUser",us.getComOpenId());
-                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
-                parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
-                parm.put("word3",sysApplyInEntity.getApplyTime());
+//                parm.put("toUser",us.getComOpenId());
+                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+//                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
+//                parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
+//                parm.put("word3",sysApplyInEntity.getApplyTime());
 
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken",accessToken);
@@ -1375,6 +1380,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 String dataStr = JSONObject.toJSONString(parm);
                 // 向队列发送消息
                 jmsMessagingTemplate.convertAndSend(queue, dataStr);
-            }
+//            }
         }
+    }
 }

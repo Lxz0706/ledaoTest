@@ -797,6 +797,12 @@ public class SysApplyInController extends BaseController
             if ("0".equals(pro.getApplyStatu()) && pro.getId()!=list.get(0).getId()){
                 pro.setApplyUserName(pro.getApplyUserName()+"(已同意)");
             }
+            if (StringUtils.isNotEmpty(pro.getShowLable())){
+                String showLable = sysDictDataService.selectDictLabel("apply_statu",pro.getShowLable());
+                if (StringUtils.isNotEmpty(showLable)){
+                    pro.setShowLable(showLable);
+                }
+            }
         }
         return getDataTable(list);
     }

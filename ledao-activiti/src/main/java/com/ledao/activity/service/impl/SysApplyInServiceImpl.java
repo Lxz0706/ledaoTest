@@ -480,6 +480,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         first.setSortOrder(1);
         first.setCreateTime(new Date());
         first.setUpdateTime(new Date());
+        first.setRemark("发起申请");
         first.setApplyId(sysApplyInEntity.getApplyId());
         sysWorkflowProcessMapper.insertSysWorkflowProcess(first);
         pros.add(first);

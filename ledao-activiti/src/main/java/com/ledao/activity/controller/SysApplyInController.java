@@ -164,6 +164,12 @@ public class SysApplyInController extends BaseController
 //        查看审批历史
         return "applyProcess/historyList";
     }
+    @GetMapping("/processWorkDialog/{applyId}")
+    public String processWorkDialog(@PathVariable("applyId") String applyId,ModelMap modelMap) {
+//        查看审批历史
+        modelMap.put("applyId",applyId);
+        return "applyIn/processWorkDialog";
+    }
 
     @GetMapping("/fileDetail/{documentId}")
     public String fileDetail(@PathVariable("documentId") Long documentId,ModelMap modelMap) {

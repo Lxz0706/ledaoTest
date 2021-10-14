@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 import com.ledao.activity.dao.*;
+import com.ledao.activity.mapper.SysWorkflowProcessMapper;
 import com.ledao.activity.service.*;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.core.text.Convert;
@@ -73,6 +74,9 @@ public class SysApplyInController extends BaseController
 
     @Autowired
     private ISysConfigService configService;
+
+    @Autowired
+    private SysWorkflowProcessMapper sysWorkflowProcessMapper;
 
     private List<Long> applyIds = new ArrayList<>();
 
@@ -768,5 +772,26 @@ public class SysApplyInController extends BaseController
         }
         AjaxResult res = sysApplyInService.deleteSysApplyInByIds(ids);
         return res;
+    }
+
+    @PostMapping("/selectSysApplyWorkflowProcess")
+    @ResponseBody
+    public TableDataInfo selectSysApplyWorkflowProcess(SysWorkflowProcess sysWorkflowProcess)
+    {
+        List<SysWorkflowProcess> list = sysWorkflowProcessMapper.selectSysWorkflowProcessList(sysWorkflowProcess);
+        for (SysWorkflowProcess pro:list) {
+            if (StringUtils.isNotEmpty(pro.getApplyUserName())){
+                if(pro.getApplyUserName().length()>1){
+                    pro.setNameEndStr(pro.getApplyUserName().substring(pro.getApplyUserName().length()-2));
+                }else {
+                    pro.setNameEndStr(pro.getApplyUserName());
+                }
+            }
+
+            if ("0".equals(pro.getApplyStatu()) && pro.getId()!=list.get(0).getId()){
+                pro.setApplyUserName(pro.getApplyUserName()+"(已同意)");
+            }
+        }
+        return getDataTable(list);
     }
 }

@@ -40,6 +40,15 @@ public class SysApplyWorkflow extends BaseEntity
     @Excel(name = "备注")
     private String remarks;
 
+    private String showLable;
+
+    public String getShowLable() {
+        return showLable;
+    }
+
+    public void setShowLable(String showLable) {
+        this.showLable = showLable;
+    }
 
     public String getApproveUserName() {
         return approveUserName;

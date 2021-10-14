@@ -67,4 +67,5 @@ public interface SysApplyWorkflowMapper
      * @return
      */
 	public List<SysApplyWorkflow> selectSysApplyWorkflowList(SysApplyIn sysApplyIn);
+
 }

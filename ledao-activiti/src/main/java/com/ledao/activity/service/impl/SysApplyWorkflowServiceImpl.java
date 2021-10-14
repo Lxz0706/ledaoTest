@@ -1,15 +1,16 @@
 package com.ledao.activity.service.impl;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.activity.mapper.SysApplyInMapper;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
+import com.ledao.system.mapper.SysRoleMapper;
+import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.ISysConfigService;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,15 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
 
     @Autowired
     private ISysConfigService configService;
+
+    @Autowired
+    private SysApplyInMapper sysApplyInMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
+
+    @Autowired
+    private SysRoleMapper roleMapper;
 
     /**
      * 查询档案出入库审批流程
@@ -128,6 +138,22 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
                 }, 2000);
             }
         }
+    }
+
+    private List<String> getUsers(String roleKey){
+        List<String> users = new ArrayList<>();
+        SysRole r = new SysRole();
+        r.setRoleKey(roleKey);
+        List<SysRole> ros = roleMapper.selectRoleList(r);
+        if (ros!=null && ros.size()>0){
+            SysUser userRoles = new SysUser();
+            userRoles.setRoleId(ros.get(0).getRoleId());
+            List<SysUser> us =  userMapper.selectAllocatedList(userRoles);
+            for (SysUser u: us) {
+                users.add(u.getLoginName());
+            }
+        }
+        return users;
     }
 
     /**

@@ -75,4 +75,5 @@ public interface ISysApplyWorkflowService
 	public AjaxResult sendLittleMsg(JSONObject parm);
 
     void sendTaskMsg(List<SysUser> us, Map<String, String> parmStr);
+
 }

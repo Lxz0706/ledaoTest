@@ -104,6 +104,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
 
+    @Autowired
+    private SysWorkflowProcessMapper sysWorkflowProcessMapper;
+
 
     private static final Logger log = LoggerFactory.getLogger(SysApplyInServiceImpl.class);
 
@@ -454,7 +457,245 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         sysApplyInEntity.setUpdateTime(new Date());
         sendMsg(users,sysApplyInEntity,"");
         sysApplyInMapper.updateSysApplyIn(sysApplyInEntity);
+        try {
+            addWorkProcessList(sysApplyInEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return AjaxResult.success();
+    }
+
+    private void addWorkProcessList(SysApplyIn sysApplyInEntity){
+        //流程发起时先进行删除原有的流程
+        sysWorkflowProcessMapper.deleteSysWorkflowProcessByApplyId(sysApplyInEntity.getApplyId());
+
+        SysApplyIn app = sysApplyInMapper.selectSysApplyInById(sysApplyInEntity.getApplyId());
+        SysUser user = userMapper.selectUserByLoginName(app.getApplyUser());
+        List<SysWorkflowProcess> pros = new ArrayList<>();
+        SysWorkflowProcess first = new SysWorkflowProcess();
+        first.setApplyStatu("0");
+        first.setApplyLoginName(app.getApplyUser());
+        first.setApplyUserName(userMapper.selectUserByLoginName(app.getApplyUser()).getUserName());
+        first.setApplyTime(sysApplyInEntity.getApplyTime());
+        first.setSortOrder(1);
+        first.setCreateTime(new Date());
+        first.setUpdateTime(new Date());
+        first.setApplyId(sysApplyInEntity.getApplyId());
+        sysWorkflowProcessMapper.insertSysWorkflowProcess(first);
+        pros.add(first);
+
+        List<String> docAdminjls = getUsers("documentAdmin");
+        List<String> documentAdminUserNames = new ArrayList<>();
+        List<String> documentAdminLoginNames = new ArrayList<>();
+        for (String documentLoginName:docAdminjls) {
+            if (!documentLoginName.equals(sysApplyInEntity.getApplyUser()) && !documentLoginName.equals(sysApplyInEntity.getRealCreateBy())){
+                documentAdminUserNames.add(userMapper.selectUserByLoginName(documentLoginName).getUserName());
+                documentAdminLoginNames.add(documentLoginName);
+            }
+        }
+        SysRole docRole = new SysRole();
+        docRole.setRoleKey("documentAdmin");
+        List<SysRole> docRoles = roleMapper.selectRoleList(docRole);
+        String documentAdminroleName = "";
+        if (docRoles!=null && docRoles.size()>0){
+            documentAdminroleName = docRoles.get(0).getRoleName();
+        }
+
+        if ("0".equals(sysApplyInEntity.getApplyType())){
+            //入库申请
+            if (user.getDirectorId() != null){
+                SysUser userDirector = userMapper.selectUserById(user.getDirectorId());
+                SysWorkflowProcess workDir = new SysWorkflowProcess();
+                workDir.setApplyLoginName(userDirector.getLoginName());
+                workDir.setApplyUserName(userMapper.selectUserByLoginName(userDirector.getLoginName()).getUserName());
+                workDir.setApplyStatu("1");
+                workDir.setSortOrder(2);
+                workDir.setCreateTime(new Date());
+                workDir.setUpdateTime(new Date());
+                workDir.setApplyId(sysApplyInEntity.getApplyId());
+                sysWorkflowProcessMapper.insertSysWorkflowProcess(workDir);
+                pros.add(workDir);
+            }
+            //无直属领导，直接到档案管理员
+
+            SysWorkflowProcess workDir = new SysWorkflowProcess();
+            workDir.setApplyUserName(String.join(",",documentAdminUserNames));
+            workDir.setApplyStatu("1");
+            workDir.setApplyLoginName(String.join(",",documentAdminLoginNames));
+            workDir.setRemark(documentAdminroleName);
+            workDir.setShowLable("已确认收到档案");
+            workDir.setSortOrder(3);
+            workDir.setRemark2("3");
+            workDir.setCreateTime(new Date());
+            workDir.setUpdateTime(new Date());
+            workDir.setApplyId(sysApplyInEntity.getApplyId());
+            sysWorkflowProcessMapper.insertSysWorkflowProcess(workDir);
+            pros.add(workDir);
+
+            SysWorkflowProcess workDirf = new SysWorkflowProcess();
+            workDirf.setApplyUserName("");
+            workDirf.setApplyStatu("1");
+//            workDirf.setCreateTime(new Date());
+//            workDirf.setUpdateTime(new Date());
+            workDirf.setRemark2("3");
+            workDir.setSortOrder(4);
+//            workDirf.setApplyId(sysApplyInEntity.getApplyId());
+//            sysWorkflowProcessMapper.insertSysWorkflowProcess(workDirf);
+            pros.add(workDirf);
+        }else{
+            int count = 1;
+            //出库申请,增加直属领导
+            List<String> users = new ArrayList<>();
+            SysUser applyUser = userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser());
+            addDirctorUser(applyUser,sysApplyInEntity,count,users);
+            count = count+users.size();
+            //增加法务
+            List<String> jls = getUsers("flgw");
+            SysRole role = new SysRole();
+            role.setRoleKey("flgw");
+            List<SysRole> roles = roleMapper.selectRoleList(role);
+            String flgwRoleName = "";
+            if (roles!=null && roles.size()>0){
+                flgwRoleName = roles.get(0).getRoleName();
+            }
+            count++;
+            for (String loginName:jls) {
+                SysWorkflowProcess workDir = new SysWorkflowProcess();
+                workDir.setApplyLoginName(loginName);
+                workDir.setApplyUserName(userMapper.selectUserByLoginName(loginName).getUserName());
+                workDir.setApplyStatu("1");
+                workDir.setRemark(flgwRoleName);
+                workDir.setCreateTime(new Date());
+                workDir.setUpdateTime(new Date());
+                workDir.setSortOrder(count);
+                workDir.setApplyId(sysApplyInEntity.getApplyId());
+                sysWorkflowProcessMapper.insertSysWorkflowProcess(workDir);
+            }
+            //增加总经理
+            List<String> zjls = getUsers("zjl");
+            SysRole zjlrole = new SysRole();
+            zjlrole.setRoleKey("zjl");
+            List<SysRole> zjlroles = roleMapper.selectRoleList(zjlrole);
+            String zjlRoleName = "";
+            if (zjlroles!=null && zjlroles.size()>0){
+                zjlRoleName = zjlroles.get(0).getRoleName();
+            }
+            for (String loginName:zjls) {
+                count++;
+                SysWorkflowProcess workDir = new SysWorkflowProcess();
+                workDir.setApplyLoginName(loginName);
+                workDir.setApplyUserName(userMapper.selectUserByLoginName(loginName).getUserName());
+                workDir.setApplyStatu("1");
+                workDir.setRemark(zjlRoleName);
+                workDir.setSortOrder(count);
+                workDir.setCreateTime(new Date());
+                workDir.setUpdateTime(new Date());
+                workDir.setApplyId(sysApplyInEntity.getApplyId());
+                sysWorkflowProcessMapper.insertSysWorkflowProcess(workDir);
+            }
+
+            //档案管理员
+            count++;
+            SysWorkflowProcess workDir = new SysWorkflowProcess();
+            workDir.setApplyUserName(String.join(",",documentAdminUserNames));
+            workDir.setApplyStatu("1");
+            workDir.setRemark(documentAdminroleName);
+            workDir.setApplyLoginName(String.join(",",documentAdminLoginNames));
+            workDir.setShowLable("7");
+            workDir.setSortOrder(count);
+            workDir.setCreateTime(new Date());
+            workDir.setUpdateTime(new Date());
+            workDir.setApplyId(sysApplyInEntity.getApplyId());
+            sysWorkflowProcessMapper.insertSysWorkflowProcess(workDir);
+
+            count++;
+            SysWorkflowProcess checkGet = new SysWorkflowProcess();
+            checkGet.setApplyStatu("1");
+            checkGet.setApplyLoginName(app.getApplyUser());
+            checkGet.setApplyUserName(userMapper.selectUserByLoginName(app.getApplyUser()).getUserName());
+            checkGet.setCreateTime(new Date());
+            checkGet.setUpdateTime(new Date());
+            checkGet.setSortOrder(count);
+            checkGet.setApplyId(sysApplyInEntity.getApplyId());
+            if ("0".equals(sysApplyInEntity.getIsReturn())){
+                checkGet.setShowLable("8");
+            }else{
+                checkGet.setShowLable("已确认收到档案");
+                checkGet.setRemark2("3");
+            }
+
+            sysWorkflowProcessMapper.insertSysWorkflowProcess(checkGet);
+
+            if ("0".equals(sysApplyInEntity.getIsReturn())){
+                //需要归还
+
+
+                count++;
+                checkGet.setSortOrder(count);
+                checkGet.setCreateTime(new Date());
+                checkGet.setUpdateTime(new Date());
+                checkGet.setShowLable("9");
+                sysWorkflowProcessMapper.insertSysWorkflowProcess(checkGet);
+
+                //档案管理员
+                SysWorkflowProcess workget = new SysWorkflowProcess();
+                count++;
+                workget.setSortOrder(count);
+                workget.setApplyUserName(String.join(",",documentAdminUserNames));
+                workget.setApplyLoginName(String.join(",",documentAdminLoginNames));
+                workget.setApplyStatu("1");
+                workget.setRemark(documentAdminroleName);
+                workget.setShowLable("已确认收回档案");
+                workget.setCreateTime(new Date());
+                workget.setUpdateTime(new Date());
+                workget.setRemark2("3");
+                workget.setApplyId(sysApplyInEntity.getApplyId());
+                sysWorkflowProcessMapper.insertSysWorkflowProcess(workget);
+
+                SysWorkflowProcess workDirf = new SysWorkflowProcess();
+                count++;
+                workDirf.setSortOrder(count);
+                workDirf.setApplyUserName("");
+                workDirf.setApplyStatu("1");
+                workDirf.setCreateTime(new Date());
+                workDirf.setUpdateTime(new Date());
+                workDirf.setRemark2("3");
+                workDirf.setApplyId(sysApplyInEntity.getApplyId());
+                sysWorkflowProcessMapper.insertSysWorkflowProcess(workDirf);
+                pros.add(workDirf);
+            }else{
+                SysWorkflowProcess workDirf = new SysWorkflowProcess();
+                count++;
+                workDirf.setSortOrder(count);
+                workDirf.setApplyUserName("");
+                workDirf.setApplyStatu("1");
+                workDirf.setCreateTime(new Date());
+                workDirf.setUpdateTime(new Date());
+                workDirf.setRemark2("3");
+                workDirf.setApplyId(sysApplyInEntity.getApplyId());
+                sysWorkflowProcessMapper.insertSysWorkflowProcess(workDirf);
+                pros.add(workDirf);
+            }
+        }
+
+    }
+
+    private void addDirctorUser(SysUser user,SysApplyIn sysApplyInEntity,int count,List<String> users){
+        if (user.getDirectorId()!=null){
+            count++;
+            SysUser userDirector = userMapper.selectUserById(user.getDirectorId());
+            SysWorkflowProcess workDir = new SysWorkflowProcess();
+            workDir.setApplyLoginName(userDirector.getLoginName());
+            users.add(userDirector.getLoginName());
+            workDir.setApplyUserName(userMapper.selectUserByLoginName(userDirector.getLoginName()).getUserName());
+            workDir.setApplyStatu("1");
+            workDir.setCreateTime(new Date());
+            workDir.setSortOrder(count);
+            workDir.setUpdateTime(new Date());
+            workDir.setApplyId(sysApplyInEntity.getApplyId());
+            sysWorkflowProcessMapper.insertSysWorkflowProcess(workDir);
+            addDirctorUser(userDirector,sysApplyInEntity,count,users);
+        }
     }
 
     public void sendMsg(List<String> users,SysApplyIn sysApplyInEntity,String refuseReason){
@@ -817,7 +1058,47 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         workflow.setApproveUser(ShiroUtils.getLoginName());
         workflow.setCreateBy(ShiroUtils.getLoginName());
         workflow.setCreateTime(new Date());
+        try {
+            saveWorkFlowProcess(workflow);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
+    }
+
+    private void saveWorkFlowProcess(SysApplyWorkflow workflow){
+        SysWorkflowProcess first = new SysWorkflowProcess();
+        first.setApplyLoginName(workflow.getApproveUser());
+        first.setApplyId(workflow.getApplyId());
+        List<SysWorkflowProcess> pross = sysWorkflowProcessMapper.selectSysWorkflowProcessList(first);
+
+        boolean isDocumentAdmin = false;
+        SysUser currentUser = ShiroUtils.getSysUser();
+        for (SysRole r: currentUser.getRoles()){
+            if ("documentAdmin".equals(r.getRoleKey())){
+                isDocumentAdmin = true;
+            }
+        }
+        if (isDocumentAdmin){
+            for (SysWorkflowProcess p:pross) {
+                p.setApplyLoginName(workflow.getApproveUser());
+                p.setApplyUserName(userMapper.selectUserByLoginName(workflow.getApproveUser()).getUserName());
+                sysWorkflowProcessMapper.updateSysWorkflowProcess(p);
+            }
+        }
+        for (SysWorkflowProcess p:pross) {
+           if (p.getApplyTime()==null){
+                if ("2".equals(workflow.getApproveStatu())){
+                    p.setApplyStatu("2");
+                }else{
+                    p.setApplyStatu("0");
+                }
+                p.setApplyTime(new Date());
+                p.setUpdateTime(new Date());
+                sysWorkflowProcessMapper.updateSysWorkflowProcess(p);
+                return;
+            }
+        }
     }
 
     @Override
@@ -1291,6 +1572,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         documentFileMapper.updateSysDocumentFile(sysDocumentFile);
                     }
                 }
+                saveWorkFlowProcessCheck(sysApplyIn);
             }else{
                 sysApplyIn.setApproveStatu("8");
                 //出库待归还
@@ -1315,6 +1597,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     sendUsalMsg(users,sysApplyIn,parm);
                 }
 
+                saveWorkFlowProcessCheck(sysApplyIn);
+
+
             }
         }
         if ("8".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReturned())){
@@ -1331,6 +1616,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 parm.put("word5","档案已归还，请确认");
                 sendUsalMsg(users,sysApplyIn,parm);
             }
+            saveWorkFlowProcessCheck(sysApplyIn);
         }
         if ("9".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceived())){
             sysApplyIn.setApproveStatu("3");
@@ -1353,23 +1639,61 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             parm.put("word2","-");
             parm.put("word5","档案归还已确认");
             sendUsalMsg(users,sysApplyIn,parm);
+            saveWorkFlowProcessCheck(sysApplyIn);
         }
 
         return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
+    }
+
+    private void saveWorkFlowProcessCheck(SysApplyIn sysApplyIn){
+        try {
+            if ("3".equals(sysApplyIn.getApproveStatu())){
+                SysWorkflowProcess first = new SysWorkflowProcess();
+                first.setRemark2("3");
+                List<SysWorkflowProcess> pross = sysWorkflowProcessMapper.selectSysWorkflowProcessList(first);
+                if (pross!=null && pross.size()>0){
+                    for (SysWorkflowProcess p:pross) {
+                        if (p.getApplyTime()==null){
+                            p.setApplyStatu("0");
+                            p.setApplyTime(new Date());
+                            p.setUpdateTime(new Date());
+                            sysWorkflowProcessMapper.updateSysWorkflowProcess(p);
+                        }
+                    }
+                }
+            }else{
+                SysWorkflowProcess first = new SysWorkflowProcess();
+                first.setApplyLoginName(ShiroUtils.getLoginName());
+                first.setApplyId(sysApplyIn.getApplyId());
+                first.setShowLable(sysApplyIn.getApproveStatu());
+                List<SysWorkflowProcess> pross = sysWorkflowProcessMapper.selectSysWorkflowProcessList(first);
+                if (pross!=null && pross.size()>0){
+                    SysWorkflowProcess p = pross.get(0);
+                    if (p.getApplyTime()==null){
+                        p.setApplyStatu("0");
+                        p.setUpdateTime(new Date());
+                        p.setApplyTime(new Date());
+                        sysWorkflowProcessMapper.updateSysWorkflowProcess(p);
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void sendUsalMsg(List<String> users,SysApplyIn sysApplyInEntity,JSONObject parm){
         for (String u : users){
             System.out.println("================档案相关消息推送，发送消息给: "+u);
             SysUser us = userMapper.selectUserByLoginName(u);
-//            if (us!=null && StringUtils.isNotEmpty(us.getComOpenId())){
+            if (us!=null && StringUtils.isNotEmpty(us.getComOpenId())){
 
 //                JSONObject parm = new JSONObject();
                 String first = "档案出库信息确认";
 
                 parm.put("first",first);
-//                parm.put("toUser",us.getComOpenId());
-                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+                parm.put("toUser",us.getComOpenId());
+//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
 //                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
 //                parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
 //                parm.put("word3",sysApplyInEntity.getApplyTime());
@@ -1380,7 +1704,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 String dataStr = JSONObject.toJSONString(parm);
                 // 向队列发送消息
                 jmsMessagingTemplate.convertAndSend(queue, dataStr);
-//            }
+            }
         }
     }
 }

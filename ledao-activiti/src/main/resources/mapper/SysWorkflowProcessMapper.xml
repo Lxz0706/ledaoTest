@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.activity.mapper.SysWorkflowProcessMapper">
+    
+    <resultMap type="SysWorkflowProcess" id="SysWorkflowProcessResult">
+        <result property="id"    column="id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="applyUserName"    column="apply_user_name"    />
+        <result property="applyLoginName"    column="apply_login_name"    />
+        <result property="applyStatu"    column="apply_statu"    />
+        <result property="showLable"    column="show_lable"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark2"    column="remark2"    />
+    </resultMap>
+
+    <sql id="selectSysWorkflowProcessVo">
+        select id, apply_id, apply_user_name, apply_login_name, apply_statu, show_lable, sort_order, apply_time, create_by, create_time, update_by, update_time, remark,remark2 from sys_workflow_process
+    </sql>
+
+    <select id="selectSysWorkflowProcessList" parameterType="SysWorkflowProcess" resultMap="SysWorkflowProcessResult">
+        <include refid="selectSysWorkflowProcessVo"/>
+        <where>  
+            <if test="applyId != null "> and apply_id = #{applyId}</if>
+            <if test="applyUserName != null  and applyUserName != ''"> and apply_user_name like concat('%', #{applyUserName}, '%')</if>
+            <if test="applyLoginName != null  and applyLoginName != ''"> and FIND_IN_SET(#{applyLoginName},apply_login_name)</if>
+            <if test="applyStatu != null  and applyStatu != ''"> and apply_statu = #{applyStatu}</if>
+            <if test="showLable != null  and showLable != ''"> and show_lable = #{showLable}</if>
+            <if test="sortOrder != null and sortOrder != 0"> and sort_order = #{sortOrder}</if>
+            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+        </where>
+        order  by sort_order asc, update_time asc
+    </select>
+    
+    <select id="selectSysWorkflowProcessById" parameterType="Long" resultMap="SysWorkflowProcessResult">
+        <include refid="selectSysWorkflowProcessVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysWorkflowProcess" parameterType="SysWorkflowProcess" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_workflow_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">apply_id,</if>
+            <if test="applyUserName != null">apply_user_name,</if>
+            <if test="applyLoginName != null">apply_login_name,</if>
+            <if test="applyStatu != null">apply_statu,</if>
+            <if test="showLable != null">show_lable,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark2 != null">remark2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">#{applyId},</if>
+            <if test="applyUserName != null">#{applyUserName},</if>
+            <if test="applyLoginName != null">#{applyLoginName},</if>
+            <if test="applyStatu != null">#{applyStatu},</if>
+            <if test="showLable != null">#{showLable},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark2 != null">#{remark2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysWorkflowProcess" parameterType="SysWorkflowProcess">
+        update sys_workflow_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="applyUserName != null">apply_user_name = #{applyUserName},</if>
+            <if test="applyLoginName != null">apply_login_name = #{applyLoginName},</if>
+            <if test="applyStatu != null">apply_statu = #{applyStatu},</if>
+            <if test="showLable != null">show_lable = #{showLable},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark2 != null">remark2 = #{remark2},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysWorkflowProcessById" parameterType="Long">
+        delete from sys_workflow_process where id = #{id}
+    </delete>
+
+    <delete id="deleteSysWorkflowProcessByApplyId" parameterType="Long">
+        delete from sys_workflow_process where apply_id = #{id}
+    </delete>
+
+    <delete id="deleteSysWorkflowProcessByIds" parameterType="String">
+        delete from sys_workflow_process where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

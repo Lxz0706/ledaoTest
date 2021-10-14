@@ -535,12 +535,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             SysWorkflowProcess workDirf = new SysWorkflowProcess();
             workDirf.setApplyUserName("");
             workDirf.setApplyStatu("1");
-//            workDirf.setCreateTime(new Date());
-//            workDirf.setUpdateTime(new Date());
+            workDirf.setCreateTime(new Date());
+            workDirf.setUpdateTime(new Date());
             workDirf.setRemark2("3");
-            workDir.setSortOrder(4);
-//            workDirf.setApplyId(sysApplyInEntity.getApplyId());
-//            sysWorkflowProcessMapper.insertSysWorkflowProcess(workDirf);
+            workDirf.setSortOrder(4);
+            workDirf.setApplyId(sysApplyInEntity.getApplyId());
+            sysWorkflowProcessMapper.insertSysWorkflowProcess(workDirf);
             pros.add(workDirf);
         }else{
             int count = 1;

@@ -25,6 +25,7 @@ public class SysWorkflowProcess extends BaseEntity
     @Excel(name = "申请id")
     private Long applyId;
 
+
     /** 审批人姓名 */
     @Excel(name = "审批人姓名")
     private String applyUserName;

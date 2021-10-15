@@ -791,6 +791,7 @@ public class SysApplyInController extends BaseController
                     pro.setNameEndStr(pro.getApplyUserName().substring(pro.getApplyUserName().length()-2));
                 }else {
                     pro.setNameEndStr(pro.getApplyUserName());
+
                 }
             }
 

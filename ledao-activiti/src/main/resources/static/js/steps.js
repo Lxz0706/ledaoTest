@@ -117,6 +117,7 @@
         },
         getParentNode: function(){ // 通过参数el返回父元素
             var _this = this,
+
                 options = _this.options,
                 resultEl;
             if (typeof options.el === "object"){ // 支持传入DOM对象

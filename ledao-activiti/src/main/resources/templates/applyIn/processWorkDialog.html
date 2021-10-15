@@ -177,10 +177,11 @@
 				</form>
 			</div>
 
-	        <div class="col-sm-12 select-table table-striped">
+	        <div class="col-sm-12 select-table table-striped" style="">
 
-		<div class="paragraph padding-left-20" style="  overflow-x: auto; display: -webkit-box; -webkit-overflow-scrolling: touch;height: 50%">
-							<div id="steps14"></div>
+		<div class="paragraph padding-left-20" style=" overflow-x: auto; display: -webkit-box; -webkit-overflow-scrolling: touch;height: 50%">
+							<div id="steps14" style="margin: 0 auto; "></div>
+							<div id="demo" style="margin: 0 auto; ">暂无数据</div>
 
 								</div>
 
@@ -262,6 +263,12 @@
 				type: "post",
 				dataType: "json",
 				success: function(result) {
+					if(result.rows.length==0){
+						document.getElementById("steps14").style.display="none";//隐藏
+						document.getElementById("demo").style.display="";
+					}else{
+						document.getElementById("steps14").style.display="";
+						document.getElementById("demo").style.display="none";
 					let len=0
 					for(let i=0; i<result.rows.length; i++) {
 
@@ -277,12 +284,12 @@
 
 							if(result.rows[i].applyStatu =='0'){
 
-								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px; ">'+ result.rows[i].showLable+'</div>'
+								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px; margin-right: 50px">'+ result.rows[i].showLable+'</div>'
 								console.log(	liu1.customHtml)
 
 							}
 							else{
-								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px;color: gray ">'+ result.rows[i].showLable+'</div>'
+								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px;color: gray; margin-right: 50px ">'+ result.rows[i].showLable+'</div>'
 							}
 							console.log(	liu1.customHtml)
 						}else{
@@ -305,7 +312,7 @@
 						}else{
 							liu1.icon= '<div style="font-size:10px">完成</div>'
 						}
-						liu1.title='<div style="font-size:8px;width:100px"><div style="font-size:8px;color:gray;height: 20px">'+result.rows[i].remark+'</div ><div style="font-size:8px;transform:scale(0.8);margin-left:-14px">'+result.rows[i].applyUserName+'</div></div>'
+						liu1.title='<div style="font-size:8px;width:100px"><div style="font-size:8px;color:gray;height: 20px">'+result.rows[i].remark+'</div ><div style="font-size:8px;transform:scale(0.8);margin-left:-14px;white-space: nowrap;padding-right: 80px">'+result.rows[i].applyUserName+'</div></div>'
 						liu.push(liu1)
 
 
@@ -319,17 +326,13 @@
 						space: 150,
 						customClass: "custom-class"
 					});
-
+				}
 				}
 
 			})
 
 
-			// for(let i=0; options.rows[i]!=0; i++) {
-			// 	debugger
-			// 	console.log(1)
-			//
-			// }
+
 
 		});
 

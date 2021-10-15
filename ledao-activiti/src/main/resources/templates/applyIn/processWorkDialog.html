@@ -2,14 +2,164 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
 	<th:block th:include="include :: header('审批历史')" />
+	<script src="../../static/js/steps.js"></script>
+	<link rel="stylesheet" href="steps.css">
+	<style>
+
+		.steps {
+			display: flex;
+			padding: 70px 10px 150px;;
+			box-sizing: border-box;
+		}
+		.steps-horizontal {
+			white-space: nowrap;
+		}
+		.steps-vertical {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+		}
+		.steps-center {
+			text-align: center;
+		}
+		.step {
+			position: relative;
+			flex-shrink: 1;
+		}
+		.steps-horizontal .step {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+		}
+		.steps-horizontal.steps-center .step {
+			align-items: center;
+		}
+		.steps-vertical .step {
+			display: flex;
+		}
+		.step-line-box {
+			position: relative;
+			width: 100%;
+			margin-bottom: 10px;
+		}
+		.steps-vertical .step-line-box {
+			flex-grow: 0;
+			width: auto;
+			margin-right: 10px;
+			margin-bottom: 0;
+		}
+		.step-line {
+			position: absolute;
+			height: 2px;
+			top: 11px;
+			left: 0;
+			right: 0;
+			border-color: inherit;
+			background-color: #c0c4cc;
+		}
+		.steps-vertical .step-line {
+			width: 2px;
+			top: 0;
+			bottom: 0;
+			left: 11px;
+			height: 100%;
+		}
+		.steps-center .step-line {
+			left: 50%;
+			right: -50%;
+		}
+		.step-icon {
+			position: relative;
+			z-index: 1;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			width: 31px;
+			height: 31px;
+			font-size: 14px;
+			box-sizing: border-box;
+			background: #fff;
+			transition: .15s ease-out;
+			border-radius: 50%;
+			border: 2px solid;
+			border-color: inherit;
+		}
+		.step-icon-number {
+			display: inline-block;
+			user-select: none;
+			text-align: center;
+			font-weight: 700;
+			line-height: 1;
+			color: inherit;
+		}
+		.step-icon-bullets {
+			display: inline-block;
+			user-select: none;
+			width: 14px;
+			height: 14px;
+			background-color: currentColor;
+			border-radius: 50%;
+		}
+		.step-title {
+			white-space: pre-line;
+			padding-right: 10%;
+			font-size: 16px;
+			margin-bottom: 10px;
+		}
+		.steps-vertical .step-title {
+			text-align: right;
+			line-height: 24px;
+			padding: 0 0 8px 0;
+			margin: 0 10px 0 0;
+		}
+		.step-description {
+			white-space: pre-line;
+			padding-right: 10%;
+			font-size: 12px;
+			line-height: 10px;
+			font-weight: 400;
+			margin: -5px 0 10px 0;
+		}
+		.steps-horizontal .step:last-child .step-title,
+		.steps-horizontal .step:last-child .step-description {
+			padding-right: 0;
+		}
+		.steps-vertical .step-description {
+			line-height: 20px;
+			padding: 0 0 8px 0;
+			margin: 0 10px 0 0;
+		}
+		.steps-center .step-title,
+		.steps-center .step-description {
+			padding-right: 0;
+		}
+		.steps .step:last-child .step-line {
+			display: none;
+		}
+
+		.step-default-class {
+			color: #999;
+			border-color: #999;
+		}
+		.step-finish-class {
+			color: #409eff;
+			border-color: #409eff;
+		}
+		.step-finish-line-bg {
+			background-color: #409eff;
+		}
+
+	</style>
+
+
 </head>
 
 <body class="gray-bg">
 	<div class="container-div">
 		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="role-form">
-					<input type="text" id="applyId" name="applyId" th:value="${applyId}">
+			<div class="" type="hidden">
+				<form id="role-form"  type="hidden">
+					<input id="applyId" name="applyId" th:value="${applyId}"  type="hidden">
 					<!-- <div class="select-list">
 						<ul>
 							<li>
@@ -28,7 +178,22 @@
 			</div>
 
 	        <div class="col-sm-12 select-table table-striped">
-			    <table id="bootstrap-table"></table>
+
+		<div class="paragraph padding-left-20" style="  overflow-x: auto; display: -webkit-box; -webkit-overflow-scrolling: touch;height: 50%">
+							<div id="steps14"></div>
+
+								</div>
+
+
+
+
+
+
+				</div>
+<!--				<script>hljs.initHighlightingOnLoad();</script>-->
+
+
+
 			</div>
 		</div>
 	</div>
@@ -37,8 +202,10 @@
 	<script th:inline="javascript">
 		var prefix = ctx + "applyIn";
 		var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+		var applyId = document.getElementById("applyId").value;
 
 		$(function() {
+
 			var options = {
 		        url: prefix + "/selectSysApplyWorkflowProcess",
 		        queryParams: queryParams,
@@ -81,7 +248,89 @@
 					title: '处理意见'
 				}]
 		    };
-		    $.table.init(options);
+
+
+
+
+			var liu=[]
+
+			$.ajax({
+				url: prefix + "/selectSysApplyWorkflowProcess",
+				data: {
+					applyId: applyId
+				},
+				type: "post",
+				dataType: "json",
+				success: function(result) {
+					let len=0
+					for(let i=0; i<result.rows.length; i++) {
+
+						const liu1={ title: '', description: "", icon: '',customHtml:'' }
+
+						if(result.rows[i].applyTime!=null){
+							len++
+							liu1.description='<br><div style="transform:scale(0.7);margin-left:-18px;white-space:nowrap;height:20px">'+ result.rows[i].applyTime+'</div>'
+						}else{
+							liu1.description='<br><div style="height:20px"></div>'
+						}
+						if(result.rows[i].showLable!=null){
+
+							if(result.rows[i].applyStatu =='0'){
+
+								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px; ">'+ result.rows[i].showLable+'</div>'
+								console.log(	liu1.customHtml)
+
+							}
+							else{
+								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px;color: gray ">'+ result.rows[i].showLable+'</div>'
+							}
+							console.log(	liu1.customHtml)
+						}else{
+							liu1.customHtml=''
+						}
+
+						if(result.rows[i].nameEndStr!=null){
+
+							if(result.rows[i].applyStatu=='0'){
+
+								liu1.icon = '<div style="font-size:10px">'+result.rows[i].nameEndStr+'</div>'
+							}else if(result.rows[i].applyStatu=='1'){
+
+								liu1.icon = '<div style="font-size:10px;color: gray">'+result.rows[i].nameEndStr+'</div>'
+							}else{
+							len--
+								liu1.icon = '<div style="font-size:10px;color: red"">'+result.rows[i].nameEndStr+'</div>'
+							}
+
+						}else{
+							liu1.icon= '<div style="font-size:10px">完成</div>'
+						}
+						liu1.title='<div style="font-size:8px;width:100px"><div style="font-size:8px;color:gray;height: 20px">'+result.rows[i].remark+'</div ><div style="font-size:8px;transform:scale(0.8);margin-left:-14px">'+result.rows[i].applyUserName+'</div></div>'
+						liu.push(liu1)
+
+
+					};
+					console.log('liu',liu)
+					var steps14 = steps({
+						el: "#steps14",
+						data: liu,
+						active: len,
+						iconType: "custom",
+						space: 150,
+						customClass: "custom-class"
+					});
+
+				}
+
+			})
+
+
+			// for(let i=0; options.rows[i]!=0; i++) {
+			// 	debugger
+			// 	console.log(1)
+			//
+			// }
+
 		});
 
 		function queryParams(params) {

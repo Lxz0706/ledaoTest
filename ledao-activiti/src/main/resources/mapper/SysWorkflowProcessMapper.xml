@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sortOrder != null and sortOrder != 0"> and sort_order = #{sortOrder}</if>
             <if test="applyTime != null "> and apply_time = #{applyTime}</if>
         </where>
-        order  by sort_order asc, update_time asc
+        order  by sort_order asc, update_time desc
     </select>
     
     <select id="selectSysWorkflowProcessById" parameterType="Long" resultMap="SysWorkflowProcessResult">

@@ -1,6 +1,8 @@
 package com.ledao.activity.dao;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -54,7 +56,8 @@ public class SysWorkflowProcess extends BaseEntity
     }
 
     /** 审批时间 */
-    @Excel(name = "审批时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "审批时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyTime;
 
     private String remark2;

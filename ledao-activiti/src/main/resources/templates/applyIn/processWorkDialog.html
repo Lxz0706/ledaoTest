@@ -284,12 +284,12 @@
 
 							if(result.rows[i].applyStatu =='0'){
 
-								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px; ">'+ result.rows[i].showLable+'</div>'
+								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px; margin-right: 50px">'+ result.rows[i].showLable+'</div>'
 								console.log(	liu1.customHtml)
 
 							}
 							else{
-								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px;color: gray ">'+ result.rows[i].showLable+'</div>'
+								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px;color: gray; margin-right: 50px ">'+ result.rows[i].showLable+'</div>'
 							}
 							console.log(	liu1.customHtml)
 						}else{
@@ -312,7 +312,7 @@
 						}else{
 							liu1.icon= '<div style="font-size:10px">完成</div>'
 						}
-						liu1.title='<div style="font-size:8px;width:100px"><div style="font-size:8px;color:gray;height: 20px">'+result.rows[i].remark+'</div ><div style="font-size:8px;transform:scale(0.8);margin-left:-14px">'+result.rows[i].applyUserName+'</div></div>'
+						liu1.title='<div style="font-size:8px;width:100px"><div style="font-size:8px;color:gray;height: 20px">'+result.rows[i].remark+'</div ><div style="font-size:8px;transform:scale(0.8);margin-left:-14px;white-space: nowrap;padding-right: 80px">'+result.rows[i].applyUserName+'</div></div>'
 						liu.push(liu1)
 
 

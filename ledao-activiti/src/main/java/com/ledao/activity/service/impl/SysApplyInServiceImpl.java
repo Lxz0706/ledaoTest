@@ -1060,14 +1060,14 @@ public class SysApplyInServiceImpl implements ISysApplyInService
         workflow.setCreateBy(ShiroUtils.getLoginName());
         workflow.setCreateTime(new Date());
         try {
-            saveWorkFlowProcess(workflow);
+            saveWorkFlowProcess(workflow,sysApplyIn);
         }catch (Exception e){
             e.printStackTrace();
         }
         return sysApplyWorkflowMapper.insertSysApplyWorkflow(workflow);
     }
 
-    private void saveWorkFlowProcess(SysApplyWorkflow workflow){
+    private void saveWorkFlowProcess(SysApplyWorkflow workflow,SysApplyIn sysApplyIn){
         SysWorkflowProcess first = new SysWorkflowProcess();
         first.setApplyLoginName(workflow.getApproveUser());
         first.setApplyId(workflow.getApplyId());
@@ -1097,6 +1097,19 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 p.setApplyTime(new Date());
                 p.setUpdateTime(new Date());
                 sysWorkflowProcessMapper.updateSysWorkflowProcess(p);
+               if (isDocumentAdmin && "4".equals(sysApplyIn.getApproveStatu()) && "0".equals(sysApplyIn.getApplyType())){
+                   SysWorkflowProcess fs = new SysWorkflowProcess();
+                   fs.setApplyId(workflow.getApplyId());
+                   fs.setRemark2("3");
+                   List<SysWorkflowProcess> prss = sysWorkflowProcessMapper.selectSysWorkflowProcessList(fs);
+                   for (SysWorkflowProcess pf:prss) {
+                       if (pf.getApplyTime()==null){
+                           pf.setApplyStatu("0");
+                           pf.setApplyTime(new Date());
+                           sysWorkflowProcessMapper.updateSysWorkflowProcess(pf);
+                       }
+                   }
+               }
                 return;
             }
         }

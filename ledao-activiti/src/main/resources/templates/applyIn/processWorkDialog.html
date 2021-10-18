@@ -177,10 +177,11 @@
 				</form>
 			</div>
 
-	        <div class="col-sm-12 select-table table-striped">
+	        <div class="col-sm-12 select-table table-striped" style="">
 
-		<div class="paragraph padding-left-20" style="  overflow-x: auto; display: -webkit-box; -webkit-overflow-scrolling: touch;height: 50%">
-							<div id="steps14"></div>
+		<div class="paragraph padding-left-20" style=" overflow-x: auto; display: -webkit-box; -webkit-overflow-scrolling: touch;height: 50%">
+							<div id="steps14" style="margin: 0 auto; "></div>
+							<div id="demo" style="margin: 0 auto; ">暂无数据</div>
 
 								</div>
 
@@ -262,6 +263,12 @@
 				type: "post",
 				dataType: "json",
 				success: function(result) {
+					if(result.rows.length==0){
+						document.getElementById("steps14").style.display="none";//隐藏
+						document.getElementById("demo").style.display="";
+					}else{
+						document.getElementById("steps14").style.display="";
+						document.getElementById("demo").style.display="none";
 					let len=0
 					for(let i=0; i<result.rows.length; i++) {
 
@@ -319,17 +326,13 @@
 						space: 150,
 						customClass: "custom-class"
 					});
-
+				}
 				}
 
 			})
 
 
-			// for(let i=0; options.rows[i]!=0; i++) {
-			// 	debugger
-			// 	console.log(1)
-			//
-			// }
+
 
 		});
 

@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           AND a.is_return = '0'
           and a.real_return_time is null
           and a.approve_statu = '8'
-          and DATE_FORMAT(NOW(),'%Y%m%d')&gt;DATE_FORMAT(a.update_time,'%Y%m%d')
+          and DATE_FORMAT(NOW(),'%Y%m%d')&gt;DATE_FORMAT(a.plan_return_time,'%Y%m%d')
     </select>
 
     <select id="selectSysApplyInListUser" parameterType="SysApplyIn" resultMap="SysApplyInResultUser">

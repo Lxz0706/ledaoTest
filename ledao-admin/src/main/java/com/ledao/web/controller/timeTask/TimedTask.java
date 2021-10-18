@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.dao.SysApplyWorkflow;
+import com.ledao.activity.mapper.SysApplyWorkflowMapper;
 import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.message.Template;
@@ -100,6 +102,9 @@ public class TimedTask {
 
     @Autowired
     private ISysApplyInService sysApplyInService;
+
+    @Autowired
+    private SysApplyWorkflowMapper sysApplyWorkflowMapper;
 
 
 
@@ -257,20 +262,22 @@ public class TimedTask {
         sysProjectUncollectedMoney.setState("否");
         List<SysProjectUncollectedMoney> list = sysProjectUncollectedMoneyService.selectSysProjectUncollectedMoneyList(sysProjectUncollectedMoney);
         for (SysProjectUncollectedMoney mon:list) {
-            if (DateUtils.differentDays(new Date(),mon.getTime())==7 || DateUtils.differentDays(mon.getTime(),new Date())%7==0){
-                List<SysUser> users = new ArrayList<>();
-                users.add(sysUserService.selectUserByLoginName("wangziyuan"));
-                users.add(sysUserService.selectUserByLoginName("zhangyi"));
-                users.add(sysUserService.selectUserByLoginName("jianghui"));
-                SysUser u = sysUserService.selectUserByLoginName(mon.getCreateBy());
-                users.add(u);
-                users.add(sysUserService.selectUserById(u.getDirectorId()));
-                SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
-                parmStr.put("word1",manage.getProjectManagementName());
-                parmStr.put("word2","-");
-                parmStr.put("word3","截止日期" +DateUtils.formatDateByPattern(mon.getTime(),"yyyy-MM-dd")+","+mon.getFundType()+"/" +mon.getAmountMoney());
-                System.out.println(parmStr);
-                sendJournalTask(users,parmStr);
+            if (DateUtils.differentDays(new Date(),mon.getTime())<8){
+                if (DateUtils.differentDays(new Date(),mon.getTime())==7 || DateUtils.differentDays(mon.getTime(),new Date())%7==0){
+                    List<SysUser> users = new ArrayList<>();
+                    users.add(sysUserService.selectUserByLoginName("wangziyuan"));
+                    users.add(sysUserService.selectUserByLoginName("zhangyi"));
+                    users.add(sysUserService.selectUserByLoginName("jianghui"));
+                    SysUser u = sysUserService.selectUserByLoginName(mon.getCreateBy());
+                    users.add(u);
+                    users.add(sysUserService.selectUserById(u.getDirectorId()));
+                    SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
+                    parmStr.put("word1",manage.getProjectManagementName());
+                    parmStr.put("word2","-");
+                    parmStr.put("word3","截止日期" +DateUtils.formatDateByPattern(mon.getTime(),"yyyy-MM-dd")+","+mon.getFundType()+"/" +mon.getAmountMoney());
+                    System.out.println(parmStr);
+                    sendJournalTask(users,parmStr);
+                }
             }
         }
         
@@ -362,8 +369,15 @@ public class TimedTask {
         List<SysApplyIn> sysApplyIn = sysApplyInService.selectNotReturned();
         List<SysUser> users = new ArrayList<>();
         for (SysApplyIn sysApp:sysApplyIn) {
-            if((new Date().getTime()-sysApp.getPlanReturnTime().getTime())%3==0){
+            if(DateUtils.differentDays(sysApp.getPlanReturnTime(),new Date())%3==0){
                 users.add(sysUserService.selectUserByLoginName(sysApp.getApplyUser()));
+                //推送给处理他的档案管理员
+                SysApplyWorkflow workflow = new SysApplyWorkflow();
+                workflow.setApplyId(sysApp.getApplyId());
+                List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
+                if (workflows!=null&& workflows.size()>0){
+                    users.add(sysUserService.selectUserByLoginName(workflows.get(0).getApproveUser()));
+                }
             }
         }
         sendDailyUsalTask(users,parmStr);
@@ -611,7 +625,7 @@ public class TimedTask {
             public void run() {
                 System.out.println("-------设定要指定任务--------");
             }
-        }, 2000);
+        }, 10000);
     }
 
     /**

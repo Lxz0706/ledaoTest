@@ -1577,6 +1577,23 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             List<SysApplyOutDetail> dfs =  sysApplyOutDetailMapper.selectSysApplyOutDetailList(sd);
             if ("1".equals(sin.getIsReturn())){
                 sysApplyIn.setApproveStatu("3");
+                try {
+                    List<String> users = new ArrayList<>();
+                    SysApplyWorkflow workflow = new SysApplyWorkflow();
+                    workflow.setApplyId(sysApplyIn.getApplyId());
+                    workflow.setApproveStatu("7");
+                    List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
+                    if (workflows!=null && workflows.size()>0){
+                        users.add(workflows.get(0).getCreateBy());
+//                    sendMsg(users,sysApplyIn,"");
+                        parm.put("word1","档案已确认接收");
+                        parm.put("word2","-");
+                        parm.put("word5","-");
+                        sendUsalMsg(users,sysApplyIn,parm);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 //出库不归还
                 for (SysApplyOutDetail df:dfs) {
                     if ("1".equals(df.getIsElec())){

@@ -462,7 +462,7 @@
 
     //人员树形选择器
     function selectUser() {
-        var url = ctx + "system/customer/selectUser?loginName=" + $("#createBy").val() + "&userName=" + $("#creator").val();
+        var url = ctx + "system/customer/selectUser?loginName=" + $("#createBy").val() + "&userName=" + $("#creator").val()+"&singleSelect=true";
         $.modal.open("人员选择", url, '850', '600');
     }
 

@@ -21,6 +21,9 @@
             <a class="btn btn-info" onclick="back()" shiro:hasPermission="system:document:list">
                 <i class="fa fa-backward"></i> 返回
             </a>
+            <!--<a class="btn btn-info" onclick="editUrl()">
+                <i class="fa fa-backward"></i> 修复
+            </a>-->
             <!--<a class="btn btn-primary" onclick="$.operate.edit()"
                shiro:hasPermission="system:document:edit">
                 <i class="fa fa-edit"></i> 修改
@@ -42,6 +45,17 @@
     var removeFlag = [[${@permission.hasPermi('system:document:remove')}]];
     var downLoadFlag = [[${@permission.hasPermi('system:document:download')}]]
     var prefix = ctx + "system/document";
+
+    function editUrl() {
+        $.ajax({
+            url: prefix + '/editUrl',
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                console.log(result);
+            }
+        })
+    }
 
     $(function () {
         var options = {
@@ -130,7 +144,7 @@
                                 || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                         } else if ('pdf' == fileType) {
-                            actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                            actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + row.fileUrl + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
                         } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
                             || 'png' == fileType || 'webp' == fileType) {
                             actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>预览</a>');
@@ -279,13 +293,13 @@
                 $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
             }
         })
-        window.location.href = ctx + "common/download/resource?resource=" + fileName + "&delete=" + true;
+        window.location.href = prefix + "/download/resource?id=" + fileId;
     }
 
     function add() {
         var documentType = $("#documentType").val();
         var subsetType = $("#subsetType").val();
-        var url= prefix +"/add?documentType="+documentType+"&subsetType="+subsetType;
+        var url = prefix + "/add?documentType=" + documentType + "&subsetType=" + subsetType;
         $.modal.open("添加" + table.options.modalName, url);
         //$.operate.adds(documentType, subsetType);
 

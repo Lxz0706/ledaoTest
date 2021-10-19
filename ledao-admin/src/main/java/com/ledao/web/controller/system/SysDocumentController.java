@@ -1,20 +1,19 @@
 package com.ledao.web.controller.system;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URLEncoder;
+import java.util.*;
 
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.config.Global;
+import com.ledao.common.constant.Constants;
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.file.FileUtils;
 import com.ledao.common.utils.file.MimeTypeUtils;
+import com.ledao.common.utils.security.Md5Utils;
 import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.framework.web.dao.server.Sys;
@@ -22,7 +21,9 @@ import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysDeptService;
 import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
+import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.apache.bcel.generic.RET;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jodconverter.DocumentConverter;
 import org.jodconverter.office.OfficeException;
@@ -41,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -218,7 +220,7 @@ public class SysDocumentController extends BaseController {
     @Log(title = "文件管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysDocument sysDocument, @RequestParam("file") MultipartFile file) {
+    public AjaxResult addSave(SysDocument sysDocument, @RequestParam("file") MultipartFile file) throws IOException {
         StringBuffer userIds = new StringBuffer();
         StringBuffer userNames = new StringBuffer();
         if (file.isEmpty()) {
@@ -264,9 +266,15 @@ public class SysDocumentController extends BaseController {
         //获取各类型名称及其子集
         String baseDir = "";
         try {
-            String avatar = FileUploadUtils.upload(Global.getProfile() + "/document" + baseDir, file, false);
-            logger.info("上传的路径：======" + avatar);
-            sysDocument.setFileUrl(avatar);
+            String avatar = FileUploadUtils.upload(Global.getProfile() + "/document" + baseDir, file, true);
+            SysDocument sysDocument1 = new SysDocument();
+            sysDocument1.setFileUrl(avatar);
+            List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument1);
+            if (sysDocumentList.size() <= 0) {
+                sysDocument.setFileUrl(avatar);
+            } else {
+                return error("已存在相同名称的文件！");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -437,4 +445,76 @@ public class SysDocumentController extends BaseController {
         return AjaxResult.success();
     }
 
+    @PostMapping("/editUrl")
+    @ResponseBody
+    public AjaxResult editUrl() throws Exception {
+        SysDocument sysDocument = new SysDocument();
+        List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument);
+        for (SysDocument sysDocument1 : sysDocumentList) {
+            String str1 = sysDocument1.getFileUrl().substring(0, sysDocument1.getFileUrl().lastIndexOf("/"));
+            String fileName = sysDocument1.getFileUrl().substring(str1.length() + 1, sysDocument1.getFileUrl().length());
+            String ss = fileName.substring(0, fileName.indexOf("."));
+            String type = sysDocument1.getFileUrl().substring(sysDocument1.getFileUrl().lastIndexOf(".") + 1, sysDocument1.getFileUrl().length());
+            String fileName1 = encodingFilename(fileName);
+            sysDocument1.setFileUrl(str1 + "/" + fileName1 + "." + type);
+            new File("F:" + str1 + "/" + fileName).renameTo(new File("F:" + str1 + "/" + fileName1 + "." + type));
+            ArrayList<File> fileList = new ArrayList<File>();
+            //getFiles("F:\\profile\\document", fileList);
+            sysDocumentService.updateSysDocument(sysDocument1);
+        }
+
+        return AjaxResult.success();
+    }
+
+    private static String encodingFilename(String fileName) {
+        fileName = fileName.replace("_", " ");
+        fileName = Md5Utils.hash(fileName);
+        return fileName;
+    }
+
+    public static void getFiles(String path, ArrayList<File> list) throws Exception {
+        //目标集合fileList
+        File file = new File(path);
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File fileIndex : files) {
+                //如果这个文件是目录，则进行递归搜索
+                if (fileIndex.isDirectory()) {
+                    getFiles(fileIndex.getPath(), list);
+                } else {
+                    //如果文件是普通文件，则将文件句柄放入集合中
+                    String oldName = fileIndex.getName();
+                    String newName = encodingFilename(oldName);
+                    System.out.println(newName + oldName.substring(oldName.lastIndexOf(".")));
+                    new File(path + "/" + oldName).renameTo(new File(path + "/" + newName + oldName.substring(oldName.lastIndexOf("."))));
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        String name = "sd.doc";
+        System.out.println(name.substring(name.indexOf("."), name.length()));
+    }
+
+    /**
+     * 本地资源通用下载
+     */
+    @GetMapping("/download/resource")
+    public void resourceDownload(Long id, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        SysDocument sysDocument = sysDocumentService.selectSysDocumentById(id);
+        // 本地资源路径
+        String localPath = Global.getProfile();
+        // 数据库资源地址
+        String downloadPath = localPath + StringUtils.substringAfter(sysDocument.getFileUrl(), Constants.RESOURCE_PREFIX);
+        // 下载名称
+        String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
+        String type = downloadName.substring(downloadName.lastIndexOf("."), downloadName.length());
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition",
+                "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, sysDocument.getFileName() + type));
+        FileUtils.writeBytes(downloadPath, response.getOutputStream());
+    }
 }

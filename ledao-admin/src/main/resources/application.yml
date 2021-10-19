@@ -9,7 +9,7 @@ ledao:
   # 实例演示开关
   demoEnabled: false
   # 文件路径 示例（ Windows配置D:/ledao/uploadPath，Linux配置 /home/ledao/uploadPath）
-  profile: F:/profile
+  profile: E:/profile
   #profile: /home/ledao/uploadPath/profile
   # 获取ip地址开关
   addressEnabled: false

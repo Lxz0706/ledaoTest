@@ -259,15 +259,19 @@ public class SysCustomerController<main> extends BaseController {
         if (StringUtils.isNotEmpty(sysCustomer.getWeChatNumber())) {
             sysCustomer.setWeChatNumber(sysCustomer.getWeChatNumber().replace(",", "/"));
         }
-        SysUser currentUser = ShiroUtils.getSysUser();
+        SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
+        sysCustomer.setDeptId(sysUser.getDeptId());
+        sysCustomer.setDeptName(sysUser.getDept().getDeptName());
+
+        sysCustomer.setAgentId(ShiroUtils.getLoginName());
+        sysCustomer.setAgent(ShiroUtils.getSysUser().getUserName());
+  /*      SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey())) {
-                        sysCustomer.setCreateBy(ShiroUtils.getLoginName());
-                        sysCustomer.setCreator(ShiroUtils.getSysUser().getUserName());
                         SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
                         sysCustomer.setDeptId(sysUser.getDeptId());
                         sysCustomer.setDeptName(sysUser.getDept().getDeptName());
@@ -278,11 +282,6 @@ public class SysCustomerController<main> extends BaseController {
                             SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
                             sysCustomer.setDeptId(sysUser.getDeptId());
                             sysCustomer.setDeptName(sysUser.getDept().getDeptName());
-                        } else {
-                            sysCustomer.setCreateBy(ShiroUtils.getLoginName());
-                            sysCustomer.setCreator(ShiroUtils.getSysUser().getUserName());
-                            sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
-                            sysCustomer.setDeptName(ShiroUtils.getSysUser().getDept().getDeptName());
                         }
                     }
                 }
@@ -295,12 +294,9 @@ public class SysCustomerController<main> extends BaseController {
                         sysCustomer.setDeptId(sysUser.getDeptId());
                         sysCustomer.setDeptName(sysUser.getDept().getDeptName());
                     }
-                } else {
-                    sysCustomer.setCreateBy(ShiroUtils.getLoginName());
-                    sysCustomer.setCreator(ShiroUtils.getSysUser().getUserName());
                 }
             }
-        }
+        }*/
         if (StringUtils.isNull(sysCustomer.getDeptId()) && StringUtils.isEmpty(sysCustomer.getDeptName())) {
             sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
             sysCustomer.setDeptName(ShiroUtils.getSysUser().getDept().getDeptName());

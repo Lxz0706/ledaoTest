@@ -2,7 +2,9 @@ package com.ledao.common.utils.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -117,7 +119,7 @@ public class FileUploadUtils {
         if (filename) {
             fileName = DateUtils.datePath() + "/" + encodingFilename(fileName) + "." + extension;
         } else {
-            fileName = DateUtils.datePath() + "/" + fileName;
+            fileName = DateUtils.datePath() + "/" + URLEncoder.encode(fileName);
         }
 
         return fileName;
@@ -147,7 +149,7 @@ public class FileUploadUtils {
      */
     private static final String encodingFilename(String fileName) {
         fileName = fileName.replace("_", " ");
-        fileName = Md5Utils.hash(fileName + System.nanoTime() + counter++);
+        fileName = Md5Utils.hash(fileName);
         return fileName;
     }
 
@@ -240,5 +242,22 @@ public class FileUploadUtils {
             }
         }
         return bytes.toString();
+    }
+
+    /**
+     * @param names 文件下文件名的集合
+     * @param name  存入的文件名
+     * @param index 索引的开始位置
+     * @return 符合要求的文件名
+     */
+    private static String checkFileName(ArrayList<String> names, String name, int index) {
+        String substring = name.substring(name.indexOf("."), name.length());
+        String o = name.substring(0, name.indexOf(".")) + index + substring;
+        if (names.contains(o)) {
+            name = checkFileName(names, name, index + 1);
+        } else {
+            return o;
+        }
+        return name;
     }
 }

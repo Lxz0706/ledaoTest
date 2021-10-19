@@ -50,14 +50,6 @@ public class ReportBackEndProcessor implements TaskListener {
         leave.setRealityStartTime((Date) realityStartTime);
         Object realityEndTime = delegateTask.getVariable("realityEndTime");
         leave.setRealityEndTime((Date) realityEndTime);
-        SysNotice sysNotice = new SysNotice();
-        sysNotice.setReceiverId(ShiroUtils.getUserId().toString());
-        sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
-        sysNotice.setNoticeType("3");
-        sysNotice.setNoticeTitle(leave.getTitle() + "流程结束");
-        sysNotice.setStatus("0");
-        sysNotice.setCreateBy(ShiroUtils.getLoginName());
-        sysNoticeService.insertNotice(sysNotice);
         bizLeaveService.updateBizLeave(leave);
     }
 

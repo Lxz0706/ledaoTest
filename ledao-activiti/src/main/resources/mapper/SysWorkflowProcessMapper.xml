@@ -38,7 +38,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
 
         order  by sort_order asc, apply_time asc
-        
     </select>
     
     <select id="selectSysWorkflowProcessById" parameterType="Long" resultMap="SysWorkflowProcessResult">

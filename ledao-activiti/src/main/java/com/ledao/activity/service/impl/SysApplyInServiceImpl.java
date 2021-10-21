@@ -731,6 +731,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
                 parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));
                 parm.put("word3",sysApplyInEntity.getApplyTime());
+                parm.put("pagepath","pages/workFlow/index");
 
 //                thing14 = "申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试请测试";
                 parm.put("word5",thing14);
@@ -969,7 +970,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         sysApplyInEntity.setApproveUser("");
                         users.add(sysApplyInEntity.getApplyUser());
                         users.add("qianwanping");
-                        users.add("xunlinyi");
+                        users.add("xulinyi");
                     }else if ("9".equals(sysApplyInEntity.getApproveStatu())){
                         if (!"0".equals(sysApplyInEntity.getIsReceived())){
                             return AjaxResult.error("档案未收到，无法完成借出审批");
@@ -1724,6 +1725,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
 
                 parm.put("first",first);
                 parm.put("toUser",us.getComOpenId());
+                parm.put("pagepath","pages/workFlow/index");
 //                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
 //                parm.put("word1",appName + " - " +userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
 //                parm.put("word2",dictDataService.selectDictLabel("apply_statu",sysApplyInEntity.getApproveStatu()));

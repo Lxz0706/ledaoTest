@@ -175,7 +175,7 @@ public class SysTrainAdminController extends BaseController
             parmData.put("scene",trainId);
             parmData.put("url","pages/qrCode/qrCode");
 
-            // 提交
+            // 提交 提交使用
             String parm = parmData.toJSONString();
 //            accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
             accessToken = configService.getWechatAccessToken();

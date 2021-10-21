@@ -1,7 +1,11 @@
 package com.ledao.activity.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.ledao.activity.dao.*;
 import com.ledao.activity.mapper.SysWorkflowProcessMapper;
@@ -10,14 +14,19 @@ import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.json.JSONObject;
 import com.ledao.common.message.WechatMessageUtil;
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.system.dao.SysDictData;
 import com.ledao.system.dao.SysRole;
+import com.ledao.system.dao.SysUserRole;
+import com.ledao.system.mapper.SysRoleMapper;
 import com.ledao.system.mapper.SysUserMapper;
+import com.ledao.system.mapper.SysUserRoleMapper;
 import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDictDataService;
+import com.ledao.system.service.ISysRoleService;
 import com.ledao.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +46,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.sound.midi.Soundbank;
+import javax.validation.constraints.Size;
 
 /**
  * 档案入库申请Controller
@@ -70,6 +81,9 @@ public class SysApplyInController extends BaseController
     private ISysApplyOutDetailService sysApplyOutDetailService;
 
     @Autowired
+    private ISysRoleService roleService;
+
+    @Autowired
     private ISysDictDataService sysDictDataService;
 
     @Autowired
@@ -77,6 +91,15 @@ public class SysApplyInController extends BaseController
 
     @Autowired
     private SysWorkflowProcessMapper sysWorkflowProcessMapper;
+
+    @Autowired
+    private SysRoleMapper roleMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
+
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
 
     private List<Long> applyIds = new ArrayList<>();
 
@@ -583,8 +606,8 @@ public class SysApplyInController extends BaseController
         String accessToken = null;
         try{
             JSONObject parmData = new JSONObject();
-            parmData.put("scene","documentId="+documentId);
-            parmData.put("url","");
+            parmData.put("scene",documentId);
+            parmData.put("url","pages/lookInformation/index");
             String parm = parmData.toString();
             /*accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
             System.out.println("accessToken;"+accessToken);*/
@@ -780,12 +803,34 @@ public class SysApplyInController extends BaseController
         return res;
     }
 
+    private List<String> getUsers(String roleKey){
+        List<String> users = new ArrayList<>();
+        SysRole r = new SysRole();
+        r.setRoleKey(roleKey);
+        List<SysRole> ros = roleMapper.selectRoleList(r);
+        if (ros!=null && ros.size()>0){
+            SysUser userRoles = new SysUser();
+            userRoles.setRoleId(ros.get(0).getRoleId());
+            List<SysUser> us =  userMapper.selectAllocatedList(userRoles);
+            for (SysUser u: us) {
+                users.add(u.getLoginName());
+            }
+        }
+        return users;
+    }
+
+
     @PostMapping("/selectSysApplyWorkflowProcess")
     @ResponseBody
     public TableDataInfo selectSysApplyWorkflowProcess(SysWorkflowProcess sysWorkflowProcess)
     {
+        List<SysWorkflowProcess> listSort = new ArrayList<>();
+        int index = 0;
         List<SysWorkflowProcess> list = sysWorkflowProcessMapper.selectSysWorkflowProcessList(sysWorkflowProcess);
-        for (SysWorkflowProcess pro:list) {
+
+        List<String> jls = getUsers("flgw");
+        for (int i=0;i<list.size();i++) {
+            SysWorkflowProcess pro = list.get(i);
             if (StringUtils.isNotEmpty(pro.getApplyUserName())){
                 if(pro.getApplyUserName().length()>1){
                     pro.setNameEndStr(pro.getApplyUserName().substring(pro.getApplyUserName().length()-2));
@@ -803,7 +848,75 @@ public class SysApplyInController extends BaseController
                     pro.setShowLable(showLable);
                 }
             }
+            if (jls.contains(pro.getApplyLoginName())){
+                listSort.add(pro);
+                if (index == 0){
+                    index = i;
+                }
+            }
+
         }
+
+        //对不带时间类型的集合进行排序
+        List<SysWorkflowProcess> pros = new ArrayList<>();
+        List<SysWorkflowProcess> listSortHasDate = new ArrayList<>();
+        for (int i=0;i<listSort.size();i++) {
+            SysWorkflowProcess pro = listSort.get(i);
+            if (pro.getApplyTime()==null){
+                pros.add(pro);
+            }else{
+                listSortHasDate.add(pro);
+            }
+        }
+
+        /*if (listSortHasDate.size()>1){
+            Collections.sort(listSortHasDate, new Comparator<SysWorkflowProcess>() {
+                DateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                @Override
+                public int compare(SysWorkflowProcess o1, SysWorkflowProcess o2) {
+                    try {
+                        return o2.getApplyTime().compareTo(o1.getApplyTime());
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e);
+                    }
+                }
+            });
+        }*/
+
+        for (SysWorkflowProcess p:pros){
+            listSortHasDate.add(p);
+        }
+        /*for (int i=pros.size()-1;i>-1; i--) {
+            list.set(index,pros.get(i));
+            index++;
+        }*/
+        for (int i=0;i<listSortHasDate.size(); i++) {
+            list.set(index,listSortHasDate.get(i));
+            index++;
+        }
+
+
+
+       /* List<SysWorkflowProcess> res = new ArrayList<>();
+        for (int j = 0; j < list.size(); j++) {
+            for (int i = j + 1; i < list.size(); i++) {
+                if (list.get(j).getSortOrder() == list.get(i).getSortOrder()) {
+                    // 相同的排序，用 apply_time 排序
+                    if (list.get(j).getApplyTime().compareTo(list.get(i).getApplyTime()) < 0) {
+                        // i的时间小时j的时间
+                        res.add(list.get(i));
+                    }else {
+                        res.add(list.get(j));
+                    }
+                }else {
+                    // 加入结果
+                    res.add(list.get(j));
+                }
+            }
+        }*/
+
         return getDataTable(list);
     }
 }
+
+

@@ -172,8 +172,8 @@ public class SysTrainAdminController extends BaseController
         String accessToken = null;
         try{
             JSONObject parmData = new JSONObject();
-            parmData.put("scene","trainId="+trainId);
-            parmData.put("url","");
+            parmData.put("scene",trainId);
+            parmData.put("url","pages/qrCode/qrCode");
             String parm = parmData.toJSONString();
 //            accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
             accessToken = configService.getWechatAccessToken();

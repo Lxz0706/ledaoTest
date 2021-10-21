@@ -607,7 +607,10 @@ public class SysApplyInController extends BaseController
         try{
             JSONObject parmData = new JSONObject();
             parmData.put("scene",documentId);
+            // 提交
             parmData.put("url","pages/lookInformation/index");
+
+
             String parm = parmData.toString();
             /*accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
             System.out.println("accessToken;"+accessToken);*/

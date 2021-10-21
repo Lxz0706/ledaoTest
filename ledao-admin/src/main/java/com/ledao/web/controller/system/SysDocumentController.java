@@ -227,7 +227,7 @@ public class SysDocumentController extends BaseController {
             return error("请上传文件！");
         }
         String fileName = file.getOriginalFilename();
-        sysDocument.setFileName(fileName.substring(0, fileName.indexOf(".")));
+        sysDocument.setFileName(fileName.substring(0, fileName.lastIndexOf(".")));
         sysDocument.setFileSize((double) file.getSize());
         sysDocument.setFileType(FileUploadUtils.getExtension(file));
         sysDocument.setFileVersion("A");
@@ -453,14 +453,11 @@ public class SysDocumentController extends BaseController {
         for (SysDocument sysDocument1 : sysDocumentList) {
             String str1 = sysDocument1.getFileUrl().substring(0, sysDocument1.getFileUrl().lastIndexOf("/"));
             String fileName = sysDocument1.getFileUrl().substring(str1.length() + 1, sysDocument1.getFileUrl().length());
-            String ss = fileName.substring(0, fileName.indexOf("."));
             String type = sysDocument1.getFileUrl().substring(sysDocument1.getFileUrl().lastIndexOf(".") + 1, sysDocument1.getFileUrl().length());
             String fileName1 = encodingFilename(fileName);
             sysDocument1.setFileUrl(str1 + "/" + fileName1 + "." + type);
-            new File("F:" + str1 + "/" + fileName).renameTo(new File("F:" + str1 + "/" + fileName1 + "." + type));
-            ArrayList<File> fileList = new ArrayList<File>();
-            //getFiles("F:\\profile\\document", fileList);
             sysDocumentService.updateSysDocument(sysDocument1);
+            new File("F:" + str1 + "/" + fileName).renameTo(new File("F:" + str1 + "/" + fileName1 + "." + type));
         }
 
         return AjaxResult.success();

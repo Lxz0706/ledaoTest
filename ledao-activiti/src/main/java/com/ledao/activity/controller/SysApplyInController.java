@@ -607,7 +607,7 @@ public class SysApplyInController extends BaseController
         try{
             JSONObject parmData = new JSONObject();
             parmData.put("scene",documentId);
-            // 提交
+            // 提交// 提交 提交使用
             parmData.put("url","pages/lookInformation/index");
 
 

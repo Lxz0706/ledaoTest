@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 文件处理工具类
@@ -110,5 +111,23 @@ public class FileUtils {
             filename = URLEncoder.encode(filename, "utf-8");
         }
         return filename;
+    }
+
+    /**
+     * 预览pdf文件工具类
+     * @param response
+     */
+    public static void showPdf(HttpServletResponse response, String path) throws IOException{
+        response.setContentType("application/pdf");
+        String basePath = FileUploadUtils.getDefaultBaseDir().replace("profile","");
+        FileInputStream in = new FileInputStream(new File(basePath+path));
+        OutputStream out = response.getOutputStream();
+        byte[] b = new byte[1024];
+        while ((in.read(b))!=-1) {
+            out.write(b);
+        }
+        out.flush();
+        in.close();
+        out.close();
     }
 }

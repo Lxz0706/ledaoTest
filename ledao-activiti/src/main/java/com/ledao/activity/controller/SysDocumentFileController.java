@@ -7,10 +7,12 @@ import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.file.FileUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysUserService;
+import com.sun.mail.iap.Response;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.poi.ExcelUtil;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -219,6 +222,20 @@ public class SysDocumentFileController extends BaseController
         ap.setReviser(ShiroUtils.getLoginName());
         sysApplyInService.updateSysApplyIn(ap);
         return res;
+    }
+
+    @GetMapping("/showPdfY")
+    public void showPdfY(HttpServletResponse response,String path){
+        try {
+            //  本地的pdf文件
+//            String path="D:\\document\\jys-fund\\test1.pdf";
+            FileUtils.showPdf(response,path);
+//            return Response.create().success();
+        }catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+//            return Response.create().error(e.getMessage());
+        }
     }
 
     /**

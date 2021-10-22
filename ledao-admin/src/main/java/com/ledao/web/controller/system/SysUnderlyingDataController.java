@@ -332,6 +332,11 @@ public class SysUnderlyingDataController extends BaseController
         if ("admin".equals(u.getLoginName())){
             return AjaxResult.success();
         }
+        for (SysRole r: u.getRoles()){
+            if ("documentAdmin".equals(r.getRoleKey())){
+                return AjaxResult.success();
+            }
+        }
         long projectMId = 0L;
         if (StringUtils.isNotEmpty(projectManagerId)){
             projectMId = Long.valueOf(projectManagerId);
@@ -353,6 +358,11 @@ public class SysUnderlyingDataController extends BaseController
         SysUnderlyingData sd = sysUnderlyingDataService.selectSysUnderlyingDataById(fileId);
         if ("admin".equals(user.getLoginName())){
             return AjaxResult.success();
+        }
+        for (SysRole r: user.getRoles()){
+            if ("documentAdmin".equals(r.getRoleKey())){
+                return AjaxResult.success();
+            }
         }
         if (sd.getProjectType()==0){
             SysProject pro = sysProjectService.selectSysProjectById(sd.getProjectId());

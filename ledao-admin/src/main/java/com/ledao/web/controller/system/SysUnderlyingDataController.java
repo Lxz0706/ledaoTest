@@ -332,6 +332,7 @@ public class SysUnderlyingDataController extends BaseController
         if ("admin".equals(u.getLoginName())){
             return AjaxResult.success();
         }
+        
         for (SysRole r: u.getRoles()){
             if ("documentAdmin".equals(r.getRoleKey())){
                 return AjaxResult.success();

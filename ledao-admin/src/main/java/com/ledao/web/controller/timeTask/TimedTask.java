@@ -705,7 +705,7 @@ public class TimedTask {
                     sj.getParams().put("beginTime",date);
                     List<SysJournal>  jours = sysJournalService.selectSysJournalList(sj);
                     if (jours==null || jours.size()==0){
-                        if (isWeekEndDay){
+                        /*if (isWeekEndDay){
                             if (( "信息部".equals(u.getDeptName()) && "thbManager2".equals(u.getRoleKey()))
                             ){
                                 List<SysUser> us = new ArrayList<>();
@@ -716,7 +716,10 @@ public class TimedTask {
                             List<SysUser> us = new ArrayList<>();
                             us.add(u);
                             sendDailyUsalTask(us,parmStr);
-                        }
+                        }*/
+                        List<SysUser> us = new ArrayList<>();
+                        us.add(u);
+                        sendDailyUsalTask(us,parmStr);
                     }
                 }
             }

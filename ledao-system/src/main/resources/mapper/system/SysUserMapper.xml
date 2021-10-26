@@ -333,7 +333,7 @@
 
     <select id="selectUserByRoleKey" parameterType="SysUser" resultMap="SysUserResult">
         select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,
-        u.status, u.create_time,u.director_id, u.director, u.formal_flag
+        u.status, u.create_time,u.director_id, u.director, u.formal_flag, u.com_open_id
         from sys_user u
         left join sys_dept d on u.dept_id = d.dept_id
         left join sys_user_role ur on u.user_id = ur.user_id

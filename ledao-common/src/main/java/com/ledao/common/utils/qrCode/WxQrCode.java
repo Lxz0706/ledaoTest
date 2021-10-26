@@ -121,15 +121,15 @@ public class WxQrCode {
             paramJson.put("is_hyaline", true);
             paramJson.put("auto_color", true);
 //            paramJson.put("trainId",trainId);
-            /**
-             * line_color生效
-             * paramJson.put("auto_color", false);
-             * JSONObject lineColor = new JSONObject();
-             * lineColor.put("r", 0);
-             * lineColor.put("g", 0);
-             * lineColor.put("b", 0);
-             * paramJson.put("line_color", lineColor);
-             * */
+
+            //line_color生效
+            paramJson.put("auto_color", false);
+            JSONObject lineColor = new JSONObject();
+            lineColor.put("r", 0);
+            lineColor.put("g", 102);
+            lineColor.put("b", 204);
+            paramJson.put("line_color", lineColor);
+
 
             printWriter.write(paramJson.toString());
             // flush输出流的缓冲

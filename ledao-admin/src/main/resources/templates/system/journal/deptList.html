@@ -2,6 +2,11 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('日志列表')" />
+    <style>
+        .border {
+            border: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -18,8 +23,13 @@
                 </a>-->
 
             </div>
-            <div class="col-sm-12 select-table table-striped">
+            <!--<div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
+            </div>-->
+            <div class="container-div">
+                <div class="row">
+                    <div class="row" style="min-height: 80%;" id="showList"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,7 +40,7 @@
         var prefix = ctx + "system/journal";
 
         $(function() {
-            var options = {
+            /*var options = {
                 url: prefix + "/deptList",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
@@ -38,9 +48,9 @@
                 exportUrl: prefix + "/export",
                 modalName: "日志",
                 columns: [
-                    /*{
+                    /!*{
                     checkbox: true
-                },*/
+                },*!/
                 {
                     title: "序号",
                     formatter: function (value, row, index) {
@@ -56,7 +66,26 @@
                 }
                 ]
             };
-            $.table.init(options);
+            $.table.init(options);*/
+            $.ajax({
+                url: prefix + "/deptList",
+                data: {},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    var row = result.rows;
+                    var str = '';
+                    var height = $(".row").height();
+                    var winHeight = height / row.length;
+                    for (var i in row) {
+                        str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+                        // str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictValue + "',\'" + row[i].dictLabel + '\')">' + row[i].dictLabel + '</a><br/>';
+                        str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].deptId + "',\'" + row[i].deptName + '\')">' + row[i].deptName + '</a><br/>';
+                        str += '</div>';
+                    }
+                    $("#showList").html(str);
+                }
+            })
         });
 
         /*$("input[name='createTime']").datetimepicker({

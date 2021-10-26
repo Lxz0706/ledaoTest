@@ -152,6 +152,13 @@ public class SysMonomerLawController extends BaseController {
                 nameSb.append(sysUser1.getUserName()).append(",");
             }
 
+            //获取风控部普通员工
+            List<SysUser> fkbptList = getUserList("fkbCommon");
+            for (SysUser sysUser1 : fkbptList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
             //获取并购重组经理
             List<SysUser> sysUserList1 = getUserList("bgczManager");
             for (SysUser sysUser1 : sysUserList1) {
@@ -167,6 +174,20 @@ public class SysMonomerLawController extends BaseController {
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
             sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
+
+            //小程序消息推送
+            try {
+                List<SysUser> us = new ArrayList<>();
+                us.addAll(sysUserList);
+                us.addAll(fkbptList);
+                us.addAll(sysUserList1);
+                Map<String, String> parmStr = new HashMap<>();
+                parmStr.put("first", "您有一个法务工作提醒");
+                parmStr.put("word1", sysNotice.getNoticeTitle());
+                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return toAjax(sysMonomerLawService.insertSysMonomerLaw(sysMonomerLaw));
     }
@@ -204,6 +225,13 @@ public class SysMonomerLawController extends BaseController {
                 nameSb.append(sysUser1.getUserName()).append(",");
             }
 
+            //获取风控部普通员工
+            List<SysUser> fkbptList = getUserList("fkbCommon");
+            for (SysUser sysUser1 : fkbptList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
             //获取并购重组经理
             List<SysUser> sysUserList1 = getUserList("bgczManager");
             for (SysUser sysUser1 : sysUserList1) {
@@ -221,15 +249,15 @@ public class SysMonomerLawController extends BaseController {
             sysNoticeService.insertNotice(sysNotice);
 
             try {
-                System.out.println("法务状态变更消息推送");
                 List<SysUser> us = new ArrayList<>();
                 us.addAll(sysUserList);
+                us.addAll(fkbptList);
                 us.addAll(sysUserList1);
-                Map<String,String> parmStr = new HashMap<>();
-                parmStr.put("first","您有一个法务工作提醒");
-                parmStr.put("word1",sysNotice.getNoticeTitle());
-                iSysApplyWorkflowService.sendTaskMsg(us,parmStr);
-            }catch (Exception e){
+                Map<String, String> parmStr = new HashMap<>();
+                parmStr.put("first", "您有一个法务工作提醒");
+                parmStr.put("word1", sysNotice.getNoticeTitle());
+                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

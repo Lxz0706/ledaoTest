@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
@@ -76,6 +77,9 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private ISysUserService sysUserService;
+
+    @Autowired
+    private ISysApplyWorkflowService iSysApplyWorkflowService;
 
     @RequiresPermissions("system:project:view")
     @GetMapping()
@@ -490,7 +494,22 @@ public class SysProjectController extends BaseController {
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
             sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
+
+            //小程序消息推送
+            try {
+                System.out.println("法务状态变更消息推送");
+                List<SysUser> us = new ArrayList<>();
+                us.addAll(sysUserList);
+                us.addAll(sysUserList1);
+                Map<String, String> parmStr = new HashMap<>();
+                parmStr.put("first", "您有一个法务工作提醒");
+                parmStr.put("word1", sysNotice.getNoticeTitle());
+                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
 
         return toAjax(Integer.parseInt(String.valueOf(sysProject.getProjectId())));
     }
@@ -659,6 +678,13 @@ public class SysProjectController extends BaseController {
                 nameSb.append(sysUser1.getUserName()).append(",");
             }
 
+            //获取风控部普通员工
+            List<SysUser> fkbptList = getUserList("fkbCommon");
+            for (SysUser sysUser1 : fkbptList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
             //获取投后部项目经理
             List<SysUser> sysUserList1 = getUserList("thbManager");
             for (SysUser sysUser1 : sysUserList1) {
@@ -687,6 +713,21 @@ public class SysProjectController extends BaseController {
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
             sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
+
+            //小程序消息推送
+            try {
+                System.out.println("法务状态变更消息推送");
+                List<SysUser> us = new ArrayList<>();
+                us.addAll(sysUserList);
+                us.addAll(sysUserList1);
+                us.addAll(fkbptList);
+                Map<String, String> parmStr = new HashMap<>();
+                parmStr.put("first", "您有一个法务工作提醒");
+                parmStr.put("word1", sysNotice.getNoticeTitle());
+                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         //将项目经理id存入数据库

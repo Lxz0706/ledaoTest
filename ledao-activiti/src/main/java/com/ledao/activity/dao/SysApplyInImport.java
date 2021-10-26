@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SysApplyInImport {
     @Excel(name = "序号")
-    private long no;
+    private Long no;
     @Excel(name = "档案类别")
     private String documentTypeLab;
     private String documentType;
@@ -125,11 +125,11 @@ public class SysApplyInImport {
         this.remark = remark;
     }
 
-    public long getNo() {
+    public Long getNo() {
         return no;
     }
 
-    public void setNo(long no) {
+    public void setNo(Long no) {
         this.no = no;
     }
 

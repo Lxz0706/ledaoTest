@@ -4,7 +4,7 @@ import com.ledao.common.annotation.Excel;
 
 public class SysApplyInImportFile {
     @Excel(name = "序号")
-    private long no;
+    private Long no;
     @Excel(name = "项目名称")
     private String projectName;
 
@@ -136,11 +136,11 @@ public class SysApplyInImportFile {
         this.documentLevelLab = documentLevelLab;
     }
 
-    public long getNo() {
+    public Long getNo() {
         return no;
     }
 
-    public void setNo(long no) {
+    public void setNo(Long no) {
         this.no = no;
     }
 

@@ -9,14 +9,8 @@ import com.google.gson.JsonParser;
 import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysMonomerLaw;
-import com.ledao.system.dao.SysNotice;
-import com.ledao.system.dao.SysProject;
-import com.ledao.system.dao.SysUser;
-import com.ledao.system.service.ISysMonomerLawService;
-import com.ledao.system.service.ISysNoticeService;
-import com.ledao.system.service.ISysProjectService;
-import com.ledao.system.service.ISysUserService;
+import com.ledao.system.dao.*;
+import com.ledao.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,6 +40,9 @@ public class OpenTimeTask {
     @Autowired
     private ISysMonomerLawService sysMonomerLawService;
 
+    @Autowired
+    private ISysBgczzckService sysBgczzckService;
+
     public void openTime() {
         //投后部小程序消息推送
         thProject();
@@ -57,7 +54,7 @@ public class OpenTimeTask {
     public void thProject() {
         SysProject sysProject = new SysProject();
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
-        System.out.println("投后部项目开庭时间个数：======="+list.size());
+        System.out.println("投后部项目开庭时间个数：=======" + list.size());
         for (SysProject sysProject1 : list) {
             //获取项目经理和其上级主管
             StringBuffer sb = new StringBuffer();
@@ -65,16 +62,16 @@ public class OpenTimeTask {
             List<SysUser> userList = new ArrayList<>();
             if (StringUtils.isNotEmpty(sysProject1.getProjectManager())) {
                 SysUser sysUser = sysUserService.selectUserByUserName(sysProject1.getProjectManager());
-               if(StringUtils.isNotNull(sysUser)){
-                   userList.add(sysUser);
-                   sb.append(sysUser.getUserId());
-                   nameSb.append(sysUser.getUserName());
-                   if (StringUtils.isNotNull(sysUser.getDirectorId())) {
-                       SysUser sysUser1 = sysUserService.selectUserById(sysUser.getDirectorId());
-                       userList.add(sysUser1);
-                       sb.append(",").append(sysUser1.getUserId());
-                       nameSb.append(",").append(sysUser1.getUserName());
-                   }
+                if (StringUtils.isNotNull(sysUser)) {
+                    userList.add(sysUser);
+                    sb.append(sysUser.getUserId());
+                    nameSb.append(sysUser.getUserName());
+                    if (StringUtils.isNotNull(sysUser.getDirectorId())) {
+                        SysUser sysUser1 = sysUserService.selectUserById(sysUser.getDirectorId());
+                        userList.add(sysUser1);
+                        sb.append(",").append(sysUser1.getUserId());
+                        nameSb.append(",").append(sysUser1.getUserName());
+                    }
                 }
             }
 
@@ -128,12 +125,13 @@ public class OpenTimeTask {
     public void tzProject() {
         SysMonomerLaw sysMonomerLaw = new SysMonomerLaw();
         List<SysMonomerLaw> sysMonomerLawList = sysMonomerLawService.selectSysMonomerLawList(sysMonomerLaw);
-        System.out.println("大型单体项目开庭时间个数：======="+sysMonomerLawList.size());
+        System.out.println("大型单体项目开庭时间个数：=======" + sysMonomerLawList.size());
         for (SysMonomerLaw sysMonomerLaw1 : sysMonomerLawList) {
             //获取项目经理和其上级主管
             StringBuffer sb = new StringBuffer();
             StringBuffer nameSb = new StringBuffer();
             List<SysUser> userList = new ArrayList<>();
+            SysBgczzck sysBgczzck = sysBgczzckService.selectSysBgczzckById(sysMonomerLaw1.getProjectId());
             //获取项目经理和其上级主管
             /*if (StringUtils.isNotEmpty(sysProject1.getProjectManager())) {
                 SysUser sysUser = sysUserService.selectUserByUserName(sysProject1.getProjectManager());
@@ -172,7 +170,7 @@ public class OpenTimeTask {
                             differentDay = 3;
                         }
                         SysNotice sysNotice = new SysNotice();
-                        sysNotice.setNoticeTitle(sysMonomerLaw1.getProjectName() + "距离" + object.getString("type") + "开庭，还剩" + differentDay + "天");
+                        sysNotice.setNoticeTitle(sysBgczzck.getProjectName() + "距离" + object.getString("type") + "开庭，还剩" + differentDay + "天");
                         sysNotice.setNoticeType("3");
                         sysNotice.setReceiverId(sb.toString());
                         sysNotice.setReceiver(nameSb.toString());

@@ -53,6 +53,7 @@
         <result property="userName" column="user_name"/>
         <result property="comOpenId" column="com_open_id"/>
         <result property="isDailyRemind" column="is_daily_remind"/>
+        <result property="remainFlag" column="remain_flag"/>
     </resultMap>
 
     <resultMap id="RoleResult" type="SysRole">
@@ -147,12 +148,14 @@
             a.login_name,
             a.user_name,
             a.com_open_id,
-            a.is_daily_remind
+            a.is_daily_remind,
+            conf.remain_flag
         FROM
             sys_user a
                 LEFT JOIN sys_dept b ON a.dept_id = b.dept_id
                 LEFT JOIN sys_user_role c on a.user_id = c.user_id
                 LEFT JOIN sys_role r on c.role_id=r.role_id
+                LEFT JOIN sys_daily_remain_config conf on b.dept_name=conf.dept_name and r.role_key=conf.role_key
     </select>
 
     <select id="selectUnallocatedList" parameterType="SysUser" resultMap="SysUserResult">

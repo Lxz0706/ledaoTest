@@ -166,6 +166,16 @@ public class SysUser extends BaseEntity {
 
     private String isDailyRemind;
 
+    private String remainFlag;
+
+    public String getRemainFlag() {
+        return remainFlag;
+    }
+
+    public void setRemainFlag(String remainFlag) {
+        this.remainFlag = remainFlag;
+    }
+
     public String getIsDailyRemind() {
         return isDailyRemind;
     }

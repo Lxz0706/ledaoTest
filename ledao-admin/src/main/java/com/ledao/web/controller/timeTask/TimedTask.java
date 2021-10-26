@@ -698,6 +698,8 @@ public class TimedTask {
             parmStr.put("first","您有一个日志任务提醒");
             parmStr.put("word1","日志未填写提醒");
             parmStr.put("word2","请及时填写日志");
+            List<String> sendUsers = new ArrayList<>();
+            List<SysUser> us = new ArrayList<>();
             for (SysUser u :users){
                 if (StringUtils.isNotNull(u.getComOpenId())){
                     SysJournal sj = new SysJournal();
@@ -705,24 +707,28 @@ public class TimedTask {
                     sj.getParams().put("beginTime",date);
                     List<SysJournal>  jours = sysJournalService.selectSysJournalList(sj);
                     if (jours==null || jours.size()==0){
-                        /*if (isWeekEndDay){
-                            if (( "信息部".equals(u.getDeptName()) && "thbManager2".equals(u.getRoleKey()))
-                            ){
-                                List<SysUser> us = new ArrayList<>();
+                        if (isWeekEndDay && "1".equals(u.getRemainFlag())){
+                            if (!sendUsers.contains(u.getLoginName())){
+                                //每周五提醒
                                 us.add(u);
-                                sendDailyUsalTask(us,parmStr);
+                                sendUsers.add(u.getLoginName());
                             }
-                        }else if( ( "法律风控部".equals(u.getDeptName()) && "flgw".equals(u.getRoleKey()))){
-                            List<SysUser> us = new ArrayList<>();
-                            us.add(u);
-                            sendDailyUsalTask(us,parmStr);
-                        }*/
-                        List<SysUser> us = new ArrayList<>();
+
+                        }else if("0".equals(u.getRemainFlag())){
+                            //每天提醒
+                            if (!sendUsers.contains(u.getLoginName())){
+                                //每周五提醒
+                                us.add(u);
+                                sendUsers.add(u.getLoginName());
+                            }
+                        }
+                        /*List<SysUser> us = new ArrayList<>();
                         us.add(u);
-                        sendDailyUsalTask(us,parmStr);
+                        sendDailyUsalTask(us,parmStr);*/
                     }
                 }
             }
+            sendDailyUsalTask(us,parmStr);
         }
     }
 

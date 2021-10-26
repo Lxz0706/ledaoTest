@@ -64,6 +64,7 @@ public class WxQrCode {
         in.close();
         JSONObject jsonObject = JSON.parseObject(result);
         String accesstoken=jsonObject.getString("access_token");
+        System.out.println("获取accesstoken返回数据信息："+jsonObject);
         return accesstoken;
     }
 

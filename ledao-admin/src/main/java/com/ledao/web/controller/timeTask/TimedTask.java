@@ -654,20 +654,26 @@ public class TimedTask {
         parmStr.put("word2","请及时归还档案");
         List<SysApplyIn> sysApply = new ArrayList<>();
         List<SysApplyIn> sysApplyIn = sysApplyInService.selectNotReturned();
-        List<SysUser> users = new ArrayList<>();
+
         for (SysApplyIn sysApp:sysApplyIn) {
             if(DateUtils.differentDays(sysApp.getPlanReturnTime(),new Date())%3==0){
+                List<SysUser> users = new ArrayList<>();
+                List<SysUser> usersAdmin = new ArrayList<>();
                 users.add(sysUserService.selectUserByLoginName(sysApp.getApplyUser()));
                 //推送给处理他的档案管理员
                 SysApplyWorkflow workflow = new SysApplyWorkflow();
                 workflow.setApplyId(sysApp.getApplyId());
                 List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
                 if (workflows!=null&& workflows.size()>0){
-                    users.add(sysUserService.selectUserByLoginName(workflows.get(0).getApproveUser()));
+                    usersAdmin.add(sysUserService.selectUserByLoginName(workflows.get(0).getApproveUser()));
                 }
+                parmStr.put("word5","档案申请时间："+DateUtils.formatDateByPattern(sysApp.getApplyTime(),"yyyy-MM-dd")+"至"+DateUtils.formatDateByPattern(sysApp.getPlanReturnTime(),"yyyy-MM-dd"));
+                sendDailyUsalTask(users,parmStr);
+                parmStr.put("word2","请及时追踪档案");
+                sendDailyUsalTask(usersAdmin,parmStr);
             }
         }
-        sendDailyUsalTask(users,parmStr);
+
     }
     /**
      * 每天21点提醒所有未填写日志的人填日志
@@ -818,7 +824,7 @@ public class TimedTask {
                 parm.put("word3",StringUtils.isNotEmpty(parmStr.get("word3"))?parmStr.get("word3"):"-");
 //                        任务状态
                 parm.put("word4",StringUtils.isNotEmpty(parmStr.get("word4"))?parmStr.get("word4"):"-");
-                parm.put("word5","-");
+                parm.put("word5",StringUtils.isNotEmpty(parmStr.get("word5"))?parmStr.get("word5"):"-");
 
 //                        任务接收人
                 parm.put("toUser",u.getComOpenId());

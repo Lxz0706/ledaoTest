@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.dao.SysApplyWorkflow;
+import com.ledao.activity.dao.SysWorkflowProcess;
 import com.ledao.activity.mapper.SysApplyWorkflowMapper;
+import com.ledao.activity.mapper.SysWorkflowProcessMapper;
 import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.message.Template;
@@ -107,6 +109,9 @@ public class TimedTask {
 
     @Autowired
     private SysApplyWorkflowMapper sysApplyWorkflowMapper;
+
+    @Autowired
+    private SysWorkflowProcessMapper sysWorkflowProcessMapper;
 
 
 
@@ -667,7 +672,21 @@ public class TimedTask {
                 if (workflows!=null&& workflows.size()>0){
                     usersAdmin.add(sysUserService.selectUserByLoginName(workflows.get(0).getApproveUser()));
                 }
-                parmStr.put("word5","档案申请时间："+DateUtils.formatDateByPattern(sysApp.getApplyTime(),"yyyy-MM-dd")+"至"+DateUtils.formatDateByPattern(sysApp.getPlanReturnTime(),"yyyy-MM-dd"));
+                String planReturnTime = "-";
+                String realGetTime = "-";
+                if(StringUtils.isNotNull(sysApp.getPlanReturnTime())){
+                    planReturnTime = DateUtils.formatDateByPattern(sysApp.getPlanReturnTime(),"yyyy-MM-dd");
+                }
+                SysWorkflowProcess w = new SysWorkflowProcess();
+                w.setApplyId(sysApp.getApplyId());
+                w.setShowLable("8");
+                List<SysWorkflowProcess> wfs = sysWorkflowProcessMapper.selectSysWorkflowProcessList(w);
+                if (wfs!=null && wfs.size()>0){
+                    if (wfs.get(0).getApplyTime()!=null){
+                        realGetTime = DateUtils.formatDateByPattern(wfs.get(0).getApplyTime(),"yyyy-MM-dd");
+                    }
+                }
+                parmStr.put("word5","档案出库时间："+realGetTime+"至"+planReturnTime);
                 sendDailyUsalTask(users,parmStr);
                 parmStr.put("word2","请及时追踪档案");
                 sendDailyUsalTask(usersAdmin,parmStr);
@@ -767,7 +786,7 @@ public class TimedTask {
                 List<SysUser> users = new ArrayList<>();
                 users.add(userMapper.selectUserByLoginName("xukai"));
                 users.add(userMapper.selectUserByLoginName("jianghui"));
-                sendTaskMsg(users,s);
+                sendTaskMsg(users,s,"您有一个投后项目总任务提醒");
             }
         }
     }
@@ -877,13 +896,13 @@ public class TimedTask {
             }
         }
     }
-    private void sendTaskMsg(List<SysUser> users,SysManageTask s){
+    private void sendTaskMsg(List<SysUser> users,SysManageTask s,String firstWord){
         for (SysUser u:users){
             if (StringUtils.isNotEmpty(u.getComOpenId())){
                 //发送消息到投后部部门经理
                 JSONObject parm = new JSONObject();
                 //发布人
-                parm.put("first","您有一个任务提醒");
+                parm.put("first",firstWord);
                 if ("0".equals(s.getTaskType())){
                     parm.put("word1",s.getZckName());
                 }else {
@@ -946,7 +965,7 @@ public class TimedTask {
                         users.add(userMapper.selectUserByLoginName("xukai"));
                         users.add(userMapper.selectUserByLoginName("jianghui"));
                         users.add(userMapper.selectUserById(p.getProjectManagerId()));
-                        sendTaskMsg(users,t);
+                        sendTaskMsg(users,t,"您有一个投后项目子任务提醒");
                     }
                 }
             }

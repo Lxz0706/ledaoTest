@@ -1501,15 +1501,21 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             doc.setUpdateTime(new Date());
             doc.setCreateBy(ShiroUtils.getLoginName());
             documentFileMapper.insertSysDocumentFile(doc);
-            SysFileDetail fileDetail = new SysFileDetail();
-            fileDetail.setCreateTime(new Date());
-            fileDetail.setUpdateTime(new Date());
-            fileDetail.setCreateBy(ShiroUtils.getLoginName());
-            fileDetail.setDocumentFileId(doc.getDocumentId());
-            fileDetail.setFileUrl(f.getFileUrl());
-            fileDetail.setFileType(f.getFileDetailType());
-            fileDetail.setFileName(f.getFileUrl().substring(f.getFileUrl().lastIndexOf("\\")+1));
-            fileDetailMapper.insertSysFileDetail(fileDetail);
+            if (StringUtils.isNotEmpty(f.getFileUrl())){
+                String[] urls = f.getFileUrl().split(",");
+                for (String u:urls) {
+                    SysFileDetail fileDetail = new SysFileDetail();
+                    fileDetail.setCreateTime(new Date());
+                    fileDetail.setUpdateTime(new Date());
+                    fileDetail.setCreateBy(ShiroUtils.getLoginName());
+                    fileDetail.setDocumentFileId(doc.getDocumentId());
+                    fileDetail.setFileUrl(u);
+                    fileDetail.setFileType(u.substring(u.lastIndexOf(".")+1));
+                    fileDetail.setFileName(u.substring(u.lastIndexOf("\\")+1));
+                    fileDetailMapper.insertSysFileDetail(fileDetail);
+                }
+            }
+
         }
         return 0;
     }
@@ -1552,15 +1558,20 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             doc.setUpdateTime(new Date());
             doc.setCreateBy(ShiroUtils.getLoginName());
             documentFileMapper.insertSysDocumentFile(doc);
-            SysFileDetail fileDetail = new SysFileDetail();
-            fileDetail.setCreateTime(new Date());
-            fileDetail.setUpdateTime(new Date());
-            fileDetail.setCreateBy(ShiroUtils.getLoginName());
-            fileDetail.setDocumentFileId(doc.getDocumentId());
-            fileDetail.setFileUrl(f.getFileUrl());
-            fileDetail.setFileType(f.getFileDetailType());
-            fileDetail.setFileName(f.getFileUrl().substring(f.getFileUrl().lastIndexOf("\\")+1));
-            fileDetailMapper.insertSysFileDetail(fileDetail);
+            if (StringUtils.isNotEmpty(f.getFileUrl())){
+                String[] urls = f.getFileUrl().split(",");
+                for (String u:urls) {
+                    SysFileDetail fileDetail = new SysFileDetail();
+                    fileDetail.setCreateTime(new Date());
+                    fileDetail.setUpdateTime(new Date());
+                    fileDetail.setCreateBy(ShiroUtils.getLoginName());
+                    fileDetail.setDocumentFileId(doc.getDocumentId());
+                    fileDetail.setFileUrl(u);
+                    fileDetail.setFileType(u.substring(u.lastIndexOf(".")+1));
+                    fileDetail.setFileName(u.substring(u.lastIndexOf("\\")+1));
+                    fileDetailMapper.insertSysFileDetail(fileDetail);
+                }
+            }
         }
         return 0;
     }

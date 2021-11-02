@@ -177,35 +177,22 @@ public class SysUserController extends BaseController {
         SysDocument sysDocument = new SysDocument();
         List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument);
         for (SysDocument sysDocument1 : sysDocumentList) {
-            for (String string : sysDocument1.getShareDeptId().split(",")) {
-                if (StringUtils.isNotEmpty(string)) {
-                    List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
-                    //查询子集
-                    if (deptList.size() > 0) {
-                        for (SysDept sysDept : deptList) {
-                            if (StringUtils.isNotNull(sysDept) && StringUtils.isNotNull(sysDept.getDeptId())) {
-                                if (sysDept.getDeptId().equals(user.getDeptId().toString())) {
-                                    SysDocument sysDocument2 = new SysDocument();
-                                    sysDocument2.setFileId(sysDocument1.getFileId());
-                                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
-                                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
-                                    sysDocumentService.updateSysDocument(sysDocument2);
-                                }
-                            }
-                        }
-                    } else {
-                        SysDept sysDept = deptService.selectDeptById(user.getDeptId());
-                        if (string.equals(sysDept.getParentId().toString())) {
-                            SysDocument sysDocument2 = new SysDocument();
-                            sysDocument2.setFileId(sysDocument1.getFileId());
-                            sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
-                            sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
-                            sysDocumentService.updateSysDocument(sysDocument2);
-                        }
-
-                    }
-
+            //如果这个人的上级部门在分享部门中，则也会分享
+            SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+            if (!sysDocument1.getShareDeptId().contains(sysDept.getParentId().toString())) {
+                if (sysDocument1.getShareDeptId().contains(user.getDeptId().toString())) {
+                    SysDocument sysDocument2 = new SysDocument();
+                    sysDocument2.setFileId(sysDocument1.getFileId());
+                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                    sysDocumentService.updateSysDocument(sysDocument2);
                 }
+            } else {
+                SysDocument sysDocument2 = new SysDocument();
+                sysDocument2.setFileId(sysDocument1.getFileId());
+                sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                sysDocumentService.updateSysDocument(sysDocument2);
             }
         }
 
@@ -213,7 +200,24 @@ public class SysUserController extends BaseController {
         SysNotice sysNotice = new SysNotice();
         List<SysNotice> sysNoticeList = sysNoticeService.selectNoticeList(sysNotice);
         for (SysNotice sysNotice1 : sysNoticeList) {
-            if (StringUtils.isNotEmpty(sysNotice1.getShareDeptId())) {
+            //如果这个人的上级部门在分享部门中，则也会分享
+            SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+            if (!sysNotice1.getShareDeptId().contains(sysDept.getParentId().toString())) {
+                if (sysNotice1.getShareDeptId().contains(user.getDeptId().toString())) {
+                    SysNotice sysNotice2 = new SysNotice();
+                    sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                    sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                    sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                    sysNoticeService.updateNotice(sysNotice2);
+                }
+            } else {
+                SysNotice sysNotice2 = new SysNotice();
+                sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                sysNoticeService.updateNotice(sysNotice2);
+            }
+            /*            if (StringUtils.isNotEmpty(sysNotice1.getShareDeptId())) {
                 for (String string : sysNotice1.getShareDeptId().split(",")) {
                     if (StringUtils.isNotEmpty(string)) {
                         List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
@@ -241,7 +245,7 @@ public class SysUserController extends BaseController {
                         }
                     }
                 }
-            }
+            }*/
         }
 
         return toAjax(Integer.parseInt(String.valueOf(user.getUserId())));
@@ -286,35 +290,22 @@ public class SysUserController extends BaseController {
         SysDocument sysDocument = new SysDocument();
         List<SysDocument> sysDocumentList = sysDocumentService.selectSysDocumentList(sysDocument);
         for (SysDocument sysDocument1 : sysDocumentList) {
-            for (String string : sysDocument1.getShareDeptId().split(",")) {
-                if (StringUtils.isNotEmpty(string)) {
-                    List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
-                    //查询子集
-                    if (deptList.size() > 0) {
-                        for (SysDept sysDept : deptList) {
-                            if (StringUtils.isNotNull(sysDept) && StringUtils.isNotNull(sysDept.getDeptId())) {
-                                if (sysDept.getDeptId().equals(user.getDeptId().toString())) {
-                                    SysDocument sysDocument2 = new SysDocument();
-                                    sysDocument2.setFileId(sysDocument1.getFileId());
-                                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
-                                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
-                                    sysDocumentService.updateSysDocument(sysDocument2);
-                                }
-                            }
-                        }
-                    } else {
-                        SysDept sysDept = deptService.selectDeptById(user.getDeptId());
-                        if (string.equals(sysDept.getParentId().toString())) {
-                            SysDocument sysDocument2 = new SysDocument();
-                            sysDocument2.setFileId(sysDocument1.getFileId());
-                            sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
-                            sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
-                            sysDocumentService.updateSysDocument(sysDocument2);
-                        }
-
-                    }
-
+            //如果这个人的上级部门在分享部门中，则也会分享
+            SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+            if (!sysDocument1.getShareDeptId().contains(sysDept.getParentId().toString())) {
+                if (sysDocument1.getShareDeptId().contains(user.getDeptId().toString())) {
+                    SysDocument sysDocument2 = new SysDocument();
+                    sysDocument2.setFileId(sysDocument1.getFileId());
+                    sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                    sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                    sysDocumentService.updateSysDocument(sysDocument2);
                 }
+            } else {
+                SysDocument sysDocument2 = new SysDocument();
+                sysDocument2.setFileId(sysDocument1.getFileId());
+                sysDocument2.setShareUserId(sysDocument1.getShareUserId() + "," + user.getUserId());
+                sysDocument2.setShareUserName(sysDocument1.getShareUserName() + "," + user.getUserName());
+                sysDocumentService.updateSysDocument(sysDocument2);
             }
         }
 
@@ -322,34 +313,22 @@ public class SysUserController extends BaseController {
         SysNotice sysNotice = new SysNotice();
         List<SysNotice> sysNoticeList = sysNoticeService.selectNoticeList(sysNotice);
         for (SysNotice sysNotice1 : sysNoticeList) {
-            if (StringUtils.isNotEmpty(sysNotice1.getShareDeptId())) {
-                for (String string : sysNotice1.getShareDeptId().split(",")) {
-                    if (StringUtils.isNotEmpty(string)) {
-                        List<SysDept> deptList = deptService.selectDeptByParentId(Long.valueOf(string));
-                        if (deptList.size() > 0) {
-                            for (SysDept sysDept : deptList) {
-                                if (StringUtils.isNotNull(sysDept) && StringUtils.isNotNull(sysDept.getDeptId())) {
-                                    if (sysDept.getDeptId().equals(user.getDeptId().toString())) {
-                                        SysNotice sysNotice2 = new SysNotice();
-                                        sysNotice2.setNoticeId(sysNotice1.getNoticeId());
-                                        sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
-                                        sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
-                                        sysNoticeService.updateNotice(sysNotice2);
-                                    }
-                                }
-                            }
-                        } else {
-                            SysDept sysDept = deptService.selectDeptById(user.getDeptId());
-                            if (string.equals(sysDept.getParentId().toString())) {
-                                SysNotice sysNotice2 = new SysNotice();
-                                sysNotice2.setNoticeId(sysNotice1.getNoticeId());
-                                sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
-                                sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
-                                sysNoticeService.updateNotice(sysNotice2);
-                            }
-                        }
-                    }
+            //如果这个人的上级部门在分享部门中，则也会分享
+            SysDept sysDept = deptService.selectDeptById(user.getDeptId());
+            if (!sysNotice1.getShareDeptId().contains(sysDept.getParentId().toString())) {
+                if (sysNotice1.getShareDeptId().contains(user.getDeptId().toString())) {
+                    SysNotice sysNotice2 = new SysNotice();
+                    sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                    sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                    sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                    sysNoticeService.updateNotice(sysNotice2);
                 }
+            } else {
+                SysNotice sysNotice2 = new SysNotice();
+                sysNotice2.setNoticeId(sysNotice1.getNoticeId());
+                sysNotice2.setReceiverId(sysNotice2.getReceiverId() + "," + user.getUserId());
+                sysNotice2.setReceiver(sysNotice2.getReceiver() + "," + user.getUserName());
+                sysNoticeService.updateNotice(sysNotice2);
             }
         }
         user.setUpdateBy(ShiroUtils.getLoginName());

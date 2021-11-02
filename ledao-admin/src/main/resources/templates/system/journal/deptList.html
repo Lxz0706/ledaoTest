@@ -76,11 +76,11 @@
                     var row = result.rows;
                     var str = '';
                     var height = $(".row").height();
-                    var winHeight = height / row.length;
+                    var winHeight = height / row.length-15;
                     for (var i in row) {
                         str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
                         // str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictValue + "',\'" + row[i].dictLabel + '\')">' + row[i].dictLabel + '</a><br/>';
-                        str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].deptId + "',\'" + row[i].deptName + '\')">' + row[i].deptName + '</a><br/>';
+                        str += '<a href="javascript:void(0)" style="font-size: 2.3em; font-weight:bold;letter-spacing:1em;" onclick="detail(\'' + row[i].deptId + "',\'" + row[i].deptName + '\')">' + row[i].deptName + '</a><br/>';
                         str += '</div>';
                     }
                     $("#showList").html(str);

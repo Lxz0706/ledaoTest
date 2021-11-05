@@ -474,6 +474,13 @@ public class SysProjectController extends BaseController {
                 nameSb.append(sysUser1.getUserName()).append(",");
             }
 
+            //获取风控部普通员工
+            List<SysUser> fkbptList = getUserList("fkbCommon");
+            for (SysUser sysUser1 : fkbptList) {
+                idSb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
             //获取投后部项目经理
             List<SysUser> sysUserList1 = getUserList("thbManager");
             for (SysUser sysUser1 : sysUserList1) {
@@ -500,7 +507,8 @@ public class SysProjectController extends BaseController {
                 System.out.println("法务状态变更消息推送");
                 List<SysUser> us = new ArrayList<>();
                 us.addAll(sysUserList);
-                us.addAll(sysUserList1);
+                //us.addAll(sysUserList1);
+                us.addAll(fkbptList);
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");
                 parmStr.put("word1", sysNotice.getNoticeTitle());
@@ -719,7 +727,7 @@ public class SysProjectController extends BaseController {
                 System.out.println("法务状态变更消息推送");
                 List<SysUser> us = new ArrayList<>();
                 us.addAll(sysUserList);
-                us.addAll(sysUserList1);
+                //us.addAll(sysUserList1);
                 us.addAll(fkbptList);
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");

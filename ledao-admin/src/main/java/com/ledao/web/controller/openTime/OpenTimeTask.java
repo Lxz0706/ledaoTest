@@ -84,6 +84,15 @@ public class OpenTimeTask {
                 nameSb.append(",").append(sysUser1.getUserName());
             }
 
+            //获取风控部普通员工
+            SysUser sysUser1 = new SysUser();
+            sysUser1.setRoleKey("fkbCommon");
+            List<SysUser> fkbptList = sysUserService.selectUserByRoleKey(sysUser1);
+            for (SysUser sysUser2 : fkbptList) {
+                sb.append(sysUser2.getUserId()).append(",");
+                nameSb.append(sysUser2.getUserName()).append(",");
+            }
+
             if (StringUtils.isNotEmpty(sysProject1.getOpenTime())) {
                 //需要使用的JSON的parseArray方法，将jsonArray解析为object类型的数组
                 JSONArray objects = JSON.parseArray(sysProject1.getOpenTime());
@@ -91,11 +100,11 @@ public class OpenTimeTask {
                     //通过数组下标取到object，使用强转转为JSONObject，之后进行操作
                     JSONObject object = JSON.parseObject(objects.get(i).toString());
                     int differentDay = 0;
-                    if (DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 10
-                            || DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 3) {
-                        if (DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 10) {
+                    if (DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 10
+                            || DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 3) {
+                        if (DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 10) {
                             differentDay = 10;
-                        } else if (DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 3) {
+                        } else if (DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 3) {
                             differentDay = 3;
                         }
                         SysNotice sysNotice = new SysNotice();
@@ -112,6 +121,7 @@ public class OpenTimeTask {
                         List<SysUser> us = new ArrayList<>();
                         us.addAll(sysUserList);
                         us.addAll(userList);
+                        us.addAll(fkbptList);
                         Map<String, String> parmStr = new HashMap<>();
                         parmStr.put("first", "您有一个法务工作提醒");
                         parmStr.put("word1", sysNotice.getNoticeTitle());
@@ -151,8 +161,27 @@ public class OpenTimeTask {
             sysUser.setRoleKey("fkbjl");
             List<SysUser> sysUserList = sysUserService.selectUserByRoleKey(sysUser);
             for (SysUser sysUser1 : sysUserList) {
-                sb.append(",").append(sysUser1.getUserId());
-                nameSb.append(",").append(sysUser1.getUserName());
+                sb.append(sysUser1.getUserId()).append(",");
+                nameSb.append(sysUser1.getUserName()).append(",");
+            }
+
+
+            //获取风控部普通员工
+            SysUser sysUser1 = new SysUser();
+            sysUser1.setRoleKey("fkbCommon");
+            List<SysUser> fkbptList = sysUserService.selectUserByRoleKey(sysUser1);
+            for (SysUser sysUser2 : fkbptList) {
+                sb.append(sysUser2.getUserId()).append(",");
+                nameSb.append(sysUser2.getUserName()).append(",");
+            }
+
+            //获取并购重组经理
+            SysUser sysUser2 = new SysUser();
+            sysUser2.setRoleKey("bgczManager");
+            List<SysUser> bgczManagerList = sysUserService.selectUserByRoleKey(sysUser2);
+            for (SysUser sysUser3 : bgczManagerList) {
+                sb.append(sysUser3.getUserId()).append(",");
+                nameSb.append(sysUser3.getUserName()).append(",");
             }
 
             if (StringUtils.isNotEmpty(sysMonomerLaw1.getOpenTime())) {
@@ -162,11 +191,11 @@ public class OpenTimeTask {
                     //通过数组下标取到object，使用强转转为JSONObject，之后进行操作
                     JSONObject object = JSON.parseObject(objects.get(i).toString());
                     int differentDay = 0;
-                    if (DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 10
-                            || DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 3) {
-                        if (DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 10) {
+                    if (DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 10
+                            || DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 3) {
+                        if (DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 10) {
                             differentDay = 10;
-                        } else if (DateUtils.differentDays(DateUtils.parseDate(object.getString("value")), new Date()) == 3) {
+                        } else if (DateUtils.differentDays(new Date(), DateUtils.parseDate(object.getString("value"))) == 3) {
                             differentDay = 3;
                         }
                         SysNotice sysNotice = new SysNotice();
@@ -183,7 +212,8 @@ public class OpenTimeTask {
                             System.out.println("-------------大型单体项目开庭时间推送----------");
                             List<SysUser> us = new ArrayList<>();
                             us.addAll(sysUserList);
-                            //us.addAll(userList);
+                            us.addAll(fkbptList);
+                            us.addAll(bgczManagerList);
                             Map<String, String> parmStr = new HashMap<>();
                             parmStr.put("first", "您有一个法务工作提醒");
                             parmStr.put("word1", sysNotice.getNoticeTitle());

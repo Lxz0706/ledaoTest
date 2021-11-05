@@ -180,7 +180,7 @@ public class SysMonomerLawController extends BaseController {
                 List<SysUser> us = new ArrayList<>();
                 us.addAll(sysUserList);
                 us.addAll(fkbptList);
-                us.addAll(sysUserList1);
+                //us.addAll(sysUserList1);
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");
                 parmStr.put("word1", sysNotice.getNoticeTitle());
@@ -252,7 +252,7 @@ public class SysMonomerLawController extends BaseController {
                 List<SysUser> us = new ArrayList<>();
                 us.addAll(sysUserList);
                 us.addAll(fkbptList);
-                us.addAll(sysUserList1);
+                //us.addAll(sysUserList1);
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");
                 parmStr.put("word1", sysNotice.getNoticeTitle());

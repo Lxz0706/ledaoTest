@@ -8,6 +8,8 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.github.pagehelper.PageHelper;
+import com.ledao.activity.service.ISysApplyInService;
+import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.constant.Constants;
 import com.ledao.common.core.controller.BaseController;
@@ -79,6 +81,9 @@ public class SysCustomerController<main> extends BaseController {
 
     @Autowired
     private ISysDeptService sysDeptService;
+
+    @Autowired
+    private ISysApplyWorkflowService sysApplyWorkflowService;
 
     @RequiresPermissions("system:customer:view")
     @GetMapping()
@@ -265,38 +270,6 @@ public class SysCustomerController<main> extends BaseController {
 
         sysCustomer.setAgentId(ShiroUtils.getLoginName());
         sysCustomer.setAgent(ShiroUtils.getSysUser().getUserName());
-  /*      SysUser currentUser = ShiroUtils.getSysUser();
-        if (currentUser != null) {
-            // 如果是超级管理员，则不过滤数据
-            if (!currentUser.isAdmin()) {
-                List<SysRole> getRoles = currentUser.getRoles();
-                for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey())) {
-                        SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
-                        sysCustomer.setDeptId(sysUser.getDeptId());
-                        sysCustomer.setDeptName(sysUser.getDept().getDeptName());
-                    } else {
-                        sysCustomer.setAgentId(ShiroUtils.getLoginName());
-                        sysCustomer.setAgent(ShiroUtils.getSysUser().getUserName());
-                        if (StringUtils.isNotEmpty(sysCustomer.getCreateBy())) {
-                            SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
-                            sysCustomer.setDeptId(sysUser.getDeptId());
-                            sysCustomer.setDeptName(sysUser.getDept().getDeptName());
-                        }
-                    }
-                }
-            } else {
-                sysCustomer.setAgentId(ShiroUtils.getLoginName());
-                sysCustomer.setAgent(ShiroUtils.getSysUser().getUserName());
-                if (StringUtils.isNotEmpty(sysCustomer.getCreateBy())) {
-                    SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
-                    if (StringUtils.isNotNull(sysUser)) {
-                        sysCustomer.setDeptId(sysUser.getDeptId());
-                        sysCustomer.setDeptName(sysUser.getDept().getDeptName());
-                    }
-                }
-            }
-        }*/
         if (StringUtils.isNull(sysCustomer.getDeptId()) && StringUtils.isEmpty(sysCustomer.getDeptName())) {
             sysCustomer.setDeptId(ShiroUtils.getSysUser().getDeptId());
             sysCustomer.setDeptName(ShiroUtils.getSysUser().getDept().getDeptName());
@@ -308,6 +281,23 @@ public class SysCustomerController<main> extends BaseController {
         } else {
             sysCustomer.setDeptType(selectDeptTypeById(sysCustomer.getDeptId()));
         }
+
+        //分享人推送
+        Map<String, String> parmStr = new HashMap<>();
+        List<SysUser> userList = new ArrayList<>();
+        parmStr.put("first", "您有一个客户信息分享提醒");
+        parmStr.put("word1", "客户姓名：" + sysCustomer.getContacts());
+        parmStr.put("word2", "-");
+        parmStr.put("word3", (sysUserService.selectUserByLoginName(sysCustomer.getCreateBy())).getUserName());
+        parmStr.put("word4", "-");
+        if (StringUtils.isNotEmpty(sysCustomer.getShareUserId())) {
+            for (String string : sysCustomer.getShareUserId().split(",")) {
+                if (StringUtils.isNotEmpty(string)) {
+                    userList.add(sysUserService.selectUserById(Long.valueOf(string)));
+                }
+            }
+        }
+        sysApplyWorkflowService.sendTaskMsg(userList, parmStr);
         return toAjax(sysCustomerService.insertSysCustomer(sysCustomer));
     }
 
@@ -398,6 +388,23 @@ public class SysCustomerController<main> extends BaseController {
 
         sysCustomer.setUpdateBy(ShiroUtils.getLoginName());
         sysCustomer.setReviser(ShiroUtils.getSysUser().getUserName());
+
+        //分享推送
+        Map<String, String> parmStr = new HashMap<>();
+        List<SysUser> userList = new ArrayList<>();
+        parmStr.put("first", "您有一个客户信息分享提醒");
+        parmStr.put("word1", "客户姓名：" + sysCustomer.getContacts());
+        parmStr.put("word2", "-");
+        parmStr.put("word3", (sysUserService.selectUserByLoginName(sysCustomer.getCreateBy())).getUserName());
+        parmStr.put("word4", "-");
+        if (StringUtils.isNotEmpty(sysCustomer.getShareUserId())) {
+            for (String string : sysCustomer.getShareUserId().split(",")) {
+                if (StringUtils.isNotEmpty(string)) {
+                    userList.add(sysUserService.selectUserById(Long.valueOf(string)));
+                }
+            }
+        }
+        sysApplyWorkflowService.sendTaskMsg(userList, parmStr);
         return toAjax(sysCustomerService.updateSysCustomer(sysCustomer));
     }
 

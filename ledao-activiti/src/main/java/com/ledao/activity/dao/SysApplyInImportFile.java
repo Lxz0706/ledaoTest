@@ -2,6 +2,8 @@ package com.ledao.activity.dao;
 
 import com.ledao.common.annotation.Excel;
 
+import java.util.Date;
+
 public class SysApplyInImportFile {
     @Excel(name = "序号")
     private Long no;
@@ -63,6 +65,16 @@ public class SysApplyInImportFile {
     private String fileUrl;
     @Excel(name = "文件后缀")
     private String fileDetailType;
+    @Excel(name = "申请时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date applyTime;
+
+    public Date getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime(Date applyTime) {
+        this.applyTime = applyTime;
+    }
 
     public String getBusiDocumentTypeLab() {
         return busiDocumentTypeLab;

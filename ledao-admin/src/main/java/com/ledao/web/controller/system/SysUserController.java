@@ -488,7 +488,11 @@ public class SysUserController extends BaseController {
         mmap.put("checkFlag", checkFlag);
         if (StringUtils.isNotNull(deptId)) {
             if (deptId == true) {
-                mmap.put("deptId", "201");
+                mmap.put("deptId", 201);
+                mmap.put("excludeId", 201);
+            } else if (deptId == false) {
+                mmap.put("deptId", 202);
+                mmap.put("excludeId", 202);
             }
         }
 

@@ -157,8 +157,12 @@
 
     //点击部门树事件
     function zOnClick(event, treeId, treeNode) {
+        /*var treeId = treeNode.id;
+        var treeName = treeNode.name;*/
         var treeId = treeNode.id;
         var treeName = treeNode.name;
+        $("#treeId").val(treeId);
+        $("#treeName").val(treeName);
         loadUserList(treeId);
     }
 

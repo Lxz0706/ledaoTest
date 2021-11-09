@@ -397,7 +397,7 @@ public class SysProjectController extends BaseController {
             SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
             if (StringUtils.isNotNull(sysUser)) {
                 if (StringUtils.isNotNull(sysUser.getUserId())) {
-                    sysProject.setProjectManagerId(sysUser.getUserId());
+                    sysProject.setProjectManagerId(sysUser.getUserId().toString());
                 }
             }
         }
@@ -743,7 +743,7 @@ public class SysProjectController extends BaseController {
             SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
             if (StringUtils.isNotNull(sysUser)) {
                 if (StringUtils.isNotNull(sysUser.getUserId())) {
-                    sysProject.setProjectManagerId(sysUser.getUserId());
+                    sysProject.setProjectManagerId(sysUser.getUserId().toString());
                 }
             }
         }
@@ -1638,7 +1638,7 @@ public class SysProjectController extends BaseController {
                 SysUser sysUser = sysUserService.selectUserByUserName(sysProject1.getProjectManager());
                 if (StringUtils.isNotNull(sysUser)) {
                     if (StringUtils.isNotNull(sysUser.getUserId())) {
-                        sysProject1.setProjectManagerId(sysUser.getUserId());
+                        sysProject1.setProjectManagerId(sysUser.getUserId().toString());
                     }
                 }
             }

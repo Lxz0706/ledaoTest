@@ -294,7 +294,6 @@ public class TimedTask {
                             Date limitationAction = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 30)));
                             if (DateUtils.timeDifference(new Date(), limitationAction, 0)) {
                                 if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
-                                    SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
                                     SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
                                     SysNotice sysNotice = new SysNotice();
                                     sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "诉讼时效为" + DateUtils.dateTime(sysProject1.getLimitationAction()) + "的消息提醒");
@@ -310,9 +309,11 @@ public class TimedTask {
                                     }
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
-                                    sysNotice.setCreateBy(sysUser.getLoginName());
+                                    for (String string : sysProject1.getProjectManagerId().split(",")) {
+                                        SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
+                                        sysNotice.setCreateBy(sysUser.getLoginName());
+                                    }
                                     sysNoticeService.insertNotice(sysNotice);
-
                                 }
                             }
                         }
@@ -324,7 +325,6 @@ public class TimedTask {
                             Date sealUpDate = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 30)));
                             if (DateUtils.timeDifference(new Date(), sealUpDate, 0)) {
                                 if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
-                                    SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
                                     SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
                                     SysNotice sysNotice = new SysNotice();
                                     sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
@@ -342,7 +342,10 @@ public class TimedTask {
                                     }
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
-                                    sysNotice.setCreateBy(sysUser.getLoginName());
+                                    for (String string : sysProject1.getProjectManagerId().split(",")) {
+                                        SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
+                                        sysNotice.setCreateBy(sysUser.getLoginName());
+                                    }
                                     sysNoticeService.insertNotice(sysNotice);
 
                                 }
@@ -355,13 +358,12 @@ public class TimedTask {
                             Date limitationExecution = DateUtils.parseDate(DateUtils.getDateToString(nextMonth(sysProject1.getLimitationExecution(), 18)));
                             if (DateUtils.timeDifference(new Date(), limitationExecution, 0)) {
                                 if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
-                                    SysUser sysUser = sysUserService.selectUserById(sysProject1.getProjectManagerId());
                                     SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
                                     SysNotice sysNotice = new SysNotice();
                                     sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
                                     sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
                                     if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
-                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
+                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId());
                                         sysNotice.setReceiver(sysProject1.getProjectManager());
                                         sysNotice.setShareDeptAndUser(sysProject1.getProjectManager());
                                     } else {
@@ -369,9 +371,13 @@ public class TimedTask {
                                         sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
                                         sysNotice.setShareDeptAndUser(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
                                     }
+
+                                    for (String string : sysProject1.getProjectManagerId().split(",")) {
+                                        SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
+                                        sysNotice.setCreateBy(sysUser.getLoginName());
+                                    }
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
-                                    sysNotice.setCreateBy(sysUser.getLoginName());
                                     sysNoticeService.insertNotice(sysNotice);
 
                                 }
@@ -495,7 +501,7 @@ public class TimedTask {
                 SysUser user = sysUserService.selectUserByLoginName(j.getCreateBy());
                 SysProject sysProject = new SysProject();
                 sysProject.setProjectId(Long.valueOf(j.getProId()));
-                sysProject.setProjectManagerId(user.getUserId());
+                sysProject.setProjectManagerId(user.getUserId().toString());
                 List<SysProject> pros = sysProjectService.selectSysProjectList(sysProject);
                 if (pros != null && pros.size() > 0) {
 //                    pros.get(0).getProjectId();
@@ -561,7 +567,7 @@ public class TimedTask {
                         }
                     }
                     SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
-                    parmStr.put("word1", StringUtils.isNotEmpty(manage.getProjectManagementName())?manage.getProjectManagementName():"");
+                    parmStr.put("word1", StringUtils.isNotEmpty(manage.getProjectManagementName()) ? manage.getProjectManagementName() : "");
                     parmStr.put("word2", "-");
                     parmStr.put("word3", "截止日期" + DateUtils.formatDateByPattern(mon.getTime(), "yyyy-MM-dd") + "," + mon.getFundType() + "/" + mon.getAmountMoney());
                     System.out.println(parmStr);
@@ -665,13 +671,13 @@ public class TimedTask {
         //查询超时未归还
         Map<String, String> parmStr = new HashMap<>();
         parmStr.put("first", "您有一个档案超时未归还提醒");
-        parmStr.put("word1", "档案超时未还提醒");
         parmStr.put("word2", "请及时归还档案");
         List<SysApplyIn> sysApply = new ArrayList<>();
         List<SysApplyIn> sysApplyIn = sysApplyInService.selectNotReturned();
 
         for (SysApplyIn sysApp : sysApplyIn) {
             if (DateUtils.differentDays(sysApp.getPlanReturnTime(), new Date()) % 3 == 0) {
+                parmStr.put("word1", "档案超时未还提醒");
                 List<SysUser> users = new ArrayList<>();
                 List<SysUser> usersAdmin = new ArrayList<>();
                 users.add(sysUserService.selectUserByLoginName(sysApp.getApplyUser()));
@@ -988,7 +994,9 @@ public class TimedTask {
                         List<SysUser> users = new ArrayList<>();
                         users.add(userMapper.selectUserByLoginName("xukai"));
                         users.add(userMapper.selectUserByLoginName("jianghui"));
-                        users.add(userMapper.selectUserById(p.getProjectManagerId()));
+                        for (String string : p.getProjectManagerId().split(",")) {
+                            users.add(userMapper.selectUserById(Long.valueOf(string)));
+                        }
                         sendTaskMsg(users, t, "您有一个投后项目子任务提醒");
                     }
                 }

@@ -108,7 +108,7 @@ public class SysProject extends BaseEntity {
     /**
      * 项目经理ID
      */
-    private Long projectManagerId;
+    private String projectManagerId;
 
     /**
      * 项目经理
@@ -119,7 +119,7 @@ public class SysProject extends BaseEntity {
     /**
      * 项目经理ID
      */
-    @Excel(name = "项目经理ID")
+    //@Excel(name = "项目经理ID")
     private Long userId;
 
     /**
@@ -678,11 +678,11 @@ public class SysProject extends BaseEntity {
         return collateral;
     }
 
-    public Long getProjectManagerId() {
+    public String getProjectManagerId() {
         return projectManagerId;
     }
 
-    public void setProjectManagerId(Long projectManagerId) {
+    public void setProjectManagerId(String projectManagerId) {
         this.projectManagerId = projectManagerId;
     }
 

@@ -31,14 +31,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 底层资料Controller
- * 
+ *
  * @author lxz
  * @date 2021-09-07
  */
 @Controller
 @RequestMapping("/system/underlyingdata")
-public class SysUnderlyingDataController extends BaseController
-{
+public class SysUnderlyingDataController extends BaseController {
     private String prefix = "system/underlying";
 
     @Autowired
@@ -58,8 +57,7 @@ public class SysUnderlyingDataController extends BaseController
 
     @RequiresPermissions("system:underlyingdata:view")
     @GetMapping()
-    public String underlyingdata()
-    {
+    public String underlyingdata() {
         return prefix + "/underlying";
     }
 
@@ -69,8 +67,7 @@ public class SysUnderlyingDataController extends BaseController
 //    @RequiresPermissions("system:underlyingdata:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysUnderlyingData sysUnderlyingData)
-    {
+    public TableDataInfo list(SysUnderlyingData sysUnderlyingData) {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingDataList(sysUnderlyingData);
         return getDataTable(list);
@@ -78,8 +75,7 @@ public class SysUnderlyingDataController extends BaseController
 
     @PostMapping("/listLying")
     @ResponseBody
-    public TableDataInfo listLying(SysUnderlyingData sysUnderlyingData)
-    {
+    public TableDataInfo listLying(SysUnderlyingData sysUnderlyingData) {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingProDataList(sysUnderlyingData);
         return getDataTable(list);
@@ -87,13 +83,13 @@ public class SysUnderlyingDataController extends BaseController
 
     /**
      * 底层资料大型单体显示项目列表
+     *
      * @param sysUnderlyingData
      * @return
      */
     @PostMapping("/listLyingPros")
     @ResponseBody
-    public TableDataInfo listLyingPros(SysUnderlyingData sysUnderlyingData)
-    {
+    public TableDataInfo listLyingPros(SysUnderlyingData sysUnderlyingData) {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingProList(sysUnderlyingData);
         return getDataTable(list);
@@ -101,8 +97,7 @@ public class SysUnderlyingDataController extends BaseController
 
     @PostMapping("/listLyingNoLikeDetail")
     @ResponseBody
-    public TableDataInfo listLyingNoLikeDetail(SysUnderlyingData sysUnderlyingData)
-    {
+    public TableDataInfo listLyingNoLikeDetail(SysUnderlyingData sysUnderlyingData) {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingNoLikeDetailDataList(sysUnderlyingData);
         return getDataTable(list);
@@ -110,8 +105,7 @@ public class SysUnderlyingDataController extends BaseController
 
     @PostMapping("/listLyingNoLike")
     @ResponseBody
-    public TableDataInfo listLyingNoLike(SysUnderlyingData sysUnderlyingData)
-    {
+    public TableDataInfo listLyingNoLike(SysUnderlyingData sysUnderlyingData) {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingNoLikeDataList(sysUnderlyingData);
         return getDataTable(list);
@@ -119,13 +113,13 @@ public class SysUnderlyingDataController extends BaseController
 
     /**
      * 投后部获取债务人信息
+     *
      * @param sysUnderlyingData
      * @return
      */
     @PostMapping("/listLyingDebt")
     @ResponseBody
-    public TableDataInfo listLyingDebt(SysUnderlyingData sysUnderlyingData)
-    {
+    public TableDataInfo listLyingDebt(SysUnderlyingData sysUnderlyingData) {
         startPage();
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingDebtList(sysUnderlyingData);
         return getDataTable(list);
@@ -138,8 +132,7 @@ public class SysUnderlyingDataController extends BaseController
     @Log(title = "底层资料", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysUnderlyingData sysUnderlyingData)
-    {
+    public AjaxResult export(SysUnderlyingData sysUnderlyingData) {
         List<SysUnderlyingData> list = sysUnderlyingDataService.selectSysUnderlyingDataList(sysUnderlyingData);
         ExcelUtil<SysUnderlyingData> util = new ExcelUtil<SysUnderlyingData>(SysUnderlyingData.class);
         return util.exportExcel(list, "underlyingdata");
@@ -149,10 +142,9 @@ public class SysUnderlyingDataController extends BaseController
      * 新增底层资料
      */
     @GetMapping("/add")
-    public String add(@RequestParam("projectId")long projectId, @RequestParam("projectType")String projectType, ModelMap mmap)
-    {
-        mmap.put("projectId",projectId);
-        mmap.put("projectType",projectType);
+    public String add(@RequestParam("projectId") long projectId, @RequestParam("projectType") String projectType, ModelMap mmap) {
+        mmap.put("projectId", projectId);
+        mmap.put("projectType", projectType);
         return prefix + "/add";
     }
 
@@ -161,68 +153,61 @@ public class SysUnderlyingDataController extends BaseController
      * 查询底层资料
      */
     @GetMapping("/list")
-    public String list(String projectId, String projectType, String projectZckType,String projectManagerId,ModelMap mmap)
-    {
-        mmap.put("projectId",projectId);
-        mmap.put("projectZckType",projectZckType);
-        mmap.put("projectType",projectType);
-        mmap.put("projectManagerId",projectManagerId);
+    public String list(String projectId, String projectType, String projectZckType, String projectManagerId, ModelMap mmap) {
+        mmap.put("projectId", projectId);
+        mmap.put("projectZckType", projectZckType);
+        mmap.put("projectType", projectType);
+        mmap.put("projectManagerId", projectManagerId);
         return "system/underlying/underlyingDataLists";
     }
 
     @GetMapping("/muList")
-    public String muList()
-    {
+    public String muList() {
         return prefix + "/underLyingMn";
     }
 
     @GetMapping("/documentDetailTypeListMu")
-    public String documentDetailTypeListMu()
-    {
+    public String documentDetailTypeListMu() {
         return prefix + "/documentDetailTypeList";
     }
 
     @GetMapping("/muUnderlyingDataListsMu")
-    public String muUnderlyingDataListsMu(String projectId,String proType, String projectType, ModelMap mmap)
-    {
-        mmap.put("projectId",projectId);
-        mmap.put("proType",proType);
-        mmap.put("projectType",projectType);
-        if ("0".equals(projectType)){
+    public String muUnderlyingDataListsMu(String projectId, String proType, String projectType, ModelMap mmap) {
+        mmap.put("projectId", projectId);
+        mmap.put("proType", proType);
+        mmap.put("projectType", projectType);
+        if ("0".equals(projectType)) {
             return prefix + "/muUnderlyingZcbLists";
-        }else{
+        } else {
             return prefix + "/muUnderlyingDataLists";
         }
     }
 
     @GetMapping("/muUnderlyingProDataListsMu")
-    public String muUnderlyingProDataListsMu(String projectId,String proType, String projectType, ModelMap mmap)
-    {
-        mmap.put("proType",proType);
-        mmap.put("projectType",projectType);
-        if ("0".equals(projectType)){
+    public String muUnderlyingProDataListsMu(String projectId, String proType, String projectType, ModelMap mmap) {
+        mmap.put("proType", proType);
+        mmap.put("projectType", projectType);
+        if ("0".equals(projectType)) {
             return prefix + "/muUnderlyingZcbLists";
-        }else{
+        } else {
             return prefix + "/underlyingProLists";
         }
     }
 
     @GetMapping("/muUnderlyingDataListsZcbMu")
-    public String muUnderlyingDataListsZcbMu( String projectType,String projectId,String projectZckId, String proType,ModelMap mmap)
-    {
-        mmap.put("projectId",projectId);
-        mmap.put("projectZckId",projectZckId);
-        mmap.put("proType",proType);
-        mmap.put("projectType",projectType);
+    public String muUnderlyingDataListsZcbMu(String projectType, String projectId, String projectZckId, String proType, ModelMap mmap) {
+        mmap.put("projectId", projectId);
+        mmap.put("projectZckId", projectZckId);
+        mmap.put("proType", proType);
+        mmap.put("projectType", projectType);
         return prefix + "/muUnderlyingZcbDetailLists";
     }
 
     @GetMapping("/muUnderlyingDataPro")
-    public String muUnderlyingDataPro( String projectType,String projectZckId, String proType,ModelMap mmap)
-    {
-        mmap.put("projectZckId",projectZckId);
-        mmap.put("proType",proType);
-        mmap.put("projectType",projectType);
+    public String muUnderlyingDataPro(String projectType, String projectZckId, String proType, ModelMap mmap) {
+        mmap.put("projectZckId", projectZckId);
+        mmap.put("proType", proType);
+        mmap.put("projectType", projectType);
         return prefix + "/muUnderlyingZcbProLists";
     }
 
@@ -235,6 +220,7 @@ public class SysUnderlyingDataController extends BaseController
         sysDictDataList = sysDictDataService.selectDictDataByType("sys_project_type");
         return getDataTable(sysDictDataList);
     }
+
     /**
      * 新增保存文件管理
      */
@@ -244,7 +230,7 @@ public class SysUnderlyingDataController extends BaseController
     @ResponseBody
     public AjaxResult addSave(SysUnderlyingData sysUnderlyingData, @RequestParam("file") MultipartFile[] files) {
         sysUnderlyingData.setCreateBy(ShiroUtils.getLoginName());
-        return sysUnderlyingDataService.insertSysUnderlyingData(sysUnderlyingData,files);
+        return sysUnderlyingDataService.insertSysUnderlyingData(sysUnderlyingData, files);
     }
 
     /**
@@ -255,9 +241,9 @@ public class SysUnderlyingDataController extends BaseController
             throws Exception {
         SysUnderlyingData sysUnderlyingData = new SysUnderlyingData();
         sysUnderlyingData.setFileUrl(resource);
-        List<SysUnderlyingData>  unds =  sysUnderlyingDataService.selectSysUnderlyingDataList(sysUnderlyingData);
+        List<SysUnderlyingData> unds = sysUnderlyingDataService.selectSysUnderlyingDataList(sysUnderlyingData);
         String downloadName = "";
-        if (unds!=null && unds.size()>0){
+        if (unds != null && unds.size() > 0) {
             downloadName = unds.get(0).getFileName();
         }
         // 本地资源路径
@@ -277,8 +263,7 @@ public class SysUnderlyingDataController extends BaseController
      * 修改底层资料
      */
     @GetMapping("/edit/{fileId}")
-    public String edit(@PathVariable("fileId") Long fileId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("fileId") Long fileId, ModelMap mmap) {
         SysUnderlyingData sysUnderlyingData = sysUnderlyingDataService.selectSysUnderlyingDataById(fileId);
         mmap.put("sysUnderlyingData", sysUnderlyingData);
         return prefix + "/edit";
@@ -291,8 +276,7 @@ public class SysUnderlyingDataController extends BaseController
     @Log(title = "底层资料", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(SysUnderlyingData sysUnderlyingData)
-    {
+    public AjaxResult editSave(SysUnderlyingData sysUnderlyingData) {
         return toAjax(sysUnderlyingDataService.updateSysUnderlyingData(sysUnderlyingData));
     }
 
@@ -301,10 +285,9 @@ public class SysUnderlyingDataController extends BaseController
      */
 //    @RequiresPermissions("system:underlyingdata:remove")
     @Log(title = "底层资料", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(sysUnderlyingDataService.deleteSysUnderlyingDataByIds(ids));
     }
 
@@ -329,24 +312,24 @@ public class SysUnderlyingDataController extends BaseController
     @ResponseBody
     public AjaxResult checkUserAllow(String projectManagerId) {
         SysUser u = ShiroUtils.getSysUser();
-        if ("admin".equals(u.getLoginName())){
+        if ("admin".equals(u.getLoginName())) {
             return AjaxResult.success();
         }
-        
-        for (SysRole r: u.getRoles()){
-            if ("documentAdmin".equals(r.getRoleKey())){
+
+        for (SysRole r : u.getRoles()) {
+            if ("documentAdmin".equals(r.getRoleKey())) {
                 return AjaxResult.success();
             }
         }
         long projectMId = 0L;
-        if (StringUtils.isNotEmpty(projectManagerId)){
+        if (StringUtils.isNotEmpty(projectManagerId)) {
             projectMId = Long.valueOf(projectManagerId);
         }
-        if (u.getUserId().longValue()==projectMId){
-           return AjaxResult.success();
+        if (u.getUserId().longValue() == projectMId) {
+            return AjaxResult.success();
         }
         SysUser user = iSysUserService.selectUserById(projectMId);
-        if (u.getUserId() == user.getDirectorId()){
+        if (u.getUserId() == user.getDirectorId()) {
             return AjaxResult.success();
         }
         return AjaxResult.error();
@@ -357,33 +340,36 @@ public class SysUnderlyingDataController extends BaseController
     public AjaxResult checkUserSee(long fileId) {
         SysUser user = ShiroUtils.getSysUser();
         SysUnderlyingData sd = sysUnderlyingDataService.selectSysUnderlyingDataById(fileId);
-        if ("admin".equals(user.getLoginName())){
+        if ("admin".equals(user.getLoginName())) {
             return AjaxResult.success();
         }
-        for (SysRole r: user.getRoles()){
-            if ("documentAdmin".equals(r.getRoleKey())){
+        for (SysRole r : user.getRoles()) {
+            if ("documentAdmin".equals(r.getRoleKey())) {
                 return AjaxResult.success();
             }
         }
-        if (sd.getProjectType()==0){
+        if (sd.getProjectType() == 0) {
             SysProject pro = sysProjectService.selectSysProjectById(sd.getProjectId());
             SysProjectZck zck = sysProjectZckService.selectSysProjectZckById(pro.getProjectZckId());
-            if ("serve".equals(zck.getProjectZckType())){
+            if ("serve".equals(zck.getProjectZckType())) {
                 List<SysRole> getRoles = user.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if ("thbManager".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey()) || "thbzz".equals(sysRole.getRoleKey())||"thbCommon".equals(sysRole.getRoleKey())) {
+                    if ("thbManager".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey()) || "thbzz".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey())) {
                         return AjaxResult.success();
                     }
                 }
-            }else{
-                if (pro.getProjectManagerId().longValue()==user.getUserId().longValue()){
-                    return AjaxResult.success();
-                }else{
-                    SysUser leaderUser = iSysUserService.selectUserById(pro.getProjectManagerId());
-                    if (leaderUser.getDirectorId().longValue() == user.getUserId().longValue()){
+            } else {
+                for (String string : pro.getProjectManagerId().split(",")) {
+                    if (Long.valueOf(string) == user.getUserId().longValue()) {
                         return AjaxResult.success();
+                    } else {
+                        SysUser leaderUser = iSysUserService.selectUserById(Long.valueOf(string));
+                        if (leaderUser.getDirectorId().longValue() == user.getUserId().longValue()) {
+                            return AjaxResult.success();
+                        }
                     }
                 }
+
             }
 
         }

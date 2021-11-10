@@ -167,8 +167,11 @@ public class SysConfigServiceImpl implements ISysConfigService {
                     accessToken = confs.get(0).getConfigValue();
                 }else{
                     needSave = true;
-                    String[] delId = {confs.get(0).getConfigId().toString()};
-                    configMapper.deleteConfigByIds(delId);
+                    /*String[] delId = {confs.get(0).getConfigId().toString()};
+                    configMapper.deleteConfigByIds(delId);*/
+                    for (SysConfig conf:confs){
+                        configMapper.deleteConfigByIds(new String[]{conf.getConfigId().toString()});
+                    }
                 }
             }else{
                 needSave = true;
@@ -197,8 +200,11 @@ public class SysConfigServiceImpl implements ISysConfigService {
                     accessToken = confs.get(0).getConfigValue();
                 }else{
                     needSave = true;
-                    String[] delId = {confs.get(0).getConfigId().toString()};
-                    configMapper.deleteConfigByIds(delId);
+                   /* String[] delId = {confs.get(0).getConfigId().toString()};
+                    configMapper.deleteConfigByIds(delId);*/
+                    for (SysConfig conf:confs){
+                        configMapper.deleteConfigByIds(new String[]{conf.getConfigId().toString()});
+                    }
                 }
             }else{
                 needSave = true;

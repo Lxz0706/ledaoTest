@@ -772,7 +772,7 @@ public class TimedTask {
                     }
                 }
             }
-            sendDailyUsalTask(us, parmStr);
+            sendDailyRemainUsalTask(us, parmStr);
         }
     }
 
@@ -853,9 +853,47 @@ public class TimedTask {
      *
      * @param
      */
-    private void sendDailyUsalTask(List<SysUser> us, Map<String, String> parmStr) {
+    private void sendDailyRemainUsalTask(List<SysUser> us, Map<String, String> parmStr) {
         for (SysUser u : us) {
             if (StringUtils.isNotEmpty(u.getComOpenId()) && !"n".equals(u.getIsDailyRemind())) {
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                //发布人
+                parm.put("first", parmStr.get("first"));
+                parm.put("word1", parmStr.get("word1"));
+//                        计划时间
+                parm.put("word2", StringUtils.isNotEmpty(parmStr.get("word2")) ? parmStr.get("word2") : "-");
+//                        任务名称
+                parm.put("word3", StringUtils.isNotEmpty(parmStr.get("word3")) ? parmStr.get("word3") : "-");
+//                        任务状态
+                parm.put("word4", StringUtils.isNotEmpty(parmStr.get("word4")) ? parmStr.get("word4") : "-");
+                parm.put("word5", StringUtils.isNotEmpty(parmStr.get("word5")) ? parmStr.get("word5") : "-");
+
+//                        任务接收人
+                parm.put("toUser", u.getComOpenId());
+//                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
+                parm.put("url", "common/journalInfo/journal");
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken", accessToken);
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("ThQueueCommonUsal");
+                String dataStr = JSONObject.toJSONString(parm);
+                System.out.println("--------------------推送提醒给：" + u.getLoginName() + "----------------------");
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+                stadingTime();
+            }
+        }
+    }
+
+    /**
+     * 日志推送公共方法
+     *
+     * @param
+     */
+    private void sendDailyUsalTask(List<SysUser> us, Map<String, String> parmStr) {
+        for (SysUser u : us) {
+            if (StringUtils.isNotEmpty(u.getComOpenId())) {
                 //发送消息到投后部部门经理
                 JSONObject parm = new JSONObject();
                 //发布人

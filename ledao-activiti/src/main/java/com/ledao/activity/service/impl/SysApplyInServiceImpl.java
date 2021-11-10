@@ -347,7 +347,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
     {
         String[] idsArr = Convert.toStrArray(ids);
         List<SysApplyIn> apps = sysApplyInMapper.selectSysApplyInListByIds(idsArr);
-        String[] applyStatusList = {"0","4"};
+        String[] applyStatusList = {"0","4","2"};
         String delDocumentIds = "";
         for (SysApplyIn a:apps) {
             // 可提交审批的状态     0保存；4撤回;
@@ -1599,8 +1599,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         users.add(workflows.get(0).getCreateBy());
 //                    sendMsg(users,sysApplyIn,"");
                         parm.put("word1","档案已确认接收");
-                        parm.put("word2","-");
-                        parm.put("word5","-");
+                        parm.put("word2","实际提交人："+userMapper.selectUserByLoginName(sin.getApplyUser()).getUserName());
+                        parm.put("word5","申请时间："+DateUtils.formatDateByPattern(sin.getApplyTime(),"yyyy-MM-dd"));
                         sendUsalMsg(users,sysApplyIn,parm);
                     }
                 }catch (Exception e){
@@ -1635,8 +1635,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 if (workflows!=null && workflows.size()>0){
                     users.add(workflows.get(0).getCreateBy());
                     parm.put("word1","档案已确认接收");
-                    parm.put("word2","-");
-                    parm.put("word5","-");
+                    parm.put("word2","实际提交人："+userMapper.selectUserByLoginName(sin.getApplyUser()).getUserName());
+                    parm.put("word5","申请时间："+DateUtils.formatDateByPattern(sin.getApplyTime(),"yyyy-MM-dd"));
                     sendUsalMsg(users,sysApplyIn,parm);
                 }
 
@@ -1655,8 +1655,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             if (workflows!=null && workflows.size()>0){
                 users.add(workflows.get(0).getCreateBy());
                 parm.put("word1","档案已归还");
-                parm.put("word2","-");
-                parm.put("word5","档案已归还，请确认");
+                parm.put("word2","实际提交人："+userMapper.selectUserByLoginName(sin.getApplyUser()).getUserName());
+                parm.put("word5","档案已归还，请确认-申请时间："+DateUtils.formatDateByPattern(sin.getApplyTime(),"yyyy-MM-dd"));
                 sendUsalMsg(users,sysApplyIn,parm);
             }
             saveWorkFlowProcessCheck(sysApplyIn);
@@ -1679,8 +1679,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             List<String> users = new ArrayList<>();
             users.add(sysApplyIn.getApplyUser());
             parm.put("word1","档案已归还");
-            parm.put("word2","-");
-            parm.put("word5","档案归还已确认");
+            parm.put("word2","实际提交人："+userMapper.selectUserByLoginName(sin.getApplyUser()).getUserName());
+            parm.put("word5","档案归还已确认-申请时间："+DateUtils.formatDateByPattern(sin.getApplyTime(),"yyyy-MM-dd"));
             sendUsalMsg(users,sysApplyIn,parm);
             saveWorkFlowProcessCheck(sysApplyIn);
         }

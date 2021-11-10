@@ -164,10 +164,10 @@
                 <a class="btn btn-success" id="addOut" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a id="editOut" class="btn btn-primary single" onclick="$.operate.edit()"
-                   shiro:hasPermission="activity:documentFile:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
+<!--                <a id="editOut" class="btn btn-primary single" onclick="$.operate.edit()"-->
+<!--                   shiro:hasPermission="activity:documentFile:edit">-->
+<!--                    <i class="fa fa-edit"></i> 修改-->
+<!--                </a>-->
                 <a id="removeOut" class="btn btn-danger multiple" onclick="$.operate.removeAll()"
                    shiro:hasPermission="activity:documentFile:remove">
                     <i class="fa fa-remove"></i> 删除
@@ -207,6 +207,7 @@
         var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
         var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
+        var optionIsElec = [[${@dict.getType('sys_borrow_type')}]]
         var showNames = false
         var documentTypeVal = document.getElementById("documentType").value
         var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
@@ -228,6 +229,9 @@
         var showDelet = false
         var showAllBut = false
         var showDatilDocumentType = false
+        var isElecObj = {}
+        var isElecIndex = ''
+        var flagA = false
     $(function () {
         // 管理员与档案管理员
         for(var i =0; i < roles.length;i++) {
@@ -533,10 +537,9 @@
                 {
                     field: 'isElec',
                     title: '借出文档类型',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(isElecDatas, value);
-                    }
+                    formatter: isElecSelect
                 },
+
                 {
                     title: '操作',
                     align: 'center',
@@ -567,9 +570,9 @@
                         // }
                     if(showNames && applyUser != loginNameUser) {}
                        else if(showEdit) {
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         } else if(showAllBut) {
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         } else if(showDelet) {
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
@@ -758,6 +761,163 @@
         var url = detail + '/docDetail/' + id;
         $.modal.open("添加附件", url);
     }
+
+        function isElecSelect (value,row,index) {
+            if(value === "0") {
+                if(showNames && applyUser != loginNameUser) {
+                    return `
+                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0" selected="true">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                }
+                else if(showEdit) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0" selected="true">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                } else if(showAllBut) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0" selected="true">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                } else if(showDelet) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0" selected="true">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                } else {
+                    return `
+                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0" selected="true">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                }
+            } else if(value === "1") {
+                if(showNames && applyUser != loginNameUser) {
+                    return `
+                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+                }
+                else if(showEdit) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+                } else if(showAllBut) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+                } else if(showDelet) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+                } else {
+                    return `
+                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+                }
+            } else {
+                if(showNames && applyUser != loginNameUser) {
+                    return `
+                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="" selected="true">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                }
+                else if(showEdit) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="" selected="true">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                } else if(showAllBut) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="" selected="true">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                } else if(showDelet) {
+                    return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="" selected="true">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                } else {
+                    return `
+                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="" selected="true">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+                }
+            }
+        }
+
+        function selectchange (id,val) {
+            var isElecId = "sele" + id
+            var isElec = document.getElementById(isElecId).value
+            console.log('id+++++++++',id)
+            console.log('isElec+++++++++',isElec)
+                $.ajax({
+                    url: "/activity/outFiledetail/edit",
+                    type: 'post',
+                    data: {
+                        "outDetailId": id,
+                        "isElec": isElec
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        if(result.code == 500) {
+                            $.modal.alertError(result.msg);
+                            document.getElementById(isElecId).value = ''
+                        } else {
+                            $.modal.alertSuccess(result.msg);
+                        }
+                    }
+                })
+        }
 </script>
 </body>
 

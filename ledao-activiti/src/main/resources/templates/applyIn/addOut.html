@@ -156,10 +156,10 @@
                 <a class="btn btn-success" onclick="$.operate.addInfo()" shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single" onclick="$.operate.edit()"
-                   shiro:hasPermission="activity:documentFile:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
+<!--                <a class="btn btn-primary single" onclick="$.operate.edit()"-->
+<!--                   shiro:hasPermission="activity:documentFile:edit">-->
+<!--                    <i class="fa fa-edit"></i> 修改-->
+<!--                </a>-->
                 <a class="btn btn-danger multiple" onclick="$.operate.removeAll()"
                    shiro:hasPermission="activity:documentFile:remove">
                     <i class="fa fa-remove"></i> 删除
@@ -366,71 +366,11 @@
                         return actions.join('');
                     }
                 },
-                /*{
-                    field: 'isPage',
-                    title: '借出是否包含字纸',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(isPageDatas, value);
-                    }
-                },*/
                 {
                     field: 'isElec',
                     title: '借出文档类型',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(isElecDatas, value);
-                    }
+                    formatter: isElecSelect
                 },
-                // {
-                //     field: 'isReturn',
-                //     title: '是否归还',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isReturnDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'planReturnTime',
-                //     title: '计划归还时间',
-                // },
-                // {
-                //     field: 'realReturnTime',
-                //     title: '实际归还时间',
-                // },
-                // {
-                //     field: 'outReason',
-                //     title: '出库原因'
-                // },
-                // {
-                //     field: 'isOut',
-                //     title: '已出库',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isOutDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'isReceive',
-                //     title: '已收到',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isReceiveDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'isReturned',
-                //     title: '是否已还',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isReturnedDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'isReceived',
-                //     title: '归还接受',
-                //     formatter: function(value, row, index) {
-                //         return $.table.selectDictLabel(isReceivedDatas, value);
-                //     }
-                // },
-                // {
-                //     field: 'remarks',
-                //     title: '备注'
-                // },
                 {
                     title: '操作',
                     align: 'center',
@@ -438,7 +378,7 @@
                         var actions = [];
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -645,6 +585,58 @@
         $("#applyUser").val(loginName.substr(0, loginName.length - 1));
         $("#applyUserName").val(userName.substr(0, userName.length - 1));
         layer.close(layer.index);
+    }
+
+    function isElecSelect (value,row,index) {
+        if(value === "0") {
+            return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0" selected="true">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+        } else if(value === "1") {
+            return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+        } else {
+            return `
+                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                            <option value="" selected="true">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+        }
+    }
+
+    function selectchange (id,val) {
+        var isElecId = "sele" + id
+        var isElec = document.getElementById(isElecId).value
+        console.log('id+++++++++',id)
+        console.log('isElec+++++++++',isElec)
+        $.ajax({
+            url: "/activity/outFiledetail/edit",
+            type: 'post',
+            data: {
+                "outDetailId": id,
+                "isElec": isElec
+            },
+            dataType: 'json',
+            success: function (result) {
+                if(result.code == 500) {
+                    $.modal.alertError(result.msg);
+                    document.getElementById(isElecId).value = ''
+                } else {
+                    $.modal.alertSuccess(result.msg);
+                }
+            }
+        })
     }
 </script>
 </body>

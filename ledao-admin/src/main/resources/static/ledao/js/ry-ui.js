@@ -91,7 +91,7 @@ var table = {
                     pagination: options.pagination,                     // 是否显示分页（*）
                     paginationLoop: options.paginationLoop,             // 是否启用分页条无限循环的功能
                     pageNumber: options.pageNumber,                     // 初始化加载第一页，默认第一页
-                    pageSize: options.pageSize,                         // 每页的记录行数（*） 
+                    pageSize: options.pageSize,                         // 每页的记录行数（*）
                     pageList: options.pageList,                         // 可供选择的每页的行数（*）
                     firstLoad: options.firstLoad,                       // 是否首次请求加载数据，对于数据较大可以配置false
                     escape: options.escape,                             // 转义HTML字符串
@@ -859,6 +859,7 @@ var table = {
                     }
                 });
             },
+
             opens: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
                 if ($.common.isMobile()) {
@@ -934,13 +935,15 @@ var table = {
                     shade: 0.3,
                     title: title,
                     content: url,
-                    btn: ['关闭'],
+                    btn: ['确定'],
                     // 弹层外区域关闭
                     shadeClose: true,
                     yes: function (index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.submitHandler(index, layero);
                         //事件
-                        layer.close(index);
-                        $.table.refresh()
+                        // layer.close(index);
+                        // $.table.refresh()
                     }
                 });
             },
@@ -1362,6 +1365,21 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
+
+            edits: function (id) {
+                table.set();
+                if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                    var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                    if ($.common.isEmpty(row)) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    var url = table.options.updateUrl.replace("{id}", row[table.options.uniqueId]);
+                    $.modal.closeOpen("修改" + table.options.modalName, url);
+                } else {
+                    $.modal.closeOpen("修改" + table.options.modalName, $.operate.editUrl(id));
+                }
+            },
             // 查看信息
             editLook:function (id) {
                 table.set();
@@ -1451,7 +1469,6 @@ var table = {
             },
 
             uploadCheck:function (url,data,callback) {
-                debugger
                 var config = {
                     url: url,
                     type: "post",
@@ -1462,11 +1479,9 @@ var table = {
                         $.modal.disable();
                     },
                     success: function (result) {
-                        debugger
                         if (typeof callback == "function") {
                             callback(result);
                         }
-                        console.log(result)
                         // $.operate.successCallback(result);
                     }
                 };
@@ -1554,6 +1569,12 @@ var table = {
                 $.modal.close();
                 parent.$.table.refresh();
                 parent.$.modal.msgSuccess('保存成功');
+            },
+            // 仅用于关闭弹窗并刷新表格,不显示提示信息
+            successClose: function () {
+                var parent = window.parent;
+                $.modal.close();
+                parent.$.table.refresh();
             },
             // 成功回调执行事件（父窗体静默更新）
             successCallback: function (result) {

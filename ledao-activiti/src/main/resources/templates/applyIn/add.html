@@ -373,10 +373,7 @@
         }
 
         function submitHandler() {
-            if ($.validate.form()) {
-                // $.operate.save(prefix + "/add");
-                $.operate.successCallbackClose()
-            }
+            $.operate.successClose()
         }
 
         function changeDocumentType(val) {

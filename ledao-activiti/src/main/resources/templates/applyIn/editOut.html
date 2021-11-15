@@ -231,7 +231,7 @@
         var showDatilDocumentType = false
         var isElecObj = {}
         var isElecIndex = ''
-        var flagA = false
+
     $(function () {
         // 管理员与档案管理员
         for(var i =0; i < roles.length;i++) {
@@ -731,12 +731,6 @@
         }
     }
 
-    function submitHandler() {
-        if ($.validate.form()) {
-            $.operate.save(prefix + "/edit", $('#form-applyIn-edit').serialize());
-        }
-    }
-
     function addList() {
         $.modal.openTab("添加" + table.options.modalName, $.operate.addUrl(id));
     }
@@ -914,10 +908,27 @@
                             document.getElementById(isElecId).value = ''
                         } else {
                             $.modal.alertSuccess(result.msg);
+                            $.table.refresh()
                         }
                     }
                 })
         }
+
+        function submitHandler() {
+            var rows = $('#bootstrap-table').bootstrapTable('getData')
+            if ($.validate.form()) {
+                if(rows.length > 0) {
+                    for(var i = 0;i < rows.length;i++) {
+                        if(rows[i].isElec == null || rows[i].isElec == '') {
+                            $.modal.alertError('借出文档类型未填，请补充之后提交');
+                            return true;
+                        }
+                    }
+                }
+                $.operate.save(prefix + "/edit", $('#form-applyIn-edit').serialize());
+            }
+        }
+
 </script>
 </body>
 

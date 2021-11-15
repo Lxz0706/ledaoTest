@@ -424,10 +424,18 @@
         }
     }
     function submitHandler() {
-        if ($.validate.form()) {
-            // $.operate.save(prefix + "/add");
-            $.operate.successCallbackClose();
+        var rows = $('#bootstrap-table').bootstrapTable('getData')
+        if(Array.isArray(rows)) {
+            if(rows.length > 0) {
+                for(var i = 0;i < rows.length;i++) {
+                    if(rows[i].isElec == null || rows[i].isElec == '') {
+                        $.modal.alertError('借出文档类型未填，请补充之后提交');
+                        return true;
+                    }
+                }
+            }
         }
+        $.operate.successClose();
     }
 
     function addFile (id) {
@@ -634,6 +642,7 @@
                     document.getElementById(isElecId).value = ''
                 } else {
                     $.modal.alertSuccess(result.msg);
+                    $.table.refresh()
                 }
             }
         })

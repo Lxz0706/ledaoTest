@@ -107,4 +107,6 @@ public interface SysApplyInMapper
     List<SysApplyIn> docListDobtDetailByPName(SysApplyIn sysApplyIn);
 
     List<SysApplyIn> selectNotReturned();
+
+    void updateIsDirector(SysApplyIn sysApplyIn);
 }

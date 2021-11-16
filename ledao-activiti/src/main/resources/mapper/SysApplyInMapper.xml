@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isReceived"    column="is_received"    />
         <result property="remarksOut"    column="remarks_out"    />
         <result property="roleType"    column="role_type"    />
+        <result property="isDirector"    column="is_director"    />
     </resultMap>
 
     <resultMap type="SysApplyIn" id="SysApplyInResultUser">
@@ -73,10 +74,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="realCreateName"    column="realCreateName"    />
         <result property="reviserName"    column="reviserName"    />
         <result property="roleType"    column="role_type"    />
+        <result property="isDirector"    column="is_director"    />
     </resultMap>
 
     <sql id="selectSysApplyInVo">
-        select apply_id, apply_type, document_type, project_id, project_name, company_name, debtor_id,debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks_out,role_type from sys_apply_in
+        select apply_id, apply_type, document_type, project_id, is_director,project_name, company_name, debtor_id,debtor_name, apply_user, apply_time, approve_user, approve_statu, real_create_by, remarks, create_by, creator, create_time, update_by, reviser, update_time, is_return, plan_return_time, real_return_time, out_reason, is_out, is_receive, is_returned, is_received, remarks_out,role_type from sys_apply_in
     </sql>
 
     <select id="selectSysApplyInList" parameterType="SysApplyIn" resultMap="SysApplyInResult">
@@ -131,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.real_create_by,
         a.remarks,
         a.create_by,
+        a.is_director,
         a.creator,
         a.create_time,
         a.update_by,
@@ -300,6 +303,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.approve_statu,
         a.real_create_by,
         a.remarks,
+        a.is_director,
         a.create_by,
         a.creator,
         a.create_time,
@@ -359,6 +363,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.document_type,
         a.project_id,
         a.project_name,
+        a.is_director,
         a.company_name,
         a.debtor_id,
         a.debtor_name,
@@ -435,6 +440,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.apply_time,
         a.approve_user,
         a.approve_statu,
+        a.is_director,
         a.real_create_by,
         a.remarks,
         a.create_by,
@@ -497,6 +503,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         app.company_name,
         app.debtor_id,
         app.debtor_name,
+        app.is_director,
         app.instance_id,
         app.apply_user,
         app.apply_time,
@@ -587,6 +594,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.company_name,
         a.debtor_name,
         a.apply_user,
+        a.is_director,
         a.apply_time,
         a.approve_user,
         a.approve_statu,
@@ -747,6 +755,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remarksOut != null">remarks_out = #{remarksOut},</if>
             <if test="roleType != null">role_type = #{roleType},</if>
         </trim>
+        where apply_id = #{applyId}
+    </update>
+
+    <update id="updateIsDirector" parameterType="SysApplyIn">
+        update sys_apply_in set is_director = #{isDirector}
         where apply_id = #{applyId}
     </update>
 

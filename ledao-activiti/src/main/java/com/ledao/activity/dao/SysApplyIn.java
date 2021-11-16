@@ -147,6 +147,16 @@ public class SysApplyIn extends BaseEntity
 
     private String fileName;
 
+    private String isDirector;
+
+    public String getIsDirector() {
+        return isDirector;
+    }
+
+    public void setIsDirector(String isDirector) {
+        this.isDirector = isDirector;
+    }
+
     public String getFileName() {
         return fileName;
     }

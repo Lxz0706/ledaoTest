@@ -177,12 +177,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 //获取申请人的个人信息
                 sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
                 //根据提交人查询是否存在直接主管
-                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && "5".equals(sysApplyIn.getApproveStatu())) {
+                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotNull(sysUser.getDirectorId()) && "5".equals(sysApplyIn.getApproveStatu())) {
                     key = "document_rk_zg";
                     SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                     //动态设置审批人员
                     variables.put("userId", sysUser1.getLoginName());
                     users.add(sysUser1.getLoginName());
+                    sysApplyIn.setIsDirector("0");
                 } else {
                     //没有直接审批人，转到档案管理员下
                     List<String> jls = getUsers("documentAdmin");
@@ -193,117 +194,75 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                         }
                     }
                     users.addAll(js);
+                    sysApplyIn.setIsDirector("1");
                     key = "document_rk_zgNo";
                 }
                 itemName = sysApplyIn.getCreator() + "提交的入库申请";
             } else {
                 itemName = sysApplyIn.getCreator() + "提交的出库申请";
-
-                List<String> userList = new ArrayList<>();
-                userList.add("yangxu");
-                userList.add("yangxudong");
-                variables.put("assigneeList", userList);
-
-                List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
-                List<String> ids = new ArrayList<>();
-                for (SysRole r:rflgw) {
-                    ids.add(r.getRoleKey());
-                }
-//                当前操作人为法律顾问
-                if(ids.contains("flgw")){
-                    //发给总经理
-                    List<String> jls = getUsers("zjl");
-                    users.addAll(jls);
-                }else if(ids.contains("zjl")){
-                    boolean isNormalWork = false;
-                    SysApplyWorkflow workflow = new SysApplyWorkflow();
-                    workflow.setApplyId(sysApplyIn.getApplyId());
-                    List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
-                    if (workflows!=null && workflows.size()>0){
-                        SysUser u = userMapper.selectUserByLoginName(workflows.get(0).getApproveUser());
-                        for (SysRole r:u.getRoles()) {
-                            if ("flgw".equals(r.getRoleKey()) && "6".equals(workflows.get(0).getApproveStatu())){
-                                isNormalWork = true;
-                            }
-                        }
-                    }
-                    if (isNormalWork){
-                        List<String> jls = getUsers("documentAdmin");
-                        List<String> js = new ArrayList<>();
-                        for (String n: jls){
-                            if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
-                                js.add(n);
-                            }
-                        }
-                        users.addAll(js);
-                    }else{
-                        List<String> jls = getUsers("flgw");
-                        users.addAll(jls);
-                    }
-                }else{
+                if ("0".equals(a.getIsDirector()) || "5".equals(sysApplyIn.getApproveStatu())){
                     //判断是否存在直接主管
                     if (StringUtils.isNotEmpty(a.getRealCreateBy()) && "0".equals(sysApplyIn.getApproveStatu())){
                         sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
                     }
-                    if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
+                    if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotNull(sysUser.getDirectorId())) {
                         SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                         users.add(sysUser1.getLoginName());
-                        //                    SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
-                        //判断是否存在二级主管
-                    /*if (StringUtils.isNotEmpty(sysUser1.getDirector()) && StringUtils.isNotEmpty(sysUser1.getDirectorId().toString())) {
-                        //判断是否存在三级主管
-                        SysUser sysUser2 = userMapper.selectUserById(sysUser1.getDirectorId());
-                        if (StringUtils.isNotEmpty(sysUser2.getDirectorId().toString()) && StringUtils.isNotEmpty(sysUser2.getDirector())) {
-                            SysUser sysUser3 = userMapper.selectUserById(sysUser2.getDirectorId());
-                            variables.put("zgUser", sysUser1.getLoginName());
-                            variables.put("ejzgUser", sysUser2.getLoginName());
-                            variables.put("sjzgUser", sysUser3.getLoginName());
-                            users.add(sysUser1.getLoginName());
-                            users.add(sysUser2.getLoginName());
-                            users.add(sysUser3.getLoginName());
-                            *//*if ("否".equals(entity.getDocumentRevertFlag())) {
-                                key = "document_ck_sjzgNo";
-                            } else {
-                                key = "document_ck_sjzg";
-                            }*//*
-                        } else {
-
-                            variables.put("zgUser", sysUser.getLoginName());
-                            variables.put("ejzgUser", sysUser1.getLoginName());
-                            users.add(sysUser.getLoginName());
-                            users.add(sysUser1.getLoginName());
-
-                           *//* if ("否".equals(entity.getDocumentRevertFlag())) {
-                                key = "document_ck_ejzgNo";
-                            } else {
-                                key = "document_ck_ejzg";
-                            }*//*
-                        }
+                        sysApplyIn.setIsDirector("0");
                     } else {
-                        variables.put("zgUser", sysUser1.getLoginName());
-                       *//* if ("N".equals(entity.getDocumentRevertFlag())) {
-                            key = "document_zjzgNo";
-                        } else {
-                            key = "document_zjzg";
-                        }*//*
-                    }*/
-                    } else {
-                    /*if ("否".equals(entity.getDocumentRevertFlag())) {
-                        key = "document_ghNo";
-                    } else {
-                        key = "document_gh";
-                    }*/
-                        //没有直属领导，直接提交给法律顾问
-                        //没有直接审批人，转到档案管理员下
-                        //没有直接审批人，转到档案管理员下
                         List<String> jls = getUsers("flgw");
                         users.addAll(jls);
+                        sysApplyIn.setIsDirector("1");
+                    }
+                }else{
+                    List<String> userList = new ArrayList<>();
+                    userList.add("yangxu");
+                    userList.add("yangxudong");
+                    variables.put("assigneeList", userList);
+
+                    List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
+                    List<String> ids = new ArrayList<>();
+                    for (SysRole r:rflgw) {
+                        ids.add(r.getRoleKey());
+                    }
+//                当前操作人为法律顾问
+                    if(ids.contains("flgw")){
+                        //发给总经理
+                        List<String> jls = getUsers("zjl");
+                        users.addAll(jls);
+                        sysApplyIn.setIsDirector("1");
+                    }else if(ids.contains("zjl")){
+                        boolean isNormalWork = false;
+                        SysApplyWorkflow workflow = new SysApplyWorkflow();
+                        workflow.setApplyId(sysApplyIn.getApplyId());
+                        List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
+                        if (workflows!=null && workflows.size()>0){
+                            SysUser u = userMapper.selectUserByLoginName(workflows.get(0).getApproveUser());
+                            for (SysRole r:u.getRoles()) {
+                                if ("flgw".equals(r.getRoleKey()) && "6".equals(workflows.get(0).getApproveStatu())){
+                                    isNormalWork = true;
+                                }
+                            }
+                        }
+                        if (isNormalWork){
+                            List<String> jls = getUsers("documentAdmin");
+                            List<String> js = new ArrayList<>();
+                            for (String n: jls){
+                                if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
+                                    js.add(n);
+                                }
+                            }
+                            users.addAll(js);
+                        }else{
+                            List<String> jls = getUsers("flgw");
+                            users.addAll(jls);
+                        }
+                        sysApplyIn.setIsDirector("1");
                     }
                 }
-
-
             }
         }
+        sysApplyInMapper.updateIsDirector(sysApplyIn);
         return users;
     }
 
@@ -410,7 +369,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 for (SysApplyOutDetail d:des){
                     /////////////
                     if (StringUtils.isEmpty(d.getIsElec())){
-                        return AjaxResult.error("档案借出信息填写不完整，请补充之后提交");
+                        return AjaxResult.error("借出文档类型未填，请补充之后提交");
                     }
                     //判断所有的审批中和待审批的附件，不能出库
                     if ("1".equals(d.getIsElec())){
@@ -566,6 +525,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                 workDir.setApplyUserName(userMapper.selectUserByLoginName(loginName).getUserName());
                 workDir.setApplyStatu("1");
                 workDir.setRemark(flgwRoleName);
+                workDir.setRemark2("fw");
                 workDir.setCreateTime(new Date());
                 workDir.setUpdateTime(new Date());
                 workDir.setSortOrder(count);
@@ -766,12 +726,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService
             //获取申请人的个人信息
             sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
             //根据提交人查询是否存在直接主管
-            if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString()) && "5".equals(sysApplyIn.getApproveStatu())) {
+            if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotNull(sysUser.getDirectorId()) && "5".equals(sysApplyIn.getApproveStatu())) {
                 key = "document_rk_zg";
                 SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                 //动态设置审批人员
                 variables.put("userId", sysUser1.getLoginName());
                 users.add(sysUser1.getLoginName());
+                sysApplyIn.setIsDirector("0");
             } else {
                 //没有直接审批人，转到档案管理员下
                 List<String> jls = getUsers("documentAdmin");
@@ -782,97 +743,53 @@ public class SysApplyInServiceImpl implements ISysApplyInService
                     }
                 }
                 users.addAll(js);
+                sysApplyIn.setIsDirector("1");
                 key = "document_rk_zgNo";
             }
             itemName = sysApplyIn.getCreator() + "提交的入库申请";
         } else {
             itemName = sysApplyIn.getCreator() + "提交的出库申请";
-
-            List<String> userList = new ArrayList<>();
-            userList.add("yangxu");
-            userList.add("yangxudong");
-            variables.put("assigneeList", userList);
-
-            List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
-            List<String> ids = new ArrayList<>();
-            for (SysRole r:rflgw) {
-                ids.add(r.getRoleKey());
-            }
-//                当前操作人为法律顾问
-            if(ids.contains("flgw")){
-                //发给总经理
-                List<String> jls = getUsers("zjl");
-                users.addAll(jls);
-            }else if(ids.contains("zjl")){
-                List<String> jls = getUsers("documentAdmin");
-                List<String> js = new ArrayList<>();
-                for (String n: jls){
-                    if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
-                        js.add(n);
-                    }
-                }
-                users.addAll(js);
-            }else{
+            if ("0".equals(a.getIsDirector()) || "5".equals(sysApplyIn.getApproveStatu())){
                 //判断是否存在直接主管
                 sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
-                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotEmpty(sysUser.getDirectorId().toString())) {
+                if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotNull(sysUser.getDirectorId())) {
                     SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
                     users.add(sysUser1.getLoginName());
-                    //                    SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
-                    //判断是否存在二级主管
-                    /*if (StringUtils.isNotEmpty(sysUser1.getDirector()) && StringUtils.isNotEmpty(sysUser1.getDirectorId().toString())) {
-                        //判断是否存在三级主管
-                        SysUser sysUser2 = userMapper.selectUserById(sysUser1.getDirectorId());
-                        if (StringUtils.isNotEmpty(sysUser2.getDirectorId().toString()) && StringUtils.isNotEmpty(sysUser2.getDirector())) {
-                            SysUser sysUser3 = userMapper.selectUserById(sysUser2.getDirectorId());
-                            variables.put("zgUser", sysUser1.getLoginName());
-                            variables.put("ejzgUser", sysUser2.getLoginName());
-                            variables.put("sjzgUser", sysUser3.getLoginName());
-                            users.add(sysUser1.getLoginName());
-                            users.add(sysUser2.getLoginName());
-                            users.add(sysUser3.getLoginName());
-                            *//*if ("否".equals(entity.getDocumentRevertFlag())) {
-                                key = "document_ck_sjzgNo";
-                            } else {
-                                key = "document_ck_sjzg";
-                            }*//*
-                        } else {
-
-                            variables.put("zgUser", sysUser.getLoginName());
-                            variables.put("ejzgUser", sysUser1.getLoginName());
-                            users.add(sysUser.getLoginName());
-                            users.add(sysUser1.getLoginName());
-
-                           *//* if ("否".equals(entity.getDocumentRevertFlag())) {
-                                key = "document_ck_ejzgNo";
-                            } else {
-                                key = "document_ck_ejzg";
-                            }*//*
-                        }
-                    } else {
-                        variables.put("zgUser", sysUser1.getLoginName());
-                       *//* if ("N".equals(entity.getDocumentRevertFlag())) {
-                            key = "document_zjzgNo";
-                        } else {
-                            key = "document_zjzg";
-                        }*//*
-                    }*/
+                    sysApplyIn.setIsDirector("0");
                 } else {
-                    /*if ("否".equals(entity.getDocumentRevertFlag())) {
-                        key = "document_ghNo";
-                    } else {
-                        key = "document_gh";
-                    }*/
-                    //没有直属领导，直接提交给法律顾问
-                    //没有直接审批人，转到档案管理员下
-                    //没有直接审批人，转到档案管理员下
                     List<String> jls = getUsers("flgw");
                     users.addAll(jls);
+                    sysApplyIn.setIsDirector("1");
+                }
+            }else{
+                List<String> userList = new ArrayList<>();
+                userList.add("yangxu");
+                userList.add("yangxudong");
+                variables.put("assigneeList", userList);
+
+                List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
+                List<String> ids = new ArrayList<>();
+                for (SysRole r:rflgw) {
+                    ids.add(r.getRoleKey());
+                }
+//                当前操作人为法律顾问
+                if(ids.contains("flgw")){
+                    //发给总经理
+                    List<String> jls = getUsers("zjl");
+                    users.addAll(jls);
+                }else if(ids.contains("zjl")){
+                    List<String> jls = getUsers("documentAdmin");
+                    List<String> js = new ArrayList<>();
+                    for (String n: jls){
+                        if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())){
+                            js.add(n);
+                        }
+                    }
+                    users.addAll(js);
                 }
             }
-
-
         }
+        sysApplyInMapper.updateIsDirector(sysApplyIn);
 
         /*ProcessInstance processInstance = processService.submitApply(a.getApplyUser(), a.getApplyId().toString(), itemName, a.getRemarks(), key, variables);
         String processInstanceId = processInstance.getId();

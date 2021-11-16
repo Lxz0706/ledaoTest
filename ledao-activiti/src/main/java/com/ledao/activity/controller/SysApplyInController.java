@@ -851,7 +851,7 @@ public class SysApplyInController extends BaseController
                     pro.setShowLable(showLable);
                 }
             }
-            if (jls.contains(pro.getApplyLoginName())){
+            if (jls.contains(pro.getApplyLoginName()) && "fw".equals(pro.getRemark2())){
                 listSort.add(pro);
                 if (index == 0){
                     index = i;

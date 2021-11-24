@@ -19,8 +19,10 @@
                             <input type="text" name="fileName"/>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
                 </div>
@@ -63,31 +65,31 @@
     $(function () {
         var options = {
             url: prefix + "/list",
-            createUrl: prefix + "/add/"+projectId+"/"+projectType,
+            createUrl: prefix + "/add/" + projectId + "/" + projectType,
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             detailUrl: prefix + "/detail/{id}",
             modalName: "底层资料",
             columns: [
-               /* {
-                // checkbox: true,
-                visible: true,
-                formatter: function(value, row, index) {
-                    var showRemove = false;
-                    for(var i =0; i < roles.length;i++) {
-                        if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
-                            showRemove = true
-                        }
-                    }
-                    // 档案管理员可以删除所有人
-                    if (loginName == row.createBy || showRemove) {
-                        return {disabled : false,}
-                    } else {
-                        return {disabled : true}
-                    }
-                }
-            },*/
+                /* {
+                 // checkbox: true,
+                 visible: true,
+                 formatter: function(value, row, index) {
+                     var showRemove = false;
+                     for(var i =0; i < roles.length;i++) {
+                         if(roles[i].roleKey == "documentAdmin" || "admin" == loginName) {
+                             showRemove = true
+                         }
+                     }
+                     // 档案管理员可以删除所有人
+                     if (loginName == row.createBy || showRemove) {
+                         return {disabled : false,}
+                     } else {
+                         return {disabled : true}
+                     }
+                 }
+             },*/
                 {
                     title: "序号",
                     formatter: function (value, row, index) {
@@ -97,8 +99,8 @@
                 {
                     field: 'fileName',
                     title: '文件名称',
-                    formatter: function(value, row, index) {
-                        return $.table.tooltip(value,10);
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value, 10);
                     }
                 },
                 {
@@ -135,22 +137,22 @@
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         var fileType = row.fileType.toLowerCase();
 
                         // 管理员与档案管理员12
                         var showRemove = false;
-                        if ("admin" == loginName){
+                        if ("admin" == loginName) {
                             showRemove = true
                         }
-                        for(var i =0; i < roles.length;i++) {
-                            if(roles[i].roleKey == "documentAdmin") {
+                        for (var i = 0; i < roles.length; i++) {
+                            if (roles[i].roleKey == "documentAdmin") {
                                 showRemove = true
                             }
                         }
                         // 档案管理员可以删除所有人
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteFile(\'' + row.fileId +"',\'" + row.createBy + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteFile(\'' + row.fileId + "',\'" + row.createBy + '\')"><i class="fa fa-remove"></i>删除</a>');
                         actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
                         if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
                                 || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
@@ -203,7 +205,7 @@
                     }
                 }
             })
-        }else{
+        } else {
             $.ajax({
                 url: prefix + '/previewCount',
                 data: {'fileId': fileId},
@@ -250,7 +252,7 @@
                     }
                 }
             })
-        }else{
+        } else {
             layer.open({
                 type: 1,
                 title: false, //不显示标题栏
@@ -329,7 +331,7 @@
                     }
                 }
             })
-        }else{
+        } else {
             $.ajax({
                 url: prefix + '/previewCount',
                 data: {'fileId': fileId},
@@ -408,7 +410,7 @@
                     }
                 }
             })
-        }else{
+        } else {
             layer.open({
                 type: 1,
                 title: false, //不显示标题栏
@@ -446,7 +448,7 @@
                     }
                 }
             })
-        }else{
+        } else {
             $.ajax({
                 url: prefix + '/previewCount',
                 data: {'fileId': fileId},
@@ -484,7 +486,7 @@
                     }
                 }
             })
-        }else{
+        } else {
             $.ajax({
                 url: prefix + '/previewCount',
                 data: {'fileId': fileId},
@@ -523,7 +525,7 @@
                     }
                 }
             })
-        }else{
+        } else {
             $.ajax({
                 url: prefix + '/updateDownLoadCount',
                 data: {'fileId': fileId},
@@ -540,26 +542,26 @@
 
     function add() {
         var projectId = $("#projectId").val();
-        if (projectType == 0){
-            if ((userId == projectManagerId && projectZckType == "automaticSwitch")||projectZckType == "serve"||loginName == "admin"){
-                var url = ctx + 'system/underlyingdata/add?projectId=' + projectId+"&projectType="+projectType;
+        if (projectType == 0) {
+            if (($.common.isNotEmpty(projectManagerId) && projectManagerId.indexOf(userId) != -1 && projectZckType == "automaticSwitch") || projectZckType == "serve" || loginName == "admin") {
+                var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + "&projectType=" + projectType;
                 $.modal.open('上传底层资料', url);
-            }else if(projectZckType == "serve"){
+            } else if (projectZckType == "serve") {
                 var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + projectType;
                 $.modal.open('上传底层资料', url);
-            }else{
+            } else {
                 $.modal.alertError("无法上传");
             }
-        }else{
-            var url = ctx + 'system/underlyingdata/add?projectId='+projectId+"&projectType="+projectType;
+        } else {
+            var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + "&projectType=" + projectType;
             $.modal.open('上传底层资料', url);
         }
     }
 
-    function deleteFile(id,createBy){
-        if (loginName == createBy){
+    function deleteFile(id, createBy) {
+        if (loginName == createBy) {
             $.operate.remove(id);
-        }else{
+        } else {
             $.modal.alertError("无法删除");
         }
     }
@@ -576,10 +578,10 @@
         $.operate.successCallbackClose()
     }
 
-   /* function back() {
-        var url = ctx + "/system/projectZck/projectList?projectZckId=17&projectZckType=automaticSwitch";
-        $.modal.parentTab("投后部项目管理", url);
-    }*/
+    /* function back() {
+         var url = ctx + "/system/projectZck/projectList?projectZckId=17&projectZckType=automaticSwitch";
+         $.modal.parentTab("投后部项目管理", url);
+     }*/
 
 </script>
 </body>

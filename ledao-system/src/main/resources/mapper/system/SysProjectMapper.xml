@@ -126,7 +126,7 @@
             <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
             <if test="pledge !=null and pledge !=''">and pledge = #{pledge}</if>
             <if test="collateral != null  and collateral != ''">and collateral = #{collateral}</if>
-            <if test="projectManagerId !=null and projectManagerId !=''">and project_manager_id = #{projectManagerId}
+            <if test="projectManagerId !=null and projectManagerId !=''">and find_in_set(#{projectManagerId},project_manager_id)
             </if>
             <if test="projectManager != null  and projectManager != ''">and project_manager = #{projectManager}</if>
             <if test="userId != null ">and user_id = #{userId}</if>

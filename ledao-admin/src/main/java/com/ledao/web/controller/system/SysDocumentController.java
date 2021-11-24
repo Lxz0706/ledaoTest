@@ -247,7 +247,11 @@ public class SysDocumentController extends BaseController {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
                             if (!"SJXXB".equals(sysRole.getRoleKey())) {
-                                sysUser.setFormalFlag("0");
+                                if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
+                                    if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
+                                        sysUser.setFormalFlag("0");
+                                    }
+                                }
                             }
                         }
                     }

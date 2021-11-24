@@ -207,10 +207,10 @@ public class TimedTask {
 
                         sysNotice.setNoticeType("3");
                         sysNotice.setStatus("0");
-                        sysNotice.setReceiverId(sysUser.getUserId().toString());
-                        sysNotice.setReceiver(sysUser.getUserName());
+                        sysNotice.setReceiverId(StringUtils.removeSameString(sysUser.getUserId().toString(), ","));
+                        sysNotice.setReceiver(StringUtils.removeSameString(sysUser.getUserName(), ","));
                         sysNotice.setCreateBy(sysUser.getLoginName());
-                        sysNotice.setShareDeptAndUser(sysUser.getUserName());
+                        sysNotice.setShareDeptAndUser(StringUtils.removeSameString(sysUser.getUserName(), ","));
                         sysNoticeService.insertNotice(sysNotice);
                     }
                 }
@@ -264,10 +264,10 @@ public class TimedTask {
 
                             sysNotice.setNoticeType("3");
                             sysNotice.setStatus("0");
-                            sysNotice.setReceiverId(sysUser.getUserId().toString());
-                            sysNotice.setReceiver(sysUser.getUserName());
+                            sysNotice.setReceiverId(StringUtils.removeSameString(sysUser.getUserId().toString(), ","));
+                            sysNotice.setReceiver(StringUtils.removeSameString(sysUser.getUserName(), ","));
                             sysNotice.setCreateBy(sysUser.getLoginName());
-                            sysNotice.setShareDeptAndUser(sysUser.getUserName());
+                            sysNotice.setShareDeptAndUser(StringUtils.removeSameString(sysUser.getUserName(), ","));
                             sysNoticeService.insertNotice(sysNotice);
                         }
                     }
@@ -296,22 +296,27 @@ public class TimedTask {
                                 if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
                                     SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
                                     SysNotice sysNotice = new SysNotice();
+                                    StringBuffer ids = new StringBuffer();
+                                    StringBuffer names = new StringBuffer();
                                     sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "诉讼时效为" + DateUtils.dateTime(sysProject1.getLimitationAction()) + "的消息提醒");
                                     sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "诉讼时效为" + DateUtils.dateTime(sysProject1.getLimitationAction()) + "的消息提醒");
                                     if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
-                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
-                                        sysNotice.setReceiver(sysProject1.getProjectManager());
-                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager());
+                                        ids.append(sysProject1.getProjectManagerId());
+                                        names.append(sysProject1.getProjectManager());
                                     } else {
-                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
-                                        sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
-                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                                        ids.append(sysProject1.getProjectManagerId()).append(",").append(sysUser1.getUserId());
+                                        names.append(sysProject1.getProjectManager()).append(",").append(sysUser1.getUserName());
                                     }
+                                    sysNotice.setReceiverId(StringUtils.removeSameString(ids.toString(), ","));
+                                    sysNotice.setReceiver(StringUtils.removeSameString(names.toString(), ","));
+                                    sysNotice.setShareDeptAndUser(StringUtils.removeSameString(names.toString(), ","));
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
                                     for (String string : sysProject1.getProjectManagerId().split(",")) {
-                                        SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
-                                        sysNotice.setCreateBy(sysUser.getLoginName());
+                                        if(StringUtils.isNotEmpty(string)){
+                                            SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
+                                            sysNotice.setCreateBy(sysUser.getLoginName());
+                                        }
                                     }
                                     sysNoticeService.insertNotice(sysNotice);
                                 }
@@ -327,24 +332,29 @@ public class TimedTask {
                                 if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
                                     SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
                                     SysNotice sysNotice = new SysNotice();
+                                    StringBuffer ids = new StringBuffer();
+                                    StringBuffer names = new StringBuffer();
                                     sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
                                     sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "的消息提醒");
                                     sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
                                     sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
                                     if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
-                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId().toString());
-                                        sysNotice.setReceiver(sysProject1.getProjectManager());
-                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager());
+                                        ids.append(sysProject1.getProjectManagerId());
+                                        names.append(sysProject1.getProjectManager());
                                     } else {
-                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId() + "," + sysUser2.getUserId());
-                                        sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName() + "," + sysUser2.getUserName());
-                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager() + "," + sysUser1.getUserName() + "," + sysUser2.getUserName());
+                                        ids.append(sysProject1.getProjectManagerId()).append(",").append(sysUser1.getUserId());
+                                        names.append(sysProject1.getProjectManager()).append(",").append(sysUser1.getUserName());
                                     }
+                                    sysNotice.setReceiverId(StringUtils.removeSameString(ids.toString(), ","));
+                                    sysNotice.setReceiver(StringUtils.removeSameString(names.toString(), ","));
+                                    sysNotice.setShareDeptAndUser(StringUtils.removeSameString(names.toString(), ","));
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
                                     for (String string : sysProject1.getProjectManagerId().split(",")) {
-                                        SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
-                                        sysNotice.setCreateBy(sysUser.getLoginName());
+                                        if(StringUtils.isNotEmpty(string)){
+                                            SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
+                                            sysNotice.setCreateBy(sysUser.getLoginName());
+                                        }
                                     }
                                     sysNoticeService.insertNotice(sysNotice);
 
@@ -360,21 +370,26 @@ public class TimedTask {
                                 if (StringUtils.isNotNull(sysProject1.getProjectManager()) && StringUtils.isNotNull(sysProject1.getProjectManagerId())) {
                                     SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
                                     SysNotice sysNotice = new SysNotice();
+                                    StringBuffer ids = new StringBuffer();
+                                    StringBuffer names = new StringBuffer();
                                     sysNotice.setNoticeTitle(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
                                     sysNotice.setNoticeContent(sysProjectZck.getZckName() + "中的" + sysProject1.getProjectName() + "执行时效为" + DateUtils.dateTime(sysProject1.getLimitationExecution()) + "的消息提醒");
                                     if (sysProject1.getProjectManagerId().equals(sysUser1.getUserId()) || sysProject1.getProjectManagerId().equals(sysUser2.getUserId())) {
-                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId());
-                                        sysNotice.setReceiver(sysProject1.getProjectManager());
-                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager());
+                                        ids.append(sysProject1.getProjectManagerId());
+                                        names.append(sysProject1.getProjectManager());
                                     } else {
-                                        sysNotice.setReceiverId(sysProject1.getProjectManagerId() + "," + sysUser1.getUserId());
-                                        sysNotice.setReceiver(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
-                                        sysNotice.setShareDeptAndUser(sysProject1.getProjectManager() + "," + sysUser1.getUserName());
+                                        ids.append(sysProject1.getProjectManagerId()).append(",").append(sysUser1.getUserId());
+                                        names.append(sysProject1.getProjectManager()).append(",").append(sysUser1.getUserName());
                                     }
+                                    sysNotice.setReceiverId(StringUtils.removeSameString(ids.toString(), ","));
+                                    sysNotice.setReceiver(StringUtils.removeSameString(names.toString(), ","));
+                                    sysNotice.setShareDeptAndUser(StringUtils.removeSameString(names.toString(), ","));
 
                                     for (String string : sysProject1.getProjectManagerId().split(",")) {
-                                        SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
-                                        sysNotice.setCreateBy(sysUser.getLoginName());
+                                        if(StringUtils.isNotEmpty(string)){
+                                            SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
+                                            sysNotice.setCreateBy(sysUser.getLoginName());
+                                        }
                                     }
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
@@ -402,20 +417,6 @@ public class TimedTask {
         return res;
 
     }
-
-
-    //档案管理流程信息
-    public void workflow() {
-        SysNotice sysNotice = new SysNotice();
-        sysNotice.setCreateBy("admin");
-        sysNotice.setStatus("0");
-        sysNotice.setNoticeTitle("这是测试数据");
-        sysNotice.setNoticeType("2");
-        sysNotice.setNoticeContent("测试数据！！！！！！！");
-        System.out.print("新建消息");
-        sysNoticeService.insertNotice(sysNotice);
-    }
-
 
     /**
      * 获取公众号的unionid及openid
@@ -585,7 +586,6 @@ public class TimedTask {
      */
     private void xmlzbServe() throws Exception {
         String dateIn = DateUtils.formatDateByPattern(new Date(), "MMdd");
-        String[] dateArray = {"0329", "0330", "0331", "0628", "0629", "0630", "0928", "0929", "0930", "1229", "1230", "1231", "1103"};
         String[] keys = sysConfigService.selectConfigByKey("sysXmlzb").split(",");
         if (!Arrays.asList(keys).contains(dateIn)) {
             return;
@@ -1033,7 +1033,9 @@ public class TimedTask {
                         users.add(userMapper.selectUserByLoginName("xukai"));
                         users.add(userMapper.selectUserByLoginName("jianghui"));
                         for (String string : p.getProjectManagerId().split(",")) {
-                            users.add(userMapper.selectUserById(Long.valueOf(string)));
+                            if(StringUtils.isNotEmpty(string)){
+                                users.add(userMapper.selectUserById(Long.valueOf(string)));
+                            }
                         }
                         sendTaskMsg(users, t, "您有一个投后项目子任务提醒");
                     }

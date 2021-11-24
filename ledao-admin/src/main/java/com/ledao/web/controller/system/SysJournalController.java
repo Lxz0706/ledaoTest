@@ -3,6 +3,7 @@ package com.ledao.web.controller.system;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysDept;
 import com.ledao.system.dao.SysRole;
@@ -81,7 +82,11 @@ public class SysJournalController extends BaseController
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey())) {
-                        sysUser.setFormalFlag("0");
+                        if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
+                            if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
+                                sysUser.setFormalFlag("0");
+                            }
+                        }
                     }
                 }
             }

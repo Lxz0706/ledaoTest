@@ -521,14 +521,14 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
-    public static String removeSameString(String str) {
+    public static String removeSameString(String str, String type) {
         Set<String> mLinkedSet = new LinkedHashSet<String>();
         String[] strArray = str.split(",");
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < strArray.length; i++) {
             if (!mLinkedSet.contains(strArray[i])) {
                 mLinkedSet.add(strArray[i]);
-                sb.append(strArray[i] + " ");
+                sb.append(strArray[i] + type);
             }
         }
         return sb.toString().substring(0, sb.toString().length() - 1);
@@ -569,5 +569,23 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         /* 开始截取 */
         String result = str.substring(strStartIndex, strEndIndex).substring(strStart.length());
         return result;
+    }
+
+    /**
+     * list去重
+     *
+     * @param list
+     * @return java.util.List
+     * @author lxz
+     * @date 2021/11/11
+     */
+    public static List removeDuplicate(List list) {
+        List listTemp = new ArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            if (!listTemp.contains(list.get(i))) {
+                listTemp.add(list.get(i));
+            }
+        }
+        return listTemp;
     }
 }

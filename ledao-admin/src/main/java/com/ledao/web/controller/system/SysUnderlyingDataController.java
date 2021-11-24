@@ -321,16 +321,19 @@ public class SysUnderlyingDataController extends BaseController {
                 return AjaxResult.success();
             }
         }
-        long projectMId = 0L;
         if (StringUtils.isNotEmpty(projectManagerId)) {
-            projectMId = Long.valueOf(projectManagerId);
-        }
-        if (u.getUserId().longValue() == projectMId) {
-            return AjaxResult.success();
-        }
-        SysUser user = iSysUserService.selectUserById(projectMId);
-        if (u.getUserId() == user.getDirectorId()) {
-            return AjaxResult.success();
+            for (String string : projectManagerId.split(",")) {
+                if(StringUtils.isNotEmpty(string)){
+                    if (u.getUserId().toString().equals(string)) {
+                        return AjaxResult.success();
+                    } else{
+                        SysUser user = iSysUserService.selectUserById(Long.valueOf(string));
+                        if (u.getUserId() == user.getDirectorId()) {
+                            return AjaxResult.success();
+                        }
+                    }
+                }
+            }
         }
         return AjaxResult.error();
     }

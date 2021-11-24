@@ -487,19 +487,25 @@ public class SysProjectController extends BaseController {
                 idSb.append(sysUser1.getUserId()).append(",");
                 nameSb.append(sysUser1.getUserName()).append(",");
             }
-            if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
-                nameSb.append(sysProject.getProjectManager());
-                SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
-                idSb.append(sysUser.getUserId());
+
+            if (StringUtils.isNotEmpty(sysProject1.getProjectManagerId())) {
+                for (String string : sysProject1.getProjectManagerId().split(",")) {
+                    if (StringUtils.isNotEmpty(string)) {
+                        SysUser sysUser2 = sysUserService.selectUserById(Long.valueOf(string));
+                        idSb.append(sysUser2.getUserId());
+                        nameSb.append(sysUser2.getUserName());
+                    }
+                }
             }
+
             SysNotice sysNotice = new SysNotice();
             sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
             sysNotice.setStatus("0");
             sysNotice.setNoticeType("3");
-            sysNotice.setReceiverId(idSb.toString());
-            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setReceiverId(StringUtils.removeSameString(idSb.toString(), ","));
+            sysNotice.setReceiver(StringUtils.removeSameString(nameSb.toString(), ","));
+            sysNotice.setShareDeptAndUser(StringUtils.removeSameString(nameSb.toString(), ","));
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
-            sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
 
             //小程序消息推送
@@ -512,7 +518,7 @@ public class SysProjectController extends BaseController {
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");
                 parmStr.put("word1", sysNotice.getNoticeTitle());
-                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+                iSysApplyWorkflowService.sendTaskMsg(StringUtils.removeDuplicate(us), parmStr);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -701,14 +707,12 @@ public class SysProjectController extends BaseController {
             }
 
             //获取项目经理
-            if (StringUtils.isNotEmpty(sysProject.getProjectManager())) {
-                SysUser sysUser = sysUserService.selectUserByUserName(sysProject.getProjectManager());
-                if (StringUtils.isNotNull(sysUser)) {
-                    if (StringUtils.isNotNull(sysUser.getUserId())) {
-                        idSb.append(sysUser.getUserId());
-                    }
-                    if (StringUtils.isNotEmpty(sysUser.getUserName())) {
-                        nameSb.append(sysUser.getUserName());
+            if (StringUtils.isNotEmpty(sysProject1.getProjectManagerId())) {
+                for (String string : sysProject1.getProjectManagerId().split(",")) {
+                    if (StringUtils.isNotEmpty(string)) {
+                        SysUser sysUser2 = sysUserService.selectUserById(Long.valueOf(string));
+                        idSb.append(sysUser2.getUserId());
+                        nameSb.append(sysUser2.getUserName());
                     }
                 }
             }
@@ -716,10 +720,10 @@ public class SysProjectController extends BaseController {
             sysNotice.setNoticeTitle(sysProject.getProjectName() + "司法状态更改为" + sysProject.getJudicialStatus());
             sysNotice.setStatus("0");
             sysNotice.setNoticeType("3");
-            sysNotice.setReceiverId(idSb.toString());
-            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setReceiverId(StringUtils.removeSameString(idSb.toString(), ","));
+            sysNotice.setReceiver(StringUtils.removeSameString(nameSb.toString(), ","));
+            sysNotice.setShareDeptAndUser(StringUtils.removeSameString(nameSb.toString(), ","));
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
-            sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
 
             //小程序消息推送
@@ -732,7 +736,7 @@ public class SysProjectController extends BaseController {
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");
                 parmStr.put("word1", sysNotice.getNoticeTitle());
-                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+                iSysApplyWorkflowService.sendTaskMsg(StringUtils.removeDuplicate(us), parmStr);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -760,7 +764,9 @@ public class SysProjectController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
-                        sysUser.setFormalFlag("0");
+                        if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
+                            sysUser.setFormalFlag("0");
+                        }
                     }
                 }
             }

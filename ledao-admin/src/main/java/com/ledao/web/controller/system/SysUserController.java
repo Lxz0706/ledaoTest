@@ -9,17 +9,14 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.http.CommonUtil;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.constant.UserConstants;
@@ -92,7 +89,7 @@ public class SysUserController extends BaseController {
         return getDataTable(list);
     }
 
-    @Log(title = "用户管理", businessType = BusinessType.EXPORT)
+    @Log(title = "用户管理" , businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:user:export")
     @PostMapping("/export")
     @ResponseBody
@@ -113,7 +110,7 @@ public class SysUserController extends BaseController {
         return util.exportExcel(list, "用户数据");
     }
 
-    @Log(title = "用户管理", businessType = BusinessType.IMPORT)
+    @Log(title = "用户管理" , businessType = BusinessType.IMPORT)
     @RequiresPermissions("system:user:import")
     @PostMapping("/importData")
     @ResponseBody
@@ -138,8 +135,8 @@ public class SysUserController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("roles", roleService.selectRoleAll());
-        mmap.put("posts", postService.selectPostAll());
+        mmap.put("roles" , roleService.selectRoleAll());
+        mmap.put("posts" , postService.selectPostAll());
         return prefix + "/add";
     }
 
@@ -147,7 +144,7 @@ public class SysUserController extends BaseController {
      * 新增保存用户
      */
     @RequiresPermissions("system:user:add")
-    @Log(title = "用户管理", businessType = BusinessType.INSERT)
+    @Log(title = "用户管理" , businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(@Validated SysUser user) {
@@ -261,9 +258,9 @@ public class SysUserController extends BaseController {
      */
     @GetMapping("/edit/{userId}")
     public String edit(@PathVariable("userId") Long userId, ModelMap mmap) {
-        mmap.put("user", userService.selectUserById(userId));
-        mmap.put("roles", roleService.selectRolesByUserId(userId));
-        mmap.put("posts", postService.selectPostsByUserId(userId));
+        mmap.put("user" , userService.selectUserById(userId));
+        mmap.put("roles" , roleService.selectRolesByUserId(userId));
+        mmap.put("posts" , postService.selectPostsByUserId(userId));
         return prefix + "/edit";
     }
 
@@ -271,10 +268,11 @@ public class SysUserController extends BaseController {
      * 修改保存用户
      */
     @RequiresPermissions("system:user:edit")
-    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @Log(title = "用户管理" , businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@Validated SysUser user) {
+        logger.info("角色ids:=======" + user.getRoleIds());
         userService.checkUserAllowed(user);
         if (UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user))) {
             return error("修改用户'" + user.getLoginName() + "'失败，手机号码已存在");
@@ -345,15 +343,15 @@ public class SysUserController extends BaseController {
     }
 
     @RequiresPermissions("system:user:resetPwd")
-    @Log(title = "重置密码", businessType = BusinessType.UPDATE)
+    @Log(title = "重置密码" , businessType = BusinessType.UPDATE)
     @GetMapping("/resetPwd/{userId}")
     public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap) {
-        mmap.put("user", userService.selectUserById(userId));
+        mmap.put("user" , userService.selectUserById(userId));
         return prefix + "/resetPwd";
     }
 
     @RequiresPermissions("system:user:resetPwd")
-    @Log(title = "重置密码", businessType = BusinessType.UPDATE)
+    @Log(title = "重置密码" , businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
     @ResponseBody
     public AjaxResult resetPwdSave(SysUser user) {
@@ -377,8 +375,8 @@ public class SysUserController extends BaseController {
         SysUser user = userService.selectUserById(userId);
         // 获取用户所属的角色列表
         List<SysUserRole> userRoles = userService.selectUserRoleByUserId(userId);
-        mmap.put("user", user);
-        mmap.put("userRoles", userRoles);
+        mmap.put("user" , user);
+        mmap.put("userRoles" , userRoles);
         return prefix + "/authRole";
     }
 
@@ -386,16 +384,16 @@ public class SysUserController extends BaseController {
      * 用户授权角色
      */
     @RequiresPermissions("system:user:add")
-    @Log(title = "用户管理", businessType = BusinessType.GRANT)
+    @Log(title = "用户管理" , businessType = BusinessType.GRANT)
     @PostMapping("/authRole/insertAuthRole")
     @ResponseBody
-    public AjaxResult insertAuthRole(Long userId, Long[] roleIds) {
-        userService.insertUserAuth(userId, roleIds);
+    public AjaxResult insertAuthRole(SysUser sysUser) {
+        userService.insertUserAuth(sysUser.getUserId(), sysUser.getRoleIds());
         return success();
     }
 
     @RequiresPermissions("system:user:remove")
-    @Log(title = "用户管理", businessType = BusinessType.DELETE)
+    @Log(title = "用户管理" , businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
@@ -445,7 +443,7 @@ public class SysUserController extends BaseController {
         try {
 //			String requestUrl="https://api.weixin.qq.com/sns/jscode2session?appid="+Global.getConfig("wxAppid")+"&secret="+Global.getConfig("wxSecret")+"&js_code="+jsCode+"&grant_type="+Global.getConfig("wxGrant_type");  
             String requestUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=" + WeChatConstants.WXAPPID + "&secret=" + WeChatConstants.WXSECRET + "&js_code=" + jsCode + "&grant_type=" + WeChatConstants.WXGRANT_TYPE;
-            jsonResult = CommonUtil.httpsRequest(requestUrl, "GET", null);
+            jsonResult = CommonUtil.httpsRequest(requestUrl, "GET" , null);
             System.out.println("返回的jsonResult" + jsonResult);
             if (jsonResult != null) {
                 System.out.println(jsonResult.toString());
@@ -463,7 +461,7 @@ public class SysUserController extends BaseController {
     /**
      * 用户状态修改
      */
-    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @Log(title = "用户管理" , businessType = BusinessType.UPDATE)
     @RequiresPermissions("system:user:edit")
     @PostMapping("/changeStatus")
     @ResponseBody
@@ -479,20 +477,20 @@ public class SysUserController extends BaseController {
     public String selectUserTree(String selectedUserIds, String selectedUserNames, String selectedDeptIds, String
             selectedDeptNames,
                                  Boolean multiSelectFlag, ModelMap mmap, Boolean deptId, Boolean checkFlag) {
-        mmap.put("dept", deptService.selectDeptById((long) 100));
-        mmap.put("selectedUserIds", selectedUserIds);
-        mmap.put("selectedUserNames", selectedUserNames);
-        mmap.put("selectedDeptIds", selectedDeptIds);
-        mmap.put("selectedDeptNames", selectedDeptNames);
-        mmap.put("multiSelectFlag", multiSelectFlag);
-        mmap.put("checkFlag", checkFlag);
+        mmap.put("dept" , deptService.selectDeptById((long) 100));
+        mmap.put("selectedUserIds" , selectedUserIds);
+        mmap.put("selectedUserNames" , selectedUserNames);
+        mmap.put("selectedDeptIds" , selectedDeptIds);
+        mmap.put("selectedDeptNames" , selectedDeptNames);
+        mmap.put("multiSelectFlag" , multiSelectFlag);
+        mmap.put("checkFlag" , checkFlag);
         if (StringUtils.isNotNull(deptId)) {
             if (deptId == true) {
-                mmap.put("deptId", 201);
-                mmap.put("excludeId", 201);
+                mmap.put("deptId" , 201);
+                mmap.put("excludeId" , 201);
             } else if (deptId == false) {
-                mmap.put("deptId", 202);
-                mmap.put("excludeId", 202);
+                mmap.put("deptId" , 202);
+                mmap.put("excludeId" , 202);
             }
         }
 
@@ -517,8 +515,8 @@ public class SysUserController extends BaseController {
         }
         List<SysUser> list = userService.selectUserList(user);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("success", true);
-        jsonObject.put("userList", list);
+        jsonObject.put("success" , true);
+        jsonObject.put("userList" , list);
         return jsonObject.toString();
     }
 
@@ -528,7 +526,7 @@ public class SysUserController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         for (String string : ids.split(",")) {
             SysUser sysUser = userService.selectUserById(Long.valueOf(string));
-            map.put("user", sysUser.getUserName());
+            map.put("user" , sysUser.getUserName());
         }
         return AjaxResult.success(map);
     }

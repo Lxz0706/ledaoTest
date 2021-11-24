@@ -66,7 +66,7 @@
         }
     });
 
-    function  fwThProject(){
+    function fwThProject() {
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -106,14 +106,14 @@
         $.table.init(options);
     }
 
-    function thProject(){
-        for(var i =0; i < roles.length;i++) {
+    function thProject() {
+        for (var i = 0; i < roles.length; i++) {
             if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" ||
-                roles[i].roleKey == "thbzz" || roles[i].roleKey == "thbCommon"){
+                roles[i].roleKey == "thbzz" || roles[i].roleKey == "thbCommon") {
                 showUnderLying = true
             }
         }
-        if("admin" == loginName){
+        if ("admin" == loginName) {
             showUnderLying = true;
         }
         var options = {
@@ -193,12 +193,15 @@
                     }
                 },
                 {
-                    title: '处置任务',
+                    title: '处置子任务',
                     formatter: function (value, row, index) {
-                        if (userId == row.projectManagerId || loginName == 'xukai'|| loginName == 'admin'){
-                            return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">任务进度</a>';
-                        }else{
-                            return '-';
+                        for(var i =0; i < roles.length;i++) {
+                            if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" || roles[i].roleKey == "SJXXB" || roles[i].roleKey == "documentAdmin" ||
+                                $.common.isNotEmpty(row.projectManagerId) && row.projectManagerId.indexOf(userId) != -1 || loginName == 'admin') {
+                                return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectId + "',\'" + row.zckName + '\')">任务进度</a>';
+                            }else{
+                                return '-';
+                            }
                         }
                     }
                 },
@@ -231,9 +234,9 @@
                         var actions = [];
                         var fileShow = row.isFile;
                         if (fileShow == 0) {
-                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toUpload(\'' + row.projectId + '\',\''+row.projectManagerId+'\',\''+row.projectZckType+'\')"><i class="fa fa-edit"></i>上传</ a> ');
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toUpload(\'' + row.projectId + '\',\'' + row.projectManagerId + '\',\'' + row.projectZckType + '\')"><i class="fa fa-edit"></i>上传</ a> ');
                         } else {
-                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(\'' + row.projectId + '\',\''+row.projectManagerId+ '\',\''+row.projectZckType+'\')"><i class="fa fa-search"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="see(\'' + row.projectId + '\',\'' + row.projectManagerId + '\',\'' + row.projectZckType + '\')"><i class="fa fa-search"></i>查看</a>');
                         }
                         return actions.join('');
                     },
@@ -260,7 +263,7 @@
     }
 
     // 查看任务
-    function detailManageTask(id,name){
+    function detailManageTask(id, name) {
         var url = '/system/managetask/managetask?proId=' + id + "&taskType=1";
         $.modal.opens("任务列表", url);
     }
@@ -329,21 +332,24 @@
         }
         $.modal.parentTab("投后部项目管理", url);
     }
-    function see(projectId,projectManagerId,zckType) {
-        var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0+"&projectZckType="+zckType+"&projectManagerId="+projectManagerId;
+
+    function see(projectId, projectManagerId, zckType) {
+        var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0 + "&projectZckType=" + zckType + "&projectManagerId=" + projectManagerId;
         $.modal.open("底层资料", url);
     }
-    function toUpload(projectId,projectManagerId,zckType) {
-        if ((userId == projectManagerId && zckType == "automaticSwitch") || zckType == "serve" || "admin" == loginName){
-            var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0+"&projectZckType="+zckType+"&projectManagerId="+projectManagerId;
+
+    function toUpload(projectId, projectManagerId, zckType) {
+        if (($.common.isNotEmpty(projectManagerId) && projectManagerId.indexOf(userId) && zckType == "automaticSwitch") || zckType == "serve" || "admin" == loginName) {
+            var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0 + "&projectZckType=" + zckType + "&projectManagerId=" + projectManagerId;
             $.modal.open("底层资料", url);
-        }else if(zckType == "serve"){
-            var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0+"&projectZckType="+zckType+"&projectManagerId="+projectManagerId;
+        } else if (zckType == "serve") {
+            var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0 + "&projectZckType=" + zckType + "&projectManagerId=" + projectManagerId;
             $.modal.open("底层资料", url);
-        }else{
+        } else {
             $.modal.alertError("无法上传");
         }
     }
+
     function showImage(content, width, height) {
         layer.open({
             type: 1,

@@ -62,9 +62,18 @@
     var removeFlag = [[${@permission.hasPermi('system:projectZck:remove')}]];
     // var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var prefix = ctx + "system/projectZck";
 
+    var showUnderLying = false;
+
     $(function () {
+        for (var i = 0; i < roles.length; i++) {
+            if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" || roles[i].roleKey == "SJXXB" ||roles[i].roleKey == "documentAdmin") {
+                showUnderLying = true
+            }
+        }
         var options = {
             url: prefix + "/listByType",
             createUrl: prefix + "/add",
@@ -117,8 +126,8 @@
                 },
                 {
                     // field: 'manageTask',
-                    title: '处置回现',
-                    visible: loginName == "xukai" || loginName == "admin",
+                    title: '处置总任务',
+                    visible: showUnderLying,
                     formatter: function (value, row, index) {
                         return '<a href="javascript:void(0)" onclick="detailManageTask(\'' + row.projectZckId + "',\'" + row.zckName + '\')">任务进度</a>';
                     },

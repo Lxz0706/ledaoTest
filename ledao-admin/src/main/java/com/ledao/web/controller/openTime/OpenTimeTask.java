@@ -54,34 +54,18 @@ public class OpenTimeTask {
     public void thProject() {
         SysProject sysProject = new SysProject();
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
-        System.out.println("投后部项目开庭时间个数：=======" + list.size());
         for (SysProject sysProject1 : list) {
-            //获取项目经理和其上级主管
             StringBuffer sb = new StringBuffer();
             StringBuffer nameSb = new StringBuffer();
             List<SysUser> userList = new ArrayList<>();
-            if (StringUtils.isNotEmpty(sysProject1.getProjectManager())) {
-                SysUser sysUser = sysUserService.selectUserByUserName(sysProject1.getProjectManager());
-                if (StringUtils.isNotNull(sysUser)) {
-                    userList.add(sysUser);
-                    sb.append(sysUser.getUserId());
-                    nameSb.append(sysUser.getUserName());
-                    if (StringUtils.isNotNull(sysUser.getDirectorId())) {
-                        SysUser sysUser1 = sysUserService.selectUserById(sysUser.getDirectorId());
-                        userList.add(sysUser1);
-                        sb.append(",").append(sysUser1.getUserId());
-                        nameSb.append(",").append(sysUser1.getUserName());
-                    }
-                }
-            }
 
             //获取法务部主管
             SysUser sysUser = new SysUser();
             sysUser.setRoleKey("fkbjl");
             List<SysUser> sysUserList = sysUserService.selectUserByRoleKey(sysUser);
             for (SysUser sysUser1 : sysUserList) {
-                sb.append(",").append(sysUser1.getUserId());
-                nameSb.append(",").append(sysUser1.getUserName());
+                sb.append(sysUser1.getUserId());
+                nameSb.append(sysUser1.getUserName());
             }
 
             //获取风控部普通员工
@@ -89,8 +73,26 @@ public class OpenTimeTask {
             sysUser1.setRoleKey("fkbCommon");
             List<SysUser> fkbptList = sysUserService.selectUserByRoleKey(sysUser1);
             for (SysUser sysUser2 : fkbptList) {
-                sb.append(sysUser2.getUserId()).append(",");
-                nameSb.append(sysUser2.getUserName()).append(",");
+                sb.append(",").append(sysUser2.getUserId());
+                nameSb.append(",").append(sysUser2.getUserName());
+            }
+
+            //获取项目经理和其上级主管
+            if (StringUtils.isNotEmpty(sysProject1.getProjectManagerId())) {
+                for (String string : sysProject1.getProjectManagerId().split(",")) {
+                    if (StringUtils.isNotEmpty(string)) {
+                        SysUser sysUser2 = sysUserService.selectUserById(Long.valueOf(string));
+                        userList.add(sysUser2);
+                        sb.append(",").append(sysUser2.getUserId());
+                        nameSb.append(",").append(sysUser2.getUserName());
+                        if (StringUtils.isNotNull(sysUser2.getDirectorId())) {
+                            SysUser sysUser3 = sysUserService.selectUserById(sysUser2.getDirectorId());
+                            userList.add(sysUser3);
+                            sb.append(",").append(sysUser3.getUserId());
+                            nameSb.append(",").append(sysUser3.getUserName());
+                        }
+                    }
+                }
             }
 
             if (StringUtils.isNotEmpty(sysProject1.getOpenTime())) {
@@ -110,9 +112,9 @@ public class OpenTimeTask {
                         SysNotice sysNotice = new SysNotice();
                         sysNotice.setNoticeTitle(sysProject1.getProjectName() + "距离" + object.getString("type") + "开庭，还剩" + differentDay + "天");
                         sysNotice.setNoticeType("3");
-                        sysNotice.setReceiverId(sb.toString());
-                        sysNotice.setReceiver(nameSb.toString());
-                        sysNotice.setShareDeptAndUser(nameSb.toString());
+                        sysNotice.setReceiverId(StringUtils.removeSameString(sb.toString(), ","));
+                        sysNotice.setReceiver(StringUtils.removeSameString(nameSb.toString(), ","));
+                        sysNotice.setShareDeptAndUser(StringUtils.removeSameString(nameSb.toString(), ","));
                         sysNotice.setCreateBy(sysProject1.getCreateBy());
                         sysNoticeService.insertNotice(sysNotice);
 
@@ -125,7 +127,7 @@ public class OpenTimeTask {
                         Map<String, String> parmStr = new HashMap<>();
                         parmStr.put("first", "您有一个法务工作提醒");
                         parmStr.put("word1", sysNotice.getNoticeTitle());
-                        iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+                        iSysApplyWorkflowService.sendTaskMsg(StringUtils.removeDuplicate(us), parmStr);
                     }
                 }
             }
@@ -135,7 +137,6 @@ public class OpenTimeTask {
     public void tzProject() {
         SysMonomerLaw sysMonomerLaw = new SysMonomerLaw();
         List<SysMonomerLaw> sysMonomerLawList = sysMonomerLawService.selectSysMonomerLawList(sysMonomerLaw);
-        System.out.println("大型单体项目开庭时间个数：=======" + sysMonomerLawList.size());
         for (SysMonomerLaw sysMonomerLaw1 : sysMonomerLawList) {
             //获取项目经理和其上级主管
             StringBuffer sb = new StringBuffer();
@@ -201,9 +202,9 @@ public class OpenTimeTask {
                         SysNotice sysNotice = new SysNotice();
                         sysNotice.setNoticeTitle(sysBgczzck.getProjectName() + "距离" + object.getString("type") + "开庭，还剩" + differentDay + "天");
                         sysNotice.setNoticeType("3");
-                        sysNotice.setReceiverId(sb.toString());
-                        sysNotice.setReceiver(nameSb.toString());
-                        sysNotice.setShareDeptAndUser(nameSb.toString());
+                        sysNotice.setReceiverId(StringUtils.removeSameString(sb.toString(), ","));
+                        sysNotice.setReceiver(StringUtils.removeSameString(nameSb.toString(), ","));
+                        sysNotice.setShareDeptAndUser(StringUtils.removeSameString(nameSb.toString(), ","));
                         sysNotice.setCreateBy(sysMonomerLaw1.getCreateBy());
                         sysNoticeService.insertNotice(sysNotice);
 
@@ -217,7 +218,7 @@ public class OpenTimeTask {
                             Map<String, String> parmStr = new HashMap<>();
                             parmStr.put("first", "您有一个法务工作提醒");
                             parmStr.put("word1", sysNotice.getNoticeTitle());
-                            iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+                            iSysApplyWorkflowService.sendTaskMsg(StringUtils.removeDuplicate(us), parmStr);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

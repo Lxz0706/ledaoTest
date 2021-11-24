@@ -169,10 +169,10 @@ public class SysMonomerLawController extends BaseController {
             sysNotice.setNoticeTitle(sysBgczzck.getProjectName() + "司法状态更改为" + sysMonomerLaw.getJudicialStatus());
             sysNotice.setStatus("0");
             sysNotice.setNoticeType("3");
-            sysNotice.setReceiverId(idSb.toString());
-            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setReceiverId(StringUtils.removeSameString(idSb.toString(), ","));
+            sysNotice.setReceiver(StringUtils.removeSameString(nameSb.toString(), ","));
+            sysNotice.setShareDeptAndUser(StringUtils.removeSameString(nameSb.toString(), ","));
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
-            sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
 
             //小程序消息推送
@@ -184,7 +184,7 @@ public class SysMonomerLawController extends BaseController {
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");
                 parmStr.put("word1", sysNotice.getNoticeTitle());
-                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+                iSysApplyWorkflowService.sendTaskMsg(StringUtils.removeDuplicate(us), parmStr);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -242,10 +242,10 @@ public class SysMonomerLawController extends BaseController {
             sysNotice.setNoticeTitle(sysBgczzck.getProjectName() + "司法状态更改为" + sysMonomerLaw.getJudicialStatus());
             sysNotice.setStatus("0");
             sysNotice.setNoticeType("3");
-            sysNotice.setReceiverId(idSb.toString());
-            sysNotice.setReceiver(nameSb.toString());
+            sysNotice.setReceiverId(StringUtils.removeSameString(idSb.toString(), ","));
+            sysNotice.setReceiver(StringUtils.removeSameString(nameSb.toString(), ","));
+            sysNotice.setShareDeptAndUser(StringUtils.removeSameString(nameSb.toString(), ","));
             sysNotice.setCreateBy(ShiroUtils.getLoginName());
-            sysNotice.setShareDeptAndUser(nameSb.toString());
             sysNoticeService.insertNotice(sysNotice);
 
             try {
@@ -256,7 +256,7 @@ public class SysMonomerLawController extends BaseController {
                 Map<String, String> parmStr = new HashMap<>();
                 parmStr.put("first", "您有一个法务工作提醒");
                 parmStr.put("word1", sysNotice.getNoticeTitle());
-                iSysApplyWorkflowService.sendTaskMsg(us, parmStr);
+                iSysApplyWorkflowService.sendTaskMsg(StringUtils.removeDuplicate(us), parmStr);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -275,7 +275,9 @@ public class SysMonomerLawController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
-                        sysUser.setFormalFlag("0");
+                        if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
+                            sysUser.setFormalFlag("0");
+                        }
                     }
                 }
             }

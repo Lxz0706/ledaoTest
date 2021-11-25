@@ -652,9 +652,17 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
         }
     }
 
-    public void sendMsg(List<String> users, SysApplyIn sysApplyInEntity, String refuseReason) {
-        for (String u : users) {
-            System.out.println("================档案相关消息推送，发送消息给: " + u);
+    public void sendMsg(List<String> users,SysApplyIn sysApplyInEntity,String refuseReason){
+        String documentType = dictDataService.selectDictLabel("sys_document_busi_type",sysApplyInEntity.getDocumentType());
+        SysDocumentFile df = new SysDocumentFile();
+        df.setApplyId(sysApplyInEntity.getApplyId());
+        List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(df);
+        for (String u : users){
+            String currentUserName = u;
+            if (currentUserName.contains("-")){
+                u = u.split("-")[0];
+            }
+            System.out.println("================档案相关消息推送，发送消息给: "+u);
             SysUser us = userMapper.selectUserByLoginName(u);
             String appName = "";
             if ("0".equals(sysApplyInEntity.getApplyType())) {
@@ -679,7 +687,17 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     } else {
                         first = "您收到一个" + appName + "已完成";
                     }
-                } else {
+                    if (currentUserName.contains("-") && "0".equals(sysApplyInEntity.getApplyType())){
+                        first = "您有一条档案抄送提醒请知晓";
+                    }
+                    if ("0".equals(sysApplyInEntity.getApplyType())){
+                        if (doc!=null && doc.size()>0){
+                            thing14 = thing14+" "+documentType+" "+doc.get(0).getFileName();
+                        }else {
+                            thing14 = thing14+" "+documentType;
+                        }
+                    }
+                } else{
                     first = "您有一条流程需要审批";
                 }
 
@@ -953,12 +971,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 users.add(sysApplyInEntity.getApplyUser());
                 if ("0".equals(sysApplyInEntity.getApplyType())) {
                     //入库申请，审批的同时，发送给yangxu，xulinyi，qianwanping
-                    users.add("yangxudong");
-                    users.add("xulinyi");
-                    users.add("qianwanping");
-                } else if ("1".equals(sysApplyInEntity.getApplyType())) {
-                    users.add("xulinyi");
-                    users.add("qianwanping");
+                    users.add("yangxudong-send");
+                    users.add("xulinyi-send");
+                    users.add("qianwanping-send");
+                }else if ("1".equals(sysApplyInEntity.getApplyType())){
+                    users.add("xulinyi-send");
+                    users.add("qianwanping-send");
                 }
             }
             sendMsg(users, sysApplyInEntity, "");

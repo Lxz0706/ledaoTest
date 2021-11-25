@@ -652,17 +652,17 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
         }
     }
 
-    public void sendMsg(List<String> users,SysApplyIn sysApplyInEntity,String refuseReason){
-        String documentType = dictDataService.selectDictLabel("sys_document_busi_type",sysApplyInEntity.getDocumentType());
+    public void sendMsg(List<String> users, SysApplyIn sysApplyInEntity, String refuseReason) {
+        String documentType = dictDataService.selectDictLabel("sys_document_busi_type", sysApplyInEntity.getDocumentType());
         SysDocumentFile df = new SysDocumentFile();
         df.setApplyId(sysApplyInEntity.getApplyId());
         List<SysDocumentFile> doc = documentFileMapper.selectSysDocumentFileList(df);
-        for (String u : users){
+        for (String u : users) {
             String currentUserName = u;
-            if (currentUserName.contains("-")){
+            if (currentUserName.contains("-")) {
                 u = u.split("-")[0];
             }
-            System.out.println("================档案相关消息推送，发送消息给: "+u);
+            System.out.println("================档案相关消息推送，发送消息给: " + u);
             SysUser us = userMapper.selectUserByLoginName(u);
             String appName = "";
             if ("0".equals(sysApplyInEntity.getApplyType())) {
@@ -685,19 +685,20 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     if (us.getLoginName().equals(sysApplyInEntity.getApplyUser())) {
                         first = "您提交的申请已处理";
                     } else {
-                        first = "您收到一个" + appName + "已完成";
+                        SysUser sysUser = userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser());
+                        first = "您收到" + sysUser.getUserName() + "提交的" + appName + "已完成";
                     }
-                    if (currentUserName.contains("-") && "0".equals(sysApplyInEntity.getApplyType())){
+                    /*if (currentUserName.contains("-") && "0".equals(sysApplyInEntity.getApplyType())) {
                         first = "您有一条档案抄送提醒请知晓";
-                    }
-                    if ("0".equals(sysApplyInEntity.getApplyType())){
-                        if (doc!=null && doc.size()>0){
-                            thing14 = thing14+" "+documentType+" "+doc.get(0).getFileName();
-                        }else {
-                            thing14 = thing14+" "+documentType;
+                    }*/
+                    if ("0".equals(sysApplyInEntity.getApplyType())) {
+                        if (doc != null && doc.size() > 0) {
+                            thing14 = thing14 + " " + documentType + " " + doc.get(0).getFileName();
+                        } else {
+                            thing14 = thing14 + " " + documentType;
                         }
                     }
-                } else{
+                } else {
                     first = "您有一条流程需要审批";
                 }
 
@@ -727,10 +728,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             parm.put("time5",DateUtils.getNowDate());
             iSysApplyWorkflowService.sendLittleMsg(parm);
         }*/
-    }
-
-    public static void main(String[] args) {
-        String str = "100.201";
     }
 
     public List<String> submitApplyInfo(SysApplyIn sysApplyIn) {
@@ -974,7 +971,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     users.add("yangxudong-send");
                     users.add("xulinyi-send");
                     users.add("qianwanping-send");
-                }else if ("1".equals(sysApplyInEntity.getApplyType())){
+                } else if ("1".equals(sysApplyInEntity.getApplyType())) {
                     users.add("xulinyi-send");
                     users.add("qianwanping-send");
                 }

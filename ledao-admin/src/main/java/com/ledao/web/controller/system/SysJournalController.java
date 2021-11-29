@@ -9,6 +9,7 @@ import com.ledao.system.dao.SysDept;
 import com.ledao.system.dao.SysRole;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysDeptService;
+import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,14 +30,13 @@ import com.ledao.common.core.page.TableDataInfo;
 
 /**
  * 日志Controller
- * 
+ *
  * @author lxz
  * @date 2021-09-05
  */
 @Controller
 @RequestMapping("/system/journal")
-public class SysJournalController extends BaseController
-{
+public class SysJournalController extends BaseController {
     private String prefix = "system/journal";
 
     @Autowired
@@ -47,34 +47,43 @@ public class SysJournalController extends BaseController
     @Autowired
     private ISysDeptService deptService;
 
-//    @RequiresPermissions("system:journal:view")
+    @Autowired
+    private ISysUserService sysUserService;
+
+    //    @RequiresPermissions("system:journal:view")
     @GetMapping()
-    public String journal()
-    {
+    public String journal() {
         return prefix + "/deptList";
     }
 
 
     @GetMapping("/jouralListByLoginName")
-    public String jouralListByLoginName(String loginName,Long parentId,ModelMap mmap)
-    {
-        mmap.put("loginName",loginName);
-        mmap.put("parentId",parentId);
+    public String jouralListByLoginName(String loginName, Long parentId, ModelMap mmap) {
+        mmap.put("loginName", loginName);
+        mmap.put("parentId", parentId);
         return prefix + "/journal";
     }
 
     @GetMapping("/userListByDepId")
-    public String userListByDepId(Long parentId,ModelMap mmap)
-    {
-        mmap.put("parentId",parentId);
-        return prefix+ "/userListByDept";
+    public String userListByDepId(Long parentId, ModelMap mmap) {
+        mmap.put("parentId", parentId);
+        return prefix + "/userListByDept";
     }
 
     @PostMapping("/userListByDepParentId")
     @ResponseBody
-    public TableDataInfo userListByDepParentId(SysDept dept)
-    {
+    public TableDataInfo userListByDepParentId(SysDept dept) {
         startPage();
+
+        //获取投后部经理2
+        List<SysUser> sysUserList = getUserList("thbManager2");
+        StringBuffer sb = new StringBuffer();
+        for (SysUser sysUser : sysUserList) {
+            if (StringUtils.isNotNull(sysUser) && StringUtils.isNotEmpty(sysUser.getLoginName())) {
+                sb.append(sysUser.getLoginName());
+            }
+        }
+
         SysUser sysUser = new SysUser();
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
@@ -83,15 +92,18 @@ public class SysJournalController extends BaseController
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey())) {
                         if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
-                            if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
-                                sysUser.setFormalFlag("0");
-                            }
+                            sysUser.setFormalFlag("0");
+                        }
+                        if (!"thbManager".equals(sysRole.getRoleKey()) && !"thbManager2".equals(sysRole.getRoleKey())
+                                && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
+                                && !"documentAdmin".equals(sysRole.getRoleKey())  && !"Cc".equals(sysRole.getRoleKey())) {
+                            sysUser.setLogName(StringUtils.removeSameString(sb.toString(), ","));
                         }
                     }
                 }
             }
         }
-        List<SysUser> deps = deptService.selectUserListByDepId(dept,sysUser);
+        List<SysUser> deps = deptService.selectUserListByDepId(dept, sysUser);
         return getDataTable(deps);
     }
 
@@ -101,8 +113,7 @@ public class SysJournalController extends BaseController
 //    @RequiresPermissions("system:journal:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysJournal sysJournal)
-    {
+    public TableDataInfo list(SysJournal sysJournal) {
         startPage();
         /*SysUser user = ShiroUtils.getSysUser();
         List<SysRole> getRoles = user.getRoles();
@@ -123,16 +134,15 @@ public class SysJournalController extends BaseController
 
     @PostMapping("/deptList")
     @ResponseBody
-    public TableDataInfo deptList()
-    {
+    public TableDataInfo deptList() {
         SysUser user = ShiroUtils.getSysUser();
         List<SysRole> getRoles = user.getRoles();
         boolean isZjl = false;
         if ("admin".equals(user.getLoginName()) || "xulinyi".equals(user.getLoginName())
-                ||"lixiangzhen".equals(user.getLoginName()) || "weicaixuan".equals(user.getLoginName())){
+                || "lixiangzhen".equals(user.getLoginName()) || "weicaixuan".equals(user.getLoginName())) {
             //允许查看所有日志的账号
-            isZjl=true;
-        }else{
+            isZjl = true;
+        } else {
             for (SysRole sysRole : getRoles) {
                 if ("zjl".equals(sysRole.getRoleKey())) {
                     //允许查看所有日志的角色
@@ -145,19 +155,19 @@ public class SysJournalController extends BaseController
         Long parendId = 100L;
         dept.setParentId(parendId);
         List<SysDept> deps = deptService.selectDeptOneLevelList(dept);
-        if (isZjl){
+        if (isZjl) {
             return getDataTable(deps);
-        }else{
+        } else {
             List<SysDept> dts = new ArrayList<>();
             SysDept deptNew = deptService.selectDeptById(user.getDeptId());
-            for (SysDept d:deps) {
-                if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())){
+            for (SysDept d : deps) {
+                if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())) {
                     dts.add(d);
                     return getDataTable(dts);
                 }
                 String[] depstra = deptNew.getAncestors().split(",");
-                for (String ds:depstra) {
-                    if(ds.equals(d.getDeptId().toString())){
+                for (String ds : depstra) {
+                    if (ds.equals(d.getDeptId().toString())) {
                         dts.add(d);
                         return getDataTable(dts);
                     }
@@ -175,8 +185,7 @@ public class SysJournalController extends BaseController
     @Log(title = "日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysJournal sysJournal)
-    {
+    public AjaxResult export(SysJournal sysJournal) {
         List<SysJournal> list = sysJournalService.selectSysJournalList(sysJournal);
         ExcelUtil<SysJournal> util = new ExcelUtil<SysJournal>(SysJournal.class);
         return util.exportExcel(list, "journal");
@@ -186,8 +195,7 @@ public class SysJournalController extends BaseController
      * 新增日志
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -198,8 +206,7 @@ public class SysJournalController extends BaseController
     @Log(title = "日志", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysJournal sysJournal)
-    {
+    public AjaxResult addSave(SysJournal sysJournal) {
         return toAjax(sysJournalService.insertSysJournal(sysJournal));
     }
 
@@ -207,8 +214,7 @@ public class SysJournalController extends BaseController
      * 修改日志
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         SysJournal sysJournal = sysJournalService.selectSysJournalById(id);
         mmap.put("sysJournal", sysJournal);
         return prefix + "/edit";
@@ -221,8 +227,7 @@ public class SysJournalController extends BaseController
     @Log(title = "日志", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(SysJournal sysJournal)
-    {
+    public AjaxResult editSave(SysJournal sysJournal) {
         return toAjax(sysJournalService.updateSysJournal(sysJournal));
     }
 
@@ -231,10 +236,31 @@ public class SysJournalController extends BaseController
      */
 //    @RequiresPermissions("system:journal:remove")
     @Log(title = "日志", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(sysJournalService.deleteSysJournalByIds(ids));
+    }
+
+    public List<SysUser> getUserList(String roleKey) {
+        StringBuffer sb = new StringBuffer();
+        SysUser sysUser = new SysUser();
+        sysUser.setRoleKey(roleKey);
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                        if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
+                            sysUser.setFormalFlag("0");
+                        }
+                    }
+                }
+            }
+        }
+        List<SysUser> sysUserList = sysUserService.selectUserByRoleKey(sysUser);
+        return sysUserList;
     }
 }

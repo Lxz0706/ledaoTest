@@ -11,6 +11,22 @@
                     <div class="select-list">
                         <ul>
                             <li>
+                                申请类型：
+                                <select id="applyType" name="applyType"
+                                        th:with="type=${@dict.getType('sys_file_apply_type')}"
+                                        data-none-selected-text="请选择">
+                                    <option value="">--请选择数据--</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <label>申请时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
+                            </li>
+                            <li>
                                 <label>档案类别：</label>
                                 <select id="documentType" name="documentType"
                                         th:with="type=${@dict.getType('sys_document_busi_type')}"
@@ -20,10 +36,6 @@
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                             th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
-                            <li id="projectName">
-                                <label>项目名称：</label>
-                                <input type="text" name="projectName"/>
                             </li>
                             <li>
                                 <label>公司名称：</label>
@@ -35,29 +47,13 @@
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
+                            <li id="projectName">
+                                <label>项目名称：</label>
+                                <input type="text" name="projectName" placeholder="请输入项目名称"/>
+                            </li>
                             <li id="debtorName">
                                 <label>债务人名称：</label>
-                                <input type="text" name="debtorName"/>
-                            </li>
-                            <li>
-                                <label>实际提交人：</label>
-                                <input type="text" name="applyUserName"/>
-                            </li>
-                            <li class="select-time">
-                                <label>申请时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
-                            </li>
-                            <li>
-                                <label>申请类型：</label>
-                                <select id="applyType" name="applyType"
-                                        th:with="type=${@dict.getType('sys_file_apply_type')}"
-                                        data-none-selected-text="请选择">
-                                    <option value="">--请选择数据--</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
+                                <input type="text" name="debtorName" placeholder="请输入债务人名称"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -134,19 +130,12 @@
                     }
                 },
                 {
-                    field: 'applyUser',
+                    field: 'applyUserName',
                     title: '申请人'
                 },
                 {
                     field: 'applyTime',
                     title: '申请时间'
-                },
-                {
-                    field: 'approveUser',
-                    title: '审批人',
-                    formatter: function(value, item, index) {
-                        return strLength(item.approveUser);
-                    }
                 },
                 {
                     field: 'approveStatu',
@@ -156,22 +145,11 @@
 		            }
                 },
                 {
-                    field: 'realCreateBy',
-                    title: '实际提交人',
-                    formatter: function(value, item, index) {
-                        return strLength(item.realCreateBy);
-                    }
-                },
-                {
                     field: 'remarks',
                     title: '备注',
                     formatter: function(value, item, index) {
                         return strLength(item.remarks);
                     }
-                },
-                {
-                    field: 'reviser',
-                    title: '修改人名称'
                 },
                 {
                     title: '操作',

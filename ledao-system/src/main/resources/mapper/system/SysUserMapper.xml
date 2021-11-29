@@ -117,6 +117,9 @@
         <if test="formalFlag != null  and formalFlag != ''">and u.formal_flag = #{formalFlag} and d.formal_flag =
             #{formalFlag}
         </if>
+        <if test="logName !=null and logName !=null">
+            and u.login_name not in (#{logName})
+        </if>
         <!-- 数据范围过滤 -->
         /*${params.dataScope}*/
     </select>

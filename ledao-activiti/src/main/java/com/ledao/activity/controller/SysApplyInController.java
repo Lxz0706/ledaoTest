@@ -51,29 +51,28 @@ import javax.validation.constraints.Size;
 
 /**
  * 档案入库申请Controller
- * 
+ *
  * @author lxz
  * @date 2021-08-04
  */
 @Controller
 @RequestMapping("/applyIn")
-public class SysApplyInController extends BaseController
-{
+public class SysApplyInController extends BaseController {
     private String prefix = "applyIn";
 
     @Autowired
     private ISysApplyInService sysApplyInService;
 
-    
+
     @Autowired
     private ISysApplyWorkflowService sysApplyWorkflowService;
 
     @Autowired
     private ISysUserService ISysUserService;
-    
+
     @Autowired
     private ISysDocumentFileService sysDocumentFileService;
-    
+
     @Autowired
     private ISysFileDetailService sysFileDetailService;
 
@@ -104,38 +103,37 @@ public class SysApplyInController extends BaseController
     private List<Long> applyIds = new ArrayList<>();
 
     @GetMapping("/applyIn")
-    public String applyIn()
-    {
+    public String applyIn() {
         return prefix + "/applyIn";
     }
 
 
-
-//    @RequiresPermissions("applyIn:view")
+    //    @RequiresPermissions("applyIn:view")
     @GetMapping("/docApplyIn")
-    public String docApplyIn()
-    {
+    public String docApplyIn() {
         return "docList/docApplyIn";
     }
+
     @GetMapping("/docEdit/{applyId}")
-    public String docEditApplyIn(@PathVariable("applyId") Long applyId, ModelMap mmap)
-    {
+    public String docEditApplyIn(@PathVariable("applyId") Long applyId, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
-        mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
+        mmap.put(("appStatu"), sysApplyIn.getApproveStatu());
         mmap.put("sysApplyIn", sysApplyIn);
         return "docList/docEdit";
     }
 
-    
+
     @GetMapping("/applyOut")
     public String applyOut(ModelMap modelMap) {
         return prefix + "/applyOut";
     }
+
     @GetMapping("/applyList")
     public String applyList(ModelMap modelMap) {
 //        我的已办
         return prefix + "/applyList";
     }
+
     @GetMapping("/applyUnDoneList")
     public String applyUnDoneList(ModelMap modelMap) {
 //        我的待办
@@ -149,10 +147,10 @@ public class SysApplyInController extends BaseController
     }
 
     @GetMapping("/inOutPage")
-    public String applyListByMe(Long documentId,String documentType,ModelMap modelMap) {
+    public String applyListByMe(Long documentId, String documentType, ModelMap modelMap) {
 //        我的申请
-        modelMap.put("documentId",documentId);
-        modelMap.put("documentType",documentType);
+        modelMap.put("documentId", documentId);
+        modelMap.put("documentType", documentType);
         return "docList/inOutPage";
     }
 
@@ -164,52 +162,52 @@ public class SysApplyInController extends BaseController
     @Log(title = "历史数据迁移", businessType = BusinessType.INSERT)
     @PostMapping("/importApplyIn")
     @ResponseBody
-    public AjaxResult importApplyIn(@RequestParam("file") MultipartFile file ) {
-        try{
+    public AjaxResult importApplyIn(@RequestParam("file") MultipartFile file) {
+        try {
             return sysApplyInService.importApplyIn(file);
-        }catch (Exception e){
-            return   AjaxResult.error("导入失败 "+e.getMessage(),e);
+        } catch (Exception e) {
+            return AjaxResult.error("导入失败 " + e.getMessage(), e);
         }
     }
 
     @GetMapping("/reject/{applyId}/{applyType}/{approveStatu}")
-    public String reject(@PathVariable("applyId") String applyId,@PathVariable("applyType") String applyType,
-                         @PathVariable("approveStatu") String approveStatu,ModelMap modelMap) {
+    public String reject(@PathVariable("applyId") String applyId, @PathVariable("applyType") String applyType,
+                         @PathVariable("approveStatu") String approveStatu, ModelMap modelMap) {
 //        我的添加审批拒绝备注
-        modelMap.put("applyId",applyId);
-        modelMap.put("applyType",applyType);
-        modelMap.put("approveStatu",approveStatu);
+        modelMap.put("applyId", applyId);
+        modelMap.put("applyType", applyType);
+        modelMap.put("approveStatu", approveStatu);
         return prefix + "/reject";
     }
 
     @GetMapping("/applyProcess/historyList/{applyId}")
-    public String historyProcess(@PathVariable("applyId") String applyId,ModelMap modelMap) {
+    public String historyProcess(@PathVariable("applyId") String applyId, ModelMap modelMap) {
 //        查看审批历史
         return "applyProcess/historyList";
     }
+
     @GetMapping("/processWorkDialog/{applyId}")
-    public String processWorkDialog(@PathVariable("applyId") String applyId,ModelMap modelMap) {
+    public String processWorkDialog(@PathVariable("applyId") String applyId, ModelMap modelMap) {
 //        查看审批历史
-        modelMap.put("applyId",applyId);
+        modelMap.put("applyId", applyId);
         return "applyIn/processWorkDialog";
     }
 
     @GetMapping("/fileDetail/{documentId}")
-    public String fileDetail(@PathVariable("documentId") Long documentId,ModelMap modelMap) {
+    public String fileDetail(@PathVariable("documentId") Long documentId, ModelMap modelMap) {
 //        查看档案附件
         SysFileDetail sysFileDetail = new SysFileDetail();
         sysFileDetail.setDocumentFileId(documentId);
         List<SysFileDetail> des = sysFileDetailService.selectSysFileDetailList(sysFileDetail);
-        modelMap.put("sysFileDetail",sysFileDetail);
+        modelMap.put("sysFileDetail", sysFileDetail);
         return "fileDetail/detail";
     }
 
     @GetMapping("/documentFile")
-    public String documentFile(String dataType,String documentType,String roleType,ModelMap mmap)
-    {
-        mmap.put("projectZckType",dataType);
-        mmap.put("documentType",documentType);
-        mmap.put("roleType",roleType);
+    public String documentFile(String dataType, String documentType, String roleType, ModelMap mmap) {
+        mmap.put("projectZckType", dataType);
+        mmap.put("documentType", documentType);
+        mmap.put("roleType", roleType);
         return "docList/docApplyInZcb";
     }
 
@@ -219,19 +217,18 @@ public class SysApplyInController extends BaseController
 //    @RequiresPermissions("applyIn:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo list(SysApplyIn sysApplyIn) {
         startPage();
         boolean isfileAdmin = false;
         SysUser u = ShiroUtils.getSysUser();
-        for (SysRole r: u.getRoles()){
-            if ("documentAdmin".equals(r.getRoleKey())){
+        for (SysRole r : u.getRoles()) {
+            if ("documentAdmin".equals(r.getRoleKey())) {
                 isfileAdmin = true;
                 continue;
             }
         }
-        if ("1".equals(sysApplyIn.getApplyType()) && isfileAdmin){
-        }else{
+        if ("1".equals(sysApplyIn.getApplyType()) && isfileAdmin) {
+        } else {
             sysApplyIn.setApplyUser(ShiroUtils.getLoginName());
         }
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(sysApplyIn);
@@ -241,8 +238,7 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/listInOutDetail")
     @ResponseBody
-    public TableDataInfo listInOutDetail(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo listInOutDetail(SysApplyIn sysApplyIn) {
         startPage();
         List<SysApplyIn> list = sysApplyInService.listInOutDetail(sysApplyIn);
         return getDataTable(list);
@@ -250,8 +246,7 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/docList")
     @ResponseBody
-    public TableDataInfo docList(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo docList(SysApplyIn sysApplyIn) {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(sysApplyIn);
         return getDataTable(list);
@@ -259,8 +254,7 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/docListDetail")
     @ResponseBody
-    public TableDataInfo docListDetail(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo docListDetail(SysApplyIn sysApplyIn) {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocDetailList(sysApplyIn);
         return getDataTable(list);
@@ -269,8 +263,7 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/docListDailyDetail")
     @ResponseBody
-    public TableDataInfo docListDailyDetail(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo docListDailyDetail(SysApplyIn sysApplyIn) {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInDailyDetailList(sysApplyIn);
         return getDataTable(list);
@@ -279,8 +272,7 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/docListDobtDetailByPName")
     @ResponseBody
-    public TableDataInfo docListDobtDetailByPName(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo docListDobtDetailByPName(SysApplyIn sysApplyIn) {
         startPage();
         List<SysApplyIn> list = sysApplyInService.docListDobtDetailByPName(sysApplyIn);
         return getDataTable(list);
@@ -288,8 +280,7 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/docListDetailByPName")
     @ResponseBody
-    public TableDataInfo docListDetailByPName(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo docListDetailByPName(SysApplyIn sysApplyIn) {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocByPNameDetailList(sysApplyIn);
         return getDataTable(list);
@@ -297,8 +288,7 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/docListDetailZcb")
     @ResponseBody
-    public TableDataInfo docListDetailZcb(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo docListDetailZcb(SysApplyIn sysApplyIn) {
         startPage();
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocDetailZcbList(sysApplyIn);
         return getDataTable(list);
@@ -306,13 +296,13 @@ public class SysApplyInController extends BaseController
 
     /**
      * 我的已办
+     *
      * @param sysApplyIn
      * @return
      */
     @PostMapping("/listByMe")
     @ResponseBody
-    public TableDataInfo listDownByMe(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo listDownByMe(SysApplyIn sysApplyIn) {
 //        sysApplyIn = new SysApplyIn();
         startPage();
         SysUser user = ShiroUtils.getSysUser();
@@ -323,29 +313,32 @@ public class SysApplyInController extends BaseController
 
     /**
      * 我的申请
+     *
      * @param
      * @return
      */
     @PostMapping("/applyListByMe")
     @ResponseBody
-    public TableDataInfo applyListByMe(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo applyListByMe(SysApplyIn sysApplyIn) {
         startPage();
         SysUser user = ShiroUtils.getSysUser();
-        sysApplyIn.setApplyUser(user.getLoginName());
+        sysApplyIn.setApproveStatu("3");
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
+        for (SysApplyIn sysApplyIn1 : list) {
+            sysApplyIn1.setApplyUserName(userMapper.selectUserByLoginName(sysApplyIn1.getApplyUser()).getUserName());
+        }
         return getDataTable(list);
     }
 
     /**
      * 我的待办
+     *
      * @param sysApplyIn
      * @return
      */
     @PostMapping("/listUnDownByMe")
     @ResponseBody
-    public TableDataInfo listUnDownByMe(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo listUnDownByMe(SysApplyIn sysApplyIn) {
 //        sysApplyIn = new SysApplyIn();
         startPage();
         SysUser user = ShiroUtils.getSysUser();
@@ -361,8 +354,7 @@ public class SysApplyInController extends BaseController
     @Log(title = "档案入库申请", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysApplyIn sysApplyIn)
-    {
+    public AjaxResult export(SysApplyIn sysApplyIn) {
         List<SysApplyIn> list = sysApplyInService.selectSysApplyInList(sysApplyIn);
         ExcelUtil<SysApplyIn> util = new ExcelUtil<SysApplyIn>(SysApplyIn.class);
         return util.exportExcel(list, "applyIn");
@@ -372,8 +364,7 @@ public class SysApplyInController extends BaseController
      * 新增档案入库申请
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -381,21 +372,20 @@ public class SysApplyInController extends BaseController
      * 新增档案入库申请
      */
     @GetMapping("/editOutList/{applyId}")
-    public String editOutList(@PathVariable("applyId") Long applyId,ModelMap mmap)
-    {
+    public String editOutList(@PathVariable("applyId") Long applyId, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
-        mmap.put("applyId",applyId);
-        mmap.put("sysApplyIn",sysApplyIn);
+        mmap.put("applyId", applyId);
+        mmap.put("sysApplyIn", sysApplyIn);
         return prefix + "/editOutList";
     }
+
     @GetMapping("/editOutUpdate/{outDetailId}")
-    public String editOutUpdate(@PathVariable("outDetailId") Long outDetailId,ModelMap mmap)
-    {
+    public String editOutUpdate(@PathVariable("outDetailId") Long outDetailId, ModelMap mmap) {
         SysApplyOutDetail sysApplyOutDetail = sysApplyOutDetailService.selectSysApplyOutDetailById(outDetailId);
         SysApplyIn in = sysApplyInService.selectSysApplyInById(sysApplyOutDetail.getApplyId());
-        mmap.put("outDetailId",outDetailId);
-        mmap.put("sysApplyOutDetail",sysApplyOutDetail);
-        mmap.put("approveStatu",in.getApproveStatu());
+        mmap.put("outDetailId", outDetailId);
+        mmap.put("sysApplyOutDetail", sysApplyOutDetail);
+        mmap.put("approveStatu", in.getApproveStatu());
         return prefix + "/editOutUpdate";
     }
 
@@ -403,21 +393,19 @@ public class SysApplyInController extends BaseController
      * 新增档案出库申请
      */
     @GetMapping("/addOut")
-    public String addOut(ModelMap mmap)
-    {
+    public String addOut(ModelMap mmap) {
         String roleType = sysApplyInService.checkUserRole(ShiroUtils.getSysUser());
-        mmap.put("roleType",roleType);
+        mmap.put("roleType", roleType);
         return prefix + "/addOut";
     }
 
     @PostMapping("/getRoleType")
     @ResponseBody
-    public AjaxResult getRoleType(@RequestParam("applyUser")String applyUser)
-    {
-        String  roleType = sysApplyInService.checkUserRole(ISysUserService.selectUserByLoginName(applyUser));
-        if (roleType!=null){
+    public AjaxResult getRoleType(@RequestParam("applyUser") String applyUser) {
+        String roleType = sysApplyInService.checkUserRole(ISysUserService.selectUserByLoginName(applyUser));
+        if (roleType != null) {
             return AjaxResult.success(roleType);
-        } else{
+        } else {
             return AjaxResult.error("无项目");
         }
 
@@ -429,66 +417,62 @@ public class SysApplyInController extends BaseController
      */
     @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}/{applyType}")
     public String editDocumentModal(@PathVariable("applyId") Long applyId
-            ,@PathVariable("documentTypeVal") String documentTypeVal
-            ,@PathVariable("applyType") String applyType
-            ,ModelMap mmap)
-    {
-        mmap.put("applyId",applyId);
-        mmap.put("documentTypeVal",documentTypeVal);
-        mmap.put("applyType",applyType);
+            , @PathVariable("documentTypeVal") String documentTypeVal
+            , @PathVariable("applyType") String applyType
+            , ModelMap mmap) {
+        mmap.put("applyId", applyId);
+        mmap.put("documentTypeVal", documentTypeVal);
+        mmap.put("applyType", applyType);
         return prefix + "/editDocumentModal";
     }
+
     /**
      * 我的待办
      */
     @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}/{applyType}/{applyTypeUnDone}")
     public String editDocumentModalUnDone(@PathVariable("applyId") Long applyId
-            ,@PathVariable("documentTypeVal") String documentTypeVal
-            ,@PathVariable("applyType") String applyType
-            ,@PathVariable("applyTypeUnDone") String applyTypeUnDone
-            ,ModelMap mmap)
-    {
-        mmap.put("applyId",applyId);
-        mmap.put("documentTypeVal",documentTypeVal);
-        mmap.put("applyType",applyType);
-        mmap.put("applyTypeUnDone",applyTypeUnDone);
+            , @PathVariable("documentTypeVal") String documentTypeVal
+            , @PathVariable("applyType") String applyType
+            , @PathVariable("applyTypeUnDone") String applyTypeUnDone
+            , ModelMap mmap) {
+        mmap.put("applyId", applyId);
+        mmap.put("documentTypeVal", documentTypeVal);
+        mmap.put("applyType", applyType);
+        mmap.put("applyTypeUnDone", applyTypeUnDone);
         return prefix + "/editDocumentModal";
     }
 
     @GetMapping("/editDocumentModal/{applyId}")
-    public String editDocumentModalUnDoneAdd(@PathVariable("applyId") Long applyId,ModelMap mmap)
-    {
+    public String editDocumentModalUnDoneAdd(@PathVariable("applyId") Long applyId, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("documentType", sysApplyIn.getDocumentType());
-        mmap.put("applyId",applyId);
+        mmap.put("applyId", applyId);
         return prefix + "/editDocumentModal";
     }
 
     @GetMapping("/selectPro")
-    public String selectPro(@RequestParam("roleType")String roleType, ModelMap mmap)
-    {
-        if("inve".equals(roleType)){
+    public String selectPro(@RequestParam("roleType") String roleType, ModelMap mmap) {
+        if ("inve".equals(roleType)) {
             return "dialogs/zcbQueryAll";
-        }else if ("thb".equals(roleType)){
+        } else if ("thb".equals(roleType)) {
             return "dialogs/projectZckByType";
-        }else if ("bg".equals(roleType)){
+        } else if ("bg".equals(roleType)) {
             return "dialogs/czbgQueryAll";
-        }else {
+        } else {
             return null;
         }
     }
 
     @GetMapping("/selectDebtor")
-    public String selectDebtor(@RequestParam("zcbId")String zcbId,@RequestParam("roleType")String roleType,ModelMap mmap)
-    {
-        mmap.put("proId",zcbId);
-        if ("inve".equals(roleType)){
+    public String selectDebtor(@RequestParam("zcbId") String zcbId, @RequestParam("roleType") String roleType, ModelMap mmap) {
+        mmap.put("proId", zcbId);
+        if ("inve".equals(roleType)) {
             return "dialogs/zck";
         }
 //        String roleType = sysApplyInService.checkUserRole();
-        if("thb".equals(roleType)){
+        if ("thb".equals(roleType)) {
             return "dialogs/project";
-        }else{
+        } else {
             return null;
         }
     }
@@ -500,8 +484,7 @@ public class SysApplyInController extends BaseController
     @Log(title = "档案入库申请(保存0)", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysApplyIn sysApplyIn)
-    {
+    public AjaxResult addSave(SysApplyIn sysApplyIn) {
         String userName = ShiroUtils.getLoginName();
         sysApplyIn.setCreateBy(userName);
         sysApplyIn.setCreateTime(new Date());
@@ -509,20 +492,20 @@ public class SysApplyInController extends BaseController
         sysApplyIn.setReviser(userName);
         sysApplyIn.setApproveStatu("0");
         //            判断当有实际提交人时，获取实际提交人的直属领导
-        if (StringUtils.isNotEmpty(sysApplyIn.getRealCreateBy())){
+        if (StringUtils.isNotEmpty(sysApplyIn.getRealCreateBy())) {
             SysUser realUser = ISysUserService.selectUserByLoginName(sysApplyIn.getRealCreateBy());
-            if (realUser!=null && StringUtils.isNotEmpty(realUser.getLoginName())){}
-            else{
+            if (realUser != null && StringUtils.isNotEmpty(realUser.getLoginName())) {
+            } else {
                 return AjaxResult.error("实际提交人不存在，请重新输入");
             }
         }
         sysApplyInService.insertSysApplyIn(sysApplyIn);
         Map resMpa = new HashMap();
-        resMpa.put("applyId",sysApplyIn.getApplyId());
+        resMpa.put("applyId", sysApplyIn.getApplyId());
         return AjaxResult.success(resMpa);
     }
-    
-    
+
+
     /**
      * 新增保存档案入库申请
      */
@@ -530,10 +513,9 @@ public class SysApplyInController extends BaseController
     @Log(title = "档案入库申请发起", businessType = BusinessType.INSERT)
     @PostMapping("/addSysApplyIn")
     @ResponseBody
-    public AjaxResult addSysApplyIn(SysApplyIn sysApplyIn)
-    {
+    public AjaxResult addSysApplyIn(SysApplyIn sysApplyIn) {
         sysApplyIn.setApproveStatu("0");
-    	sysApplyInService.insertSysApplyIn(sysApplyIn);
+        sysApplyInService.insertSysApplyIn(sysApplyIn);
         return toAjax(true);
     }
 
@@ -541,17 +523,16 @@ public class SysApplyInController extends BaseController
      * 修改档案入库申请
      */
     @GetMapping("/edit/{applyId}/{applyType}/{applyTypeUnDone}/{seOrEd}")
-    public String edit(@PathVariable("applyId") Long applyId,@PathVariable("applyType") String applyType,
-                       @PathVariable("applyTypeUnDone") String applyTypeUnDone,@PathVariable("seOrEd") String seOrEd,ModelMap mmap)
-    {
+    public String edit(@PathVariable("applyId") Long applyId, @PathVariable("applyType") String applyType,
+                       @PathVariable("applyTypeUnDone") String applyTypeUnDone, @PathVariable("seOrEd") String seOrEd, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
-        mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
+        mmap.put(("appStatu"), sysApplyIn.getApproveStatu());
         mmap.put("applyTypeUnDone", applyTypeUnDone);
         mmap.put("seOrEd", seOrEd);
-        if ("1".equals(applyType)){
+        if ("1".equals(applyType)) {
             String roleType = sysApplyInService.checkUserRole(ShiroUtils.getSysUser());
-            mmap.put("roleType",roleType);
+            mmap.put("roleType", roleType);
             return prefix + "/editOut";
         }
         return prefix + "/edit";
@@ -561,10 +542,9 @@ public class SysApplyInController extends BaseController
      * 修改档案入库申请
      */
     @GetMapping("/edit/{applyId}")
-    public String editApplyIn(@PathVariable("applyId") Long applyId, ModelMap mmap)
-    {
+    public String editApplyIn(@PathVariable("applyId") Long applyId, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
-        mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
+        mmap.put(("appStatu"), sysApplyIn.getApproveStatu());
         mmap.put("sysApplyIn", sysApplyIn);
         return prefix + "/edit";
     }
@@ -573,13 +553,12 @@ public class SysApplyInController extends BaseController
      * 修改档案入库申请
      */
     @GetMapping("/editOut/{applyId}")
-    public String editOut(@PathVariable("applyId") Long applyId, ModelMap mmap)
-    {
+    public String editOut(@PathVariable("applyId") Long applyId, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
-        mmap.put(("appStatu"),sysApplyIn.getApproveStatu());
+        mmap.put(("appStatu"), sysApplyIn.getApproveStatu());
         String roleType = sysApplyInService.checkUserRole(ISysUserService.selectUserByLoginName(sysApplyIn.getApplyUser()));
-        mmap.put("roleType",roleType);
+        mmap.put("roleType", roleType);
         return prefix + "/editOut";
     }
 
@@ -587,8 +566,7 @@ public class SysApplyInController extends BaseController
      * 修改档案入库申请
      */
     @GetMapping("/applyBack/{applyId}")
-    public String applyBack(@PathVariable("applyId") Long applyId, ModelMap mmap)
-    {
+    public String applyBack(@PathVariable("applyId") Long applyId, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
         return prefix + "/edit";
@@ -597,25 +575,26 @@ public class SysApplyInController extends BaseController
 
     /**
      * 接收二维码
+     *
      * @return
      * @throws IOException
      */
-    @GetMapping(value="/code")
+    @GetMapping(value = "/code")
     public Object twoCode(Long documentId, HttpServletResponse response) throws Exception {
-        JSONObject data=new JSONObject();
+        JSONObject data = new JSONObject();
         String accessToken = null;
-        try{
+        try {
             JSONObject parmData = new JSONObject();
-            parmData.put("scene",documentId);
+            parmData.put("scene", documentId);
             // 提交// 提交 提交使用
-            parmData.put("url","pages/lookInformation/index");
+            parmData.put("url", "pages/lookInformation/index");
 
 
             String parm = parmData.toString();
             /*accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
             System.out.println("accessToken;"+accessToken);*/
             accessToken = configService.getWechatAccessToken();
-            if (StringUtils.isEmpty(accessToken)){
+            if (StringUtils.isEmpty(accessToken)) {
                 throw new RuntimeException("获取accessToken失败");
             }
 /*            com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken,"");
@@ -624,10 +603,10 @@ public class SysApplyInController extends BaseController
             Map m = (Map) res.get("data");
             openIds = (List<String>) m.get("openid");
             WechatMessageUtil.batchGetUserUnionId(accessToken,openIds);*/
-            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
+            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(), response, parm);
             data.put("twoCodeUrl", twoCodeUrl);
             return data;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -640,8 +619,7 @@ public class SysApplyInController extends BaseController
     @Log(title = "档案入库申请", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(SysApplyIn sysApplyIn)
-    {
+    public AjaxResult editSave(SysApplyIn sysApplyIn) {
         return toAjax(sysApplyInService.editSave(sysApplyIn));
     }
 
@@ -651,108 +629,98 @@ public class SysApplyInController extends BaseController
     @Log(title = "档案状态修改", businessType = BusinessType.UPDATE)
     @PostMapping("/applyEditSave")
     @ResponseBody
-    public synchronized AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request)
-    {
+    public synchronized AjaxResult applyEditSave(SysApplyIn sysApplyIn, HttpServletRequest request) {
         AjaxResult res = new AjaxResult();
         try {
-            res = sysApplyInService.applyEditSave(sysApplyIn,request);
+            res = sysApplyInService.applyEditSave(sysApplyIn, request);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
 //            applyIds.remove(sysApplyIn.getApplyId());
         }
         return res;
     }
 
     @GetMapping("/documentTypeListOpen")
-    public String documentTypeListOpen()
-    {
+    public String documentTypeListOpen() {
         return "docList/documentTypeList";
     }
 
     @GetMapping("/documentTypeListBack")
-    public String documentTypeListBack(String documentType,String roleType,ModelMap mmap)
-    {
-        mmap.put("roleType",roleType);
-        if ("0".equals(documentType)){
-            mmap.put("documentType",documentType);
-            if ("thb".equals(roleType)){
+    public String documentTypeListBack(String documentType, String roleType, ModelMap mmap) {
+        mmap.put("roleType", roleType);
+        if ("0".equals(documentType)) {
+            mmap.put("documentType", documentType);
+            if ("thb".equals(roleType)) {
                 return "docList/documentDetailTypeList";
             }
             return "docList/docProTypeMu";
-        }else{
+        } else {
             return "docList/documentTypeList";
         }
     }
 
     @GetMapping("/backDocumentTypeList")
-    public String backDocumentTypeList()
-    {
+    public String backDocumentTypeList() {
         return "docList/documentTypeList";
     }
 
     @GetMapping("/documentDetailTypeListOpen")
-    public String documentDetailTypeListOpen(String docType, ModelMap mmap)
-    {
-        mmap.put("documentType",docType);
-        if ("0".equals(docType)){
+    public String documentDetailTypeListOpen(String docType, ModelMap mmap) {
+        mmap.put("documentType", docType);
+        if ("0".equals(docType)) {
             return "docList/docProTypeMu";
-        }else{
+        } else {
             return "docList/docApplyInDaily";
         }
     }
 
     @GetMapping("/docProTypeMu")
-    public String docProTypeMu(String roleType, ModelMap mmap)
-    {
-        mmap.put("roleType",roleType);
-        mmap.put("documentType","0");
-        if ("thb".equals(roleType)){
+    public String docProTypeMu(String roleType, ModelMap mmap) {
+        mmap.put("roleType", roleType);
+        mmap.put("documentType", "0");
+        if ("thb".equals(roleType)) {
             return "docList/documentDetailTypeList";
-        }else if ("bg".equals(roleType)){
+        } else if ("bg".equals(roleType)) {
             //大型单体的项目类/资产包页面
             return "docList/docApplyInZcb";
-        }else{
+        } else {
             //投资的项目类/资产包页面
             return "docList/docApplyInZcb";
         }
     }
 
 
-
     @GetMapping("/docApplyInZcbDetail")
-    public String docApplyInZcbDetail(String roleType, String documentType,String projectName,String projectZckType, ModelMap mmap)
-    {
-        mmap.put("projectZckType",projectZckType);
-        mmap.put("roleType",roleType);
-        mmap.put("documentType",documentType);
-        mmap.put("projectName",projectName);
-        if ("bg".equals(roleType)){
+    public String docApplyInZcbDetail(String roleType, String documentType, String projectName, String projectZckType, ModelMap mmap) {
+        mmap.put("projectZckType", projectZckType);
+        mmap.put("roleType", roleType);
+        mmap.put("documentType", documentType);
+        mmap.put("projectName", projectName);
+        if ("bg".equals(roleType)) {
             return "docList/docApplyInZcbDebtDetail";
-        }else{
+        } else {
             return "docList/docApplyInZcbDetail";
         }
 //        return "docList/docApplyInZcbDebtDetail";
     }
 
     @GetMapping("/docApplyInZcbDebtDetail")
-    public String docApplyInZcbDebtDetail(String roleType, String documentType,String projectName,String projectZckType,String debtorName, ModelMap mmap)
-    {
-        mmap.put("projectZckType",projectZckType);
-        mmap.put("roleType",roleType);
-        mmap.put("documentType",documentType);
-        mmap.put("projectName",projectName);
-        mmap.put("debtorName",debtorName);
+    public String docApplyInZcbDebtDetail(String roleType, String documentType, String projectName, String projectZckType, String debtorName, ModelMap mmap) {
+        mmap.put("projectZckType", projectZckType);
+        mmap.put("roleType", roleType);
+        mmap.put("documentType", documentType);
+        mmap.put("projectName", projectName);
+        mmap.put("debtorName", debtorName);
         //投资详情展示页面
         return "docList/docApplyInZcbDebtDetail";
     }
 
     @GetMapping("/docApplyInDailyDetail")
-    public String docApplyInDailyDetail(String roleType, String documentType,String companyName, ModelMap mmap)
-    {
-        mmap.put("roleType",roleType);
-        mmap.put("documentType",documentType);
-        mmap.put("companyName",companyName);
+    public String docApplyInDailyDetail(String roleType, String documentType, String companyName, ModelMap mmap) {
+        mmap.put("roleType", roleType);
+        mmap.put("documentType", documentType);
+        mmap.put("companyName", companyName);
         return "docList/docApplyInDailyDetail";
     }
 
@@ -767,20 +735,19 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/documentDetailTypeList/{docType}")
     @ResponseBody
-    public TableDataInfo documentDetailTypeList(@PathVariable("docType")String docType) {
+    public TableDataInfo documentDetailTypeList(@PathVariable("docType") String docType) {
         List<SysDictData> sysDictDataList = new ArrayList<>();
 //        项目类
-        if ("0".equals(docType)){
+        if ("0".equals(docType)) {
             startPage();
             sysDictDataList = sysDictDataService.selectDictDataByType("sys_project_type");
         }
         return getDataTable(sysDictDataList);
     }
-    
+
     @PostMapping("/selectSysApplyWorkflowList")
     @ResponseBody
-    public TableDataInfo selectSysApplyWorkflowList(SysApplyIn sysApplyIn)
-    {
+    public TableDataInfo selectSysApplyWorkflowList(SysApplyIn sysApplyIn) {
         List<SysApplyWorkflow> list = sysApplyWorkflowService.selectSysApplyWorkflowList(sysApplyIn);
         return getDataTable(list);
     }
@@ -790,15 +757,14 @@ public class SysApplyInController extends BaseController
      */
 //    @RequiresPermissions("applyIn:remove")
     @Log(title = "档案入库申请", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         String loginName = ShiroUtils.getLoginName();
         String[] idsArr = Convert.toStrArray(ids);
-        for (String id:idsArr) {
+        for (String id : idsArr) {
             SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(Long.parseLong(id));
-            if (sysApplyIn==null || !loginName.equals(sysApplyIn.getApplyUser())){
+            if (sysApplyIn == null || !loginName.equals(sysApplyIn.getApplyUser())) {
                 return AjaxResult.error("不可操作");
             }
         }
@@ -806,16 +772,16 @@ public class SysApplyInController extends BaseController
         return res;
     }
 
-    private List<String> getUsers(String roleKey){
+    private List<String> getUsers(String roleKey) {
         List<String> users = new ArrayList<>();
         SysRole r = new SysRole();
         r.setRoleKey(roleKey);
         List<SysRole> ros = roleMapper.selectRoleList(r);
-        if (ros!=null && ros.size()>0){
+        if (ros != null && ros.size() > 0) {
             SysUser userRoles = new SysUser();
             userRoles.setRoleId(ros.get(0).getRoleId());
-            List<SysUser> us =  userMapper.selectAllocatedList(userRoles);
-            for (SysUser u: us) {
+            List<SysUser> us = userMapper.selectAllocatedList(userRoles);
+            for (SysUser u : us) {
                 users.add(u.getLoginName());
             }
         }
@@ -825,35 +791,34 @@ public class SysApplyInController extends BaseController
 
     @PostMapping("/selectSysApplyWorkflowProcess")
     @ResponseBody
-    public TableDataInfo selectSysApplyWorkflowProcess(SysWorkflowProcess sysWorkflowProcess)
-    {
+    public TableDataInfo selectSysApplyWorkflowProcess(SysWorkflowProcess sysWorkflowProcess) {
         List<SysWorkflowProcess> listSort = new ArrayList<>();
         int index = 0;
         List<SysWorkflowProcess> list = sysWorkflowProcessMapper.selectSysWorkflowProcessList(sysWorkflowProcess);
 
         List<String> jls = getUsers("flgw");
-        for (int i=0;i<list.size();i++) {
+        for (int i = 0; i < list.size(); i++) {
             SysWorkflowProcess pro = list.get(i);
-            if (StringUtils.isNotEmpty(pro.getApplyUserName())){
-                if(pro.getApplyUserName().length()>1){
-                    pro.setNameEndStr(pro.getApplyUserName().substring(pro.getApplyUserName().length()-2));
-                }else {
+            if (StringUtils.isNotEmpty(pro.getApplyUserName())) {
+                if (pro.getApplyUserName().length() > 1) {
+                    pro.setNameEndStr(pro.getApplyUserName().substring(pro.getApplyUserName().length() - 2));
+                } else {
                     pro.setNameEndStr(pro.getApplyUserName());
                 }
             }
 
-            if ("0".equals(pro.getApplyStatu()) && pro.getId()!=list.get(0).getId()){
-                pro.setApplyUserName(pro.getApplyUserName()+"(已同意)");
+            if ("0".equals(pro.getApplyStatu()) && pro.getId() != list.get(0).getId()) {
+                pro.setApplyUserName(pro.getApplyUserName() + "(已同意)");
             }
-            if (StringUtils.isNotEmpty(pro.getShowLable())){
-                String showLable = sysDictDataService.selectDictLabel("apply_statu",pro.getShowLable());
-                if (StringUtils.isNotEmpty(showLable)){
+            if (StringUtils.isNotEmpty(pro.getShowLable())) {
+                String showLable = sysDictDataService.selectDictLabel("apply_statu", pro.getShowLable());
+                if (StringUtils.isNotEmpty(showLable)) {
                     pro.setShowLable(showLable);
                 }
             }
-            if (jls.contains(pro.getApplyLoginName()) && "fw".equals(pro.getRemark2())){
+            if (jls.contains(pro.getApplyLoginName()) && "fw".equals(pro.getRemark2())) {
                 listSort.add(pro);
-                if (index == 0){
+                if (index == 0) {
                     index = i;
                 }
             }
@@ -863,11 +828,11 @@ public class SysApplyInController extends BaseController
         //对不带时间类型的集合进行排序
         List<SysWorkflowProcess> pros = new ArrayList<>();
         List<SysWorkflowProcess> listSortHasDate = new ArrayList<>();
-        for (int i=0;i<listSort.size();i++) {
+        for (int i = 0; i < listSort.size(); i++) {
             SysWorkflowProcess pro = listSort.get(i);
-            if (pro.getApplyTime()==null){
+            if (pro.getApplyTime() == null) {
                 pros.add(pro);
-            }else{
+            } else {
                 listSortHasDate.add(pro);
             }
         }
@@ -886,15 +851,15 @@ public class SysApplyInController extends BaseController
             });
         }*/
 
-        for (SysWorkflowProcess p:pros){
+        for (SysWorkflowProcess p : pros) {
             listSortHasDate.add(p);
         }
         /*for (int i=pros.size()-1;i>-1; i--) {
             list.set(index,pros.get(i));
             index++;
         }*/
-        for (int i=0;i<listSortHasDate.size(); i++) {
-            list.set(index,listSortHasDate.get(i));
+        for (int i = 0; i < listSortHasDate.size(); i++) {
+            list.set(index, listSortHasDate.get(i));
             index++;
         }
 

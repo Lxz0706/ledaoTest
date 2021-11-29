@@ -96,8 +96,10 @@ public class SysJournalController extends BaseController {
                         }
                         if (!"thbManager".equals(sysRole.getRoleKey()) && !"thbManager2".equals(sysRole.getRoleKey())
                                 && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
-                                && !"documentAdmin".equals(sysRole.getRoleKey())  && !"Cc".equals(sysRole.getRoleKey())) {
-                            sysUser.setLogName(StringUtils.removeSameString(sb.toString(), ","));
+                                && !"documentAdmin".equals(sysRole.getRoleKey()) && !"Cc".equals(sysRole.getRoleKey())) {
+                            if (StringUtils.isNotEmpty(sb.toString())) {
+                                sysUser.setLogName(sb.toString().substring(0, sb.toString().length() - 1));
+                            }
                         }
                     }
                 }

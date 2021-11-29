@@ -13,7 +13,6 @@ import com.ledao.system.dao.*;
 import com.ledao.system.mapper.*;
 import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDictDataService;
-import com.ledao.system.service.impl.SysConfigServiceImpl;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.apache.activemq.command.ActiveMQQueue;
@@ -968,12 +967,20 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 users.add(sysApplyInEntity.getApplyUser());
                 if ("0".equals(sysApplyInEntity.getApplyType())) {
                     //入库申请，审批的同时，发送给yangxu，xulinyi，qianwanping
-                    users.add("yangxudong-send");
-                    users.add("xulinyi-send");
-                    users.add("qianwanping-send");
+//                    users.add("yangxudong-send");
+//                    users.add("xulinyi-send");
+//                    users.add("qianwanping-send");
+                    List<SysUser> sysUserList = getUserList("Cc");
+                    for (SysUser sysUser1 : sysUserList) {
+                        users.add(sysUser1.getLoginName() + "-send");
+                    }
                 } else if ("1".equals(sysApplyInEntity.getApplyType())) {
-                    users.add("xulinyi-send");
-                    users.add("qianwanping-send");
+//                    users.add("xulinyi-send");
+//                    users.add("qianwanping-send");
+                    List<SysUser> sysUserList = getUserList("Cc");
+                    for (SysUser sysUser1 : sysUserList) {
+                        users.add(sysUser1.getLoginName() + "-send");
+                    }
                 }
             }
             sendMsg(users, sysApplyInEntity, "");
@@ -1683,5 +1690,13 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 jmsMessagingTemplate.convertAndSend(queue, dataStr);
             }
         }
+    }
+
+    public List<SysUser> getUserList(String roleKey) {
+        StringBuffer sb = new StringBuffer();
+        SysUser sysUser = new SysUser();
+        sysUser.setRoleKey(roleKey);
+        List<SysUser> sysUserList = userMapper.selectUserByRoleKey(sysUser);
+        return sysUserList;
     }
 }

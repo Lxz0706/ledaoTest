@@ -120,4 +120,11 @@ public interface ISysDeptService {
     List<SysUser> selectUserListByDepId(SysDept dept,SysUser sysUser);
 
     List<SysDept> selectDeptOneLevelList(SysDept dept);
+
+    /**
+     * 根据depts查询部门
+     * @param depts
+     * @return
+     */
+    public List<SysDept> selectDeptByIds(String depts);
 }

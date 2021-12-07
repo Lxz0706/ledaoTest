@@ -81,6 +81,8 @@ public class SysDept extends BaseEntity {
      */
     private String formalFlag;
 
+    private String depts;
+
     public String getUserName() {
         return userName;
     }
@@ -199,6 +201,14 @@ public class SysDept extends BaseEntity {
         this.formalFlag = formalFlag;
     }
 
+    public String getDepts() {
+        return depts;
+    }
+
+    public void setDepts(String depts) {
+        this.depts = depts;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -218,6 +228,7 @@ public class SysDept extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("formalFlag", getFormalFlag())
+                .append("depts", getDepts())
                 .toString();
     }
 }

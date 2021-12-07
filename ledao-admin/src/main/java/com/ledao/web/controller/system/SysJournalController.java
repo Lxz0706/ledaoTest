@@ -1,13 +1,13 @@
 package com.ledao.web.controller.system;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysDept;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysUser;
+import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysDeptService;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.dao.SysJournal;
 import com.ledao.system.service.ISysJournalService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
@@ -80,7 +79,7 @@ public class SysJournalController extends BaseController {
         StringBuffer sb = new StringBuffer();
         for (SysUser sysUser : sysUserList) {
             if (StringUtils.isNotNull(sysUser) && StringUtils.isNotEmpty(sysUser.getLoginName())) {
-                sb.append(sysUser.getLoginName());
+                sb.append(sysUser.getLoginName()).append(",");
             }
         }
 
@@ -97,7 +96,7 @@ public class SysJournalController extends BaseController {
                         if (!"thbManager".equals(sysRole.getRoleKey()) && !"thbManager2".equals(sysRole.getRoleKey())
                                 && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
                                 && !"documentAdmin".equals(sysRole.getRoleKey()) && !"Cc".equals(sysRole.getRoleKey())) {
-                            if (StringUtils.isNotEmpty(sb.toString())) {
+                            if (StringUtils.isNotEmpty(sb.toString()) && sb.toString().length() > 0) {
                                 sysUser.setLogName(sb.toString().substring(0, sb.toString().length() - 1));
                             }
                         }
@@ -140,16 +139,21 @@ public class SysJournalController extends BaseController {
         SysUser user = ShiroUtils.getSysUser();
         List<SysRole> getRoles = user.getRoles();
         boolean isZjl = false;
+        StringBuffer sb = new StringBuffer();
+        sb.append(user.getDeptId());
         if ("admin".equals(user.getLoginName()) || "xulinyi".equals(user.getLoginName())
                 || "lixiangzhen".equals(user.getLoginName()) || "weicaixuan".equals(user.getLoginName())) {
             //允许查看所有日志的账号
             isZjl = true;
         } else {
             for (SysRole sysRole : getRoles) {
-                if ("zjl".equals(sysRole.getRoleKey())) {
+                if ("zjl".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())) {
                     //允许查看所有日志的角色
                     isZjl = true;
                     continue;
+                }
+                if ("fkbjl".equals(sysRole.getRoleKey()) || "flgw".equals(sysRole.getRoleKey())) {
+                    sb.append(",").append("202");
                 }
             }
         }
@@ -161,17 +165,19 @@ public class SysJournalController extends BaseController {
             return getDataTable(deps);
         } else {
             List<SysDept> dts = new ArrayList<>();
-            SysDept deptNew = deptService.selectDeptById(user.getDeptId());
-            for (SysDept d : deps) {
-                if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())) {
-                    dts.add(d);
-                    return getDataTable(dts);
-                }
-                String[] depstra = deptNew.getAncestors().split(",");
-                for (String ds : depstra) {
-                    if (ds.equals(d.getDeptId().toString())) {
+            List<SysDept> list = deptService.selectDeptByIds(sb.toString());
+            for (SysDept deptNew : list) {
+                for (SysDept d : deps) {
+                    if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())) {
                         dts.add(d);
-                        return getDataTable(dts);
+                        //return getDataTable(dts);
+                    }
+                    String[] depstra = deptNew.getAncestors().split(",");
+                    for (String ds : depstra) {
+                        if (ds.equals(d.getDeptId().toString())) {
+                            dts.add(d);
+                            //return getDataTable(dts);
+                        }
                     }
                 }
             }
@@ -254,7 +260,7 @@ public class SysJournalController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                             sysUser.setFormalFlag("0");
                         }
@@ -264,5 +270,18 @@ public class SysJournalController extends BaseController {
         }
         List<SysUser> sysUserList = sysUserService.selectUserByRoleKey(sysUser);
         return sysUserList;
+    }
+
+    /**
+     * 日志详情
+     *
+     * @param id
+     * @param mmap
+     * @return
+     */
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+        mmap.put("sysJournal", sysJournalService.selectSysJournalById(id));
+        return prefix + "/detail";
     }
 }

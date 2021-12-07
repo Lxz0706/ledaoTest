@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.ledao.common.core.text.Convert;
 import com.ledao.system.dao.SysUser;
 import com.ledao.system.mapper.SysUserMapper;
 import org.apache.commons.lang3.ArrayUtils;
@@ -310,4 +311,16 @@ public class SysDeptServiceImpl implements ISysDeptService {
     public List<SysDept> selectDeptOneLevelList(SysDept dept) {
         return deptMapper.selectDeptOneLevelList(dept);
     }
+
+    /**
+     * 根据depts查询部门
+     *
+     * @param depts
+     * @return
+     */
+    @Override
+    public List<SysDept> selectDeptByIds(String depts) {
+        return deptMapper.selectDeptByIds(Convert.toStrArray(depts));
+    }
+
 }

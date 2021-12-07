@@ -495,7 +495,7 @@ public class TimedTask {
         String date = DateUtils.formatDateByPattern(new Date(), "yyyyMMdd");
         SysJournal sj = new SysJournal();
         sj.getParams().put("beginTime", date);
-        ;
+
         List<SysJournal> jours = sysJournalService.selectSysJournalList(sj);
         for (SysJournal j : jours) {
             if (loginNames.contains(j.getCreateBy()) && StringUtils.isNotEmpty(j.getProId())) {

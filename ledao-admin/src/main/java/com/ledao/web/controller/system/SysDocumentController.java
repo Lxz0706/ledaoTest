@@ -164,7 +164,7 @@ public class SysDocumentController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                            && !"admin".equals(sysRole.getRoleKey())) {
+                            && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         sysDocument.setShareUserName(ShiroUtils.getSysUser().getUserName());
                     }
                 }
@@ -177,7 +177,7 @@ public class SysDocumentController extends BaseController {
                 if (!currentUser.isAdmin()) {
                     List<SysRole> getRoles = currentUser.getRoles();
                     for (SysRole sysRole : getRoles) {
-                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
+                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey()) || "zjl".equals(sysRole.getRoleKey())
                                 || "admin".equals(sysRole.getRoleKey()) || ShiroUtils.getLoginName().equals(sysDocument1.getCreateBy())) {
                             sysDocument1.setIsAdmin("Y");
                         }
@@ -351,7 +351,7 @@ public class SysDocumentController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                            && !"admin".equals(sysRole.getRoleKey())) {
+                            && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         sysDocument.setShareUserName(ShiroUtils.getSysUser().getUserName());
                     }
                 }
@@ -383,7 +383,7 @@ public class SysDocumentController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                            && !"admin".equals(sysRole.getRoleKey())) {
+                            && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         sysDocument.setShareUserName(ShiroUtils.getSysUser().getUserName());
                     }
                 }
@@ -396,7 +396,7 @@ public class SysDocumentController extends BaseController {
                 if (!currentUser.isAdmin()) {
                     List<SysRole> getRoles = currentUser.getRoles();
                     for (SysRole sysRole : getRoles) {
-                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())
+                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey()) || "zjl".equals(sysRole.getRoleKey())
                                 || "admin".equals(sysRole.getRoleKey()) || ShiroUtils.getLoginName().equals(sysDocument1.getCreateBy())) {
                             sysDocument1.setIsAdmin("Y");
                         }

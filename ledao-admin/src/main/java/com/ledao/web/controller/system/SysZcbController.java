@@ -95,7 +95,7 @@ public class SysZcbController extends BaseController {
                         //投资部经理，大型单体经理，高层角色
                         if (!"investmentManager".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
                                 || !"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) &&
-                                !"investmentManager2".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
+                                !"investmentManager2".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                             sysZcb1.setCollateralTotal(new BigDecimal(0));
                             sysZcb1.setCapValue(new BigDecimal(0));
                         }
@@ -107,7 +107,7 @@ public class SysZcbController extends BaseController {
             sysPcustomer1.setProjectId(Long.valueOf(sysZcb1.getId()));
             if (!currentUser.isAdmin()) {
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
                             && !"investmentManager".equals(sysRole.getRoleKey())) {
                         sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
                     }
@@ -133,7 +133,7 @@ public class SysZcbController extends BaseController {
             // 如果是超级管理员，则不过滤数据
             if (!currentUser.isAdmin()) {
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
                             && !"investmentManager".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
                         sysZcb.setTeamMembersId(currentUser.getUserId().toString());
                     }
@@ -148,8 +148,8 @@ public class SysZcbController extends BaseController {
                 if (!currentUser.isAdmin()) {
                     for (SysRole sysRole : getRoles) {
                         //投资部经理，大型单体经理，高层角色
-                        if (!"investmentManager".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                                || !"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) &&
+                        if (!"investmentManager".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
+                                && !"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) &&
                                 !"investmentManager2".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
                             sysZcb1.setCollateralTotal(new BigDecimal(0));
                             sysZcb1.setCapValue(new BigDecimal(0));
@@ -162,7 +162,7 @@ public class SysZcbController extends BaseController {
             sysPcustomer1.setProjectId(Long.valueOf(sysZcb1.getId()));
             if (!currentUser.isAdmin()) {
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
                             && !"investmentManager".equals(sysRole.getRoleKey())) {
                         sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
                     }

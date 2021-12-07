@@ -2,6 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
+import com.ledao.common.utils.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import com.ledao.system.dao.SysDept;
 
@@ -124,4 +125,11 @@ public interface SysDeptMapper {
     public List<SysDept> selectDeptByParentId(Long parentId);
 
     List<SysDept> selectDeptOneLevelList(SysDept dept);
+
+    /**
+     * 根据depts查询部门
+     * @param depts
+     * @return
+     */
+    public List<SysDept> selectDeptByIds(String[] depts);
 }

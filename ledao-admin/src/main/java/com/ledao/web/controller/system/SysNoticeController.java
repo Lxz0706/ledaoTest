@@ -93,7 +93,7 @@ public class SysNoticeController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         notice.setCreateBy(ShiroUtils.getLoginName());
                         notice.setReceiver(ShiroUtils.getSysUser().getUserName());
                     }
@@ -436,7 +436,7 @@ public class SysNoticeController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         sysNotice.setCreateBy(ShiroUtils.getLoginName());
                         sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
                     }

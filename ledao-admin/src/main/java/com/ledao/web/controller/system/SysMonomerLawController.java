@@ -274,7 +274,7 @@ public class SysMonomerLawController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                             sysUser.setFormalFlag("0");
                         }

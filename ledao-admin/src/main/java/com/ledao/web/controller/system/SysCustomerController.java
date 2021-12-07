@@ -1,29 +1,16 @@
 package com.ledao.web.controller.system;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.dingtalk.api.DefaultDingTalkClient;
-import com.dingtalk.api.DingTalkClient;
-import com.dingtalk.api.request.OapiGettokenRequest;
-import com.dingtalk.api.response.OapiGettokenResponse;
 import com.github.pagehelper.PageHelper;
-import com.ledao.activity.service.ISysApplyInService;
 import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.annotation.Log;
-import com.ledao.common.constant.Constants;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.common.core.page.PageDao;
 import com.ledao.common.core.page.TableDataInfo;
-import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.common.utils.DateUtils;
-import com.ledao.common.utils.ServletUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.common.utils.freemarker.WorldUtil;
 import com.ledao.common.utils.poi.ExcelUtil;
-import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
@@ -32,22 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import com.dingtalk.api.request.*;
-import com.dingtalk.api.response.*;
-import com.ledao.common.annotation.ExcelModel;
-import com.taobao.api.ApiException;
 
-import javax.crypto.KeyGenerator;
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.security.Key;
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -108,7 +80,7 @@ public class SysCustomerController<main> extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey())) {
+                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         /*if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey()) || "investmentCommon".equals(sysRole.getRoleKey())
                                 || "investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
                             String ids = "201,207,208,209";
@@ -135,7 +107,7 @@ public class SysCustomerController<main> extends BaseController {
                     List<SysRole> getRoles = currentUser1.getRoles();
                     for (SysRole sysRole : getRoles) {
 
-                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())) {
+                        if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey()) || "zjl".equals(sysRole.getRoleKey())) {
                             sysCustomer1.setIsAdmin("Y");
                         } else {
                             if ("thbManager".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey()) || "tzbzz".equals(sysRole.getRoleKey())
@@ -230,7 +202,7 @@ public class SysCustomerController<main> extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         isAdmin = false;
                         modelMap.put("isAdmin", isAdmin);
                     } else {
@@ -313,7 +285,7 @@ public class SysCustomerController<main> extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         isAdmin = false;
                         mmap.put("isAdmin", isAdmin);
                     } else {
@@ -529,7 +501,7 @@ public class SysCustomerController<main> extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         if ("bgczCommon".equals(sysRole.getRoleKey()) || "bgczManager".equals(sysRole.getRoleKey()) || "investmentCommon".equals(sysRole.getRoleKey())
                                 || "investmentManager2".equals(sysRole.getRoleKey()) || "investmentManager".equals(sysRole.getRoleKey())) {
                             String ids = "201,207,208,209";
@@ -551,7 +523,7 @@ public class SysCustomerController<main> extends BaseController {
                 if (!currentUser1.isAdmin()) {
                     List<SysRole> getRoles = currentUser1.getRoles();
                     for (SysRole sysRole : getRoles) {
-                        if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                        if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                             if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
                                     && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
                                 //  sysItem.setCreateBy(ShiroUtils.getLoginName());
@@ -603,7 +575,7 @@ public class SysCustomerController<main> extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
                                 && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())) {
                             mmap.put("deptId", 202);
@@ -634,7 +606,7 @@ public class SysCustomerController<main> extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
                         isAdmin = false;
                         mmap.put("isAdmin", isAdmin);
                     } else {

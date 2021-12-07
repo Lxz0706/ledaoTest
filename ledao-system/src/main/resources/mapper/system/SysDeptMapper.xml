@@ -25,18 +25,31 @@
     </resultMap>
 
     <sql id="selectDeptVo">
-        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num,d.leader_id, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by,
-        d.create_time, d.formal_flag
+        select d.dept_id,
+               d.parent_id,
+               d.ancestors,
+               d.dept_name,
+               d.order_num,
+               d.leader_id,
+               d.leader,
+               d.phone,
+               d.email,
+               d.status,
+               d.del_flag,
+               d.create_by,
+               d.create_time,
+               d.formal_flag
         from sys_dept d
     </sql>
 
     <select id="selectRoleDeptTree" parameterType="Long" resultType="String">
-		select concat(d.dept_id, d.dept_name) as dept_name
-		from sys_dept d
-			left join sys_role_dept rd on d.dept_id = rd.dept_id
-		where d.del_flag = '0' and rd.role_id = #{roleId}
-		order by d.parent_id, d.order_num
-	</select>
+        select concat(d.dept_id, d.dept_name) as dept_name
+        from sys_dept d
+                 left join sys_role_dept rd on d.dept_id = rd.dept_id
+        where d.del_flag = '0'
+          and rd.role_id = #{roleId}
+        order by d.parent_id, d.order_num
+    </select>
 
     <select id="selectDeptList" parameterType="SysDept" resultMap="SysDeptResult">
         <include refid="selectDeptVo"/>
@@ -51,7 +64,7 @@
             AND status = #{status}
         </if>
         <if test="formalFlag != null  and formalFlag != ''">and formal_flag = #{formalFlag}</if>
-        order  by   d.order_num
+        order by d.order_num
         <!-- 数据范围过滤 -->
         /* ${params.dataScope}*/
         /*order by d.parent_id, d.order_num*/
@@ -73,15 +86,18 @@
             AND order_num = #{orderNum}
         </if>
         <if test="formalFlag != null  and formalFlag != ''">and formal_flag = #{formalFlag}</if>
-        order  by   d.order_num
+        order by d.order_num
         <!-- 数据范围过滤 -->
         /* ${params.dataScope}*/
         /*order by d.parent_id, d.order_num*/
     </select>
 
     <select id="checkDeptExistUser" parameterType="Long" resultType="int">
-		select count(1) from sys_user where dept_id = #{deptId} and del_flag = '0'
-	</select>
+        select count(1)
+        from sys_user
+        where dept_id = #{deptId}
+          and del_flag = '0'
+    </select>
 
     <select id="selectDeptCount" parameterType="SysDept" resultType="int">
         select count(1) from sys_dept
@@ -96,19 +112,35 @@
     </select>
 
     <select id="selectDeptById" parameterType="Long" resultMap="SysDeptResult">
-		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num,d.leader_id, d.leader, d.phone, d.email, d.status,d.formal_flag,
-			(select dept_name from sys_dept where dept_id = d.parent_id) parent_name
-		from sys_dept d
-		where d.dept_id = #{deptId}
-	</select>
+        select d.dept_id,
+               d.parent_id,
+               d.ancestors,
+               d.dept_name,
+               d.order_num,
+               d.leader_id,
+               d.leader,
+               d.phone,
+               d.email,
+               d.status,
+               d.formal_flag,
+               (select dept_name from sys_dept where dept_id = d.parent_id) parent_name
+        from sys_dept d
+        where d.dept_id = #{deptId}
+    </select>
 
     <select id="selectChildrenDeptById" parameterType="Long" resultMap="SysDeptResult">
-		select * from sys_dept where find_in_set(#{deptId}, ancestors)
-	</select>
+        select *
+        from sys_dept
+        where find_in_set(#{deptId}, ancestors)
+    </select>
 
     <select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
-		select count(*) from sys_dept where status = 0 and del_flag = '0' and find_in_set(#{deptId}, ancestors)
-	</select>
+        select count(*)
+        from sys_dept
+        where status = 0
+          and del_flag = '0'
+          and find_in_set(#{deptId}, ancestors)
+    </select>
 
     <insert id="insertDept" parameterType="SysDept">
         insert into sys_dept(
@@ -175,8 +207,10 @@
     </update>
 
     <delete id="deleteDeptById" parameterType="Long">
-		update sys_dept set del_flag = '2' where dept_id = #{deptId}
-	</delete>
+        update sys_dept
+        set del_flag = '2'
+        where dept_id = #{deptId}
+    </delete>
 
     <update id="updateDeptStatus" parameterType="SysDept">
         update sys_dept
@@ -189,12 +223,32 @@
     </update>
 
     <select id="selectDeptByParentId" parameterType="Long" resultMap="SysDeptResult">
-        SELECT * FROM(
-            SELECT * FROM sys_dept where parent_id > 0 GROUP BY dept_id
-             ORDER BY parent_id, dept_id DESC
-         ) realname_sorted,
-          (SELECT @pv := #{parentId}) initialisation
-          WHERE (FIND_IN_SET(parent_id,@pv)>0 And @pv := concat(@pv, ',', dept_id)) AND del_flag='0' AND `status`='0' GROUP BY dept_id
+        SELECT *
+        FROM (
+                 SELECT *
+                 FROM sys_dept
+                 where parent_id > 0
+                 GROUP BY dept_id
+                 ORDER BY parent_id, dept_id DESC
+             ) realname_sorted,
+             (SELECT @pv := #{parentId}) initialisation
+        WHERE (FIND_IN_SET(parent_id, @pv) > 0 And @pv := concat(@pv, ',', dept_id))
+          AND del_flag = '0'
+          AND `status` = '0'
+        GROUP BY dept_id
+    </select>
+
+
+    <select id="selectDeptByIds" parameterType="String" resultMap="SysDeptResult">
+        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num,d.leader_id, d.leader, d.phone, d.email,
+        d.status,d.formal_flag,
+        (select dept_name from sys_dept where dept_id = d.parent_id) parent_name
+        from sys_dept d
+        where d.dept_id in
+        <foreach collection="array" item="deptId" index="index"
+                 separator="," open="(" close=")">
+            #{deptId}
+        </foreach>
     </select>
 
 </mapper> 

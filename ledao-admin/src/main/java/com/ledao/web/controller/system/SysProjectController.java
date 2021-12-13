@@ -542,7 +542,7 @@ public class SysProjectController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey()) || "zjl".equals(sysRole.getRoleKey())
-                            || ShiroUtils.getLoginName().equals(sysProject.getCreateBy()) || "admin".equals(sysRole.getRoleKey())) {
+                            || ShiroUtils.getLoginName().equals(sysProject.getCreateBy()) || "admin".equals(sysRole.getRoleKey()) || "documentAdmin".equals(sysRole.getRoleKey())) {
                         sysProject.setIsCreate("true");
                     } else {
                         sysProject.setIsCreate("false");
@@ -763,7 +763,7 @@ public class SysProjectController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                         if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                             sysUser.setFormalFlag("0");
                         }
@@ -913,7 +913,7 @@ public class SysProjectController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if ("SJXXB".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey()) || "zjl".equals(sysRole.getRoleKey())
-                            /*|| ShiroUtils.getLoginName().equals(sysProject.getCreateBy())*/ || "admin".equals(sysRole.getRoleKey())) {
+                            /*|| ShiroUtils.getLoginName().equals(sysProject.getCreateBy())*/ || "admin".equals(sysRole.getRoleKey()) || "documentAdmin".equals(sysRole.getRoleKey())) {
                         sysProject.setIsCreate("true");
                     } else {
                         sysProject.setIsCreate("false");
@@ -963,7 +963,7 @@ public class SysProjectController extends BaseController {
         if (!currentUser.isAdmin()) {
             for (SysRole sysRole : getRoles) {
                 if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
-                        && !"thbManager2".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey())) {
+                        && !"thbManager2".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
                     sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
                 }
             }

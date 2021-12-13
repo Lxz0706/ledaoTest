@@ -71,7 +71,7 @@ public class SysJournalServiceImpl implements ISysJournalService
     @Override
     public int insertSysJournal(SysJournal sysJournal)
     {
-        sysJournal.setCreateTime(DateUtils.getNowDate());
+        //sysJournal.setCreateTime(DateUtils.getNowDate());
         return sysJournalMapper.insertSysJournal(sysJournal);
     }
 

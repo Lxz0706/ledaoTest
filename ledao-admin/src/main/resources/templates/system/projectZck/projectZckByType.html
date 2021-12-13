@@ -63,14 +63,16 @@
     // var showTask = [[${@permission.hasPermi('system:project:showTask')}]];
     var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var roles = [[${@permission.getPrincipalProperty('roles')}]];
-    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var prefix = ctx + "system/projectZck";
 
     var showUnderLying = false;
 
     $(function () {
+        if ("admin" == loginName) {
+            showUnderLying = true;
+        }
         for (var i = 0; i < roles.length; i++) {
-            if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" || roles[i].roleKey == "SJXXB" ||roles[i].roleKey == "documentAdmin") {
+            if (roles[i].roleKey == "thbManager" || roles[i].roleKey == "thbManager2" || roles[i].roleKey == "SJXXB" || roles[i].roleKey == "documentAdmin") {
                 showUnderLying = true
             }
         }
@@ -146,12 +148,12 @@
         };
         $.table.init(options);
     });
+
     // 查看任务
-    function detailManageTask(id,name){
+    function detailManageTask(id, name) {
         var url = '/system/managetask/managetask?proId=' + id + "&taskType=0";
         $.modal.opens("任务列表", url);
     }
-
 
 
     /*资产库列表-详细*/

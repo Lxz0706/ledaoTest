@@ -8,6 +8,7 @@ import java.util.Map;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
+import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDeptService;
 import com.ledao.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,6 +50,9 @@ public class SysJournalController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private ISysConfigService sysConfigService;
+
     //    @RequiresPermissions("system:journal:view")
     @GetMapping()
     public String journal() {
@@ -72,7 +76,6 @@ public class SysJournalController extends BaseController {
     @PostMapping("/userListByDepParentId")
     @ResponseBody
     public TableDataInfo userListByDepParentId(SysDept dept) {
-        startPage();
 
         //获取投后部经理2
         List<SysUser> sysUserList = getUserList("thbManager2");
@@ -89,7 +92,7 @@ public class SysJournalController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                         if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                             sysUser.setFormalFlag("0");
                         }
@@ -104,6 +107,7 @@ public class SysJournalController extends BaseController {
                 }
             }
         }
+        startPage();
         List<SysUser> deps = deptService.selectUserListByDepId(dept, sysUser);
         return getDataTable(deps);
     }
@@ -152,9 +156,9 @@ public class SysJournalController extends BaseController {
                     isZjl = true;
                     continue;
                 }
-                if ("fkbjl".equals(sysRole.getRoleKey()) || "flgw".equals(sysRole.getRoleKey())) {
-                    sb.append(",").append("202");
-                }
+//                if ("fkbjl".equals(sysRole.getRoleKey()) || "flgw".equals(sysRole.getRoleKey())) {
+//                    sb.append(",").append("201,202");
+//                }
             }
         }
         SysDept dept = new SysDept();
@@ -165,22 +169,22 @@ public class SysJournalController extends BaseController {
             return getDataTable(deps);
         } else {
             List<SysDept> dts = new ArrayList<>();
-            List<SysDept> list = deptService.selectDeptByIds(sb.toString());
-            for (SysDept deptNew : list) {
-                for (SysDept d : deps) {
-                    if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())) {
+            SysDept deptNew = deptService.selectDeptById(user.getDeptId());
+            //for (SysDept deptNew : list) {
+            for (SysDept d : deps) {
+                if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())) {
+                    dts.add(d);
+                    //return getDataTable(dts);
+                }
+                String[] depstra = deptNew.getAncestors().split(",");
+                for (String ds : depstra) {
+                    if (ds.equals(d.getDeptId().toString())) {
                         dts.add(d);
                         //return getDataTable(dts);
                     }
-                    String[] depstra = deptNew.getAncestors().split(",");
-                    for (String ds : depstra) {
-                        if (ds.equals(d.getDeptId().toString())) {
-                            dts.add(d);
-                            //return getDataTable(dts);
-                        }
-                    }
                 }
             }
+            //}
             return getDataTable(dts);
         }
     }
@@ -260,7 +264,7 @@ public class SysJournalController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                         if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                             sysUser.setFormalFlag("0");
                         }
@@ -283,5 +287,15 @@ public class SysJournalController extends BaseController {
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
         mmap.put("sysJournal", sysJournalService.selectSysJournalById(id));
         return prefix + "/detail";
+    }
+
+    public List<String> getUserByKey() {
+        String[] users = sysConfigService.selectConfigByKey("lawUser").split(",");
+        List<String> list = new ArrayList<>();
+        for (String stringUser : users) {
+            SysUser sysUser = sysUserService.selectUserByLoginName(stringUser);
+            list.add(sysUser.getLoginName());
+        }
+        return list;
     }
 }

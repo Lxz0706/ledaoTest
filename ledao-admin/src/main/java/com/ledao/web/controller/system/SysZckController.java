@@ -71,7 +71,7 @@ public class SysZckController extends BaseController {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
-                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
+                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                         sysZck.setCreateBy(currentUser.getLoginName());
                     }
                 }
@@ -299,7 +299,7 @@ public class SysZckController extends BaseController {
      * 新增资产信息库
      */
     @GetMapping("/add")
-    public String add(String zcbId,String parentId, ModelMap mmap) {
+    public String add(String zcbId, String parentId, ModelMap mmap) {
         mmap.put("parentId", parentId);
         mmap.put("zcbId", zcbId);
         return prefix + "/add";

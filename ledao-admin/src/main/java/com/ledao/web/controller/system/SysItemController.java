@@ -79,7 +79,7 @@ public class SysItemController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                         if (!"bgczCommon".equals(sysRole.getRoleKey()) && !"bgczManager".equals(sysRole.getRoleKey()) && !"investmentCommon".equals(sysRole.getRoleKey())
                                 && !"investmentManager2".equals(sysRole.getRoleKey()) && !"investmentManager".equals(sysRole.getRoleKey())
                                 && !"thbManager".equals(sysRole.getRoleKey()) && !"thbManager2".equals(sysRole.getRoleKey())
@@ -122,7 +122,7 @@ public class SysItemController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                         if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey())
                                 || "thbManager2".equals(sysRole.getRoleKey()) || "thbzz".equals(sysRole.getRoleKey())) {
                             if (ShiroUtils.getLoginName().equals(sysCustomer.getCreateBy())) {
@@ -246,7 +246,7 @@ public class SysItemController extends BaseController {
                             }
                         } else if ("thbManager".equals(sysRole.getRoleKey()) || "thbCommon".equals(sysRole.getRoleKey())
                                 || "SJXXB".equals(sysRole.getRoleKey()) || "thbManager2".equals(sysRole.getRoleKey())
-                                || "thbzz".equals(sysRole.getRoleKey())) {
+                                || "thbzz".equals(sysRole.getRoleKey())|| "documentAdmin".equals(sysRole.getRoleKey())) {
                             for (String string : sysItem.getProjectId().split(",")) {
                                 SysPcustomer sysPcustomer = new SysPcustomer();
                                 sysPcustomer.setCustomerId(sysItem.getCustomerId().toString());

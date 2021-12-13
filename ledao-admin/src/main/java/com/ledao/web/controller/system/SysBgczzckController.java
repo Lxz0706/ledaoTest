@@ -304,7 +304,7 @@ public class SysBgczzckController extends BaseController {
         if (!currentUser.isAdmin()) {
             for (SysRole sysRole : getRoles) {
                 if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                        && !"bgczManager".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
+                        && !"bgczManager".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
                     sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
                 }
             }

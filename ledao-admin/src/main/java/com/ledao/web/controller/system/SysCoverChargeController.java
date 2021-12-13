@@ -93,7 +93,7 @@ public class SysCoverChargeController extends BaseController {
         if (!sysUser.isAdmin()) {
             List<SysRole> sysRoleList = sysUser.getRoles();
             for (SysRole sysRole : sysRoleList) {
-                if ("financeManager".equals(sysRole.getRoleKey()) || "SJXXB".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey())) {
+                if ("financeManager".equals(sysRole.getRoleKey()) || "SJXXB".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey()) || "documentAdmin".equals(sysRole.getRoleKey())) {
                     modelMap.put("cw", "true");
                 } else {
                     modelMap.put("cw", "false");
@@ -128,7 +128,7 @@ public class SysCoverChargeController extends BaseController {
         if (!sysUser.isAdmin()) {
             List<SysRole> sysRoleList = sysUser.getRoles();
             for (SysRole sysRole : sysRoleList) {
-                if ("financeManager".equals(sysRole.getRoleKey()) || "SJXXB".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey())) {
+                if ("financeManager".equals(sysRole.getRoleKey()) || "SJXXB".equals(sysRole.getRoleKey()) || "admin".equals(sysRole.getRoleKey()) || "documentAdmin".equals(sysRole.getRoleKey())) {
                     sysCoverCharge.setCw("true");
                 } else {
                     sysCoverCharge.setCw("false");

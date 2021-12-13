@@ -61,7 +61,7 @@ public class SysWorkLogController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
                         /*sysWorkLog.setCreateBy(ShiroUtils.getLoginName());
                         sysWorkLog.setShareUserName(ShiroUtils.getSysUser().getUserName());*/
                         sysWorkLog.setDeptId(ShiroUtils.getSysUser().getDeptId());
@@ -163,7 +163,7 @@ public class SysWorkLogController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
                         /*sysWorkLog.setCreateBy(ShiroUtils.getLoginName());
                         sysWorkLog.setShareUserName(ShiroUtils.getSysUser().getUserName());*/
                         sysWorkLog.setDeptId(ShiroUtils.getSysUser().getDeptId());

@@ -1,5 +1,6 @@
 package com.ledao.web.controller.system;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -15,6 +16,7 @@ import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysItemService;
+import com.ledao.system.service.ISysProjectService;
 import com.ledao.system.service.ISysZcbService;
 import com.ledao.system.service.ISysZckService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,6 +51,9 @@ public class SysZckController extends BaseController {
 
     @Autowired
     private ISysItemService sysItemService;
+
+    @Autowired
+    private ISysProjectService sysProjectService;
 
     @RequiresPermissions("system:zck:view")
     @GetMapping()
@@ -479,6 +484,19 @@ public class SysZckController extends BaseController {
         String operName = ShiroUtils.getSysUser().getLoginName();
         String message = sysZckService.importZck(sysZckList, updateSupport, operName, zcbId);
         return AjaxResult.success(message);
+    }
+
+    @PostMapping("/importDataForTh")
+    @ResponseBody
+    public AjaxResult importDataForTh(MultipartFile file, boolean updateSupport) throws Exception {
+        ExcelUtil<SysProject> util = new ExcelUtil<>(SysProject.class);
+        List<SysProject> list = util.importExcel(file.getInputStream());
+        for (SysProject sysProject : list) {
+            sysProject.setCreateBy("wanglili");
+            sysProject.setProjectZckId(Long.valueOf(25));
+            sysProjectService.insertSysProject(sysProject);
+        }
+        return AjaxResult.success();
     }
 
     @RequiresPermissions("system:zck:view")

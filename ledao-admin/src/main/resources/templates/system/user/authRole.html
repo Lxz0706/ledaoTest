@@ -52,8 +52,7 @@
     var userRoles = [[${userRoles}]]
     var checkedIds = new Array();
     $(function () {
-        console.log(getRoleIds(userRoles));
-        checkedIds.push(getRoleIds(userRoles));
+        getRoleIds(userRoles);
         var options = {
             url: ctx + "system/role/list",
             sortName: "roleSort",
@@ -62,6 +61,7 @@
             showToggle: false,
             showColumns: false,
             clickToSelect: true,
+            rememberSelected: true,
             checkedIds: checkedIds,
             columns: [{
                 checkbox: true,
@@ -99,50 +99,64 @@
             var datas = $.isArray(rows) ? rows : [rows];        // 点击时获取选中的行或取消选中的行
             examine(e.type, datas);                              // 保存到全局 Array() 里
         });
-        $("#bootstrap-table").on("check-all.bs.table", (event, rows) => {
-            rows.forEach(function (item) {
-                checkedIds.push(item.roleId);
-            })
-        }).on("uncheck-all.bs.table", (event, rows) => {
-            rows.forEach(function (item) {
-                checkedIds.splice(checkedIds.indexOf(item.roleId), 1);
-            })
-        }).on("check.bs.table", (event, row) => {
-            checkedIds.push(row.roleId)
-        }).on("uncheck.bs.table", (event, row) => {
-            checkedIds.splice(checkedIds.indexOf(row.roleId), 1);
-        })
     });
 
     function getRoleIds(userRoles) {
-        var ids = new Array();
         for (var i in userRoles) {
-            ids.push(userRoles[i].roleId);
+            checkedIds.push(userRoles[i].roleId);
         }
-        return ids;
     }
 
-
-    var overAllIds = new Array();  //全局数组
 
     function examine(type, datas) {
         if (type.indexOf('uncheck') == -1) {
             $.each(datas, function (i, v) {
                 // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
-                overAllIds.indexOf(v.roleId) == -1 ? overAllIds.push(v.roleId) : -1;
+                if (checkedIds.indexOf(v.roleId) == -1) {
+                    checkedIds.push(v.roleId)
+                }
             });
         } else {
             $.each(datas, function (i, v) {
-                overAllIds.splice(overAllIds.indexOf(v.roleId), 1);    //删除取消选中行
+                checkedIds.splice(getArrIndex(v.roleId), 0);    //删除取消选中行
             });
+        }
+    }
+
+    function getArrIndex(val) {
+        for (var i = 0; i < checkedIds.length; i++) {
+            if (checkedIds[i] === val) {
+                return i;
+            }
+            return -1;
         }
     }
 
     /* 添加角色-提交 */
     function submitHandler(index, layero) {
-        console.log("ids:======" + $.common.trim(checkedIds));
         var data = {"userId": $.common.trim($("#userId").val()), "roleIds": $.common.trim(checkedIds)};
         $.operate.saveTab(prefix + "/insertAuthRole", data);
+    }
+
+    function selectRows() {
+        //获取当前选中的值
+        let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+        //去重
+        return uniqueFnByRows(rows);
+    }
+
+    function uniqueFnByRows(array) {
+        var result = [];
+        var hashObj = {};
+        for (var i = 0; i < array.length; i++) {
+            if (!hashObj[array[i].roleId]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i].roleId] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
     }
 </script>
 </body>

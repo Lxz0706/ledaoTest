@@ -131,6 +131,10 @@ public class SysJudicial extends BaseEntity {
 
     private Integer totalCount;
 
+    private Integer pageNumber;
+
+    private Integer pageSizeNum;
+
     public Long getId() {
         return id;
     }
@@ -297,6 +301,22 @@ public class SysJudicial extends BaseEntity {
 
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSizeNum() {
+        return pageSizeNum;
+    }
+
+    public void setPageSizeNum(Integer pageSizeNum) {
+        this.pageSizeNum = pageSizeNum;
     }
 
     @Override

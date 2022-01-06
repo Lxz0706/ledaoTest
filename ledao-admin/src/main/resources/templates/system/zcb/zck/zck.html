@@ -159,7 +159,9 @@
     /*资产库数据-新增资产库数据*/
     function add() {
         var zcbId = $("#zcbId").val();
-        $.operate.add(zcbId);
+        var url = prefix + "/add?zcbId=" + zcbId;
+        $.modal.open("添加" + table.options.modalName, url);
+        //$.operate.add(zcbId);
     }
 
     /*资产库列表-详细*/

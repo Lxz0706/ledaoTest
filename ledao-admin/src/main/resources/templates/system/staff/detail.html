@@ -91,7 +91,7 @@
                         str += '<div class="col-sm-3" style="height: 150px;"><div class="fa fa-file-word-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a onclick="toPdf(\'' + array_element + '\')" style="word-wrap: break-word">'
                             + $.common.getFileNameByPath(array_element) + '</a></div></div>';
                     } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'pdf')) {
-                        str += '<div class="col-sm-3" style="height: 150px;"><div class="fa fa-file-pdf-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + array_element + '" style="word-wrap: break-word">'
+                        str += '<div class="col-sm-3" style="height: 150px;"><div class="fa fa-file-pdf-o" style="letter-spacing:20px;font-weight: 600;font-size: 4em;margin: 30px;"></div><div><a target="_blank" href="/documentFile/showPdfY?path=' + array_element + '" style="word-wrap: break-word">'
                             + $.common.getFileNameByPath(array_element) + '</a></div></div>';
                     } else if ($.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'png') ||
                         $.common.equalsIgnoreCase($.common.getFileTypeByPath(array_element), 'jpg') ||

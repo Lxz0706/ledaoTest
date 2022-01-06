@@ -18,7 +18,7 @@ import com.ledao.common.core.text.Convert;
  * @date 2020-11-03
  */
 @Service
-@DataSource(value = DataSourceType.SLAVE)
+@DataSource(value = DataSourceType.SLAVE1)
 public class SysTaggingServiceImpl implements ISysTaggingService {
     @Autowired
     private SysTaggingMapper sysTaggingMapper;

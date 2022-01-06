@@ -38,8 +38,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequestMapping("/system/train")
-public class SysTrainAdminController extends BaseController
-{
+public class SysTrainAdminController extends BaseController {
     private String prefix = "system/trainadmin";
 
     @Autowired
@@ -49,10 +48,9 @@ public class SysTrainAdminController extends BaseController
     private ISysConfigService configService;
 
 
-//    @RequiresPermissions("system:train:view")
+    //    @RequiresPermissions("system:train:view")
     @GetMapping()
-    public String train()
-    {
+    public String train() {
         return prefix + "/trainAdmin";
     }
 
@@ -62,13 +60,11 @@ public class SysTrainAdminController extends BaseController
 //    @RequiresPermissions("system:train:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysTrainAdmin sysTrainAdmin)
-    {
+    public TableDataInfo list(SysTrainAdmin sysTrainAdmin) {
         startPage();
         List<SysTrainAdmin> list = sysTrainAdminService.selectSysTrainAdminList(sysTrainAdmin);
         return getDataTable(list);
     }
-
 
 
     /**
@@ -78,8 +74,7 @@ public class SysTrainAdminController extends BaseController
     @Log(title = "签到管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysTrainAdmin sysTrainAdmin)
-    {
+    public AjaxResult export(SysTrainAdmin sysTrainAdmin) {
         List<SysTrainAdmin> list = sysTrainAdminService.selectSysTrainAdminList(sysTrainAdmin);
         ExcelUtil<SysTrainAdmin> util = new ExcelUtil<SysTrainAdmin>(SysTrainAdmin.class);
         return util.exportExcel(list, "train");
@@ -89,15 +84,13 @@ public class SysTrainAdminController extends BaseController
      * 新增签到管理
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
     @GetMapping("/goTrainUser")
-    public String goTrainUser(@RequestParam("trainId")Long trainId, ModelMap mmap)
-    {
-        mmap.put("trainId",trainId);
+    public String goTrainUser(@RequestParam("trainId") Long trainId, ModelMap mmap) {
+        mmap.put("trainId", trainId);
         return prefix + "/trainUser";
     }
 
@@ -109,18 +102,17 @@ public class SysTrainAdminController extends BaseController
     @Log(title = "签到管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysTrainAdmin sysTrainAdmin)
-    {
-        if(!DateUtils.isTimeEaily(sysTrainAdmin.getStartTime(),sysTrainAdmin.getEndTime())){
+    public AjaxResult addSave(SysTrainAdmin sysTrainAdmin) {
+        if (!DateUtils.isTimeEaily(sysTrainAdmin.getStartTime(), sysTrainAdmin.getEndTime())) {
             return AjaxResult.error("结束时间不能早于开始时间！");
         }
-        if (sysTrainAdmin.getQrcodeStartTime()==null){
-            sysTrainAdmin.setQrcodeStartTime(DateUtils.getMoreMinute(-10,sysTrainAdmin.getStartTime()));
+        if (sysTrainAdmin.getQrcodeStartTime() == null) {
+            sysTrainAdmin.setQrcodeStartTime(DateUtils.getMoreMinute(-10, sysTrainAdmin.getStartTime()));
         }
-        if (sysTrainAdmin.getQrcodeEndTime()==null){
-            sysTrainAdmin.setQrcodeEndTime(DateUtils.getMoreMinute(30,sysTrainAdmin.getStartTime()));
+        if (sysTrainAdmin.getQrcodeEndTime() == null) {
+            sysTrainAdmin.setQrcodeEndTime(DateUtils.getMoreMinute(30, sysTrainAdmin.getStartTime()));
         }
-        if(!DateUtils.isTimeEaily(sysTrainAdmin.getQrcodeStartTime(),sysTrainAdmin.getQrcodeEndTime())){
+        if (!DateUtils.isTimeEaily(sysTrainAdmin.getQrcodeStartTime(), sysTrainAdmin.getQrcodeEndTime())) {
             return AjaxResult.error("二维码有效结束时间不能早于开始时间！");
         }
         return toAjax(sysTrainAdminService.insertSysTrainAdmin(sysTrainAdmin));
@@ -130,8 +122,7 @@ public class SysTrainAdminController extends BaseController
      * 修改签到管理
      */
     @GetMapping("/edit/{trainId}")
-    public String edit(@PathVariable("trainId") Long trainId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("trainId") Long trainId, ModelMap mmap) {
         SysTrainAdmin sysTrainAdmin = sysTrainAdminService.selectSysTrainAdminById(trainId);
         mmap.put("sysTrainAdmin", sysTrainAdmin);
         return prefix + "/edit";
@@ -144,18 +135,17 @@ public class SysTrainAdminController extends BaseController
     @Log(title = "签到管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(SysTrainAdmin sysTrainAdmin)
-    {
-        if(!DateUtils.isTimeEaily(sysTrainAdmin.getStartTime(),sysTrainAdmin.getEndTime())){
+    public AjaxResult editSave(SysTrainAdmin sysTrainAdmin) {
+        if (!DateUtils.isTimeEaily(sysTrainAdmin.getStartTime(), sysTrainAdmin.getEndTime())) {
             return AjaxResult.error("结束时间不能早于开始时间！");
         }
-        if (sysTrainAdmin.getQrcodeStartTime()==null){
-            sysTrainAdmin.setQrcodeStartTime(DateUtils.getMoreMinute(-10,sysTrainAdmin.getStartTime()));
+        if (sysTrainAdmin.getQrcodeStartTime() == null) {
+            sysTrainAdmin.setQrcodeStartTime(DateUtils.getMoreMinute(-10, sysTrainAdmin.getStartTime()));
         }
-        if (sysTrainAdmin.getQrcodeEndTime()==null){
-            sysTrainAdmin.setQrcodeEndTime(DateUtils.getMoreMinute(30,sysTrainAdmin.getStartTime()));
+        if (sysTrainAdmin.getQrcodeEndTime() == null) {
+            sysTrainAdmin.setQrcodeEndTime(DateUtils.getMoreMinute(30, sysTrainAdmin.getStartTime()));
         }
-        if(!DateUtils.isTimeEaily(sysTrainAdmin.getQrcodeStartTime(),sysTrainAdmin.getQrcodeEndTime())){
+        if (!DateUtils.isTimeEaily(sysTrainAdmin.getQrcodeStartTime(), sysTrainAdmin.getQrcodeEndTime())) {
             return AjaxResult.error("二维码有效结束时间不能早于开始时间！");
         }
         return toAjax(sysTrainAdminService.updateSysTrainAdmin(sysTrainAdmin));
@@ -163,30 +153,29 @@ public class SysTrainAdminController extends BaseController
 
     /**
      * 接收二维码
+     *
      * @return
      * @throws IOException
      */
-    @GetMapping(value="/code")
+    @GetMapping(value = "/code")
     public Object twoCode(Long trainId, HttpServletResponse response) throws IOException {
-        JSONObject data=new JSONObject();
+        JSONObject data = new JSONObject();
         String accessToken = null;
-        try{
+        try {
             JSONObject parmData = new JSONObject();
-            parmData.put("scene",trainId);
-            parmData.put("url","pages/qrCode/qrCode");
+            parmData.put("scene", trainId);
+            parmData.put("url", "pages/qrCode/qrCode");
 
             // 提交 提交使用
             String parm = parmData.toJSONString();
 //            accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
             accessToken = configService.getWechatAccessToken();
-            if (StringUtils.isEmpty(accessToken)){
+            if (StringUtils.isEmpty(accessToken)) {
                 throw new RuntimeException("获取accessToken失败");
             }
-            System.out.println("accessToken;"+accessToken);
-            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(),response,parm);
-            data.put("twoCodeUrl", twoCodeUrl);
+            data.put("twoCodeUrl", WxQrCode.getWxQrCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(sysTrainAdminService.selectSysTrainAdminById(trainId).getTrainName().trim()), parm, response));
             return data;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -197,10 +186,9 @@ public class SysTrainAdminController extends BaseController
      */
 //    @RequiresPermissions("system:train:remove")
     @Log(title = "签到管理", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(sysTrainAdminService.deleteSysTrainAdminByIds(ids));
     }
 }

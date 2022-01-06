@@ -116,6 +116,12 @@ public class TimedTask {
     @Autowired
     private ISysConfigService sysConfigService;
 
+    @Autowired
+    private ISysAPropertyService sysAPropertyService;
+
+    @Autowired
+    private ISysJudicialSuspectedService sysJudicialSuspectedService;
+
 
     public void timeTask() throws ParseException {
         //应收应付未收服务费消息提醒
@@ -313,7 +319,7 @@ public class TimedTask {
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
                                     for (String string : sysProject1.getProjectManagerId().split(",")) {
-                                        if(StringUtils.isNotEmpty(string)){
+                                        if (StringUtils.isNotEmpty(string)) {
                                             SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
                                             sysNotice.setCreateBy(sysUser.getLoginName());
                                         }
@@ -351,7 +357,7 @@ public class TimedTask {
                                     sysNotice.setStatus("0");
                                     sysNotice.setNoticeType("3");
                                     for (String string : sysProject1.getProjectManagerId().split(",")) {
-                                        if(StringUtils.isNotEmpty(string)){
+                                        if (StringUtils.isNotEmpty(string)) {
                                             SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
                                             sysNotice.setCreateBy(sysUser.getLoginName());
                                         }
@@ -386,7 +392,7 @@ public class TimedTask {
                                     sysNotice.setShareDeptAndUser(StringUtils.removeSameString(names.toString(), ","));
 
                                     for (String string : sysProject1.getProjectManagerId().split(",")) {
-                                        if(StringUtils.isNotEmpty(string)){
+                                        if (StringUtils.isNotEmpty(string)) {
                                             SysUser sysUser = sysUserService.selectUserById(Long.valueOf(string));
                                             sysNotice.setCreateBy(sysUser.getLoginName());
                                         }
@@ -428,7 +434,9 @@ public class TimedTask {
             com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken, "");
             List<String> openIds = new ArrayList<>();
             Map m = (Map) res.get("data");
-            openIds = (List<String>) m.get("openid");
+            if (StringUtils.isNotNull(m) && StringUtils.isNotNull(m.get("openid"))) {
+                openIds = (List<String>) m.get("openid");
+            }
 //            WechatMessageUtil.batchGetUserUnionId(accessToken,openIds);
             String batchUrl = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
             String url = batchUrl.replace("ACCESS_TOKEN", accessToken);
@@ -725,17 +733,67 @@ public class TimedTask {
         }
 
         //判断是否是周五
-        boolean isWeekEndDay = false;
-        boolean isWeekRest = false;
-        String weekStr = DateUtils.getWeekOfDate(new Date());
-        if ("星期五".equals(weekStr)) {
-            isWeekEndDay = true;
+        //boolean isWeekEndDay = false;
+        //boolean isWeekRest = false;
+        //String weekStr = DateUtils.getWeekOfDate(new Date());
+        //if ("星期五".equals(weekStr)) {
+        //    isWeekEndDay = true;
+        //}
+        //if ("星期六".equals(weekStr) || "星期日".equals(weekStr)) {
+        //    isWeekRest = true;
+        //}
+        //
+        //if (!isWeekRest) {
+        //    String date = DateUtils.formatDateByPattern(new Date(), "yyyyMMdd");
+        //    List<SysUser> users = sysUserService.selectAllUserDepRole();
+        //    Map<String, String> parmStr = new HashMap<>();
+        //    parmStr.put("first", "您有一个日志任务提醒");
+        //    parmStr.put("word1", "日志未填写提醒");
+        //    parmStr.put("word2", "请及时填写日志");
+        //    List<String> sendUsers = new ArrayList<>();
+        //    List<SysUser> us = new ArrayList<>();
+        //    for (SysUser u : users) {
+        //        if (StringUtils.isNotNull(u.getComOpenId())) {
+        //            SysJournal sj = new SysJournal();
+        //            sj.setCreateBy(u.getLoginName());
+        //            sj.getParams().put("beginTime", date);
+        //            List<SysJournal> jours = sysJournalService.selectSysJournalList(sj);
+        //            if (jours == null || jours.size() == 0) {
+        //                if (isWeekEndDay && "1".equals(u.getRemainFlag())) {
+        //                    if (!sendUsers.contains(u.getLoginName())) {
+        //                        //每周五提醒
+        //                        us.add(u);
+        //                        sendUsers.add(u.getLoginName());
+        //                    }
+        //
+        //                } else if ("0".equals(u.getRemainFlag())) {
+        //                    //每天提醒
+        //                    if (!sendUsers.contains(u.getLoginName())) {
+        //                        //每周五提醒
+        //                        us.add(u);
+        //                        sendUsers.add(u.getLoginName());
+        //                    }
+        //                }
+        //                /*List<SysUser> us = new ArrayList<>();
+        //                us.add(u);
+        //                sendDailyUsalTask(us,parmStr);*/
+        //            }
+        //        }
+        //    }
+        //    sendDailyRemainUsalTask(us, parmStr);
+        //}
+        boolean holiday = false;
+        Map jjr = DateUtils.getJjr(DateUtils.parseDateToStr("yyyy-MM", new Date()));
+        Integer code = (Integer) jjr.get("code");
+        if (code != 0) {
+            throw new RuntimeException("获取失败！！！");
         }
-        if ("星期六".equals(weekStr) || "星期日".equals(weekStr)) {
-            isWeekRest = true;
+        Map<String, Map<String, Object>> holidayList = (Map<String, Map<String, Object>>) jjr.get("holiday");
+        Set<String> strings = holidayList.keySet();
+        if (strings.contains(DateUtils.parseDateToStr("MM-dd", new Date()))) {
+            holiday = true;
         }
-
-        if (!isWeekRest) {
+        if (!holiday) {
             String date = DateUtils.formatDateByPattern(new Date(), "yyyyMMdd");
             List<SysUser> users = sysUserService.selectAllUserDepRole();
             Map<String, String> parmStr = new HashMap<>();
@@ -745,30 +803,18 @@ public class TimedTask {
             List<String> sendUsers = new ArrayList<>();
             List<SysUser> us = new ArrayList<>();
             for (SysUser u : users) {
-                if (StringUtils.isNotNull(u.getComOpenId())) {
-                    SysJournal sj = new SysJournal();
-                    sj.setCreateBy(u.getLoginName());
-                    sj.getParams().put("beginTime", date);
-                    List<SysJournal> jours = sysJournalService.selectSysJournalList(sj);
-                    if (jours == null || jours.size() == 0) {
-                        if (isWeekEndDay && "1".equals(u.getRemainFlag())) {
+                if ("y".equals(u.getIsDailyRemind()) || StringUtils.isEmpty(u.getIsDailyRemind())) {
+                    if (StringUtils.isNotEmpty(u.getComOpenId())) {
+                        SysJournal sj = new SysJournal();
+                        sj.setCreateBy(u.getLoginName());
+                        sj.getParams().put("beginTime", date);
+                        List<SysJournal> jours = sysJournalService.selectSysJournalList(sj);
+                        if (jours == null || jours.size() == 0) {
                             if (!sendUsers.contains(u.getLoginName())) {
-                                //每周五提醒
-                                us.add(u);
-                                sendUsers.add(u.getLoginName());
-                            }
-
-                        } else if ("0".equals(u.getRemainFlag())) {
-                            //每天提醒
-                            if (!sendUsers.contains(u.getLoginName())) {
-                                //每周五提醒
                                 us.add(u);
                                 sendUsers.add(u.getLoginName());
                             }
                         }
-                        /*List<SysUser> us = new ArrayList<>();
-                        us.add(u);
-                        sendDailyUsalTask(us,parmStr);*/
                     }
                 }
             }
@@ -876,7 +922,7 @@ public class TimedTask {
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken", accessToken);
                 // 创建名称为投后队列
-                Queue queue = new ActiveMQQueue("ThQueueCommonUsal");
+                Queue queue = new ActiveMQQueue("dailyReceiveMessageCommon");
                 String dataStr = JSONObject.toJSONString(parm);
                 System.out.println("--------------------推送提醒给：" + u.getLoginName() + "----------------------");
                 // 向队列发送消息
@@ -1033,7 +1079,7 @@ public class TimedTask {
                         users.add(userMapper.selectUserByLoginName("xukai"));
                         users.add(userMapper.selectUserByLoginName("jianghui"));
                         for (String string : p.getProjectManagerId().split(",")) {
-                            if(StringUtils.isNotEmpty(string)){
+                            if (StringUtils.isNotEmpty(string)) {
                                 users.add(userMapper.selectUserById(Long.valueOf(string)));
                             }
                         }
@@ -1145,95 +1191,14 @@ public class TimedTask {
         }
     }
 
-
-    public static void main(String[] args) throws ParseException {
-        /*int year = DateUtils.yearDateDiff("2020-10-04", "2021-07-01");
-        System.out.print(year);*/
-        testJson();
-    }
-
-    public static void testJson() {
-        List<String> strs = new ArrayList<>();
-        strs.add("1111111111");
-        strs.add("2222222222");
-        strs.add("333333333");
-        strs.add("4444444444");
-        strs.add("555555555");
-        strs.add("6666666666");
-        strs.add("777777777777");
-        strs.add("88888888");
-
-        int cout = strs.size() / 3;
-        if (strs.size() % 3 != 0) {
-            cout++;
+    //爬虫爬取的数据跟疑似人表匹配，有更新则新增
+    public void copyDataTo() {
+        SysJudicialSuspected sysJudicialSuspected = new SysJudicialSuspected();
+        List<SysJudicialSuspected> sysJudicialSuspectedList = sysJudicialSuspectedService.selectSysJudicialSuspectedList(sysJudicialSuspected);
+        Map<String, String> susMap = new HashMap<>();
+        for (SysJudicialSuspected sysJudicialSuspected1 : sysJudicialSuspectedList) {
+            susMap.put(sysJudicialSuspected1.getItemTitle(), sysJudicialSuspected1.getItemOwner());
         }
 
-        for (int j = 0; j < cout; j++) {
-            for (int i = 0; i < 3; i++) {
-                if (3 * j + i == strs.size()) {
-                    continue;
-                }
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("lang", "zh_CN");
-                jsonObject.put("openid", strs.get(3 * j + i));
-                System.out.println(jsonObject.toJSONString());
-            }
-        }
-
-
-        /*JSONObject data1 = new JSONObject();
-        data1.put("openid","111111111111");
-        data1.put("unionid","432fewf");
-        JSONObject data2 = new JSONObject();
-        data2.put("openid","222222222");
-        data2.put("unionid","432fewf");
-        JSONObject data3 = new JSONObject();
-        data3.put("openid","3333333333333");
-        data3.put("unionid","432fewf");
-        JSONObject data4 = new JSONObject();
-        data4.put("openid","444444444444");
-        data4.put("unionid","432fewf");
-        JSONObject data5 = new JSONObject();
-        data5.put("openid","55555555555555");
-        data5.put("unionid","432fewf");
-        JSONArray jarr = new JSONArray();
-        jarr.add(data1);
-        jarr.add(data2);
-        jarr.add(data3);
-        jarr.add(data4);
-        jarr.add(data5);
-        String jsonStr = JSONArray.toJSONString(jarr);
-        System.out.println(jsonStr);
-
-        JSONArray data = jarr;
-
-        int cout=data.size()/2;
-        for(int j=0;j<cout;j++){
-            for (int i=0;i<2;i++){
-                String openid = (String) data.getJSONObject(i).get("openid");
-                String unionid = (String) data.getJSONObject(i).get("unionid");
-                System.out.println(openid);
-                System.out.println(unionid);
-            }
-        }*/
-
-
-
-       /* for(int i=0;i<data.size();i++) {
-            String openid = (String) data.getJSONObject(i).get("openid");
-            String unionid = (String) data.getJSONObject(i).get("unionid");
-            System.out.println(openid);
-            System.out.println(unionid);
-            *//*SysUser use = new SysUser();
-            use.setUnionId(unionid);
-            List<SysUser> uList = userMapper.selectUnallocatedList(use);
-            if (uList!=null && uList.size()>0){
-                SysUser newUser =  uList.get(0);
-                if (StringUtils.isEmpty(newUser.getUnionId())){
-                    newUser.setComOpenId(openid);
-                    userMapper.updateUser(newUser);
-                }
-            }*//*
-        }*/
     }
 }

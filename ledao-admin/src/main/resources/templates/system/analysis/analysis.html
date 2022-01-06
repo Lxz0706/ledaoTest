@@ -161,7 +161,7 @@
                                 fontSize: 12,
                                 textAlign: 'center',
                             },
-                            offsetY: -30,
+                            offsetY: -10,
                         })
                         .text({
                             position: [item.type, item.value],
@@ -170,53 +170,10 @@
                                 fontSize: 12,
                                 textAlign: 'center',
                             },
-                            offsetY: -12,
+                            offsetY: -10,
                         });
                 });
                 chart.render();
-
-                /* const chart = new G2.Chart({
-                     container: 'cityAnalysis',
-                     autoFit: true,
-                     height:height
-                 });
-
-                 chart.data(result);
-                 chart.scale({
-                     value: {
-                         max: maxcnt + 50,
-                         min: 0,
-                         alias: '总数'
-                     },
-                 });
-                 chart.axis('type', {
-                     title: null,
-                     tickLine: null,
-                     line: null,
-                 });
-
-                 chart.axis('value', {
-                     label: null,
-                     title: {
-                         offset: 5,
-                         style: {
-                             fontSize: 13,
-                         },
-                     },
-                 });
-                 chart.legend(false);
-                 chart.coordinate().transpose();
-                 chart.interval().position('type*value').size(15).color('value', '#76C893')
-                     .label('value', {
-                         style: {
-                             fontSize: 13,
-                             fontWeight: 'bold',
-                         },
-                         offset: 10,
-                     });
-                 chart.interaction('element-active');
-                 chart.render();*/
-
             }
         });
     }
@@ -275,7 +232,7 @@
                                 fontSize: 13,
                                 textAlign: 'center',
                             },
-                            offsetY: -30,
+                            offsetY: -10,
                         })
                         .text({
                             position: [item.type, item.value],
@@ -284,7 +241,7 @@
                                 fontSize: 13,
                                 textAlign: 'center',
                             },
-                            offsetY: -12,
+                            offsetY: -10,
                         });
                 });
                 chart.render();

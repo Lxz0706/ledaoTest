@@ -2,11 +2,7 @@ package com.ledao.common.message;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
@@ -14,7 +10,7 @@ import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.utils.http.CommonUtil;
 
 @Component
-public class JmsConsumer {
+public class JmsConsumers {
 	private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,sss");
 
 	/*@JmsListener(destination = "zyQueue1")

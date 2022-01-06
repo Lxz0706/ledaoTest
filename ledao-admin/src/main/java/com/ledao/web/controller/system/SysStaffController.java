@@ -148,6 +148,7 @@ public class SysStaffController extends BaseController {
     public AjaxResult editResume(SysStaff sysStaff, @RequestParam("resume") MultipartFile resume) throws IOException {
         SysStaff sysStaff1 = sysStaffService.selectSysStaffById(sysStaff.getStaffId());
         String avatar = FileUploadUtils.upload(Global.getProfile() + "/staff", resume, false);
+        logger.info("文件路径：=======" + avatar);
         if (StringUtils.isNotEmpty(sysStaff1.getResumeUrl())) {
             if (!sysStaff1.getResumeUrl().contains(resume.getOriginalFilename())) {
                 sysStaff1.setResumeUrl(avatar + ";" + sysStaff1.getResumeUrl());

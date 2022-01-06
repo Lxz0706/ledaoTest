@@ -18,7 +18,7 @@ import com.ledao.common.core.text.Convert;
  * @date 2021-01-14
  */
 @Service
-@DataSource(value = DataSourceType.SLAVE)
+@DataSource(value = DataSourceType.SLAVE1)
 public class SysJudicialSuspectedServiceImpl implements ISysJudicialSuspectedService {
     @Autowired
     private SysJudicialSuspectedMapper sysJudicialSuspectedMapper;

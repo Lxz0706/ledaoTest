@@ -25,13 +25,13 @@ public class SysProject extends BaseEntity {
     /**
      * 项目名称
      */
-    @Excel(name = "项目名称")
+    @Excel(name = "借款人名称")
     private String projectName;
 
     /**
      * 资产包状态
      */
-    @Excel(name = "资产包状态")
+    //@Excel(name = "资产包状态")
     private String assetStatus;
 
     /**
@@ -43,49 +43,49 @@ public class SysProject extends BaseEntity {
     /**
      * 借款人名称
      */
-    @Excel(name = "借款人名称")
+    //@Excel(name = "借款人名称")
     private String borrower;
 
     /**
      * 城市/地区
      */
-    @Excel(name = "城市/地区")
+    //@Excel(name = "城市/地区")
     private String city;
 
     /**
      * 放款银行
      */
-    @Excel(name = "放款银行")
+    //@Excel(name = "放款银行")
     private String loanBank;
 
     /**
      * 合同本金(元)
      */
-    @Excel(name = "合同本金(元)")
+    //@Excel(name = "合同本金(元)")
     private BigDecimal contractPrincipal;
 
     /**
      * 本金余额(元)
      */
-    @Excel(name = "本金余额(元)")
+    //@Excel(name = "本金余额(元)")
     private BigDecimal principalBalance;
 
     /**
      * 利息金额(元)
      */
-    @Excel(name = "利息余额(元)")
+    //@Excel(name = "利息余额(元)")
     private BigDecimal interestBalance;
 
     /**
      * 本息余额(元)
      */
-    @Excel(name = "本息余额(元)")
+    //@Excel(name = "本息余额(元)")
     private BigDecimal principalInterestBalance;
 
     /**
      * 保证人
      */
-    @Excel(name = "保证人")
+    //@Excel(name = "保证人")
     private String guarantor;
 
     private String guarantors;
@@ -93,7 +93,7 @@ public class SysProject extends BaseEntity {
     /**
      * 抵押物
      */
-    @Excel(name = "抵押物")
+    //@Excel(name = "抵押物")
     private String collateral;
 
     private String collaterals;
@@ -113,181 +113,181 @@ public class SysProject extends BaseEntity {
     /**
      * 项目经理
      */
-    @Excel(name = "项目经理")
+    //@Excel(name = "项目经理")
     private String projectManager;
 
     /**
      * 项目经理ID
      */
-    //@Excel(name = "项目经理ID")
+    ////@Excel(name = "项目经理ID")
     private Long userId;
 
     /**
      * 司法状态
      */
-    @Excel(name = "司法状态")
+    //@Excel(name = "司法状态")
     private String judicialStatus;
 
     /**
      * 管辖法院
      */
-    @Excel(name = "管辖法院")
+    //@Excel(name = "管辖法院")
     private String competentCourt;
 
     /**
      * 法官及联系方式
      */
-    @Excel(name = "法官及联系方式")
+    //@Excel(name = "法官及联系方式")
     private String judgeContact;
 
     /**
      * 律所
      */
-    @Excel(name = "律所")
+    //@Excel(name = "律所")
     private String lawFirm;
 
     /**
      * 律师及联系方式
      */
-    @Excel(name = "律师及联系方式")
+    //@Excel(name = "律师及联系方式")
     private String lawyerContact;
 
     /**
      * 司法状态备注
      */
-    @Excel(name = "司法状态备注")
+    //@Excel(name = "司法状态备注")
     private String judicialRemarks;
 
     /**
      * 抵押物/债权
      */
-    @Excel(name = "抵押物/债权")
+    //@Excel(name = "抵押物/债权")
     private String collateralClaims;
 
     /**
      * 成交类型
      */
-    @Excel(name = "成交类型")
+    //@Excel(name = "成交类型")
     private String transactionType;
 
     /**
      * 买家
      */
-    @Excel(name = "买家")
+    //@Excel(name = "买家")
     private String buyer;
 
     /**
      * 买家ID
      */
-    //@Excel(name = "买家ID")
+    ////@Excel(name = "买家ID")
     private String buyerId;
 
     /**
      * 买家来源
      */
-    @Excel(name = "买家来源")
+    //@Excel(name = "买家来源")
     private String buyerSources;
 
     /**
      * 买家联系方式
      */
-    @Excel(name = "买家联系方式")
+    //@Excel(name = "买家联系方式")
     private String buyerContact;
 
     /**
      * 所属债权合同编号
      */
-    @Excel(name = "所属债权合同编号")
+    //@Excel(name = "所属债权合同编号")
     private String contractNo;
 
     /**
      * 诉讼时效起算日
      */
-    @Excel(name = "诉讼时效起算日")
+    //@Excel(name = "诉讼时效起算日")
     private Date limitationAction;
 
     /**
      * 查封标的
      */
-    @Excel(name = "查封标的")
+    //@Excel(name = "查封标的")
     private String sealUpSubjectMatter;
 
     /**
      * 查封日期
      */
-    @Excel(name = "查封日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "查封日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date sealUpDate;
 
     /**
      * 执行时效起算日
      */
-    @Excel(name = "执行时效起算日")
+    //@Excel(name = "执行时效起算日")
     private Date limitationExecution;
 
     /**
      * 起诉立案日期
      */
-    @Excel(name = "起诉立案日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "起诉立案日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date dateFiling;
 
     /**
      * 一审判决案号及日期
      */
-    @Excel(name = "一审判决案号及日期")
+    //@Excel(name = "一审判决案号及日期")
     private String firstInstance;
 
     /**
      * 二审判决案号及日期
      */
-    @Excel(name = "二审判决案号及日期")
+    //@Excel(name = "二审判决案号及日期")
     private String secondInstance;
 
     /**
      * 再审判决案号及日期
      */
-    @Excel(name = "再审判决案号及日期")
+    //@Excel(name = "再审判决案号及日期")
     private String retrial;
 
     /**
      * 执行立案日期
      */
-    @Excel(name = "执行立案日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "执行立案日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date enforcementFilingDate;
 
     /**
      * 出具评估报告日期
      */
-    @Excel(name = "出具评估报告日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "出具评估报告日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date appraisalReportDate;
 
     /**
      * 第一次挂拍日期
      */
-    @Excel(name = "第一次挂拍日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "第一次挂拍日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date firstShotDate;
 
     /**
      * 第二次挂拍日期
      */
-    @Excel(name = "第二次挂拍日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "第二次挂拍日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date secondShotDate;
 
     /**
      * 变卖挂拍日期
      */
-    @Excel(name = "变卖挂拍日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "变卖挂拍日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date sellShotDate;
 
     /**
      * 拍卖成交日期
      */
-    @Excel(name = "拍卖成交日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "拍卖成交日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date successfulBidderDate;
 
     /**
      * 执行款到账日期
      */
-    @Excel(name = "执行款到账日期", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "执行款到账日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date paymentReceivedDate;
 
     /**
@@ -298,7 +298,7 @@ public class SysProject extends BaseEntity {
     /**
      * 父级ID
      */
-    @Excel(name = "父级ID")
+    //@Excel(name = "父级ID")
     private Long parentId;
 
     /**
@@ -321,7 +321,7 @@ public class SysProject extends BaseEntity {
     /**
      * 债权状态
      */
-    @Excel(name = "债权状态")
+    ////@Excel(name = "债权状态")
     private String debtStatus;
 
     /**
@@ -362,43 +362,43 @@ public class SysProject extends BaseEntity {
     /**
      * 意向客户
      */
-    @Excel(name = "意向客户")
+    //////@Excel(name = "意向客户")
     private String potentialCustomers;
 
     /**
      * 意向客户ID
      */
-    // @Excel(name = "意向客户ID")
+    // ////@Excel(name = "意向客户ID")
     private String potentialCustomersId;
 
     /**
      * 查封日期提醒
      */
-    //@Excel(name = "查封日期提醒")
+    //////@Excel(name = "查封日期提醒")
     private String seizure;
 
     /**
      * 执行时效提醒
      */
-    //@Excel(name = "执行时效提醒")
+    //////@Excel(name = "执行时效提醒")
     private String ageing;
 
     /**
      * 诉讼时效提醒
      */
-    //@Excel(name = "诉讼时效提醒")
+    //////@Excel(name = "诉讼时效提醒")
     private String limitation;
 
     /**
      * 成交客户id
      */
-    //@Excel(name = "成交客户id")
+    //////@Excel(name = "成交客户id")
     private String dealCustomerId;
 
     /**
      * 成交客户名称
      */
-    @Excel(name = "客户名称")
+    ////@Excel(name = "客户名称")
     private String dealCustomerName;
 
     private String isCreate;
@@ -406,115 +406,115 @@ public class SysProject extends BaseEntity {
     /**
      * 客户标签
      */
-    //@Excel(name = "客户标签")
+    //////@Excel(name = "客户标签")
     private String customerLable;
 
     /**
      * 资产供应方id
      */
-    //@Excel(name = "资产供应方id")
+    //////@Excel(name = "资产供应方id")
     private String assetSupplierId;
 
     /**
      * 资产供应方名称
      */
-    // @Excel(name = "资产供应方名称")
+    // ////@Excel(name = "资产供应方名称")
     private String assetSupplierName;
 
     /**
      * 资金供应方id
      */
-    //@Excel(name = "资金供应方id")
+    //////@Excel(name = "资金供应方id")
     private String fundingProviderId;
 
     /**
      * 资金供应发名称
      */
-    // @Excel(name = "资金供应发名称")
+    // ////@Excel(name = "资金供应发名称")
     private String fundingProviderName;
 
     /**
      * 律师id
      */
-    //@Excel(name = "律师id")
+    //////@Excel(name = "律师id")
     private String lawyerId;
 
     /**
      * 律师名称
      */
-    //@Excel(name = "律师名称")
+    //////@Excel(name = "律师名称")
     private String lawyerName;
 
     /**
      * 中介方id
      */
-    @Excel(name = "律师id")
+    ////@Excel(name = "律师id")
     private String intermediaryId;
 
     /**
      * 中介方名称
      */
-    //@Excel(name = "律师名称")
+    //////@Excel(name = "律师名称")
     private String intermediaryName;
 
     /**
      * 物权意向客户id
      */
-    //@Excel(name = "物权意向客户id")
+    //////@Excel(name = "物权意向客户id")
     private String wqyxCustomerId;
 
     /**
      * 物权意向客户名称
      */
-    //@Excel(name = "物权意向客户名称")
+    ////@Excel(name = "物权意向客户名称")
     private String wqyxCustomerName;
 
     /**
      * 物权成交客户id
      */
-    //@Excel(name = "物权成交客户id")
+    ////@Excel(name = "物权成交客户id")
     private String wqcjCustomerId;
 
     /**
      * 物权成交客户名称
      */
-    //@Excel(name = "物权成交客户名称")
+    ////@Excel(name = "物权成交客户名称")
     private String wqcjCustomerName;
 
     /**
      * 债权意向客户id
      */
-    //@Excel(name = "债权意向客户id")
+    ////@Excel(name = "债权意向客户id")
     private String zqyxCustomerId;
 
     /**
      * 债券意向客户名称
      */
-    //@Excel(name = "债券意向客户名称")
+    ////@Excel(name = "债券意向客户名称")
     private String zqyxCustomerName;
 
     /**
      * 债权成交客户id
      */
-    //@Excel(name = "债权成交客户id")
+    ////@Excel(name = "债权成交客户id")
     private String zqcjCustomerId;
 
     /**
      * 债权成交客户名称
      */
-    //@Excel(name = "债权成交客户名称")
+    ////@Excel(name = "债权成交客户名称")
     private String zqcjCustomerName;
 
     /**
      * 其他id
      */
-    //@Excel(name = "其他id")
+    ////@Excel(name = "其他id")
     private String otherId;
 
     /**
      * 其他名称
      */
-    //@Excel(name = "其他名称")
+    ////@Excel(name = "其他名称")
     private String otherName;
 
     /*
@@ -532,7 +532,7 @@ public class SysProject extends BaseEntity {
     /**
      * 是否其他项目
      */
-    // @Excel(name = "是否其他项目")
+    // //@Excel(name = "是否其他项目")
     private String otherFlag;
 
     /**

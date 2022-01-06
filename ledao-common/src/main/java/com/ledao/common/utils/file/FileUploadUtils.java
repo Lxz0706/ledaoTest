@@ -119,7 +119,7 @@ public class FileUploadUtils {
         if (filename) {
             fileName = DateUtils.datePath() + "/" + encodingFilename(fileName) + "." + extension;
         } else {
-            fileName = DateUtils.datePath() + "/" + URLEncoder.encode(fileName);
+            fileName = DateUtils.datePath() + "/" + fileName;
         }
 
         return fileName;

@@ -40,4 +40,19 @@ public class WeChatConstants {
 	 */
 	public static final String WXGRANT_TYPE = "authorization_code";
 
+	/**
+	 * 工作流消息推送模板id
+	 */
+	public static final String WXMSGWORKFLOW_TEMPID = "rYpdPX9ymq9zAM8RBMxsnF2v8WyuVDUXsseXjG6sB2g";
+
+	/**
+	 * 任务消息推送模板id
+	 */
+	public static final String WXMSGTASK_TEMPID = "4hJMeUCWNgLm_3Mt-y0Q3pyKhsqizCX3uLfmQ5t4H6w";
+
+	/**
+	 * 公共日常任务的推送模板id
+	 */
+	public static final String WXMSGTASKUSAL_TEMPID = "TD_OZclHHKL0lWVTYB0ZNDXzxjg-9i0H_u__l2XY2Ao";
+
 }

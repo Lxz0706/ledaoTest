@@ -1,5 +1,7 @@
 package com.ledao.common.utils.file;
 
+import com.ledao.common.utils.StringUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -115,19 +117,30 @@ public class FileUtils {
 
     /**
      * 预览pdf文件工具类
+     *
      * @param response
      */
-    public static void showPdf(HttpServletResponse response, String path) throws IOException{
+    public static void showPdf(HttpServletResponse response, String path) throws IOException {
         response.setContentType("application/pdf");
-        String basePath = FileUploadUtils.getDefaultBaseDir().replace("profile","");
-        FileInputStream in = new FileInputStream(new File(basePath+path));
+        String basePath = FileUploadUtils.getDefaultBaseDir().replace("profile", "");
+        FileInputStream in = new FileInputStream(new File(basePath + path));
         OutputStream out = response.getOutputStream();
         byte[] b = new byte[1024];
-        while ((in.read(b))!=-1) {
+        while ((in.read(b)) != -1) {
             out.write(b);
         }
         out.flush();
         in.close();
         out.close();
+    }
+
+    public static void delFolder(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File file1 : files) {
+                delFolder(file1);
+            }
+        }
+        file.delete();
     }
 }

@@ -61,6 +61,12 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!--postgresql驱动包-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
         <!-- 核心模块-->
         <dependency>
             <groupId>com.ledao</groupId>

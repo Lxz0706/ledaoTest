@@ -4,12 +4,15 @@ import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 
 /**
  * 时间工具类
@@ -453,8 +456,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         }
         return time;
     }
+
     /**
-     *
      * 描述:获取下一个月.
      *
      * @return
@@ -469,6 +472,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 获取当前月后的第几个有的月份
+     *
      * @param com
      * @return
      */
@@ -482,11 +486,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 计算时间往后多少分钟
-     * @param hour
+     *
+     * @param minute
      * @param date
      * @return
      */
-    public static Date getMoreMinute(int minute,Date date) {
+    public static Date getMoreMinute(int minute, Date date) {
         long curren = date.getTime();
         curren += minute * 60 * 1000;
         Date da = new Date(curren);
@@ -495,24 +500,25 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 根据日期判断是星期几
+     *
      * @param dt
      * @return
      */
     public static String getWeekOfDate(Date dt) {
-        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         Calendar cal = Calendar.getInstance();
         cal.setTime(dt);
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0)
+        if (w < 0) {
             w = 0;
+        }
         return weekDays[w];
     }
 
     /**
      * 判断该日期是否是该月的最后一天
      *
-     * @param date
-     *            需要判断的日期
+     * @param date 需要判断的日期
      * @return
      */
     public static boolean isLastDayOfMonth(Date date) {
@@ -524,6 +530,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 获取未来 第 past 天的日期
+     *
      * @param past
      * @return
      */
@@ -536,12 +543,113 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 判断date2是否在date1后面
-     * @param past
+     *
+     * @param date1
+     * @param date2
      * @return
      */
-    public static boolean isTimeEaily(Date date1,Date date2) {
-        return date2.getTime()-date1.getTime()>0;
+    public static boolean isTimeEaily(Date date1, Date date2) {
+        return date2.getTime() - date1.getTime() > 0;
     }
 
 
+    ///**
+    // * 获取周末和节假日
+    // *
+    // * @param year
+    // * @param month
+    // * @return
+    // */
+    //public static Set<String> JJR(int year, int month) {
+    //    //获取所有的周末
+    //    Set<String> monthWekDay = getMonthWekDay(year, month);
+    //    //http://timor.tech/api/holiday api文档地址
+    //    Map jjr = getJjr(year, month + 1);
+    //    Integer code = (Integer) jjr.get("code");
+    //    if (code != 0) {
+    //        return monthWekDay;
+    //    }
+    //    Map<String, Map<String, Object>> holiday = (Map<String, Map<String, Object>>) jjr.get("holiday");
+    //    Set<String> strings = holiday.keySet();
+    //    for (String str : strings) {
+    //        Map<String, Object> stringObjectMap = holiday.get(str);
+    //        Integer wage = (Integer) stringObjectMap.get("wage");
+    //        String date = (String) stringObjectMap.get("date");
+    //        //筛选掉补班
+    //        if (wage.equals(1)) {
+    //            monthWekDay.remove(date);
+    //        } else {
+    //            monthWekDay.add(date);
+    //        }
+    //    }
+    //    return monthWekDay;
+    //}
+
+    /**
+     * 获取节假日不含周末
+     *
+     * @param yearAndMonth
+     * @return
+     */
+    public static Map getJjr(String yearAndMonth) {
+        String url = "http://timor.tech/api/holiday/year/";
+        OkHttpClient client = new OkHttpClient();
+        Response response;
+        //解密数据
+        String rsa = null;
+        Request request = new Request.Builder()
+                .url(url + yearAndMonth)
+                .get()
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        try {
+            response = client.newCall(request).execute();
+            rsa = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return JSONObject.parseObject(rsa, Map.class);
+    }
+
+
+    ///**
+    // * 获取周末  月从0开始
+    // *
+    // * @param year
+    // * @param mouth
+    // * @return
+    // */
+    //public static Set<String> getMonthWekDay(int year, int mouth) {
+    //    Set<String> dateList = new HashSet<>();
+    //    SimpleDateFormat simdf = new SimpleDateFormat("yyyy-MM-dd");
+    //    Calendar calendar = new GregorianCalendar(year, mouth, 1);
+    //    Calendar endCalendar = new GregorianCalendar(year, mouth, 1);
+    //    endCalendar.add(Calendar.MONTH, 1);
+    //    while (true) {
+    //        int weekday = calendar.get(Calendar.DAY_OF_WEEK);
+    //        if (weekday == 1 || weekday == 7) {
+    //            dateList.add(simdf.format(calendar.getTime()));
+    //        }
+    //        calendar.add(Calendar.DATE, 1);
+    //        if (calendar.getTimeInMillis() >= endCalendar.getTimeInMillis()) {
+    //            break;
+    //        }
+    //    }
+    //    return dateList;
+    //}
+
+    public static void main(String[] args) {
+        Map jjr = DateUtils.getJjr(DateUtils.parseDateToStr("yyyy-MM", new Date()));
+        Integer code = (Integer) jjr.get("code");
+        if (code != 0) {
+            throw new RuntimeException("获取失败！！！");
+        }
+        Map<String, Map<String, Object>> holiday = (Map<String, Map<String, Object>>) jjr.get("holiday");
+        Set<String> strings = holiday.keySet();
+        if (strings.contains(parseDateToStr("MM-dd", new Date()))) {
+            System.out.print("节假日！！！");
+        } else {
+            System.out.print("工作日！");
+        }
+    }
 }

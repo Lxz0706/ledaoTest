@@ -164,7 +164,7 @@
     function add() {
         var zcbId = $("#zcbId").val();
         var parentId = $("#id").val();
-        $.operate.adds(zcbId, parentId);
+        //$.operate.adds(zcbId, parentId);
         var url = prefix + "/add?zcbId=" + zcbId + "&parentId=" + parentId;
         $.modal.open("添加" + table.options.modalName, url);
     }

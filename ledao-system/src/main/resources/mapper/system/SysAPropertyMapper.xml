@@ -44,6 +44,7 @@
                 #{itemContent},'%')
             </if>
         </where>
+        order by item_time desc
     </select>
 
     <select id="selectSysAPropertyById" parameterType="Long" resultMap="SysAPropertyResult">

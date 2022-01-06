@@ -1,22 +1,35 @@
 package com.ledao.activity.controller;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ledao.activity.dao.*;
 import com.ledao.activity.mapper.SysWorkflowProcessMapper;
 import com.ledao.activity.service.*;
+import com.ledao.common.config.Global;
+import com.ledao.common.constant.Constants;
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.json.JSONObject;
 import com.ledao.common.message.WechatMessageUtil;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.WxImageTool;
+import com.ledao.common.utils.ZipUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
+import com.ledao.common.utils.file.FileUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.system.dao.SysDictData;
 import com.ledao.system.dao.SysRole;
@@ -43,6 +56,7 @@ import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -101,6 +115,7 @@ public class SysApplyInController extends BaseController {
     private SysUserRoleMapper userRoleMapper;
 
     private List<Long> applyIds = new ArrayList<>();
+    private String accessToken;
 
     @GetMapping("/applyIn")
     public String applyIn() {
@@ -580,6 +595,7 @@ public class SysApplyInController extends BaseController {
      * @throws IOException
      */
     @GetMapping(value = "/code")
+    @ResponseBody
     public Object twoCode(Long documentId, HttpServletResponse response) throws Exception {
         JSONObject data = new JSONObject();
         String accessToken = null;
@@ -591,20 +607,11 @@ public class SysApplyInController extends BaseController {
 
 
             String parm = parmData.toString();
-            /*accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
-            System.out.println("accessToken;"+accessToken);*/
             accessToken = configService.getWechatAccessToken();
             if (StringUtils.isEmpty(accessToken)) {
                 throw new RuntimeException("获取accessToken失败");
             }
-/*            com.alibaba.fastjson.JSONObject res = WechatMessageUtil.getAllUser(accessToken,"");
-            List<String> openIds = new ArrayList<>();
-//            openIds = (List<String>) res.get("data.openId");
-            Map m = (Map) res.get("data");
-            openIds = (List<String>) m.get("openid");
-            WechatMessageUtil.batchGetUserUnionId(accessToken,openIds);*/
-            String twoCodeUrl = WxQrCode.getminiqrQr(accessToken, FileUploadUtils.getDefaultBaseDir(), response, parm);
-            data.put("twoCodeUrl", twoCodeUrl);
+            data.put("twoCodeUrl", WxQrCode.getWxQrCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(sysDocumentFileService.selectSysDocumentFileById(documentId).getFileName().trim()), parm, response));
             return data;
         } catch (Exception e) {
             e.printStackTrace();
@@ -837,54 +844,131 @@ public class SysApplyInController extends BaseController {
             }
         }
 
-        /*if (listSortHasDate.size()>1){
-            Collections.sort(listSortHasDate, new Comparator<SysWorkflowProcess>() {
-                DateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                @Override
-                public int compare(SysWorkflowProcess o1, SysWorkflowProcess o2) {
-                    try {
-                        return o2.getApplyTime().compareTo(o1.getApplyTime());
-                    } catch (Exception e) {
-                        throw new IllegalArgumentException(e);
-                    }
-                }
-            });
-        }*/
-
         for (SysWorkflowProcess p : pros) {
             listSortHasDate.add(p);
         }
-        /*for (int i=pros.size()-1;i>-1; i--) {
-            list.set(index,pros.get(i));
-            index++;
-        }*/
         for (int i = 0; i < listSortHasDate.size(); i++) {
             list.set(index, listSortHasDate.get(i));
             index++;
         }
 
-
-
-       /* List<SysWorkflowProcess> res = new ArrayList<>();
-        for (int j = 0; j < list.size(); j++) {
-            for (int i = j + 1; i < list.size(); i++) {
-                if (list.get(j).getSortOrder() == list.get(i).getSortOrder()) {
-                    // 相同的排序，用 apply_time 排序
-                    if (list.get(j).getApplyTime().compareTo(list.get(i).getApplyTime()) < 0) {
-                        // i的时间小时j的时间
-                        res.add(list.get(i));
-                    }else {
-                        res.add(list.get(j));
-                    }
-                }else {
-                    // 加入结果
-                    res.add(list.get(j));
-                }
-            }
-        }*/
-
         return getDataTable(list);
     }
+
+    @GetMapping("/download/resource")
+    public void download(String ids, Long applyId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String accessToken = configService.getWechatAccessToken();
+        if (StringUtils.isEmpty(accessToken)) {
+            throw new RuntimeException("获取accessToken失败");
+        }
+        if (StringUtils.isEmpty(ids)) {
+            SysDocumentFile sysDocumentFile = new SysDocumentFile();
+            sysDocumentFile.setApplyId(applyId);
+            List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileDetailList(sysDocumentFile);
+            for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
+                ids = sysDocumentFile.getDocumentId() + "," + ids;
+            }
+        }
+        for (String string : ids.split(",")) {
+            if (StringUtils.isNotEmpty(string)) {
+                JSONObject paramData = new JSONObject();
+                paramData.put("scene", Long.valueOf(string));
+                paramData.put("url", "pages/lookInformation/index");
+                WxQrCode.downloadMiniCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(sysDocumentFileService.selectSysDocumentFileById(Long.valueOf(string)).getFileName().trim()), sysApplyInService.selectSysApplyInById(applyId).getDebtorName(), paramData.toString());
+            }
+        }
+        downloadFile(sysApplyInService.selectSysApplyInById(applyId).getDebtorName(), request, response);
+    }
+
+    @GetMapping("/download/resources")
+    public void downloadForAppId(String applyIds, SysApplyIn sysApplyIn, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String fileName = "";
+        //附件类型
+        List<SysDictData> documentFileTypeDict = sysDictDataService.selectDictDataByType("document_file_type");
+        //档案类型
+        List<SysDictData> busiDocumentTypeDict = sysDictDataService.selectDictDataByType("busi_document_type");
+        if (StringUtils.isEmpty(applyIds) || "null".equals(applyIds) || "undefined".equals(applyIds)) {
+            List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocByPNameDetailList(sysApplyIn);
+            for (SysApplyIn sysApplyIn1 : list) {
+                fileName = sysApplyInService.selectSysApplyInById(sysApplyIn1.getApplyId()).getDebtorName();
+                SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                sysDocumentFile.setApplyId(sysApplyIn1.getApplyId());
+                editFileName(sysApplyIn1.getApplyId());
+                List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
+                for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
+                    String documentGetType = getValue(busiDocumentTypeDict, sysDocumentFile1.getDocumentGetType());
+                    String fileType = getValue(documentFileTypeDict, sysDocumentFile1.getFileType());
+                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), fileName, fileName + ";" + sysDocumentFile1.getCounts() + "份        " + sysDocumentFile1.getPages() + "页        " + fileType);
+                }
+            }
+        } else {
+            for (String string : applyIds.split(",")) {
+                fileName = sysApplyInService.selectSysApplyInById(Long.valueOf(string)).getDebtorName();
+                SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                sysDocumentFile.setApplyId(Long.valueOf(string));
+                List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
+                for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
+                    String documentGetType = getValue(busiDocumentTypeDict, sysDocumentFile1.getDocumentGetType());
+                    String fileType = getValue(documentFileTypeDict, sysDocumentFile1.getFileType());
+                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), fileName, fileName + ";" + sysDocumentFile1.getCounts() + "份        " + sysDocumentFile1.getPages() + "页        " + fileType);
+                }
+            }
+        }
+        downloadFile(fileName, request, response);
+    }
+
+    public String getValue(List<SysDictData> list, String valueName) {
+        for (SysDictData sysDictData : list) {
+            if (sysDictData.getDictValue().equals(valueName)) {
+                valueName = sysDictData.getDictLabel();
+            }
+        }
+        return valueName;
+    }
+
+    public void createQrCodeImg(Long scene, String fileName, String debtorName, String text) throws Exception {
+        String accessToken = configService.getWechatAccessToken();
+        if (StringUtils.isEmpty(accessToken)) {
+            throw new RuntimeException("获取accessToken失败");
+        }
+        JSONObject paramData = new JSONObject();
+        paramData.put("scene", scene);
+        paramData.put("url", "pages/lookInformation/index");
+        WxQrCode.downloadMiniCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(fileName), debtorName, paramData.toString());
+        String nowday = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String savePath = FileUploadUtils.getDefaultBaseDir() + File.separator + "files" + File.separator + nowday + File.separator + debtorName + File.separator + fileName + ".png";
+        String saveImgPath = WxImageTool.generateCode(savePath, savePath, text, 300, 300);
+    }
+
+    public void downloadFile(String debtorName, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String nowday = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        // 数据库资源地址
+        String downloadPath = FileUploadUtils.getDefaultBaseDir() + File.separator + "files" + File.separator + nowday + File.separator + debtorName;
+        ZipUtils.toZip(downloadPath, new FileOutputStream(new File(downloadPath + ".zip")), true);
+        // 下载名称
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition",
+                "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, debtorName + ".zip"));
+        FileUtils.writeBytes(downloadPath + ".zip", response.getOutputStream());
+        FileUtils.delFolder(new File(downloadPath));
+        File file = new File(downloadPath + ".zip");
+        if (file.getName().endsWith(".zip")) {
+            file.delete();
+        }
+    }
+
+
+    public void editFileName(Long appId) {
+        SysDocumentFile sysDocumentFile = new SysDocumentFile();
+        sysDocumentFile.setApplyId(appId);
+        List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
+        for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
+            sysDocumentFile1.setFileName(sysDocumentFile1.getFileName().trim().replace(" ", "").replace("/", "-"));
+            sysDocumentFileService.updateSysDocumentFile(sysDocumentFile1);
+        }
+    }
+
 }
 
 

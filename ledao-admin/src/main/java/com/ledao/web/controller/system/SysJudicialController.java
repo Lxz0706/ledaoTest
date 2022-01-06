@@ -63,11 +63,13 @@ public class SysJudicialController extends BaseController {
     @RepeatSubmit
     public TableDataInfo list(SysJudicial sysJudicial) {
         startPage();
+        sysJudicial.setPageNumber(TableSupport.buildPageRequest().getPageNum());
+        sysJudicial.setPageSizeNum(TableSupport.buildPageRequest().getPageSize());
         List<SysJudicial> list = sysJudicialService.selectSysJudicialList(sysJudicial);
         for (SysJudicial sysJudicial1 : list) {
             SysTagging sysTagging = new SysTagging();
             sysTagging.setCreateBy(ShiroUtils.getLoginName());
-             sysTagging.setItemId(sysJudicial1.getItemId());
+            sysTagging.setItemId(sysJudicial1.getItemId());
             sysTagging.setJudicial("Y");
             List<SysTagging> sysTaggingList = sysTaggingService.selectSysTaggingList(sysTagging);
             if (sysTaggingList.size() > 0) {

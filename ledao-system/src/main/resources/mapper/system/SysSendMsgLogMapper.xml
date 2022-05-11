@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysSendMsgLogMapper">
+
+    <resultMap type="SysSendMsgLog" id="SysSendMsgLogResult">
+        <result property="id" column="id"/>
+        <result property="toUser" column="to_user"/>
+        <result property="sendMsg" column="send_msg"/>
+        <result property="resMsg" column="res_msg"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectSysSendMsgLogVo">
+        select id, to_user, send_msg, res_msg, create_time
+        from sys_send_msg_log
+    </sql>
+
+    <select id="selectSysSendMsgLogList" parameterType="SysSendMsgLog" resultMap="SysSendMsgLogResult">
+        <include refid="selectSysSendMsgLogVo"/>
+        <where>
+            <if test="toUser != null  and toUser != ''">and to_user = #{toUser}</if>
+            <if test="sendMsg != null  and sendMsg != ''">and send_msg = #{sendMsg}</if>
+            <if test="resMsg != null  and resMsg != ''">and res_msg = #{resMsg}</if>
+        </where>
+    </select>
+
+    <select id="selectSysSendMsgLogById" parameterType="Long" resultMap="SysSendMsgLogResult">
+        <include refid="selectSysSendMsgLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysSendMsgLog" parameterType="SysSendMsgLog" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_send_msg_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="toUser != null and toUser != ''">to_user,</if>
+            <if test="sendMsg != null and sendMsg != ''">send_msg,</if>
+            <if test="resMsg != null and resMsg != ''">res_msg,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="toUser != null and toUser != ''">#{toUser},</if>
+            <if test="sendMsg != null and sendMsg != ''">#{sendMsg},</if>
+            <if test="resMsg != null and resMsg != ''">#{resMsg},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysSendMsgLog" parameterType="SysSendMsgLog">
+        update sys_send_msg_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="toUser != null and toUser != ''">to_user = #{toUser},</if>
+            <if test="sendMsg != null and sendMsg != ''">send_msg = #{sendMsg},</if>
+            <if test="resMsg != null and resMsg != ''">res_msg = #{resMsg},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysSendMsgLogById" parameterType="Long">
+        delete
+        from sys_send_msg_log
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteSysSendMsgLogByIds" parameterType="String">
+        delete from sys_send_msg_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

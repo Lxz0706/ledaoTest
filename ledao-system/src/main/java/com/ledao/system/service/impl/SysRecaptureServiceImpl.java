@@ -3,6 +3,7 @@ package com.ledao.system.service.impl;
 import java.util.List;
 
 import com.ledao.common.utils.DateUtils;
+import com.ledao.system.dao.SysProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysRecaptureMapper;
@@ -109,5 +110,10 @@ public class SysRecaptureServiceImpl implements ISysRecaptureService {
     @Override
     public SysRecapture selectTotalRecaptureByProjectId(Long projectId) {
         return sysRecaptureMapper.selectTotalRecaptureByProjectId(projectId);
+    }
+
+    @Override
+    public SysRecapture selectSysRecapture(String zckIds) {
+        return sysRecaptureMapper.selectSysRecapture(zckIds);
     }
 }

@@ -1,32 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ledao.system.mapper.SysJournalMapper">
-    
+
     <resultMap type="SysJournal" id="SysJournalResult">
-        <result property="id"    column="id"    />
-        <result property="depId"    column="dep_id"    />
-        <result property="proId"    column="pro_id"    />
-        <result property="workDetail"    column="work_detail"    />
-        <result property="shared"    column="shared"    />
-        <result property="modularOrder"    column="modular_order"    />
-        <result property="remarks1"    column="remarks1"    />
-        <result property="remarks2"    column="remarks2"    />
-        <result property="remarks3"    column="remarks3"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="creator"    column="creator"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="reviser"    column="reviser"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="deptName"    column="dept_name"    />
-        <result property="userName"    column="user_name"    />
-        <result property="projectName"    column="project_Name"    />
+        <result property="id" column="id"/>
+        <result property="depId" column="dep_id"/>
+        <result property="proId" column="pro_id"/>
+        <result property="workDetail" column="work_detail"/>
+        <result property="shared" column="shared"/>
+        <result property="modularOrder" column="modular_order"/>
+        <result property="remarks1" column="remarks1"/>
+        <result property="remarks2" column="remarks2"/>
+        <result property="remarks3" column="remarks3"/>
+        <result property="createBy" column="create_by"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="reviser" column="reviser"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="projectName" column="project_Name"/>
     </resultMap>
 
     <sql id="selectSysJournalVo">
-        select id, dep_id, pro_id, work_detail, shared, modular_order, remarks1, remarks2, remarks3, create_by, creator, create_time, update_by, reviser, update_time from sys_journal
+        select id,
+               dep_id,
+               pro_id,
+               work_detail,
+               shared,
+               modular_order,
+               remarks1,
+               remarks2,
+               remarks3,
+               create_by,
+               creator,
+               create_time,
+               update_by,
+               reviser,
+               update_time
+        from sys_journal
     </sql>
 
     <select id="selectSysJournalList" parameterType="SysJournal" resultMap="SysJournalResult">
@@ -70,26 +85,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptName != null  and deptName != ''">and c.dept_name like concat('%',
                 #{deptName}, '%')
             </if>
-            <if test="depId != null  and depId != ''"> and a.dep_id = #{depId}</if>
-            <if test="proId != null  and proId != ''"> and a.pro_id = #{proId}</if>
-            <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
-            <if test="workDetail != null  and workDetail != ''"> and a.work_detail = #{workDetail}</if>
-            <if test="shared != null  and shared != ''"> and a.shared = #{shared}</if>
-            <if test="modularOrder != null "> and a.modular_order = #{modularOrder}</if>
-            <if test="remarks1 != null  and remarks1 != ''"> and a.remarks1 = #{remarks1}</if>
-            <if test="remarks2 != null  and remarks2 != ''"> and a.remarks2 = #{remarks2}</if>
-            <if test="remarks3 != null  and remarks3 != ''"> and a.remarks3 = #{remarks3}</if>
-            <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
-            <if test="reviser != null  and reviser != ''"> and a.reviser = #{reviser}</if>
+            <if test="depId != null  and depId != ''">and a.dep_id = #{depId}</if>
+            <if test="proId != null  and proId != ''">and a.pro_id = #{proId}</if>
+            <if test="createBy != null  and createBy != ''">and a.create_by = #{createBy}</if>
+            <if test="workDetail != null  and workDetail != ''">and a.work_detail = #{workDetail}</if>
+            <if test="shared != null  and shared != ''">and a.shared = #{shared}</if>
+            <if test="modularOrder != null ">and a.modular_order = #{modularOrder}</if>
+            <if test="remarks1 != null  and remarks1 != ''">and a.remarks1 = #{remarks1}</if>
+            <if test="remarks2 != null  and remarks2 != ''">and a.remarks2 = #{remarks2}</if>
+            <if test="remarks3 != null  and remarks3 != ''">and a.remarks3 = #{remarks3}</if>
+            <if test="creator != null  and creator != ''">and a.creator = #{creator}</if>
+            <if test="reviser != null  and reviser != ''">and a.reviser = #{reviser}</if>
         </where>
-        order by  a.create_time DESC
+        order by a.create_time DESC
     </select>
-    
+
     <select id="selectSysJournalById" parameterType="Long" resultMap="SysJournalResult">
         <include refid="selectSysJournalVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertSysJournal" parameterType="SysJournal" useGeneratedKeys="true" keyProperty="id">
         insert into sys_journal
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -107,7 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="reviser != null">reviser,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="depId != null">#{depId},</if>
             <if test="proId != null">#{proId},</if>
@@ -123,7 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="reviser != null">#{reviser},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysJournal" parameterType="SysJournal">
@@ -148,14 +163,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysJournalById" parameterType="Long">
-        delete from sys_journal where id = #{id}
+        delete
+        from sys_journal
+        where id = #{id}
     </delete>
 
     <delete id="deleteSysJournalByIds" parameterType="String">
-        delete from sys_journal where id in 
+        delete from sys_journal where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
+    <select id="selectSysJournalForCreate" parameterType="SysJournal" resultMap="SysJournalResult">
+        SELECT user_id,user_name,dept_id
+        FROM sys_user
+        WHERE login_name not IN (select create_by
+        from sys_journal
+        <where>
+            <if test="selectTime != null">
+                AND date_format(create_time,'%Y%m%d') = date_format(#{selectTime},'%Y%m%d')
+            </if>
+        </where>
+        GROUP BY create_by)
+        AND `status` = '0'
+        and formal_flag = '0'
+        AND del_flag = '0'
+    </select>
+
 </mapper>

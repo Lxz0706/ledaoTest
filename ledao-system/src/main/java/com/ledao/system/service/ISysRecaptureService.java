@@ -2,6 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysRecapture;
 
 /**
@@ -74,4 +75,6 @@ public interface ISysRecaptureService {
      * @return
      */
     public SysRecapture selectTotalRecaptureByProjectId(Long projectId);
+
+    public SysRecapture selectSysRecapture(String zckIds);
 }

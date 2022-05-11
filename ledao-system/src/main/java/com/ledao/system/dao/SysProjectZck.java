@@ -330,6 +330,8 @@ public class SysProjectZck extends BaseEntity {
                 .append("projectZckIds", getProjectZckIds())
                 .append("dictLable", getDictLable())
                 .append("zckStatusCount", getZckStatusCount())
+                .append("syhs", getSyhs())
+                .append("totalZck", getTotalZck())
                 .toString();
     }
 }

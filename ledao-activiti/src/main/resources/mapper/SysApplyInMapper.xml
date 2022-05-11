@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="documentType != null  and documentType != ''"> and document_type = #{documentType}</if>
             <if test="projectId != null "> and project_id = #{projectId}</if>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and company_name = #{companyName}</if>
             <if test="debtorName != null  and debtorName != ''"> and debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="applyUser != null  and applyUser != ''"> and apply_user = #{applyUser}</if>
             <if test="applyTime != null "> and apply_time = #{applyTime}</if>
@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and a.project_id = #{projectId}</if>
             <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
             <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
                 and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
@@ -196,7 +196,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and a.project_id = #{projectId}</if>
             <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
             <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
                 and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
@@ -231,7 +231,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and a.project_id = #{projectId}</if>
             <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and a.project_name = #{projectName}</if>
-            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
             <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
                 and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
@@ -266,7 +266,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and a.project_id = #{projectId}</if>
             <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
             <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
                 and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
@@ -405,7 +405,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and a.project_id = #{projectId}</if>
             <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
             <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
                 and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
@@ -475,7 +475,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and a.project_id = #{projectId}</if>
             <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
             <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->
                 and date_format(apply_time,'%Y%m%d') &gt;= date_format(#{params.beginApplyTime},'%Y%m%d')
@@ -565,7 +565,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="documentType != null  and documentType != ''"> and app.document_type = #{documentType}</if>
             <if test="projectId != null "> and app.project_id = #{projectId}</if>
             <if test="projectName != null  and projectName != ''"> and app.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="companyName != null  and companyName != ''"> and app.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and app.company_name = #{companyName}</if>
             <if test="applyUserName != null  and applyUserName != ''"> and ub.user_name like concat('%', #{applyUserName}, '%')</if>
             <if test="debtorName != null  and debtorName != ''"> and app.debtor_name like concat('%', #{debtorName}, '%')</if>
             <if test="applyTime != null "> and app.apply_time = #{applyTime}</if>
@@ -622,7 +622,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="projectId != null "> and a.project_id = #{projectId}</if>
         <if test="applyUserName != null  and applyUserName != ''"> and b.user_name like concat('%', #{applyUserName}, '%')</if>
         <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
-        <if test="companyName != null  and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+        <if test="companyName != null  and companyName != ''"> and a.company_name = #{companyName}</if>
         <if test="debtorName != null  and debtorName != ''"> and a.debtor_name like concat('%', #{debtorName}, '%')</if>
         <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
         <if test="params.beginApplyTime != null and params.beginApplyTime != ''"><!-- 开始时间检索 -->

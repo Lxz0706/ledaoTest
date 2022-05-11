@@ -58,4 +58,12 @@ public interface SysJournalMapper
      * @return 结果
      */
     public int deleteSysJournalByIds(String[] ids);
+
+    /**
+     * 查询没有填写日志的人员
+     *
+     * @param sysJournal
+     * @return
+     */
+    public List<SysJournal> selectSysJournalForCreate(SysJournal sysJournal);
 }

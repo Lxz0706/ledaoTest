@@ -9,8 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.utils.CoordinateUtil;
+import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysJudicial;
+import com.ledao.system.service.ISysJudicialService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +50,9 @@ public class SysValuationmapController extends BaseController {
     @Autowired
     private ISysValuationmapService sysValuationmapService;
 
+    @Autowired
+    private ISysJudicialService sysJudicialService;
+
     @RequiresPermissions("system:valuationmap:view")
     @GetMapping()
     public String valuationmap() {
@@ -60,18 +68,42 @@ public class SysValuationmapController extends BaseController {
     public String list(SysValuationmap sysValuationmap) {
         JSONArray array = new JSONArray();
         List<SysValuationmap> list = sysValuationmapService.selectSysValuationmapList(sysValuationmap);
+        ThreadLocal<Long> startTime = new ThreadLocal<>();
+        startTime.set(System.currentTimeMillis());
         for (SysValuationmap sysValuationmap1 : list) {
             JSONObject object = new JSONObject();
-            object.put("city", sysValuationmap1.getItemCity());
-            object.put("title", sysValuationmap1.getItemTitle());
-            object.put("areaMeasure", sysValuationmap1.getItemAreameasure());
-            object.put("type", sysValuationmap1.getItemType());
-            object.put("statue", sysValuationmap1.getItemStatus());
-            object.put("itemX", sysValuationmap1.getItemX());
-            object.put("itemY", sysValuationmap1.getItemY());
-            array.add(object);
+            if (StringUtils.isNotEmpty(sysValuationmap1.getItemX()) && StringUtils.isNotEmpty(sysValuationmap1.getItemY())) {
+                if (!"0".equals(sysValuationmap1.getItemX()) && !"0".equals(sysValuationmap1.getItemY())) {
+                    object.put("address", sysValuationmap1.getItemTitle());
+                    object.put("city", sysValuationmap1.getItemCity());
+                    object.put("title", sysValuationmap1.getItemTitle());
+                    object.put("areaMeasure", sysValuationmap1.getItemAreameasure());
+                    object.put("itemXY", sysValuationmap1.getItemX() + "," + sysValuationmap1.getItemY());
+                    object.put("type", sysValuationmap1.getItemType());
+                    object.put("statue", sysValuationmap1.getItemStatus());
+                    object.put("itemX", sysValuationmap1.getItemX());
+                    object.put("itemY", sysValuationmap1.getItemY());
+                    array.add(object);
+                }
+            }
         }
         return array.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getWgs84xy(13269197.0,4085292.7));
+    }
+
+    public static String getWgs84xy(double x, double y) {
+
+        //先转 国测局坐标
+        double[] doubles_gcj = CoordinateUtil.bd09togcj02(x, y);
+
+        //国测局坐标转wgs84
+        double[] doubles_wgs84 = CoordinateUtil.gcj02towgs84(doubles_gcj[0], doubles_gcj[1]);
+
+        //返回 纠偏后 坐标
+        return doubles_wgs84[0] + "," + doubles_wgs84[1];
     }
 
     /**

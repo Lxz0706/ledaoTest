@@ -148,11 +148,16 @@ public class SysProjectServiceImpl implements ISysProjectService {
     /**
      * 根据projectId查询总的本金余额
      *
-     * @param projectId
+     * @param projectZckIds
      * @return
      */
     @Override
-    public SysProject selectTotalPrincipalBalanceByParentId(Long projectId) {
-        return sysProjectMapper.selectTotalPrincipalBalanceByParentId(projectId);
+    public SysProject selectTotalPrincipalBalanceByParentId(String projectZckIds) {
+        return sysProjectMapper.selectTotalPrincipalBalanceByParentId(projectZckIds);
+    }
+
+    @Override
+    public SysProject selectTotal(SysProject sysProject) {
+        return sysProjectMapper.selectTotal(sysProject);
     }
 }

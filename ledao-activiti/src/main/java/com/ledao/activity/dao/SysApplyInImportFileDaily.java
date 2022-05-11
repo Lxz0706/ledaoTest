@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class SysApplyInImportFileDaily {
     @Excel(name = "序号")
-    private long no;
+    private Long no;
 
     @Excel(name = "种类")
     private String dailyDocumentTypeLab;
@@ -141,11 +141,11 @@ public class SysApplyInImportFileDaily {
         this.documentLevelLab = documentLevelLab;
     }
 
-    public long getNo() {
+    public Long getNo() {
         return no;
     }
 
-    public void setNo(long no) {
+    public void setNo(Long no) {
         this.no = no;
     }
 

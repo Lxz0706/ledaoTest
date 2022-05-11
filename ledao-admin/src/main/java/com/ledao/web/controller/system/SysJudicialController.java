@@ -2,15 +2,20 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ledao.activity.dao.BizLeaveVo;
 import com.ledao.common.annotation.RepeatSubmit;
 import com.ledao.common.core.page.PageDao;
 import com.ledao.common.core.page.TableSupport;
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysTagging;
+import com.ledao.system.dao.SysValuationmap;
 import com.ledao.system.service.ISysTaggingService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +66,9 @@ public class SysJudicialController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     @RepeatSubmit
+    @Log(title = "网拍线索查询", businessType = BusinessType.QUERY)
     public TableDataInfo list(SysJudicial sysJudicial) {
         startPage();
-        sysJudicial.setPageNumber(TableSupport.buildPageRequest().getPageNum());
-        sysJudicial.setPageSizeNum(TableSupport.buildPageRequest().getPageSize());
         List<SysJudicial> list = sysJudicialService.selectSysJudicialList(sysJudicial);
         for (SysJudicial sysJudicial1 : list) {
             SysTagging sysTagging = new SysTagging();
@@ -76,7 +80,52 @@ public class SysJudicialController extends BaseController {
                 sysJudicial1.setTaggings("Y");
             }
         }
-        return getDataTable(list);
+        return getDataTable(list, sysJudicial);
+    }
+
+    @PostMapping("/valuationmapList")
+    @ResponseBody
+    public String valuationmapList(SysJudicial sysJudicial) {
+        JSONArray array = new JSONArray();
+        //统计请求的处理时间
+        //sysJudicial.setItemType("工业用房");
+        sysJudicial.setItemStatus("已结束");
+        List<SysJudicial> list = sysJudicialService.selectSysJudicialList(sysJudicial);
+        for (SysJudicial sysJudicial1 : list) {
+            JSONObject object = new JSONObject();
+            if (StringUtils.isNotEmpty(sysJudicial1.getCoordinate())) {
+                if (!"0".equals(sysJudicial1.getCoordinate())) {
+                    //地址
+                    object.put("address", sysJudicial1.getAddress());
+                    //标题
+                    object.put("title", sysJudicial1.getItemTitle());
+                    //坐标
+                    object.put("itemXY", sysJudicial1.getCoordinate());
+                    //类型
+                    object.put("type", sysJudicial1.getItemType());
+                    //网址
+                    object.put("itemLink", sysJudicial1.getItemLink());
+                    //成交价
+                    object.put("itemCurrentprice", sysJudicial1.getItemCurrentprice());
+                    //单价
+                    //object.put("")
+                    //成交日期
+                    object.put("itemEndTime", DateUtils.parseDateToStr("yyyy-MM-dd",sysJudicial1.getItemEndTime()));
+                    //状态
+                    object.put("tags", sysJudicial1.getTags());
+                    array.add(object);
+                }
+            }
+        }
+        return array.toString();
+    }
+
+    protected TableDataInfo getDataTable(List<?> list, SysJudicial sysJudicial) {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setRows(list);
+        rspData.setTotal(sysJudicialService.selectSysJudicialListTotal(sysJudicial));
+        return rspData;
     }
 
     /**

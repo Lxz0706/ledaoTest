@@ -2,6 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysRecapture;
 
 /**
@@ -74,4 +75,6 @@ public interface SysRecaptureMapper {
      * @return
      */
     public SysRecapture selectTotalRecaptureByProjectId(Long projectId);
+
+    public SysRecapture selectSysRecapture(String zckIds);
 }

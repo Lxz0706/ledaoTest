@@ -588,4 +588,56 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return listTemp;
     }
+
+    /**
+     * 去除字符串str1中的str2
+     *
+     * @param str1 原字符串
+     * @param str2 去掉的字符串
+     * @return
+     */
+    public static String getSubString(String str1, String str2) {
+        StringBuffer sb = new StringBuffer(str1);
+        while (true) {
+            int index = sb.indexOf(str2);
+            if (index == -1) {
+                break;
+            }
+            sb.delete(index, index + str2.length());
+        }
+        return sb.toString();
+    }
+
+    public static String removeSameStr(String str1, String str2) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < str2.split(",").length; i++) {
+            for (int j = 0; j < str1.split(",").length; j++) {
+                System.out.println(str1.split(",")[j] + "---------" + str2.split(",")[i]);
+                System.out.println(str1.split(",")[j].equals(str2.split(",")[i]));
+                if (str1.split(",")[j].equals(str2.split(",")[i])) {
+                    sb.append(str1.split(",")[j]).append(",");
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    ;
+
+
+    public static void main(String[] args) {
+        String str = "admin,duxiaodan,wujunjie,jianghui,zhangyi,huasiyue,xukai,baohaifeng,caozhengsheng,xuxiaodong,yangxu,weicaixuan,wanglili,wangziyuan,huirunfen,qianwanping,chenlimin,miaoqing,zhujiaming,yinzuoyao,yangxudong,jiangjiaolong,wanhongwei,chenyanping,xuchi,luolina,,zhouli,huangyan,lixiangzhen,law-yinzuoyao,law-lixiangyang,law-chenyanping,law-,maochunming,jiangheng,taoguimin,liangxiao,chenzhigang,qianguojun";
+        String str2 = "taoguimin,wanglili,wanhongwei,wujunjie,caozhengsheng,huasiyue, xuxiaodong,maochunming, liangxiao, lixiangzhen, zhangyi,baohaifeng,jiangjiaolong,law-lixiangyang,yinzuoyao,law-yinzuoyao,chenyanping, law-chenyanping, weicaixuan, xuchi, huangyan, xukai, wanzhaonan, law-wanzhaonan, zhujiaming ";
+        List<String> list = new ArrayList<>(Arrays.asList(str.split(",")));
+        for (int i = 0; i < list.size(); i++) {
+            for (String st : str2.split(",")) {
+                if (list.get(i).equals(st)) {
+                    System.out.println("======"+list.get(i));
+                    list.remove(i);
+                    i--;
+                }
+            }
+        }
+        System.out.println(list);
+    }
 }

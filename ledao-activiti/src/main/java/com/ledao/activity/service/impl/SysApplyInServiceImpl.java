@@ -1289,7 +1289,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     List<SysApplyInImportFile> files = new ArrayList<>();
                     for (SysApplyInImportFile fi : filesList) {
                         if (apply.getProjectName().equals(fi.getProjectName()) && apply.getCompanyNameLab().equals(fi.getCompanyNameLab()) &&
-                                apply.getDebtorName().equals(fi.getDebtorName()) && apply.getApplyTime().equals(fi.getApplyTime())) {
+                                apply.getDebtorName().equals(fi.getDebtorName())
+                                && apply.getApplyTime().equals(fi.getApplyTime())) {
                             files.add(fi);
                         }
                     }

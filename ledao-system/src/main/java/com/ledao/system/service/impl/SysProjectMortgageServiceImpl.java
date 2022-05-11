@@ -3,6 +3,7 @@ package com.ledao.system.service.impl;
 import java.util.List;
 
 import com.ledao.common.utils.DateUtils;
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,7 +110,7 @@ public class SysProjectMortgageServiceImpl implements ISysProjectMortgageService
      * @return 结果
      */
     @Override
-    public SysProjectMortgage selectProjectMortgageByProjectId(Long projectId){
+    public SysProjectMortgage selectProjectMortgageByProjectId(Long projectId) {
         return sysProjectMortgageMapper.selectProjectMortgageByProjectId(projectId);
     }
 
@@ -120,7 +121,12 @@ public class SysProjectMortgageServiceImpl implements ISysProjectMortgageService
      * @return 结果
      */
     @Override
-    public List<SysProjectMortgage> selectProjectMortgageByProjectIds(Long projectId){
+    public List<SysProjectMortgage> selectProjectMortgageByProjectIds(Long projectId) {
         return sysProjectMortgageMapper.selectProjectMortgageByProjectIds(projectId);
+    }
+
+    @Override
+    public SysProjectMortgage selectMortgageByProject(SysProject sysProject) {
+        return sysProjectMortgageMapper.selectMortgageByProject(sysProject);
     }
 }

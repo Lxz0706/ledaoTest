@@ -2,6 +2,9 @@ package com.ledao.web.controller.monitor;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.ledao.system.dao.SysCustomer;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,9 +56,12 @@ public class SysOperlogController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysOperLog operLog) {
+        //List<SysOperLog> list = operLogService.selectOperLogList(operLog);
+        //ExcelUtil<SysOperLog> util = new ExcelUtil<SysOperLog>(SysOperLog.class);
+        //return util.exportExcel(list, "操作日志");
         List<SysOperLog> list = operLogService.selectOperLogList(operLog);
         ExcelUtil<SysOperLog> util = new ExcelUtil<SysOperLog>(SysOperLog.class);
-        return util.exportExcel(list, "操作日志");
+        return util.exportEasyExcel(list, "操作日志");
     }
 
     @RequiresPermissions("monitor:operlog:remove")
@@ -80,4 +86,52 @@ public class SysOperlogController extends BaseController {
         operLogService.cleanOperLog();
         return success();
     }
+
+    @GetMapping("/analysis")
+    public String analysis() {
+        return prefix + "/analysis";
+    }
+
+    @PostMapping("/selectOperLogByTitle")
+    @ResponseBody
+    public String selectOperLogByTitle(SysOperLog sysOperLog) {
+        List<SysOperLog> sysOperLogList = operLogService.selectOperLogByTitle(sysOperLog);
+        JSONArray jsonArray = new JSONArray();
+        for (SysOperLog sysOperLog1 : sysOperLogList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", sysOperLog1.getTitle());
+            jsonObject.put("value", sysOperLog1.getTotal());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray.toJSONString();
+    }
+
+    @PostMapping("/selectSysOperLogByOperTime")
+    @ResponseBody
+    public String selectSysOperLogByOperTime(SysOperLog sysOperLog) {
+        List<SysOperLog> sysOperLogList = operLogService.selectSysOperLogByOperTime(sysOperLog);
+        JSONArray jsonArray = new JSONArray();
+        for (SysOperLog sysOperLog1 : sysOperLogList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", sysOperLog1.getHours());
+            jsonObject.put("value", sysOperLog1.getTotal());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray.toJSONString();
+    }
+
+    @PostMapping("/selectOperLogByOperName")
+    @ResponseBody
+    public String selectOperLogByOperName(SysOperLog sysOperLog) {
+        List<SysOperLog> sysOperLogList = operLogService.selectOperLogByOperName(sysOperLog);
+        JSONArray jsonArray = new JSONArray();
+        for (SysOperLog sysOperLog1 : sysOperLogList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", sysOperLog1.getUserName());
+            jsonObject.put("value", sysOperLog1.getTotal());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray.toJSONString();
+    }
+
 }

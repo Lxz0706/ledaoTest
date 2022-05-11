@@ -24,6 +24,7 @@ import com.ledao.system.service.ISysUserService;
 import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.apache.bcel.generic.RET;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jodconverter.DocumentConverter;
 import org.jodconverter.office.OfficeException;
@@ -246,7 +247,7 @@ public class SysDocumentController extends BaseController {
                     if (!currentUser.isAdmin()) {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                                 if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                     if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                         sysUser.setFormalFlag("0");
@@ -262,6 +263,13 @@ public class SysDocumentController extends BaseController {
                     userNames.append(sysUser1.getUserName()).append(",");
                 }
             }
+        }
+
+        if (!Arrays.asList(userIds.toString().split(",")).contains(ShiroUtils.getUserId())) {
+            userIds.append(ShiroUtils.getUserId());
+        }
+        if (userNames.toString().indexOf(ShiroUtils.getSysUser().getUserName()) == -1) {
+            userNames.append(ShiroUtils.getSysUser().getUserName());
         }
         sysDocument.setShareUserId(userIds.toString());
         sysDocument.setShareUserName(userNames.toString());
@@ -494,8 +502,10 @@ public class SysDocumentController extends BaseController {
     }
 
     public static void main(String[] args) throws Exception {
-        String name = "sd.doc";
-        System.out.println(name.substring(name.indexOf("."), name.length()));
+        String name = "钱婉萍";
+        String ids = "10";
+        String names = "10,50";
+        System.out.println(Arrays.asList(names.split(",")).contains(ids));
     }
 
     /**
@@ -518,4 +528,27 @@ public class SysDocumentController extends BaseController {
                 "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, sysDocument.getFileName() + type));
         FileUtils.writeBytes(downloadPath, response.getOutputStream());
     }
+
+    @GetMapping("/filePr")
+    public void viewOfdDoc(Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //获取⽂件夹真实路径upload
+        SysDocument sysDocument = sysDocumentService.selectSysDocumentById(id);
+        // 本地资源路径
+        String localPath = Global.getProfile();
+        // 数据库资源地址
+        String downloadPath = localPath + StringUtils.substringAfter(sysDocument.getFileUrl(), Constants.RESOURCE_PREFIX);
+        // 下载名称
+        String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
+        String type = downloadName.substring(downloadName.lastIndexOf("."), downloadName.length());
+        //获取上传⽂件实
+        //拼接路径创建对象
+        File file = new File(downloadPath);
+        InputStream inputStream = new FileInputStream(file);
+        OutputStream outputStream = response.getOutputStream();
+        response.setContentType("application/x-download");
+        response.addHeader("Content-Disposition", "attachment;filename=" + FileUtils.setFileDownloadHeader(request, sysDocument.getFileName() + type));
+        IOUtils.copy(inputStream, outputStream);
+        outputStream.flush();
+    }
+
 }

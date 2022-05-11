@@ -4,6 +4,7 @@
 <head>
     <th:block th:include="include :: header('修改档案出库申请')"/>
     <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: select2-css"/>
 </head>
 
 <body class="white-bg">
@@ -45,11 +46,14 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">公司名称：</label>
             <div class="col-sm-8">
-                <select id="companyName" name="companyName"
-                        th:with="type=${@dict.getType('sys_company_name')}"
-                        data-none-selected-text="请选择" class="form-control m-b">
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                            th:value="${dict.dictValue}" th:field="*{companyName}"></option>
+<!--                <select id="companyName" name="companyName"-->
+<!--                        th:with="type=${@dict.getType('sys_company_name')}"-->
+<!--                        data-none-selected-text="请选择" class="form-control m-b">-->
+<!--                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
+<!--                            th:value="${dict.dictValue}" th:field="*{companyName}"></option>-->
+<!--                </select>-->
+                <select id="companyName" name="companyName" class="form-control select2-multiple"th:field="*{companyName}">
+                    <option th:each="sysDictData:${sysDictData}" th:value="${sysDictData.dictValue}" th:text="${sysDictData.dictLabel}"></option>
                 </select>
             </div>
         </div>
@@ -182,6 +186,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: select2-js"/>
 <script type="text/javascript" th:inline="javascript">
         var prefix = ctx + "applyIn";
         var docDetailUrl = ctx + "activity/outFiledetail"

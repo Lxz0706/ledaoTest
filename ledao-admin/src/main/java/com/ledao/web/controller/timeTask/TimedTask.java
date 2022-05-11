@@ -783,25 +783,27 @@ public class TimedTask {
         //    sendDailyRemainUsalTask(us, parmStr);
         //}
         boolean holiday = false;
-        Map jjr = DateUtils.getJjr(DateUtils.parseDateToStr("yyyy-MM", new Date()));
-        Integer code = (Integer) jjr.get("code");
-        if (code != 0) {
-            throw new RuntimeException("获取失败！！！");
+        //获取节假日和周末
+        Set<String> set = DateUtils.JJR(Integer.valueOf(DateUtils.parseDateToStr("yyyy", new Date())), Integer.valueOf(DateUtils.parseDateToStr("MM", new Date())));
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            String str = (String) it.next();
+            //判断当前日期是否是节假日或者周末
+            if (str.equals(DateUtils.parseDateToStr("yyyy-MM-dd", new Date()))) {
+                holiday = true;
+            }
         }
-        Map<String, Map<String, Object>> holidayList = (Map<String, Map<String, Object>>) jjr.get("holiday");
-        Set<String> strings = holidayList.keySet();
-        if (strings.contains(DateUtils.parseDateToStr("MM-dd", new Date()))) {
-            holiday = true;
-        }
+
         if (!holiday) {
             String date = DateUtils.formatDateByPattern(new Date(), "yyyyMMdd");
-            List<SysUser> users = sysUserService.selectAllUserDepRole();
             Map<String, String> parmStr = new HashMap<>();
             parmStr.put("first", "您有一个日志任务提醒");
             parmStr.put("word1", "日志未填写提醒");
             parmStr.put("word2", "请及时填写日志");
             List<String> sendUsers = new ArrayList<>();
             List<SysUser> us = new ArrayList<>();
+            SysUser sysUser = new SysUser();
+            List<SysUser> users = sysUserService.selectAllUser();
             for (SysUser u : users) {
                 if ("y".equals(u.getIsDailyRemind()) || StringUtils.isEmpty(u.getIsDailyRemind())) {
                     if (StringUtils.isNotEmpty(u.getComOpenId())) {
@@ -809,6 +811,7 @@ public class TimedTask {
                         sj.setCreateBy(u.getLoginName());
                         sj.getParams().put("beginTime", date);
                         List<SysJournal> jours = sysJournalService.selectSysJournalList(sj);
+                        System.out.println("日志数量：=============" + jours.size());
                         if (jours == null || jours.size() == 0) {
                             if (!sendUsers.contains(u.getLoginName())) {
                                 us.add(u);
@@ -1052,7 +1055,7 @@ public class TimedTask {
             public void run() {
                 System.out.println("-------设定要指定任务--------");
             }
-        }, 10000);
+        }, 3000);
     }
 
     /**

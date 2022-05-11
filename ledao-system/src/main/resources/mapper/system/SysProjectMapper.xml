@@ -126,7 +126,8 @@
             <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
             <if test="pledge !=null and pledge !=''">and pledge = #{pledge}</if>
             <if test="collateral != null  and collateral != ''">and collateral = #{collateral}</if>
-            <if test="projectManagerId !=null and projectManagerId !=''">and find_in_set(#{projectManagerId},project_manager_id)
+            <if test="projectManagerId !=null and projectManagerId !=''">and
+                find_in_set(#{projectManagerId},project_manager_id)
             </if>
             <if test="projectManager != null  and projectManager != ''">and project_manager = #{projectManager}</if>
             <if test="userId != null ">and user_id = #{userId}</if>
@@ -226,7 +227,8 @@
             <if test="guarantor != null  and guarantor != ''">and guarantor = #{guarantor}</if>
             <if test="pledge !=null and pledge !=''">and pledge = #{pledge}</if>
             <if test="collateral != null  and collateral != ''">and collateral = #{collateral}</if>
-            <if test="projectManagerId !=null and projectManagerId !=''">and find_in_set( #{projectManagerId},project_manager_id)
+            <if test="projectManagerId !=null and projectManagerId !=''">and find_in_set(
+                #{projectManagerId},project_manager_id)
             </if>
             <if test="userId != null ">and user_id = #{userId}</if>
             <if test="judicialStatus != null  and judicialStatus != ''">and judicial_status = #{judicialStatus}</if>
@@ -587,10 +589,10 @@
 
     <select id="selectProject" parameterType="SysProject" resultMap="SysProjectResult">
         SELECT
-        zck.project_zck_type,
+        SUM(principal_balance) AS totalPrincipalBalance,
         pro.*
         FROM
-        sys_project pro LEFT JOIN sys_project_zck zck on pro.project_zck_id = zck.project_zck_id
+        sys_project pro
         <where>
             pro.del_flag='0' and pro.parent_id IS NULL
             <if test="projectZckId != null ">and pro.project_zck_id = #{projectZckId}</if>
@@ -599,7 +601,7 @@
             <if test="projectName != null ">and pro.project_name like concat ('%', #{projectName},'%')</if>
             <if test="otherFlag != null  and otherFlag != ''">and other_flag = #{otherFlag}</if>
         </where>
-        order by no asc
+        GROUP BY project_id order by no asc
     </select>
 
     <select id="selectSysProjectByParentId" parameterType="SysProject" resultMap="SysProjectResult">
@@ -612,6 +614,22 @@
         WHERE ischild != 0 AND del_flag='0' OR project_id =#{projectId}
     </select>
 
+    <select id="selectTotal" parameterType="SysProject" resultMap="SysProjectResult">
+        select SUM(capital) grossCapital, SUM(total_interest) grossInterest
+        FROM sys_project_contract
+        WHERE project_id IN (SELECT project_id
+                             FROM (SELECT t1.project_id,
+                                          IF(FIND_IN_SET(parent_id, @pids) > 0, @pids := CONCAT(@pids, ',', project_id), 0) AS ischild,
+                                          del_flag
+                                   FROM (SELECT project_id, parent_id, del_flag
+                                         FROM sys_project t
+                                         ORDER BY parent_id, project_id) t1,
+                                        (SELECT @pids := #{projectId}) t2) t3
+                             WHERE ischild
+            != 0 AND del_flag='0' OR project_id =#{projectId})
+          AND del_flag='0';
+    </select>
+
     <select id="selectSysProjectByProjectId" parameterType="String" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         <where>
@@ -620,7 +638,7 @@
                 #{projectId}
             </foreach>
         </where>
-        order  by  no asc
+        order by no asc
     </select>
 
     <select id="selectSysProjectByProjectZckId" parameterType="String" resultMap="SysProjectResult">
@@ -641,20 +659,10 @@
         </where>
     </select>
 
-    <select id="selectTotalPrincipalBalanceByParentId" parameterType="Long" resultMap="SysProjectResult">
+    <select id="selectTotalPrincipalBalanceByParentId" parameterType="String" resultMap="SysProjectResult">
         SELECT SUM(principal_balance) as totalPrincipalBalance
         FROM sys_project
-        WHERE del_flag = '0'
-          AND project_id IN
-              (SELECT project_id
-               FROM (SELECT t1.project_id,
-                            IF(FIND_IN_SET(parent_id, @pids) > 0,
-                               @pids := CONCAT(@pids, ',', project_id), 0) AS ischild,
-                            del_flag
-                     FROM (SELECT project_id, parent_id, del_flag FROM sys_project t ORDER BY parent_id, project_id) t1,
-                          (SELECT @pids := #{projectId}) t2) t3
-               WHERE ischild
-            != 0 AND del_flag='0' OR project_id =#{projectId});
+        WHERE project_zck_id IN (#{zckIds}) AND parent_id IS NULL AND del_flag='0'
     </select>
 
 </mapper>

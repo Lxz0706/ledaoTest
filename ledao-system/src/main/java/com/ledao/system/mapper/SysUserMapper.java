@@ -155,4 +155,14 @@ public interface SysUserMapper {
     public List<SysUser> selectUserByRoleKey(SysUser sysUser);
 
     List<SysUser> selectAllUserDepRole();
+
+
+    public List<SysUser> selectAllUser();
+
+    /**
+     * 查询出没有填写日志的人员
+     * @param sysUser
+     * @return
+     */
+    public List<SysUser> selectCreatorForUser(SysUser sysUser);
 }

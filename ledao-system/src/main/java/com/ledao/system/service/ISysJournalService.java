@@ -1,19 +1,19 @@
 package com.ledao.system.service;
 
 import java.util.List;
+
 import com.ledao.system.dao.SysJournal;
 
 /**
  * 日志Service接口
- * 
+ *
  * @author lxz
  * @date 2021-09-05
  */
-public interface ISysJournalService 
-{
+public interface ISysJournalService {
     /**
      * 查询日志
-     * 
+     *
      * @param id 日志ID
      * @return 日志
      */
@@ -21,7 +21,7 @@ public interface ISysJournalService
 
     /**
      * 查询日志列表
-     * 
+     *
      * @param sysJournal 日志
      * @return 日志集合
      */
@@ -29,7 +29,7 @@ public interface ISysJournalService
 
     /**
      * 新增日志
-     * 
+     *
      * @param sysJournal 日志
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface ISysJournalService
 
     /**
      * 修改日志
-     * 
+     *
      * @param sysJournal 日志
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface ISysJournalService
 
     /**
      * 批量删除日志
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -53,9 +53,17 @@ public interface ISysJournalService
 
     /**
      * 删除日志信息
-     * 
+     *
      * @param id 日志ID
      * @return 结果
      */
     public int deleteSysJournalById(Long id);
+
+    /**
+     * 查询没有填写日志的人员
+     *
+     * @param sysJournal
+     * @return
+     */
+    public List<SysJournal> selectSysJournalForCreate(SysJournal sysJournal);
 }

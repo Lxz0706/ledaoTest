@@ -3,6 +3,7 @@ package com.ledao.system.service.impl;
 import java.util.List;
 
 import com.ledao.common.utils.DateUtils;
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectMortgage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,5 +108,10 @@ public class SysProjectPledgeServiceImpl implements ISysProjectPledgeService {
     @Override
     public List<SysProjectPledge> selectSysPledgeByProjectId(Long projectId) {
         return sysProjectPledgeMapper.selectSysPledgeByProjectId(projectId);
+    }
+
+    @Override
+    public SysProjectPledge seletPledgor(SysProject sysProject) {
+        return sysProjectPledgeMapper.seletPledgor(sysProject);
     }
 }

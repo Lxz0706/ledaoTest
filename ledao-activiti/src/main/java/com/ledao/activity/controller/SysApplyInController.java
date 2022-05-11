@@ -1,39 +1,29 @@
 package com.ledao.activity.controller;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.ledao.activity.dao.*;
 import com.ledao.activity.mapper.SysWorkflowProcessMapper;
 import com.ledao.activity.service.*;
-import com.ledao.common.config.Global;
-import com.ledao.common.constant.Constants;
-import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.json.JSONObject;
-import com.ledao.common.message.WechatMessageUtil;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.WxImageTool;
 import com.ledao.common.utils.ZipUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;
+import com.ledao.common.utils.poi.EasyExcelUtil;
 import com.ledao.common.utils.qrCode.WxQrCode;
+import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.SysDictData;
 import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysUserRole;
+import com.ledao.common.utils.bean.SheetExcelData;
 import com.ledao.system.mapper.SysRoleMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.mapper.SysUserRoleMapper;
@@ -56,12 +46,8 @@ import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysUser;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.sound.midi.Soundbank;
-import javax.validation.constraints.Size;
 
 /**
  * 档案入库申请Controller
@@ -379,7 +365,8 @@ public class SysApplyInController extends BaseController {
      * 新增档案入库申请
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmp) {
+        mmp.put("sysDictData", sysDictDataService.selectDictDataByType("sys_company_name"));
         return prefix + "/add";
     }
 
@@ -411,6 +398,7 @@ public class SysApplyInController extends BaseController {
     public String addOut(ModelMap mmap) {
         String roleType = sysApplyInService.checkUserRole(ShiroUtils.getSysUser());
         mmap.put("roleType", roleType);
+        mmap.put("sysDictData", sysDictDataService.selectDictDataByType("sys_company_name"));
         return prefix + "/addOut";
     }
 
@@ -545,6 +533,7 @@ public class SysApplyInController extends BaseController {
         mmap.put(("appStatu"), sysApplyIn.getApproveStatu());
         mmap.put("applyTypeUnDone", applyTypeUnDone);
         mmap.put("seOrEd", seOrEd);
+        mmap.put("sysDictData", sysDictDataService.selectDictDataByType("sys_company_name"));
         if ("1".equals(applyType)) {
             String roleType = sysApplyInService.checkUserRole(ShiroUtils.getSysUser());
             mmap.put("roleType", roleType);
@@ -561,6 +550,7 @@ public class SysApplyInController extends BaseController {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put(("appStatu"), sysApplyIn.getApproveStatu());
         mmap.put("sysApplyIn", sysApplyIn);
+        mmap.put("sysDictData", sysDictDataService.selectDictDataByType("sys_company_name"));
         return prefix + "/edit";
     }
 
@@ -856,7 +846,11 @@ public class SysApplyInController extends BaseController {
     }
 
     @GetMapping("/download/resource")
-    public void download(String ids, Long applyId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void download(String ids, Long applyId, String debtorName, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String title = debtorName;
+        //附件类型
+        List<SysDictData> documentFileTypeDict = sysDictDataService.selectDictDataByType("document_file_type");
+        List<SysDictData> companyList = sysDictDataService.selectDictDataByType("sys_company_name");
         String accessToken = configService.getWechatAccessToken();
         if (StringUtils.isEmpty(accessToken)) {
             throw new RuntimeException("获取accessToken失败");
@@ -866,27 +860,34 @@ public class SysApplyInController extends BaseController {
             sysDocumentFile.setApplyId(applyId);
             List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileDetailList(sysDocumentFile);
             for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
-                ids = sysDocumentFile.getDocumentId() + "," + ids;
+                ids = sysDocumentFile1.getDocumentId() + "," + ids;
             }
         }
         for (String string : ids.split(",")) {
             if (StringUtils.isNotEmpty(string)) {
-                JSONObject paramData = new JSONObject();
-                paramData.put("scene", Long.valueOf(string));
-                paramData.put("url", "pages/lookInformation/index");
-                WxQrCode.downloadMiniCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(sysDocumentFileService.selectSysDocumentFileById(Long.valueOf(string)).getFileName().trim()), sysApplyInService.selectSysApplyInById(applyId).getDebtorName(), paramData.toString());
+                SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
+                SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(Long.valueOf(string));
+                String fileType = getValue(documentFileTypeDict, sysDocumentFile.getFileType());
+                String companyName = getValue(companyList, sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId()).getCompanyName());
+                title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
+                String userName = userMapper.selectUserByLoginName(sysApplyIn.getApplyUser()).getUserName();
+                String createTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn.getCreateTime());
+                createQrCodeImg(Long.valueOf(string), sysDocumentFile.getFileName(), title, title + ";" + createTime + ";" + userName + ";" + fileType + ";" + sysDocumentFile.getCounts() + "份     " + sysDocumentFile.getPages() + "页;");
             }
         }
-        downloadFile(sysApplyInService.selectSysApplyInById(applyId).getDebtorName(), request, response);
+        downloadFile(title, request, response);
     }
 
     @GetMapping("/download/resources")
-    public void downloadForAppId(String applyIds, SysApplyIn sysApplyIn, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void downloadForAppId(String applyIds, SysApplyIn sysApplyIn, String debtorName, String roleType, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String fileName = "";
+        String title = debtorName;
         //附件类型
         List<SysDictData> documentFileTypeDict = sysDictDataService.selectDictDataByType("document_file_type");
         //档案类型
         List<SysDictData> busiDocumentTypeDict = sysDictDataService.selectDictDataByType("busi_document_type");
+
+        List<SysDictData> companyList = sysDictDataService.selectDictDataByType("sys_company_name");
         if (StringUtils.isEmpty(applyIds) || "null".equals(applyIds) || "undefined".equals(applyIds)) {
             List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocByPNameDetailList(sysApplyIn);
             for (SysApplyIn sysApplyIn1 : list) {
@@ -898,7 +899,15 @@ public class SysApplyInController extends BaseController {
                 for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
                     String documentGetType = getValue(busiDocumentTypeDict, sysDocumentFile1.getDocumentGetType());
                     String fileType = getValue(documentFileTypeDict, sysDocumentFile1.getFileType());
-                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), fileName, fileName + ";" + sysDocumentFile1.getCounts() + "份        " + sysDocumentFile1.getPages() + "页        " + fileType);
+                    String companyName = getValue(companyList, sysApplyInService.selectSysApplyInById(sysDocumentFile1.getApplyId()).getCompanyName());
+                    if ("bg".equals(sysApplyIn.getRoleType())) {
+                        title = sysApplyIn.getProjectName();
+                    } else {
+                        title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
+                    }
+                    String userName = userMapper.selectUserByLoginName(sysApplyIn1.getApplyUser()).getUserName();
+                    String createTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn1.getCreateTime());
+                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), title, title + ";" + createTime + ";" + userName + ";" + fileType + ";" + sysDocumentFile1.getCounts() + "份     " + sysDocumentFile1.getPages() + "页;");
                 }
             }
         } else {
@@ -908,13 +917,18 @@ public class SysApplyInController extends BaseController {
                 sysDocumentFile.setApplyId(Long.valueOf(string));
                 List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
                 for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
+                    SysApplyIn sysApplyIn1 = sysApplyInService.selectSysApplyInById(Long.valueOf(string));
                     String documentGetType = getValue(busiDocumentTypeDict, sysDocumentFile1.getDocumentGetType());
                     String fileType = getValue(documentFileTypeDict, sysDocumentFile1.getFileType());
-                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), fileName, fileName + ";" + sysDocumentFile1.getCounts() + "份        " + sysDocumentFile1.getPages() + "页        " + fileType);
+                    String companyName = getValue(companyList, sysApplyInService.selectSysApplyInById(sysDocumentFile1.getApplyId()).getCompanyName());
+                    title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
+                    String userName = userMapper.selectUserByLoginName(sysApplyIn1.getApplyUser()).getUserName();
+                    String createTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn1.getCreateTime());
+                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), title, title + ";" + createTime + ";" + userName + ";" + fileType + ";" + sysDocumentFile1.getCounts() + "份     " + sysDocumentFile1.getPages() + "页;");
                 }
             }
         }
-        downloadFile(fileName, request, response);
+        downloadFile(title, request, response);
     }
 
     public String getValue(List<SysDictData> list, String valueName) {
@@ -937,7 +951,7 @@ public class SysApplyInController extends BaseController {
         WxQrCode.downloadMiniCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(fileName), debtorName, paramData.toString());
         String nowday = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String savePath = FileUploadUtils.getDefaultBaseDir() + File.separator + "files" + File.separator + nowday + File.separator + debtorName + File.separator + fileName + ".png";
-        String saveImgPath = WxImageTool.generateCode(savePath, savePath, text, 300, 300);
+        WxImageTool.generateCode(savePath, savePath, text, 290, 300);
     }
 
     public void downloadFile(String debtorName, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -967,6 +981,49 @@ public class SysApplyInController extends BaseController {
             sysDocumentFile1.setFileName(sysDocumentFile1.getFileName().trim().replace(" ", "").replace("/", "-"));
             sysDocumentFileService.updateSysDocumentFile(sysDocumentFile1);
         }
+    }
+
+    @GetMapping("/selectSysApplyInByApplyUserNameAndTime")
+    public void selectSysApplyInByApplyUserNameAndTime(SysApplyIn applyIn, HttpServletResponse response) throws IOException {
+        List<SysApplyIn> list = sysApplyInService.selectSysApplyInListUser(applyIn);
+        for (SysApplyIn sysApplyIn : list) {
+            sysApplyIn.setApplyTypeToString(sysDictDataService.selectDictLabel("sys_file_apply_type", sysApplyIn.getApplyType()));
+            sysApplyIn.setDocumentTypeToString(sysDictDataService.selectDictLabel("sys_document_busi_type", sysApplyIn.getDocumentType()));
+            sysApplyIn.setCompanyNameToString(sysDictDataService.selectDictLabel("sys_company_name", sysApplyIn.getCompanyName()));
+            sysApplyIn.setApproveStatuToString(sysDictDataService.selectDictLabel("apply_statu", sysApplyIn.getApproveStatu()));
+        }
+
+        EasyExcelUtil util = new EasyExcelUtil();
+
+        List<SheetExcelData> sheetExcelDataList = new ArrayList<>();
+        SheetExcelData<SysApplyIn> sysApplyInSheetExcelData = new SheetExcelData<>();
+        sysApplyInSheetExcelData.setSheetName("基本信息");
+        sysApplyInSheetExcelData.settClass(SysApplyIn.class);
+        sysApplyInSheetExcelData.setDataList(list);
+        sheetExcelDataList.add(sysApplyInSheetExcelData);
+
+        //获取文档信息
+        SysDocumentFile sysDocumentFile = new SysDocumentFile();
+        sysDocumentFile.setApplyUserName(applyIn.getApplyUserName());
+        sysDocumentFile.getParams().put("beginApplyTime", applyIn.getParams().get("beginApplyTime"));
+        sysDocumentFile.getParams().put("endApplyTime", applyIn.getParams().get("endApplyTime"));
+        List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
+        for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
+            sysDocumentFile1.setFileGetTypeToString(sysDictDataService.selectDictLabel("document_in_type", sysDocumentFile1.getFileGetType()));
+            sysDocumentFile1.setDocumentGetTypeToString(sysDictDataService.selectDictLabel("busi_document_type", sysDocumentFile1.getDocumentGetType()));
+            sysDocumentFile1.setDocumentStatuToString(sysDictDataService.selectDictLabel("document_in_status", sysDocumentFile1.getDocumentStatu()));
+            sysDocumentFile1.setDailyDocumentTypeToString(sysDictDataService.selectDictLabel("sys_document_busi_type", sysDocumentFile1.getDailyDocumentType()));
+            sysDocumentFile1.setDocumentLevelToString(sysDictDataService.selectDictLabel("document_level", sysDocumentFile1.getDocumentLevel()));
+            sysDocumentFile1.setCompanyNameToString(sysDictDataService.selectDictLabel("sys_company_name", sysDocumentFile1.getCompanyName()));
+            sysDocumentFile1.setDocumentTypeVal(sysDictDataService.selectDictLabel("sys_document_busi_type", sysDocumentFile1.getDocumentType()));
+        }
+        SheetExcelData<SysDocumentFile> sysDocumentFileSheetExcelData = new SheetExcelData<>();
+        sysDocumentFileSheetExcelData.setSheetName("档案信息");
+        sysDocumentFileSheetExcelData.settClass(SysDocumentFile.class);
+        sysDocumentFileSheetExcelData.setDataList(sysDocumentFileList);
+        sheetExcelDataList.add(sysDocumentFileSheetExcelData);
+
+        util.exportSheetsExcel("出入库信息", sheetExcelDataList, response);
     }
 
 }

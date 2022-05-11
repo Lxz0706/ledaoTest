@@ -462,6 +462,9 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     public int changeStatus(SysUser user) {
+        user.setOpenId("");
+        user.setComOpenId("");
+        user.setUnionId("");
         return userMapper.updateUser(user);
     }
 
@@ -513,5 +516,21 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public List<SysUser> selectAllUserDepRole() {
         return userMapper.selectAllUserDepRole();
+    }
+
+    @Override
+    public List<SysUser> selectAllUser() {
+        return userMapper.selectAllUser();
+    }
+
+    /**
+     * 查询出没有填写日志的人员
+     *
+     * @param sysUser
+     * @return
+     */
+    @Override
+    public List<SysUser> selectCreatorForUser(SysUser sysUser) {
+        return userMapper.selectCreatorForUser(sysUser);
     }
 }

@@ -93,59 +93,33 @@ public class SysProjectController extends BaseController {
     // @RequiresPermissions("system:project:list")
     @PostMapping("/list")
     @ResponseBody
+    @Log(title = "投后部项目管理", businessType = BusinessType.QUERY)
     public TableDataInfo list(SysProject sysProject) {
         startPage();
         List<SysProject> list = sysProjectService.selectProject(sysProject);
         for (SysProject sysProject1 : list) {
-            StringBuffer sb = new StringBuffer();
-            StringBuffer sb1 = new StringBuffer();
-            StringBuffer sb2 = new StringBuffer();
-            StringBuffer sb3 = new StringBuffer();
-            //根据父级ID查询出子集
-            List<SysProject> sysProjectsList = sysProjectService.selectSysProjectByParentId(sysProject1);
-            for (SysProject sysProject2 : sysProjectsList) {
-                //合同本金
-                List<SysProjectContract> sysProjectContractList = sysProjectContractService.selectSysProjectContractByProjectId(sysProject2.getProjectId().toString());
-                for (SysProjectContract sysProjectContract : sysProjectContractList) {
-                    if (sysProject1.getTotalPrice() == null) {
-                        sysProject1.setTotalPrice(new BigDecimal(0));
-                    }
-                    if (sysProjectContract.getCapital() == null) {
-                        sysProjectContract.setCapital(new BigDecimal(0));
-                    }
-                    sysProject1.setTotalPrice(sysProject1.getTotalPrice().add(sysProjectContract.getCapital()));
+            SysProjectZck sysProjectZck=sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+            sysProject1.setProjectZckType(sysProjectZck.getProjectZckType());
 
-                    //利息相加
-                    if (sysProjectContract.getTotalInterest() == null) {
-                        sysProjectContract.setTotalInterest(new BigDecimal(0));
-                    }
-                    if (sysProject1.getTotalInterest() == null) {
-                        sysProject1.setTotalInterest(new BigDecimal(0));
-                    }
-                    sysProject1.setTotalInterest(sysProject1.getTotalInterest().add(sysProjectContract.getTotalInterest()));
+            SysProject sysTaotalProject = sysProjectService.selectTotal(sysProject1);
+            if (StringUtils.isNotNull(sysTaotalProject)) {
+                if (sysTaotalProject.getGrossCapital() == null) {
+                    sysTaotalProject.setGrossCapital(new BigDecimal(0));
                 }
-                SysProject sysProject3 = sysProjectService.selectSysProjectById(sysProject2.getProjectId());
-                //本金余额相加
-                if (sysProject1.getTotalPrincipalBalance() == null) {
-                    sysProject1.setTotalPrincipalBalance(new BigDecimal(0));
+                if (sysTaotalProject.getGrossInterest() == null) {
+                    sysTaotalProject.setGrossInterest(new BigDecimal(0));
                 }
-                if (sysProject3.getPrincipalBalance() == null) {
-                    sysProject3.setPrincipalBalance(new BigDecimal(0));
-                }
-                sysProject1.setTotalPrincipalBalance(sysProject1.getTotalPrincipalBalance().add(sysProject3.getPrincipalBalance()));
-                sb.append(sysProject2.getProjectId()).append(",");
+                sysProject1.setTotalPrice(sysTaotalProject.getGrossCapital());
+                sysProject1.setTotalInterest(sysTaotalProject.getGrossInterest());
             }
 
             //现金回现
-            List<SysRecapture> sysRecaptureList = sysRecaptureService.selectSysRecaptureByProjectId(sysProject1.getProjectId());
-            for (SysRecapture sysRecapture : sysRecaptureList) {
-                if (sysProject1.getRecapture() == null) {
-                    sysProject1.setRecapture(new BigDecimal(0));
+            SysRecapture sysRecapture = sysRecaptureService.selectTotalRecaptureByProjectId(sysProject1.getProjectId());
+            if (StringUtils.isNotNull(sysRecapture)) {
+                if (sysRecapture.getTotalRecapture() == null) {
+                    sysRecapture.setTotalRecapture(new BigDecimal(0));
                 }
-                if (sysRecapture.getRecapture() == null) {
-                    sysRecapture.setRecapture(new BigDecimal(0));
-                }
-                sysProject1.setRecapture(sysProject1.getRecapture().add(sysRecapture.getRecapture()));
+                sysProject1.setRecapture(sysRecapture.getTotalRecapture());
             }
 
             if (StringUtils.isNotNull(sysProject1.getRecapture()) && StringUtils.isNotNull(sysProject1.getTotalPrincipalBalance())) {
@@ -168,34 +142,24 @@ public class SysProjectController extends BaseController {
             }
 
             //保证人
-            List<SysProjectBail> sysProjectBailList = sysProjectBailService.selectSysProjectBailByProjectId(sb.toString());
-            for (SysProjectBail sysProjectBail1 : sysProjectBailList) {
-                if (StringUtils.isNotNull(StringUtils.replaceBlank(sysProjectBail1.getBail())) && StringUtils.isNotEmpty(StringUtils.replaceBlank(sysProjectBail1.getBail()))) {
-                    sb1.append(StringUtils.replaceBlank(sysProjectBail1.getBail())).append(";");
-                }
+            SysProjectBail sysProjectBail = sysProjectBailService.selectGuarantorsByProject(sysProject1);
+            if (StringUtils.isNotNull(sysProjectBail) && StringUtils.isNotEmpty(sysProjectBail.getBail())) {
+                sysProject1.setGuarantors(sysProjectBail.getBail());
             }
-            sysProject1.setGuarantors(sb1.toString());
-
 
             //抵押物
-            List<SysProjectMortgage> sysProjectMortgageList = sysProjectMortgageService.selectSysProjectMortgageByProjectId(sb.toString());
-            for (SysProjectMortgage sysProjectMortgage : sysProjectMortgageList) {
-                if (StringUtils.isNotNull(StringUtils.replaceBlank(sysProjectMortgage.getMortgagor()))
-                        && StringUtils.isNotEmpty(StringUtils.replaceBlank(sysProjectMortgage.getMortgagor()))) {
-                    sb2.append(StringUtils.replaceBlank(sysProjectMortgage.getMortgagor())).append(";");
-                }
+            SysProjectMortgage sysProjectMortgage = sysProjectMortgageService.selectMortgageByProject(sysProject1);
+            if (StringUtils.isNotNull(sysProjectMortgage) && StringUtils.isNotEmpty(sysProjectMortgage.getMortgagor())) {
+                sysProject1.setCollaterals(sysProjectMortgage.getMortgagor());
             }
-            sysProject1.setCollaterals(sb2.toString());
+
 
             //质押物
-            List<SysProjectPledge> sysProjectPledgeList = sysProjectPledgeService.selectPledgeByProjectId(sb.toString());
-            for (SysProjectPledge sysProjectPledge : sysProjectPledgeList) {
-                if (StringUtils.isNotNull(StringUtils.replaceBlank(sysProjectPledge.getPledgor()))
-                        && StringUtils.isNotEmpty(StringUtils.replaceBlank(sysProjectPledge.getPledgor()))) {
-                    sb3.append(StringUtils.replaceBlank(sysProjectPledge.getPledgor())).append(";");
-                }
+            SysProjectPledge sysProjectPledge = sysProjectPledgeService.seletPledgor(sysProject1);
+            if (StringUtils.isNotNull(sysProjectPledge) && StringUtils.isNotEmpty(sysProjectPledge.getPledgor())) {
+                sysProject1.setPledges(sysProjectPledge.getPledgor());
             }
-            sysProject1.setPledges(sb3.toString());
+
 
             if (sysProject1.getTotalInterestBalance() == null) {
                 sysProject1.setTotalInterestBalance(sysProject1.getTotalInterest());
@@ -212,6 +176,7 @@ public class SysProjectController extends BaseController {
 
     @PostMapping("/listPro")
     @ResponseBody
+    @Log(title = "投后部项目管理", businessType = BusinessType.QUERY)
     public TableDataInfo listPro(SysProject sysProject) {
         startPage();
         List<SysProject> list = sysProjectService.selectProject(sysProject);
@@ -884,7 +849,7 @@ public class SysProjectController extends BaseController {
      * 查看详细
      */
     //@RequiresPermissions("system:project:detail")
-    @Log(title = "项目管理", businessType = BusinessType.DETAIL)
+    @Log(title = "投后部项目管理", businessType = BusinessType.DETAIL)
     @GetMapping("/detail")
     public String detail(Long id, Long ids, Long pId, String projectZckType, String fwProjectType, String otherFlag, ModelMap mmap) {
         String url = "";
@@ -963,7 +928,7 @@ public class SysProjectController extends BaseController {
         if (!currentUser.isAdmin()) {
             for (SysRole sysRole : getRoles) {
                 if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
-                        && !"thbManager2".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                        && !"thbManager2".equals(sysRole.getRoleKey()) && !"thbManager".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                     sysPcustomer1.setShareUserId(ShiroUtils.getUserId().toString());
                 }
             }
@@ -1480,9 +1445,9 @@ public class SysProjectController extends BaseController {
 
         //查询出状态是处置中的数据
         sysProjectZck.setZckStatus("处置中");
-        //List<SysProjectZck> sysProjectZckList = sysProjectZckService.selectSysProjectZckList(sysProjectZck);
-        String ids = "10,12,13,24";
-        List<SysProjectZck> sysProjectZckList = sysProjectZckService.selectSysProjectZckByIds(ids);
+        List<SysProjectZck> sysProjectZckList = sysProjectZckService.selectSysProjectZckList(sysProjectZck);
+        //String ids = "10,12,13,24";
+        //List<SysProjectZck> sysProjectZckList = sysProjectZckService.selectSysProjectZckByIds(ids);
         for (SysProjectZck sysProjectZck1 : sysProjectZckList) {
             map.put(sysProjectZck1.getProjectZckId(), sysProjectZck1.getProjectZckId());
             sb.append(sysProjectZck1.getProjectZckId()).append(",");

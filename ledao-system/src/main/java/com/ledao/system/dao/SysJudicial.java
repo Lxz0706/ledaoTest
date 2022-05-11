@@ -135,6 +135,54 @@ public class SysJudicial extends BaseEntity {
 
     private Integer pageSizeNum;
 
+    /**
+     * 高德地图坐标
+     */
+    @Excel(name = "高德地图坐标")
+    private String coordinate;
+
+    /**
+     * 阿里标签
+     */
+    @Excel(name = "阿里标签")
+    private String tags;
+
+    /**
+     * 处置单位
+     */
+    @Excel(name = "处置单位")
+    private String shopname;
+
+    /**
+     * 报名人数
+     */
+    @Excel(name = "报名人数")
+    private Long applyer;
+
+    /**
+     * 设置提醒人数
+     */
+    @Excel(name = "设置提醒人数")
+    private Long notify;
+
+    /**
+     * 围观人数
+     */
+    @Excel(name = "围观人数")
+    private Long looker;
+
+    /**
+     * 标的物位置
+     */
+    @Excel(name = "标的物位置")
+    private String address;
+
+    /**
+     * 采集时间
+     */
+    @Excel(name = "采集时间")
+    private Date timestamp;
+
     public Long getId() {
         return id;
     }
@@ -319,6 +367,70 @@ public class SysJudicial extends BaseEntity {
         this.pageSizeNum = pageSizeNum;
     }
 
+    public String getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(String coordinate) {
+        this.coordinate = coordinate;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
+    }
+
+    public Long getApplyer() {
+        return applyer;
+    }
+
+    public void setApplyer(Long applyer) {
+        this.applyer = applyer;
+    }
+
+    public Long getNotify() {
+        return notify;
+    }
+
+    public void setNotify(Long notify) {
+        this.notify = notify;
+    }
+
+    public Long getLooker() {
+        return looker;
+    }
+
+    public void setLooker(Long looker) {
+        this.looker = looker;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -339,6 +451,14 @@ public class SysJudicial extends BaseEntity {
                 .append("itemCity", getItemCity())
                 .append("itemCounty", getItemCounty())
                 .append("itemSource", getItemSource())
+                .append("coordinate", getCoordinate())
+                .append("tags", getTags())
+                .append("shopname", getShopname())
+                .append("applyer", getApplyer())
+                .append("notify", getNotify())
+                .append("looker", getLooker())
+                .append("address", getAddress())
+                .append("timestamp", getTimestamp())
                 .toString();
     }
 }

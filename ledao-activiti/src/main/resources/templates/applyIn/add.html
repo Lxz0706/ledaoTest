@@ -3,6 +3,7 @@
 <head>
     <th:block th:include="include :: header('新增档案入库申请')" />
     <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -10,7 +11,7 @@
         <form class="form-horizontal m" id="form-applyIn-add" th:object="${sysApplyIn}">
             <input name="applyType" value="0" type="hidden"/>
             <input name="realCreateBy" value="" type="hidden" id="realCreateBy">
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">档案类别：</label>
                 <div class="col-sm-8">
                     <select id="documentType" onchange="changeDocumentType(this.value)" name="documentType" th:with="type=${@dict.getType('sys_document_busi_type')}"
@@ -38,14 +39,18 @@
                     <input autocomplete="off" name="projectName" id="projectNameVal" class="form-control required" type="text" onclick="selectPro()">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">公司名称：</label>
                 <div class="col-sm-8">
-                    <select id="companyName" name="companyName"
-                                        th:with="type=${@dict.getType('sys_company_name')}"
-                                        data-none-selected-text="请选择" class="form-control m-b">
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
+<!--                    <select id="companyName" name="companyName"-->
+<!--                                        th:with="type=${@dict.getType('sys_company_name')}"-->
+<!--                                        data-none-selected-text="请选择" class="form-control m-b">-->
+<!--                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
+<!--                                            th:value="${dict.dictValue}"></option>-->
+<!--                    </select>-->
+                    <select id="companyName" name="companyName" class="form-control select2-multiple">
+<!--                        <option >&#45;&#45;请选择公司名称&#45;&#45;</option>-->
+                        <option th:each="sysDictData:${sysDictData}" th:value="${sysDictData.dictValue}" th:text="${sysDictData.dictLabel}"></option>
                     </select>
                 </div>
             </div>
@@ -98,6 +103,7 @@
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: select2-js"/>
     <script type="text/javascript" th:inline="javascript">
         var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
         var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
@@ -142,6 +148,11 @@
             } else {
                 showDocumentType = false
             }
+
+            $("#companyName").select2({
+                placeholder:'请选择公司',
+                allowClear: true,
+            })
         })
 
         $("#form-applyIn-add").validate({

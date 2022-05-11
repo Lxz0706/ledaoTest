@@ -558,6 +558,21 @@ public class SysProject extends BaseEntity {
     private String lawsuit;
     private String projectZckType;
 
+    /**
+     * 总本金（含子级）
+     */
+    private BigDecimal grossCapital;
+
+    /**
+     * 总利息（含子级）
+     */
+    private BigDecimal grossInterest;
+
+    /**
+     * 总本金余额（含子级）
+     */
+    private BigDecimal grossPrincipalBalance;
+
     public String getProjectZckType() {
         return projectZckType;
     }
@@ -1350,6 +1365,30 @@ public class SysProject extends BaseEntity {
         this.lawsuit = lawsuit;
     }
 
+    public BigDecimal getGrossCapital() {
+        return grossCapital;
+    }
+
+    public void setGrossCapital(BigDecimal grossCapital) {
+        this.grossCapital = grossCapital;
+    }
+
+    public BigDecimal getGrossInterest() {
+        return grossInterest;
+    }
+
+    public void setGrossInterest(BigDecimal grossInterest) {
+        this.grossInterest = grossInterest;
+    }
+
+    public BigDecimal getGrossPrincipalBalance() {
+        return grossPrincipalBalance;
+    }
+
+    public void setGrossPrincipalBalance(BigDecimal grossPrincipalBalance) {
+        this.grossPrincipalBalance = grossPrincipalBalance;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1438,6 +1477,9 @@ public class SysProject extends BaseEntity {
                 .append("isFile", getIsFile())
                 .append("sue", getSue())
                 .append("lawsuit", getLawsuit())
+                .append("grossCapital", getGrossCapital())
+                .append("grossInterest", getGrossInterest())
+                .append("grossPrincipalBalance", getGrossPrincipalBalance())
                 .toString();
     }
 }

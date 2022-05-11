@@ -27,14 +27,33 @@
     </resultMap>
 
     <sql id="selectSysValuationmapVo">
-        select id, item_id, item_title, item_areaMeasure, item_type, item_status, item_initialPrice, item_consultPrice, item_marketPrice, item_finalPrice, item_start_time, item_end_time, item_province, item_city, item_county, item_source, item_x, item_y, item_link from sys_valuationmap
+        select id,
+               item_id,
+               item_title,
+               item_areaMeasure,
+               item_type,
+               item_status,
+               item_initialPrice,
+               item_consultPrice,
+               item_marketPrice,
+               item_finalPrice,
+               item_start_time,
+               item_end_time,
+               item_province,
+               item_city,
+               item_county,
+               item_source,
+               item_x,
+               item_y,
+               item_link
+        from sys_valuationmap
     </sql>
 
     <select id="selectSysValuationmapList" parameterType="SysValuationmap" resultMap="SysValuationmapResult">
         <include refid="selectSysValuationmapVo"/>
         <where>
             <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
-            <if test="itemTitle != null  and itemTitle != ''">and item_title = #{itemTitle}</if>
+            <if test="itemTitle != null  and itemTitle != ''">and item_title like concat('%', #{itemTitle},'%')</if>
             <if test="itemAreameasure != null  and itemAreameasure != ''">and item_areaMeasure = #{itemAreameasure}</if>
             <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
             <if test="itemStatus != null  and itemStatus != ''">and item_status = #{itemStatus}</if>
@@ -129,7 +148,9 @@
     </update>
 
     <delete id="deleteSysValuationmapById" parameterType="Long">
-        delete from sys_valuationmap where id = #{id}
+        delete
+        from sys_valuationmap
+        where id = #{id}
     </delete>
 
     <delete id="deleteSysValuationmapByIds" parameterType="String">

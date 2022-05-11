@@ -87,4 +87,12 @@ public interface ISysCustomerService {
      * 根据传递来的数据进行分组查询
      */
     public List<SysCustomer> selectSysCustomerByParam(SysCustomer sysCustomer, String param);
+
+    /**
+     * 按照在职人员进行分组统计
+     *
+     * @param sysCustomer
+     * @return
+     */
+    public List<SysCustomer> selectSysCustomerForCreator(SysCustomer sysCustomer);
 }

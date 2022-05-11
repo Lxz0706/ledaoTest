@@ -59,6 +59,7 @@ public class SysTaggingController extends BaseController {
     @RequiresPermissions("system:tagging:list")
     @PostMapping("/list")
     @ResponseBody
+    @Log(title = "星标库", businessType = BusinessType.QUERY)
     public TableDataInfo list(SysTagging sysTagging) {
         startPage();
 

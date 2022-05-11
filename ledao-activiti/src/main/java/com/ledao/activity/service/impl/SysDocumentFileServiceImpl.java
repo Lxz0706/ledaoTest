@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.itextpdf.text.log.SysoLogger;
+//import com.itextpdf.text.log.SysoLogger;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.mapper.SysApplyInMapper;
 import com.ledao.common.constant.Constants;
@@ -33,176 +33,180 @@ import com.ledao.common.core.text.Convert;
 
 /**
  * 档案Service业务层处理
- * 
+ *
  * @author yangwenxi
  * @date 2021-08-04
  */
 @Service
 @Transactional
 public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
-	@Autowired
-	private SysDocumentFileMapper sysDocumentFileMapper;
-	@Autowired
-	private SysFileDetailMapper sysFileDetailMapper;
-	@Autowired
-	private SysFileDetailMapper fileDetailMapper;
-	@Autowired
-	private SysApplyInMapper sysApplyInMapper;
+    @Autowired
+    private SysDocumentFileMapper sysDocumentFileMapper;
+    @Autowired
+    private SysFileDetailMapper sysFileDetailMapper;
+    @Autowired
+    private SysFileDetailMapper fileDetailMapper;
+    @Autowired
+    private SysApplyInMapper sysApplyInMapper;
 
-	/**
-	 * 查询档案
-	 * 
-	 * @param documentId 档案ID
-	 * @return 档案
-	 */
-	@Override
-	public SysDocumentFile selectSysDocumentFileById(Long documentId) {
-		return sysDocumentFileMapper.selectSysDocumentFileById(documentId);
-	}
+    /**
+     * 查询档案
+     *
+     * @param documentId 档案ID
+     * @return 档案
+     */
+    @Override
+    public SysDocumentFile selectSysDocumentFileById(Long documentId) {
+        return sysDocumentFileMapper.selectSysDocumentFileById(documentId);
+    }
 
-	/**
-	 * 查询档案列表
-	 * 
-	 * @param sysDocumentFile 档案
-	 * @return 档案
-	 */
-	@Override
-	public List<SysDocumentFile> selectSysDocumentFileList(SysDocumentFile sysDocumentFile) {
-		List<SysDocumentFile> documentFiles = sysDocumentFileMapper.selectSysDocumentFileList(sysDocumentFile);
-		for (SysDocumentFile doc : documentFiles) {
-			SysApplyIn apin = sysApplyInMapper.selectSysApplyInById(doc.getApplyId());
-			doc.setCompanyName(apin.getCompanyName());
-			List<String> fileNames = new ArrayList<>();
-			SysFileDetail detail = new SysFileDetail();
-			detail.setDocumentFileId(doc.getDocumentId());
-			List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
-			for (SysFileDetail fd: details){
-				fileNames.add(fd.getFileName());
-			}
-			doc.setFileNames(String.join(",",fileNames));
-		}
-		return documentFiles;
-	}
+    /**
+     * 查询档案列表
+     *
+     * @param sysDocumentFile 档案
+     * @return 档案
+     */
+    @Override
+    public List<SysDocumentFile> selectSysDocumentFileList(SysDocumentFile sysDocumentFile) {
+        List<SysDocumentFile> documentFiles = sysDocumentFileMapper.selectSysDocumentFileList(sysDocumentFile);
+        for (SysDocumentFile doc : documentFiles) {
+            SysApplyIn apin = sysApplyInMapper.selectSysApplyInById(doc.getApplyId());
+            if(StringUtils.isNotNull(apin)){
+                doc.setCompanyName(apin.getCompanyName());
+            }
+
+            List<String> fileNames = new ArrayList<>();
+            SysFileDetail detail = new SysFileDetail();
+            detail.setDocumentFileId(doc.getDocumentId());
+            List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
+            for (SysFileDetail fd : details) {
+                fileNames.add(fd.getFileName());
+            }
+            doc.setFileNames(String.join(",", fileNames));
+        }
+        return documentFiles;
+    }
 
 
-	/**
-	 * 新增档案
-	 * 
-	 * @param sysDocumentFile 档案
-	 * @return 结果
-	 */
-	@Override
-	public int insertSysDocumentFile(SysDocumentFile sysDocumentFile, MultipartFile[] files) {
-		sysDocumentFile.setCreateTime(DateUtils.getNowDate());
-		sysDocumentFile.setCreateBy(ShiroUtils.getLoginName());
-		sysDocumentFile.setCreator(ShiroUtils.getLoginName());
-		sysDocumentFileMapper.insertSysDocumentFile(sysDocumentFile);
-		SysUser currentUser = ShiroUtils.getSysUser();
-		String loginUser = currentUser.getLoginName();
-		for (MultipartFile file : files) {
-			try {
-				if (StringUtils.isEmpty(file.getResource().getFilename())){
-					continue;
-				}
-				// 上传文件路径
-				String filePath = Global.getUploadPath() + "/document";
-				// 上传并返回新文件名称
-				String fileName = FileUploadUtils.upload(filePath, file, true);
-				String url = filePath + fileName;
-				SysFileDetail fileDetail = new SysFileDetail();
-				fileDetail.setCreateBy(loginUser);
-				fileDetail.setFileName(file.getResource().getFilename());
-				fileDetail.setFileUrl(fileName.split("/document")[1]);
-				fileDetail.setCreateTime(new Date());
-				fileDetail.setDocumentFileId(sysDocumentFile.getDocumentId());
-				sysFileDetailMapper.insertSysFileDetail(fileDetail);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-		}
-		return 0;
-	}
-	/**
-	 * 修改档案
-	 * 
-	 * @param sysDocumentFile 档案
-	 * @return 结果
-	 */
-	@Override
-	public int updateSysDocumentFile(SysDocumentFile sysDocumentFile) {
-		sysDocumentFile.setUpdateTime(DateUtils.getNowDate());
-		sysDocumentFile.setUpdateBy(ShiroUtils.getLoginName());
-		sysDocumentFile.setReviser(ShiroUtils.getLoginName());
-		return sysDocumentFileMapper.updateSysDocumentFile(sysDocumentFile);
-	}
+    /**
+     * 新增档案
+     *
+     * @param sysDocumentFile 档案
+     * @return 结果
+     */
+    @Override
+    public int insertSysDocumentFile(SysDocumentFile sysDocumentFile, MultipartFile[] files) {
+        sysDocumentFile.setCreateTime(DateUtils.getNowDate());
+        sysDocumentFile.setCreateBy(ShiroUtils.getLoginName());
+        sysDocumentFile.setCreator(ShiroUtils.getLoginName());
+        sysDocumentFileMapper.insertSysDocumentFile(sysDocumentFile);
+        SysUser currentUser = ShiroUtils.getSysUser();
+        String loginUser = currentUser.getLoginName();
+        for (MultipartFile file : files) {
+            try {
+                if (StringUtils.isEmpty(file.getResource().getFilename())) {
+                    continue;
+                }
+                // 上传文件路径
+                String filePath = Global.getUploadPath() + "/document";
+                // 上传并返回新文件名称
+                String fileName = FileUploadUtils.upload(filePath, file, true);
+                String url = filePath + fileName;
+                SysFileDetail fileDetail = new SysFileDetail();
+                fileDetail.setCreateBy(loginUser);
+                fileDetail.setFileName(file.getResource().getFilename());
+                fileDetail.setFileUrl(fileName.split("/document")[1]);
+                fileDetail.setCreateTime(new Date());
+                fileDetail.setDocumentFileId(sysDocumentFile.getDocumentId());
+                sysFileDetailMapper.insertSysFileDetail(fileDetail);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException();
+            }
+        }
+        return 0;
+    }
 
-	/**
-	 * 删除档案对象
-	 * 
-	 * @param ids 需要删除的数据ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteSysDocumentFileByIds(String ids) {
-		String[] idArray = Convert.toStrArray(ids);
+    /**
+     * 修改档案
+     *
+     * @param sysDocumentFile 档案
+     * @return 结果
+     */
+    @Override
+    public int updateSysDocumentFile(SysDocumentFile sysDocumentFile) {
+        sysDocumentFile.setUpdateTime(DateUtils.getNowDate());
+        sysDocumentFile.setUpdateBy(ShiroUtils.getLoginName());
+        sysDocumentFile.setReviser(ShiroUtils.getLoginName());
+        return sysDocumentFileMapper.updateSysDocumentFile(sysDocumentFile);
+    }
 
-		boolean flag = false;
-		long docId = 0L;
-		for (String id: idArray) {
-			flag = true;
-			docId = Long.parseLong(id);
-			SysFileDetail SysFileDetail = new SysFileDetail();
-			SysFileDetail.setDocumentFileId(Long.parseLong(id));
-			List<SysFileDetail> files = fileDetailMapper.selectSysFileDetailList(SysFileDetail);
-			for (SysFileDetail f : files){
+    /**
+     * 删除档案对象
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteSysDocumentFileByIds(String ids) {
+        String[] idArray = Convert.toStrArray(ids);
+
+        boolean flag = false;
+        long docId = 0L;
+        for (String id : idArray) {
+            flag = true;
+            docId = Long.parseLong(id);
+            SysFileDetail SysFileDetail = new SysFileDetail();
+            SysFileDetail.setDocumentFileId(Long.parseLong(id));
+            List<SysFileDetail> files = fileDetailMapper.selectSysFileDetailList(SysFileDetail);
+            for (SysFileDetail f : files) {
 //				System.out.println(Global.getUploadPath()+f.getFileUrl());
 //				FileUtils.deleteFile(Global.getUploadPath()+"/document"+f.getFileUrl());
-				String url = f.getFileUrl().replace(Constants.RESOURCE_PREFIX,"");
-				FileUtils.deleteFile(Global.getProfile()+url);
-				sysFileDetailMapper.deleteSysFileDetailById(f.getFileId());
+                String url = f.getFileUrl().replace(Constants.RESOURCE_PREFIX, "");
+                FileUtils.deleteFile(Global.getProfile() + url);
+                sysFileDetailMapper.deleteSysFileDetailById(f.getFileId());
 
-			}
-		}
-		if (flag){
-			SysApplyIn ap2 = new SysApplyIn();
-			SysDocumentFile doc =  sysDocumentFileMapper.selectSysDocumentFileById(docId);
-			ap2.setApplyId(doc.getApplyId());
-			ap2.setReviser(ShiroUtils.getLoginName());
-			sysApplyInMapper.updateSysApplyIn(ap2);
-		}
-		return sysDocumentFileMapper.deleteSysDocumentFileByIds(idArray);
-	}
+            }
+        }
+        if (flag) {
+            SysApplyIn ap2 = new SysApplyIn();
+            SysDocumentFile doc = sysDocumentFileMapper.selectSysDocumentFileById(docId);
+            ap2.setApplyId(doc.getApplyId());
+            ap2.setReviser(ShiroUtils.getLoginName());
+            sysApplyInMapper.updateSysApplyIn(ap2);
+        }
+        return sysDocumentFileMapper.deleteSysDocumentFileByIds(idArray);
+    }
 
-	/**
-	 * 删除档案信息
-	 * 
-	 * @param documentId 档案ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteSysDocumentFileById(Long documentId) {
-		return sysDocumentFileMapper.deleteSysDocumentFileById(documentId);
-	}
+    /**
+     * 删除档案信息
+     *
+     * @param documentId 档案ID
+     * @return 结果
+     */
+    @Override
+    public int deleteSysDocumentFileById(Long documentId) {
+        return sysDocumentFileMapper.deleteSysDocumentFileById(documentId);
+    }
 
-	@Override
-	public boolean isInChangeStatus(long applyId) {
-		SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(applyId);
-		String[] applyStatusList = {"0","4","2"};
-		// 可提交审批的状态     0保存；4撤回；2拒绝
-		if (Arrays.asList(applyStatusList).contains(ap.getApproveStatu())){
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean isInChangeStatus(long applyId) {
+        SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(applyId);
+        String[] applyStatusList = {"0", "4", "2"};
+        // 可提交审批的状态     0保存；4撤回；2拒绝
+        if (Arrays.asList(applyStatusList).contains(ap.getApproveStatu())) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public List<SysDocumentFile> selectSysDocumentFileDetailList(SysDocumentFile sysDocumentFile) {
-		return sysDocumentFileMapper.selectSysDocumentFileDetailList(sysDocumentFile);
-	}
+    @Override
+    public List<SysDocumentFile> selectSysDocumentFileDetailList(SysDocumentFile sysDocumentFile) {
+        return sysDocumentFileMapper.selectSysDocumentFileDetailList(sysDocumentFile);
+    }
 
-	@Override
-	public List<SysDocumentFile> selectSysDocumentFileTotalList(SysDocumentFile sysDocumentFile) {
-		return sysDocumentFileMapper.selectSysDocumentFileTotalList(sysDocumentFile);
-	}
+    @Override
+    public List<SysDocumentFile> selectSysDocumentFileTotalList(SysDocumentFile sysDocumentFile) {
+        return sysDocumentFileMapper.selectSysDocumentFileTotalList(sysDocumentFile);
+    }
 }

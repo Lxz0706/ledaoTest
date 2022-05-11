@@ -11,6 +11,32 @@
 <body class="gray-bg">
 <div class="container-div">
     <div class="row">
+        <div class="col-sm-12">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>申请人:</label>
+                            <input type="text" name="applyUserName" id="applyUserName" placeholder="请输入申请人信息"/>
+                        </li>
+                        <li class="select-time">
+                            <label>申请时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginApplyTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endApplyTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-warning" onclick="serach()"><i
+                                    class="fa fa-search"></i>&nbsp;导出</a>
+<!--                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i-->
+<!--                                    class="fa fa-refresh"></i>&nbsp;重置</a>-->
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
         <div class="row" style="min-height: 80%;" id="showList"></div>
     </div>
 </div>
@@ -51,6 +77,11 @@
     function jump() {
         var data = $("#formId").serialize();
         $.operate.gets(ctx + "system/project/queryAll", data, "查询界面");
+    }
+
+    //查询
+    function serach() {
+        window.location.href = prefix + "/selectSysApplyInByApplyUserNameAndTime?" + $("#formId").serialize();
     }
 
 </script>

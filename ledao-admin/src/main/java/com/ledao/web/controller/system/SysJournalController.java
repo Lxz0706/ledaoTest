@@ -1,10 +1,10 @@
 package com.ledao.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
@@ -145,11 +145,11 @@ public class SysJournalController extends BaseController {
         boolean isZjl = false;
         StringBuffer sb = new StringBuffer();
         sb.append(user.getDeptId());
-        if ("admin".equals(user.getLoginName()) || "xulinyi".equals(user.getLoginName())
-                || "lixiangzhen".equals(user.getLoginName()) || "weicaixuan".equals(user.getLoginName())) {
+        String seeJournal = sysConfigService.selectConfigByKey("seeJournal");
+        if (isFlag(user.getLoginName(), seeJournal)) {
             //允许查看所有日志的账号
             isZjl = true;
-        } else {
+        }/* else {
             for (SysRole sysRole : getRoles) {
                 if ("zjl".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())) {
                     //允许查看所有日志的角色
@@ -160,7 +160,7 @@ public class SysJournalController extends BaseController {
 //                    sb.append(",").append("201,202");
 //                }
             }
-        }
+        }*/
         SysDept dept = new SysDept();
         Long parendId = 100L;
         dept.setParentId(parendId);
@@ -187,6 +187,16 @@ public class SysJournalController extends BaseController {
             //}
             return getDataTable(dts);
         }
+    }
+
+    public boolean isFlag(String loginName, String loginNames) {
+        boolean flag = false;
+        for (String string : loginNames.split(",")) {
+            if (loginName.equals(string)) {
+                flag = true;
+            }
+        }
+        return flag;
     }
 
 
@@ -298,4 +308,39 @@ public class SysJournalController extends BaseController {
         }
         return list;
     }
+
+    @PostMapping("/selectJournalForCreate")
+    @ResponseBody
+    public AjaxResult selectJournalForCreate(SysJournal sysJournal) {
+        String begintTime = (String) sysJournal.getParams().get("startTime");
+        String endTime = (String) sysJournal.getParams().get("endTime");
+        List<SysJournalCreator> list = new ArrayList<>();
+        for (String days : DateUtils.findDaysStr(begintTime, endTime)) {
+            Set<String> set = DateUtils.JJR(Integer.valueOf(DateUtils.parseDateToStr("yyyy", DateUtils.parseDate(days))), Integer.valueOf(DateUtils.parseDateToStr("MM", DateUtils.parseDate(days))));
+            if (!set.contains(days)) {
+                SysUser sysUser = new SysUser();
+                sysUser.setSelectTime(days);
+                List<SysUser> userList = sysUserService.selectCreatorForUser(sysUser);
+                for (SysUser sysUser1 : userList) {
+                    SysJournalCreator sysJournalCreator = new SysJournalCreator();
+                    sysJournalCreator.setUserName(sysUser1.getUserName());
+                    sysJournalCreator.setBeginTime(days);
+                    sysJournalCreator.setDeptName(sysDeptService.selectDeptById(sysUser1.getDeptId()).getDeptName());
+                    //if (list.size() > 0) {
+                    //    for (SysJournalCreator sysJournalCreator1 : list) {
+                     //       if (sysJournalCreator1.getUserName().equals(sysUser1.getUserName()) && !days.equals(sysJournalCreator1.getBeginTime())) {
+                     //           sysJournalCreator.setBeginTime(sysJournalCreator.getBeginTime() + "," + days);
+                    //        }
+                    //    }
+                   // } else {
+                        list.add(sysJournalCreator);
+                    //}
+
+                }
+            }
+        }
+        ExcelUtil<SysJournalCreator> util = new ExcelUtil<SysJournalCreator>(SysJournalCreator.class);
+        return util.exportExcel(list, "未填写日志人员");
+    }
+
 }

@@ -553,52 +553,41 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
 
-    ///**
-    // * 获取周末和节假日
-    // *
-    // * @param year
-    // * @param month
-    // * @return
-    // */
-    //public static Set<String> JJR(int year, int month) {
-    //    //获取所有的周末
-    //    Set<String> monthWekDay = getMonthWekDay(year, month);
-    //    //http://timor.tech/api/holiday api文档地址
-    //    Map jjr = getJjr(year, month + 1);
-    //    Integer code = (Integer) jjr.get("code");
-    //    if (code != 0) {
-    //        return monthWekDay;
-    //    }
-    //    Map<String, Map<String, Object>> holiday = (Map<String, Map<String, Object>>) jjr.get("holiday");
-    //    Set<String> strings = holiday.keySet();
-    //    for (String str : strings) {
-    //        Map<String, Object> stringObjectMap = holiday.get(str);
-    //        Integer wage = (Integer) stringObjectMap.get("wage");
-    //        String date = (String) stringObjectMap.get("date");
-    //        //筛选掉补班
-    //        if (wage.equals(1)) {
-    //            monthWekDay.remove(date);
-    //        } else {
-    //            monthWekDay.add(date);
-    //        }
-    //    }
-    //    return monthWekDay;
-    //}
+    //获取周末和节假日
+    public static Set<String> JJR(int year, int month) {
+        //获取所有的周末
+        Set<String> monthWekDay = getWeekendInMonth(year, month);
+        //http://timor.tech/api/holiday api文档地址
+        Map jjr = getJjr(year, month);
+        Integer code = (Integer) jjr.get("code");
+        if (code != 0) {
+            return monthWekDay;
+        }
+        Map<String, Map<String, Object>> holiday = (Map<String, Map<String, Object>>) jjr.get("holiday");
+        Set<String> strings = holiday.keySet();
+        for (String str : strings) {
+            Map<String, Object> stringObjectMap = holiday.get(str);
+            Integer wage = (Integer) stringObjectMap.get("wage");
+            String date = (String) stringObjectMap.get("date");
+            //筛选掉补班
+            if (wage.equals(1)) {
+                monthWekDay.remove(date);
+            } else {
+                monthWekDay.add(date);
+            }
+        }
+        return monthWekDay;
+    }
 
-    /**
-     * 获取节假日不含周末
-     *
-     * @param yearAndMonth
-     * @return
-     */
-    public static Map getJjr(String yearAndMonth) {
-        String url = "http://timor.tech/api/holiday/year/";
+    //获取节假日不含周末
+    public static Map getJjr(int year, int month) {
+        String url = "http://timor.tech/api/holiday/year/" + year + "-" + month;
         OkHttpClient client = new OkHttpClient();
         Response response;
         //解密数据
         String rsa = null;
         Request request = new Request.Builder()
-                .url(url + yearAndMonth)
+                .url(url)
                 .get()
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
@@ -611,45 +600,129 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return JSONObject.parseObject(rsa, Map.class);
     }
 
+    /**
+     * 获取当月的所有周末
+     *
+     * @param year
+     * @param month
+     * @return
+     */
 
-    ///**
-    // * 获取周末  月从0开始
-    // *
-    // * @param year
-    // * @param mouth
-    // * @return
-    // */
-    //public static Set<String> getMonthWekDay(int year, int mouth) {
-    //    Set<String> dateList = new HashSet<>();
-    //    SimpleDateFormat simdf = new SimpleDateFormat("yyyy-MM-dd");
-    //    Calendar calendar = new GregorianCalendar(year, mouth, 1);
-    //    Calendar endCalendar = new GregorianCalendar(year, mouth, 1);
-    //    endCalendar.add(Calendar.MONTH, 1);
-    //    while (true) {
-    //        int weekday = calendar.get(Calendar.DAY_OF_WEEK);
-    //        if (weekday == 1 || weekday == 7) {
-    //            dateList.add(simdf.format(calendar.getTime()));
-    //        }
-    //        calendar.add(Calendar.DATE, 1);
-    //        if (calendar.getTimeInMillis() >= endCalendar.getTimeInMillis()) {
-    //            break;
-    //        }
-    //    }
-    //    return dateList;
-    //}
+    public static Set<String> getWeekendInMonth(int year, int month) {
+        Set<String> dateList = new HashSet<>();
+        Calendar calendar = Calendar.getInstance();
+        // 不设置的话默认为当年
+        calendar.set(Calendar.YEAR, year);
+        // 设置月份
+        calendar.set(Calendar.MONTH, month - 1);
+        // 设置为当月第一天
+        calendar.set(Calendar.DAY_OF_MONTH, 0);
+        // 当月最大天数
+        int daySize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for (int i = 0; i < daySize - 1; i++) {
+            //在第一天的基础上加1
+            calendar.add(Calendar.DATE, 1);
+            int week = calendar.get(Calendar.DAY_OF_WEEK);
+            // 1代表周日，7代表周六 判断这是一个星期的第几天从而判断是否是周末
+            if (week == Calendar.SATURDAY || week == Calendar.SUNDAY) {
+                dateList.add(parseDateToStr(YYYY_MM_DD, calendar.getTime()));
+            }
 
-    public static void main(String[] args) {
-        Map jjr = DateUtils.getJjr(DateUtils.parseDateToStr("yyyy-MM", new Date()));
-        Integer code = (Integer) jjr.get("code");
-        if (code != 0) {
-            throw new RuntimeException("获取失败！！！");
         }
-        Map<String, Map<String, Object>> holiday = (Map<String, Map<String, Object>>) jjr.get("holiday");
-        Set<String> strings = holiday.keySet();
-        if (strings.contains(parseDateToStr("MM-dd", new Date()))) {
-            System.out.print("节假日！！！");
-        } else {
-            System.out.print("工作日！");
+
+        return dateList;
+
+    }
+
+    /**
+     * 计算两个时间之间的每一天
+     * @param begintTime
+     * @param endTime
+     * @return
+     */
+    public static List<String> findDaysStr(String begintTime, String endTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dBegin = null;
+        Date dEnd = null;
+        try {
+            dBegin = sdf.parse(begintTime);
+            dEnd = sdf.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        List<String> daysStrList = new ArrayList<String>();
+        daysStrList.add(sdf.format(dBegin));
+        Calendar calBegin = Calendar.getInstance();
+        calBegin.setTime(dBegin);
+        Calendar calEnd = Calendar.getInstance();
+        calEnd.setTime(dEnd);
+        while (dEnd.after(calBegin.getTime())) {
+            calBegin.add(Calendar.DAY_OF_MONTH, 1);
+            String dayStr = sdf.format(calBegin.getTime());
+            daysStrList.add(dayStr);
+        }
+        return daysStrList;
+    }
+
+    /**
+     * 前/后?分钟
+     *
+     * @param d
+     * @param minute
+     * @return
+     */
+    public static Date rollMinute(Date d, int minute) {
+        return new Date(d.getTime() + minute * 60 * 1000);
+    }
+
+    /**
+     * 前/后?天
+     *
+     * @param d
+     * @param day
+     * @return
+     */
+    public static Date rollDay(Date d, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.DAY_OF_MONTH, day);
+        return cal.getTime();
+    }
+
+    /**
+     * 前/后?月
+     *
+     * @param d
+     * @param mon
+     * @return
+     */
+    public static Date rollMon(Date d, int mon) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.MONTH, mon);
+        return cal.getTime();
+    }
+
+    /**
+     * 前/后?年
+     *
+     * @param d
+     * @param year
+     * @return
+     */
+    public static Date rollYear(Date d, int year) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.YEAR, year);
+        return cal.getTime();
+    }
+
+    public static Date rollDate(Date d, int year, int mon, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.YEAR, year);
+        cal.add(Calendar.MONTH, mon);
+        cal.add(Calendar.DAY_OF_MONTH, day);
+        return cal.getTime();
     }
 }

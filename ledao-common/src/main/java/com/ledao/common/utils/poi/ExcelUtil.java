@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import com.ledao.common.utils.bean.SheetExcelData;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -164,7 +168,7 @@ public class ExcelUtil<T> {
             for (int i = 0; i < heard.getPhysicalNumberOfCells(); i++) {
                 Cell cell = heard.getCell(i);
                 if (StringUtils.isNotNull(cell)) {
-                    String value = this.getCellValue(heard, i).toString();
+                    String value = this.getStringCellValue(heard, i).toString();
                     cellMap.put(value, i);
                 } else {
                     cellMap.put(null, i);
@@ -189,7 +193,7 @@ public class ExcelUtil<T> {
                 Row row = sheet.getRow(i);
                 T entity = null;
                 for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet()) {
-                    Object val = this.getCellValue(row, entry.getKey());
+                    Object val = this.getStringCellValue(row, entry.getKey());
 
                     // 如果不存在实例则新建.
                     entity = (entity == null ? clazz.newInstance() : entity);
@@ -571,7 +575,7 @@ public class ExcelUtil<T> {
      * 编码文件名
      */
     public String encodingFilename(String filename) {
-        filename = UUID.randomUUID().toString() + "_" + filename + ".xlsx" ;
+        filename = UUID.randomUUID().toString() + "_" + filename + ".xlsx";
         return filename;
     }
 
@@ -697,11 +701,11 @@ public class ExcelUtil<T> {
      * @param column 获取单元格列号
      * @return 单元格值
      */
-    public Object getCellValue(Row row, int column) {
+    public Object getStringCellValue(Row row, int column) {
         if (row == null) {
             return row;
         }
-        Object val = "" ;
+        Object val = "";
         try {
             Cell cell = row.getCell(column);
             if (StringUtils.isNotNull(cell)) {
@@ -730,4 +734,28 @@ public class ExcelUtil<T> {
         }
         return val;
     }
+
+    /**
+     * 对excel表单默认第一个索引名转换成list（EasyExcel）
+     *
+     * @param is 输入流
+     * @return 转换后集合
+     */
+    public List<T> importEasyExcel(InputStream is) throws Exception {
+        return EasyExcel.read(is).head(clazz).sheet().doReadSync();
+    }
+
+    /**
+     * 对list数据源将其里面的数据导入到excel表单（EasyExcel）
+     *
+     * @param list      导出数据集合
+     * @param sheetName 工作表的名称
+     * @return 结果
+     */
+    public AjaxResult exportEasyExcel(List<T> list, String sheetName) {
+        String filename = encodingFilename(sheetName);
+        EasyExcel.write(getAbsoluteFile(filename), clazz).sheet(sheetName).doWrite(list);
+        return AjaxResult.success(filename);
+    }
+
 }

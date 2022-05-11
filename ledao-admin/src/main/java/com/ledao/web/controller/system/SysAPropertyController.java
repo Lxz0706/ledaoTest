@@ -21,7 +21,7 @@ import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 
 /**
- * 【请填写功能名称】Controller
+ * A资产Controller
  *
  * @author lxz
  * @date 2020-10-20
@@ -41,11 +41,12 @@ public class SysAPropertyController extends BaseController {
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询A资产列表
      */
     @RequiresPermissions("system:property:list")
     @PostMapping("/list")
     @ResponseBody
+    @Log(title = "A资产", businessType = BusinessType.QUERY)
     public TableDataInfo list(SysAProperty sysAProperty) {
         startPage();
         List<SysAProperty> list = sysAPropertyService.selectSysAPropertyList(sysAProperty);
@@ -53,10 +54,10 @@ public class SysAPropertyController extends BaseController {
     }
 
     /**
-     * 导出【请填写功能名称】列表
+     * 导出A资产列表
      */
     @RequiresPermissions("system:property:export")
-    @Log(title = "【请填写功能名称】" , businessType = BusinessType.EXPORT)
+    @Log(title = "A资产" , businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysAProperty sysAProperty) {
@@ -66,7 +67,7 @@ public class SysAPropertyController extends BaseController {
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增A资产
      */
     @GetMapping("/add")
     public String add() {
@@ -74,10 +75,10 @@ public class SysAPropertyController extends BaseController {
     }
 
     /**
-     * 新增保存【请填写功能名称】
+     * 新增保存A资产
      */
     @RequiresPermissions("system:property:add")
-    @Log(title = "【请填写功能名称】" , businessType = BusinessType.INSERT)
+    @Log(title = "A资产" , businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysAProperty sysAProperty) {
@@ -85,7 +86,7 @@ public class SysAPropertyController extends BaseController {
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改A资产
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
@@ -95,10 +96,10 @@ public class SysAPropertyController extends BaseController {
     }
 
     /**
-     * 修改保存【请填写功能名称】
+     * 修改保存A资产
      */
     @RequiresPermissions("system:property:edit")
-    @Log(title = "【请填写功能名称】" , businessType = BusinessType.UPDATE)
+    @Log(title = "A资产" , businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysAProperty sysAProperty) {
@@ -106,10 +107,10 @@ public class SysAPropertyController extends BaseController {
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除A资产
      */
     @RequiresPermissions("system:property:remove")
-    @Log(title = "【请填写功能名称】" , businessType = BusinessType.DELETE)
+    @Log(title = "A资产" , businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {

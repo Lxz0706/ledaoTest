@@ -2,6 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectPledge;
 
 /**
@@ -71,4 +72,6 @@ public interface SysProjectPledgeMapper {
      * 根据projectId查询
      */
     public List<SysProjectPledge> selectSysPledgeByProjectId(Long projectId);
+
+    public SysProjectPledge seletPledgor(SysProject sysProject);
 }

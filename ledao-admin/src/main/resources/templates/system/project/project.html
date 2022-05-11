@@ -339,13 +339,10 @@
     }
 
     function toUpload(projectId, projectManagerId, zckType) {
-        if (($.common.isNotEmpty(projectManagerId) && projectManagerId.indexOf(userId) && zckType == "automaticSwitch") || zckType == "serve" || "admin" == loginName) {
+        if (($.common.isNotEmpty(projectManagerId) && projectManagerId.indexOf(userId) !=-1 && zckType === "automaticSwitch") || zckType === "serve" || "admin" === loginName) {
             var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0 + "&projectZckType=" + zckType + "&projectManagerId=" + projectManagerId;
             $.modal.open("底层资料", url);
-        } else if (zckType == "serve") {
-            var url = ctx + "system/underlyingdata/list?projectId=" + projectId + '&projectType=' + 0 + "&projectZckType=" + zckType + "&projectManagerId=" + projectManagerId;
-            $.modal.open("底层资料", url);
-        } else {
+        }else {
             $.modal.alertError("无法上传");
         }
     }

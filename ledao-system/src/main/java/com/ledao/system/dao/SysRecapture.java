@@ -52,6 +52,8 @@ public class SysRecapture extends BaseEntity {
 
     private BigDecimal totalRecapture;
 
+    private String zckIds;
+
     public Long getRecaptureId() {
         return recaptureId;
     }
@@ -108,6 +110,15 @@ public class SysRecapture extends BaseEntity {
         this.totalRecapture = totalRecapture;
     }
 
+
+    public String getZckIds() {
+        return zckIds;
+    }
+
+    public void setZckIds(String zckIds) {
+        this.zckIds = zckIds;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -122,6 +133,7 @@ public class SysRecapture extends BaseEntity {
                 .append("updateTime", getUpdateTime())
                 .append("recaptureTime", getRecaptureTime())
                 .append("totalRecapture", getTotalRecapture())
+                .append("zckIds", getZckIds())
                 .toString();
     }
 }

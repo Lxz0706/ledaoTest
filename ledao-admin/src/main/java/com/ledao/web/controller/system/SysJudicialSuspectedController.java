@@ -25,7 +25,7 @@ import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 
 /**
- * 司法拍卖项目Controller
+ * 关键词Controller
  *
  * @author lxz
  * @date 2021-01-14
@@ -48,11 +48,12 @@ public class SysJudicialSuspectedController extends BaseController {
     }
 
     /**
-     * 查询司法拍卖项目列表
+     * 查询关键词列表
      */
     @RequiresPermissions("system:suspected:list")
     @PostMapping("/list")
     @ResponseBody
+    @Log(title = "关键词", businessType = BusinessType.QUERY)
     public TableDataInfo list(SysJudicialSuspected sysJudicialSuspected) {
         startPage();
         List<SysJudicialSuspected> list = sysJudicialSuspectedService.selectSysJudicialSuspectedList(sysJudicialSuspected);
@@ -71,10 +72,10 @@ public class SysJudicialSuspectedController extends BaseController {
     }
 
     /**
-     * 导出司法拍卖项目列表
+     * 导出关键词列表
      */
     @RequiresPermissions("system:suspected:export")
-    @Log(title = "司法拍卖项目", businessType = BusinessType.EXPORT)
+    @Log(title = "关键词", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysJudicialSuspected sysJudicialSuspected) {
@@ -84,7 +85,7 @@ public class SysJudicialSuspectedController extends BaseController {
     }
 
     /**
-     * 新增司法拍卖项目
+     * 新增关键词
      */
     @GetMapping("/add")
     public String add() {
@@ -92,10 +93,10 @@ public class SysJudicialSuspectedController extends BaseController {
     }
 
     /**
-     * 新增保存司法拍卖项目
+     * 新增保存关键词
      */
     @RequiresPermissions("system:suspected:add")
-    @Log(title = "司法拍卖项目", businessType = BusinessType.INSERT)
+    @Log(title = "关键词", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysJudicialSuspected sysJudicialSuspected) {
@@ -103,7 +104,7 @@ public class SysJudicialSuspectedController extends BaseController {
     }
 
     /**
-     * 修改司法拍卖项目
+     * 修改关键词
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
@@ -113,10 +114,10 @@ public class SysJudicialSuspectedController extends BaseController {
     }
 
     /**
-     * 修改保存司法拍卖项目
+     * 修改保存关键词
      */
     @RequiresPermissions("system:suspected:edit")
-    @Log(title = "司法拍卖项目", businessType = BusinessType.UPDATE)
+    @Log(title = "关键词", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysJudicialSuspected sysJudicialSuspected) {
@@ -124,10 +125,10 @@ public class SysJudicialSuspectedController extends BaseController {
     }
 
     /**
-     * 删除司法拍卖项目
+     * 删除关键词
      */
     @RequiresPermissions("system:suspected:remove")
-    @Log(title = "司法拍卖项目", businessType = BusinessType.DELETE)
+    @Log(title = "关键词", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {

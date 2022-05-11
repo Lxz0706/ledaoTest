@@ -61,4 +61,9 @@ public enum BusinessType {
      */
     DETAIL,
 
+    /**
+     * 查询
+     */
+    QUERY,
+
 }

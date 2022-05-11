@@ -156,4 +156,24 @@
         where project_id = #{projectId} and del_flag='0'
     </select>
 
+    <select id="selectMortgageByProject" parameterType="SysProject" resultMap="SysProjectMortgageResult">
+        SELECT GROUP_CONCAT('', t1.mortgagor, '') mortgagor
+        FROM sys_project_mortgage t1
+        WHERE project_id IN (
+            SELECT project_id
+            FROM (
+                     SELECT t1.project_id,
+                            IF
+                                (FIND_IN_SET(parent_id, @pids) > 0, @pids := CONCAT( @pids, ',', project_id ),
+                                 0) AS ischild,
+                            del_flag
+                     FROM (SELECT project_id, parent_id, del_flag FROM sys_project t ORDER BY parent_id, project_id) t1,
+                          (SELECT @pids := #{projectId}) t2
+                 ) t3
+            WHERE ischild != 0
+		AND del_flag = '0'
+		OR project_id = #{projectId}
+            )and del_flag = '0'
+    </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectPledge;
 
 /**
@@ -71,4 +72,6 @@ public interface ISysProjectPledgeService {
      * 根据projectId查询
      */
     public List<SysProjectPledge> selectSysPledgeByProjectId(Long projectId);
+
+    public SysProjectPledge seletPledgor(SysProject sysProject);
 }

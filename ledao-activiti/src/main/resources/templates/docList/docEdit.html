@@ -607,7 +607,7 @@
         for (var i = 0; i < row.length; i++) {
             ids = row[i].documentId + "," + ids;
         }
-        window.location.href = prefix + "/download/resource?ids=" + ids.substr(0, ids.length - 1) + "&applyId=" + $("#applyId").val() + "&applyType=" + $("#applyType").val();
+        window.location.href = prefix + "/download/resource?ids=" + ids.substr(0, ids.length - 1) + "&applyId=" + $("#applyId").val() + "&applyType=" + $("#applyType").val() + "&debtorName=" + $("#debtorNameTip").val();
     }
 
     function selectRows() {

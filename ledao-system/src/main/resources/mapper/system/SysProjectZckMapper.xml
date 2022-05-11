@@ -21,8 +21,19 @@
     </resultMap>
 
     <sql id="selectSysProjectZckVo">
-        select project_zck_id, zck_name, zck_status, del_flag, create_by, create_time, update_by, update_time,
-        start_time,end_time, fw_project_type,project_zck_type  from sys_project_zck
+        select project_zck_id,
+               zck_name,
+               zck_status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               start_time,
+               end_time,
+               fw_project_type,
+               project_zck_type
+        from sys_project_zck
     </sql>
 
     <select id="selectSysProjectZckList" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
@@ -37,13 +48,15 @@
     </select>
 
     <select id="selectSysProjectZckAllNoLike" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
-        <include refid="selectSysProjectZckVo"/> where del_flag = '0' and zck_status !=''
+        <include refid="selectSysProjectZckVo"/>
+        where del_flag = '0' and zck_status !=''
         <if test="zckName != null  and zckName != ''">and zck_name = #{zckName}</if>
         <if test="zckStatus != null  and zckStatus != ''">and zck_status = #{zckStatus}</if>
     </select>
 
     <select id="selectSysProjectZckAll" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
-        <include refid="selectSysProjectZckVo"/> where del_flag = '0' and zck_status !=''
+        <include refid="selectSysProjectZckVo"/>
+        where del_flag = '0' and zck_status !=''
         <if test="zckName != null  and zckName != ''">and zck_name like concat('%', #{zckName}, '%')</if>
         <if test="zckStatus != null  and zckStatus != ''">and zck_status = #{zckStatus}</if>
     </select>
@@ -102,7 +115,9 @@
     </update>
 
     <delete id="deleteSysProjectZckById" parameterType="Long">
-        update sys_project_zck set del_flag = '2' where project_zck_id = #{projectZckId}
+        update sys_project_zck
+        set del_flag = '2'
+        where project_zck_id = #{projectZckId}
     </delete>
 
     <delete id="deleteSysProjectZckByIds" parameterType="String">
@@ -121,13 +136,22 @@
     </select>
 
     <select id="selectSysProjectZckByType" parameterType="SysProjectZck" resultMap="SysProjectZckResult">
-        SELECT COALESCE (dict_label) as dictLable,COALESCE(dict_value) as project_zck_type,GROUP_CONCAT(project_zck_id) as projectZckIds FROM sys_project_zck t1
-        LEFT JOIN sys_dict_data t2 ON t1.project_zck_type=t2.dict_value	WHERE  del_flag='0' GROUP BY project_zck_type
+        SELECT COALESCE(dict_label)            as dictLable,
+               COALESCE(dict_value)            as project_zck_type,
+               GROUP_CONCAT(t1.project_zck_id) as projectZckIds,
+               COUNT(t1.project_zck_id)        as totalZck
+        FROM sys_project_zck t1
+                 LEFT JOIN sys_dict_data t2 ON t1.project_zck_type = t2.dict_value
+        WHERE t1.del_flag = '0'
+        GROUP BY project_zck_type
     </select>
 
     <select id="selectProjectZckGroupByType" parameterType="String" resultMap="SysProjectZckResult">
-        SELECT COALESCE (`zck_status`) as zck_status, COUNT(`zck_status`) as zckStatusCount FROM sys_project_zck
-        WHERE project_zck_type=#{projectZckType} AND del_flag='0' GROUP BY zck_status
+        SELECT COALESCE(`zck_status`) as zck_status, COUNT(`zck_status`) as zckStatusCount
+        FROM sys_project_zck
+        WHERE project_zck_type = #{projectZckType}
+          AND del_flag = '0'
+        GROUP BY zck_status
     </select>
 
 </mapper>

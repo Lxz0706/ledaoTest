@@ -68,6 +68,6 @@ public interface SysJudicialMapper {
      *
      * */
 
-    public List<SysJudicial> selectListTotal(SysJudicial sysJudicial);
+    public Long selectSysJudicialListTotal(SysJudicial sysJudicial);
 
 }

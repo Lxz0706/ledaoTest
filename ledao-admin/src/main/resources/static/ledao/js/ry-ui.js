@@ -349,10 +349,10 @@ var table = {
             },
             // 搜索-默认第一个form
             search: function (formId, tableId, data) {
+                console.log(data);
                 table.set(tableId);
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
                 var params = $.common.isEmpty(tableId) ? $("#" + table.options.id).bootstrapTable('getOptions') : $("#" + tableId).bootstrapTable('getOptions');
-                console.log("------" + params.pageNumber + "=====" + params.limit)
                 params.queryParams = function (params) {
                     var search = $.common.formToJSON(currentId);
                     if ($.common.isNotEmpty(data)) {

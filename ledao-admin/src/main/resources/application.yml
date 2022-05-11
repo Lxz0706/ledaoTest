@@ -9,7 +9,7 @@ ledao:
   # 实例演示开关
   demoEnabled: false
   # 文件路径 示例（ Windows配置D:/ledao/uploadPath，Linux配置 /home/ledao/uploadPath）
-  profile: E:/profile
+  profile: D:/profile
   #profile: /home/ledao/uploadPath/profile
   # 获取ip地址开关
   addressEnabled: false
@@ -34,9 +34,9 @@ server:
 # 日志配置
 logging:
   level:
-    com.ledao.system.mapper: debug
+    com.ledao.system.mapper: info
     org.springframework: info
-    com.ledao.activity.mapper: debug
+    com.ledao.activity.mapper: info
 
 # 用户配置
 user:
@@ -110,7 +110,7 @@ mybatis:
 
 # PageHelper分页插件
 pagehelper:
-  helperDialect: mysql
+  helperDialect: postgresql
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
@@ -168,6 +168,6 @@ jodconverter:
   local:
     enabled: true
     max-tasks-per-process: 10
-    port-numbers: 8100
-#    office-home: C:\Program Files (x86)\OpenOffice 4
+#   port-numbers: 8100
+#   office-home: C:\Program Files (x86)\OpenOffice 4
 

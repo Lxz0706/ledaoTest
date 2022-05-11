@@ -103,10 +103,13 @@ public interface SysProjectMapper {
     /**
      * 根据projectId查询总的本金余额
      *
-     * @param projectId
+     * @param projectZckIds
      * @return
      */
-    public SysProject selectTotalPrincipalBalanceByParentId(Long projectId);
+    public SysProject selectTotalPrincipalBalanceByParentId(String projectZckIds);
 
     public List<SysProject>  selectSysProjectListNoLike(SysProject sysProject);
+
+    public SysProject selectTotal(SysProject sysProject);
+
 }

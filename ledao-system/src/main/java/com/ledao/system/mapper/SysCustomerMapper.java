@@ -104,4 +104,12 @@ public interface SysCustomerMapper {
      * 根据部门分组查询
      */
     public List<SysCustomer> selectSysCustomerByDeptId(SysCustomer sysCustomer);
+
+    /**
+     * 按照在职人员进行分组统计
+     *
+     * @param sysCustomer
+     * @return
+     */
+    public List<SysCustomer> selectSysCustomerForCreator(SysCustomer sysCustomer);
 }

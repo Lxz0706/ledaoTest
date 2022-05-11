@@ -172,6 +172,8 @@ public class SysUser extends BaseEntity {
 
     private String logName;
 
+    private String selectTime;
+
     public String getRemainFlag() {
         return remainFlag;
     }
@@ -461,6 +463,14 @@ public class SysUser extends BaseEntity {
         this.logName = logName;
     }
 
+    public String getSelectTime() {
+        return selectTime;
+    }
+
+    public void setSelectTime(String selectTime) {
+        this.selectTime = selectTime;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -490,6 +500,7 @@ public class SysUser extends BaseEntity {
                 .append("director", getDirector())
                 .append("formalFlag", getFormalFlag())
                 .append("roleKey", getRoleKey())
+                .append("selectTime", getSelectTime())
                 .toString();
     }
 }

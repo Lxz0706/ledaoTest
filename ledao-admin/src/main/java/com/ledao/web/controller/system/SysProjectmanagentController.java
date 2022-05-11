@@ -293,8 +293,18 @@ public class SysProjectmanagentController extends BaseController {
             }
             //回现金额
             List<SysRecapture> sysRecaptureList = sysRecaptureService.selectSysRecaptureByProjectId(sysProjectmanagent1.getProjectManagementId());
-            if (sysRecaptureList != null && !sysRecaptureList.isEmpty()) {
-                sysProjectmanagent1.setRecapture(sysRecaptureList.get(0).getRecapture());
+            //if (sysRecaptureList != null && !sysRecaptureList.isEmpty()) {
+            //    sysProjectmanagent1.setRecapture(sysRecaptureList.get(0).getRecapture());
+            //}
+            for (SysRecapture sysRecapture : sysRecaptureList) {
+                if (sysRecapture.getRecapture() == null) {
+                    sysRecapture.setRecapture(new BigDecimal(0));
+                }
+
+                if (sysProjectmanagent1.getRecapture() == null) {
+                    sysProjectmanagent1.setRecapture(new BigDecimal(0));
+                }
+                sysProjectmanagent1.setRecapture(sysProjectmanagent1.getRecapture().add(sysRecapture.getRecapture()));
             }
         }
         return getDataTable(list);

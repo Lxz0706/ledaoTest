@@ -2,6 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectContract;
 import com.ledao.system.dao.SysProjectMortgage;
 
@@ -83,4 +84,6 @@ public interface ISysProjectMortgageService {
      * @return 结果
      */
     public List<SysProjectMortgage> selectProjectMortgageByProjectIds(Long projectId);
+
+    public SysProjectMortgage selectMortgageByProject(SysProject sysProject);
 }

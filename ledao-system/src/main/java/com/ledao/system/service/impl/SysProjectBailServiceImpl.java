@@ -3,6 +3,7 @@ package com.ledao.system.service.impl;
 import java.util.List;
 
 import com.ledao.common.utils.DateUtils;
+import com.ledao.system.dao.SysProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysProjectBailMapper;
@@ -120,5 +121,16 @@ public class SysProjectBailServiceImpl implements ISysProjectBailService {
     @Override
     public List<SysProjectBail> selectProjectBailListByProjectId(Long projectId) {
         return sysProjectBailMapper.selectProjectBailListByProjectId(projectId);
+    }
+
+    /**
+     * 根据项目查询出子级保证人
+     *
+     * @param sysProject
+     * @return
+     */
+    @Override
+    public SysProjectBail selectGuarantorsByProject(SysProject sysProject) {
+        return sysProjectBailMapper.selectGuarantorsByProject(sysProject);
     }
 }

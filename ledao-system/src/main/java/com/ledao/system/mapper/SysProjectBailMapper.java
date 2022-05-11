@@ -2,6 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
+import com.ledao.system.dao.SysProject;
 import com.ledao.system.dao.SysProjectBail;
 
 /**
@@ -82,4 +83,12 @@ public interface SysProjectBailMapper {
      * @return 结果
      */
     public List<SysProjectBail> selectProjectBailListByProjectId(Long projectId);
+
+    /**
+     * 根据项目查询出子级保证人
+     *
+     * @param sysProject
+     * @return
+     */
+    public SysProjectBail selectGuarantorsByProject(SysProject sysProject);
 }

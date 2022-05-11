@@ -103,14 +103,14 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     @Override
     public String checkPhoneUnique(SysCustomer sysCustomer) {
         //for (String string : sysCustomer.getContactNumber().split(",")) {
-            Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
-            SysCustomer sysCustomer1 = new SysCustomer();
-            sysCustomer1.setContactNumber(sysCustomer.getContactNumber());
-            SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer1);
-            if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
-                return UserConstants.USER_PHONE_NOT_UNIQUE;
-            }
-       // }
+        Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
+        SysCustomer sysCustomer1 = new SysCustomer();
+        sysCustomer1.setContactNumber(sysCustomer.getContactNumber());
+        SysCustomer info = sysCustomerMapper.checkPhoneUnique(sysCustomer1);
+        if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
+            return UserConstants.USER_PHONE_NOT_UNIQUE;
+        }
+        // }
         return UserConstants.USER_PHONE_UNIQUE;
     }
 
@@ -123,15 +123,15 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
     @Override
     public String checkWeChatNumberUnique(SysCustomer sysCustomer) {
 
-       // for (String string : sysCustomer.getWeChatNumber().split(",")) {
-            Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
-            SysCustomer sysCustomer1 = new SysCustomer();
-            sysCustomer1.setWeChatNumber(sysCustomer.getWeChatNumber());
-            SysCustomer info = sysCustomerMapper.checkWeChatNumberUnique(sysCustomer1);
-            if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
-                return UserConstants.USER_PHONE_NOT_UNIQUE;
-            }
-      //  }
+        // for (String string : sysCustomer.getWeChatNumber().split(",")) {
+        Long customerId = StringUtils.isNull(sysCustomer.getCustomerId()) ? -1L : sysCustomer.getCustomerId();
+        SysCustomer sysCustomer1 = new SysCustomer();
+        sysCustomer1.setWeChatNumber(sysCustomer.getWeChatNumber());
+        SysCustomer info = sysCustomerMapper.checkWeChatNumberUnique(sysCustomer1);
+        if (StringUtils.isNotNull(info) && info.getCustomerId().longValue() != customerId.longValue()) {
+            return UserConstants.USER_PHONE_NOT_UNIQUE;
+        }
+        //  }
 
         return UserConstants.USER_PHONE_UNIQUE;
     }
@@ -162,5 +162,16 @@ public class SysCustomerServiceImpl implements ISysCustomerService {
         } else {
             return sysCustomerMapper.selectSysCustomerByDeptId(sysCustomer);
         }
+    }
+
+    /**
+     * 按照在职人员进行分组统计
+     *
+     * @param sysCustomer
+     * @return
+     */
+    @Override
+    public List<SysCustomer> selectSysCustomerForCreator(SysCustomer sysCustomer) {
+        return sysCustomerMapper.selectSysCustomerForCreator(sysCustomer);
     }
 }

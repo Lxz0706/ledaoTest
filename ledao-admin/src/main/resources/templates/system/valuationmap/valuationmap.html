@@ -2,280 +2,372 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('【请填写功能名称】列表')"/>
+    <th:block th:include="include :: select2-css"/>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css"/>
     <!--引用百度地图API-->
     <style type="text/css">
-        body,
-        html,
-        #map {
-            overflow: hidden;
+        html, body, #container {
             width: 100%;
             height: 100%;
+            overflow: hidden;
             margin: 0;
-            font-family: "微软雅黑";
+            padding: 0
         }
 
         .info {
             z-index: 999;
             width: auto;
-            min-width: 22rem;
-            padding: .75rem 1.25rem;
-            margin-left: 1.25rem;
+            padding: 10px;
+            margin-left: 10px;
             position: fixed;
-            top: 1rem;
+            top: 10px;
             background-color: #fff;
-            border-radius: .25rem;
+            border-radius: 5px;
             font-size: 14px;
             color: #666;
             box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
         }
+
+        ul li {
+            list-style: none;
+        }
+
+        .btn-wrap {
+            z-index: 999;
+            width: 290px;
+            position: fixed;
+            bottom: 30px;
+            left: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(265, 265, 265, 0.9);
+            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+        }
+
+        .btn {
+            width: 120px;
+            height: 30px;
+            float: left;
+            background-color: #fff;
+            color: rgba(27, 142, 236, 1);
+            font-size: 14px;
+            border: 1px solid rgba(27, 142, 236, 1);
+            border-radius: 5px;
+            margin: 0 5px 6px;
+            text-align: center;
+            /*line-height: 30px;*/
+        }
+
+        .btn:hover {
+            background-color: rgba(27, 142, 236, 0.8);
+            color: #fff;
+            cursor: pointer;
+        }
     </style>
-    <script type="text/javascript" src="//api.map.baidu.com/api?v=1.1&ak=qpeLGoMvRGNry7x5h7bf6IBfWOkIOmL1"></script>
 </head>
 <body class="gray-bg">
 <div>
     <div class="row">
         <div class="col-sm-12 search-collapse">
+            <input type="hidden" class="latlon">
             <form id="formId">
                 <div class="select-list">
-                    <!-- <ul>
-                         <li>
-                             <label>项目id：</label>
-                             <input type="text" name="itemId"/>
-                         </li>
-                         <li>
-                             <label>项目title：</label>
-                             <input type="text" name="itemTitle"/>
-                         </li>
-                         <li>
-                             <label>项目面积，单位平方米：</label>
-                             <input type="text" name="itemAreameasure"/>
-                         </li>
-                         <li>
-                             <label>项目类型：</label>
-                             <select name="itemType">
-                                 <option value="">所有</option>
-                                 <option value="-1">代码生成请选择字典属性</option>
-                             </select>
-                         </li>
-                         <li>
-                             <label>项目状态：</label>
-                             <select name="itemStatus">
-                                 <option value="">所有</option>
-                                 <option value="-1">代码生成请选择字典属性</option>
-                             </select>
-                         </li>
-                         <li>
-                             <label>项目起拍价：</label>
-                             <input type="text" name="itemInitialprice"/>
-                         </li>
-                         <li>
-                             <label>项目评估价：</label>
-                             <input type="text" name="itemConsultprice"/>
-                         </li>
-                         <li>
-                             <label>项目市场价：</label>
-                             <input type="text" name="itemMarketprice"/>
-                         </li>
-                         <li>
-                             <label>项目成交价格：</label>
-                             <input type="text" name="itemFinalprice"/>
-                         </li>
-                         <li class="select-time">
-                             <label>项目开始时间：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                    name="params[beginItemStartTime]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                    name="params[endItemStartTime]"/>
-                         </li>
-                         <li class="select-time">
-                             <label>项目结束时间：</label>
-                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                    name="params[beginItemEndTime]"/>
-                             <span>-</span>
-                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                    name="params[endItemEndTime]"/>
-                         </li>
-                         <li>
-                             <label>项目所在省：</label>
-                             <input type="text" name="itemProvince"/>
-                         </li>
-                         <li>
-                             <label>项目所在市：</label>
-                             <input type="text" name="itemCity"/>
-                         </li>
-                         <li>
-                             <label>项目所在区(县)：</label>
-                             <input type="text" name="itemCounty"/>
-                         </li>
-                         <li>
-                             <label>项目来源：</label>
-                             <input type="text" name="itemSource"/>
-                         </li>
-                         <li>
-                             <label>项目x坐标：</label>
-                             <input type="text" name="itemX"/>
-                         </li>
-                         <li>
-                             <label>项目y坐标：</label>
-                             <input type="text" name="itemY"/>
-                         </li>
-                         <li>
-                             <label>项目网址：</label>
-                             <input type="text" name="itemLink"/>
-                         </li>
-                         <li>
-                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                     class="fa fa-search"></i>&nbsp;搜索</a>
-                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                     class="fa fa-refresh"></i>&nbsp;重置</a>
-                         </li>
-                     </ul>-->
+                    <ul>
+                        <li>
+                            <label>项目title：</label>
+                            <input type="text" name="itemTitle" id="suggestId" onchange="selectPoint()"/>
+                        </li>
+                        <li>
+                            <label>类型：</label>
+                            <select id="itemType" class="form-control select2-multiple"
+                                    th:with="type=${@dict.getType('debt_type')}" data-none-selected-text="请选择">
+                                <option th:each="dict : ${type}" th:value="${dict.dictValue}"
+                                        th:text="${dict.dictLabel}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>距离：</label>
+                            <select id="radius" class="form-control select2-multiple"
+                                    th:with="type=${@dict.getType('valueMap_gap')}" data-none-selected-text="请选择">
+                                <option th:each="dict : ${type}" th:value="${dict.dictValue}"
+                                        th:text="${dict.dictLabel}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="searchs()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <!--                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i-->
+                            <!--                                    class="fa fa-refresh"></i>&nbsp;重置</a>-->
+                        </li>
+                    </ul>
+                    <!--                    <button onclick="selectLocation()">地图选点</button>-->
                 </div>
+                <div id="searchResultPanel"
+                     style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
             </form>
         </div>
-
-        <!--<div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:valuationmap:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:valuationmap:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="system:valuationmap:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-
-        </div>-->
-        <!--<div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table"></table>
-        </div>-->
     </div>
 
 </div>
-
-<div style="width:697px;height:550px;border:#ccc solid 1px;" id="dituContent"></div>
+<br>
+<div id="container"></div>
+<script type="text/javascript"
+        src="https://api.map.baidu.com/api?v=2.0&ak=qpeLGoMvRGNry7x5h7bf6IBfWOkIOmL1"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:valuationmap:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:valuationmap:remove')}]];
-    var prefix = ctx + "system/valuationmap";
+    var prefix = ctx + "system/judicial";
+    var circle,   // 圆
+        marker,  // 搜索点
+        myValue; //搜索的地址
 
-    //创建和初始化地图函数：
-    function initMap() {
-        createMap();//创建地图
-        setMapEvent();//设置地图事件
-        addMapControl();//向地图添加控件
-        addMarker();//向地图中添加marker
-    }
+    // 百度地图API功能
+    var map = new BMap.Map("container");    // 创建Map实例
+    map.centerAndZoom('无锡市', 12);  // 初始化地图,设置中心点坐标和地图级别
+    //添加地图类型控件
+    // map.addControl(new BMap.MapTypeControl({
+    // }));
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
-    //创建地图函数：
-    function createMap() {
-        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
-        var point = new BMap.Point(118.803572, 32.094757);//定义一个中心点坐标
-        map.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
-        window.map = map;//将map变量存储在全局
-    }
+    var circleMarker,  // 圆内点
+        circle,   // 圆
+        marker  // 搜索点
+    ;
 
-    //地图事件设置函数：
-    function setMapEvent() {
-        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
-        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
-        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
-        map.enableKeyboard();//启用键盘上下左右键移动地图
-    }
-
-    //地图控件添加函数：
-    function addMapControl() {
-        //向地图中添加缩放控件
-        var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE});
-        map.addControl(ctrl_nav);
-        //向地图中添加缩略图控件
-        var ctrl_ove = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
-        map.addControl(ctrl_ove);
-        //向地图中添加比例尺控件
-        var ctrl_sca = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
-        map.addControl(ctrl_sca);
-    }
-
-    //标注点数组
+    // $("#s").blur(function(){
+    //     alert("输入框失去了焦点");
+    // });
     var markerArr;
-
-    //创建marker
-    function addMarker() {
-        for (var i = 0; i < markerArr.length; i++) {
-            var json = markerArr[i];
-            var p0 = json.itemX;
-            var p1 = json.itemY;
-            var point = new BMap.Point(p0, p1);
-            // var iconImg = createIcon(json.icon);
-            var marker = new BMap.Marker(point);
-            var iw = createInfoWindow(i);
-            var label = new BMap.Label(json.title, {"offset": new BMap.Size(100, -20)});
-            marker.setLabel(label);
-            map.addOverlay(marker);
-            label.setStyle({
-                borderColor: "#808080",
-                color: "#333",
-                cursor: "pointer"
+    // 搜索按钮点击
+    function searchs() {
+        $.ajax({
+            url: prefix + "/valuationmapList",
+            data: {'itemType': $("#itemType").val()},
+            type: 'post',
+            async: false,
+            datatype: 'json',
+            beforeSend: function () {
+                $.modal.loading("正在努力地加载数据中，请稍候.....");
+                $.modal.disable();
+            },
+            success: function (data) {
+                markerArr = eval(data);
+                $.modal.closeLoading();
+                $.modal.enable();
+            }
+        })
+        // 清除所有覆盖物
+        map.clearOverlays();
+        selectPoint();
+        // 获取坐标值
+        var latlon = $('.latlon').val().split(',');
+        // 添加点标注
+        //var point = new BMap.Point(latlon[0], latlon[1]);
+        var marker = new BMap.Marker(new BMap.Point(latlon[0], latlon[1]));
+        map.addOverlay(marker);
+        // 设置中心点
+        map.setCenter(new BMap.Point(latlon[0], latlon[1]));
+        // 逆地址解析
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(new BMap.Point(latlon[0], latlon[1]), function (rs) {
+            $('.local').html(rs.address)
+        });
+        // 获取圆半径
+        var r;
+        if ($.common.isEmpty($('#radius').val())) {
+            r = 1000;
+        } else {
+            r = $('#radius').val();
+        }
+        // 创建以点为中心的圆
+        var circle = new BMap.Circle(new BMap.Point(latlon[0], latlon[1]), r,
+            {
+                strokeColor: "#e61623", //线颜色
+                strokeWeight: 2, //线宽
+                fillColor: "#f18900", // 填充色
+                fillOpacity: '0.1',  // 填充透明度
             });
+        map.addOverlay(circle);
+        //设置覆盖面可编辑
+        // circle.enableEditing();
+        //
+        // var label = new BMap.Label("<span id=maptip'><span>");
+        // // 自定义文本标注样式
+        // label.setStyle({
+        //     color: 'blue',
+        //     borderRadius: '5px',
+        //     borderColor: '#ccc',
+        //     padding: '10px',
+        //     fontSize: '16px',
+        //     height: '30px',
+        //     lineHeight: '30px',
+        //     fontFamily: '微软雅黑',
+        //     border: '0px'
+        // });
+        // map.addOverlay(label);
+        //鼠标点击或拖动显示半径
+        // var clickEvts = ['click','lineupdate'];
+        // for (let i = 0; i < clickEvts.length; i++)  {
+        //     const event = clickEvts[i];
+        //     circle.addEventListener(event,function(e){
+        //         switch (event) {
+        //             case 'click':
+        //                 $("#maptip").val(circle.xa.toFixed(2));
+        //                 searchs();
+        //                 break;
+        //             case 'lineupdate':
+        //                 $("#maptip").val(circle.xa.toFixed(2));
+        //                 searchs();
+        //                 break;
+        //         }
+        //     })
+        // }
+        //
 
-            (function () {
-                var index = i;
-                var _iw = createInfoWindow(i);
-                var _marker = marker;
-                _marker.addEventListener("click", function () {
-                    this.openInfoWindow(_iw);
-                });
-                _iw.addEventListener("open", function () {
-                    _marker.getLabel().hide();
-                })
-                _iw.addEventListener("close", function () {
-                    _marker.getLabel().show();
-                })
-                label.addEventListener("click", function () {
-                    _marker.openInfoWindow(_iw);
-                })
-                if (!!json.isOpen) {
-                    label.hide();
-                    _marker.openInfoWindow(_iw);
-                }
-            })()
+
+        //显示圆范围内的点
+        for (var i in markerArr) {
+            var json = markerArr[i];
+            var p0 = json.itemXY.split(",")[0];
+            var p1 = json.itemXY.split(",")[1];
+            var point = new BMap.Point(p0, p1);
+            if (BMapLib.GeoUtils.isPointInCircle(point, circle)) {
+                // 创建Marker标注，使用小车图标
+                var marker1 = new BMap.Marker(point);
+
+                //var label = new BMap.Label(json.title, {"offset": new BMap.Size(25, 10)});
+                //marker1.setLabel(label);
+                map.addOverlay(marker1);
+                // label.setStyle({
+                //     borderColor: "#808080",
+                //     color: "#333",
+                //     cursor: "pointer"
+                // });
+
+                (function () {
+                    var index = i;
+                    var _iw = createInfoWindow(json);
+                    var _marker = marker1;
+                    _marker.addEventListener("click", function () {
+                        this.openInfoWindow(_iw, new BMap.Point(p0, p1));
+                    });
+                    // _iw.addEventListener("open", function () {
+                    //     _marker.getLabel().hide();
+                    // })
+                    // _iw.addEventListener("close", function () {
+                    //     _marker.getLabel().show();
+                    // })
+                    // label.addEventListener("click", function () {
+                    //     _marker.openInfoWindow(_iw, point);
+                    // })
+                    if (!!json.isOpen) {
+                        label.hide();
+                        _marker.openInfoWindow(_iw, point);
+                    }
+                })()
+            }
         }
     }
 
-    //创建InfoWindow
-    function createInfoWindow(i) {
-        var json = markerArr[i];
-        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>" + json.content + "</div>");
-        return iw;
+    function selectPoint() {
+        var value = $("#suggestId").val();
+        //创建地址解析器实例
+        var myGeo = new BMap.Geocoder();
+        // 将地址解析结果显示在地图上，并调整地图视野
+        myGeo.getPoint(value, function (point) {
+            if (point) {
+                map.centerAndZoom(point, 16);
+                map.addOverlay(new BMap.Marker(point, {title: value}))
+                $(".latlon").val(point.lng + "," + point.lat);
+            } else {
+                alert('您选择的地址没有解析到结果！');
+            }
+        }, '无锡市');
     }
+
+    // function G(id) {
+    //     return document.getElementById(id);
+    // }
+    //
+    // var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+    //     {
+    //         "input": "suggestId"
+    //         , "location": map
+    //     });
+    //
+    // ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+    //     var str = "";
+    //     var _value = e.fromitem.value;
+    //     var value = "";
+    //     if (e.fromitem.index > -1) {
+    //         value = _value.province + _value.city + _value.district + _value.street + _value.business;
+    //     }
+    //     str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+    //
+    //     value = "";
+    //     if (e.toitem.index > -1) {
+    //         _value = e.toitem.value;
+    //         value = _value.province + _value.city + _value.district + _value.street + _value.business;
+    //     }
+    //     str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+    //     G("searchResultPanel").innerHTML = str;
+    // });
+    //
+    // ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+    //     var _value = e.item.value;
+    //     myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+    //     G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+    //     setPlace();
+    // });
+    //
+    // function setPlace() {
+    //     map.clearOverlays();    //清除地图上所有覆盖物
+    //     function myFun() {
+    //         var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+    //         map.centerAndZoom(pp, 18);
+    //         map.addOverlay(new BMap.Marker(pp));    //添加标注
+    //     }
+    //     var local = new BMap.LocalSearch(map, { //智能搜索
+    //         onSearchComplete: myFun
+    //     });
+    //     selectPoint(myValue);
+    // }
+
+
+    // $('#radius').change(function () {
+    //     searchs();
+    // });
+
+    //创建InfoWindow
+    function createInfoWindow(json) {
+        console.log(json);
+        var opts = {
+            width: 350,     // 信息窗口宽度
+            height: 250,     // 信息窗口高度
+            title: '<p><h4>' + json.title + '</h4></p>'  // 信息窗口标题
+        }
+        var message = "<p><b>性质：</b>" + $.common.nullToStr(json.type) + "</p><p><b>地址：</b>" + $.common.nullToStr(json.address) + "</p>" +
+            '<p><b>网址：</b><a href="' + json.itemLink + '" target="_blank">' + $.common.nullToStr(json.itemLink) + '</a></p><p><b>成交总价：</b>' +
+            $.operate.numberFormatter(json.itemCurrentprice,3,'.',',') + '（元）</p><p><b>成交日期：</b>' + $.common.nullToStr(json.itemEndTime) + '</p><p><b>状态：</b>' + $.common.nullToStr(json.tags) + '</p>';
+        var infoWindow = new BMap.InfoWindow(message, opts);  // 创建信息窗口对象
+        return infoWindow;
+    }
+
 
     //创建一个Icon
     function createIcon(json) {
-        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(100, 200), {
-            imageOffset: new BMap.Size(-100, -100),
-            infoWindowOffset: new BMap.Size(200, 1),
-            offset: new BMap.Size(100, 200)
-        })
-        return icon;
+        var icon;
+        if ($.common.equals("工业用房", json.type)) {
+            icon = "../../static/img/gy.png"
+        }
+        var myIcon = new BMap.Icon(icon, new BMap.Size(52, 26));
+
+        return myIcon;
     }
 
-    $(function () {
-        $.ajax({
-            url: prefix + '/list',
-            async: false,
-            data: {},
-            type: 'post',
-            dataType: 'json',
-            success: function (result) {
-                markerArr = result;
-            }
-        });
-        initMap();//创建和初始化地图
-    });
 </script>
 </body>
 </html>

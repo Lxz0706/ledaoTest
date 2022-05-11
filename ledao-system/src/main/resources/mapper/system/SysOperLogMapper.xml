@@ -24,14 +24,32 @@
     </resultMap>
 
     <sql id="selectOperLogVo">
-        select oper_id, title, business_type, method, request_method, operator_type, oper_name, dept_name, oper_url, oper_ip, oper_location, oper_param, json_result, status, error_msg, oper_time
+        select oper_id,
+               title,
+               business_type,
+               method,
+               request_method,
+               operator_type,
+               oper_name,
+               dept_name,
+               oper_url,
+               oper_ip,
+               oper_location,
+               oper_param,
+               json_result,
+               status,
+               error_msg,
+               oper_time
         from sys_oper_log
     </sql>
 
     <insert id="insertOperlog" parameterType="SysOperLog">
-		insert into sys_oper_log(title, business_type, method, request_method, operator_type, oper_name, dept_name, oper_url, oper_ip, oper_location, oper_param, json_result, status, error_msg, oper_time)
-        values (#{title}, #{businessType}, #{method}, #{requestMethod}, #{operatorType}, #{operName}, #{deptName}, #{operUrl}, #{operIp}, #{operLocation}, #{operParam}, #{jsonResult}, #{status}, #{errorMsg}, sysdate())
-	</insert>
+        insert into sys_oper_log(title, business_type, method, request_method, operator_type, oper_name, dept_name,
+                                 oper_url, oper_ip, oper_location, oper_param, json_result, status, error_msg,
+                                 oper_time)
+        values (#{title}, #{businessType}, #{method}, #{requestMethod}, #{operatorType}, #{operName}, #{deptName},
+                #{operUrl}, #{operIp}, #{operLocation}, #{operParam}, #{jsonResult}, #{status}, #{errorMsg}, sysdate())
+    </insert>
 
     <select id="selectOperLogList" parameterType="SysOperLog" resultMap="SysOperLogResult">
         <include refid="selectOperLogVo"/>
@@ -78,5 +96,34 @@
     <update id="cleanOperLog">
         truncate table sys_oper_log
     </update>
+
+    <select id="selectOperLogByTitle" parameterType="SysOperLog" resultMap="SysOperLogResult">
+        SELECT title, COUNT(title) as total
+        FROM sys_oper_log
+        WHERE title LIKE '%A资产%'
+           OR title LIKE '%网拍线索%'
+           OR title LIKE '%星标库%'
+        GROUP BY title
+        ORDER BY total;
+    </select>
+
+    <select id="selectOperLogByOperName" parameterType="sysOperLog" resultMap="SysOperLogResult">
+        SELECT t2.user_name as userName, COUNT(oper_name) as total
+        FROM sys_oper_log t1
+                 INNER JOIN sys_user t2 ON t1.oper_name = t2.login_name
+        WHERE title LIKE '%A资产%'
+           OR title LIKE '%网拍线索%'
+           OR title LIKE '%星标库%' AND t2.`status` = '0'
+        GROUP BY oper_name
+        ORDER BY total;
+    </select>
+
+    <select id="selectSysOperLogByOperTime" parameterType="sysOperLog" resultMap="SysOperLogResult">
+        select DATE_FORMAT(oper_time, '%H') as hours, count(oper_id) as total
+        from sys_oper_log
+        WHERE title LIKE '%A资产%' OR title LIKE '%网拍线索%' OR title LIKE '%星标库%'
+        group by hours
+        ORDER BY hours;
+    </select>
 
 </mapper> 

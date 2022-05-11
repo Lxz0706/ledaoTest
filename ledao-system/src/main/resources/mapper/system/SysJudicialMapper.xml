@@ -22,6 +22,14 @@
         <result property="itemCity" column="item_city"/>
         <result property="itemCounty" column="item_county"/>
         <result property="itemSource" column="item_source"/>
+        <result property="coordinate" column="coordinate"/>
+        <result property="tags" column="tags"/>
+        <result property="shopname" column="shopName"/>
+        <result property="applyer" column="applyer"/>
+        <result property="notify" column="notify"/>
+        <result property="looker" column="looker"/>
+        <result property="address" column="address"/>
+        <result property="timestamp" column="timestamp"/>
     </resultMap>
 
     <sql id="selectSysJudicialVo">
@@ -41,7 +49,15 @@
                item_province,
                item_city,
                item_county,
-               item_source
+               item_source,
+               coordinate,
+               tags,
+               shopName,
+               applyer,
+               notify,
+               looker,
+               address,
+            timestamp
         from sys_judicial
     </sql>
 
@@ -49,7 +65,9 @@
         <include refid="selectSysJudicialVo"/>
         <where>
             <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
-            <if test="itemTitle != null  and itemTitle != ''">and item_title || item_owner like concat('%', #{itemTitle},'%')</if>
+            <if test="itemTitle != null  and itemTitle != ''">and item_title || item_owner like concat('%',
+                #{itemTitle},'%')
+            </if>
             <if test="itemOwner != null  and itemOwner != ''">and item_owner like concat('%', #{itemOwner},'%')</if>
             <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
             <if test="itemStatus != null  and itemStatus != ''">and item_status = #{itemStatus}</if>
@@ -64,6 +82,14 @@
             <if test="itemCity != null  and itemCity != ''">and item_city = #{itemCity}</if>
             <if test="itemCounty != null  and itemCounty != ''">and item_county = #{itemCounty}</if>
             <if test="itemSource != null  and itemSource != ''">and item_source = #{itemSource}</if>
+            <if test="coordinate != null  and coordinate != ''">and coordinate = #{coordinate}</if>
+            <if test="tags != null  and tags != ''">and tags = #{tags}</if>
+            <if test="shopname != null  and shopname != ''">and shopName like concat('%', #{shopname}, '%')</if>
+            <if test="applyer != null ">and applyer = #{applyer}</if>
+            <if test="notify != null ">and notify = #{notify}</if>
+            <if test="looker != null ">and looker = #{looker}</if>
+            <if test="address !=null">and address = #{address}</if>
+            <if test="timestamp !=null">and timestamp= #{timestamp}</if>
         </where>
     </select>
 
@@ -149,11 +175,13 @@
     </delete>
 
 
-    <select id="selectSysJudicialList_COUNT" parameterType="SysJudicial" resultType="Long">
+    <select id="selectSysJudicialListTotal" parameterType="SysJudicial" resultType="Long">
         select count(*) from sys_judicial
         <where>
             <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
-            <if test="itemTitle != null  and itemTitle != ''">and item_title || item_owner like concat('%', #{itemTitle},'%')</if>
+            <if test="itemTitle != null  and itemTitle != ''">and item_title || item_owner like concat('%',
+                #{itemTitle},'%')
+            </if>
             <if test="itemOwner != null  and itemOwner != ''">and item_owner like concat('%', #{itemOwner},'%')</if>
             <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
             <if test="itemStatus != null  and itemStatus != ''">and item_status = #{itemStatus}</if>
@@ -168,6 +196,12 @@
             <if test="itemCity != null  and itemCity != ''">and item_city = #{itemCity}</if>
             <if test="itemCounty != null  and itemCounty != ''">and item_county = #{itemCounty}</if>
             <if test="itemSource != null  and itemSource != ''">and item_source = #{itemSource}</if>
+            <if test="coordinate != null  and coordinate != ''">and coordinate = #{coordinate}</if>
+            <if test="tags != null  and tags != ''">and tags = #{tags}</if>
+            <if test="shopname != null  and shopname != ''">and shopName like concat('%', #{shopname}, '%')</if>
+            <if test="applyer != null ">and applyer = #{applyer}</if>
+            <if test="notify != null ">and notify = #{notify}</if>
+            <if test="looker != null ">and looker = #{looker}</if>
         </where>
     </select>
 </mapper>

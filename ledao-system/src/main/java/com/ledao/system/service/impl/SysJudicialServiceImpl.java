@@ -2,7 +2,10 @@ package com.ledao.system.service.impl;
 
 import java.util.List;
 
+import com.github.pagehelper.Page;
 import com.ledao.common.annotation.DataSource;
+import com.ledao.common.core.page.PageDao;
+import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.enums.DataSourceType;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import com.ledao.system.mapper.SysJudicialMapper;
 import com.ledao.system.dao.SysJudicial;
 import com.ledao.system.service.ISysJudicialService;
 import com.ledao.common.core.text.Convert;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 司法拍卖项目Service业务层处理
@@ -43,6 +47,17 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
      */
     @Override
     public List<SysJudicial> selectSysJudicialList(SysJudicial sysJudicial) {
+        //PageDao pageDomain = TableSupport.buildPageRequest();
+        //Integer pageNum = pageDomain.getPageNum();
+        //Integer pageSize = pageDomain.getPageSize();
+        //Page<SysJudicial> list = (Page<SysJudicial>) sysJudicialMapper.selectSysJudicialList(sysJudicial);
+        //Page<SysJudicial> returnList = new Page<>();
+        //for (SysJudicial sysJudicial1 : list) {
+        //    returnList.add(sysJudicial1);
+        //}
+        //returnList.setTotal(CollectionUtils.isEmpty(list) ? 0 : list.getTotal());
+        //returnList.setPageNum(pageNum);
+        //returnList.setPageSize(pageSize);
         return sysJudicialMapper.selectSysJudicialList(sysJudicial);
     }
 
@@ -98,8 +113,8 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
      * @return 结果
      */
     @Override
-    public List<SysJudicial> selectListTotal(SysJudicial sysJudicial) {
-        return sysJudicialMapper.selectListTotal(sysJudicial);
+    public Long selectSysJudicialListTotal(SysJudicial sysJudicial) {
+        return sysJudicialMapper.selectSysJudicialListTotal(sysJudicial);
     }
 
 }

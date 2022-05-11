@@ -67,6 +67,7 @@
                 <a class="btn btn-info" onclick="back()" >
                     <i class="fa fa-backward"></i> 返回
                 </a>
+                <a class="btn btn-success" onclick="downLoad()"><i class="fa fa-plus"></i>下载</a>
                 <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:applyIn:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>-->
@@ -89,7 +90,7 @@
     <script th:inline="javascript">
         var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
         var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
-        var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+         var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
         var prefix = ctx + "applyIn";
         var documentType = document.getElementById("documentType").value;
         var roleType = document.getElementById("roleType").value;
@@ -106,9 +107,9 @@
                 modalName: "档案入库申请",
                 status: "In",
                 columns: [
-                   /* {
+                    {
                     checkbox: true
-                },*/
+                },
                 {
                     field: 'applyId',
                     title: 'id',
@@ -238,6 +239,49 @@
                 // projectName.style.display = "block"
                 debtorName.style.display = "block"
             }
+        }
+
+        function downLoad() {
+            var row = selectRows();
+            var appIds;
+            console.log(row.length);
+            for (var i = 0; i < row.length; i++) {
+                if ($.common.isEmpty(appIds)) {
+                    appIds = row[i].applyId;
+                } else {
+                    appIds = row[i].applyId + "," + appIds;
+                }
+            }
+            window.location.href = prefix + "/download/resources?applyIds=" + appIds + "&" + $("#formId").serialize();
+        }
+        function selectRows() {
+            //获取当前选中的值
+            let rows = $.map($("#bootstrap-table").bootstrapTable('getSelections'), function (row) {
+                return row;
+            });
+            //如果设置了记住选中数据
+            if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+                let selectedRows = table.rememberSelecteds[table.options.id];
+                if ($.common.isNotEmpty(selectedRows)) {
+                    rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
+                        return row;
+                    });
+                }
+            }
+            //去重
+            return uniqueFnByRows(rows);
+        }
+
+        function uniqueFnByRows(array) {
+            var result = [];
+            var hashObj = {};
+            for (var i = 0; i < array.length; i++) {
+                if (!hashObj[array[i].applyId]) {//参数id为主键，请根据自己的情况进行修改
+                    hashObj[array[i].applyId] = true;
+                    result.push(array[i]);
+                }
+            }
+            return result;
         }
     </script>
 </body>

@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('档案入库申请列表')" />
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -28,12 +29,16 @@
                             </li>-->
                             <li>
                                 <label>公司名称：</label>
-                                <select id="companyName" name="companyName"
-                                        th:with="type=${@dict.getType('sys_company_name')}"
-                                        data-none-selected-text="请选择">
+<!--                                <select id="companyName" name="companyName"-->
+<!--                                        th:with="type=${@dict.getType('sys_company_name')}"-->
+<!--                                        data-none-selected-text="请选择">-->
+<!--                                    <option value="">&#45;&#45;请选择数据&#45;&#45;</option>-->
+<!--                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
+<!--                                            th:value="${dict.dictValue}"></option>-->
+<!--                                </select>-->
+                                <select id="companyName" name="companyName" class="form-control select2-multiple" th:with="type=${@dict.getType('sys_company_name')}" data-none-selected-text="请选择">
                                     <option value="">--请选择数据--</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
+                                    <option th:each="dict : ${type}" th:value="${dict.dictValue}" th:text="${dict.dictLabel}"></option>
                                 </select>
                             </li>
                             <!--<li class="select-time">
@@ -48,7 +53,7 @@
                             </li>-->
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" id="reset-all" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
                     </div>
@@ -78,6 +83,7 @@
         </div>
     </div>
     <th:block th:include="include :: footer" />
+     <th:block th:include="include :: select2-js"/>
     <script th:inline="javascript">
         var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
         var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];
@@ -86,6 +92,10 @@
         var documentType = document.getElementById("documentType").value;
         var roleType = document.getElementById("roleType").value;
         var showPro = false;
+
+        $("#reset-all").click(function(){
+            $("#select2-companyName-container").text("--请选择数据--")
+        });
 
         $(function() {
             var options = {

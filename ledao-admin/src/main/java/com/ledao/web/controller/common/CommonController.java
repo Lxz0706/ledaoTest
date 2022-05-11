@@ -4,6 +4,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.jodconverter.DocumentConverter;
 import org.jodconverter.office.OfficeException;
 import org.slf4j.Logger;
@@ -251,7 +252,7 @@ public class CommonController {
             String oldSuffix = url.substring(url.lastIndexOf(".") + 1);
             //默认转pdf,excel转html
             String suffix = ".pdf";
-            if ("txt".equals(oldSuffix)) {
+            if ("txt".equals(oldSuffix) || "doc".equals(oldSuffix) || "docx".equals(oldSuffix)) {
                 charsetEnc(Global.getProfile().substring(0, Global.getProfile().indexOf("/profile")) + url, "UTF-8");
             }
             if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
@@ -298,12 +299,12 @@ public class CommonController {
             String oldSuffix = url.substring(url.lastIndexOf(".") + 1);
             //默认转pdf,excel转html
             String suffix = ".pdf";
-            if ("txt".equals(oldSuffix)) {
-                charsetEnc(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + url, "UTF-8");
-            }
-            if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
-                suffix = ".html";
-            }
+            //if ("txt".equals(oldSuffix) || "doc".equals(oldSuffix) || "docx".equals(oldSuffix)) {
+            //    charsetEnc(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + url, "UTF-8");
+            //}
+            //if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix) || "txt".equals(oldSuffix)) {
+            //    suffix = ".html";
+            //}
 
             //转换的文件存放位置
             newUrl = url.replace("." + oldSuffix, suffix);
@@ -411,6 +412,40 @@ public class CommonController {
         osw.flush();
         osw.close();
         isr.close();
+    }
+
+    @GetMapping("/common/onlinePreview")
+    public void toPdfFile(String url, HttpServletResponse response) {
+        File file = new File(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + url);// 需要转换的文件
+        String oldSuffix = url.substring(url.lastIndexOf(".") + 1);
+        String suffix = ".pdf";
+        String newUrl = "";
+        try {
+            if ("xlsx".equals(oldSuffix) || "xls".equals(oldSuffix)) {
+                suffix = ".html";
+            }
+
+            //转换的文件存放位置
+            newUrl = url.replace("." + oldSuffix, suffix);
+            File newFile = new File(Global.getProfile().substring(0, Global.getProfile().indexOf("/")) + newUrl);
+
+            if (!newFile.exists()) {
+                // 文件转化
+                converter.convert(file).to(newFile).execute();
+            }
+            // 使用response,将pdf文件以流的方式发送的前段
+            ServletOutputStream outputStream = response.getOutputStream();
+            // 读取文件
+            InputStream in = new FileInputStream(newFile);
+            // copy文件
+            IOUtils.copy(in, outputStream);
+            in.close();
+            outputStream.close();
+            newFile.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //return "Change PDF Over!";
     }
 
 }

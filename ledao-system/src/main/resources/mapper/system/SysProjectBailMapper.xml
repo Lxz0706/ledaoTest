@@ -22,8 +22,21 @@
     </resultMap>
 
     <sql id="selectSysProjectBailVo">
-        select bail_id, project_id, project_name, contract_no, bail, amount_guaranteed, start_time,
-        end_time, amount_compensated, del_flag, create_by, create_time, update_by, update_time from sys_project_bail
+        select bail_id,
+               project_id,
+               project_name,
+               contract_no,
+               bail,
+               amount_guaranteed,
+               start_time,
+               end_time,
+               amount_compensated,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        from sys_project_bail
     </sql>
 
     <select id="selectSysProjectBailList" parameterType="SysProjectBail" resultMap="SysProjectBailResult">
@@ -103,7 +116,9 @@
     </update>
 
     <delete id="deleteSysProjectBailById" parameterType="Long">
-        update sys_project_bail set del_flag = '2' where bail_id = #{bailId}
+        update sys_project_bail
+        set del_flag = '2'
+        where bail_id = #{bailId}
     </delete>
 
     <delete id="deleteSysProjectBailByIds" parameterType="String">
@@ -114,7 +129,8 @@
     </delete>
 
     <select id="selectSysProjectBailByProjectId" parameterType="String" resultMap="SysProjectBailResult">
-        <include refid="selectSysProjectBailVo"/> where project_id in
+        <include refid="selectSysProjectBailVo"/>
+        where project_id in
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
         </foreach>
@@ -129,6 +145,26 @@
     <select id="selectProjectBailListByProjectId" parameterType="Long" resultMap="SysProjectBailResult">
         <include refid="selectSysProjectBailVo"/>
         where project_id = #{projectId} and del_flag='0'
+    </select>
+
+    <select id="selectGuarantorsByProject" parameterType="SysProject" resultMap="SysProjectBailResult">
+        SELECT GROUP_CONCAT('', t1.bail, '') bail
+        FROM sys_project_bail t1
+        WHERE project_id IN (
+            SELECT project_id
+            FROM (
+                     SELECT t1.project_id,
+                            IF
+                                (FIND_IN_SET(parent_id, @pids) > 0, @pids := CONCAT( @pids, ',', project_id ),
+                                 0) AS ischild,
+                            del_flag
+                     FROM (SELECT project_id, parent_id, del_flag FROM sys_project t ORDER BY parent_id, project_id) t1,
+                          (SELECT @pids := #{projectId}) t2
+                 ) t3
+            WHERE ischild != 0
+		AND del_flag = '0'
+		OR project_id = #{projectId}
+	)and del_flag = '0'
     </select>
 
 </mapper>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('日志详细')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <table class="table table-striped">
+        <tr>
+            <td style="width: 10%!important;"><h5>项目名称：</h5></td>
+            <td style="width: 90%!important;"><span th:text="${sysJournal.projectName}"/></td>
+        </tr>
+        <tr>
+            <td><h5>日志内容：</h5></td>
+            <td><span th:text="${sysJournal.workDetail}"/></td>
+        </tr>
+        <tr>
+            <td><h5>日期：</h5></td>
+            <td><span th:text="${#dates.format(sysJournal.createTime, 'yyyy-MM-dd')}"/></td>
+        </tr>
+    </table>
+</div>
+<th:block th:include="include :: footer"/>
+</body>
+</html>

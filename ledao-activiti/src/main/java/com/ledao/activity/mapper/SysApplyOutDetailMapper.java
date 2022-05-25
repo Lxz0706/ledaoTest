@@ -78,4 +78,12 @@ public interface SysApplyOutDetailMapper
 
 
     List<SysApplyOutDetail> selectSysApplyOutDetailByDocumentIds(@Param("applyId")long applyId, @Param("documentIds") String[] documentIds, @Param("loginName") String loginName);
+
+    /**
+     * 批量修改借出文档类型
+     *
+     * @param sysApplyOutDetail
+     * @return
+     */
+    public int editOutFileDetailByIds(SysApplyOutDetail sysApplyOutDetail);
 }

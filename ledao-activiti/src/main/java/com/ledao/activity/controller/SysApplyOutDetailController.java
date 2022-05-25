@@ -24,14 +24,13 @@ import com.ledao.common.core.page.TableDataInfo;
 
 /**
  * 档案出库详情记录Controller
- * 
+ *
  * @author lxz
  * @date 2021-08-10
  */
 @Controller
 @RequestMapping("/activity/outFiledetail")
-public class SysApplyOutDetailController extends BaseController
-{
+public class SysApplyOutDetailController extends BaseController {
     private String prefix = "activity/outFiledetail";
 
     @Autowired
@@ -42,8 +41,7 @@ public class SysApplyOutDetailController extends BaseController
 
     @RequiresPermissions("activity:outFiledetail:view")
     @GetMapping()
-    public String outFiledetail()
-    {
+    public String outFiledetail() {
         return prefix + "/outFiledetail";
     }
 
@@ -53,8 +51,7 @@ public class SysApplyOutDetailController extends BaseController
 //    @RequiresPermissions("activity:outFiledetail:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysApplyOutDetail sysApplyOutDetail)
-    {
+    public TableDataInfo list(SysApplyOutDetail sysApplyOutDetail) {
         startPage();
         List<SysApplyOutDetail> list = sysApplyOutDetailService.selectSysApplyOutDetailList(sysApplyOutDetail);
         return getDataTable(list);
@@ -66,8 +63,7 @@ public class SysApplyOutDetailController extends BaseController
 //    @RequiresPermissions("activity:outFiledetail:list")
     @PostMapping("/listDocumentAndDetail")
     @ResponseBody
-    public TableDataInfo listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail)
-    {
+    public TableDataInfo listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail) {
         startPage();
         List<SysApplyOutDetail> list = sysApplyOutDetailService.listDocumentAndDetail(sysApplyOutDetail);
         return getDataTable(list);
@@ -75,8 +71,7 @@ public class SysApplyOutDetailController extends BaseController
 
     @PostMapping("/listDocumentAndDetail/{applyId}")
     @ResponseBody
-    public TableDataInfo listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail, @PathVariable("applyId") Long applyId)
-    {
+    public TableDataInfo listDocumentAndDetail(SysApplyOutDetail sysApplyOutDetail, @PathVariable("applyId") Long applyId) {
         startPage();
         sysApplyOutDetail.setApplyId(applyId);
         List<SysApplyOutDetail> list = sysApplyOutDetailService.listDocumentAndDetail(sysApplyOutDetail);
@@ -90,8 +85,7 @@ public class SysApplyOutDetailController extends BaseController
     @Log(title = "档案出库详情记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysApplyOutDetail sysApplyOutDetail)
-    {
+    public AjaxResult export(SysApplyOutDetail sysApplyOutDetail) {
         List<SysApplyOutDetail> list = sysApplyOutDetailService.selectSysApplyOutDetailList(sysApplyOutDetail);
         ExcelUtil<SysApplyOutDetail> util = new ExcelUtil<SysApplyOutDetail>(SysApplyOutDetail.class);
         return util.exportExcel(list, "outFiledetail");
@@ -101,8 +95,7 @@ public class SysApplyOutDetailController extends BaseController
      * 新增档案出库详情记录
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -113,8 +106,7 @@ public class SysApplyOutDetailController extends BaseController
     @Log(title = "档案出库详情记录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SysApplyOutDetail sysApplyOutDetail)
-    {
+    public AjaxResult addSave(SysApplyOutDetail sysApplyOutDetail) {
         return toAjax(sysApplyOutDetailService.insertSysApplyOutDetail(sysApplyOutDetail));
     }
 
@@ -125,17 +117,15 @@ public class SysApplyOutDetailController extends BaseController
     @Log(title = "档案出库添加要出库的档案id", businessType = BusinessType.INSERT)
     @PostMapping("/addDocDetailIds")
     @ResponseBody
-    public AjaxResult addDocDetailIds(String ids,long applyId)
-    {
-        return sysApplyOutDetailService.addDocDetailIds(ids,applyId);
+    public AjaxResult addDocDetailIds(String ids, long applyId) {
+        return sysApplyOutDetailService.addDocDetailIds(ids, applyId);
     }
 
     /**
      * 修改档案出库详情记录
      */
     @GetMapping("/edit/{outDetailId}")
-    public String edit(@PathVariable("outDetailId") Long outDetailId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("outDetailId") Long outDetailId, ModelMap mmap) {
         SysApplyOutDetail sysApplyOutDetail = sysApplyOutDetailService.selectSysApplyOutDetailById(outDetailId);
         mmap.put("sysApplyOutDetail", sysApplyOutDetail);
         return prefix + "/edit";
@@ -148,24 +138,41 @@ public class SysApplyOutDetailController extends BaseController
     @Log(title = "档案出库详情记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(SysApplyOutDetail sysApplyOutDetail)
-    {
-        if ("1".equals(sysApplyOutDetail.getIsElec())){
+    public AjaxResult editSave(SysApplyOutDetail sysApplyOutDetail) {
+        if ("1".equals(sysApplyOutDetail.getIsElec())) {
             //纸质版出库时，需要判断当前档案是否在库，纸质1，电子0
             SysApplyOutDetail model = sysApplyOutDetailService.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
             SysDocumentFile doc = sysDocumentFileService.selectSysDocumentFileById(model.getDocumentId());
-            if (!"1".equals(doc.getDocumentStatu())){
+            if (!"1".equals(doc.getDocumentStatu())) {
                 return AjaxResult.error("当前档案纸质文件不在库");
             }
         }
         return toAjax(sysApplyOutDetailService.updateSysApplyOutDetail(sysApplyOutDetail));
     }
 
+    @Log(title = "档案出库批量修改借出文档类型", businessType = BusinessType.UPDATE)
+    @PostMapping("/editOutFileDetailByIds")
+    @ResponseBody
+    public AjaxResult editOutFileDetailByIds(SysApplyOutDetail sysApplyOutDetail) {
+        int i = 0;
+        for (String string : sysApplyOutDetail.getOutFileDetailIds().split(",")) {
+            logger.info("需要修改的数据id：=======" + string);
+            if ("1".equals(sysApplyOutDetail.getIsElec())) {
+                //纸质版出库时，需要判断当前档案是否在库，纸质1，电子0
+                SysApplyOutDetail model = sysApplyOutDetailService.selectSysApplyOutDetailById(Long.valueOf(string));
+                SysDocumentFile doc = sysDocumentFileService.selectSysDocumentFileById(model.getDocumentId());
+                if (!"1".equals(doc.getDocumentStatu())) {
+                    return AjaxResult.error(doc.getFileName() + "纸质文件不在库");
+                }
+            }
+        }
+        return toAjax(sysApplyOutDetailService.editOutFileDetailByIds(sysApplyOutDetail));
+    }
+
     @PostMapping("/saveApplyOutDetails")
     @ResponseBody
-    public AjaxResult saveApplyOutDetails(List<SysApplyOutDetail> sysApplyOutDetails,String applyId)
-    {
-        return toAjax(sysApplyOutDetailService.saveApplyOutDetails(sysApplyOutDetails,applyId));
+    public AjaxResult saveApplyOutDetails(List<SysApplyOutDetail> sysApplyOutDetails, String applyId) {
+        return toAjax(sysApplyOutDetailService.saveApplyOutDetails(sysApplyOutDetails, applyId));
     }
 
     /**
@@ -173,10 +180,9 @@ public class SysApplyOutDetailController extends BaseController
      */
 //    @RequiresPermissions("activity:outFiledetail:remove")
     @Log(title = "档案出库详情记录", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(sysApplyOutDetailService.deleteSysApplyOutDetailByIds(ids));
     }
 }

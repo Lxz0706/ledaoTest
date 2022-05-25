@@ -1237,6 +1237,18 @@ var table = {
                     $.operate.submit(url, "post", "json", data);
                 });
             },
+            changeAll:function (){
+                table.set();
+                var rows = $.table.selectRows();
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                };
+                console.log("========="+rows.length);
+                for (var i = 0; i < rows.length; i++) {
+                    console.log(rows[i].fileType);
+                }
+            },
             // 清空信息
             clean: function () {
                 table.set();

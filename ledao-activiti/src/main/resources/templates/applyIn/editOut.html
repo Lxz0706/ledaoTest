@@ -290,28 +290,52 @@
             }
 
         } else if(showNames && applyUser != loginNameUser) {
-            $("#companyName").attr("disabled", "disabled")
-            $("#isReturn").attr("disabled", "disabled")
-            $("#isOut").attr("disabled", "disabled")
-            $("#isReturned").attr("disabled", "disabled")
-            $("#isReceived").attr("disabled", "disabled")
-            $("#planReturnTime").attr("disabled", "disabled")
-            $("#isReceive").attr("disabled", "disabled")
-            $("#outReason").attr("disabled", "disabled")
-            $("#remarks").attr("disabled", "disabled")
-            $("#projectNameVal").attr("disabled", "disabled")
-            $("#debtorNameTip").attr("disabled", "disabled")
-            $("#applyUser").attr("disabled", "disabled")
-            $("#applyUserName").attr("disabled","disabled");
-            $("#planReturnTimeShow").show()
-            $("#realReturnTime").show()
-            $("#isOutShow").show()
-            $("#isReceiveShow").show()
-            $("#isReturnedShow").show()
-            $("#isReceivedShow").show()
-            $("#toolbar").hide()
-            $("a").attr("disabled",true);
-            $('.btn').removeAttr('onclick')
+            if(showNames){
+                $("#toolbar").show();
+                $("#companyName").attr("disabled", "disabled")
+                $("#isReturn").attr("disabled", "disabled")
+                $("#isOut").attr("disabled", "disabled")
+                $("#isReturned").attr("disabled", "disabled")
+                $("#isReceived").attr("disabled", "disabled")
+                $("#planReturnTime").attr("disabled", "disabled")
+                $("#isReceive").attr("disabled", "disabled")
+                $("#outReason").attr("disabled", "disabled")
+                $("#remarks").attr("disabled", "disabled")
+                $("#projectNameVal").attr("disabled", "disabled")
+                $("#debtorNameTip").attr("disabled", "disabled")
+                $("#applyUser").attr("disabled", "disabled")
+                $("#applyUserName").attr("disabled","disabled");
+                $("#planReturnTimeShow").show()
+                $("#realReturnTime").show()
+                $("#isOutShow").show()
+                $("#isReceiveShow").show()
+                $("#isReturnedShow").show()
+                $("#isReceivedShow").show()
+                $('.btn').removeAttr('onclick');
+            }else{
+                $("#toolbar").hide();
+                $("#companyName").attr("disabled", "disabled")
+                $("#isReturn").attr("disabled", "disabled")
+                $("#isOut").attr("disabled", "disabled")
+                $("#isReturned").attr("disabled", "disabled")
+                $("#isReceived").attr("disabled", "disabled")
+                $("#planReturnTime").attr("disabled", "disabled")
+                $("#isReceive").attr("disabled", "disabled")
+                $("#outReason").attr("disabled", "disabled")
+                $("#remarks").attr("disabled", "disabled")
+                $("#projectNameVal").attr("disabled", "disabled")
+                $("#debtorNameTip").attr("disabled", "disabled")
+                $("#applyUser").attr("disabled", "disabled")
+                $("#applyUserName").attr("disabled","disabled");
+                $("#planReturnTimeShow").show()
+                $("#realReturnTime").show()
+                $("#isOutShow").show()
+                $("#isReceiveShow").show()
+                $("#isReturnedShow").show()
+                $("#isReceivedShow").show()
+                $("a").attr("disabled",true);
+                $('.btn').removeAttr('onclick');
+            }
         }
         if(documentTypeVal == "0") {
             projectName.style.display = 'block'
@@ -359,9 +383,14 @@
                     $("#removeOut").hide();
                 }
             } else {
-                $("#addOut").hide();
-                $("#editOut").hide();
-                $("#removeOut").hide();
+                if(showNames){
+                    $("#addOut").hide();
+                    $("#removeOut").show();
+                }else{
+                    $("#addOut").hide();
+                    $("#editOut").hide();
+                    $("#removeOut").hide();
+                }
             }
         } else if (applyTypeUnDone == "3") {
             if(applyType == "0" || applyType == "1") {
@@ -615,9 +644,11 @@
                 $("input").attr("readonly","readonly");
                 $("input").removeAttr("onclick");
                 $("select").attr("disabled",true);
-                $("a").attr("disabled",true);
                 $("textarea").attr("disabled",true);
-                $('.btn').removeAttr('onclick')
+                if(!showNames){
+                    $("a").attr("disabled", true);
+                    $('.btn').removeAttr('onclick');
+                }
             }
         }
 

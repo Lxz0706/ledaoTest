@@ -88,6 +88,7 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
         return sysApplyWorkflowMapper.insertSysApplyWorkflow(sysApplyWorkflow);
     }
 
+    @Override
     public AjaxResult sendLittleMsg(JSONObject parm){
 /*        JSONObject parm = new JSONObject();
         parm.put("thing6","测试1");
@@ -96,10 +97,10 @@ public class SysApplyWorkflowServiceImpl implements ISysApplyWorkflowService
         parm.put("time4",DateUtils.getNowDate());*/
 
         // 创建名称为zyQueue的队列
-        Queue queue = new ActiveMQQueue("zyQueueCommon");
-        String dataStr = JSONObject.toJSONString(parm);
+        //Queue queue = new ActiveMQQueue("zyQueueCommon");
+        //String dataStr = JSONObject.toJSONString(parm);
         // 向队列发送消息
-        jmsMessagingTemplate.convertAndSend(queue, dataStr);
+        //jmsMessagingTemplate.convertAndSend(queue, dataStr);
         return AjaxResult.success();
     }
 

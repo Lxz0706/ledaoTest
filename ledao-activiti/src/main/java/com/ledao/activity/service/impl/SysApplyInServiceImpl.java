@@ -155,28 +155,17 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
     }
 
     public List<String> getApplyNextUser(SysApplyIn sysApplyIn) {
-        Map<String, Object> variables = new HashMap<>();
-        String key = "";
-        String itemName = "";
         SysUser sysUser = ShiroUtils.getSysUser();
         List<String> users = new ArrayList<>();
         if (StringUtils.isNotNull(sysUser)) {
             //入库申请
             SysApplyIn a = sysApplyInMapper.selectSysApplyInById(sysApplyIn.getApplyId());
             if ("0".equals(sysApplyIn.getApplyType())) {
-                /*if ("5".equals(sysApplyIn.getApproveStatu())){
-                    if (StringUtils.isNotEmpty(a.getRealCreateBy())){
-                        sysUser = userMapper.selectUserByLoginName(a.getRealCreateBy());
-                    }
-                }*/
                 //获取申请人的个人信息
                 sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
                 //根据提交人查询是否存在直接主管
                 if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotNull(sysUser.getDirectorId()) && "5".equals(sysApplyIn.getApproveStatu())) {
-                    key = "document_rk_zg";
                     SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
-                    //动态设置审批人员
-                    variables.put("userId", sysUser1.getLoginName());
                     users.add(sysUser1.getLoginName());
                     sysApplyIn.setIsDirector("0");
                 } else {
@@ -190,11 +179,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     }
                     users.addAll(js);
                     sysApplyIn.setIsDirector("1");
-                    key = "document_rk_zgNo";
                 }
-                itemName = sysApplyIn.getCreator() + "提交的入库申请";
             } else {
-                itemName = sysApplyIn.getCreator() + "提交的出库申请";
                 if ("0".equals(a.getIsDirector()) || "5".equals(sysApplyIn.getApproveStatu())) {
                     //判断是否存在直接主管
                     if (StringUtils.isNotEmpty(a.getRealCreateBy()) && "0".equals(sysApplyIn.getApproveStatu())) {
@@ -210,11 +196,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                         sysApplyIn.setIsDirector("1");
                     }
                 } else {
-                    List<String> userList = new ArrayList<>();
-                    userList.add("yangxu");
-                    userList.add("yangxudong");
-                    variables.put("assigneeList", userList);
-
                     List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
                     List<String> ids = new ArrayList<>();
                     for (SysRole r : rflgw) {
@@ -730,9 +711,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
     }
 
     public List<String> submitApplyInfo(SysApplyIn sysApplyIn) {
-        Map<String, Object> variables = new HashMap<>();
-        String key = "";
-        String itemName = "";
         SysUser sysUser = ShiroUtils.getSysUser();
         List<String> users = new ArrayList<>();
         //入库申请
@@ -742,10 +720,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
             //根据提交人查询是否存在直接主管
             if (StringUtils.isNotEmpty(sysUser.getDirector()) && StringUtils.isNotNull(sysUser.getDirectorId()) && "5".equals(sysApplyIn.getApproveStatu())) {
-                key = "document_rk_zg";
                 SysUser sysUser1 = userMapper.selectUserById(sysUser.getDirectorId());
-                //动态设置审批人员
-                variables.put("userId", sysUser1.getLoginName());
                 users.add(sysUser1.getLoginName());
                 sysApplyIn.setIsDirector("0");
             } else {
@@ -759,11 +734,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 }
                 users.addAll(js);
                 sysApplyIn.setIsDirector("1");
-                key = "document_rk_zgNo";
             }
-            itemName = sysApplyIn.getCreator() + "提交的入库申请";
         } else {
-            itemName = sysApplyIn.getCreator() + "提交的出库申请";
             if ("0".equals(a.getIsDirector()) || "5".equals(sysApplyIn.getApproveStatu())) {
                 //判断是否存在直接主管
                 sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
@@ -777,11 +749,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     sysApplyIn.setIsDirector("1");
                 }
             } else {
-                List<String> userList = new ArrayList<>();
-                userList.add("yangxu");
-                userList.add("yangxudong");
-                variables.put("assigneeList", userList);
-
                 List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
                 List<String> ids = new ArrayList<>();
                 for (SysRole r : rflgw) {
@@ -805,11 +772,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             }
         }
         sysApplyInMapper.updateIsDirector(sysApplyIn);
-
-        /*ProcessInstance processInstance = processService.submitApply(a.getApplyUser(), a.getApplyId().toString(), itemName, a.getRemarks(), key, variables);
-        String processInstanceId = processInstance.getId();
-        a.setInstanceId(processInstanceId); // 建立双向关系
-        sysApplyInMapper.updateSysApplyIn(a);*/
         return users;
     }
 
@@ -849,8 +811,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
         SysApplyWorkflow workflow = new SysApplyWorkflow();
         workflow.setRemarks(sysApplyIn.getRemarks());
 
-        String key = "";
-        Map<String, Object> variables = new HashMap<>();
         List<String> users = new ArrayList<>();
 
         //提交审批，寻找下一审批人
@@ -867,7 +827,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             }
             sysApplyInEntity.setApproveStatu(sysApplyIn.getApproveStatu());
             sysApplyInEntity.setApproveUser("");
-//            saveWorkFlow(sysApplyInEntity,workflow);
         }
         //审批拒绝，回到申请人
         if ("2".equals(sysApplyIn.getApproveStatu())) {
@@ -901,8 +860,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                         sysApplyInEntity.setApproveStatu("7");
                         sysApplyInEntity.setApproveUser("");
                         users.add(sysApplyInEntity.getApplyUser());
-                        users.add("qianwanping");
-                        users.add("xulinyi");
+                        List<SysUser> sysUserList = getUserList("Cc-ck");
+                        for (SysUser sysUser1 : sysUserList) {
+                            users.add(sysUser1.getLoginName() + "-send");
+                        }
                     } else if ("9".equals(sysApplyInEntity.getApproveStatu())) {
                         if (!"0".equals(sysApplyInEntity.getIsReceived())) {
                             return AjaxResult.error("档案未收到，无法完成借出审批");
@@ -939,25 +900,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     users = getApplyNextUser(sysApplyIn);
                     sysApplyInEntity.setApproveUser(String.join(",", users));
                     sysApplyInEntity.setApproveStatu("1");
-
-
-                    if (StringUtils.isNotEmpty(sysApplyInEntity.getInstanceId())) {
-                        BizTodoItem bizTodoItem = new BizTodoItem();
-                        bizTodoItem.setInstanceId(sysApplyInEntity.getInstanceId());
-                        List<BizTodoItem> bizs = bizTodoItemService.selectBizTodoItemList(bizTodoItem);
-                        if (bizs != null && bizs.size() > 0) {
-                            //获取对应的流程id
-                            String taskId = bizs.get(0).getTaskId();
-                            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-                            key = task.getProcessDefinitionId().substring(0, task.getProcessDefinitionId().indexOf(":"));
-                            processService.complete(taskId, sysApplyInEntity.getInstanceId(), sysApplyInEntity.getCreator() + "提交入库申请", sysApplyInEntity.getRemarks(), key, new HashMap<String, Object>(), request);
-                        }
-                    }
-                    /*if (saveEntityBoolean) {
-                        sysWorkflowService.updateSysWorkflow(sysWorkFlowVo);
-                    }*/
-
-//                    bizTodoItemService.insertTodoItem(sysApplyInEntity.getInstanceId(),"档案入库申请","","document_rk_zg");
                 }
             }
             saveWorkFlow(sysApplyInEntity, workflow);
@@ -966,18 +908,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             } else if ("3".equals(sysApplyInEntity.getApproveStatu())) {
                 users.add(sysApplyInEntity.getApplyUser());
                 if ("0".equals(sysApplyInEntity.getApplyType())) {
-                    //入库申请，审批的同时，发送给yangxu，xulinyi，qianwanping
-//                    users.add("yangxudong-send");
-//                    users.add("xulinyi-send");
-//                    users.add("qianwanping-send");
-                    List<SysUser> sysUserList = getUserList("Cc");
+                    List<SysUser> sysUserList = getUserList("Cc-rk");
                     for (SysUser sysUser1 : sysUserList) {
                         users.add(sysUser1.getLoginName() + "-send");
                     }
                 } else if ("1".equals(sysApplyInEntity.getApplyType())) {
-//                    users.add("xulinyi-send");
-//                    users.add("qianwanping-send");
-                    List<SysUser> sysUserList = getUserList("Cc");
+                    List<SysUser> sysUserList = getUserList("Cc-ck");
                     for (SysUser sysUser1 : sysUserList) {
                         users.add(sysUser1.getLoginName() + "-send");
                     }

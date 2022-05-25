@@ -34,9 +34,9 @@ server:
 # 日志配置
 logging:
   level:
-    com.ledao.system.mapper: info
-    org.springframework: info
-    com.ledao.activity.mapper: info
+    com.ledao.system.mapper: error
+    org.springframework: error
+    com.ledao.activity.mapper: error
 
 # 用户配置
 user:
@@ -110,10 +110,15 @@ mybatis:
 
 # PageHelper分页插件
 pagehelper:
-  helperDialect: postgresql
-  reasonable: true
+#  helperDialect: postgresql
+#  reasonable: true
+#  supportMethodsArguments: true
+#  params: count=countSql
+  helperDialect: mysql
   supportMethodsArguments: true
   params: count=countSql
+  auto-dialect: true
+  auto-runtime-dialect: true
 
 # Shiro
 shiro:

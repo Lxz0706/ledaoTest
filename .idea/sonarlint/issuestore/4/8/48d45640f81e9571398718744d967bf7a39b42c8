@@ -1,0 +1,103 @@
+
+a	java:S112Ù"FDefine and throw a dedicated exception instead of using a generic one.(úé¡ùÿÿÿÿ
+a	java:S112Ì"FDefine and throw a dedicated exception instead of using a generic one.(·Îåßıÿÿÿÿ
+a	java:S112×"FDefine and throw a dedicated exception instead of using a generic one.(úé¡ùÿÿÿÿ
+a	java:S112±"FDefine and throw a dedicated exception instead of using a generic one.(úé¡ùÿÿÿÿ
+\	java:S112®"FDefine and throw a dedicated exception instead of using a generic one.(øü›Ü
+K
+java:S3740ù"/Provide the parametrized type for this generic.(öÄâİûÿÿÿÿ
+K
+java:S3740ù"/Provide the parametrized type for this generic.(öÄâİûÿÿÿÿ
+K
+java:S3740å"/Provide the parametrized type for this generic.(‚š§ıÿÿÿÿÿ
+o	java:S116F"ZRename this field "ISysUserService" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Äœøš
+S
+java:S1854É"7Remove this useless assignment to local variable "des".(ªæâ¥úÿÿÿÿ
+D
+java:S1481É"(Remove this unused "des" local variable.(ªæâ¥úÿÿÿÿ
+2
+java:S3626ã"Remove this redundant jump.(ÉŠ©ƒ
+D	java:S108æ")Either remove or fill this block of code.(îÉÆ§øÿÿÿÿ
+Q	java:S125²"<This block of commented-out lines of code should be removed.(ÆÀÒ
+O
+java:S1854Ä"8Remove this useless assignment to local variable "user".(ˆ¡Âû
+@
+java:S1481Ä")Remove this unused "user" local variable.(ˆ¡Âû
+Q	java:S125Ö"<This block of commented-out lines of code should be removed.(ÆÀÒ
+R	java:S125Ú"<This block of commented-out lines of code should be removed.(Éúú
+?	java:S108ó")Either remove or fill this block of code.(š¿º¨
+W
+java:S1117Î"@Rename "accessToken" which hides the field declared at line 103.(ÙŠØû
+R	java:S125û"<This block of commented-out lines of code should be removed.(ÿúÆ™
+R	java:S125½"<This block of commented-out lines of code should be removed.(¾°µ
+n
+java:S3776–"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(¶ÒÔâıÿÿÿÿ
+V
+java:S1117Õ"@Rename "accessToken" which hides the field declared at line 103.(‚µC
+n
+java:S3776ñ"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(Œ½äœúÿÿÿÿ
+S
+java:S1854ı"<Remove this useless assignment to local variable "fileName".(—ªˆ…
+_
+java:S1854ƒ"CRemove this useless assignment to local variable "documentGetType".(êê‡úúÿÿÿÿ
+S
+java:S1854’"<Remove this useless assignment to local variable "fileName".(ıŒÚÿ
+_
+java:S1854˜"CRemove this useless assignment to local variable "documentGetType".(êê‡úúÿÿÿÿ
+D
+java:S1481ò"-Remove this unused "fileName" local variable.(´¥àš
+P
+java:S1481ƒ"4Remove this unused "documentGetType" local variable.(êê‡úúÿÿÿÿ
+P
+java:S1481˜"4Remove this unused "documentGetType" local variable.(êê‡úúÿÿÿÿ
+V
+java:S1117¯"@Rename "accessToken" which hides the field declared at line 103.(‚µC
+V	java:S899Ê";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ
+j
+java:S4042Ê"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ
+B
+java:S1068f",Remove this unused "applyIds" private field.(İÃ«
+J
+java:S1068g"/Remove this unused "accessToken" private field.(ù‰ôÅøÿÿÿÿ
+u
+java:S2293ç"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ö€øúÿÿÿÿ
+p
+java:S1192‚"YDefine a constant instead of duplicating this literal "docList/documentTypeList" 3 times.( àÄ®
+f
+java:S1192²"JDefine a constant instead of duplicating this literal "applyType" 3 times.(úÍóõùÿÿÿÿ
+h
+java:S1192ğ"QDefine a constant instead of duplicating this literal "sys_company_name" 8 times.(»Ğ‰Î
+c
+java:S1192ğ"LDefine a constant instead of duplicating this literal "sysDictData" 4 times.(»Ğ‰Î
+_
+java:S1192±"HDefine a constant instead of duplicating this literal "applyId" 7 times.(¤–ŞŞ
+t
+java:S1192Ù"XDefine a constant instead of duplicating this literal "è·å–accessTokenå¤±è´¥" 3 times.(úé¡ùÿÿÿÿ
+k
+java:S1192Ğ"ODefine a constant instead of duplicating this literal "projectZckType" 3 times.(Ü˜Æ›úÿÿÿÿ
+r
+java:S1192Ó"VDefine a constant instead of duplicating this literal "docList/docApplyInZcb" 3 times.(™æÌ»ûÿÿÿÿ
+s
+java:S1192Ø"WDefine a constant instead of duplicating this literal "sys_document_busi_type" 4 times.(Ê§óøÿÿÿÿ
+d
+java:S1192™"MDefine a constant instead of duplicating this literal "documentType" 9 times.(ßØù
+f
+java:S1192y"KDefine a constant instead of duplicating this literal "sysApplyIn" 6 times.(àï¶Ãÿÿÿÿÿ
+e
+java:S1192Ò"IDefine a constant instead of duplicating this literal "roleType" 9 times.(µ‡ÿ¡üÿÿÿÿ
+e
+java:S1192ê"IDefine a constant instead of duplicating this literal "ä»½     " 3 times.(ë—ÿÍıÿÿÿÿ
+_
+java:S1192x"IDefine a constant instead of duplicating this literal "appStatu" 4 times.(Œàæş
+g
+java:S1192é"KDefine a constant instead of duplicating this literal "yyyy-MM-dd" 3 times.(å‰›µüÿÿÿÿ
+]
+java:S1192"FDefine a constant instead of duplicating this literal "/edit" 3 times.(‘¨¾ä
+j
+java:S1192¬"SDefine a constant instead of duplicating this literal "/editDocumentModal" 3 times.(ôóø
+U
+java:S1155ˆ">Use isEmpty() to check whether the collection is empty or not.(³ÅÌ
+3
+java:S1643Ş"Use a StringBuilder instead.(‡ ÙÅ
+r
+java:S1488ÿ"[Immediately return this expression instead of assigning it to the temporary variable "res".(ø‰È

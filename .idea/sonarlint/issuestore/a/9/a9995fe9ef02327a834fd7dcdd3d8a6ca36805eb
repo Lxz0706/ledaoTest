@@ -1,0 +1,193 @@
+
+\	java:S112Ó"FDefine and throw a dedicated exception instead of using a generic one.(¥üÎİ
+K
+java:S3740´"/Provide the parametrized type for this generic.(öèÆ©ùÿÿÿÿ
+F
+java:S3740”"/Provide the parametrized type for this generic.(ø†—‚
+v
+java:S1149±"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ò„‡«
+{
+java:S1149²"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ıòê“şÿÿÿÿ
+v
+java:S1149Õ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ò„‡«
+{
+java:S1149Ö"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ıòê“şÿÿÿÿ
+v
+java:S1149û"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ò„‡«
+{
+java:S1149ü"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ıòê“şÿÿÿÿ
+R	java:S125‰"<This block of commented-out lines of code should be removed.(ì‘üì
+P
+java:S2130™"9Use "Integer.parseInt" for this string-to-int conversion.(’İà
+n
+java:S3776²"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(“ñË ùÿÿÿÿ
+R	java:S125»"<This block of commented-out lines of code should be removed.(ôï“©
+W	java:S125à"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+i
+java:S3776ä"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(ÑÿÙ›
+W	java:S125î"<This block of commented-out lines of code should be removed.(ö™îÑıÿÿÿÿ
+W	java:S125˜"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+j
+java:S3776¡"SRefactor this method to reduce its Cognitive Complexity from 156 to the 15 allowed.(Õ°Ø¦
+r
+java:S2159µ"VRemove this call to "equals"; comparisons between unrelated types always return false.(šÿäïüÿÿÿÿ
+r
+java:S2159µ"VRemove this call to "equals"; comparisons between unrelated types always return false.(šÿäïüÿÿÿÿ
+r
+java:S2159Û"VRemove this call to "equals"; comparisons between unrelated types always return false.(šÿäïüÿÿÿÿ
+r
+java:S2159Û"VRemove this call to "equals"; comparisons between unrelated types always return false.(šÿäïüÿÿÿÿ
+r
+java:S2159ÿ"VRemove this call to "equals"; comparisons between unrelated types always return false.(šÿäïüÿÿÿÿ
+r
+java:S2159ÿ"VRemove this call to "equals"; comparisons between unrelated types always return false.(šÿäïüÿÿÿÿ
+N
+java:S1854"7Remove this useless assignment to local variable "res".(¼ŒÃ¡
+i
+java:S3776®"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ÔË¤ã
+R	java:S125¸"<This block of commented-out lines of code should be removed.(¯ƒ§
+R	java:S125¼"<This block of commented-out lines of code should be removed.(Ó¡Î¡
+Q	java:S125„"<This block of commented-out lines of code should be removed.(£–Š!
+n
+java:S3776¥"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(õäŞ¦ıÿÿÿÿ
+R	java:S125²"<This block of commented-out lines of code should be removed.(æ­§–
+O	java:S106Æ"9Replace this use of System.out or System.err by a logger.(Ÿæ¦µ
+R	java:S125á"<This block of commented-out lines of code should be removed.(óÿîÄ
+R	java:S125æ"<This block of commented-out lines of code should be removed.(æ­§–
+R	java:S125ö"<This block of commented-out lines of code should be removed.(•š™¬
+O	java:S106û"9Replace this use of System.out or System.err by a logger.(Ÿæ¦µ
+n
+java:S3776—"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(Îêòãúÿÿÿÿ
+X
+java:S1854«"<Remove this useless assignment to local variable "sysApply".(×¦æ†ùÿÿÿÿ
+I
+java:S1481«"-Remove this unused "sysApply" local variable.(×¦æ†ùÿÿÿÿ
+n
+java:S3776Ø"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(ŞìÂÈıÿÿÿÿ
+W
+java:S1854¥";Remove this useless assignment to local variable "sysUser".(ˆĞ€®üÿÿÿÿ
+R	java:S125à"<This block of commented-out lines of code should be removed.(˜Á²
+H
+java:S1481¥",Remove this unused "sysUser" local variable.(ˆĞ€®üÿÿÿÿ
+T	java:S106®"9Replace this use of System.out or System.err by a logger.(Ñ¬Ï¨şÿÿÿÿ
+R	java:S125Ö"<This block of commented-out lines of code should be removed.(ôÄîù
+W	java:S125ö"<This block of commented-out lines of code should be removed.(èÎêÏşÿÿÿÿ
+]
+java:S3252û"FUse static access with "com.alibaba.fastjson.JSON" for "toJSONString".(•Ùô
+O	java:S106ü"9Replace this use of System.out or System.err by a logger.(ÅÛáâ
+n
+java:S3776‰"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(¢¯Ôàÿÿÿÿÿ
+W	java:S125›"<This block of commented-out lines of code should be removed.(èÎêÏşÿÿÿÿ
+]
+java:S3252¡"FUse static access with "com.alibaba.fastjson.JSON" for "toJSONString".(•Ùô
+T	java:S106¢"9Replace this use of System.out or System.err by a logger.(õÑÈ¥ûÿÿÿÿ
+W	java:S125Á"<This block of commented-out lines of code should be removed.(èÎêÏşÿÿÿÿ
+]
+java:S3252Ç"FUse static access with "com.alibaba.fastjson.JSON" for "toJSONString".(•Ùô
+T	java:S106È"9Replace this use of System.out or System.err by a logger.(õÑÈ¥ûÿÿÿÿ
+W	java:S125ç"<This block of commented-out lines of code should be removed.(èÎêÏşÿÿÿÿ
+]
+java:S3252ì"FUse static access with "com.alibaba.fastjson.JSON" for "toJSONString".(•Ùô
+T	java:S106ğ"9Replace this use of System.out or System.err by a logger.(õÑÈ¥ûÿÿÿÿ
+R	java:S125‡"<This block of commented-out lines of code should be removed.(ãôÈÒ
+W	java:S125"<This block of commented-out lines of code should be removed.(èÎêÏşÿÿÿÿ
+]
+java:S3252“"FUse static access with "com.alibaba.fastjson.JSON" for "toJSONString".(•Ùô
+T	java:S106 "9Replace this use of System.out or System.err by a logger.(ô”§—øÿÿÿÿ
+i
+java:S3776ª"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(›û“Â
+
+java:S1130Í"qRemove the declaration of thrown exception 'java.text.ParseException', as it cannot be thrown from method's body.(æÔşıÿÿÿÿ
+W	java:S125Õ"<This block of commented-out lines of code should be removed.(—ñ—’ÿÿÿÿÿ
+R	java:S125Ø"<This block of commented-out lines of code should be removed.(‰§Š
+O	java:S106à"9Replace this use of System.out or System.err by a logger.(Ÿæ¦µ
+L
+java:S1854Š	"6Remove this useless assignment to local variable "DF".(é®¢
+=
+java:S1481Š	"'Remove this unused "DF" local variable.(é®¢
+8
+java:S2111¢	"!Use "BigDecimal.valueOf" instead.(Ó¨ìº
+=
+java:S2111§	"!Use "BigDecimal.valueOf" instead.(£œö¬ûÿÿÿÿ
+U
+java:S1144ä"9Remove this unused private "sendDailyJournalTask" method.(€İµ‘øÿÿÿÿ
+r
+java:S1192È"VDefine a constant instead of duplicating this literal "æœ‰ä¸€ç¬”é‡‘é¢ä¸ºï¼š" 8 times.(ÇÏğãûÿÿÿÿ
+`
+java:S1192¤"IDefine a constant instead of duplicating this literal "jianghui" 3 times.(ä»ÿõ
+b
+java:S1192´"KDefine a constant instead of duplicating this literal "wangziyuan" 6 times.(†‰ğÑ
+c
+java:S1192Ã"GDefine a constant instead of duplicating this literal "word1" 15 times.(š¡¤¦ıÿÿÿÿ
+^
+java:S1192µ"GDefine a constant instead of duplicating this literal "openid" 4 times.(Ù©²Ë
+^
+java:S1192Å"GDefine a constant instead of duplicating this literal "word3" 16 times.(®óÀ
+^
+java:S1192Ä"GDefine a constant instead of duplicating this literal "word2" 19 times.(×äªö
+n
+java:S1192ü"WDefine a constant instead of duplicating this literal "----------------------" 4 times.(ÅÛáâ
+b
+java:S1192É"FDefine a constant instead of duplicating this literal "word5" 9 times.(‘æÑÅùÿÿÿÿ
+^
+java:S1192ñ"GDefine a constant instead of duplicating this literal "word4" 14 times.(æâ§Ò
+h
+java:S1192ø"LDefine a constant instead of duplicating this literal "accessToken" 5 times.(Ü™¯Ÿıÿÿÿÿ
+g
+java:S1192³"PDefine a constant instead of duplicating this literal "çš„æ¶ˆæ¯æé†’" 6 times.(ï¶•ª
+c
+java:S1192ß"GDefine a constant instead of duplicating this literal "yyyyMM" 3 times.(ÇËáÿÿÿÿÿ
+ƒ
+java:S1192¢"gDefine a constant instead of duplicating this literal "--------------------æ¨é€æé†’ç»™ï¼š" 3 times.(õÑÈ¥ûÿÿÿÿ
+^
+java:S1192õ"GDefine a constant instead of duplicating this literal "toUser" 5 times.(™õ€è
+j
+java:S1192ú"NDefine a constant instead of duplicating this literal "ThQueueCommon" 3 times.(ÖÔüôûÿÿÿÿ
+l
+java:S1192È"PDefine a constant instead of duplicating this literal "ï¼ˆæœªç¡®è®¤ï¼‰" 4 times.(ÇÏğãûÿÿÿÿ
+b
+java:S1192£"FDefine a constant instead of duplicating this literal "xukai" 3 times.(±”¯¢şÿÿÿÿ
+b
+java:S1192Å"KDefine a constant instead of duplicating this literal "yyyy-MM-dd" 6 times.(®óÀ
+c
+java:S1192§"GDefine a constant instead of duplicating this literal "first" 15 times.(·Ë‰üÿÿÿÿ
+F
+java:S1066¼"/Merge this if statement with the enclosing one.(ß›¨Ê
+K
+java:S1066í"/Merge this if statement with the enclosing one.(Ñ›øíùÿÿÿÿ
+K
+java:S1066ï"/Merge this if statement with the enclosing one.(¼¤Öıøÿÿÿÿ
+F
+java:S1066«"/Merge this if statement with the enclosing one.(‡‚œÖ
+K
+java:S1066®"/Merge this if statement with the enclosing one.(ÿ¤›âÿÿÿÿÿ
+F
+java:S1066Ï"/Merge this if statement with the enclosing one.(å‚½
+K
+java:S1066Ò"/Merge this if statement with the enclosing one.(ÿ¤›âÿÿÿÿÿ
+K
+java:S1066õ"/Merge this if statement with the enclosing one.(ÍçÃ¡şÿÿÿÿ
+K
+java:S1066ø"/Merge this if statement with the enclosing one.(ÿ¤›âÿÿÿÿÿ
+E
+java:S1066­"/Merge this if statement with the enclosing one.(–¡Ê}
+K
+java:S1066Å"/Merge this if statement with the enclosing one.(Ç±Ùµıÿÿÿÿ
+F
+java:S1066©"/Merge this if statement with the enclosing one.(…ñø°
+K
+java:S1066°"/Merge this if statement with the enclosing one.(ùœ øÿÿÿÿ
+f	java:S117Š	"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(é®¢
+U
+java:S1155Ş">Use isEmpty() to check whether the collection is empty or not.(İ•ñ‰
+Z
+java:S1155ƒ">Use isEmpty() to check whether the collection is empty or not.(å© »ûÿÿÿÿ
+U
+java:S1155‡">Use isEmpty() to check whether the collection is empty or not.(³ÅÌ
+U
+java:S1155¸">Use isEmpty() to check whether the collection is empty or not.(˜†¿ß
+Z
+java:S1155Ä">Use isEmpty() to check whether the collection is empty or not.(ü»¢¨üÿÿÿÿ
+Z
+java:S1155¯">Use isEmpty() to check whether the collection is empty or not.(Îñ‹ıÿÿÿÿ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ä¯ìó

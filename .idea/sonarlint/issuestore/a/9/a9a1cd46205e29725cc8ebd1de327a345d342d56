@@ -1,0 +1,116 @@
+
+h	java:S112£
+"FDefine and throw a dedicated exception instead of using a generic one.(¯åÕøÿÿÿÿ8Û…“ú0
+L
+java:S3740¦"/Provide the parametrized type for this generic.(§½•
+8ã…“ú0
+L
+java:S3740¦"/Provide the parametrized type for this generic.(§½•
+8å…“ú0
+R
+java:S3740©"/Provide the parametrized type for this generic.(äÃÿ©ıÿÿÿÿ8ç…“ú0
+R
+java:S3740©"/Provide the parametrized type for this generic.(äÃÿ©ıÿÿÿÿ8é…“ú0
+M
+java:S3740­"/Provide the parametrized type for this generic.(ÚÙºÎ8ë…“ú0
+M
+java:S3740­"/Provide the parametrized type for this generic.(ÚÙºÎ8í…“ú0
+M
+java:S3740°"/Provide the parametrized type for this generic.(úÕÙ’8î…“ú0
+M
+java:S3740°"/Provide the parametrized type for this generic.(úÕÙ’8î…“ú0
+M
+java:S3740´"/Provide the parametrized type for this generic.(ÚÙºÎ8î…“ú0
+M
+java:S3740´"/Provide the parametrized type for this generic.(ÚÙºÎ8î…“ú0
+M
+java:S3740·"/Provide the parametrized type for this generic.(úÕÙ’8î…“ú0
+M
+java:S3740·"/Provide the parametrized type for this generic.(úÕÙ’8ï…“ú0
+s	java:S116C"WRename this field "SysZckMapper" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôÈ£ë8ù…“ú0
+y
+java:S1845W"\Rename field "sysZckMapper" to prevent any misunderstanding/clash with field "SysZckMapper".(æß€û8‰†“ú0
+}
+java:S1149à"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8Â†“ú0
+p
+java:S3776œ"RRefactor this method to reduce its Cognitive Complexity from 84 to the 15 allowed.(„†¿¢8û†“ú0
+Y	java:S125"<This block of commented-out lines of code should be removed.(ŠÚÈ8´‡“ú0
+u
+java:S3776Â"RRefactor this method to reduce its Cognitive Complexity from 57 to the 15 allowed.(¦ÎÚªşÿÿÿÿ8¼‡“ú0
+F	java:S108Ë")Either remove or fill this block of code.(·Ô»³8Ã‡“ú0
+^	java:S125ÿ"<This block of commented-out lines of code should be removed.(êªÍ˜ıÿÿÿÿ8Î‡“ú0
+u
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(»À¿ûÿÿÿÿ8Ö‡“ú0
+p
+java:S3776ú"RRefactor this method to reduce its Cognitive Complexity from 33 to the 15 allowed.(òÁ“Ç8‹ˆ“ú0
+V	java:S106„"9Replace this use of System.out or System.err by a logger.(øï’8ªˆ“ú0
+^	java:S125"<This block of commented-out lines of code should be removed.(ÆÕØ’úÿÿÿÿ8¯ˆ“ú0
+X	java:S125³"<This block of commented-out lines of code should be removed.(¾í´z8²ˆ“ú0
+Y	java:S125»"<This block of commented-out lines of code should be removed.(‡ÔŸ8´ˆ“ú0
+u
+java:S3776È"RRefactor this method to reduce its Cognitive Complexity from 40 to the 15 allowed.(–†¯¿úÿÿÿÿ8µˆ“ú0
+^
+java:S1854É";Remove this useless assignment to local variable "sysUser".(¶İÚæùÿÿÿÿ8¶ˆ“ú0
+u
+java:S3776Š"RRefactor this method to reduce its Cognitive Complexity from 91 to the 15 allowed.(æ‹¥ùÿÿÿÿ8Äˆ“ú0
+Y	java:S125Ö"<This block of commented-out lines of code should be removed.(æÙÊÂ8Üˆ“ú0
+u
+java:S3776²"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(šñ×Èûÿÿÿÿ8îˆ“ú0
+^	java:S125ë"<This block of commented-out lines of code should be removed.(¢¨øÿÿÿÿ8úˆ“ú0
+^	java:S125€"<This block of commented-out lines of code should be removed.(š³şÿÿÿÿ8ûˆ“ú0
+q
+java:S3776š"SRefactor this method to reduce its Cognitive Complexity from 174 to the 15 allowed.(–Ö“Æ8€‰“ú0
+u
+java:S3776°"RRefactor this method to reduce its Cognitive Complexity from 42 to the 15 allowed.(œÃıêùÿÿÿÿ8“Š“ú0
+X	java:S125Ä"<This block of commented-out lines of code should be removed.(òÁ‰I8šŠ“ú0
+u
+java:S3776Ÿ"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(­ÆÍúÿÿÿÿ8´Š“ú0
+V	java:S106Æ"9Replace this use of System.out or System.err by a logger.(øï’8ÄŠ“ú0
+^	java:S125Ê"<This block of commented-out lines of code should be removed.(µ÷³ûÿÿÿÿ8ÅŠ“ú0
+^	java:S125Ğ"<This block of commented-out lines of code should be removed.(èÎêÏşÿÿÿÿ8ÆŠ“ú0
+d
+java:S3252Ø"FUse static access with "com.alibaba.fastjson.JSON" for "toJSONString".(•Ùô8’®Å¡0
+T
+java:S1854à"6Remove this useless assignment to local variable "sb".(í…Ò‰8ÇŠ“ú0
+E
+java:S1481à"'Remove this unused "sb" local variable.(í…Ò‰8ÊŠ“ú0
+q
+java:S1192Æ"SDefine a constant instead of duplicating this literal "å®é™…æäº¤äººï¼š" 4 times.(­ä•ô8ÔŠ“ú0
+d
+java:S1192à"FDefine a constant instead of duplicating this literal "-send" 3 times.(çËß”8ÔŠ“ú0
+d
+java:S1192®"FDefine a constant instead of duplicating this literal "word1" 5 times.(Í ş¥8ÔŠ“ú0
+l
+java:S1192¬"NDefine a constant instead of duplicating this literal "documentAdmin" 8 times.(ëñõå8ÕŠ“ú0
+i
+java:S1192¯"FDefine a constant instead of duplicating this literal "word2" 5 times.(ÑÌ¯üùÿÿÿÿ8ÕŠ“ú0
+i
+java:S1192´"FDefine a constant instead of duplicating this literal "word5" 5 times.(Àæùıûÿÿÿÿ8ÕŠ“ú0
+h
+java:S1192Ç"KDefine a constant instead of duplicating this literal "yyyy-MM-dd" 4 times.(œßÜS8ÖŠ“ú0
+m	java:S117 "QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ¶ô$8ÜŠ“ú0
+m	java:S117¡"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(êûÃm8ÜŠ“ú0
+\
+java:S1155ù">Use isEmpty() to check whether the collection is empty or not.(³ÅÌ8âŠ“ú0
+\
+java:S1155°">Use isEmpty() to check whether the collection is empty or not.(ÖƒÎ¸8äŠ“ú0
+a
+java:S1155ê">Use isEmpty() to check whether the collection is empty or not.(ß÷–¦úÿÿÿÿ8äŠ“ú0
+a
+java:S1155">Use isEmpty() to check whether the collection is empty or not.(‡ÅºÛüÿÿÿÿ8äŠ“ú0
+\
+java:S1155ä	">Use isEmpty() to check whether the collection is empty or not.(’™è8æŠ“ú0
+\
+java:S1155ì	">Use isEmpty() to check whether the collection is empty or not.(ßÓ˜°8æŠ“ú0
+\
+java:S1155ù	">Use isEmpty() to check whether the collection is empty or not.(ßÓ˜°8æŠ“ú0
+a
+java:S1155
+">Use isEmpty() to check whether the collection is empty or not.(å© »ûÿÿÿÿ8çŠ“ú0
+\
+java:S1155
+">Use isEmpty() to check whether the collection is empty or not.(ßÓ˜°8çŠ“ú0
+9
+java:S1643¥"Use a StringBuilder instead.(Úã”D8êŠ“ú0
+†
+java:S1488ã"cImmediately return this expression instead of assigning it to the temporary variable "sysUserList".(—Æ”Àÿÿÿÿÿ8íŠ“ú0

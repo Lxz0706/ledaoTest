@@ -1,0 +1,7 @@
+
+_
+java:S1128"=Remove this unused import 'com.ledao.system.dao.SysCustomer'.(àıœÉùÿÿÿÿ8ÖÈÍ¡0
+v
+java:S2293<"YReplace the type specification in this constructor call with the diamond operator ("<>").(Œšµó8ÖìÍ¡0
+[
+java:S1192d"FDefine a constant instead of duplicating this literal "value" 3 times.(„±‹(

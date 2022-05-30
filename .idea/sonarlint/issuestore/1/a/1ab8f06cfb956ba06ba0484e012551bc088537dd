@@ -1,0 +1,57 @@
+
+v
+java:S1149ï"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
+n
+java:S3776š"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(Šœˆ†şÿÿÿÿ
+n
+java:S3776€"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(Ø‚Ïúÿÿÿÿ
+N
+java:S1854µ"7Remove this useless assignment to local variable "map".(ƒ¢Œó
+G
+java:S1481³"+Remove this unused "status" local variable.(Ç²ëıÿÿÿÿ
+?
+java:S1481µ"(Remove this unused "map" local variable.(ƒ¢Œó
+n
+java:S3776á"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(Ú‡ ¡şÿÿÿÿ
+ˆ
+java:S1130á"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(Ú‡ ¡şÿÿÿÿ
+n
+java:S3252ò"WUse static access with "org.apache.commons.lang3.StringUtils" for "substringAfterLast".(ÈÔĞì
+n
+java:S2293U"YReplace the type specification in this constructor call with the diamond operator ("<>").(áÎÇ5
+¯
+java:S1192ï"’Define a constant instead of duplicating this literal "å½“å‰ç”¨æˆ·æ²¡æœ‰ä¿®æ”¹æƒé™ï¼Œè¯·è”ç³»ç®¡ç†å‘˜æˆ–è€…åˆ›å»ºäººè¿›è¡Œä¿®æ”¹ï¼" 3 times.(á„Éøÿÿÿÿ
+r
+java:S1192"[Define a constant instead of duplicating this literal "sysProjectUncollectedMoney" 3 times.(¥Ó©
+g
+java:S1192 "KDefine a constant instead of duplicating this literal "wangziyuan" 4 times.(½¼Ğûÿÿÿÿ
+K
+java:S1066Ÿ"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
+K
+java:S1066 "/Merge this if statement with the enclosing one.(½¼Ğûÿÿÿÿ
+K
+java:S1066ª"/Merge this if statement with the enclosing one.(ÌÈúúøÿÿÿÿ
+K
+java:S1066ì"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
+K
+java:S1066í"/Merge this if statement with the enclosing one.(³¤äÜøÿÿÿÿ
+K
+java:S1066î"/Merge this if statement with the enclosing one.(ŒÊ¿ãùÿÿÿÿ
+K
+java:S1066†"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
+K
+java:S1066‡"/Merge this if statement with the enclosing one.(“×å©üÿÿÿÿ
+K
+java:S1066ˆ"/Merge this if statement with the enclosing one.(Ë½ƒõøÿÿÿÿ
+K
+java:S1066»"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
+K
+java:S1066¼"/Merge this if statement with the enclosing one.(“×å©üÿÿÿÿ
+K
+java:S1066½"/Merge this if statement with the enclosing one.(Ö¢‚òûÿÿÿÿ
+K
+java:S1066æ"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
+K
+java:S1066ç"/Merge this if statement with the enclosing one.(“×å©üÿÿÿÿ
+K
+java:S1066è"/Merge this if statement with the enclosing one.(Ö¢‚òûÿÿÿÿ

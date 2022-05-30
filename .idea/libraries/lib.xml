@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ledao-admin/src/main/resources/lib/top-api-sdk-dev-ding-open-mc-20180719.091043-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ledao-admin/src/main/resources/lib/lippi-oapi-encrpt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ledao-admin/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20210709.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ledao-admin/src/main/resources/lib/top-api-sdk-dev-ding-open-mc-20180719.091254-2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ledao-admin/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20210709-source.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

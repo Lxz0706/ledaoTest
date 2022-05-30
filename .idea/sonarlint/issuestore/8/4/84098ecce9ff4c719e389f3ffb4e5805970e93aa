@@ -1,0 +1,53 @@
+
+u
+java:S1149R"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
+v
+java:S1149’"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
+v
+java:S1149Œ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
+h
+java:S3776N"RRefactor this method to reduce its Cognitive Complexity from 33 to the 15 allowed.(ïşÔ‰
+f
+java:S3252`"KUse static access with "org.apache.commons.lang3.StringUtils" for "equals".(†áë™úÿÿÿÿ
+V	java:S125{"<This block of commented-out lines of code should be removed.(ØœÉÛşÿÿÿÿ
+X
+java:S1854"<Remove this useless assignment to local variable "getRoles".(Øı§¨ıÿÿÿÿ
+I
+java:S1481"-Remove this unused "getRoles" local variable.(Øı§¨ıÿÿÿÿ
+W	java:S125˜"<This block of commented-out lines of code should be removed.(àŸ˜ıÿÿÿÿ
+W	java:S125­"<This block of commented-out lines of code should be removed.(ä°¦¾ıÿÿÿÿ
+W	java:S125±"<This block of commented-out lines of code should be removed.(ç©Üúüÿÿÿÿ
+W	java:S125·"<This block of commented-out lines of code should be removed.(ç©Üúüÿÿÿÿ
+W	java:S125»"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+i
+java:S3776‹"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(óË…³
+M
+java:S1854Œ"6Remove this useless assignment to local variable "sb".(í…Ò‰
+>
+java:S1481Œ"'Remove this unused "sb" local variable.(í…Ò‰
+g
+java:S3252–"KUse static access with "org.apache.commons.lang3.StringUtils" for "equals".(†áë™úÿÿÿÿ
+W	java:S125É"<This block of commented-out lines of code should be removed.(šü¢şÿÿÿÿ
+W	java:S125Ñ"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+K
+java:S1128"5Remove this unused import 'java.text.ParseException'.(ñ®ï•
+M
+java:S1128"7Remove this unused import 'java.text.SimpleDateFormat'.(ú¡ÙÛ
+h
+java:S1128"RRemove this unused import 'org.apache.shiro.authz.annotation.RequiresPermissions'.(ëÇ«º
+p
+java:S2293Ô"YReplace the type specification in this constructor call with the diamond operator ("<>").(»›±ÿ
+p
+java:S2293Ö"YReplace the type specification in this constructor call with the diamond operator ("<>").(ö–ó›
+i
+java:S1192_"NDefine a constant instead of duplicating this literal "documentAdmin" 3 times.(Õ†Ğ¿úÿÿÿÿ
+J
+java:S1066\"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
+J
+java:S1066f"/Merge this if statement with the enclosing one.(…’Ë¦ûÿÿÿÿ
+K
+java:S1066’"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
+K
+java:S1066–"/Merge this if statement with the enclosing one.(†áë™úÿÿÿÿ
+z
+java:S1488"cImmediately return this expression instead of assigning it to the temporary variable "sysUserList".(È¸Òø

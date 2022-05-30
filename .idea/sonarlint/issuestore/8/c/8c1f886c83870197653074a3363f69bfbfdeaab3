@@ -1,0 +1,10 @@
+
+q
+java:S3008"VRename this field "SQL_PATTERN" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(üÅàýûÿÿÿÿ
+U
+java:S1118
+":Add a private constructor to hide the implicit public one.(Ë¿Š¶þÿÿÿÿ
+r
+java:S1104"WMake SQL_PATTERN a static final constant or non-public and provide accessors if needed.(üÅàýûÿÿÿÿ
+L
+java:S1444"1Make this "public static SQL_PATTERN" field final(üÅàýûÿÿÿÿ

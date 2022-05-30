@@ -1,0 +1,67 @@
+
+[	java:S1128"FDefine and throw a dedicated exception instead of using a generic one.(œ²âý
+[	java:S112O"FDefine and throw a dedicated exception instead of using a generic one.(ý‘òÞ
+`	java:S112d"FDefine and throw a dedicated exception instead of using a generic one.(èÝÎÑþÿÿÿÿ
+a	java:S112ú"FDefine and throw a dedicated exception instead of using a generic one.(¹æš¼üÿÿÿÿ
+a	java:S112©"FDefine and throw a dedicated exception instead of using a generic one.(¹æš¼üÿÿÿÿ
+a	java:S112Ø"FDefine and throw a dedicated exception instead of using a generic one.(¾Ñß—úÿÿÿÿ
+\	java:S112ñ"FDefine and throw a dedicated exception instead of using a generic one.(“›èÝ
+p
+java:S3008Î"TRename this field "ReaderEcd" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(°…–öÿÿÿÿÿ
+n
+java:S3252h"SUse static access with "org.apache.commons.lang3.StringUtils" for "substringAfter".(Þæ¬Úþÿÿÿÿ
+m
+java:S3252j"WUse static access with "org.apache.commons.lang3.StringUtils" for "substringAfterLast".(ð³±Ò
+T	java:S106ª"9Replace this use of System.out or System.err by a logger.(ÇéÕŸùÿÿÿÿ
+\
+java:S2147Ï"ECombine this catch with the one at line 205, which has the same body.(ï­£Ä
+V	java:S899—";Do something with the "boolean" value returned by "delete".(„˜ÛÞýÿÿÿÿ
+j
+java:S4042—"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(„˜ÛÞýÿÿÿÿ
+]
+java:S3457¥"AFormat specifiers should be used instead of string concatenation.(ÙŸî¿üÿÿÿÿ
+W	java:S125®"<This block of commented-out lines of code should be removed.(ÃöÓÙùÿÿÿÿ
+V	java:S899Æ";Do something with the "boolean" value returned by "delete".(„˜ÛÞýÿÿÿÿ
+j
+java:S4042Æ"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(„˜ÛÞýÿÿÿÿ
+R	java:S125Ú"<This block of commented-out lines of code should be removed.(ˆõÆá
+U
+java:S4719Û"9Replace charset name argument with StandardCharsets.UTF_8(¯ÆÊŽþÿÿÿÿ
+V	java:S899¼";Do something with the "boolean" value returned by "delete".(„˜ÛÞýÿÿÿÿ
+j
+java:S4042¼"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(„˜ÛÞýÿÿÿÿ
+W	java:S125À"<This block of commented-out lines of code should be removed.(ð Ç³ùÿÿÿÿ
+I
+java:S1068Î"-Remove this unused "ReaderEcd" private field.(°…–öÿÿÿÿÿ
+F
+java:S1068Ð"*Remove this unused "outEcd" private field.(ð¾ëýøÿÿÿÿ
+\
+java:S1192ô"FDefine a constant instead of duplicating this literal "UTF-8" 5 times.(ç›Ï
+`
+java:S1192ø"IDefine a constant instead of duplicating this literal "/profile" 3 times.(‹«¨
+8
+java:S1643ß"Use a StringBuilder instead.(ÙÏ…Þúÿÿÿÿ
+S
+java:S2629¥"7Use the built-in formatting to construct this argument.(ÙŸî¿üÿÿÿÿ
+@
+java:S5411B"*Use the primitive boolean expression here.(î­ÁÂ
+d
+java:S2095¼"MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(»Üä¬
+c
+java:S2095â"LUse try-with-resources or close this "BufferedWriter" in a "finally" clause.(úøó™
+d
+java:S2095"MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(»Üä¬
+k
+java:S2095•"OUse try-with-resources or close this "InputStreamReader" in a "finally" clause.(©Èãûÿÿÿÿ
+n
+java:S2095œ"RUse try-with-resources or close this "BufferedOutputStream" in a "finally" clause.(Ö…¢Çüÿÿÿÿ
+j
+java:S2095›"NUse try-with-resources or close this "FileOutputStream" in a "finally" clause.(äœ¶Öüÿÿÿÿ
+m
+java:S2095ò"QUse try-with-resources or close this "BufferedInputStream" in a "finally" clause.(·³×ÿÿÿÿÿ
+g
+java:S2095–"PUse try-with-resources or close this "OutputStreamWriter" in a "finally" clause.(ñºú
+d
+java:S2095·"MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(»Üä¬
+c
+java:S2095Ü"LUse try-with-resources or close this "BufferedReader" in a "finally" clause.(Ô½ÀŠ

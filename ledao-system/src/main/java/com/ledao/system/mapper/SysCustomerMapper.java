@@ -3,7 +3,6 @@ package com.ledao.system.mapper;
 import java.util.List;
 
 import com.ledao.system.dao.SysCustomer;
-import com.ledao.system.dao.SysUser;
 
 /**
  * 客户库Mapper接口

@@ -1,21 +1,14 @@
 package com.ledao.web.controller.system;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
-import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.dao.DepartmentTree;
 import com.ledao.common.core.dao.Ztree;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysDept;
-import com.mysql.cj.xdevapi.JsonArray;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +26,6 @@ import com.ledao.system.service.ISysDepartmentService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
-import com.ledao.common.core.page.TableDataInfo;
 
 /**
  * 公司部门Controller

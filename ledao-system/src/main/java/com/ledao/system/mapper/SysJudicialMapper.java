@@ -5,6 +5,7 @@ import java.util.List;
 import com.ledao.system.dao.SysJudicial;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
  * 司法拍卖项目Mapper接口
@@ -12,7 +13,7 @@ import org.apache.ibatis.annotations.Select;
  * @author ledao
  * @date 2020-09-14
  */
-public interface SysJudicialMapper {
+public interface SysJudicialMapper{
     /**
      * 查询司法拍卖项目
      *

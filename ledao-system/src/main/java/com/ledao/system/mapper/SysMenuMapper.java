@@ -2,7 +2,7 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.dao.SysMenu;
+import com.ledao.common.core.dao.entity.SysMenu;
 import org.apache.ibatis.annotations.Param;
 
 /**

@@ -1,13 +1,12 @@
 package com.ledao.system.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysTrainAdmin;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.mapper.SysTrainAdminMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;

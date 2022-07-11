@@ -9,7 +9,7 @@ import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.activity.dao.BizLeaveVo;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;

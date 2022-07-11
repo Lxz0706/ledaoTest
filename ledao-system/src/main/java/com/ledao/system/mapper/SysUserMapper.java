@@ -2,7 +2,8 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
  * 用户表 数据层
@@ -161,6 +162,7 @@ public interface SysUserMapper {
 
     /**
      * 查询出没有填写日志的人员
+     *
      * @param sysUser
      * @return
      */

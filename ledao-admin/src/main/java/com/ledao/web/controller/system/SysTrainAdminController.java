@@ -4,16 +4,11 @@ import java.io.IOException;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
-import com.ledao.system.dao.SysDept;
-import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysConfigService;
-import com.ledao.system.service.ISysDeptService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +22,6 @@ import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**

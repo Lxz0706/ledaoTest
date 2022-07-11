@@ -2,6 +2,7 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.system.service.ISysDictTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,7 @@ import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysDictType;
-import com.ledao.system.service.ISysDictTypeService;
+import com.ledao.common.core.dao.entity.SysDictType;
 
 /**
  * 数据字典信息
@@ -115,18 +115,19 @@ public class SysDictTypeController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(dictTypeService.deleteDictTypeByIds(ids));
+        dictTypeService.deleteDictTypeByIds(ids);
+        return success();
     }
 
     /**
-     * 清空缓存
+     * 刷新字典缓存
      */
     @RequiresPermissions("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.CLEAN)
-    @GetMapping("/clearCache")
+    @GetMapping("/refreshCache")
     @ResponseBody
-    public AjaxResult clearCache() {
-        dictTypeService.clearCache();
+    public AjaxResult refreshCache() {
+        dictTypeService.resetDictCache();
         return success();
     }
 

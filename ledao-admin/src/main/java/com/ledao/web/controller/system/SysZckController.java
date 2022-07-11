@@ -1,18 +1,12 @@
 package com.ledao.web.controller.system;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.ledao.common.core.page.PageDao;
-import com.ledao.common.core.page.TableSupport;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysItemService;

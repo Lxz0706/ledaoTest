@@ -1,13 +1,10 @@
 package com.ledao.system.service.impl;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.common.utils.security.Md5Utils;
-import com.ledao.system.dao.SysUser;
 import com.ledao.system.dao.SysZck;
 import com.ledao.system.mapper.SysZckMapper;
 import com.ledao.system.service.ISysZckService;

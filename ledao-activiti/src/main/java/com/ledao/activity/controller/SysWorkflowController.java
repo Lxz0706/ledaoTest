@@ -10,7 +10,7 @@ import com.ledao.activity.dao.SysWorkFlowVo;
 import com.ledao.activity.service.IProcessService;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.service.ISysUserService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;

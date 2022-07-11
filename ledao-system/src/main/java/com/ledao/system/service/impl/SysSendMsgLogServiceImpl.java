@@ -3,7 +3,7 @@ package com.ledao.system.service.impl;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.system.dao.SysSendMsgLog;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.mapper.SysSendMsgLogMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.ISysSendMsgLogService;

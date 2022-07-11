@@ -11,7 +11,7 @@ import com.ledao.common.utils.ServletUtils;
 import com.ledao.framework.manager.AsyncManager;
 import com.ledao.framework.manager.factory.AsyncFactory;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.service.ISysUserService;
 
 /**

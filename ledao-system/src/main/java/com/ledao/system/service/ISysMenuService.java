@@ -1,9 +1,9 @@
 package com.ledao.system.service;
 
 import com.ledao.common.core.dao.Ztree;
-import com.ledao.system.dao.SysMenu;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysMenu;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 
 import java.util.List;
 import java.util.Map;

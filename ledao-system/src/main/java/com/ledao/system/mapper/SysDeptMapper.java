@@ -2,9 +2,8 @@ package com.ledao.system.mapper;
 
 import java.util.List;
 
-import com.ledao.common.utils.StringUtils;
 import org.apache.ibatis.annotations.Param;
-import com.ledao.system.dao.SysDept;
+import com.ledao.common.core.dao.entity.SysDept;
 
 /**
  * 部门管理 数据层

@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.dao.SysApplyWorkflow;
 import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 
 /**
  * 档案出入库审批流程Service接口

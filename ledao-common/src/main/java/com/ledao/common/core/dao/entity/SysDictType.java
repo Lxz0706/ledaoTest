@@ -1,4 +1,4 @@
-package com.ledao.system.dao;
+package com.ledao.common.core.dao.entity;
 
 import javax.validation.constraints.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;

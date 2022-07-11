@@ -1,4 +1,4 @@
-package com.ledao.system.dao;
+package com.ledao.common.core.dao.entity;
 
 import java.util.List;
 import java.util.ArrayList;

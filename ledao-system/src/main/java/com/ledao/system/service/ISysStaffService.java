@@ -3,7 +3,6 @@ package com.ledao.system.service;
 import java.util.List;
 
 import com.ledao.system.dao.SysStaff;
-import com.ledao.system.dao.SysUser;
 
 /**
  * 员工信息Service接口

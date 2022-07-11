@@ -4,19 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 //import com.itextpdf.text.log.SysoLogger;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.mapper.SysApplyInMapper;
 import com.ledao.common.constant.Constants;
-import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

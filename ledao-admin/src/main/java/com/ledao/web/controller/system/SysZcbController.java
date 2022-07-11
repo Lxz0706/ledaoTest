@@ -3,6 +3,8 @@ package com.ledao.web.controller.system;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;

@@ -1,9 +1,10 @@
-package com.ledao.system.dao;
+package com.ledao.common.core.dao.entity;
 
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
 
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ledao.common.annotation.Excel;
@@ -11,6 +12,10 @@ import com.ledao.common.annotation.Excel.ColumnType;
 import com.ledao.common.annotation.Excel.Type;
 import com.ledao.common.annotation.Excels;
 import com.ledao.common.core.dao.BaseEntity;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * 用户对象 sys_user
@@ -23,6 +28,7 @@ public class SysUser extends BaseEntity {
     /**
      * 用户ID
      */
+    @Id
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 

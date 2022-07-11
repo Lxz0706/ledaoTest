@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.*;
 
 import com.ledao.common.config.Global;
-import com.ledao.common.utils.Base64Util;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
@@ -14,7 +15,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
@@ -24,11 +24,6 @@ import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 流转服务费Controller

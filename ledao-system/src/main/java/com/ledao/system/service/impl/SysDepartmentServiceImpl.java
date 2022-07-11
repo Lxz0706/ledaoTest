@@ -2,18 +2,12 @@ package com.ledao.system.service.impl;
 
 import java.util.*;
 
-import com.google.common.collect.Maps;
-import com.ledao.common.annotation.DataScope;
 import com.ledao.common.constant.UserConstants;
-import com.ledao.common.core.dao.DepartmentTree;
 import com.ledao.common.core.dao.Ztree;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysDept;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysDepartmentMapper;

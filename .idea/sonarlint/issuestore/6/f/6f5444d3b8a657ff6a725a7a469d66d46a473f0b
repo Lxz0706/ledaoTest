@@ -1,8 +1,12 @@
 
-f
-java:S3252â"JUse static access with "org.apache.commons.lang3.StringUtils" for "split".(¯Ş–—úÿÿÿÿ
+S
+java:S1905à"0Remove this unnecessary cast to "SysDepartment".(ü½µıÿÿÿÿ8‰ĞÇÀ‘0
+m
+java:S3252â"JUse static access with "org.apache.commons.lang3.StringUtils" for "split".(¯Ş–—úÿÿÿÿ8‹ĞÇÀ‘0
 o
 java:S2293Æ"YReplace the type specification in this constructor call with the diamond operator ("<>").(Šş€?
+[
+java:S1155p">Use isEmpty() to check whether the collection is empty or not.(–ù¸‘8ĞÇÀ‘0
 z
 java:S1488°"^Immediately return this expression instead of assigning it to the temporary variable "ztrees".(ÀÓ–ûûÿÿÿÿ
 z

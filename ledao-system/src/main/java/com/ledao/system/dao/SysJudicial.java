@@ -5,8 +5,10 @@ import java.util.Date;
 
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * 司法拍卖项目对象 sys_judicial

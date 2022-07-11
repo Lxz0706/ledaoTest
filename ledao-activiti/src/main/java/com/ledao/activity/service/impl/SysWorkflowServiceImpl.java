@@ -1,7 +1,6 @@
 package com.ledao.activity.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import com.ledao.common.core.page.PageDao;
 import com.ledao.common.core.page.TableSupport;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.mapper.SysUserMapper;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;

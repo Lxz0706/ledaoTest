@@ -11,7 +11,7 @@ import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysNotice;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.activity.dao.BizLeaveVo;
 import com.ledao.system.service.ISysNoticeService;

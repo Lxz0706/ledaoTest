@@ -36,9 +36,6 @@
     <script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
     <!-- jquery-validate 表单树插件 -->
     <script th:src="@{/ajax/libs/bootstrap-treetable/bootstrap-treetable.js}"></script>
-    <!-- jquery-export 表格导出插件-->
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
     <!-- 遮罩层 -->
     <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
     <script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
@@ -225,4 +222,10 @@
 <!--pdf在线预览css-->
 <div th:fragment="pdf-css">
     <link rel="stylesheet" th:href="@{/js/plugins/pdfJS/web/viewer.css}"/>
+</div>
+
+<!-- 表格导出插件 -->
+<div th:fragment="bootstrap-table-export-js">
+    <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js?v=1.18.3}"></script>
+    <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.min.js?v=1.10.24}"></script>
 </div>

@@ -2,11 +2,11 @@ package com.ledao.framework.web.service;
 
 import java.util.List;
 
+import com.ledao.system.service.ISysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ledao.system.dao.SysDictData;
+import com.ledao.common.core.dao.entity.SysDictData;
 import com.ledao.system.service.ISysDictDataService;
-import com.ledao.system.service.ISysDictTypeService;
 
 /**
  * LeDao首创 html调用 thymeleaf 实现字典读取

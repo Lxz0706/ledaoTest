@@ -1,41 +1,43 @@
 package com.ledao.system.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
 import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.qrCode.WxQrCode;
+import com.ledao.system.dao.SysConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.common.constant.Constants;
 import com.ledao.common.constant.UserConstants;
+import com.ledao.common.core.redis.RedisCache;
 import com.ledao.common.core.text.Convert;
-import com.ledao.common.utils.CacheUtils;
+import com.ledao.common.exception.ServiceException;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysConfig;
 import com.ledao.system.mapper.SysConfigMapper;
 import com.ledao.system.service.ISysConfigService;
 
 /**
  * 参数配置 服务层实现
  *
- * @author lxz
+ * @author ruoyi
  */
 @Service
 public class SysConfigServiceImpl implements ISysConfigService {
     @Autowired
     private SysConfigMapper configMapper;
 
+    @Autowired
+    private RedisCache redisCache;
+
     /**
      * 项目启动时，初始化参数到缓存
      */
     @PostConstruct
     public void init() {
-        List<SysConfig> configsList = configMapper.selectConfigList(new SysConfig());
-        for (SysConfig config : configsList) {
-            CacheUtils.put(getCacheName(), getCacheKey(config.getConfigKey()), config.getConfigValue());
-        }
+        loadingConfigCache();
     }
 
     /**
@@ -59,7 +61,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
      */
     @Override
     public String selectConfigByKey(String configKey) {
-        String configValue = Convert.toStr(CacheUtils.get(getCacheName(), getCacheKey(configKey)));
+        String configValue = Convert.toStr(redisCache.getCacheObject(getCacheKey(configKey)));
         if (StringUtils.isNotEmpty(configValue)) {
             return configValue;
         }
@@ -67,7 +69,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
         config.setConfigKey(configKey);
         SysConfig retConfig = configMapper.selectConfig(config);
         if (StringUtils.isNotNull(retConfig)) {
-            CacheUtils.put(getCacheName(), getCacheKey(configKey), retConfig.getConfigValue());
+            redisCache.setCacheObject(getCacheKey(configKey), retConfig.getConfigValue());
             return retConfig.getConfigValue();
         }
         return StringUtils.EMPTY;
@@ -94,7 +96,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
     public int insertConfig(SysConfig config) {
         int row = configMapper.insertConfig(config);
         if (row > 0) {
-            CacheUtils.put(getCacheName(), getCacheKey(config.getConfigKey()), config.getConfigValue());
+            redisCache.setCacheObject(getCacheKey(config.getConfigKey()), config.getConfigValue());
         }
         return row;
     }
@@ -109,7 +111,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
     public int updateConfig(SysConfig config) {
         int row = configMapper.updateConfig(config);
         if (row > 0) {
-            CacheUtils.put(getCacheName(), getCacheKey(config.getConfigKey()), config.getConfigValue());
+            redisCache.setCacheObject(getCacheKey(config.getConfigKey()), config.getConfigValue());
         }
         return row;
     }
@@ -121,21 +123,45 @@ public class SysConfigServiceImpl implements ISysConfigService {
      * @return 结果
      */
     @Override
-    public int deleteConfigByIds(String ids) {
-        int count = configMapper.deleteConfigByIds(Convert.toStrArray(ids));
-        if (count > 0) {
-
-            CacheUtils.removeAll(getCacheName());
+    public void deleteConfigByIds(String ids) {
+        Long[] configIds = Convert.toLongArray(ids);
+        for (Long configId : configIds) {
+            SysConfig config = selectConfigById(configId);
+            if (StringUtils.equals(UserConstants.YES, config.getConfigType())) {
+                throw new ServiceException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
+            }
+            configMapper.deleteConfigById(configId);
+            redisCache.deleteObject(getCacheKey(config.getConfigKey()));
         }
-        return count;
     }
 
     /**
-     * 清空缓存数据
+     * 加载参数缓存数据
      */
     @Override
-    public void clearCache() {
-        CacheUtils.removeAll(getCacheName());
+    public void loadingConfigCache() {
+        List<SysConfig> configsList = configMapper.selectConfigList(new SysConfig());
+        for (SysConfig config : configsList) {
+            redisCache.setCacheObject(getCacheKey(config.getConfigKey()), config.getConfigValue());
+        }
+    }
+
+    /**
+     * 清空参数缓存数据
+     */
+    @Override
+    public void clearConfigCache() {
+        Collection<String> keys = redisCache.keys(Constants.SYS_CONFIG_KEY + "*");
+        redisCache.deleteObject(keys);
+    }
+
+    /**
+     * 重置参数缓存数据
+     */
+    @Override
+    public void resetConfigCache() {
+        clearConfigCache();
+        loadingConfigCache();
     }
 
     /**
@@ -154,6 +180,16 @@ public class SysConfigServiceImpl implements ISysConfigService {
         return UserConstants.CONFIG_KEY_UNIQUE;
     }
 
+    /**
+     * 设置cache key
+     *
+     * @param configKey 参数键
+     * @return 缓存键key
+     */
+    private String getCacheKey(String configKey) {
+        return Constants.SYS_CONFIG_KEY + configKey;
+    }
+
     @Override
     public String getWechatComAccessToken() {
         String accessToken = "";
@@ -162,22 +198,20 @@ public class SysConfigServiceImpl implements ISysConfigService {
             config.setConfigKey("weChatAccessToken");
             List<SysConfig> confs = configMapper.selectConfigList(config);
             boolean needSave = false;
-            if (confs!=null&& confs.size()>0){
-                if ((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90 && StringUtils.isNotEmpty(confs.get(0).getConfigValue())){
+            if (confs != null && confs.size() > 0) {
+                if ((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime()) / 1000 / 60 < 90 && StringUtils.isNotEmpty(confs.get(0).getConfigValue())) {
                     accessToken = confs.get(0).getConfigValue();
-                }else{
+                } else {
                     needSave = true;
-                    /*String[] delId = {confs.get(0).getConfigId().toString()};
-                    configMapper.deleteConfigByIds(delId);*/
-                    for (SysConfig conf:confs){
+                    for (SysConfig conf : confs) {
                         configMapper.deleteConfigByIds(new String[]{conf.getConfigId().toString()});
                     }
                 }
-            }else{
+            } else {
                 needSave = true;
             }
-            if (needSave){
-                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM,WeChatConstants.WXSECRETCOM);
+            if (needSave) {
+                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPIDCOM, WeChatConstants.WXSECRETCOM);
                 config.setConfigValue(accessToken);
                 configMapper.insertConfig(config);
             }
@@ -195,23 +229,20 @@ public class SysConfigServiceImpl implements ISysConfigService {
             config.setConfigKey("weChatLittleAccessToken");
             List<SysConfig> confs = configMapper.selectConfigList(config);
             boolean needSave = false;
-            if (confs!=null&& confs.size()>0){
-                if (((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime())/1000/60<90) && StringUtils.isNotEmpty(confs.get(0).getConfigValue())){
+            if (confs != null && confs.size() > 0) {
+                if (((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime()) / 1000 / 60 < 90) && StringUtils.isNotEmpty(confs.get(0).getConfigValue())) {
                     accessToken = confs.get(0).getConfigValue();
-                }else{
+                } else {
                     needSave = true;
-                   /* String[] delId = {confs.get(0).getConfigId().toString()};
-                    configMapper.deleteConfigByIds(delId);*/
-                    for (SysConfig conf:confs){
+                    for (SysConfig conf : confs) {
                         configMapper.deleteConfigByIds(new String[]{conf.getConfigId().toString()});
                     }
                 }
-            }else{
+            } else {
                 needSave = true;
             }
-            if (needSave){
-                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID,WeChatConstants.WXSECRET);
-//                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXSECRET,WeChatConstants.WXAPPIDCOM);
+            if (needSave) {
+                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXAPPID, WeChatConstants.WXSECRET);
                 config.setConfigValue(accessToken);
                 configMapper.insertConfig(config);
             }
@@ -221,22 +252,4 @@ public class SysConfigServiceImpl implements ISysConfigService {
         return accessToken;
     }
 
-    /**
-     * 获取cache name
-     *
-     * @return 缓存名
-     */
-    private String getCacheName() {
-        return Constants.SYS_CONFIG_CACHE;
-    }
-
-    /**
-     * 设置cache key
-     *
-     * @param configKey 参数键
-     * @return 缓存键key
-     */
-    private String getCacheKey(String configKey) {
-        return Constants.SYS_CONFIG_KEY + configKey;
-    }
 }

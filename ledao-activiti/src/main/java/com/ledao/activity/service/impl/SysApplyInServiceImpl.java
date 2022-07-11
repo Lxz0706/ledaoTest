@@ -7,6 +7,9 @@ import com.ledao.activity.dao.*;
 import com.ledao.activity.mapper.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.dao.entity.SysDictData;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.system.dao.*;
@@ -14,7 +17,6 @@ import com.ledao.system.mapper.*;
 import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDictDataService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.task.Task;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,7 +183,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     sysApplyIn.setIsDirector("1");
                 }
             } else {
-                if ("0".equals(a.getIsDirector()) || "5".equals(sysApplyIn.getApproveStatu())) {
+                if ("0".equals(a.getIsDirector()) || "6".equals(sysApplyIn.getApproveStatu())) {
                     //判断是否存在直接主管
                     if (StringUtils.isNotEmpty(a.getRealCreateBy()) && "0".equals(sysApplyIn.getApproveStatu())) {
                         sysUser = userMapper.selectUserByLoginName(a.getApplyUser());
@@ -191,49 +193,52 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                         users.add(sysUser1.getLoginName());
                         sysApplyIn.setIsDirector("0");
                     } else {
-                        List<String> jls = getUsers("flgw");
-                        users.addAll(jls);
-                        sysApplyIn.setIsDirector("1");
-                    }
-                } else {
-                    List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
-                    List<String> ids = new ArrayList<>();
-                    for (SysRole r : rflgw) {
-                        ids.add(r.getRoleKey());
-                    }
-//                当前操作人为法律顾问
-                    if (ids.contains("flgw")) {
-                        //发给总经理
-                        List<String> jls = getUsers("zjl");
-                        users.addAll(jls);
-                        sysApplyIn.setIsDirector("1");
-                    } else if (ids.contains("zjl")) {
-                        boolean isNormalWork = false;
-                        SysApplyWorkflow workflow = new SysApplyWorkflow();
-                        workflow.setApplyId(sysApplyIn.getApplyId());
-                        List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
-                        if (workflows != null && workflows.size() > 0) {
-                            SysUser u = userMapper.selectUserByLoginName(workflows.get(0).getApproveUser());
-                            for (SysRole r : u.getRoles()) {
-                                if ("flgw".equals(r.getRoleKey()) && "6".equals(workflows.get(0).getApproveStatu())) {
-                                    isNormalWork = true;
-                                }
-                            }
+                        //List<String> jls = getUsers("flgw");
+                        //users.addAll(jls);
+                        //sysApplyIn.setIsDirector("1");
+                        List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
+                        List<String> ids = new ArrayList<>();
+                        for (SysRole r : rflgw) {
+                            ids.add(r.getRoleKey());
                         }
-                        if (isNormalWork) {
-                            List<String> jls = getUsers("documentAdmin");
-                            List<String> js = new ArrayList<>();
-                            for (String n : jls) {
-                                if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())) {
-                                    js.add(n);
+//                当前操作人为法律顾问
+                        if (ids.contains("flgw")) {
+                            //发给总经理
+                            List<String> jls = getUsers("zjl");
+                            users.addAll(jls);
+                            sysApplyIn.setIsDirector("1");
+                        } else if (ids.contains("zjl")) {
+                            boolean isNormalWork = false;
+                            SysApplyWorkflow workflow = new SysApplyWorkflow();
+                            workflow.setApplyId(sysApplyIn.getApplyId());
+                            List<SysApplyWorkflow> workflows = sysApplyWorkflowMapper.selectSysApplyWorkflowList(workflow);
+                            if (workflows != null && workflows.size() > 0) {
+                                SysUser u = userMapper.selectUserByLoginName(workflows.get(0).getApproveUser());
+                                for (SysRole r : u.getRoles()) {
+                                    if ("flgw".equals(r.getRoleKey()) && "6".equals(workflows.get(0).getApproveStatu())) {
+                                        isNormalWork = true;
+                                    }
                                 }
                             }
-                            users.addAll(js);
+                            if (isNormalWork) {
+                                List<String> jls = getUsers("documentAdmin");
+                                List<String> js = new ArrayList<>();
+                                for (String n : jls) {
+                                    if (!n.equals(a.getApplyUser()) && !n.equals(a.getRealCreateBy())) {
+                                        js.add(n);
+                                    }
+                                }
+                                users.addAll(js);
+                            } else {
+                                List<String> jls = getUsers("flgw");
+                                users.addAll(jls);
+                            }
+                            sysApplyIn.setIsDirector("1");
                         } else {
                             List<String> jls = getUsers("flgw");
                             users.addAll(jls);
+                            sysApplyIn.setIsDirector("1");
                         }
-                        sysApplyIn.setIsDirector("1");
                     }
                 }
             }

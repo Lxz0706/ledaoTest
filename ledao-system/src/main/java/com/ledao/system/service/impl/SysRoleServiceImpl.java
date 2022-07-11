@@ -15,7 +15,7 @@ import com.ledao.common.core.text.Convert;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.spring.SpringUtils;
-import com.ledao.system.dao.SysRole;
+import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.system.dao.SysRoleDept;
 import com.ledao.system.dao.SysRoleMenu;
 import com.ledao.system.dao.SysUserRole;

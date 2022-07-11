@@ -6,18 +6,14 @@ package com.ledao.activity.listener;/**
  * @date 2021/5/20 9:01
  */
 
-import com.ledao.activity.dao.BizLeaveVo;
 import com.ledao.activity.dao.SysWorkFlowVo;
-import com.ledao.activity.service.IBizLeaveService;
 import com.ledao.activity.service.ISysWorkflowService;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysNotice;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.service.ISysNoticeService;
 import com.ledao.system.service.ISysUserService;
-import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
-import org.activiti.engine.delegate.JavaDelegate;
 import org.activiti.engine.delegate.TaskListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

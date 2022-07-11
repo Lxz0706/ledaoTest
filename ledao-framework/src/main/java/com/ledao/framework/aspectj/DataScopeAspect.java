@@ -13,8 +13,8 @@ import com.ledao.common.annotation.DataScope;
 import com.ledao.common.core.dao.BaseEntity;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysRole;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 
 /**
  * 数据过滤处理

@@ -1,7 +1,6 @@
 package com.ledao.web.controller.timeTask;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.activity.dao.SysApplyWorkflow;
@@ -9,29 +8,20 @@ import com.ledao.activity.dao.SysWorkflowProcess;
 import com.ledao.activity.mapper.SysApplyWorkflowMapper;
 import com.ledao.activity.mapper.SysWorkflowProcessMapper;
 import com.ledao.activity.service.ISysApplyInService;
-import com.ledao.common.constant.WeChatConstants;
-import com.ledao.common.message.Template;
-import com.ledao.common.message.TemplateParam;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.common.message.WechatMessageUtil;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.http.CommonUtil;
-import com.ledao.common.utils.qrCode.WxQrCode;
-import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
 import com.ledao.system.mapper.SysRoleMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.*;
 
 import org.apache.activemq.command.ActiveMQQueue;
-import org.quartz.DisallowConcurrentExecution;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootVersion;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.core.SpringVersion;
 import org.springframework.jms.core.JmsMessagingTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

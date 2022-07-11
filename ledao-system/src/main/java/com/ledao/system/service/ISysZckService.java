@@ -2,7 +2,6 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.system.dao.SysUser;
 import com.ledao.system.dao.SysZck;
 
 /**

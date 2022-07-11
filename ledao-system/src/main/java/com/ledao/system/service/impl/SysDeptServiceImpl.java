@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.ledao.common.core.text.Convert;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.mapper.SysUserMapper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,8 @@ import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.dao.Ztree;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysDept;
-import com.ledao.system.dao.SysRole;
+import com.ledao.common.core.dao.entity.SysDept;
+import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.system.mapper.SysDeptMapper;
 import com.ledao.system.service.ISysDeptService;
 

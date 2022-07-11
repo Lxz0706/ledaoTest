@@ -6,7 +6,7 @@ import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysJudicial;
 import com.ledao.system.dao.SysJudicialSuspected;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.service.ISysJudicialService;
 import com.ledao.system.service.ISysJudicialSuspectedService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

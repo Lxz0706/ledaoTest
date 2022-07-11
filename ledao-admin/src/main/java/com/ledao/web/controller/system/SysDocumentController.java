@@ -2,32 +2,28 @@ package com.ledao.web.controller.system;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.*;
 
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.config.Global;
 import com.ledao.common.constant.Constants;
-import com.ledao.common.utils.DateUtils;
+import com.ledao.common.core.dao.entity.SysDept;
+import com.ledao.common.core.dao.entity.SysDictData;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.common.utils.file.FileUtils;
-import com.ledao.common.utils.file.MimeTypeUtils;
 import com.ledao.common.utils.security.Md5Utils;
 import com.ledao.common.utils.sql.SqlUtil;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.ISysDeptService;
 import com.ledao.system.service.ISysDictDataService;
 import com.ledao.system.service.ISysUserService;
-import org.activiti.editor.language.json.converter.util.CollectionUtils;
-import org.apache.bcel.generic.RET;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jodconverter.DocumentConverter;
-import org.jodconverter.office.OfficeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,8 +37,6 @@ import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

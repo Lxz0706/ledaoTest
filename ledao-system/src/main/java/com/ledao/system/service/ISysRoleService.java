@@ -2,7 +2,7 @@ package com.ledao.system.service;
 
 import java.util.List;
 import java.util.Set;
-import com.ledao.system.dao.SysRole;
+import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.system.dao.SysUserRole;
 
 /**

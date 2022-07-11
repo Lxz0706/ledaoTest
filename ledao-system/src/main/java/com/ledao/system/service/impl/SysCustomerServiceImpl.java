@@ -6,7 +6,6 @@ import com.ledao.common.annotation.DataScope;
 import com.ledao.common.constant.UserConstants;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ledao.system.mapper.SysCustomerMapper;

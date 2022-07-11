@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
+import org.crazycake.shiro.RedisCache;
+import org.crazycake.shiro.RedisCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ledao.common.utils.spring.SpringUtils;
@@ -12,12 +13,12 @@ import com.ledao.common.utils.spring.SpringUtils;
 /**
  * Cache工具类
  *
- * @author lxz
+ * @author ruoyi
  */
 public class CacheUtils {
     private static Logger logger = LoggerFactory.getLogger(CacheUtils.class);
 
-    private static CacheManager cacheManager = SpringUtils.getBean(CacheManager.class);
+    private static RedisCacheManager cacheManager = SpringUtils.getBean(RedisCacheManager.class);
 
     private static final String SYS_CACHE = "sys-cache";
 
@@ -114,7 +115,7 @@ public class CacheUtils {
      * @param cacheName
      */
     public static void removeAll(String cacheName) {
-        Cache<String, Object> cache = getCache(cacheName);
+        RedisCache<String, Object> cache = getCache(cacheName);
         Set<String> keys = cache.keys();
         for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
             cache.remove(it.next());
@@ -160,12 +161,11 @@ public class CacheUtils {
      * @param cacheName
      * @return
      */
-    private static Cache<String, Object> getCache(String cacheName) {
+    public static RedisCache<String, Object> getCache(String cacheName) {
         Cache<String, Object> cache = cacheManager.getCache(cacheName);
         if (cache == null) {
             throw new RuntimeException("当前系统中没有定义“" + cacheName + "”这个缓存。");
         }
-        return cache;
+        return (RedisCache<String, Object>) cache;
     }
-
 }

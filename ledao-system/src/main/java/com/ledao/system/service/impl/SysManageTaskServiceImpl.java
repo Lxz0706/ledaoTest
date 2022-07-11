@@ -1,9 +1,7 @@
 package com.ledao.system.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import com.ledao.common.utils.DateUtils;
-import com.ledao.system.dao.SysDictData;
 import com.ledao.system.service.ISysDictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

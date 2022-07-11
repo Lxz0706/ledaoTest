@@ -82,7 +82,7 @@ public class SysLogininforController extends BaseController {
     @PostMapping("/unlock")
     @ResponseBody
     public AjaxResult unlock(String loginName) {
-        passwordService.unlock(loginName);
+        passwordService.clearLoginRecordCache(loginName);
         return success();
     }
 }

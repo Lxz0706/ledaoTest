@@ -3,7 +3,7 @@ package com.ledao.activity.service;
 import java.util.List;
 import com.ledao.activity.dao.SysApplyIn;
 import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;

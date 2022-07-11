@@ -3,7 +3,6 @@ package com.ledao.system.mapper;
 import java.util.List;
 
 import com.ledao.system.dao.SysDepartment;
-import com.ledao.system.dao.SysDept;
 import org.apache.ibatis.annotations.Param;
 
 /**

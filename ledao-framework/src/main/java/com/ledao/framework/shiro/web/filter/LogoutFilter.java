@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Deque;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
+import com.ledao.common.core.dao.entity.SysUser;
+import com.ledao.framework.util.ShiroUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.SessionException;
@@ -16,13 +19,11 @@ import com.ledao.common.utils.MessageUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.manager.AsyncManager;
 import com.ledao.framework.manager.factory.AsyncFactory;
-import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
 
 /**
  * 退出过滤器
  * 
- * @author lxz
+ * @author ruoyi
  */
 public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
 {
@@ -61,7 +62,7 @@ public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
                     // 记录用户退出日志
                     AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGOUT, MessageUtils.message("user.logout.success")));
                     // 清理缓存
-                    cache.remove(loginName);
+                    removeUserCache(loginName, ShiroUtils.getSessionId());
                 }
                 // 退出登录
                 subject.logout();
@@ -77,6 +78,17 @@ public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
             log.error("Encountered session exception during logout.  This can generally safely be ignored.", e);
         }
         return false;
+    }
+
+    public void removeUserCache(String loginName, String sessionId)
+    {
+        Deque<Serializable> deque = cache.get(loginName);
+        if (StringUtils.isEmpty(deque) || deque.size() == 0)
+        {
+            return;
+        }
+        deque.remove(sessionId);
+        cache.put(loginName, deque);
     }
 
     /**

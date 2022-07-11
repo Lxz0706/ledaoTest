@@ -22,7 +22,7 @@ import com.ledao.common.constant.ShiroConstants;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.ServletUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 
 /**
  * 登录帐号控制过滤器

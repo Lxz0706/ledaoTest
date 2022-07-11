@@ -21,7 +21,7 @@ import com.ledao.framework.manager.AsyncManager;
 import com.ledao.framework.manager.factory.AsyncFactory;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.SysOperLog;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 
 /**
  * 操作日志记录处理

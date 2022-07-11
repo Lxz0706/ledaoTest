@@ -6,7 +6,7 @@ import com.ledao.activity.service.IBizTodoItemService;
 import com.ledao.common.core.text.Convert;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.mapper.SysUserMapper;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;

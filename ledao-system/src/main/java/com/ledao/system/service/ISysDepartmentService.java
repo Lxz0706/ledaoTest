@@ -2,11 +2,8 @@ package com.ledao.system.service;
 
 import java.util.List;
 
-import com.ledao.common.core.dao.DepartmentTree;
 import com.ledao.common.core.dao.Ztree;
 import com.ledao.system.dao.SysDepartment;
-import com.ledao.system.dao.SysDept;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 公司部门Service接口

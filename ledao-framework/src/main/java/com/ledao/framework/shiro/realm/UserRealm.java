@@ -29,7 +29,7 @@ import com.ledao.common.exception.user.UserPasswordNotMatchException;
 import com.ledao.common.exception.user.UserPasswordRetryLimitExceedException;
 import com.ledao.framework.shiro.service.SysLoginService;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.SysUser;
+import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.system.service.ISysMenuService;
 import com.ledao.system.service.ISysRoleService;
 

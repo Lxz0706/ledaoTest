@@ -2,8 +2,6 @@ package com.ledao.web.controller.system;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
@@ -12,12 +10,8 @@ import com.ledao.common.config.Global;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUploadUtils;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.framework.web.dao.server.Sys;
 import com.ledao.system.dao.SysDepartment;
-import com.ledao.system.dao.SysProjectUncollectedMoney;
-import com.ledao.system.dao.SysUser;
 import com.ledao.system.service.ISysDepartmentService;
-import com.ledao.system.service.ISysDictDataService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

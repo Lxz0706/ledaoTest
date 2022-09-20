@@ -27,13 +27,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 档案详情Service业务层处理
- * 
+ *
  * @author lxz
  * @date 2021-08-04
  */
 @Service
-public class SysFileDetailServiceImpl implements ISysFileDetailService 
-{
+public class SysFileDetailServiceImpl implements ISysFileDetailService {
     @Autowired
     private SysFileDetailMapper sysFileDetailMapper;
     @Autowired
@@ -43,29 +42,27 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
 
     /**
      * 查询档案详情
-     * 
+     *
      * @param fileId 档案详情ID
      * @return 档案详情
      */
     @Override
-    public SysFileDetail selectSysFileDetailById(Long fileId)
-    {
+    public SysFileDetail selectSysFileDetailById(Long fileId) {
         return sysFileDetailMapper.selectSysFileDetailById(fileId);
     }
 
     /**
      * 查询档案详情列表
-     * 
+     *
      * @param sysFileDetail 档案详情
      * @return 档案详情
      */
     @Override
-    public List<SysFileDetail> selectSysFileDetailList(SysFileDetail sysFileDetail)
-    {
-        List<SysFileDetail> fis =sysFileDetailMapper.selectSysFileDetailList(sysFileDetail);
-        for (SysFileDetail f: fis ) {
-            if (StringUtils.isNotEmpty(f.getFileName()) ){
-                f.setFileName(f.getFileName().substring(f.getFileName().lastIndexOf("/")+1));
+    public List<SysFileDetail> selectSysFileDetailList(SysFileDetail sysFileDetail) {
+        List<SysFileDetail> fis = sysFileDetailMapper.selectSysFileDetailList(sysFileDetail);
+        for (SysFileDetail f : fis) {
+            if (StringUtils.isNotEmpty(f.getFileName())) {
+                f.setFileName(f.getFileName().substring(f.getFileName().lastIndexOf("/") + 1));
             }
         }
         return fis;
@@ -73,23 +70,25 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
 
     /**
      * 新增档案详情
-     * 
+     *
      * @param sysFileDetail 档案详情
      * @return 结果
      */
     @Override
-    public AjaxResult insertSysFileDetail(SysFileDetail sysFileDetail, MultipartFile[] files)
-    {
+    public AjaxResult insertSysFileDetail(SysFileDetail sysFileDetail, MultipartFile[] files) {
         try {
             boolean flag = true;
             List<MultipartFile> muFs = new ArrayList<>();
             for (MultipartFile f : files) {
                 muFs.add(f);
                 SysFileDetail sysFile = new SysFileDetail();
+                if (!FileUtils.isValidFilename(f.getResource().getFilename())) {
+                    return AjaxResult.error(f.getResource().getFilename() + "存在特殊符号，请修改文件名称后重新上传");
+                }
                 sysFile.setFileName(f.getResource().getFilename());
                 sysFile.setDocumentFileId(sysFileDetail.getDocumentFileId());
                 List<SysFileDetail> fs = sysFileDetailMapper.selectSysFileDetailList(sysFile);
-                if (fs!=null && fs.size()>0){
+                if (fs != null && fs.size() > 0) {
                     return AjaxResult.error("存在相同文件，请修改后重新上传");
                 }
             }
@@ -118,7 +117,7 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
         return AjaxResult.success();
     }
 
-    public int updateApplyIn(SysApplyIn ap){
+    public int updateApplyIn(SysApplyIn ap) {
         ap.setReviser(ShiroUtils.getLoginName());
         ap.setUpdateTime(DateUtils.getNowDate());
         return sysApplyInMapper.updateSysApplyIn(ap);
@@ -126,35 +125,33 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
 
     /**
      * 修改档案详情
-     * 
+     *
      * @param sysFileDetail 档案详情
      * @return 结果
      */
     @Override
-    public int updateSysFileDetail(SysFileDetail sysFileDetail)
-    {
+    public int updateSysFileDetail(SysFileDetail sysFileDetail) {
         sysFileDetail.setUpdateTime(DateUtils.getNowDate());
         return sysFileDetailMapper.updateSysFileDetail(sysFileDetail);
     }
 
     /**
      * 删除档案详情对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
     @Override
-    public int deleteSysFileDetailByIds(String ids)
-    {
+    public int deleteSysFileDetailByIds(String ids) {
         String[] idArray = Convert.toStrArray(ids);
         long doId = 0L;
-        for (String id: idArray) {
+        for (String id : idArray) {
             SysFileDetail SysFileDetail = new SysFileDetail();
             SysFileDetail.setFileId(Long.parseLong(id));
             SysFileDetail f = sysFileDetailMapper.selectSysFileDetailById(Long.parseLong(id));
-            String url = f.getFileUrl().replace(Constants.RESOURCE_PREFIX,"");
+            String url = f.getFileUrl().replace(Constants.RESOURCE_PREFIX, "");
             doId = f.getDocumentFileId();
-            FileUtils.deleteFile(Global.getProfile()+url);
+            FileUtils.deleteFile(Global.getProfile() + url);
         }
         SysDocumentFile ds = sysDocumentFileMapper.selectSysDocumentFileById(doId);
         SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(ds.getApplyId());
@@ -164,13 +161,12 @@ public class SysFileDetailServiceImpl implements ISysFileDetailService
 
     /**
      * 删除档案详情信息
-     * 
+     *
      * @param fileId 档案详情ID
      * @return 结果
      */
     @Override
-    public int deleteSysFileDetailById(Long fileId)
-    {
+    public int deleteSysFileDetailById(Long fileId) {
         SysFileDetail f = sysFileDetailMapper.selectSysFileDetailById(fileId);
         SysDocumentFile ds = sysDocumentFileMapper.selectSysDocumentFileById(f.getDocumentFileId());
         SysApplyIn ap = sysApplyInMapper.selectSysApplyInById(ds.getApplyId());

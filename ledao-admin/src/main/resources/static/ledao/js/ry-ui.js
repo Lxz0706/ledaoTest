@@ -349,7 +349,6 @@ var table = {
             },
             // 搜索-默认第一个form
             search: function (formId, tableId, data) {
-                console.log(data);
                 table.set(tableId);
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
                 var params = $.common.isEmpty(tableId) ? $("#" + table.options.id).bootstrapTable('getOptions') : $("#" + tableId).bootstrapTable('getOptions');
@@ -1093,6 +1092,7 @@ var table = {
             },
             // get请求传输
             gets: function (url, data, title, callback) {
+
                 $.modal.openTab(title, url + "?" + data);
             },
             // 详细信息

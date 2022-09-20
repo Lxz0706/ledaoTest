@@ -35,8 +35,8 @@ public class SysJudicialServiceImpl implements ISysJudicialService {
      * @return 司法拍卖项目
      */
     @Override
-    public SysJudicial selectSysJudicialById(Long id) {
-        return sysJudicialMapper.selectSysJudicialById(id);
+    public SysJudicial selectSysJudicialById(String itemId) {
+        return sysJudicialMapper.selectSysJudicialById(itemId);
     }
 
     /**

@@ -206,7 +206,7 @@
       // 处理自己的业务
       var form = document.getElementById("form-applyIn-editDocumentModal");
       var formdata = new FormData(form);
-      formdata.append("files", $('input[type=file]')[0]);
+      //formdata.append("files", $('input[type=file]')[0]);
       $.ajax({
         url: ctx + 'documentFile/add',
         data: formdata,

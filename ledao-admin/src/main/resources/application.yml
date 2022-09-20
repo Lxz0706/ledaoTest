@@ -117,11 +117,10 @@ pagehelper:
 #  reasonable: true
 #  supportMethodsArguments: true
 #  params: count=countSql
-  helperDialect: mysql
+  autoRuntimeDialect: true
+  reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-  auto-dialect: true
-  auto-runtime-dialect: true
 
 # Shiro
 shiro:

@@ -495,12 +495,6 @@ public class SysDocumentController extends BaseController {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        String name = "钱婉萍";
-        String ids = "10";
-        String names = "10,50";
-        System.out.println(Arrays.asList(names.split(",")).contains(ids));
-    }
 
     /**
      * 本地资源通用下载

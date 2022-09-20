@@ -27,97 +27,97 @@ public class SysJudicial extends BaseEntity {
     /**
      * 项目id
      */
-    @Excel(name = "项目id")
+    //@Excel(name = "项目id")
     private String itemId;
 
     /**
      * 项目title
      */
-    @Excel(name = "项目title")
+    //@Excel(name = "项目title")
     private String itemTitle;
 
     /**
      * 项目所有人
      */
-    @Excel(name = "项目所有人")
+    //@Excel(name = "项目所有人")
     private String itemOwner;
 
     /**
      * 项目类型
      */
-    @Excel(name = "项目类型")
+    // @Excel(name = "项目类型")
     private String itemType;
 
     /**
      * 项目状态
      */
-    @Excel(name = "项目状态")
+    //@Excel(name = "项目状态")
     private String itemStatus;
 
     /**
      * 项目网址
      */
-    @Excel(name = "项目网址")
+    //@Excel(name = "项目网址")
     private String itemLink;
 
     /**
      * 项目起拍价
      */
-    @Excel(name = "项目起拍价")
+    //@Excel(name = "项目起拍价")
     private BigDecimal itemInitialprice;
 
     /**
      * 项目当前价
      */
-    @Excel(name = "项目当前价")
+    //@Excel(name = "项目当前价")
     private BigDecimal itemCurrentprice;
 
     /**
      * 项目评估价
      */
-    @Excel(name = "项目评估价")
+    //@Excel(name = "项目评估价")
     private BigDecimal itemConsultprice;
 
     /**
      * 项目市场价
      */
-    @Excel(name = "项目市场价")
+    //@Excel(name = "项目市场价")
     private BigDecimal itemMarketprice;
 
     /**
      * 项目开始时间
      */
-    @Excel(name = "项目开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "项目开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date itemStartTime;
 
     /**
      * 项目结束时间
      */
-    @Excel(name = "项目结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    //@Excel(name = "项目结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date itemEndTime;
 
     /**
      * 项目所在省
      */
-    @Excel(name = "项目所在省")
+    //@Excel(name = "项目所在省")
     private String itemProvince;
 
     /**
      * 项目所在市
      */
-    @Excel(name = "项目所在市")
+    //@Excel(name = "项目所在市")
     private String itemCity;
 
     /**
      * 项目所在区(县)
      */
-    @Excel(name = "项目所在区(县)")
+    //@Excel(name = "项目所在区(县)")
     private String itemCounty;
 
     /**
      * 项目来源
      */
-    @Excel(name = "项目来源")
+    //@Excel(name = "项目来源")
     private String itemSource;
 
     private String taggings;
@@ -140,50 +140,76 @@ public class SysJudicial extends BaseEntity {
     /**
      * 高德地图坐标
      */
-    @Excel(name = "高德地图坐标")
+    //@Excel(name = "高德地图坐标")
     private String coordinate;
 
     /**
      * 阿里标签
      */
-    @Excel(name = "阿里标签")
+    //@Excel(name = "阿里标签")
     private String tags;
 
     /**
      * 处置单位
      */
-    @Excel(name = "处置单位")
+    //@Excel(name = "处置单位")
     private String shopname;
 
     /**
      * 报名人数
      */
-    @Excel(name = "报名人数")
+    //@Excel(name = "报名人数")
     private Long applyer;
 
     /**
      * 设置提醒人数
      */
-    @Excel(name = "设置提醒人数")
+    //@Excel(name = "设置提醒人数")
     private Long notify;
 
     /**
      * 围观人数
      */
-    @Excel(name = "围观人数")
+    //@Excel(name = "围观人数")
     private Long looker;
 
     /**
      * 标的物位置
      */
-    @Excel(name = "标的物位置")
+    //@Excel(name = "标的物位置")
     private String address;
 
     /**
      * 采集时间
      */
-    @Excel(name = "采集时间")
+    //@Excel(name = "采集时间")
     private Date timestamp;
+
+    @Excel(name = "是否范围内")
+    private boolean flag;
+
+    @Excel(name = "圆范围")
+    private String radiues;
+
+    @Excel(name = "圆心经度")
+    private double lng1;
+
+    @Excel(name = "圆心纬度")
+    private double lat1;
+
+    @Excel(name = "转换后经度")
+    private double lng2;
+
+    @Excel(name = "转换后纬度")
+    private double lat2;
+
+    @Excel(name = "itemId")
+    private String itemIds;
+
+    /**
+     * 建筑面积
+     */
+    private Long floorSpace;
 
     public Long getId() {
         return id;
@@ -433,6 +459,70 @@ public class SysJudicial extends BaseEntity {
         this.timestamp = timestamp;
     }
 
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public String getRadiues() {
+        return radiues;
+    }
+
+    public void setRadiues(String radiues) {
+        this.radiues = radiues;
+    }
+
+    public double getLng1() {
+        return lng1;
+    }
+
+    public void setLng1(double lng1) {
+        this.lng1 = lng1;
+    }
+
+    public double getLat1() {
+        return lat1;
+    }
+
+    public void setLat1(double lat1) {
+        this.lat1 = lat1;
+    }
+
+    public double getLng2() {
+        return lng2;
+    }
+
+    public void setLng2(double lng2) {
+        this.lng2 = lng2;
+    }
+
+    public double getLat2() {
+        return lat2;
+    }
+
+    public void setLat2(double lat2) {
+        this.lat2 = lat2;
+    }
+
+    public String getItemIds() {
+        return itemIds;
+    }
+
+    public void setItemIds(String itemIds) {
+        this.itemIds = itemIds;
+    }
+
+    public Long getFloorSpace() {
+        return floorSpace;
+    }
+
+    public void setFloorSpace(Long floorSpace) {
+        this.floorSpace = floorSpace;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -461,6 +551,7 @@ public class SysJudicial extends BaseEntity {
                 .append("looker", getLooker())
                 .append("address", getAddress())
                 .append("timestamp", getTimestamp())
+                .append("floorSpace", getFloorSpace())
                 .toString();
     }
 }

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysSubscribeMapper">
+
+    <resultMap type="SysSubscribe" id="SysSubscribeResult">
+        <result property="id" column="id"/>
+        <result property="subscribe" column="subscribe"/>
+        <result property="openId" column="open_id"/>
+        <result property="language" column="language"/>
+        <result property="subscribeTime" column="subscribe_time"/>
+        <result property="unionId" column="union_id"/>
+        <result property="remark" column="remark"/>
+        <result property="groupId" column="group_id"/>
+        <result property="tagridId" column="tagrid_id"/>
+        <result property="subscribeScene" column="subscribe_scene"/>
+        <result property="qrScene" column="qr_scene"/>
+        <result property="qrSceneStr" column="qr_scene_str"/>
+        <result property="sex" column="sex"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="headimgUrl" column="headimg_url"/>
+        <result property="subscribeType" column="subscribe_type"/>
+    </resultMap>
+
+    <sql id="selectSysSubscribeVo">
+        select id,
+               subscribe,
+               open_id, language, subscribe_time, union_id, remark, group_id, tagrid_id, subscribe_scene, qr_scene, qr_scene_str, sex, nick_name, country, province, city, headimg_url, subscribe_type
+        from sys_subscribe
+    </sql>
+
+    <select id="selectSysSubscribeList" parameterType="SysSubscribe" resultMap="SysSubscribeResult">
+        <include refid="selectSysSubscribeVo"/>
+        <where>
+            <if test="subscribe != null  and subscribe != ''">and subscribe = #{subscribe}</if>
+            <if test="openId != null  and openId != ''">and open_id = #{openId}</if>
+            <if test="language != null  and language != ''">and language = #{language}</if>
+            <if test="subscribeTime != null ">and subscribe_time = #{subscribeTime}</if>
+            <if test="unionId != null  and unionId != ''">and union_id = #{unionId}</if>
+            <if test="groupId != null ">and group_id = #{groupId}</if>
+            <if test="tagridId != null  and tagridId != ''">and tagrid_id = #{tagridId}</if>
+            <if test="subscribeScene != null  and subscribeScene != ''">and subscribe_scene = #{subscribeScene}</if>
+            <if test="qrScene != null  and qrScene != ''">and qr_scene = #{qrScene}</if>
+            <if test="qrSceneStr != null  and qrSceneStr != ''">and qr_scene_str = #{qrSceneStr}</if>
+            <if test="sex != null  and sex != ''">and sex = #{sex}</if>
+            <if test="nickName != null  and nickName != ''">and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="country != null  and country != ''">and country = #{country}</if>
+            <if test="province != null  and province != ''">and province = #{province}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="headimgUrl != null  and headimgUrl != ''">and headimg_url = #{headimgUrl}</if>
+            <if test="subscribeType != null  and subscribeType != ''">and subscribe_type = #{subscribeType}</if>
+        </where>
+    </select>
+
+    <select id="selectSysSubscribeById" parameterType="Integer" resultMap="SysSubscribeResult">
+        <include refid="selectSysSubscribeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysSubscribe" parameterType="SysSubscribe">
+        insert into sys_subscribe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="subscribe != null">subscribe,</if>
+            <if test="openId != null">open_id,</if>
+            <if test="language != null">language,</if>
+            <if test="subscribeTime != null">subscribe_time,</if>
+            <if test="unionId != null">union_id,</if>
+            <if test="remark != null">remark,</if>
+            <if test="groupId != null">group_id,</if>
+            <if test="tagridId != null">tagrid_id,</if>
+            <if test="subscribeScene != null">subscribe_scene,</if>
+            <if test="qrScene != null">qr_scene,</if>
+            <if test="qrSceneStr != null">qr_scene_str,</if>
+            <if test="sex != null">sex,</if>
+            <if test="nickName != null">nick_name,</if>
+            <if test="country != null">country,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="headimgUrl != null">headimg_url,</if>
+            <if test="subscribeType != null">subscribe_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="subscribe != null">#{subscribe},</if>
+            <if test="openId != null">#{openId},</if>
+            <if test="language != null">#{language},</if>
+            <if test="subscribeTime != null">#{subscribeTime},</if>
+            <if test="unionId != null">#{unionId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="groupId != null">#{groupId},</if>
+            <if test="tagridId != null">#{tagridId},</if>
+            <if test="subscribeScene != null">#{subscribeScene},</if>
+            <if test="qrScene != null">#{qrScene},</if>
+            <if test="qrSceneStr != null">#{qrSceneStr},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="nickName != null">#{nickName},</if>
+            <if test="country != null">#{country},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="headimgUrl != null">#{headimgUrl},</if>
+            <if test="subscribeType != null">#{subscribeType},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysSubscribe" parameterType="SysSubscribe">
+        update sys_subscribe
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="subscribe != null">subscribe = #{subscribe},</if>
+            <if test="openId != null">open_id = #{openId},</if>
+            <if test="language != null">language = #{language},</if>
+            <if test="subscribeTime != null">subscribe_time = #{subscribeTime},</if>
+            <if test="unionId != null">union_id = #{unionId},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="groupId != null">group_id = #{groupId},</if>
+            <if test="tagridId != null">tagrid_id = #{tagridId},</if>
+            <if test="subscribeScene != null">subscribe_scene = #{subscribeScene},</if>
+            <if test="qrScene != null">qr_scene = #{qrScene},</if>
+            <if test="qrSceneStr != null">qr_scene_str = #{qrSceneStr},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="headimgUrl != null">headimg_url = #{headimgUrl},</if>
+            <if test="subscribeType != null">subscribe_type = #{subscribeType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysSubscribeById" parameterType="Integer">
+        delete
+        from sys_subscribe
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteSysSubscribeByIds" parameterType="String">
+        delete from sys_subscribe where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysSubscribe">
+        delete
+        from sys_subscribe
+    </delete>
+
+    <select id="selectSysSubscribeByOpenId" parameterType="string" resultMap="SysSubscribeResult">
+        <include refid="selectSysSubscribeVo"/>
+        where open_id = #{openId}
+    </select>
+
+</mapper>

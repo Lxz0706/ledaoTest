@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.annotation.Log;
+import com.ledao.common.constant.WeChatConstants;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.dao.entity.SysDept;
@@ -15,6 +16,7 @@ import com.ledao.common.core.page.TableDataInfo;
 import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.poi.ExcelUtil;
+import com.ledao.common.utils.qrCode.WxQrCode;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.service.*;
@@ -61,6 +63,9 @@ public class SysCustomerController<main> extends BaseController {
     @Autowired
     private ISysApplyWorkflowService sysApplyWorkflowService;
 
+    @Autowired
+    private ISysConfigService sysConfigService;
+
     @RequiresPermissions("system:customer:view")
     @GetMapping()
     public String customer(String pageNumber, String pageSize, ModelMap modelMap) {
@@ -75,7 +80,9 @@ public class SysCustomerController<main> extends BaseController {
     @RequiresPermissions("system:customer:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysCustomer sysCustomer) {
+    public TableDataInfo list(SysCustomer sysCustomer) throws Exception {
+
+        WxQrCode.getUsers(WxQrCode.getAccessToken(WeChatConstants.WXAPPID, WeChatConstants.WXSECRET));
         startPage();
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {

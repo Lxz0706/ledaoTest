@@ -612,8 +612,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < str2.split(",").length; i++) {
             for (int j = 0; j < str1.split(",").length; j++) {
-                System.out.println(str1.split(",")[j] + "---------" + str2.split(",")[i]);
-                System.out.println(str1.split(",")[j].equals(str2.split(",")[i]));
                 if (str1.split(",")[j].equals(str2.split(",")[i])) {
                     sb.append(str1.split(",")[j]).append(",");
                 }
@@ -622,22 +620,4 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
-    ;
-
-
-    public static void main(String[] args) {
-        String str = "admin,duxiaodan,wujunjie,jianghui,zhangyi,huasiyue,xukai,baohaifeng,caozhengsheng,xuxiaodong,yangxu,weicaixuan,wanglili,wangziyuan,huirunfen,qianwanping,chenlimin,miaoqing,zhujiaming,yinzuoyao,yangxudong,jiangjiaolong,wanhongwei,chenyanping,xuchi,luolina,,zhouli,huangyan,lixiangzhen,law-yinzuoyao,law-lixiangyang,law-chenyanping,law-,maochunming,jiangheng,taoguimin,liangxiao,chenzhigang,qianguojun";
-        String str2 = "taoguimin,wanglili,wanhongwei,wujunjie,caozhengsheng,huasiyue, xuxiaodong,maochunming, liangxiao, lixiangzhen, zhangyi,baohaifeng,jiangjiaolong,law-lixiangyang,yinzuoyao,law-yinzuoyao,chenyanping, law-chenyanping, weicaixuan, xuchi, huangyan, xukai, wanzhaonan, law-wanzhaonan, zhujiaming ";
-        List<String> list = new ArrayList<>(Arrays.asList(str.split(",")));
-        for (int i = 0; i < list.size(); i++) {
-            for (String st : str2.split(",")) {
-                if (list.get(i).equals(st)) {
-                    System.out.println("======"+list.get(i));
-                    list.remove(i);
-                    i--;
-                }
-            }
-        }
-        System.out.println(list);
-    }
 }

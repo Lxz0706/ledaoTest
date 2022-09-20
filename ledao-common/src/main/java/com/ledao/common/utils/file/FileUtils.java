@@ -2,6 +2,8 @@ package com.ledao.common.utils.file;
 
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class FileUtils {
     public static String FILENAME_PATTERN = "[a-zA-Z0-9_\\-\\|\\.\\u4e00-\\u9fa5]+";
+
+    public static String FILENAME_SPECIAL_PATTERN = "^[^\\/:*?\"\"<>|]+$";
 
     /**
      * 默认转换后文件后缀
@@ -80,13 +84,19 @@ public class FileUtils {
     }
 
     /**
-     * 文件名称验证
+     * 文件名称验证(是否包含特殊字符)
      *
      * @param filename 文件名称
      * @return true 正常 false 非法
      */
     public static boolean isValidFilename(String filename) {
-        return filename.matches(FILENAME_PATTERN);
+        Pattern r = Pattern.compile(FILENAME_SPECIAL_PATTERN);
+        Matcher m = r.matcher(filename);
+        return m.matches();
+    }
+
+    public static boolean isValidFilName(String fileName) {
+        return fileName.matches(FILENAME_PATTERN);
     }
 
     /**
@@ -146,71 +156,4 @@ public class FileUtils {
         file.delete();
     }
 
-    ///**
-    // * 方法描述 office文档转换为PDF(处理本地文件)
-    // *
-    // * @param sourcePath 源文件路径
-    // * @param suffix     源文件后缀
-    // * @return InputStream 转换后文件输入流
-    // * @author tarzan
-    // */
-    //public static InputStream convertLocaleFile(String sourcePath, String suffix) throws Exception {
-    //    File inputFile = new File(sourcePath);
-    //    InputStream inputStream = new FileInputStream(inputFile);
-    //    return covertCommonByStream(inputStream, suffix);
-    //}
-    //
-    ///**
-    // * 方法描述  office文档转换为PDF(处理网络文件)
-    // *
-    // * @param netFileUrl 网络文件路径
-    // * @param suffix     文件后缀
-    // * @return InputStream 转换后文件输入流
-    // * @author tarzan
-    // */
-    //public static InputStream convertNetFile(String netFileUrl, String suffix) throws Exception {
-    //    // 创建URL
-    //    URL url = new URL(netFileUrl);
-    //    // 试图连接并取得返回状态码
-    //    URLConnection urlconn = url.openConnection();
-    //    urlconn.connect();
-    //    HttpURLConnection httpconn = (HttpURLConnection) urlconn;
-    //    int httpResult = httpconn.getResponseCode();
-    //    if (httpResult == HttpURLConnection.HTTP_OK) {
-    //        InputStream inputStream = urlconn.getInputStream();
-    //        return covertCommonByStream(inputStream, suffix);
-    //    }
-    //    return null;
-    //}
-    //
-    ///**
-    // * 方法描述  将文件以流的形式转换
-    // *
-    // * @param inputStream 源文件输入流
-    // * @param suffix      源文件后缀
-    // * @return InputStream 转换后文件输入流
-    // * @author tarzan
-    // */
-    //public static InputStream covertCommonByStream(InputStream inputStream, String suffix) throws Exception {
-    //    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    //    OpenOfficeConnection connection = new SocketOpenOfficeConnection(OPENOFFICE_PORT);
-    //    connection.connect();
-    //    DocumentConverter converter = new StreamOpenOfficeDocumentConverter(connection);
-    //    DefaultDocumentFormatRegistry formatReg = new DefaultDocumentFormatRegistry();
-    //    DocumentFormat targetFormat = formatReg.getFormatByFileExtension(DEFAULT_SUFFIX);
-    //    DocumentFormat sourceFormat = formatReg.getFormatByFileExtension(suffix);
-    //    converter.convert(inputStream, sourceFormat, out, targetFormat);
-    //    connection.disconnect();
-    //    return outputStreamConvertInputStream(out);
-    //}
-
-    ///**
-    // * 方法描述 outputStream转inputStream
-    // *
-    // * @author tarzan
-    // */
-    //public static ByteArrayInputStream outputStreamConvertInputStream(final OutputStream out) throws Exception {
-    //    ByteArrayOutputStream baos = (ByteArrayOutputStream) out;
-    //    return new ByteArrayInputStream(baos.toByteArray());
-    //}
 }

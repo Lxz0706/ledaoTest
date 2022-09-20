@@ -98,7 +98,7 @@
                    shiro:hasPermission="activity:documentFile:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-success" onclick="downLoad()"><i class="fa fa-plus"></i>下载</a>
+                <a class="btn btn-info" onclick="downLoad()"><i class="fa fa-plus"></i>下载</a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -457,7 +457,6 @@
                 $("input").removeAttr("onclick");
                 $("select").attr("disabled", true);
                 $("a").attr("disabled", true);
-                $('.btn').removeAttr('onclick')
             }
             if (showNames) {
                 $("input").attr("readonly", "readonly");
@@ -472,13 +471,14 @@
                 for (var i = 0; i < roles.length; i++) {
                     if (roles[i].roleKey !== "documentAdmin" && "admin" !== loginNameUser) {
                         $("a").attr("disabled", true);
-                        $('.btn').removeAttr('onclick')
+                        //$('.btn').removeAttr('onclick');
+                    } else {
+                        $("a").attr("disabled", false);
                     }
                 }
 
             }
         }
-        console.log(isNotChange + "=====" + seOrEd);
         // disabled删除必选项
         $.operate.lock()
     });

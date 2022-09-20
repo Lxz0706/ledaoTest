@@ -1,133 +1,180 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('司法拍卖项目列表')" />
+    <th:block th:include="include :: header('司法拍卖项目列表')"/>
     <style type="text/css">
-        .select-table table{table-layout:fixed;}.select-table .table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-        .form-control{padding:3px 6px 4px;height:30px;}.icheckbox-blue{top:0px;left:6px;}
-        .form-control.select2-hidden-accessible{position:static!important;}.select-table table label.error{position: inherit;}select + label.error{z-index:1;right:40px;}
+        .select-table table {
+            table-layout: fixed;
+        }
+
+        .select-table .table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .form-control {
+            padding: 3px 6px 4px;
+            height: 30px;
+        }
+
+        .icheckbox-blue {
+            top: 0px;
+            left: 6px;
+        }
+
+        .form-control.select2-hidden-accessible {
+            position: static !important;
+        }
+
+        .select-table table label.error {
+            position: inherit;
+        }
+
+        select + label.error {
+            z-index: 1;
+            right: 40px;
+        }
     </style>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <label>标题/所有人：</label>
-                                <input type="text" name="itemTitle" placeholder="以标题/所有人查询"/>
-                            </li>
-<!--                            <li>-->
-<!--                                <label>所有人：</label>-->
-<!--                                <input type="text" name="itemOwner"/>-->
-<!--                            </li>-->
-                            <!--<li>
-                                <label>项目类型：</label>
-                                <select name="itemType">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>项目状态：</label>
-                                <select name="itemStatus">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>项目起拍价：</label>
-                                <input type="text" name="itemInitialprice"/>
-                            </li>
-                            <li>
-                                <label>项目当前价：</label>
-                                <input type="text" name="itemCurrentprice"/>
-                            </li>
-                            <li>
-                                <label>项目评估价：</label>
-                                <input type="text" name="itemConsultprice"/>
-                            </li>
-                            <li>
-                                <label>项目市场价：</label>
-                                <input type="text" name="itemMarketprice"/>
-                            </li>
-                            <li class="select-time">
-                                <label>项目开始时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginItemStartTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endItemStartTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <label>项目结束时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginItemEndTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endItemEndTime]"/>
-                            </li>-->
-                            <!--<li>
-                                <label>项目所在省：</label>
-                                <input type="text" name="itemProvince"/>
-                            </li>
-                            <li>
-                                <label>项目所在市：</label>
-                                <input type="text" name="itemCity"/>
-                            </li>
-                            <li>
-                                <label>项目所在区(县)：</label>
-                                <input type="text" name="itemCounty"/>
-                            </li>
-                            <li>
-                                <label>项目来源：</label>
-                                <input type="text" name="itemSource"/>
-                            </li>-->
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>标题/所有人：</label>
+                            <input type="text" name="itemTitle" placeholder="以标题/所有人查询"/>
+                        </li>
+                        <li>
+                            债权类型：<select name="itemType" th:with="type=${@dict.getType('debt_type')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <li>
+                            拍卖状态：<select name="itemStatus" th:with="type=${@dict.getType('judicial_status')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <!--                            <li>-->
+                        <!--                                <label>所有人：</label>-->
+                        <!--                                <input type="text" name="itemOwner"/>-->
+                        <!--                            </li>-->
+                        <!--<li>
+                            <label>项目类型：</label>
+                            <select name="itemType">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>项目状态：</label>
+                            <select name="itemStatus">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>项目起拍价：</label>
+                            <input type="text" name="itemInitialprice"/>
+                        </li>
+                        <li>
+                            <label>项目当前价：</label>
+                            <input type="text" name="itemCurrentprice"/>
+                        </li>
+                        <li>
+                            <label>项目评估价：</label>
+                            <input type="text" name="itemConsultprice"/>
+                        </li>
+                        <li>
+                            <label>项目市场价：</label>
+                            <input type="text" name="itemMarketprice"/>
+                        </li>
+                        <li class="select-time">
+                            <label>项目开始时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginItemStartTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endItemStartTime]"/>
+                        </li>
+                        <li class="select-time">
+                            <label>项目结束时间：</label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginItemEndTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endItemEndTime]"/>
+                        </li>-->
+                        <!--<li>
+                            <label>项目所在省：</label>
+                            <input type="text" name="itemProvince"/>
+                        </li>
+                        <li>
+                            <label>项目所在市：</label>
+                            <input type="text" name="itemCity"/>
+                        </li>
+                        <li>
+                            <label>项目所在区(县)：</label>
+                            <input type="text" name="itemCounty"/>
+                        </li>
+                        <li>
+                            <label>项目来源：</label>
+                            <input type="text" name="itemSource"/>
+                        </li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <!--<div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:judicial:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:judicial:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:judicial:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:judicial:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>-->
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:judicial:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:judicial:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:judicial:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:judicial:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:judicial:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:judicial:remove')}]];
-        var prefix = ctx + "system/judicial";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:judicial:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:judicial:remove')}]];
+    var prefix = ctx + "system/judicial";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "司法拍卖项目",
-                columns: [{
-                    field: 'id',
-                    title: 'id',
-                    visible: false
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "司法拍卖项目",
+            columns: [{
+                field: 'id',
+                title: 'id',
+                visible: false
+            },
                 {
                     field: 'itemTitle',
                     title: '标题'
@@ -143,15 +190,15 @@
                 {
                     field: 'itemInitialprice',
                     title: '项目起拍价',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
                     field: 'itemCurrentprice',
                     title: '当前/成交价',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
+                    formatter: function (value, row, index) {
+                        return $.operate.numberFormatter(value, 3, '.', ',');
                     }
                 },
                 {
@@ -169,8 +216,8 @@
                 {
                     field: 'itemLink',
                     title: '网站链接',
-                    formatter: function(value, row, index) {
-                        return '<a href="'+row.itemLink+'" target="_blank">' + value + '</a>';
+                    formatter: function (value, row, index) {
+                        return '<a href="' + row.itemLink + '" target="_blank">' + value + '</a>';
                     }
                 },
                 {
@@ -183,6 +230,12 @@
                     formatter: function (value, row, index) {
                         return statusTools(row);
                     }
+                }, {
+                    field: '',
+                    title: '估值计算',
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="valuationModel(\'' + row.itemId + '\')">估值计算</a>';
+                    }
                 }]/*,
                 onLoadSuccess: function () {
                     $('.bootstrap-table tr td').each(function () {
@@ -190,29 +243,37 @@
                         $(this).css("cursor", 'pointer');
                     });
                 }*/
-            };
-            $.table.init(options);
+        };
+        $.table.init(options);
+    });
+
+    function statusTools(row) {
+        if (row.taggings == 'Y') {
+            return '<a href="javascript:void(0)" onclick="detail1(\'' + row.itemId + '\')">★</a>';
+        } else {
+            return '<a href="javascript:void(0)" onclick="detail(\'' + row.itemId + '\')">☆</a>';
+        }
+    }
+
+    function detail(id) {
+        $.modal.confirm("确认要将该条数据添加到星标库吗？", function () {
+            $.operate.post(prefix + "/addTagging", {"itemId": id, "judicial": "Y"});
         });
+    }
 
-        function statusTools(row){
-            if(row.taggings == 'Y'){
-                return '<a href="javascript:void(0)" onclick="detail1(\'' + row.itemId+'\')">★</a>';
-            }else {
-                return '<a href="javascript:void(0)" onclick="detail(\'' + row.itemId+'\')">☆</a>';
-            }
-        }
+    function detail1(id) {
+        $.modal.confirm("确认要将该条数据从星标库中删除吗？", function () {
+            $.operate.post(prefix + "/removeTagging", {"itemId": id, "judicial": "Y"});
+        });
+    }
 
-        function detail(id){
-            $.modal.confirm("确认要将该条数据添加到星标库吗？", function () {
-                $.operate.post(prefix + "/addTagging", {"itemId": id,"judicial":"Y" });
-            });
+    function valuationModel(itemId) {
+        var data = {
+            'itemId': itemId
         }
-
-        function detail1(id){
-            $.modal.confirm("确认要将该条数据从星标库中删除吗？", function () {
-                $.operate.post(prefix + "/removeTagging", {"itemId": id,"judicial":"Y" });
-            });
-        }
-    </script>
+        var url = ctx + 'system/valuationModel/valuationModel?itemId=' + itemId;
+        $.modal.open("估值计算", url, '750', '600');
+    }
+</script>
 </body>
 </html>

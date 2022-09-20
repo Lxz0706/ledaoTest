@@ -422,11 +422,13 @@
             'deptName': $("#deptName").val(),
             'wechatFlag': $("#wechatFlag").val(),
         };
+        //window.location.href = prefix + "/selectSysApplyInByApplyUserNameAndTime?" + $("#formId").serialize();
         $.ajax({
             url: prefix + "/export",
             data: data,
             type: "post",
             success: function (result) {
+                console.log("返回数据：=======" + result.msg);
                 window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
             }
         })

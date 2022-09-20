@@ -136,10 +136,4 @@ public class PositionUtil {
         return ret;
     }
 
-    public static void main(String[] args) {
-
-        // 北斗芯片获取的经纬度为WGS84地理坐标 31.426896,119.496145
-        Gps gcj2 = bd09_To_Gcj02(13269197.0,4085292.7);
-        System.out.println("gcj :" + gcj2);
-    }
 }

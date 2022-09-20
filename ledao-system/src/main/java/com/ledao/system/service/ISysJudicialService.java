@@ -17,10 +17,10 @@ public interface ISysJudicialService {
     /**
      * 查询司法拍卖项目
      *
-     * @param id 司法拍卖项目ID
+     * @param itemId 司法拍卖项目ID
      * @return 司法拍卖项目
      */
-    public SysJudicial selectSysJudicialById(Long id);
+    public SysJudicial selectSysJudicialById(String itemId);
 
     /**
      * 查询司法拍卖项目列表

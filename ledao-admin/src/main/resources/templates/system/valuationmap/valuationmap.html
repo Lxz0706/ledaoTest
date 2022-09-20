@@ -81,6 +81,7 @@
                             <label>类型：</label>
                             <select id="itemType" class="form-control select2-multiple"
                                     th:with="type=${@dict.getType('debt_type')}" data-none-selected-text="请选择">
+                                <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:value="${dict.dictValue}"
                                         th:text="${dict.dictLabel}"></option>
                             </select>
@@ -92,6 +93,13 @@
                                 <option th:each="dict : ${type}" th:value="${dict.dictValue}"
                                         th:text="${dict.dictLabel}"></option>
                             </select>
+                        </li>
+                        <li>
+                            拍卖状态：<select name="itemStatus" id="itemStatus" th:with="type=${@dict.getType('judicial_status')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="searchs()"><i
@@ -145,7 +153,7 @@
     function searchs() {
         $.ajax({
             url: prefix + "/valuationmapList",
-            data: {'itemType': $("#itemType").val()},
+            data: {'itemType': $("#itemType").val(),'itemStatus':$("#itemStatus").val()},
             type: 'post',
             async: false,
             datatype: 'json',

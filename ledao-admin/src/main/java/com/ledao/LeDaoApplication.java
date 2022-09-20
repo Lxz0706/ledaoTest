@@ -17,5 +17,6 @@ public class LeDaoApplication {
     public static void main(String[] args) {
         // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(LeDaoApplication.class, args);
+        System.setProperty("druid.mysql.usePingMethod","false");
     }
 }

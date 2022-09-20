@@ -198,6 +198,8 @@ public class SysDocumentFile extends BaseEntity {
 
     private String applyUserName;
 
+    private String applyInIds;
+
     public String getDocumentTypeVal() {
         return documentTypeVal;
     }
@@ -500,6 +502,14 @@ public class SysDocumentFile extends BaseEntity {
         this.fileGetTypeToString = fileGetTypeToString;
     }
 
+    public String getApplyInIds() {
+        return applyInIds;
+    }
+
+    public void setApplyInIds(String applyInIds) {
+        this.applyInIds = applyInIds;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -532,6 +542,7 @@ public class SysDocumentFile extends BaseEntity {
                 .append("updateTime", getUpdateTime())
                 .append("dailyDocumentTypeContract", getDailyDocumentTypeContract())
                 .append("applyUserName", getApplyUserName())
+                .append("applyInIds", getApplyInIds())
                 .toString();
     }
 

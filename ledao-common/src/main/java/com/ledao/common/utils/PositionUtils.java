@@ -135,7 +135,4 @@ public class PositionUtils {
         return ret;
     }
 
-    public static void main(String[] args) {
-        System.out.println(bd09togcj02(13269197.0,4085292.7));
-    }
 }

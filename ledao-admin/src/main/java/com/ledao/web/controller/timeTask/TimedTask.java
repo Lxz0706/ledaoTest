@@ -20,6 +20,7 @@ import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.*;
 
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.poi.ss.formula.functions.Count;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -111,6 +112,9 @@ public class TimedTask {
 
     @Autowired
     private ISysJudicialSuspectedService sysJudicialSuspectedService;
+
+    @Autowired
+    private ISysSubscribeService sysSubscribeService;
 
 
     public void timeTask() throws ParseException {
@@ -569,7 +573,6 @@ public class TimedTask {
                     parmStr.put("word1", StringUtils.isNotEmpty(manage.getProjectManagementName()) ? manage.getProjectManagementName() : "");
                     parmStr.put("word2", "-");
                     parmStr.put("word3", "截止日期" + DateUtils.formatDateByPattern(mon.getTime(), "yyyy-MM-dd") + "," + mon.getFundType() + "/" + mon.getAmountMoney());
-                    System.out.println(parmStr);
                     sendJournalTask(users, parmStr);
                 }
             }
@@ -622,7 +625,6 @@ public class TimedTask {
                 parmStr.put("word1", manage.getProjectManagementName());
                 parmStr.put("word2", "-");
                 parmStr.put("word3", "截止日期" + DateUtils.formatDateByPattern(mon.getPaidDate(), "yyyy-MM-dd") + "," + mon.getFundType() + "/" + mon.getAmountPaid());
-                System.out.println(parmStr);
                 sendJournalTask(users, parmStr);
             }
         }
@@ -774,7 +776,7 @@ public class TimedTask {
         //}
         boolean holiday = false;
         //获取节假日和周末
-        Set<String> set = DateUtils.JJR(Integer.valueOf(DateUtils.parseDateToStr("yyyy", new Date())), Integer.valueOf(DateUtils.parseDateToStr("MM", new Date())));
+        Set<String> set = DateUtils.JJR(DateUtils.parseDateToStr("yyyy", new Date()), DateUtils.parseDateToStr("MM", new Date()));
         Iterator it = set.iterator();
         while (it.hasNext()) {
             String str = (String) it.next();
@@ -792,16 +794,14 @@ public class TimedTask {
             parmStr.put("word2", "请及时填写日志");
             List<String> sendUsers = new ArrayList<>();
             List<SysUser> us = new ArrayList<>();
-            SysUser sysUser = new SysUser();
             List<SysUser> users = sysUserService.selectAllUser();
             for (SysUser u : users) {
-                if ("y".equals(u.getIsDailyRemind()) || StringUtils.isEmpty(u.getIsDailyRemind())) {
+                if (!StringUtils.equals("n", u.getIsDailyRemind())) {
                     if (StringUtils.isNotEmpty(u.getComOpenId())) {
                         SysJournal sj = new SysJournal();
                         sj.setCreateBy(u.getLoginName());
                         sj.getParams().put("beginTime", date);
                         List<SysJournal> jours = sysJournalService.selectSysJournalList(sj);
-                        System.out.println("日志数量：=============" + jours.size());
                         if (jours == null || jours.size() == 0) {
                             if (!sendUsers.contains(u.getLoginName())) {
                                 us.add(u);
@@ -811,6 +811,7 @@ public class TimedTask {
                     }
                 }
             }
+            parmStr.put("url", "common/journalInfo/journal?isChat=0");
             sendDailyRemainUsalTask(us, parmStr);
         }
     }
@@ -911,7 +912,8 @@ public class TimedTask {
 //                        任务接收人
                 parm.put("toUser", u.getComOpenId());
 //                parm.put("toUser","o_gyCwh9IvRICHvI_Z9pWejZ3-nw");
-                parm.put("url", "common/journalInfo/journal");
+                //parm.put("url", "common/journalInfo/journal");
+                parm.put("pagepath", StringUtils.isNotEmpty(parmStr.get("url")) ? parmStr.get("url") : "common/journalInfo/journal");
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken", accessToken);
                 // 创建名称为投后队列
@@ -1107,7 +1109,6 @@ public class TimedTask {
         parmStr.put("word2", "-");
         parmStr.put("word3", "-");
         parmStr.put("word4", "-");
-        System.out.println(parmStr);
         List<SysUser> users = getUsers("thbManager");
         usersAll.addAll(users);
         List<SysUser> users2 = getUsers("thbManager2");
@@ -1194,4 +1195,119 @@ public class TimedTask {
         }
 
     }
+
+    /**
+     * 获取公众号的关注人员信息
+     */
+    public void getSubscribeAccessTokenComOpenId(String accessToken, String type) {
+        try {
+            JSONObject res = WechatMessageUtil.getAllUser(accessToken, "");
+            List<String> openIds = new ArrayList<>();
+            Map m = (Map) res.get("data");
+            if (StringUtils.isNotNull(m) && StringUtils.isNotNull(m.get("openid"))) {
+                openIds = (List<String>) m.get("openid");
+            }
+            String batchUrl = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
+            String url = batchUrl.replace("ACCESS_TOKEN", accessToken);
+
+            //总数量
+            int total = openIds.size();
+            //最大获取量
+            int temp = 100;
+            //当前页面
+            int page = 0;
+            //总共获取次数
+            int count = 0;
+            int index = 0;
+            if (total != 0) {
+                if (total > temp) {
+                    count = total / 100 + ((total % 100 > 0) ? 1 : 0);
+                } else {
+                    count = 1;
+                }
+                sysSubscribeService.deleteSysSubscribe();
+                while (page < count) {
+                    List<Map> userLists = new ArrayList<>();
+                    index = (temp * (page + 1)) > total ? total : (temp * (page + 1));
+                    for (int i = page * temp; i < index; i++) {
+                        String openId = openIds.get(i);
+                        Map userMap = new HashMap<String, String>();
+                        userMap.put("openid", openId);
+                        userMap.put("lang", "zh_CN");
+                        userLists.add(userMap);
+                    }
+                    JSONObject requestMap = new JSONObject();
+                    requestMap.put("user_list", userLists);
+                    String tUserJSON = JSONObject.toJSONString(requestMap);
+                    if (StringUtils.isNotEmpty(tUserJSON)) {
+                        JSONObject jsonResult = CommonUtil.wxMessageModeSendUrl(requestMap, url);
+                        if (StringUtils.isNotNull(jsonResult)) {
+                            JSONArray data = (JSONArray) jsonResult.get("user_info_list");
+                            for (int i = 0; i < data.size(); i++) {
+                                SysSubscribe sysSubscribe = new SysSubscribe();
+                                sysSubscribe.setOpenId((String) data.getJSONObject(i).get("openid"));
+                                //JSONObject jsonResult1 = CommonUtil.httpsRequest(userInfo.replace("OPENID", (String) data.getJSONObject(i).get("openid")), "GET", null);
+                                //SysSubscribe sysSubscribes = sysSubscribeService.selectSysSubscribeByOpenId((String) data.getJSONObject(i).get("openid"));
+                                //System.out.println("用户基本信息：----------------" + jsonResult1);
+                                sysSubscribe.setSubscribe(((Integer) data.getJSONObject(i).get("subscribe")).toString());
+                                sysSubscribe.setLanguage((String) data.getJSONObject(i).get("language"));
+                                sysSubscribe.setSubscribeTime(DateUtils.parseDate(DateUtils.timeStamp2Date(((Integer) data.getJSONObject(i).get("subscribe_time")).toString(), "yyyy-MM-dd HH:mm:ss")));
+                                sysSubscribe.setUnionId((String) data.getJSONObject(i).get("unionid"));
+                                sysSubscribe.setRemark((String) data.getJSONObject(i).get("remark"));
+                                sysSubscribe.setGroupId((Integer) data.getJSONObject(i).get("groupid"));
+                                sysSubscribe.setSubscribeScene((String) data.getJSONObject(i).get("subscribe_scene"));
+                                sysSubscribe.setQrScene(((Integer) data.getJSONObject(i).get("qr_scene")).toString());
+                                sysSubscribe.setQrSceneStr((String) data.getJSONObject(i).get("qr_scene_str"));
+                                sysSubscribe.setSex(((Integer) data.getJSONObject(i).get("sex")).toString());
+                                sysSubscribe.setNickName((String) data.getJSONObject(i).get("nickname"));
+                                sysSubscribe.setCountry((String) data.getJSONObject(i).get("country"));
+                                sysSubscribe.setProvince((String) data.getJSONObject(i).get("province"));
+                                sysSubscribe.setCity((String) data.getJSONObject(i).get("city"));
+                                sysSubscribe.setHeadimgUrl((String) data.getJSONObject(i).get("headimgurl"));
+                                sysSubscribe.setTagridId(StringUtils.join(data.getJSONObject(i).get("tagid_list")));
+                                sysSubscribe.setSubscribeType(type);
+                                //if (StringUtils.isNull(sysSubscribes)) {
+                                sysSubscribeService.insertSysSubscribe(sysSubscribe);
+                                //} else {
+                                //  sysSubscribe.setId(sysSubscribes.getId());
+                                // sysSubscribeService.updateSysSubscribe(sysSubscribe);
+                                //}
+                            }
+                        }
+                        page++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllUserFormSubscribe() {
+        try {
+            //订阅号accessToken
+            //getSubscribeAccessTokenComOpenId(configService.getSubscribeAccessToken(), "0");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            //服务号accessToken
+            getSubscribeAccessTokenComOpenId(configService.getWechatComAccessToken(), "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getSubscriptToken() {
+        try {
+            sysConfigService.getSubscribeAccessToken();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

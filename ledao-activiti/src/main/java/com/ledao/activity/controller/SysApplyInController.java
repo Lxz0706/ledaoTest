@@ -866,12 +866,14 @@ public class SysApplyInController extends BaseController {
             if (StringUtils.isNotEmpty(string)) {
                 SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
                 SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(Long.valueOf(string));
-                String fileType = getValue(documentFileTypeDict, sysDocumentFile.getFileType());
+                String fileType = StringUtils.isNotNull(getValue(documentFileTypeDict, sysDocumentFile.getFileType())) ? getValue(documentFileTypeDict, sysDocumentFile.getFileType()) : "";
                 String companyName = getValue(companyList, sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId()).getCompanyName());
                 title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
                 String userName = userMapper.selectUserByLoginName(sysApplyIn.getApplyUser()).getUserName();
-                String createTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn.getCreateTime());
-                createQrCodeImg(Long.valueOf(string), sysDocumentFile.getFileName(), title, title + ";" + createTime + ";" + userName + ";" + fileType + ";" + sysDocumentFile.getCounts() + "份     " + sysDocumentFile.getPages() + "页;");
+                String applyTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn.getApplyTime());
+                Long counts = StringUtils.isNotNull(sysDocumentFile.getCounts()) ? sysDocumentFile.getCounts() : Long.valueOf(0);
+                Long pages = StringUtils.isNotNull(sysDocumentFile.getPages()) ? sysDocumentFile.getPages() : Long.valueOf(0);
+                createQrCodeImg(Long.valueOf(string), sysDocumentFile.getFileName().replace(" ", "").replace("（", "(").replace("）", ")"), title, title + ";" + applyTime + ";" + userName + ";" + fileType + ";" + counts + "份     " + pages + "页;", accessToken);
             }
         }
         downloadFile(title, request, response);
@@ -879,53 +881,39 @@ public class SysApplyInController extends BaseController {
 
     @GetMapping("/download/resources")
     public void downloadForAppId(String applyIds, SysApplyIn sysApplyIn, String debtorName, String roleType, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String fileName = "";
-        String title = debtorName;
+        StringBuffer applyInIdsSb = new StringBuffer();
         //附件类型
         List<SysDictData> documentFileTypeDict = sysDictDataService.selectDictDataByType("document_file_type");
         //档案类型
-        List<SysDictData> busiDocumentTypeDict = sysDictDataService.selectDictDataByType("busi_document_type");
 
         List<SysDictData> companyList = sysDictDataService.selectDictDataByType("sys_company_name");
         if (StringUtils.isEmpty(applyIds) || "null".equals(applyIds) || "undefined".equals(applyIds)) {
             List<SysApplyIn> list = sysApplyInService.selectSysApplyInDocByPNameDetailList(sysApplyIn);
             for (SysApplyIn sysApplyIn1 : list) {
-                fileName = sysApplyInService.selectSysApplyInById(sysApplyIn1.getApplyId()).getDebtorName();
-                SysDocumentFile sysDocumentFile = new SysDocumentFile();
-                sysDocumentFile.setApplyId(sysApplyIn1.getApplyId());
-                editFileName(sysApplyIn1.getApplyId());
-                List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
-                for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
-                    String documentGetType = getValue(busiDocumentTypeDict, sysDocumentFile1.getDocumentGetType());
-                    String fileType = getValue(documentFileTypeDict, sysDocumentFile1.getFileType());
-                    String companyName = getValue(companyList, sysApplyInService.selectSysApplyInById(sysDocumentFile1.getApplyId()).getCompanyName());
-                    if ("bg".equals(sysApplyIn.getRoleType())) {
-                        title = sysApplyIn.getProjectName();
-                    } else {
-                        title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
-                    }
-                    String userName = userMapper.selectUserByLoginName(sysApplyIn1.getApplyUser()).getUserName();
-                    String createTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn1.getCreateTime());
-                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), title, title + ";" + createTime + ";" + userName + ";" + fileType + ";" + sysDocumentFile1.getCounts() + "份     " + sysDocumentFile1.getPages() + "页;");
-                }
+                applyInIdsSb.append(sysApplyIn1.getApplyId()).append(",");
             }
         } else {
             for (String string : applyIds.split(",")) {
-                fileName = sysApplyInService.selectSysApplyInById(Long.valueOf(string)).getDebtorName();
-                SysDocumentFile sysDocumentFile = new SysDocumentFile();
-                sysDocumentFile.setApplyId(Long.valueOf(string));
-                List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
-                for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
-                    SysApplyIn sysApplyIn1 = sysApplyInService.selectSysApplyInById(Long.valueOf(string));
-                    String documentGetType = getValue(busiDocumentTypeDict, sysDocumentFile1.getDocumentGetType());
-                    String fileType = getValue(documentFileTypeDict, sysDocumentFile1.getFileType());
-                    String companyName = getValue(companyList, sysApplyInService.selectSysApplyInById(sysDocumentFile1.getApplyId()).getCompanyName());
-                    title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
-                    String userName = userMapper.selectUserByLoginName(sysApplyIn1.getApplyUser()).getUserName();
-                    String createTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn1.getCreateTime());
-                    createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName(), title, title + ";" + createTime + ";" + userName + ";" + fileType + ";" + sysDocumentFile1.getCounts() + "份     " + sysDocumentFile1.getPages() + "页;");
-                }
+                applyInIdsSb.append(string).append(",");
             }
+        }
+        createAndDow(applyInIdsSb.toString(), debtorName, documentFileTypeDict, companyList, request, response);
+    }
+
+    public void createAndDow(String applyInIds, String debtorName, List<SysDictData> documentFileTypeDict, List<SysDictData> companyList, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String title = debtorName;
+        String accessToken = configService.getWechatAccessToken();
+        List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectDocListByApplyInIds(applyInIds);
+        for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
+            SysApplyIn sysApplyIn1 = sysApplyInService.selectSysApplyInById(sysDocumentFile1.getApplyId());
+            String fileType = StringUtils.isNotNull(getValue(documentFileTypeDict, sysDocumentFile1.getFileType())) ? getValue(documentFileTypeDict, sysDocumentFile1.getFileType()) : "";
+            String companyName = getValue(companyList, sysDocumentFile1.getCompanyName());
+            title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
+            String userName = sysDocumentFile1.getCreatorName();
+            String applyTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn1.getApplyTime());
+            Long counts = StringUtils.isNotNull(sysDocumentFile1.getCounts()) ? sysDocumentFile1.getCounts() : Long.valueOf(0);
+            Long pages = StringUtils.isNotNull(sysDocumentFile1.getPages()) ? sysDocumentFile1.getPages() : Long.valueOf(0);
+            createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName().replace(" ", "").replace("（", "(").replace("）", ")"), title, title + ";" + applyTime + ";" + userName + ";" + fileType + ";" + counts + "份     " + pages + "页;", accessToken);
         }
         downloadFile(title, request, response);
     }
@@ -939,17 +927,16 @@ public class SysApplyInController extends BaseController {
         return valueName;
     }
 
-    public void createQrCodeImg(Long scene, String fileName, String debtorName, String text) throws Exception {
-        String accessToken = configService.getWechatAccessToken();
+    public void createQrCodeImg(Long scene, String fileName, String debtorName, String text, String accessToken) throws Exception {
         if (StringUtils.isEmpty(accessToken)) {
             throw new RuntimeException("获取accessToken失败");
         }
         JSONObject paramData = new JSONObject();
         paramData.put("scene", scene);
         paramData.put("url", "pages/lookInformation/index");
-        WxQrCode.downloadMiniCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(fileName), debtorName, paramData.toString());
+        WxQrCode.downloadMiniCode(accessToken, FileUploadUtils.getDefaultBaseDir(), StringUtils.replaceBlank(fileName + "-" + scene), debtorName, paramData.toString());
         String nowday = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String savePath = FileUploadUtils.getDefaultBaseDir() + File.separator + "files" + File.separator + nowday + File.separator + debtorName + File.separator + fileName + ".png";
+        String savePath = FileUploadUtils.getDefaultBaseDir() + File.separator + "files" + File.separator + nowday + File.separator + debtorName + File.separator + (fileName + "-" + scene) + ".png";
         WxImageTool.generateCode(savePath, savePath, text, 290, 300);
     }
 

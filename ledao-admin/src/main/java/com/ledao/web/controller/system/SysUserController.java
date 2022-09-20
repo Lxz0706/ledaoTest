@@ -445,9 +445,7 @@ public class SysUserController extends BaseController {
 //			String requestUrl="https://api.weixin.qq.com/sns/jscode2session?appid="+Global.getConfig("wxAppid")+"&secret="+Global.getConfig("wxSecret")+"&js_code="+jsCode+"&grant_type="+Global.getConfig("wxGrant_type");  
             String requestUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=" + WeChatConstants.WXAPPID + "&secret=" + WeChatConstants.WXSECRET + "&js_code=" + jsCode + "&grant_type=" + WeChatConstants.WXGRANT_TYPE;
             jsonResult = CommonUtil.httpsRequest(requestUrl, "GET" , null);
-            System.out.println("返回的jsonResult" + jsonResult);
             if (jsonResult != null) {
-                System.out.println(jsonResult.toString());
                 String openid = jsonResult.getString("openid");
                 return AjaxResult.success(openid);
             } else {

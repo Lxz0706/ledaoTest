@@ -419,7 +419,7 @@ public class WxImageTool {
                         }
                     }
                     for (int p = 0; p < tempStrs.length; p++) {
-                        if(StringUtils.isNotEmpty(tempStrs[p])){
+                        if (StringUtils.isNotEmpty(tempStrs[p])) {
                             g.drawString(tempStrs[p], 410, (fontHeight + 25) * (p + 1));
                         }
                     }
@@ -441,76 +441,5 @@ public class WxImageTool {
         // 返回给页面的图片地址(因为绝对路径无法访问)
         imgName = outPath;
         return imgName;
-    }
-
-    public static void textToImage(String filePath, String outPath, String text, Integer width, Integer height) {
-        try {
-            Font font = new Font("宋体", Font.BOLD, 28);
-            String imgName = "D:\\back.png";
-            String imageLocalUrl = "D:\\profile\\back.png";
-            BufferedImage imageLocal = ImageIO.read(new FileInputStream(imageLocalUrl));
-            // 以本地图片为模板
-            Graphics2D g = imageLocal.createGraphics();
-            // 在模板上添加二维码(地址,左边距,上边距,图片宽度,图片高度,未知)
-            // 设置文本样式
-            g.setFont(font);
-            g.setColor(Color.BLACK);
-            int fontHeight = (int) font.getSize2D();
-            for (String string : text.split(";")) {
-                System.out.println(string);
-// 得到当前的font metrics
-                FontMetrics metrics = g.getFontMetrics();
-                int StrPixelWidth = metrics.stringWidth(string); // 字符串长度（像素） str要打印的字符串
-                int lineSize = (int) Math.ceil(StrPixelWidth * 1.0 / width) + 1;// 算出行数
-                if (width < StrPixelWidth) {
-                    // 页面宽度（width）小于 字符串长度
-                    StringBuilder sb = new StringBuilder();
-                    // 存储每一行的字符串
-                    int j = 0;
-                    int tempStart = 0;
-                    String tempStrs[] = new String[lineSize];
-                    // 存储换行之后每一行的字符串
-                    for (int i1 = 0; i1 < string.length(); i1++) {
-                        char ch = string.charAt(i1);
-                        sb.append(ch);
-                        Rectangle2D bounds2 = metrics.getStringBounds(sb.toString(), null);
-                        int tempStrPi1exlWi1dth = (int) bounds2.getWidth();
-                        if (tempStrPi1exlWi1dth > width) {
-                            tempStrs[j++] = string.substring(tempStart, i1);
-                            tempStart = i1;
-                            sb.delete(0, sb.length());
-                            sb.append(ch);
-                        }
-                        // 最后一行
-                        if (i1 == string.length() - 1) {
-                            tempStrs[j] = string.substring(tempStart);
-                        }
-                    }
-                    for (int p = 0; p < tempStrs.length; p++) {
-                        g.drawString(tempStrs[p], 150, (fontHeight + 5) * (p + 1));
-                    }
-                    fontHeight = (fontHeight + 15) * tempStrs.length;
-                } else {
-                    fontHeight = fontHeight + 25;
-                    g.drawString(string, 150, fontHeight);
-                }
-            }
-
-
-            // 获取新文件的地址
-            File outputfile = new File(imgName);
-            // 生成新的合成过的用户二维码并写入新图片
-            ImageIO.write(imageLocal, "png", outputfile);
-            // 完成模板修改
-            g.dispose();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] arg) {
-        String str = "江苏青泓信息科技、无锡檀泉科技有限公司;1份;11页;原件";
-        textToImage("D:\\back.png", "D:\\profile\\back.png", str, 290, 140);
     }
 }

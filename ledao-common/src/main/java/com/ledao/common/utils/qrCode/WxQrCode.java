@@ -3,6 +3,7 @@ package com.ledao.common.utils.qrCode;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.http.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -27,6 +27,10 @@ public class WxQrCode {
     //获取二维码路径
     private static final String WxCode_URL
             = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN";//小程序密钥
+
+
+    //获取微信公众号关注用户
+    private static final String USERINFO_URL = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN";
 
     /**
      * 用于获取access_token
@@ -57,10 +61,11 @@ public class WxQrCode {
         connection.connect();
         // 定义 BufferedReader输入流来读取URL的响应
         BufferedReader in = null;
-        if (requestUrl.contains("nlp"))
+        if (requestUrl.contains("nlp")) {
             in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "GBK"));
-        else
+        } else {
             in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+        }
         String result = "";
         String getLine;
         while ((getLine = in.readLine()) != null) {
@@ -226,7 +231,7 @@ public class WxQrCode {
     public static String downloadMiniCode(String accessToken, String uploadPath, String fileName, String debtorName, String param) {
         String bizPath = "files";
         String nowday = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        File file = new File(uploadPath + File.separator + bizPath + File.separator + nowday+ File.separator +debtorName);
+        File file = new File(uploadPath + File.separator + bizPath + File.separator + nowday + File.separator + debtorName);
         if (!file.exists()) {
             file.mkdirs();// 创建文件根目录
         }
@@ -279,6 +284,11 @@ public class WxQrCode {
             e.printStackTrace();
         }
         return savePath;
+    }
+
+    public static Set<String> getUsers(String accessToken) {
+        Set<String> openIds = new HashSet<>();
+        return openIds;
     }
 
 }

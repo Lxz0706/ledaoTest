@@ -90,9 +90,6 @@ public class SysValuationmapController extends BaseController {
         return array.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(getWgs84xy(13269197.0,4085292.7));
-    }
 
     public static String getWgs84xy(double x, double y) {
 

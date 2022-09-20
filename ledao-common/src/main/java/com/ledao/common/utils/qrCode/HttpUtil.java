@@ -46,11 +46,8 @@ public class HttpUtil {
             out.flush();
             out.close();
 
-            System.out.println(conn.getResponseCode());
-
             // 请求返回的状态
             if (HttpURLConnection.HTTP_OK == conn.getResponseCode()) {
-                System.out.println("连接成功");
                 // 请求返回的数据
                 InputStream in1 = conn.getInputStream();
                 try {
@@ -61,7 +58,6 @@ public class HttpUtil {
                         sb.append(readLine).append("\n");
                     }
                     responseReader.close();
-                    System.out.println(sb.toString());
 
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -120,7 +116,6 @@ public class HttpUtil {
             System.out.println(conn.getResponseCode());
             // 请求返回的状态
             if (HttpURLConnection.HTTP_OK == conn.getResponseCode()) {
-                System.out.println("连接成功");
                 // 请求返回的数据
                 InputStream in1 = conn.getInputStream();
                 try {
@@ -130,7 +125,6 @@ public class HttpUtil {
                         sb.append(readLine).append("\n");
                     }
                     responseReader.close();
-                    System.out.println(sb.toString());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

@@ -10,7 +10,9 @@ import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.dao.entity.SysDictData;
 import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.common.core.dao.entity.SysUser;
+import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.file.FileUtils;
 import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.system.dao.*;
 import com.ledao.system.mapper.*;
@@ -333,8 +335,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             return AjaxResult.error("非待审批状态");
         }
 
-        if ((sysApplyInEntity.getCreateBy().equals(loginUser) && "0".equals(sysApplyInEntity.getApproveStatu())) ||
-                (!"0".equals(sysApplyInEntity.getApproveStatu()) && sysApplyInEntity.getApplyUser().equals(loginUser))) {
+        if ((sysApplyInEntity.getCreateBy().equals(loginUser) && "0".equals(sysApplyInEntity.getApproveStatu())) || (!"0".equals(sysApplyInEntity.getApproveStatu()) && sysApplyInEntity.getApplyUser().equals(loginUser))) {
         } else {
             return AjaxResult.error("非创建人无法提交审批");
         }
@@ -357,8 +358,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                         if (desApOuts != null && desApOuts.size() > 0) {
                             for (SysApplyOutDetail out : desApOuts) {
                                 SysApplyIn app = sysApplyInMapper.selectSysApplyInById(out.getApplyId());
-                                if ("1".equals(out.getIsElec()) && app != null && ("1".equals(app.getApproveStatu()) || "5".equals(app.getApproveStatu())
-                                        || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
+                                if ("1".equals(out.getIsElec()) && app != null && ("1".equals(app.getApproveStatu()) || "5".equals(app.getApproveStatu()) || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
                                     return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
                                 }
                             }
@@ -660,18 +660,22 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 JSONObject parm = new JSONObject();
                 String first = "";
                 String thing14 = "-";
+                String pagePath = "";
                 if (StringUtils.isNotEmpty(sysApplyInEntity.getRemarks())) {
                     thing14 = sysApplyInEntity.getRemarks();
                 }
                 if ("2".equals(sysApplyInEntity.getApproveStatu())) {
                     first = "您的申请被拒绝";
                     thing14 = "拒绝原因：" + refuseReason;
+                    pagePath = "pages/workFlow/index?current=2";
                 } else if ("3".equals(sysApplyInEntity.getApproveStatu())) {
                     if (us.getLoginName().equals(sysApplyInEntity.getApplyUser())) {
                         first = "您提交的申请已处理";
+                        pagePath = "pages/workFlow/index?current=2";
                     } else {
                         SysUser sysUser = userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser());
                         first = "您收到" + sysUser.getUserName() + "提交的" + appName + "已完成";
+                        pagePath = "pages/workFlow/index?current=1";
                     }
                     /*if (currentUserName.contains("-") && "0".equals(sysApplyInEntity.getApplyType())) {
                         first = "您有一条档案抄送提醒请知晓";
@@ -685,6 +689,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     }
                 } else {
                     first = "您有一条流程需要审批";
+                    pagePath = "pages/workFlow/index?current=0";
                 }
 
                 parm.put("first", first);
@@ -692,7 +697,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 parm.put("word1", appName + " - " + userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
                 parm.put("word2", dictDataService.selectDictLabel("apply_statu", sysApplyInEntity.getApproveStatu()));
                 parm.put("word3", sysApplyInEntity.getApplyTime());
-                parm.put("pagepath", "pages/workFlow/index");
+                parm.put("pagepath", pagePath);
 
 //                thing14 = "申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试申请测试请测试";
                 parm.put("word5", thing14);
@@ -790,8 +795,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             return AjaxResult.error("无该申请");
         }
         String appUser = sysApplyInEntity.getApproveUser();
-        if (!"0".equals(sysApplyInEntity.getApproveStatu()) && !"2".equals(sysApplyInEntity.getApproveStatu())
-                && !"4".equals(sysApplyInEntity.getApproveStatu())) {
+        if (!"0".equals(sysApplyInEntity.getApproveStatu()) && !"2".equals(sysApplyInEntity.getApproveStatu()) && !"4".equals(sysApplyInEntity.getApproveStatu())) {
             boolean isAppUser = false;
             if (StringUtils.isNotEmpty(appUser)) {
                 if (appUser.contains(",")) {
@@ -1229,9 +1233,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 if ("0".equals(documentType)) {
                     List<SysApplyInImportFile> files = new ArrayList<>();
                     for (SysApplyInImportFile fi : filesList) {
-                        if (apply.getProjectName().equals(fi.getProjectName()) && apply.getCompanyNameLab().equals(fi.getCompanyNameLab()) &&
-                                apply.getDebtorName().equals(fi.getDebtorName())
-                                && apply.getApplyTime().equals(fi.getApplyTime())) {
+                        if (apply.getProjectName().equals(fi.getProjectName()) && apply.getCompanyNameLab().equals(fi.getCompanyNameLab()) && apply.getDebtorName().equals(fi.getDebtorName()) && apply.getApplyTime().equals(fi.getApplyTime())) {
                             files.add(fi);
                         }
                     }
@@ -1349,6 +1351,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
     }
 
     public int insertApply(SysApplyInImport apply, SysApplyIn applyIn) {
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
         applyIn.setApplyUser(apply.getApplyUser());
         applyIn.setApplyTime(apply.getApplyTime());
         applyIn.setApproveStatu("3");
@@ -1363,46 +1369,62 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
         applyIn.setUpdateTime(new Date());
         sysApplyInMapper.insertSysApplyIn(applyIn);
         for (SysApplyInImportFile f : apply.getFiles()) {
-            SysDocumentFile doc = new SysDocumentFile();
-            doc.setApplyId(applyIn.getApplyId());
-            doc.setAssetNumber(f.getAssetNumber());
-            doc.setContractNo(f.getContractNo());
-            doc.setFileName(f.getFileName());
-            doc.setFileType(f.getFileType());
-            doc.setDocumentGetType(f.getBusiDocumentType());
-            doc.setFileScanType(f.getFileScanType());
-            doc.setCounts(f.getCounts());
-            doc.setPages(f.getPages());
-            doc.setDocumentStatu(f.getDocumentStatu());
-            doc.setCabinetNo(f.getCabinetNo());
-            doc.setBagNo(f.getBagNo());
-            doc.setFileGetType(f.getFileGetType());
-            doc.setDocumentType(applyIn.getDocumentType());
-            doc.setDocumentLevel(f.getDocumentLevel());
-            doc.setCreateTime(new Date());
-            doc.setUpdateTime(new Date());
-            doc.setCreateBy(ShiroUtils.getLoginName());
-            documentFileMapper.insertSysDocumentFile(doc);
-            if (StringUtils.isNotEmpty(f.getFileUrl())) {
-                String[] urls = f.getFileUrl().split(",");
-                for (String u : urls) {
-                    SysFileDetail fileDetail = new SysFileDetail();
-                    fileDetail.setCreateTime(new Date());
-                    fileDetail.setUpdateTime(new Date());
-                    fileDetail.setCreateBy(ShiroUtils.getLoginName());
-                    fileDetail.setDocumentFileId(doc.getDocumentId());
-                    fileDetail.setFileUrl(u);
-                    fileDetail.setFileType(u.substring(u.lastIndexOf(".") + 1));
-                    fileDetail.setFileName(u.substring(u.lastIndexOf("\\") + 1));
-                    fileDetailMapper.insertSysFileDetail(fileDetail);
+            if (FileUtils.isValidFilename(f.getFileName())) {
+                SysDocumentFile doc = new SysDocumentFile();
+                doc.setApplyId(applyIn.getApplyId());
+                doc.setAssetNumber(f.getAssetNumber());
+                doc.setContractNo(f.getContractNo());
+                doc.setFileName(f.getFileName());
+                doc.setFileType(f.getFileType());
+                doc.setDocumentGetType(f.getBusiDocumentType());
+                doc.setFileScanType(f.getFileScanType());
+                doc.setCounts(f.getCounts());
+                doc.setPages(f.getPages());
+                doc.setDocumentStatu(f.getDocumentStatu());
+                doc.setCabinetNo(f.getCabinetNo());
+                doc.setBagNo(f.getBagNo());
+                doc.setFileGetType(f.getFileGetType());
+                doc.setDocumentType(applyIn.getDocumentType());
+                doc.setDocumentLevel(f.getDocumentLevel());
+                doc.setCreateTime(new Date());
+                doc.setUpdateTime(new Date());
+                doc.setCreateBy(ShiroUtils.getLoginName());
+                documentFileMapper.insertSysDocumentFile(doc);
+                if (StringUtils.isNotEmpty(f.getFileUrl())) {
+                    String[] urls = f.getFileUrl().split(",");
+                    for (String u : urls) {
+                        SysFileDetail fileDetail = new SysFileDetail();
+                        fileDetail.setCreateTime(new Date());
+                        fileDetail.setUpdateTime(new Date());
+                        fileDetail.setCreateBy(ShiroUtils.getLoginName());
+                        fileDetail.setDocumentFileId(doc.getDocumentId());
+                        fileDetail.setFileUrl(u);
+                        fileDetail.setFileType(u.substring(u.lastIndexOf(".") + 1));
+                        fileDetail.setFileName(u.substring(u.lastIndexOf("\\") + 1));
+                        fileDetailMapper.insertSysFileDetail(fileDetail);
+                    }
                 }
+                successNum++;
+                successMsg.append("<br/>" + successNum + "、账号 " + f.getFileName() + " 导入成功");
+            } else {
+                failureNum++;
+                failureMsg.append("<br/>" + failureNum + "、文件名：" + f.getFileName() + "存在特殊符号，请修改文件名称后重新上传");
             }
-
         }
-        return 0;
+        if (failureNum > 0) {
+            failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new BusinessException(failureMsg.toString());
+        } else {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+        }
+        return successNum;
     }
 
     public int insertApplyDaily(SysApplyInImportDaily apply, SysApplyIn applyIn) {
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
         applyIn.setApplyUser(apply.getApplyUser());
         applyIn.setApplyTime(apply.getApplyTime());
         applyIn.setApproveStatu("3");
@@ -1417,45 +1439,58 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
         applyIn.setUpdateTime(new Date());
         sysApplyInMapper.insertSysApplyIn(applyIn);
         for (SysApplyInImportFileDaily f : apply.getFilesDaily()) {
-            SysDocumentFile doc = new SysDocumentFile();
-            doc.setApplyId(applyIn.getApplyId());
-            doc.setFileName(f.getFileName());
-            doc.setFileType(f.getFileType());
-            doc.setFileScanType(f.getFileScanType());
-            if ("1".equals(applyIn.getDocumentType())) {
-                doc.setDailyDocumentType(f.getDailyDocumentType());
-            } else {
-                doc.setDailyDocumentTypeContract(f.getDailyDocumentType());
-            }
-            doc.setDocumentGetType(f.getBusiDocumentType());
-            doc.setCounts(f.getCounts());
-            doc.setPages(f.getPages());
-            doc.setDocumentStatu(f.getDocumentStatu());
-            doc.setCabinetNo(f.getCabinetNo());
-            doc.setBagNo(f.getBagNo());
-            doc.setFileGetType(f.getFileGetType());
-            doc.setDocumentType(applyIn.getDocumentType());
-            doc.setDocumentLevel(f.getDocumentLevel());
-            doc.setCreateTime(new Date());
-            doc.setUpdateTime(new Date());
-            doc.setCreateBy(ShiroUtils.getLoginName());
-            documentFileMapper.insertSysDocumentFile(doc);
-            if (StringUtils.isNotEmpty(f.getFileUrl())) {
-                String[] urls = f.getFileUrl().split(",");
-                for (String u : urls) {
-                    SysFileDetail fileDetail = new SysFileDetail();
-                    fileDetail.setCreateTime(new Date());
-                    fileDetail.setUpdateTime(new Date());
-                    fileDetail.setCreateBy(ShiroUtils.getLoginName());
-                    fileDetail.setDocumentFileId(doc.getDocumentId());
-                    fileDetail.setFileUrl(u);
-                    fileDetail.setFileType(u.substring(u.lastIndexOf(".") + 1));
-                    fileDetail.setFileName(u.substring(u.lastIndexOf("\\") + 1));
-                    fileDetailMapper.insertSysFileDetail(fileDetail);
+            if (FileUtils.isValidFilename(f.getFileName())) {
+                SysDocumentFile doc = new SysDocumentFile();
+                doc.setApplyId(applyIn.getApplyId());
+                doc.setFileName(f.getFileName());
+                doc.setFileType(f.getFileType());
+                doc.setFileScanType(f.getFileScanType());
+                if ("1".equals(applyIn.getDocumentType())) {
+                    doc.setDailyDocumentType(f.getDailyDocumentType());
+                } else {
+                    doc.setDailyDocumentTypeContract(f.getDailyDocumentType());
                 }
+                doc.setDocumentGetType(f.getBusiDocumentType());
+                doc.setCounts(f.getCounts());
+                doc.setPages(f.getPages());
+                doc.setDocumentStatu(f.getDocumentStatu());
+                doc.setCabinetNo(f.getCabinetNo());
+                doc.setBagNo(f.getBagNo());
+                doc.setFileGetType(f.getFileGetType());
+                doc.setDocumentType(applyIn.getDocumentType());
+                doc.setDocumentLevel(f.getDocumentLevel());
+                doc.setCreateTime(new Date());
+                doc.setUpdateTime(new Date());
+                doc.setCreateBy(ShiroUtils.getLoginName());
+                documentFileMapper.insertSysDocumentFile(doc);
+                if (StringUtils.isNotEmpty(f.getFileUrl())) {
+                    String[] urls = f.getFileUrl().split(",");
+                    for (String u : urls) {
+                        SysFileDetail fileDetail = new SysFileDetail();
+                        fileDetail.setCreateTime(new Date());
+                        fileDetail.setUpdateTime(new Date());
+                        fileDetail.setCreateBy(ShiroUtils.getLoginName());
+                        fileDetail.setDocumentFileId(doc.getDocumentId());
+                        fileDetail.setFileUrl(u);
+                        fileDetail.setFileType(u.substring(u.lastIndexOf(".") + 1));
+                        fileDetail.setFileName(u.substring(u.lastIndexOf("\\") + 1));
+                        fileDetailMapper.insertSysFileDetail(fileDetail);
+                    }
+                }
+                successNum++;
+                successMsg.append("<br/>" + successNum + "、账号 " + f.getFileName() + " 导入成功");
+            } else {
+                failureNum++;
+                failureMsg.append("<br/>" + failureNum + "、文件名：" + f.getFileName() + "存在特殊符号，请修改文件名称后重新上传");
             }
         }
-        return 0;
+        if (failureNum > 0) {
+            failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new BusinessException(failureMsg.toString());
+        } else {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+        }
+        return successNum;
     }
 
     @Override

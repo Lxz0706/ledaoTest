@@ -316,7 +316,7 @@ public class SysJournalController extends BaseController {
         String endTime = (String) sysJournal.getParams().get("endTime");
         List<SysJournalCreator> list = new ArrayList<>();
         for (String days : DateUtils.findDaysStr(begintTime, endTime)) {
-            Set<String> set = DateUtils.JJR(Integer.valueOf(DateUtils.parseDateToStr("yyyy", DateUtils.parseDate(days))), Integer.valueOf(DateUtils.parseDateToStr("MM", DateUtils.parseDate(days))));
+            Set<String> set = DateUtils.JJR(DateUtils.parseDateToStr("yyyy", DateUtils.parseDate(days)), DateUtils.parseDateToStr("MM", DateUtils.parseDate(days)));
             if (!set.contains(days)) {
                 SysUser sysUser = new SysUser();
                 sysUser.setSelectTime(days);

@@ -30,6 +30,7 @@
         <result property="looker" column="looker"/>
         <result property="address" column="address"/>
         <result property="timestamp" column="timestamp"/>
+        <result property="floorSpace" column="floor_space"/>
     </resultMap>
 
     <sql id="selectSysJudicialVo">
@@ -57,7 +58,8 @@
                notify,
                looker,
                address,
-            timestamp
+            timestamp,
+            floor_space
         from sys_judicial
     </sql>
 
@@ -93,9 +95,9 @@
         </where>
     </select>
 
-    <select id="selectSysJudicialById" parameterType="Long" resultMap="SysJudicialResult">
+    <select id="selectSysJudicialById" parameterType="string" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
-        where id = #{id}
+        where item_id = #{itemId}
     </select>
 
     <insert id="insertSysJudicial" parameterType="SysJudicial" useGeneratedKeys="true" keyProperty="id">

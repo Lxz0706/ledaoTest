@@ -125,34 +125,38 @@ public class SysDocumentFileController extends BaseController
     @Log(title = "档案", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(HttpSession session, SysDocumentFile sysDocumentFile, @RequestParam("files")MultipartFile[] files )
-    {
-        String loginName = ShiroUtils.getLoginName();
-        SysDocumentFile f = new SysDocumentFile();
-        f.setAssetPag(sysDocumentFile.getAssetPag());
-        f.setAssetNumber(sysDocumentFile.getAssetNumber());
-        f.setBagNo(sysDocumentFile.getBagNo());
-        f.setDocumentType(sysDocumentFile.getDocumentType());
-        f.setDailyDocumentType(sysDocumentFile.getDailyDocumentType());
-        f.setFileName(sysDocumentFile.getFileName());
-        f.setFileType(sysDocumentFile.getFileType());
-        f.setCreateBy(loginName);
-        f.setFileScanType(sysDocumentFile.getFileScanType());
-        f.setApplyId(sysDocumentFile.getApplyId());
-        f.setDailyDocumentTypeContract(sysDocumentFile.getDailyDocumentTypeContract());
-        List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
-        if (ss !=null && ss.size()>0){
-            return AjaxResult.error("存在重复记录，请检查");
+    public AjaxResult addSave(SysDocumentFile sysDocumentFile) {
+        StringBuilder failureMsg = new StringBuilder();
+        if (FileUtils.isValidFilename(sysDocumentFile.getFileName())) {
+            String loginName = ShiroUtils.getLoginName();
+            SysDocumentFile f = new SysDocumentFile();
+            f.setAssetPag(sysDocumentFile.getAssetPag());
+            f.setAssetNumber(sysDocumentFile.getAssetNumber());
+            f.setBagNo(sysDocumentFile.getBagNo());
+            f.setDocumentType(sysDocumentFile.getDocumentType());
+            f.setDailyDocumentType(sysDocumentFile.getDailyDocumentType());
+            f.setFileName(sysDocumentFile.getFileName());
+            f.setFileType(sysDocumentFile.getFileType());
+            f.setCreateBy(loginName);
+            f.setFileScanType(sysDocumentFile.getFileScanType());
+            f.setApplyId(sysDocumentFile.getApplyId());
+            f.setDailyDocumentTypeContract(sysDocumentFile.getDailyDocumentTypeContract());
+            List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
+            if (ss != null && ss.size() > 0) {
+                return AjaxResult.error("存在重复记录，请检查");
+            }
+            if (StringUtils.isNotEmpty(sysDocumentFile.getDocumentTypeVal())) {
+                sysDocumentFile.setDocumentType(sysDocumentFile.getDocumentTypeVal());
+            }
+            sysDocumentFile.setReviser(loginName);
+            sysDocumentFile.setCreateBy(loginName);
+            sysDocumentFileService.insertSysDocumentFile(sysDocumentFile);
+            SysApplyIn ap = sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
+            ap.setReviser(ShiroUtils.getLoginName());
+            sysApplyInService.updateSysApplyIn(ap);
+        } else {
+            failureMsg.append("<br/>文件名：" + sysDocumentFile.getFileName() + "存在特殊符号，请修改文件名称后重新上传");
         }
-        if (StringUtils.isNotEmpty(sysDocumentFile.getDocumentTypeVal())){
-            sysDocumentFile.setDocumentType(sysDocumentFile.getDocumentTypeVal());
-        }
-        sysDocumentFile.setReviser(loginName);
-        sysDocumentFile.setCreateBy(loginName);
-    	sysDocumentFileService.insertSysDocumentFile(sysDocumentFile,files);
-        SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
-        ap.setReviser(ShiroUtils.getLoginName());
-        sysApplyInService.updateSysApplyIn(ap);
         return toAjax(true);
     }
 

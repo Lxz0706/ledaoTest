@@ -84,4 +84,10 @@ public interface ISysConfigService {
     String getWechatComAccessToken();
 
     String getWechatAccessToken();
+
+    /***
+     * 获取微信订阅号AccessToken
+     * @return accessToken
+     */
+    public String getSubscribeAccessToken();
 }

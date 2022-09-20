@@ -114,7 +114,6 @@ public class SysApplyIn extends BaseEntity {
     private Long projectId;
 
 
-
     /**
      * 债务人名称
      */
@@ -144,7 +143,6 @@ public class SysApplyIn extends BaseEntity {
      * 实际提交人
      */
     private String realCreateBy;
-
 
 
     /**
@@ -239,6 +237,26 @@ public class SysApplyIn extends BaseEntity {
      * 是否直属主管
      */
     private String isDirector;
+
+    /**
+     * 柜号
+     */
+    private String cabinetNo;
+
+    /**
+     * 档案袋编号
+     */
+    private String bagNo;
+
+    /**
+     * 档案状态--字典项
+     */
+    private String documentStatu;
+
+    /**
+     * 附件类型--字典项
+     */
+    private String fileType;
 
     public String getApplyTypeToString() {
         return applyTypeToString;
@@ -570,6 +588,38 @@ public class SysApplyIn extends BaseEntity {
         this.approveStatuToString = approveStatuToString;
     }
 
+    public String getCabinetNo() {
+        return cabinetNo;
+    }
+
+    public void setCabinetNo(String cabinetNo) {
+        this.cabinetNo = cabinetNo;
+    }
+
+    public String getBagNo() {
+        return bagNo;
+    }
+
+    public void setBagNo(String bagNo) {
+        this.bagNo = bagNo;
+    }
+
+    public String getDocumentStatu() {
+        return documentStatu;
+    }
+
+    public void setDocumentStatu(String documentStatu) {
+        this.documentStatu = documentStatu;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -595,6 +645,10 @@ public class SysApplyIn extends BaseEntity {
                 .append("reviser", getReviser())
                 .append("reviserName", getReviser())
                 .append("updateTime", getUpdateTime())
+                .append("cabinetNo", getCabinetNo())
+                .append("bagNo", getBagNo())
+                .append("documentStatu", getDocumentStatu())
+                .append("fileType", getFileType())
                 .toString();
     }
 }

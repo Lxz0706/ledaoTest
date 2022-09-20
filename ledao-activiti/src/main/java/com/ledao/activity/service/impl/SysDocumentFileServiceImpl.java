@@ -69,7 +69,7 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
         List<SysDocumentFile> documentFiles = sysDocumentFileMapper.selectSysDocumentFileList(sysDocumentFile);
         for (SysDocumentFile doc : documentFiles) {
             SysApplyIn apin = sysApplyInMapper.selectSysApplyInById(doc.getApplyId());
-            if(StringUtils.isNotNull(apin)){
+            if (StringUtils.isNotNull(apin)) {
                 doc.setCompanyName(apin.getCompanyName());
             }
 
@@ -93,36 +93,35 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
      * @return 结果
      */
     @Override
-    public int insertSysDocumentFile(SysDocumentFile sysDocumentFile, MultipartFile[] files) {
+    public int insertSysDocumentFile(SysDocumentFile sysDocumentFile) {
         sysDocumentFile.setCreateTime(DateUtils.getNowDate());
         sysDocumentFile.setCreateBy(ShiroUtils.getLoginName());
         sysDocumentFile.setCreator(ShiroUtils.getLoginName());
-        sysDocumentFileMapper.insertSysDocumentFile(sysDocumentFile);
-        SysUser currentUser = ShiroUtils.getSysUser();
-        String loginUser = currentUser.getLoginName();
-        for (MultipartFile file : files) {
-            try {
-                if (StringUtils.isEmpty(file.getResource().getFilename())) {
-                    continue;
-                }
-                // 上传文件路径
-                String filePath = Global.getUploadPath() + "/document";
-                // 上传并返回新文件名称
-                String fileName = FileUploadUtils.upload(filePath, file, true);
-                String url = filePath + fileName;
-                SysFileDetail fileDetail = new SysFileDetail();
-                fileDetail.setCreateBy(loginUser);
-                fileDetail.setFileName(file.getResource().getFilename());
-                fileDetail.setFileUrl(fileName.split("/document")[1]);
-                fileDetail.setCreateTime(new Date());
-                fileDetail.setDocumentFileId(sysDocumentFile.getDocumentId());
-                sysFileDetailMapper.insertSysFileDetail(fileDetail);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException();
-            }
-        }
-        return 0;
+        //SysUser currentUser = ShiroUtils.getSysUser();
+        //String loginUser = currentUser.getLoginName();
+        //for (MultipartFile file : files) {
+        //try {
+        //if (StringUtils.isEmpty(file.getResource().getFilename())) {
+        //    continue;
+        //}
+        // 上传文件路径
+        //String filePath = Global.getUploadPath() + "/document";
+        // 上传并返回新文件名称
+        // String fileName = FileUploadUtils.upload(filePath, file, true);
+        // String url = filePath + fileName;
+        //SysFileDetail fileDetail = new SysFileDetail();
+        //fileDetail.setCreateBy(loginUser);
+        // fileDetail.setFileName(file.getResource().getFilename());
+        // fileDetail.setFileUrl(fileName.split("/document")[1]);
+        //    fileDetail.setCreateTime(new Date());
+        //    fileDetail.setDocumentFileId(sysDocumentFile.getDocumentId());
+        //    sysFileDetailMapper.insertSysFileDetail(fileDetail);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //    throw new RuntimeException();
+        //}
+        // }
+        return sysDocumentFileMapper.insertSysDocumentFile(sysDocumentFile);
     }
 
     /**
@@ -206,5 +205,27 @@ public class SysDocumentFileServiceImpl implements ISysDocumentFileService {
     @Override
     public List<SysDocumentFile> selectSysDocumentFileTotalList(SysDocumentFile sysDocumentFile) {
         return sysDocumentFileMapper.selectSysDocumentFileTotalList(sysDocumentFile);
+    }
+
+    @Override
+    public List<SysDocumentFile> selectDocListByApplyInIds(String ids) {
+        List<SysDocumentFile> documentFiles = sysDocumentFileMapper.selectDocListByApplyInIds(Convert.toStrArray(ids));
+        for (SysDocumentFile doc : documentFiles) {
+            SysApplyIn apin = sysApplyInMapper.selectSysApplyInById(doc.getApplyId());
+            if (StringUtils.isNotNull(apin)) {
+                doc.setCompanyName(apin.getCompanyName());
+            }
+
+            List<String> fileNames = new ArrayList<>();
+            SysFileDetail detail = new SysFileDetail();
+            detail.setDocumentFileId(doc.getDocumentId());
+            List<SysFileDetail> details = fileDetailMapper.selectSysFileDetailList(detail);
+            for (SysFileDetail fd : details) {
+                fileNames.add(fd.getFileName());
+            }
+            doc.setFileNames(String.join(",", fileNames));
+        }
+        return documentFiles;
+
     }
 }

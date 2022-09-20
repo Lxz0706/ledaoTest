@@ -263,7 +263,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             format = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        System.out.print("时间：=====" + seconds);
         return sdf.format(new Date(Long.valueOf(seconds + "000")));
     }
 
@@ -552,9 +551,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return date2.getTime() - date1.getTime() > 0;
     }
 
-
     //获取周末和节假日
-    public static Set<String> JJR(int year, int month) {
+    public static Set<String> JJR(String year, String month) {
         //获取所有的周末
         Set<String> monthWekDay = getWeekendInMonth(year, month);
         //http://timor.tech/api/holiday api文档地址
@@ -580,7 +578,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     //获取节假日不含周末
-    public static Map getJjr(int year, int month) {
+    public static Map getJjr(String year, String month) {
         String url = "http://timor.tech/api/holiday/year/" + year + "-" + month;
         OkHttpClient client = new OkHttpClient();
         Response response;
@@ -608,34 +606,43 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return
      */
 
-    public static Set<String> getWeekendInMonth(int year, int month) {
+    public static Set<String> getWeekendInMonth(String year, String month) {
         Set<String> dateList = new HashSet<>();
         Calendar calendar = Calendar.getInstance();
-        // 不设置的话默认为当年
-        calendar.set(Calendar.YEAR, year);
-        // 设置月份
-        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.YEAR, Integer.valueOf(year));
+        calendar.set(Calendar.MONTH, Integer.valueOf(month) - 1);
         // 设置为当月第一天
-        calendar.set(Calendar.DAY_OF_MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
         // 当月最大天数
         int daySize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int i = 0; i < daySize - 1; i++) {
+            String days = "";
             //在第一天的基础上加1
             calendar.add(Calendar.DATE, 1);
             int week = calendar.get(Calendar.DAY_OF_WEEK);
             // 1代表周日，7代表周六 判断这是一个星期的第几天从而判断是否是周末
             if (week == Calendar.SATURDAY || week == Calendar.SUNDAY) {
-                dateList.add(parseDateToStr(YYYY_MM_DD, calendar.getTime()));
+                int ct = calendar.get(Calendar.DAY_OF_MONTH);
+                if (ct < 10) {
+                    days = "0" + ct;
+                } else {
+                    days = String.valueOf(ct);
+                }
+                // 得到当天是一个月的第几天
+                //list.add(year + "-" + month + "-" + days);
+                dateList.add(year + "-" + month + "-" + days);
             }
-
         }
-
         return dateList;
+    }
 
+    public static void main(String[] args) {
+        System.out.println(getWeekendInMonth("2022", "08"));
     }
 
     /**
      * 计算两个时间之间的每一天
+     *
      * @param begintTime
      * @param endTime
      * @return

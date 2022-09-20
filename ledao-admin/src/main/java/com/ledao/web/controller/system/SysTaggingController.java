@@ -74,7 +74,7 @@ public class SysTaggingController extends BaseController {
         List<SysTagging> list = sysTaggingService.selectSysTaggingList(sysTagging);
         for (SysTagging sysTagging1 : list) {
             if ("Y".equals(sysTagging1.getJudicial())) {
-                SysJudicial sysJudicial = sysJudicialService.selectSysJudicialById(sysTagging1.getJudicialId());
+                SysJudicial sysJudicial = sysJudicialService.selectSysJudicialById(sysTagging1.getItemId());
                 if (StringUtils.isNotNull(sysJudicial)) {
                     sysTagging1.setTitle(sysJudicial.getItemTitle());
                     sysTagging1.setName(sysJudicial.getItemOwner());

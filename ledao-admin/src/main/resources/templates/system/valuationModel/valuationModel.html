@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body class="gray-bg">
+<div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="select-list">
+                <input type="hidden" id="itemTypes" th:value="*{itemType}">
+                <input type="hidden" id="itemStatuses" th:value="*{itemStatus}">
+                <ul>
+                    <li>
+                        <label>类型：</label>
+                        <select id="itemType">
+                            <option value="">--请选择--</option>
+                            <option value="住宅用房">住宅用房</option>
+                            <option value="商业用房">商业用房</option>
+                            <option value="工业用房">工业用房</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label>状态</label>
+                        <select id="itemStatus" onchange="changeStatus()">
+                            <option value="">--请选择--</option>
+                            <option value="已结束">成交</option>
+                            <option value="已结束(流拍)">流拍</option>
+                            <option value="市场法">市场法</option>
+                        </select>
+                    </li>
+                    <li>
+                        标的物建筑面积（m²）：
+                        <input type="text" id="floorSpace" onkeyup="num(this)" th:value="*{floorSpace}"
+                               placeholder="请输入标的物建筑面积" required>
+                    </li>
+                    <li>
+                        系数1：
+                        <input type="text" id="num1" onkeyup="num(this)" placeholder="请输入系数1" required>
+                    </li>
+                    <li>
+                        系数2：
+                        <input type="text" id="num2" onkeyup="num(this)" placeholder="请输入系数2" required>
+                    </li>
+                    <li>
+                        成交价格（元）：
+                        <input type="text" id="itemCurrentPrice" onkeyup="num(this)" th:value="*{itemCurrentprice}"
+                               placeholder="请输入成交价格">
+                    </li>
+                    <li id="itemPrices" style="display: none">
+                        挂牌价（元）：
+                        <input type="text" id="itemPrice" onkeyup="num(this)" placeholder="请输入挂牌价">
+                    </li>
+                    <li>
+                        评估价/市场价（元）：
+                        <input type="text" id="itemMarketPrice" onkeyup="num(this)" th:value="*{itemMarketPrice}"
+                               placeholder="请输入评估价/市场价">
+                    </li>
+                    <li>
+                        参考物建筑面积（m²）：
+                        <input type="text" id="building" onkeyup="num(this)" placeholder="请输入参考物建筑面积">
+                    </li>
+                    <li>
+                        参考物有证建筑面积（m²）：
+                        <input type="text" id="building1" onkeyup="num(this)" placeholder="请输入参考物有证建筑面积">
+                    </li>
+                    <li>
+                        赋值单价（有证）（元）：
+                        <input type="text" id="price1" onkeyup="num(this)" placeholder="请输入赋值单价（有证）">
+                    </li>
+                    <li>
+                        参考物无证建筑面积（m²）：
+                        <input type="text" id="building2" onkeyup="num(this)" placeholder="请输入参考物无证建筑面积">
+                    </li>
+                    <li>
+                        赋值单价（无证）（元）：
+                        <input type="text" id="price2" onkeyup="num(this)" placeholder="请输入赋值单价（无证）">
+                    </li>
+                    <li>
+                        结果：
+                        <input type="text" id="valuation" placeholder="结果">
+                    </li>
+                    <li>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="reckon()"><i
+                                class="fa fa-search"></i>&nbsp;计算</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "system/valuationModel";
+    var circle;
+    var flag = false;
+
+    $(function () {
+        set_select_checked("itemType", $("#itemTypes").val());
+        set_select_checked("itemStatus", $("#itemStatuses").val());
+    })
+
+
+    function set_select_checked(selectId, checkValue) {
+        var select = document.getElementById(selectId);
+
+        for (var i = 0; i < select.options.length; i++) {
+            if (select.options[i].value == checkValue) {
+                select.options[i].selected = true;
+                break;
+            }
+        }
+    }
+
+
+    /**
+     * 限制输入框只能输入数字（小数点后3位）
+     * @param obj
+     */
+    function num(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+    }
+
+    function itemTypeChange() {
+        var itemType = $('#itemType').val();
+        console.log("======" + itemType);
+    }
+
+    function changeStatus() {
+        var itemStatus = $("#itemStatus").val();
+        var itemPrice = $("#itemPrice").val();
+        if ($.common.equals("流拍", itemStatus)) {
+
+        } else if ($.common.equals("市场", itemStatus)) {
+            $("#itemPrices").show();
+        }
+    }
+
+    function reckon() {
+        //类型
+        var itemType = $('#itemType').val();
+        //拍卖状态
+        var itemStatus = $("#itemStatus").val();
+        //计算公式
+        var reckon = $("#reckon").val();
+        //标的物建筑面积
+        var floorSpace = $("#floorSpace").val();
+        //系数1
+        var num1 = $("#num1").val();
+        //系数2
+        var num2 = $("#num2").val();
+        //系数3
+        var num3 = $("#num3").val();
+        //系数4
+        var num4 = $("#num4").val();
+        //成交价
+        var itemCurrentPrice = $("#itemCurrentPrice").val();
+        //参考物建筑面积
+        var building = $("#building").val();
+        //挂牌价
+        var itemPrice = $("#itemPrice").val();
+        //评估价/市场价
+        var itemMarketPrice = $("#itemMarketPrice").val();
+        //有证建筑面积
+        var building1 = $("#building1").val();
+        //有证建筑面积
+        var building2 = $("#building2").val();
+        //有证建筑面积
+        var price1 = $("#price1").val();
+        //有证建筑面积
+        var price2 = $("#price2").val();
+
+        var value = "";
+        //结果
+        var valuation;
+
+
+        var price = getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemPrice, itemMarketPrice, building1, price1, building2, price2);
+        console.log(price);
+
+        if ($.common.isEmpty(num1)) {
+            num1 = 0.5;
+        }
+
+        if ($.common.isEmpty(num2)) {
+            num2 = 0.8;
+        }
+
+        if ($.common.equals("住宅用房", itemType)) {
+            valuation = (floorSpace * num1 * num2 * price)
+        } else if ($.common.equals("商业用房", itemType)) {
+            valuation = (floorSpace * num1 * num2 * price)
+        } else if ($.common.equals("工业用房", itemType)) {
+            valuation = ((floorSpace * num1 * price) + ((building1 * price1) + (building2 * price2)))
+        }
+        console.log("valuation:-----" + valuation);
+        //$("#valuation").val(valuation.toFixed(3));
+    }
+
+    function getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemPrice, itemMarketPrice, building1, price1, building2, price2) {
+        var price;
+        var prices;
+        if ($.common.equals("工业用房", itemType)) {
+            prices = (building1 * price1) + (building2 * price2);
+        }
+        if ($.common.isEmpty(prices)) {
+            prices = 0;
+        }
+        if ($.common.isEmpty(num1)) {
+            num1 = 0.8;
+        }
+        if ($.common.equals("已结束", itemStatus)) {
+            if ($.common.isNotEmpty(itemMarketPrice)) {
+                if (parseFloat(itemCurrentPrice) > parseFloat(itemMarketPrice)) {
+                    price = (((itemCurrentPrice * num1) - prices) / building);
+                } else {
+                    price = ((itemCurrentPrice - prices) / building);
+                }
+            } else {
+                price = ((itemCurrentPrice - prices) / building);
+            }
+
+        } else if ($.common.equals("已结束(流拍)", itemStatus)) {
+            if (parseFloat(itemCurrentPrice) >= parseFloat(itemMarketPrice)) {
+                price = (((itemCurrentPrice * 0.8) - prices) / building);
+            } else {
+                price = (((itemMarketPrice * 0.56) - prices) / building);
+            }
+        } else if ($.common.equals("市场法", itemStatus)) {
+            price = (((itemPrice * num1) - prices) / building);
+        }
+        return price;
+    }
+
+</script>
+</body>
+</html>

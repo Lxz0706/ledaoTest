@@ -252,4 +252,39 @@ public class SysConfigServiceImpl implements ISysConfigService {
         return accessToken;
     }
 
+    /***
+     * 获取微信订阅号AccessToken
+     * @return accessToken
+     */
+    @Override
+    public String getSubscribeAccessToken() {
+        String accessToken = "";
+        try {
+            SysConfig config = new SysConfig();
+            config.setConfigKey("weSubscribeAccessToken");
+            List<SysConfig> confs = configMapper.selectConfigList(config);
+            boolean needSave = false;
+            if (confs != null && confs.size() > 0) {
+                if (((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime()) / 1000 / 60 < 90) && StringUtils.isNotEmpty(confs.get(0).getConfigValue())) {
+                    accessToken = confs.get(0).getConfigValue();
+                } else {
+                    needSave = true;
+                    for (SysConfig conf : confs) {
+                        configMapper.deleteConfigByIds(new String[]{conf.getConfigId().toString()});
+                    }
+                }
+            } else {
+                needSave = true;
+            }
+            if (needSave) {
+                accessToken = WxQrCode.getAccessToken(WeChatConstants.WXSUBSCRIBEAPPID, WeChatConstants.WXSUBSCRIBEAPPSECRET);
+                config.setConfigValue(accessToken);
+                configMapper.insertConfig(config);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accessToken;
+    }
+
 }

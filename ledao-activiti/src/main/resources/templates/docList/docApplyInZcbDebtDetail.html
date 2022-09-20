@@ -35,16 +35,18 @@
                         </li>-->
                         <li class="companyNameShow">
                             <label>公司名称：</label>
-<!--                            <select id="companyName" name="companyName"-->
-<!--                                    th:with="type=${@dict.getType('sys_company_name')}"-->
-<!--                                    data-none-selected-text="请选择">-->
-<!--                                <option value="">&#45;&#45;请选择数据&#45;&#45;</option>-->
-<!--                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
-<!--                                        th:value="${dict.dictValue}"></option>-->
-<!--                            </select>-->
-                            <select id="companyName" name="companyName" class="form-control select2-multiple" th:with="type=${@dict.getType('sys_company_name')}" data-none-selected-text="请选择">
+                            <!--                            <select id="companyName" name="companyName"-->
+                            <!--                                    th:with="type=${@dict.getType('sys_company_name')}"-->
+                            <!--                                    data-none-selected-text="请选择">-->
+                            <!--                                <option value="">&#45;&#45;请选择数据&#45;&#45;</option>-->
+                            <!--                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
+                            <!--                                        th:value="${dict.dictValue}"></option>-->
+                            <!--                            </select>-->
+                            <select id="companyName" name="companyName" class="form-control select2-multiple"
+                                    th:with="type=${@dict.getType('sys_company_name')}" data-none-selected-text="请选择">
                                 <option value="">--请选择数据--</option>
-                                <option th:each="dict : ${type}" th:value="${dict.dictValue}" th:text="${dict.dictLabel}"></option>
+                                <option th:each="dict : ${type}" th:value="${dict.dictValue}"
+                                        th:text="${dict.dictLabel}"></option>
                             </select>
                         </li>
                         <li class="select-time">
@@ -56,17 +58,43 @@
                                    name="params[endApplyTime]"/>
                         </li>
                         <li id="fileName">
-                            <label>文件名称：</label>
-                            <input type="text" name="fileName"/>
+                            文件名称：
+                            <input type="text" name="fileName" placeholder="请输入文件名称"/>
                         </li>
                         <li>
                             <label>实际提交人：</label>
-                            <input type="text" name="applyUserName"/>
+                            <input type="text" name="applyUserName" placeholder="请输入实际提交人"/>
+                        </li>
+                        <li>
+                            <label>档案袋编号：</label>
+                            <input type="text" name="bagNo" placeholder="请输入档案袋编号">
+                        </li>
+                        <li>
+                            <label>附件类型：</label>
+                            <select name="fileType" class="form-control select2-multiple"
+                                    th:with="type=${@dict.getType('document_file_type')}" data-none-selected-text="请选择">
+                                <option value="">--请选择数据--</option>
+                                <option th:each="dict : ${type}" th:value="${dict.dictValue}"
+                                        th:text="${dict.dictLabel}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>在库状态：</label>
+                            <select name="documentStatu" class="form-control select2-multiple"
+                                    th:with="type=${@dict.getType('document_in_status')}" data-none-selected-text="请选择">
+                                <option value="">--请选择数据--</option>
+                                <option th:each="dict : ${type}" th:value="${dict.dictValue}"
+                                        th:text="${dict.dictLabel}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>柜号：</label>
+                            <input type="text" name="cabinetNo" placeholder="请输入柜号">
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" id="reset-all"  onclick="$.form.reset()"><i
+                            <a class="btn btn-warning btn-rounded btn-sm" id="reset-all" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
@@ -113,7 +141,7 @@
     var showDebt = false;
     var proNameLableShow = "";
 
-    $("#reset-all").click(function(){
+    $("#reset-all").click(function () {
         $("#select2-companyName-container").text("--请选择数据--")
     });
 

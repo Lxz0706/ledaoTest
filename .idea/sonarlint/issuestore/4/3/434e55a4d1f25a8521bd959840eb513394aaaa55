@@ -1,54 +1,89 @@
 
-a	java:S112”"FDefine and throw a dedicated exception instead of using a generic one.(£½ø—úÿÿÿÿ
-[	java:S112«"FDefine and throw a dedicated exception instead of using a generic one.(Şœ¢
-a	java:S112ñ"FDefine and throw a dedicated exception instead of using a generic one.(²˜€úùÿÿÿÿ
-i
-java:S3776Œ"RRefactor this method to reduce its Cognitive Complexity from 69 to the 15 allowed.(‘Ã°è
-T
-java:S1117"8Rename "list" which hides the field declared at line 96.(„¢Áòÿÿÿÿÿ
-U
-java:S1117"9Rename "sheet" which hides the field declared at line 86.(ãò»şÿÿÿÿ
-C
-java:S3011¶",This accessibility update should be removed.(˜ÂÓ˜
-<
-java:S2185–"%Remove this silly call to "Math.ceil"(ÍÇğõ
-F
-java:S2093”"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
-E
-java:S1905Ë")Remove this unnecessary cast to "Object".(Æõá‡ÿÿÿÿÿ
-C
-java:S3011Ñ",This accessibility update should be removed.(˜ÂÓ˜
-Q
-java:S1117ß":Rename "styles" which hides the field declared at line 91.(åšÉô
-,
-java:S3457Ó"Not enough arguments.(­³ÙŠ
-n
-java:S2737"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û
-n
-java:S2737µ"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û
-Q
-java:S1117ó":Rename "clazz" which hides the field declared at line 106.(şÑÜ
-i
-java:S3776¼"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(åîø¸
-v
-java:S3252Æ"XUse static access with "org.apache.poi.ss.usermodel.DateUtil" for "isCellDateFormatted".(‚ğƒ8çöÅı0
+a	java:S112˜"FDefine and throw a dedicated exception instead of using a generic one.(£½ø—úÿÿÿÿ
+[	java:S112¯"FDefine and throw a dedicated exception instead of using a generic one.(Şœ¢
+a	java:S112õ"FDefine and throw a dedicated exception instead of using a generic one.(²˜€úùÿÿÿÿ
+\	java:S112è"FDefine and throw a dedicated exception instead of using a generic one.(á¦”é
 o
-java:S2293r"YReplace the type specification in this constructor call with the diamond operator ("<>").(¦ìØï
+java:S2293v"YReplace the type specification in this constructor call with the diamond operator ("<>").(¦ìØï
 u
-java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(„¢Áòÿÿÿÿÿ
+java:S2293“"YReplace the type specification in this constructor call with the diamond operator ("<>").(„¢Áòÿÿÿÿÿ
 u
-java:S2293¡"YReplace the type specification in this constructor call with the diamond operator ("<>").(î÷éøÿÿÿÿ
+java:S2293¥"YReplace the type specification in this constructor call with the diamond operator ("<>").(î÷éøÿÿÿÿ
 u
-java:S2293°"YReplace the type specification in this constructor call with the diamond operator ("<>").(®Ï§ëûÿÿÿÿ
+java:S2293´"YReplace the type specification in this constructor call with the diamond operator ("<>").(®Ï§ëûÿÿÿÿ
 p
-java:S2293ß"YReplace the type specification in this constructor call with the diamond operator ("<>").(åšÉô
+java:S2293ã"YReplace the type specification in this constructor call with the diamond operator ("<>").(åšÉô
 p
-java:S2293ÿ"YReplace the type specification in this constructor call with the diamond operator ("<>").(şŒŸ¦
+java:S2293ƒ"YReplace the type specification in this constructor call with the diamond operator ("<>").(şŒŸ¦
 u
-java:S2293€"YReplace the type specification in this constructor call with the diamond operator ("<>").(¹‹ìÕúÿÿÿÿ
+java:S2293„"YReplace the type specification in this constructor call with the diamond operator ("<>").(¹‹ìÕúÿÿÿÿ
 f
-java:S1104j"QMake clazz a static final constant or non-public and provide accessors if needed.(”¹„=
+java:S1104n"QMake clazz a static final constant or non-public and provide accessors if needed.(”¹„=
 Y
-java:S2184–"BCast one of the operands of this division operation to a "double".(ÍÇğõ
+java:S2184š"BCast one of the operands of this division operation to a "double".(ÍÇğõ
 W
-java:S1226É"@Introduce a new variable instead of reusing the parameter "row".(µõ×è
+java:S1226Í"@Introduce a new variable instead of reusing the parameter "row".(µõ×è
+a
+java:S3252†"JUse static access with "org.apache.commons.lang3.StringUtils" for "EMPTY".(¤™‚Á
+i
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 69 to the 15 allowed.(‘Ã°è
+U
+java:S1117“"9Rename "list" which hides the field declared at line 100.(„¢Áòÿÿÿÿÿ
+U
+java:S1117”"9Rename "sheet" which hides the field declared at line 90.(ãò»şÿÿÿÿ
+C
+java:S3011º",This accessibility update should be removed.(˜ÂÓ˜
+i
+java:S3252Î"MUse static access with "org.apache.commons.lang3.StringUtils" for "endsWith".(óêˆÙÿÿÿÿÿ
+k
+java:S3252Ï"TUse static access with "org.apache.commons.lang3.StringUtils" for "substringBefore".(Ùëö
+<
+java:S2185š"%Remove this silly call to "Math.ceil"(ÍÇğõ
+F
+java:S2093˜"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
+E
+java:S1905Ï")Remove this unnecessary cast to "Object".(Æõá‡ÿÿÿÿÿ
+C
+java:S3011Õ",This accessibility update should be removed.(˜ÂÓ˜
+Q
+java:S1117ã":Rename "styles" which hides the field declared at line 95.(åšÉô
+O
+java:S1874œ"3Remove this use of "setCellType"; it is deprecated.(‘ª‡óúÿÿÿÿ
+O
+java:S1874Ÿ"3Remove this use of "setCellType"; it is deprecated.(‘ª‡óúÿÿÿÿ
+,
+java:S3457×"Not enough arguments.(­³ÙŠ
+n
+java:S2737¢"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û
+n
+java:S2737¹"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û
+Q
+java:S1117÷":Rename "clazz" which hides the field declared at line 110.(şÑÜ
+i
+java:S3776À"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(åîø¸
+S
+java:S1874È"7Remove this use of "getCellTypeEnum"; it is deprecated.(•Ú¦ûÿÿÿÿ
+S
+java:S1874È"7Remove this use of "getCellTypeEnum"; it is deprecated.(•Ú¦ûÿÿÿÿ
+o
+java:S3252Ê"XUse static access with "org.apache.poi.ss.usermodel.DateUtil" for "isCellDateFormatted".(‚ğƒ
+K
+java:S1874Ê"4Remove this use of "HSSFDateUtil"; it is deprecated.(‚ğƒ
+N
+java:S1874Ó"7Remove this use of "getCellTypeEnum"; it is deprecated.(€èá†
+S
+java:S1874Õ"7Remove this use of "getCellTypeEnum"; it is deprecated.(‚×³¦ÿÿÿÿÿ
+S
+java:S1874×"7Remove this use of "getCellTypeEnum"; it is deprecated.(¶‚øÿÿÿÿ
+ƒ
+java:S1130è"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(á¦”é
+c
+java:S3252é"GUse static access with "com.alibaba.excel.EasyExcelFactory" for "read".(‘½êõúÿÿÿÿ
+d
+java:S3252õ"HUse static access with "com.alibaba.excel.EasyExcelFactory" for "write".(Ñïƒıÿÿÿÿ
+P
+java:S1128":Remove this unused import 'com.alibaba.excel.ExcelWriter'.(²âÖ
+
+java:S1128"fRemove this unused import 'com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy'.(¬­‘şÿÿÿÿ
+b
+java:S1128"GRemove this unused import 'com.ledao.common.utils.bean.SheetExcelData'.(¨ô²Óúÿÿÿÿ

@@ -1,16 +1,23 @@
 package com.ledao.common.utils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.utils.http.HttpUtils;
+import com.ledao.common.utils.qrCode.HttpUtil;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
@@ -477,7 +484,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      */
     public static String getPreMonthByCount(int com) {
         Calendar cal = Calendar.getInstance();
-        cal.add(cal.MONTH, com);
+        cal.add(Calendar.MONTH, com);
         SimpleDateFormat dft = new SimpleDateFormat("yyyyMM");
         String preMonth = dft.format(cal.getTime());
         return preMonth;
@@ -553,10 +560,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     //获取周末和节假日
     public static Set<String> JJR(String year, String month) {
-        //获取所有的周末
-        Set<String> monthWekDay = getWeekendInMonth(year, month);
-        //http://timor.tech/api/holiday api文档地址
-        Map jjr = getJjr(year, month);
+        Set<String> monthWekDay = new HashSet<>();
+        Map jjr = new HashMap<>();
+        if (StringUtils.isNotEmpty(month)) {
+            monthWekDay = getWeekendInMonth(year, month);
+            jjr = getJjr(year, month);
+        } else {
+            monthWekDay = getWeekdaysInYear(year);
+            jjr = getJjr(year, "");
+        }
         Integer code = (Integer) jjr.get("code");
         if (code != 0) {
             return monthWekDay;
@@ -578,24 +590,16 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     //获取节假日不含周末
-    public static Map getJjr(String year, String month) {
-        String url = "http://timor.tech/api/holiday/year/" + year + "-" + month;
-        OkHttpClient client = new OkHttpClient();
-        Response response;
-        //解密数据
-        String rsa = null;
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .build();
-        try {
-            response = client.newCall(request).execute();
-            rsa = response.body().string();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private static Map getJjr(String year, String month) {
+        String url = "";
+        if (StringUtils.isNotEmpty(month)) {
+            url = "https://timor.tech/api/holiday/year/" + year + "-" + month;
+        } else {
+            url = "https://timor.tech/api/holiday/year/" + year;
         }
-        return JSONObject.parseObject(rsa, Map.class);
+        //解密数据
+        String rspStr = HttpUtils.sendGet(url, "");
+        return JSONObject.parseObject(rspStr, Map.class);
     }
 
     /**
@@ -629,7 +633,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
                     days = String.valueOf(ct);
                 }
                 // 得到当天是一个月的第几天
-                //list.add(year + "-" + month + "-" + days);
                 dateList.add(year + "-" + month + "-" + days);
             }
         }
@@ -637,7 +640,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(getWeekendInMonth("2022", "08"));
+        System.out.println("=========" + JJR("2022", "10"));
     }
 
     /**
@@ -731,5 +734,30 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         cal.add(Calendar.MONTH, mon);
         cal.add(Calendar.DAY_OF_MONTH, day);
         return cal.getTime();
+    }
+
+    /**
+     * 获取全年周末
+     *
+     * @param year
+     * @return
+     */
+    public static Set<String> getWeekdaysInYear(String year) {
+        Set<String> dateList = new HashSet<String>();
+        SimpleDateFormat simdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = new GregorianCalendar(Integer.valueOf(year), 0, 1);
+        int i = 1;
+        while (calendar.get(Calendar.YEAR) < Integer.valueOf(year) + 1) {
+            calendar.set(Calendar.WEEK_OF_YEAR, i++);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            if (calendar.get(Calendar.YEAR) == Integer.valueOf(year)) {
+                dateList.add(simdf.format(calendar.getTime()));
+            }
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+            if (calendar.get(Calendar.YEAR) == Integer.valueOf(year)) {
+                dateList.add(simdf.format(calendar.getTime()));
+            }
+        }
+        return dateList;
     }
 }

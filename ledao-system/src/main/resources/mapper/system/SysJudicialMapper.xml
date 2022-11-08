@@ -65,34 +65,35 @@
 
     <select id="selectSysJudicialList" parameterType="SysJudicial" resultMap="SysJudicialResult">
         <include refid="selectSysJudicialVo"/>
-        <where>
-            <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
-            <if test="itemTitle != null  and itemTitle != ''">and item_title || item_owner like concat('%',
-                #{itemTitle},'%')
-            </if>
-            <if test="itemOwner != null  and itemOwner != ''">and item_owner like concat('%', #{itemOwner},'%')</if>
-            <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
-            <if test="itemStatus != null  and itemStatus != ''">and item_status = #{itemStatus}</if>
-            <if test="itemLink != null  and itemLink != ''">and item_link = #{itemLink}</if>
-            <if test="itemInitialprice != null ">and item_initialprice = #{itemInitialprice}</if>
-            <if test="itemCurrentprice != null ">and item_currentprice = #{itemCurrentprice}</if>
-            <if test="itemConsultprice != null ">and item_consultprice = #{itemConsultprice}</if>
-            <if test="itemMarketprice != null ">and item_marketprice = #{itemMarketprice}</if>
-            <if test="itemStartTime != null ">and item_start_time = #{itemStartTime}</if>
-            <if test="itemEndTime != null ">and item_end_time = #{itemEndTime}</if>
-            <if test="itemProvince != null  and itemProvince != ''">and item_province = #{itemProvince}</if>
-            <if test="itemCity != null  and itemCity != ''">and item_city = #{itemCity}</if>
-            <if test="itemCounty != null  and itemCounty != ''">and item_county = #{itemCounty}</if>
-            <if test="itemSource != null  and itemSource != ''">and item_source = #{itemSource}</if>
-            <if test="coordinate != null  and coordinate != ''">and coordinate = #{coordinate}</if>
-            <if test="tags != null  and tags != ''">and tags = #{tags}</if>
-            <if test="shopname != null  and shopname != ''">and shopName like concat('%', #{shopname}, '%')</if>
-            <if test="applyer != null ">and applyer = #{applyer}</if>
-            <if test="notify != null ">and notify = #{notify}</if>
-            <if test="looker != null ">and looker = #{looker}</if>
-            <if test="address !=null">and address = #{address}</if>
-            <if test="timestamp !=null">and timestamp= #{timestamp}</if>
-        </where>
+        where item_end_time is not null
+        <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
+        <if test="itemTitle != null  and itemTitle != ''">and item_title || item_owner like concat('%',
+            #{itemTitle},'%')
+        </if>
+        <if test="itemOwner != null  and itemOwner != ''">and item_owner like concat('%', #{itemOwner},'%')</if>
+        <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
+        <if test="itemStatus != null  and itemStatus != ''">and item_status = #{itemStatus}</if>
+        <if test="itemLink != null  and itemLink != ''">and item_link = #{itemLink}</if>
+        <if test="itemInitialprice != null ">and item_initialprice = #{itemInitialprice}</if>
+        <if test="itemCurrentprice != null ">and item_currentprice = #{itemCurrentprice}</if>
+        <if test="itemConsultprice != null ">and item_consultprice = #{itemConsultprice}</if>
+        <if test="itemMarketprice != null ">and item_marketprice = #{itemMarketprice}</if>
+        <if test="itemStartTime != null ">and item_start_time = #{itemStartTime}</if>
+        <if test="itemEndTime != null ">and item_end_time = #{itemEndTime}</if>
+        <if test="itemProvince != null  and itemProvince != ''">and item_province = #{itemProvince}</if>
+        <if test="itemCity != null  and itemCity != ''">and item_city = #{itemCity}</if>
+        <if test="itemCounty != null  and itemCounty != ''">and item_county = #{itemCounty}</if>
+        <if test="itemSource != null  and itemSource != ''">and item_source = #{itemSource}</if>
+        <if test="coordinate != null  and coordinate != ''">and coordinate = #{coordinate}</if>
+        <if test="tags != null  and tags != ''">and tags = #{tags}</if>
+        <if test="shopname != null  and shopname != ''">and shopName like concat('%', #{shopname}, '%')</if>
+        <if test="applyer != null ">and applyer = #{applyer}</if>
+        <if test="notify != null ">and notify = #{notify}</if>
+        <if test="looker != null ">and looker = #{looker}</if>
+        <if test="address !=null">and address = #{address}</if>
+        <if test="timestamp !=null">and timestamp= #{timestamp}</if>
+
+        order by item_end_time desc
     </select>
 
     <select id="selectSysJudicialById" parameterType="string" resultMap="SysJudicialResult">

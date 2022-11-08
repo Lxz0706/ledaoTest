@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.dao.SysDocumentFile;
 import com.ledao.activity.mapper.SysApplyInMapper;
+import com.ledao.activity.mapper.SysDocumentFileMapper;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.DateUtils;
+import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService {
 
     @Autowired
     private SysApplyInMapper sysApplyInMapper;
+
+    @Autowired
+    private SysDocumentFileMapper sysDocumentFileMapper;
 
     /**
      * 查询档案出库详情记录
@@ -208,6 +214,12 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService {
             SysApplyOutDetail.setCreateBy(loginName);
             SysApplyOutDetail.setCreateBy(loginName);
             SysApplyOutDetail.setCreateTime(new Date());
+            SysDocumentFile sysDocumentFile = sysDocumentFileMapper.selectSysDocumentFileById(Long.parseLong(idsArr[i]));
+            if (StringUtils.isNull(sysDocumentFile.getCounts())) {
+                SysApplyOutDetail.setCounts(Long.valueOf(0));
+            } else {
+                SysApplyOutDetail.setCounts(sysDocumentFile.getCounts());
+            }
             sysApplyOutDetailMapper.insertSysApplyOutDetail(SysApplyOutDetail);
         }
         updateSysApplyIn(applyId);

@@ -211,6 +211,11 @@ public class SysJudicial extends BaseEntity {
      */
     private Long floorSpace;
 
+    /**
+     * 圆点坐标
+     */
+    public String latLon;
+
     public Long getId() {
         return id;
     }
@@ -521,6 +526,14 @@ public class SysJudicial extends BaseEntity {
 
     public void setFloorSpace(Long floorSpace) {
         this.floorSpace = floorSpace;
+    }
+
+    public String getLatLon() {
+        return latLon;
+    }
+
+    public void setLatLon(String latLon) {
+        this.latLon = latLon;
     }
 
     @Override

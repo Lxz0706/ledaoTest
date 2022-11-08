@@ -1,8 +1,0 @@
-
-a	java:S112º"FDefine and throw a dedicated exception instead of using a generic one.(¯åÕøÿÿÿÿ
-P	java:S125P"<This block of commented-out lines of code should be removed.(—¹‘F
-^
-java:S1128"CRemove this unused import 'net.sf.jsqlparser.expression.LongValue'.(‡öïûÿÿÿÿ
-g	java:S117Í"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¤Óòì
-U
-java:S1155È">Use isEmpty() to check whether the collection is empty or not.(¯¨€

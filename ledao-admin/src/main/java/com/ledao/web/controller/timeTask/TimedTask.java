@@ -116,6 +116,11 @@ public class TimedTask {
     @Autowired
     private ISysSubscribeService sysSubscribeService;
 
+    @Autowired
+    private ISysPcczService sysPcczService;
+
+    @Autowired
+    private ISysHolidayService sysHolidayService;
 
     public void timeTask() throws ParseException {
         //应收应付未收服务费消息提醒
@@ -570,7 +575,12 @@ public class TimedTask {
                         }
                     }
                     SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
-                    parmStr.put("word1", StringUtils.isNotEmpty(manage.getProjectManagementName()) ? manage.getProjectManagementName() : "");
+                    if (StringUtils.isNotNull(manage)) {
+                        parmStr.put("word1", StringUtils.isNotEmpty(manage.getProjectManagementName()) ? manage.getProjectManagementName() : "");
+                    } else {
+                        parmStr.put("word1", "");
+                    }
+
                     parmStr.put("word2", "-");
                     parmStr.put("word3", "截止日期" + DateUtils.formatDateByPattern(mon.getTime(), "yyyy-MM-dd") + "," + mon.getFundType() + "/" + mon.getAmountMoney());
                     sendJournalTask(users, parmStr);
@@ -724,59 +734,15 @@ public class TimedTask {
             e.printStackTrace();
         }
 
-        //判断是否是周五
-        //boolean isWeekEndDay = false;
-        //boolean isWeekRest = false;
-        //String weekStr = DateUtils.getWeekOfDate(new Date());
-        //if ("星期五".equals(weekStr)) {
-        //    isWeekEndDay = true;
-        //}
-        //if ("星期六".equals(weekStr) || "星期日".equals(weekStr)) {
-        //    isWeekRest = true;
-        //}
-        //
-        //if (!isWeekRest) {
-        //    String date = DateUtils.formatDateByPattern(new Date(), "yyyyMMdd");
-        //    List<SysUser> users = sysUserService.selectAllUserDepRole();
-        //    Map<String, String> parmStr = new HashMap<>();
-        //    parmStr.put("first", "您有一个日志任务提醒");
-        //    parmStr.put("word1", "日志未填写提醒");
-        //    parmStr.put("word2", "请及时填写日志");
-        //    List<String> sendUsers = new ArrayList<>();
-        //    List<SysUser> us = new ArrayList<>();
-        //    for (SysUser u : users) {
-        //        if (StringUtils.isNotNull(u.getComOpenId())) {
-        //            SysJournal sj = new SysJournal();
-        //            sj.setCreateBy(u.getLoginName());
-        //            sj.getParams().put("beginTime", date);
-        //            List<SysJournal> jours = sysJournalService.selectSysJournalList(sj);
-        //            if (jours == null || jours.size() == 0) {
-        //                if (isWeekEndDay && "1".equals(u.getRemainFlag())) {
-        //                    if (!sendUsers.contains(u.getLoginName())) {
-        //                        //每周五提醒
-        //                        us.add(u);
-        //                        sendUsers.add(u.getLoginName());
-        //                    }
-        //
-        //                } else if ("0".equals(u.getRemainFlag())) {
-        //                    //每天提醒
-        //                    if (!sendUsers.contains(u.getLoginName())) {
-        //                        //每周五提醒
-        //                        us.add(u);
-        //                        sendUsers.add(u.getLoginName());
-        //                    }
-        //                }
-        //                /*List<SysUser> us = new ArrayList<>();
-        //                us.add(u);
-        //                sendDailyUsalTask(us,parmStr);*/
-        //            }
-        //        }
-        //    }
-        //    sendDailyRemainUsalTask(us, parmStr);
-        //}
         boolean holiday = false;
         //获取节假日和周末
-        Set<String> set = DateUtils.JJR(DateUtils.parseDateToStr("yyyy", new Date()), DateUtils.parseDateToStr("MM", new Date()));
+        //Set<String> set = DateUtils.JJR(DateUtils.parseDateToStr("yyyy", new Date()), DateUtils.parseDateToStr("MM", new Date()));
+        SysHoliday sysHoliday = new SysHoliday();
+        List<SysHoliday> sysHolidayList = sysHolidayService.selectSysHolidayList(sysHoliday);
+        Set<String> set = new HashSet<>();
+        for (SysHoliday sysHoliday1 : sysHolidayList) {
+            set.add(sysHoliday1.getHoliday());
+        }
         Iterator it = set.iterator();
         while (it.hasNext()) {
             String str = (String) it.next();
@@ -870,7 +836,7 @@ public class TimedTask {
                 parm.put("word3", StringUtils.isNotEmpty(parmStr.get("word3")) ? parmStr.get("word3") : "-");
 //                        任务状态
                 parm.put("word4", StringUtils.isNotEmpty(parmStr.get("word4")) ? parmStr.get("word4") : "-");
-                parm.put("word5", "-");
+                parm.put("word5", StringUtils.isNotEmpty(parmStr.get("word5")) ? parmStr.get("word5") : "-");
 
 //                        任务接收人
                 parm.put("toUser", u.getComOpenId());
@@ -880,7 +846,6 @@ public class TimedTask {
                 // 创建名称为投后队列
                 Queue queue = new ActiveMQQueue("ThQueueCommon");
                 String dataStr = JSONObject.toJSONString(parm);
-                System.out.println("--------------------推送日报填写提醒给：" + u.getLoginName() + "----------------------");
                 // 向队列发送消息
                 jmsMessagingTemplate.convertAndSend(queue, dataStr);
                 stadingTime();
@@ -1098,13 +1063,6 @@ public class TimedTask {
         Map<String, String> parmStr = new HashMap<>();
         List<SysUser> usersAll = new ArrayList<>();
         parmStr.put("first", "您有一个网拍线索消息提醒");
-        /*users.add(sysUserService.selectUserByLoginName("wangziyuan"));
-        users.add(sysUserService.selectUserByLoginName("zhangyi"));
-        users.add(sysUserService.selectUserByLoginName("jianghui"));*/
-//        SysUser u = sysUserService.selectUserByLoginName(mon.getCreateBy());
-//        users.add(u);
-//        users.add(sysUserService.selectUserById(u.getDirectorId()));
-//        SysProjectmanagent manage = sysProjectmanagentService.selectSysProjectmanagentById(mon.getProjectManagementId());
         parmStr.put("word1", "此次变更数量为：" + list.size());
         parmStr.put("word2", "-");
         parmStr.put("word3", "-");
@@ -1288,14 +1246,14 @@ public class TimedTask {
     public void getAllUserFormSubscribe() {
         try {
             //订阅号accessToken
-            //getSubscribeAccessTokenComOpenId(configService.getSubscribeAccessToken(), "0");
+            getSubscribeAccessTokenComOpenId(configService.getSubscribeAccessToken(), "0");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
             //服务号accessToken
-            getSubscribeAccessTokenComOpenId(configService.getWechatComAccessToken(), "1");
+            //getSubscribeAccessTokenComOpenId(configService.getWechatComAccessToken(), "1");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1310,4 +1268,80 @@ public class TimedTask {
         }
     }
 
+    /**
+     * 推送破产消息
+     */
+    public void pccz() {
+        SysPccz sysPccz = new SysPccz();
+        sysPccz.setStatus("0");
+        List<SysPccz> list = sysPcczService.selectSysPcczList(sysPccz);
+
+        Map<String, String> parmStr = new HashMap<>();
+        List<SysUser> usersAll = new ArrayList<>();
+//        List<SysUser> users = getUsers("thbManager");
+//        usersAll.addAll(users);
+        List<SysUser> users2 = getUsers("thbManager2");
+        usersAll.addAll(users2);
+        List<SysUser> users3 = getUsers("thbzz");
+        usersAll.addAll(users3);
+        List<SysUser> users4 = getUsers("thbCommon");
+        usersAll.addAll(users4);
+        if (list.size() > 0 || list != null) {
+            for (SysPccz sysPccz1 : list) {
+                parmStr.put("first", "关于" + sysPccz1.getKeyword() + "的破产消息");
+                parmStr.put("word1", "关于" + sysPccz1.getKeyword() + "的破产消息");
+                parmStr.put("word2", sysPccz1.getTitle());
+                parmStr.put("word3", sysPccz1.getGkr());
+                parmStr.put("word4", DateUtils.dateTime(sysPccz1.getPublishDate()));
+                parmStr.put("word5", sysPccz1.getUrl());
+                parmStr.put("word6", sysPccz1.getItemType());
+                sendBankruptcyPushMessageCommon(usersAll, parmStr);
+                sysPccz1.setStatus("1");
+                sysPcczService.updateSysPccz(sysPccz1);
+            }
+        }
+    }
+
+    private void sendBankruptcyPushMessageCommon(List<SysUser> us, Map<String, String> parmStr) {
+        for (SysUser u : us) {
+            if (StringUtils.isNotEmpty(u.getComOpenId()) && !"n".equals(u.getIsDailyRemind())) {
+                //发送消息到投后部部门经理
+                JSONObject parm = new JSONObject();
+                //发布人
+                parm.put("first", StringUtils.isNotEmpty(parmStr.get("first")) ? parmStr.get("first") : "-");
+                parm.put("word1", StringUtils.isNotEmpty(parmStr.get("word1")) ? parmStr.get("word1") : "-");
+                parm.put("word2", StringUtils.isNotEmpty(parmStr.get("word2")) ? parmStr.get("word2") : "-");
+                parm.put("word3", StringUtils.isNotEmpty(parmStr.get("word3")) ? parmStr.get("word3") : "-");
+                parm.put("word4", StringUtils.isNotEmpty(parmStr.get("word4")) ? parmStr.get("word4") : "-");
+                parm.put("word5", StringUtils.isNotEmpty(parmStr.get("word5")) ? parmStr.get("word5") : "-");
+                parm.put("word6", StringUtils.isNotEmpty(parmStr.get("word6")) ? parmStr.get("word6") : "-");
+
+                //任务接收人
+                parm.put("toUser", u.getComOpenId());
+                String accessToken = configService.getWechatComAccessToken();
+                parm.put("accessToken", accessToken);
+                // 创建名称为投后队列
+                Queue queue = new ActiveMQQueue("bankruptcyPushMessageCommon");
+                String dataStr = JSONObject.toJSONString(parm);
+                // 向队列发送消息
+                jmsMessagingTemplate.convertAndSend(queue, dataStr);
+                stadingTime();
+            }
+        }
+    }
+
+    /**
+     * 获取节假日
+     */
+    public void getHoliday() {
+        Set<String> set = DateUtils.JJR(DateUtils.parseDateToStr("yyyy", new Date()), "");
+        Iterator it = set.iterator();
+        sysHolidayService.deleteSysHoliday();
+        while (it.hasNext()) {
+            String str = (String) it.next();
+            SysHoliday sysHoliday = new SysHoliday();
+            sysHoliday.setHoliday(str);
+            sysHolidayService.insertSysHoliday(sysHoliday);
+        }
+    }
 }

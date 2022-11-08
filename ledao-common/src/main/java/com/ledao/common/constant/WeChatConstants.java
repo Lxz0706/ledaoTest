@@ -65,4 +65,9 @@ public class WeChatConstants {
      */
     public static final String WXSUBSCRIBEAPPSECRET = "0333af5a590dd5b055c5e6b4ec423ad4";
 
+    /**
+     * 破产类消息提醒
+     */
+    public static final String WXMSGTASK_BANKRUPTCY_PUSH = "52LhrTId4O-m7bvR-068SK4zLlqVdoJk2-vMiy-tWdA";
+
 }

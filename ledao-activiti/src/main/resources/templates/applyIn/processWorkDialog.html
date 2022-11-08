@@ -1,341 +1,304 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('审批历史')" />
-	<script src="../../static/js/steps.js"></script>
-	<link rel="stylesheet" href="steps.css">
-	<style>
+    <th:block th:include="include :: header('审批历史')"/>
+    <script src="../../static/js/steps.js"></script>
+    <link rel="stylesheet" href="steps.css">
+    <style>
 
-		.steps {
-			display: flex;
-			padding: 70px 10px 150px;;
-			box-sizing: border-box;
-		}
-		.steps-horizontal {
-			white-space: nowrap;
-		}
-		.steps-vertical {
-			display: flex;
-			flex-direction: column;
-			height: 100%;
-		}
-		.steps-center {
-			text-align: center;
-		}
-		.step {
-			position: relative;
-			flex-shrink: 1;
-		}
-		.steps-horizontal .step {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-		}
-		.steps-horizontal.steps-center .step {
-			align-items: center;
-		}
-		.steps-vertical .step {
-			display: flex;
-		}
-		.step-line-box {
-			position: relative;
-			width: 100%;
-			margin-bottom: 10px;
-		}
-		.steps-vertical .step-line-box {
-			flex-grow: 0;
-			width: auto;
-			margin-right: 10px;
-			margin-bottom: 0;
-		}
-		.step-line {
-			position: absolute;
-			height: 2px;
-			top: 11px;
-			left: 0;
-			right: 0;
-			border-color: inherit;
-			background-color: #c0c4cc;
-		}
-		.steps-vertical .step-line {
-			width: 2px;
-			top: 0;
-			bottom: 0;
-			left: 11px;
-			height: 100%;
-		}
-		.steps-center .step-line {
-			left: 50%;
-			right: -50%;
-		}
-		.step-icon {
-			position: relative;
-			z-index: 1;
-			display: inline-flex;
-			justify-content: center;
-			align-items: center;
-			width: 31px;
-			height: 31px;
-			font-size: 14px;
-			box-sizing: border-box;
-			background: #fff;
-			transition: .15s ease-out;
-			border-radius: 50%;
-			border: 2px solid;
-			border-color: inherit;
-		}
-		.step-icon-number {
-			display: inline-block;
-			user-select: none;
-			text-align: center;
-			font-weight: 700;
-			line-height: 1;
-			color: inherit;
-		}
-		.step-icon-bullets {
-			display: inline-block;
-			user-select: none;
-			width: 14px;
-			height: 14px;
-			background-color: currentColor;
-			border-radius: 50%;
-		}
-		.step-title {
-			white-space: pre-line;
-			padding-right: 10%;
-			font-size: 16px;
-			margin-bottom: 10px;
-		}
-		.steps-vertical .step-title {
-			text-align: right;
-			line-height: 24px;
-			padding: 0 0 8px 0;
-			margin: 0 10px 0 0;
-		}
-		.step-description {
-			white-space: pre-line;
-			padding-right: 10%;
-			font-size: 12px;
-			line-height: 10px;
-			font-weight: 400;
-			margin: -5px 0 10px 0;
-		}
-		.steps-horizontal .step:last-child .step-title,
-		.steps-horizontal .step:last-child .step-description {
-			padding-right: 0;
-		}
-		.steps-vertical .step-description {
-			line-height: 20px;
-			padding: 0 0 8px 0;
-			margin: 0 10px 0 0;
-		}
-		.steps-center .step-title,
-		.steps-center .step-description {
-			padding-right: 0;
-		}
-		.steps .step:last-child .step-line {
-			display: none;
-		}
+        .steps {
+            display: flex;
+            padding: 70px 10px 150px;;
+            box-sizing: border-box;
+        }
 
-		.step-default-class {
-			color: #999;
-			border-color: #999;
-		}
-		.step-finish-class {
-			color: #409eff;
-			border-color: #409eff;
-		}
-		.step-finish-line-bg {
-			background-color: #409eff;
-		}
+        .steps-horizontal {
+            white-space: nowrap;
+        }
 
-	</style>
+        .steps-vertical {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .steps-center {
+            text-align: center;
+        }
+
+        .step {
+            position: relative;
+            flex-shrink: 1;
+        }
+
+        .steps-horizontal .step {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .steps-horizontal.steps-center .step {
+            align-items: center;
+        }
+
+        .steps-vertical .step {
+            display: flex;
+        }
+
+        .step-line-box {
+            position: relative;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .steps-vertical .step-line-box {
+            flex-grow: 0;
+            width: auto;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
+        .step-line {
+            position: absolute;
+            height: 2px;
+            top: 11px;
+            left: 0;
+            right: 0;
+            border-color: inherit;
+            background-color: #c0c4cc;
+        }
+
+        .steps-vertical .step-line {
+            width: 2px;
+            top: 0;
+            bottom: 0;
+            left: 11px;
+            height: 100%;
+        }
+
+        .steps-center .step-line {
+            left: 50%;
+            right: -50%;
+        }
+
+        .step-icon {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 31px;
+            height: 31px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #fff;
+            transition: .15s ease-out;
+            border-radius: 50%;
+            border: 2px solid;
+            border-color: inherit;
+        }
+
+        .step-icon-number {
+            display: inline-block;
+            user-select: none;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1;
+            color: inherit;
+        }
+
+        .step-icon-bullets {
+            display: inline-block;
+            user-select: none;
+            width: 14px;
+            height: 14px;
+            background-color: currentColor;
+            border-radius: 50%;
+        }
+
+        .step-title {
+            white-space: pre-line;
+            padding-right: 10%;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .steps-vertical .step-title {
+            text-align: right;
+            line-height: 24px;
+            padding: 0 0 8px 0;
+            margin: 0 10px 0 0;
+        }
+
+        .step-description {
+            white-space: pre-line;
+            padding-right: 10%;
+            font-size: 12px;
+            line-height: 10px;
+            font-weight: 400;
+            margin: -5px 0 10px 0;
+        }
+
+        .steps-horizontal .step:last-child .step-title,
+        .steps-horizontal .step:last-child .step-description {
+            padding-right: 0;
+        }
+
+        .steps-vertical .step-description {
+            line-height: 20px;
+            padding: 0 0 8px 0;
+            margin: 0 10px 0 0;
+        }
+
+        .steps-center .step-title,
+        .steps-center .step-description {
+            padding-right: 0;
+        }
+
+        .steps .step:last-child .step-line {
+            display: none;
+        }
+
+        .step-default-class {
+            color: #999;
+            border-color: #999;
+        }
+
+        .step-finish-class {
+            color: #409eff;
+            border-color: #409eff;
+        }
+
+        .step-finish-line-bg {
+            background-color: #409eff;
+        }
+
+    </style>
 
 
 </head>
 
 <body class="gray-bg">
-	<div class="container-div">
-		<div class="row">
-			<div class="" type="hidden">
-				<form id="role-form"  type="hidden">
-					<input id="applyId" name="applyId" th:value="${applyId}"  type="hidden">
-					<!-- <div class="select-list">
-						<ul>
-							<li>
-								任务名称：<input type="text" name="activityName"/>
-							</li>
-							<li>
-								办理人ID：<input type="text" name="assignee"/>
-							</li>
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div> -->
-				</form>
-			</div>
+<div class="container-div">
+    <div class="row">
+        <div class="" type="hidden">
+            <form id="role-form" type="hidden">
+                <input id="applyId" name="applyId" th:value="${applyId}" type="hidden">
+                <!-- <div class="select-list">
+                    <ul>
+                        <li>
+                            任务名称：<input type="text" name="activityName"/>
+                        </li>
+                        <li>
+                            办理人ID：<input type="text" name="assignee"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div> -->
+            </form>
+        </div>
 
-	        <div class="col-sm-12 select-table table-striped" style="">
+        <div class="col-sm-12 select-table table-striped" style="">
 
-		<div class="paragraph padding-left-20" style=" overflow-x: auto; display: -webkit-box; -webkit-overflow-scrolling: touch;height: 50%">
-			<div id="steps14" style="margin: 0 auto; "></div>
-			<div id="demo" style="margin: 0 auto; ">暂无数据</div>
-		</div>
+            <div class="paragraph padding-left-20"
+                 style=" overflow-x: auto; display: -webkit-box; -webkit-overflow-scrolling: touch;height: 50%">
+                <div id="steps14" style="margin: 0 auto; "></div>
+                <div id="demo" style="margin: 0 auto; ">暂无数据</div>
+            </div>
 
-				</div>
-			</div>
-		</div>
-	</div>
-	<th:block th:include="include :: footer" />
-	<script th:src="@{/js/activiti.js}"></script>
-	<script th:inline="javascript">
-		var prefix = ctx + "applyIn";
-		var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
-		var applyId = document.getElementById("applyId").value;
+        </div>
+    </div>
+</div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:src="@{/js/activiti.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "applyIn";
+    var applyStatuDictDatas = [[${@dict.getType('apply_statu')}]];
+    var applyId = document.getElementById("applyId").value;
 
-		$(function() {
+    $(function () {
+        var liu = []
 
-			var options = {
-		        url: prefix + "/selectSysApplyWorkflowProcess",
-		        queryParams: queryParams,
-		        sortName: "createTime",
-		        sortOrder: "desc",
-		        modalName: "审批历史",
-		        showSearch: false,
-		        showRefresh: false,
-		        showToggle: false,
-		        showColumns: false,
-		        clickToSelect: false,
-		        rememberSelected: false,
-						pagination: false,
-		        columns: [{
-		            field: 'workFlowId',
-		            title: 'ID',
-		            visible: false
-		        },
-		        {
-		            field: 'approveUser',
-		            title: '处理人账号'
-		        },
-				{
-					field: 'approveUserName',
-					title: '处理人'
-				},
-				{
-					field: 'createTime',
-					title: '处理时间'
-				},
-		        {
-		            field: 'approveStatu',
-		            title: '处理结果',
-					formatter: function(value, item, index) {
-						return $.table.selectDictLabel(applyStatuDictDatas, item.approveStatu);
-					}
-		        },
-				{
-					field: 'remarks',
-					title: '处理意见'
-				}]
-		    };
+        $.ajax({
+            url: prefix + "/selectSysApplyWorkflowProcess",
+            data: {
+                applyId: applyId
+            },
+            type: "post",
+            dataType: "json",
+            success: function (result) {
+                if (result.rows.length == 0) {
+                    document.getElementById("steps14").style.display = "none";//隐藏
+                    document.getElementById("demo").style.display = "";
+                } else {
+                    document.getElementById("steps14").style.display = "";
+                    document.getElementById("demo").style.display = "none";
+                    let len = 0
+                    for (let i = 0; i < result.rows.length; i++) {
+                        const liu1 = {title: '', description: "", icon: '', customHtml: ''}
 
+                        if (result.rows[i].applyTime != null) {
+                            len++
+                            liu1.description = '<br><div style="transform:scale(0.7);margin-left:-18px;white-space:nowrap;height:20px">' + result.rows[i].applyTime + '</div>'
+                        } else {
+                            liu1.description = '<br><div style="height:20px"></div>'
+                        }
+                        if (result.rows[i].showLable != null) {
+                            if (result.rows[i].applyStatu == '0') {
+                                liu1.customHtml = '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px; margin-right: 50px">' + result.rows[i].showLable + '</div>'
+                            } else {
+                                liu1.customHtml = '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px;color: gray; margin-right: 50px ">' + result.rows[i].showLable + '</div>'
+                            }
+                        } else {
+                            liu1.customHtml = ''
+                        }
 
+                        if (result.rows[i].nameEndStr != null) {
+                            if (result.rows[i].applyStatu == '0') {
+                                liu1.icon = '<div style="font-size:10px">' + result.rows[i].nameEndStr + '</div>'
+                            } else if (result.rows[i].applyStatu == '1') {
+                                liu1.icon = '<div style="font-size:10px;color: gray">' + result.rows[i].nameEndStr + '</div>'
+                            } else {
+                                len--
+                                liu1.icon = '<div style="font-size:10px;color: red"">' + result.rows[i].nameEndStr + '</div>'
+                            }
 
+                        } else {
+                            liu1.icon = '<div style="font-size:10px">完成</div>'
+                        }
+                        liu1.title = '<div style="font-size:8px;width:100px"><div style="font-size:8px;height: 20px">' + result.rows[i].remark + '</div ><div style="font-size:8px;transform:scale(0.8);margin-left:-14px;white-space: nowrap;padding-right: 80px">' + result.rows[i].applyUserName + '</div></div>'
+                        liu.push(liu1)
+                    }
+                    var steps14 = steps({
+                        el: "#steps14",
+                        data: liu,
+                        active: len,
+                        iconType: "custom",
+                        space: 150,
+                        customClass: "custom-class"
+                    });
+                }
+            }
 
-			var liu=[]
-
-			$.ajax({
-				url: prefix + "/selectSysApplyWorkflowProcess",
-				data: {
-					applyId: applyId
-				},
-				type: "post",
-				dataType: "json",
-				success: function(result) {
-					if(result.rows.length==0){
-						document.getElementById("steps14").style.display="none";//隐藏
-						document.getElementById("demo").style.display="";
-					}else{
-						document.getElementById("steps14").style.display="";
-						document.getElementById("demo").style.display="none";
-					let len=0
-					for(let i=0; i<result.rows.length; i++) {
-
-						const liu1={ title: '', description: "", icon: '',customHtml:'' }
-
-						if(result.rows[i].applyTime!=null){
-							len++
-							liu1.description='<br><div style="transform:scale(0.7);margin-left:-18px;white-space:nowrap;height:20px">'+ result.rows[i].applyTime+'</div>'
-						}else{
-							liu1.description='<br><div style="height:20px"></div>'
-						}
-						if(result.rows[i].showLable!=null){
-
-							if(result.rows[i].applyStatu =='0'){
-
-								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px; margin-right: 50px">'+ result.rows[i].showLable+'</div>'
-								console.log(	liu1.customHtml)
-
-							}
-							else{
-								liu1.customHtml= '<div style="order: 3;margin-top:-130px ;margin-left:50px;font-size:10px;color: gray; margin-right: 50px ">'+ result.rows[i].showLable+'</div>'
-							}
-							console.log(	liu1.customHtml)
-						}else{
-							liu1.customHtml=''
-						}
-
-						if(result.rows[i].nameEndStr!=null){
-
-							if(result.rows[i].applyStatu=='0'){
-
-								liu1.icon = '<div style="font-size:10px">'+result.rows[i].nameEndStr+'</div>'
-							}else if(result.rows[i].applyStatu=='1'){
-
-								liu1.icon = '<div style="font-size:10px;color: gray">'+result.rows[i].nameEndStr+'</div>'
-							}else{
-							len--
-								liu1.icon = '<div style="font-size:10px;color: red"">'+result.rows[i].nameEndStr+'</div>'
-							}
-
-						}else{
-							liu1.icon= '<div style="font-size:10px">完成</div>'
-						}
-						liu1.title='<div style="font-size:8px;width:100px"><div style="font-size:8px;color:gray;height: 20px">'+result.rows[i].remark+'</div ><div style="font-size:8px;transform:scale(0.8);margin-left:-14px;white-space: nowrap;padding-right: 80px">'+result.rows[i].applyUserName+'</div></div>'
-						liu.push(liu1)
+        })
 
 
-					};
-					console.log('liu',liu)
-					var steps14 = steps({
-						el: "#steps14",
-						data: liu,
-						active: len,
-						iconType: "custom",
-						space: 150,
-						customClass: "custom-class"
-					});
-				}
-				}
+    });
 
-			})
+    function queryParams(params) {
+        var search = $.table.queryParams(params);
+        search.applyId = $("#applyId").val();
+        return search;
+    }
 
-
-
-
-		});
-
-		function queryParams(params) {
-			var search = $.table.queryParams(params);
-			search.applyId = $("#applyId").val();
-			return search;
-		}
-
-		/* 添加用户-选择用户-提交 */
-		function submitHandler() {
-			$.modal.close();
-		}
-	</script>
+    /* 添加用户-选择用户-提交 */
+    function submitHandler() {
+        $.modal.close();
+    }
+</script>
 </body>
 </html>

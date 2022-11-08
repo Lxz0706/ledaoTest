@@ -183,6 +183,14 @@ public class SysApplyOutDetailController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        for (String str : ids.split(",")) {
+            SysApplyOutDetail sysApplyOutDetail = sysApplyOutDetailService.selectSysApplyOutDetailById(Long.valueOf(str));
+            SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(sysApplyOutDetail.getDocumentId());
+            int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail.getCounts().toString());
+            sysDocumentFile.setDocumentId(sysApplyOutDetail.getDocumentId());
+            sysDocumentFile.setCounts(Long.valueOf(count));
+            sysDocumentFileService.updateSysDocumentFile(sysDocumentFile);
+        }
         return toAjax(sysApplyOutDetailService.deleteSysApplyOutDetailByIds(ids));
     }
 }

@@ -5,6 +5,7 @@
     <th:block th:include="include :: header('修改档案出库申请')"/>
     <th:block th:include="include :: datetimepicker-css"/>
     <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-editable-css"/>
 </head>
 
 <body class="white-bg">
@@ -17,9 +18,9 @@
         <input name="applyId" id="applyId" th:field="*{applyId}" type="hidden">
         <input name="applyType" id="applyType" th:field="*{applyType}" type="hidden">
         <input name="createBy" id="createBy" th:field="*{createBy}" type="hidden">
-<!--        待提交人-->
+        <!--        待提交人-->
         <input name="realCreateBy" id="realCreateBy" th:field="*{realCreateBy}" type="hidden">
-<!--        <input name="approveStatu" id="approveStatu" th:field="*{approveStatu}" type="hidden">-->
+        <!--        <input name="approveStatu" id="approveStatu" th:field="*{approveStatu}" type="hidden">-->
         <div class="form-group">
             <label class="col-sm-3 control-label">档案类别：</label>
             <div class="col-sm-8">
@@ -27,7 +28,7 @@
                          disabled
                          th:with="type=${@dict.getType('sys_document_busi_type')}" data-none-selected-text="请选择"
                          class="form-control m-b"
-                         >                         
+            >                         
                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
                         th:field="*{documentType}">
                 </option>
@@ -38,38 +39,44 @@
         <div class="form-group" id="projectName" style="display: none">
             <label class="col-sm-3 control-label is-required">项目名称：</label>
             <div class="col-sm-8">
-<!--                <input name="projectName" th:field="*{projectName}" class="form-control" type="text">-->
-                <input name="projectId" id="projectIdVal" th:field="*{projectId}" class="form-control required" required type="hidden">
-                <input autocomplete="off" name="projectName" id="projectNameVal" th:field="*{projectName}" class="form-control required" required type="text" onclick="selectPro()">
+                <!--                <input name="projectName" th:field="*{projectName}" class="form-control" type="text">-->
+                <input name="projectId" id="projectIdVal" th:field="*{projectId}" class="form-control required" required
+                       type="hidden">
+                <input autocomplete="off" name="projectName" id="projectNameVal" th:field="*{projectName}"
+                       class="form-control required" required type="text" onclick="selectPro()">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">公司名称：</label>
             <div class="col-sm-8">
-<!--                <select id="companyName" name="companyName"-->
-<!--                        th:with="type=${@dict.getType('sys_company_name')}"-->
-<!--                        data-none-selected-text="请选择" class="form-control m-b">-->
-<!--                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
-<!--                            th:value="${dict.dictValue}" th:field="*{companyName}"></option>-->
-<!--                </select>-->
-                <select id="companyName" name="companyName" class="form-control select2-multiple"th:field="*{companyName}">
-                    <option th:each="sysDictData:${sysDictData}" th:value="${sysDictData.dictValue}" th:text="${sysDictData.dictLabel}"></option>
+                <!--                <select id="companyName" name="companyName"-->
+                <!--                        th:with="type=${@dict.getType('sys_company_name')}"-->
+                <!--                        data-none-selected-text="请选择" class="form-control m-b">-->
+                <!--                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
+                <!--                            th:value="${dict.dictValue}" th:field="*{companyName}"></option>-->
+                <!--                </select>-->
+                <select id="companyName" name="companyName" class="form-control select2-multiple"
+                        th:field="*{companyName}">
+                    <option th:each="sysDictData:${sysDictData}" th:value="${sysDictData.dictValue}"
+                            th:text="${sysDictData.dictLabel}"></option>
                 </select>
             </div>
         </div>
         <div class="form-group" id="debtorName" style="display: none">
             <label class="col-sm-3 control-label is-required">债务人名称：</label>
             <div class="col-sm-8">
-<!--                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">-->
-                <input name="debtorId" id="debtorNameVal" th:field="*{debtorId}"  class="form-control" type="hidden">
-                <input autocomplete="off" name="debtorName" id="debtorNameTip" th:field="*{debtorName}" class="form-control required" type="text" onclick="selectDebtor()">
+                <!--                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">-->
+                <input name="debtorId" id="debtorNameVal" th:field="*{debtorId}" class="form-control" type="hidden">
+                <input autocomplete="off" name="debtorName" id="debtorNameTip" th:field="*{debtorName}"
+                       class="form-control required" type="text" onclick="selectDebtor()">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">实际提交人：</label>
             <div class="col-sm-8">
                 <input class="form-control" type="hidden" th:field="*{applyUser}" name="applyUser" id="applyUser">
-                <input autocomplete="off" class="form-control" type="text" th:field="*{applyUserName}" name="applyUserName" id="applyUserName" onclick="selectUser()">
+                <input autocomplete="off" class="form-control" type="text" th:field="*{applyUserName}"
+                       name="applyUserName" id="applyUserName" onclick="selectUser()">
             </div>
         </div>
         <div class="form-group">
@@ -77,7 +84,8 @@
             <div class="col-sm-8">
                 <select id="isReturn" name="isReturn"
                         th:with="type=${@dict.getType('sys_is_not')}"
-                        data-none-selected-text="请选择" class="form-control m-b required" onchange="changeIsReturn(this.value)">
+                        data-none-selected-text="请选择" class="form-control m-b required"
+                        onchange="changeIsReturn(this.value)">
                     <option value="">请选择数据</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                             th:value="${dict.dictValue}" th:field="*{isReturn}"></option>
@@ -137,7 +145,9 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="planReturnTime" id="planReturnTime" th:value="${#dates.format(sysApplyIn.planReturnTime, 'yyyy-MM-dd')}" class="form-control required" placeholder="yyyy-MM-dd" type="text">
+                    <input name="planReturnTime" id="planReturnTime"
+                           th:value="${#dates.format(sysApplyIn.planReturnTime, 'yyyy-MM-dd')}"
+                           class="form-control required" placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
@@ -146,7 +156,9 @@
             <div class="col-sm-8">
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input disabled name="realReturnTime" th:value="${#dates.format(sysApplyIn.realReturnTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <input disabled name="realReturnTime"
+                           th:value="${#dates.format(sysApplyIn.realReturnTime, 'yyyy-MM-dd')}" class="form-control"
+                           placeholder="yyyy-MM-dd" type="text">
                 </div>
             </div>
         </div>
@@ -165,13 +177,14 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">文件列表：</label>
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" id="addOut" onclick="$.operate.add()" shiro:hasPermission="activity:documentFile:add">
+                <a class="btn btn-success" id="addOut" onclick="$.operate.add()"
+                   shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-<!--                <a id="editOut" class="btn btn-primary single" onclick="$.operate.edit()"-->
-<!--                   shiro:hasPermission="activity:documentFile:edit">-->
-<!--                    <i class="fa fa-edit"></i> 修改-->
-<!--                </a>-->
+                <!--                <a id="editOut" class="btn btn-primary single" onclick="$.operate.edit()"-->
+                <!--                   shiro:hasPermission="activity:documentFile:edit">-->
+                <!--                    <i class="fa fa-edit"></i> 修改-->
+                <!--                </a>-->
                 <a id="removeOut" class="btn btn-danger multiple" onclick="$.operate.removeAll()"
                    shiro:hasPermission="activity:documentFile:remove">
                     <i class="fa fa-remove"></i> 删除
@@ -187,68 +200,69 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
 <th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
 <script type="text/javascript" th:inline="javascript">
-        var prefix = ctx + "applyIn";
-        var docDetailUrl = ctx + "activity/outFiledetail"
-        var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
-        var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
-        var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
-        var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
-        var roles = [[${@permission.getPrincipalProperty('roles')}]];
-        var loginNameUser = [[${@permission.getPrincipalProperty('loginName')}]];
-        var editFlag = [[${@permission.hasPermi('activity:detail:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('activity:detail:remove')}]];
-        var isPageDatas = [[${@dict.getType('sys_is_not')}]];
-        var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
-        var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
-        var planReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
-        var realReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
-        var isOutDatas = [[${@dict.getType('sys_is_not')}]];
-        var isReceiveDatas = [[${@dict.getType('sys_is_not')}]];
-        var isReturnedDatas = [[${@dict.getType('sys_is_not')}]];
-        var isReceivedDatas = [[${@dict.getType('sys_is_not')}]];
-        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
-        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
-        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
-        var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
-        var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
-        var optionIsElec = [[${@dict.getType('sys_borrow_type')}]]
-        var showNames = false
-        var documentTypeVal = document.getElementById("documentType").value
-        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
-        var projectName = document.getElementById("projectName")
-        var debtorName = document.getElementById("debtorName")
-        var applyIds = document.getElementById("applyId").value
-        var isNotChange = false
-        var appStatu = document.getElementById("appStatu").value;
-        var seOrEd = document.getElementById("seOrEd").value;
-        var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
-        var isReturn = document.getElementById("isReturn").value;
-        var roleType = document.getElementById("roleType").value;
-        var applyType = document.getElementById("applyType").value;
-        // 实际提交人
-        var applyUser = document.getElementById("applyUser").value;
-        // 待提交人
-        var realCreateBy = document.getElementById("realCreateBy").value;
-        var showEdit = false
-        var showDelet = false
-        var showAllBut = false
-        var showDatilDocumentType = false
-        var isElecObj = {}
-        var isElecIndex = ''
+    var prefix = ctx + "applyIn";
+    var docDetailUrl = ctx + "activity/outFiledetail"
+    var documentFileTypeDictDatas = [[${@dict.getType('document_file_type')}]];
+    var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
+    var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
+    var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
+    var roles = [[${@permission.getPrincipalProperty('roles')}]];
+    var loginNameUser = [[${@permission.getPrincipalProperty('loginName')}]];
+    var editFlag = [[${@permission.hasPermi('activity:detail:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('activity:detail:remove')}]];
+    var isPageDatas = [[${@dict.getType('sys_is_not')}]];
+    var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
+    var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
+    var planReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
+    var realReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
+    var isOutDatas = [[${@dict.getType('sys_is_not')}]];
+    var isReceiveDatas = [[${@dict.getType('sys_is_not')}]];
+    var isReturnedDatas = [[${@dict.getType('sys_is_not')}]];
+    var isReceivedDatas = [[${@dict.getType('sys_is_not')}]];
+    var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
+    var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
+    var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
+    var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
+    var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
+    var optionIsElec = [[${@dict.getType('sys_borrow_type')}]]
+    var showNames = false
+    var documentTypeVal = document.getElementById("documentType").value
+    var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
+    var projectName = document.getElementById("projectName")
+    var debtorName = document.getElementById("debtorName")
+    var applyIds = document.getElementById("applyId").value
+    var isNotChange = false
+    var appStatu = document.getElementById("appStatu").value;
+    var seOrEd = document.getElementById("seOrEd").value;
+    var applyTypeUnDone = document.getElementById("applyTypeUnDone").value;
+    var isReturn = document.getElementById("isReturn").value;
+    var roleType = document.getElementById("roleType").value;
+    var applyType = document.getElementById("applyType").value;
+    // 实际提交人
+    var applyUser = document.getElementById("applyUser").value;
+    // 待提交人
+    var realCreateBy = document.getElementById("realCreateBy").value;
+    var showEdit = false
+    var showDelet = false
+    var showAllBut = false
+    var showDatilDocumentType = false
+    var isElecObj = {}
+    var isElecIndex = ''
 
     $(function () {
         // 管理员与档案管理员
-        for(var i =0; i < roles.length;i++) {
-            if(roles[i].roleKey == "documentAdmin" || "admin" == loginNameUser) {
+        for (var i = 0; i < roles.length; i++) {
+            if (roles[i].roleKey == "documentAdmin" || "admin" == loginNameUser) {
                 showNames = true
-                if(applyType == "1") {
+                if (applyType == "1") {
                 } else {
                     $("#isOutShow").show()
                     $("#isReceiveShow").show()
                     $("#isReturnedShow").show()
                     $("#isReceivedShow").show()
-                    $("select,input,textarea").attr("readonly","readonly");
+                    $("select,input,textarea").attr("readonly", "readonly");
                     $("input").removeAttr("onclick");
                     $("#isOut").removeAttr("readonly");
                 }
@@ -259,7 +273,7 @@
             $("#planReturnTimeShow").show()
         }
         // 判断当前的状态
-        if(appStatu == "7" || appStatu == "8" || appStatu == "9" || appStatu == "3") {
+        if (appStatu == "7" || appStatu == "8" || appStatu == "9" || appStatu == "3") {
             // $("select,input,textarea").attr("readonly","readonly");
             $("#companyName").attr("disabled", "disabled")
             $("#isReturn").attr("disabled", "disabled")
@@ -279,9 +293,9 @@
             $("#isReceiveShow").show()
             $("#isReturnedShow").show()
             $("#isReceivedShow").show()
-            $("a").attr("disabled",true);
+            $("a").attr("disabled", true);
             $('.btn').removeAttr('onclick')
-            if(appStatu == "7") {
+            if (appStatu == "7") {
                 $("#isReceive").removeAttr("disabled");
             } else if (appStatu == "8") {
                 $("#isReturned").removeAttr("disabled");
@@ -289,8 +303,8 @@
                 $("#isReceived").removeAttr("disabled");
             }
 
-        } else if(showNames && applyUser != loginNameUser) {
-            if(showNames){
+        } else if (showNames && applyUser != loginNameUser) {
+            if (showNames) {
                 $("#toolbar").show();
                 $("#companyName").attr("disabled", "disabled")
                 $("#isReturn").attr("disabled", "disabled")
@@ -304,7 +318,7 @@
                 $("#projectNameVal").attr("disabled", "disabled")
                 $("#debtorNameTip").attr("disabled", "disabled")
                 $("#applyUser").attr("disabled", "disabled")
-                $("#applyUserName").attr("disabled","disabled");
+                $("#applyUserName").attr("disabled", "disabled");
                 $("#planReturnTimeShow").show()
                 $("#realReturnTime").show()
                 $("#isOutShow").show()
@@ -312,7 +326,7 @@
                 $("#isReturnedShow").show()
                 $("#isReceivedShow").show()
                 $('.btn').removeAttr('onclick');
-            }else{
+            } else {
                 $("#toolbar").hide();
                 $("#companyName").attr("disabled", "disabled")
                 $("#isReturn").attr("disabled", "disabled")
@@ -326,28 +340,28 @@
                 $("#projectNameVal").attr("disabled", "disabled")
                 $("#debtorNameTip").attr("disabled", "disabled")
                 $("#applyUser").attr("disabled", "disabled")
-                $("#applyUserName").attr("disabled","disabled");
+                $("#applyUserName").attr("disabled", "disabled");
                 $("#planReturnTimeShow").show()
                 $("#realReturnTime").show()
                 $("#isOutShow").show()
                 $("#isReceiveShow").show()
                 $("#isReturnedShow").show()
                 $("#isReceivedShow").show()
-                $("a").attr("disabled",true);
+                $("a").attr("disabled", true);
                 $('.btn').removeAttr('onclick');
             }
         }
-        if(documentTypeVal == "0") {
+        if (documentTypeVal == "0") {
             projectName.style.display = 'block'
             debtorName.style.display = 'block'
-            if ("bg"==roleType){
+            if ("bg" == roleType) {
                 $("#debtorName").hide()
             }
         } else {
             projectName.style.display = 'none'
             debtorName.style.display = 'none'
             // chenjie 21.9.9 #75
-            if(documentTypeVal == 1) {
+            if (documentTypeVal == 1) {
                 showDatilDocumentType = true
             } else {
                 showDatilDocumentType = false
@@ -355,14 +369,14 @@
             // end
         }
 
-        if (appStatu != 0){
-            $("#applyUserName").attr("readonly","readonly");
+        if (appStatu != 0) {
+            $("#applyUserName").attr("readonly", "readonly");
             $("#applyUserName").removeAttr("onclick")
         }
-        if(appStatu == 0 || appStatu == 4 || appStatu == 2) {
+        if (appStatu == 0 || appStatu == 4 || appStatu == 2) {
             isNotChange = false
         } else {
-            if(appStatu == 7 || appStatu == 8 || appStatu == 9) {
+            if (appStatu == 7 || appStatu == 8 || appStatu == 9) {
                 isNotChange = false
             } else {
                 isNotChange = true
@@ -370,9 +384,9 @@
         }
 
         // 出库修改画面的按钮显示逻辑
-        if(applyTypeUnDone == "2") {
-            if(applyType == "0") {
-                if(showNames) {
+        if (applyTypeUnDone == "2") {
+            if (applyType == "0") {
+                if (showNames) {
                     $("#addOut").hide();
                     $("#editOut").show();
                     $("#removeOut").hide();
@@ -383,24 +397,24 @@
                     $("#removeOut").hide();
                 }
             } else {
-                if(showNames){
+                if (showNames) {
                     $("#addOut").hide();
                     $("#removeOut").show();
-                }else{
+                } else {
                     $("#addOut").hide();
                     $("#editOut").hide();
                     $("#removeOut").hide();
                 }
             }
         } else if (applyTypeUnDone == "3") {
-            if(applyType == "0" || applyType == "1") {
+            if (applyType == "0" || applyType == "1") {
                 $("#addOut").hide();
                 $("#editOut").hide();
                 $("#removeOut").hide();
             }
         } else {
-            if(applyType == "0" || applyType == "1") {
-                if((realCreateBy == applyUser || realCreateBy !== applyUser) && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
+            if (applyType == "0" || applyType == "1") {
+                if ((realCreateBy == applyUser || realCreateBy !== applyUser) && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
                     $("#addOut").show();
                     $("#editOut").show();
                     $("#removeOut").show();
@@ -420,6 +434,7 @@
             updateUrl: prefix + "/editOutUpdate/{id}",
             removeUrl: docDetailUrl + "/remove",
             exportUrl: prefix + "/export",
+            onEditableSave: onEditableSave,
             modalName: "档案出库详情记录",
             columns: [{
                 checkbox: true
@@ -429,21 +444,6 @@
                     title: 'id',
                     visible: false
                 },
-                // {
-                //     field: 'applyId',
-                //     title: '申请id'
-                // },
-                // {
-                //     field: 'documentId',
-                //     title: '档案id'
-                // },
-                // {
-                //     field: 'documentType',
-                //     title: '档案种类',
-                //     formatter: function(value, item, index) {
-                //         return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
-                //     }
-                // },
                 {
                     field: 'projectName',
                     title: '项目名称',
@@ -470,7 +470,7 @@
                 {
                     field: 'dailyDocumentType',
                     title: '档案种类',
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         return $.table.selectDictLabel(dailyDocumentTypeDictDatas, item.dailyDocumentType);
                     },
                     visible: documentTypeVal == "0" ? false : true && showDatilDocumentType
@@ -478,7 +478,7 @@
                 {
                     field: 'dailyDocumentTypeContract',
                     title: '档案种类',
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         return strLength($.table.selectDictLabel(dailyDocumentTypeDictDatasContract, item.dailyDocumentTypeContract));
                     },
                     visible: documentTypeVal == "0" ? false : true && !showDatilDocumentType
@@ -490,20 +490,33 @@
                 {
                     field: 'fileType',
                     title: '附件类型',
-                    formatter: function(value, item, index) {
-                                return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
-                            }
+                    formatter: function (value, item, index) {
+                        return $.table.selectDictLabel(documentFileTypeDictDatas, item.fileType);
+                    }
                 },
                 {
                     field: 'fileScanType',
                     title: '扫描件类型',
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         return strLength($.table.selectDictLabel(documentScanTypeDictDatas, item.fileScanType));
                     }
                 },
                 {
                     field: 'counts',
-                    title: '份数'
+                    title: '份数',
+                    editable: {
+                        type: 'text',
+                        title: '份数',
+                        emptytext: "【份数】为空",
+                        validate: function (value) {
+                            if (value == 30) {
+                                return '名称不能超过30个字符';
+                            }
+                            if (value == 0) {
+                                return '份数不能为空';
+                            }
+                        }
+                    }
                 },
                 {
                     field: 'pages',
@@ -513,7 +526,7 @@
                     field: 'documentStatu',
                     title: '档案状态',
                     visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
                     }
                 },
@@ -531,7 +544,7 @@
                     field: 'documentGetType',
                     title: '档案类型',
                     visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
                     }
                 },
@@ -539,7 +552,7 @@
                     field: 'fileGetType',
                     title: '文件类型',
                     visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
                     }
                 },
@@ -547,7 +560,7 @@
                     field: 'documentLevel',
                     title: '档案级别',
                     visible: showNames && (applyTypeUnDone == "2" || applyTypeUnDone == "3"),
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         return strLength($.table.selectDictLabel(documentLevelDictDatas, item.documentLevel));
                     }
                 },
@@ -579,36 +592,13 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>'); */
-                        console.log(row)
-                        // if((showNames && appStatu =="1") || (showNames && appStatu =="9") || (row.realCreateBy == loginNameUser && (appStatu == "0" || appStatu == "4" || appStatu == "2"))) {
-                        //     if(showNames && applyTypeUnDone == "2" && applyType == "1") {
-                        //     } else {
-                        //         if(applyType == "1" && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
-                        //             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        //         }
-                        //     }
-                        // }
-                        // if(applyType == 1) {
-                        // } else {
-                        //     if(row.realCreateBy == loginNameUser && (appStatu == "0" || appStatu == "4" || appStatu == "2")) {
-                        //         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        //     }
-                        // }
-                        // if(!isNotChange) {
-                        //     if(applyTypeUnDone == "3" || applyTypeUnDone == "2") {
-                        //     } else {
-                        //         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        //     }
-                        // }
-                    if(showNames && applyUser != loginNameUser) {}
-                       else if(showEdit) {
+                        if (showNames && applyUser != loginNameUser) {
+                        } else if (showEdit) {
                             // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        } else if(showAllBut) {
+                        } else if (showAllBut) {
                             // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        } else if(showDelet) {
+                        } else if (showDelet) {
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         }
                         return actions.join('');
@@ -618,34 +608,34 @@
         $.table.init(options);
 
         // applyTypeUnDone == "3" 是从我的已办入口进入
-        if(applyTypeUnDone == "3") {
-            if(seOrEd == 'edse1') {
-                $("input").attr("readonly","readonly");
+        if (applyTypeUnDone == "3") {
+            if (seOrEd == 'edse1') {
+                $("input").attr("readonly", "readonly");
                 $("input").removeAttr("onclick");
-                $("select").attr("disabled",true);
-                $("a").attr("disabled",true);
+                $("select").attr("disabled", true);
+                $("a").attr("disabled", true);
                 $('.btn').removeAttr('onclick');
                 $("#editOut").attr("onclick");
                 $("#editOut").removeAttr("disabled");
-                if(applyType == "1" && showNames) {
+                if (applyType == "1" && showNames) {
                     $("#isReceived").removeAttr("disabled");
                 }
             } else {
-                $("input").attr("readonly","readonly");
+                $("input").attr("readonly", "readonly");
                 $("input").removeAttr("onclick");
-                $("select").attr("disabled",true);
-                $("a").attr("disabled",true);
+                $("select").attr("disabled", true);
+                $("a").attr("disabled", true);
                 $('.btn').removeAttr('onclick')
                 $("#outReason").attr("disabled", "disabled")
                 $("#remarks").attr("disabled", "disabled")
             }
         } else {
-            if(isNotChange){
-                $("input").attr("readonly","readonly");
+            if (isNotChange) {
+                $("input").attr("readonly", "readonly");
                 $("input").removeAttr("onclick");
-                $("select").attr("disabled",true);
-                $("textarea").attr("disabled",true);
-                if(!showNames){
+                $("select").attr("disabled", true);
+                $("textarea").attr("disabled", true);
+                if (!showNames) {
                     $("a").attr("disabled", true);
                     $('.btn').removeAttr('onclick');
                 }
@@ -656,13 +646,13 @@
         $.operate.lock()
 
         // applyTypeUnDone == "2" 是从我的待办入口进入的
-        if(applyTypeUnDone == "2" && showNames) {
+        if (applyTypeUnDone == "2" && showNames) {
             // if(isReturn == "0") {
-                $("#isOutShow").show()
-                $("#isOut").removeAttr("disabled")
+            $("#isOutShow").show()
+            $("#isOut").removeAttr("disabled")
             // }
         }
-        if(showNames && applyTypeUnDone == "2" && applyType == "1") {
+        if (showNames && applyTypeUnDone == "2" && applyType == "1") {
             $("#editOut").hide();
         }
     });
@@ -671,89 +661,87 @@
         focusCleanup: true
     });
 
-        function changeRoleType(){
-            roleType = document.getElementById("roleType").value;
-            if ("bg"==roleType){
-                $("#debtorName").hide()
-            }else{
-                $("#debtorName").show()
-            }
-            $("#projectIdVal").val("");
-            $("#projectNameVal").val("");
+    function changeRoleType() {
+        roleType = document.getElementById("roleType").value;
+        if ("bg" == roleType) {
+            $("#debtorName").hide()
+        } else {
+            $("#debtorName").show()
+        }
+        $("#projectIdVal").val("");
+        $("#projectNameVal").val("");
+        $("#debtorNameVal").val("");
+        $("#debtorNameTip").val("");
+    }
+
+    function strLength(value) {
+        var str = $.common.nullToStr(value);
+        return str;
+    }
+
+    function selectDebtor() {
+        var url = ctx + "applyIn/selectDebtor?zcbId=" + $("#projectIdVal").val() + "&roleType=" + roleType;
+        $.modal.open("债务人选择", url, '750', '600/2');
+    }
+
+    //人员树形选择器
+    function selectUser() {
+        var url = ctx + "system/dept/selectLeaderDepUser?userId=" + $("#applyUser").val() + "&userName=" + $("#applyUserName").val() + "&deptId=" + deptId;
+        $.modal.open("人员选择", url, '750', '600/2');
+    }
+
+    function selectPro() {
+        var url = ctx + "applyIn/selectPro?roleType=" + roleType;
+        $.modal.open("项目选择", url, '750', '600/2');
+    }
+
+    function getDeviceBasics(row) {
+        var userName = "";
+        var loginName = "";
+        for (var i = 0; i < row.length; i++) {
+            userName = row[i].userName + "," + userName;
+            loginName = row[i].loginName + "," + loginName;
+        }
+        $("#applyUser").val(loginName.substr(0, loginName.length - 1));
+        $("#applyUserName").val(userName.substr(0, userName.length - 1));
+        $("#realCreateBy").val(loginNameUser)
+        layer.close(layer.index);
+    }
+
+    function getZcdSelected(row) {
+        if (roleType == "inve") {
+            $("#projectIdVal").val(row[0].id);
+            $("#projectNameVal").val(row[0].assetPackageName);
+        } else if (roleType == "thb") {
+            $("#projectIdVal").val(row[0].projectZckId);
+            $("#projectNameVal").val(row[0].zckName);
+        } else if (roleType == "bg") {
+            $("#projectIdVal").val(row[0].id);
+            $("#projectNameVal").val(row[0].projectName);
+        }
+        if (row.length > 0) {
             $("#debtorNameVal").val("");
             $("#debtorNameTip").val("");
+            $("#debtorNameTip").removeAttr("disabled");
+        }
+        layer.close(layer.index);
+    }
+
+    function getDobtSelected(row) {
+        if (roleType == "inve") {
+            $("#debtorNameVal").val(row[0].id);
+            $("#debtorNameTip").val(row[0].projectName);
+        } else if (roleType == "thb") {
+            $("#debtorNameVal").val(row[0].projectId);
+            $("#debtorNameTip").val(row[0].projectName);
         }
 
-        function strLength(value){
-            var str = $.common.nullToStr(value);
-            return str;
-        }
-
-        function selectDebtor(){
-            var url = ctx + "applyIn/selectDebtor?zcbId=" + $("#projectIdVal").val()+"&roleType="+roleType;
-            $.modal.open("债务人选择", url, '750', '600/2');
-        }
-
-        //人员树形选择器
-        function selectUser() {
-            var url = ctx + "system/dept/selectLeaderDepUser?userId=" + $("#applyUser").val() + "&userName=" + $("#applyUserName").val() + "&deptId=" + deptId;
-            $.modal.open("人员选择", url, '750', '600/2');
-        }
-
-        function selectPro(){
-            var url = ctx + "applyIn/selectPro?roleType="+roleType;
-            $.modal.open("项目选择", url, '750', '600/2');
-        }
-        function getDeviceBasics(row) {
-            var userName = "";
-            var loginName = "";
-            for (var i = 0; i < row.length; i++) {
-                userName = row[i].userName + "," + userName;
-                loginName = row[i].loginName + "," + loginName;
-            }
-            $("#applyUser").val(loginName.substr(0, loginName.length - 1));
-            $("#applyUserName").val(userName.substr(0, userName.length - 1));
-            $("#realCreateBy").val(loginNameUser)
-            layer.close(layer.index);
-        }
-        function getZcdSelected(row) {
-            if (roleType == "inve"){
-                $("#projectIdVal").val(row[0].id);
-                $("#projectNameVal").val(row[0].assetPackageName);
-            }else if(roleType == "thb"){
-                $("#projectIdVal").val(row[0].projectZckId);
-                $("#projectNameVal").val(row[0].zckName);
-            }else if(roleType == "bg"){
-                $("#projectIdVal").val(row[0].id);
-                $("#projectNameVal").val(row[0].projectName);
-            }
-            if (row.length>0){
-                $("#debtorNameVal").val("");
-                $("#debtorNameTip").val("");
-                $("#debtorNameTip").removeAttr("disabled");
-            }
-            layer.close(layer.index);
-        }
-        /*  function getThbSelected(row) {
-              $("#projectIdVal").val(row[0].projectZckId);
-              $("#projectNameVal").val(row[0].zckName);
-              layer.close(layer.index);
-          }*/
-        function getDobtSelected(row){
-            if (roleType == "inve"){
-                $("#debtorNameVal").val(row[0].id);
-                $("#debtorNameTip").val(row[0].projectName);
-            }else if(roleType == "thb"){
-                $("#debtorNameVal").val(row[0].projectId);
-                $("#debtorNameTip").val(row[0].projectName);
-            }
-
-            layer.close(layer.index);
-        }
+        layer.close(layer.index);
+    }
 
     // 是否归还
     function changeIsReturn(val) {
-        if(val == "0") {
+        if (val == "0") {
             $("#realReturnTime").show()
             $("#planReturnTimeShow").show()
         } else if (val == "1") {
@@ -786,185 +774,218 @@
         autoclose: true
     });
 
-    function addFile (id) {
+    function addFile(id) {
         var detail = ctx + 'activity/fileDetail'
         var url = detail + '/docDetail/' + id;
         $.modal.open("添加附件", url);
     }
 
-        function isElecSelect (value,row,index) {
-            if(value === "0") {
-                if(showNames && applyUser != loginNameUser) {
-                    return `
-                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+    function isElecSelect(value, row, index) {
+        if (value === "0") {
+            if (showNames && applyUser != loginNameUser) {
+                console.log("1111111111");
+                return `
+                        <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
                             <option value="0" selected="true">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
-                }
-                else if(showEdit) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+            } else if (showEdit) {
+                console.log("2222222");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
                             <option value="0" selected="true">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
-                } else if(showAllBut) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+            } else if (showAllBut) {
+                console.log("3333333333");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
                             <option value="0" selected="true">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
-                } else if(showDelet) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+            } else if (showDelet) {
+                console.log("44444444");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
                             <option value="0" selected="true">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
-                } else {
-                    return `
-                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
-                            <option value="">请选择</option>
-                            <option value="0" selected="true">电子</option>
-                            <option value="1">纸质</option>
-                        </select>
-                    `
-                }
-            } else if(value === "1") {
-                if(showNames && applyUser != loginNameUser) {
-                    return `
-                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
-                            <option value="">请选择</option>
-                            <option value="0">电子</option>
-                            <option value="1" selected="true">纸质</option>
-                        </select>
-                    `
-                }
-                else if(showEdit) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
-                            <option value="">请选择</option>
-                            <option value="0">电子</option>
-                            <option value="1" selected="true">纸质</option>
-                        </select>
-                    `
-                } else if(showAllBut) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
-                            <option value="">请选择</option>
-                            <option value="0">电子</option>
-                            <option value="1" selected="true">纸质</option>
-                        </select>
-                    `
-                } else if(showDelet) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
-                            <option value="">请选择</option>
-                            <option value="0">电子</option>
-                            <option value="1" selected="true">纸质</option>
-                        </select>
-                    `
-                } else {
-                    return `
-                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
-                            <option value="">请选择</option>
-                            <option value="0">电子</option>
-                            <option value="1" selected="true">纸质</option>
-                        </select>
-                    `
-                }
             } else {
-                if(showNames && applyUser != loginNameUser) {
-                    return `
-                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+                console.log("5555555");
+                return `
+                        <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
+                            <option value="">请选择</option>
+                            <option value="0" selected="true">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+            }
+        } else if (value === "1") {
+            if (showNames && applyUser != loginNameUser) {
+                console.log("66666666");
+                return `
+                        <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+            } else if (showEdit) {
+                console.log("777777");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+            } else if (showAllBut) {
+                console.log("88888888");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+            } else if (showDelet) {
+                console.log("99999999");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+            } else {
+                console.log("1010101010");
+                return `
+                        <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
+                            <option value="">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1" selected="true">纸质</option>
+                        </select>
+                    `
+            }
+        } else {
+            if (showNames && applyUser != loginNameUser) {
+                console.log("11111111112222222");
+                return `
+                        <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
                             <option value="0">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
-                }
-                else if(showEdit) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+            } else if (showEdit) {
+                console.log("1212211212121212111111111");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
                             <option value="0">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
-                } else if(showAllBut) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+            } else if (showAllBut) {
+                console.log("131313131313");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
                             <option value="0">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
-                } else if(showDelet) {
-                    return `
-                        <select id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
+            } else if (showDelet) {
+                console.log("14141414141414");
+                return `
+                        <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
                             <option value="0">电子</option>
                             <option value="1">纸质</option>
                         </select>
                     `
+            } else {
+                console.log("151515151515");
+                return `
+                        <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
+                            <option value="" selected="true">请选择</option>
+                            <option value="0">电子</option>
+                            <option value="1">纸质</option>
+                        </select>
+                    `
+            }
+        }
+    }
+
+    function selectchange(id, val) {
+        var isElecId = "sele" + id
+        var isElec = document.getElementById(isElecId).value
+        $.ajax({
+            url: "/activity/outFiledetail/edit",
+            type: 'post',
+            data: {
+                "outDetailId": id,
+                "isElec": isElec
+            },
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 500) {
+                    $.modal.alertError(result.msg);
+                    document.getElementById(isElecId).value = ''
                 } else {
-                    return `
-                        <select disabled id="sele`+ row.outDetailId +`" onchange="selectchange(`+ row.outDetailId +`)">
-                            <option value="" selected="true">请选择</option>
-                            <option value="0">电子</option>
-                            <option value="1">纸质</option>
-                        </select>
-                    `
+                    $.modal.alertSuccess(result.msg);
+                    $.table.refresh()
                 }
             }
-        }
+        })
+    }
 
-        function selectchange (id,val) {
-            var isElecId = "sele" + id
-            var isElec = document.getElementById(isElecId).value
-            console.log('id+++++++++',id)
-            console.log('isElec+++++++++',isElec)
-                $.ajax({
-                    url: "/activity/outFiledetail/edit",
-                    type: 'post',
-                    data: {
-                        "outDetailId": id,
-                        "isElec": isElec
-                    },
-                    dataType: 'json',
-                    success: function (result) {
-                        if(result.code == 500) {
-                            $.modal.alertError(result.msg);
-                            document.getElementById(isElecId).value = ''
-                        } else {
-                            $.modal.alertSuccess(result.msg);
-                            $.table.refresh()
-                        }
-                    }
-                })
-        }
-
-        function submitHandler() {
-            var rows = $('#bootstrap-table').bootstrapTable('getData')
-            if ($.validate.form()) {
-                if(rows.length > 0) {
-                    for(var i = 0;i < rows.length;i++) {
-                        if(rows[i].isElec == null || rows[i].isElec == '') {
-                            $.modal.alertError('借出文档类型未填，请补充之后提交');
-                            return true;
-                        }
+    function submitHandler() {
+        var rows = $('#bootstrap-table').bootstrapTable('getData')
+        if ($.validate.form()) {
+            if (rows.length > 0) {
+                for (var i = 0; i < rows.length; i++) {
+                    if (rows[i].isElec == null || rows[i].isElec == '') {
+                        $.modal.alertError('借出文档类型未填，请补充之后提交');
+                        return true;
                     }
                 }
-                $.operate.save(prefix + "/edit", $('#form-applyIn-edit').serialize());
             }
+            $.operate.save(prefix + "/edit", $('#form-applyIn-edit').serialize());
         }
+    }
 
+
+    function onEditableSave(field, row, rowIndex, oldValue, $el) {
+        if (!showNames && applyUser != loginNameUser && !showEdit && !showDelet && !showAllBut) {
+            $.ajax({
+                type: "post",
+                url: prefix + "/editApplyOutCount",
+                data: row,
+                dataType: 'JSON',
+                success: function (result) {
+                    $.operate.ajaxSuccess(result);
+                    $.table.refresh();
+                }
+            });
+        }
+    }
+
+
+    function getIsElecSelect(row) {
+        var id = $("#id" + row.outDetailId).val();
+        if (id == null || id == undefined) {
+            return $.modal.msgError("请先选择出库文档类型！！！");
+        }
+    }
 </script>
 </body>
 

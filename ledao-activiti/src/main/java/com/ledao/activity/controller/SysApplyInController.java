@@ -763,6 +763,16 @@ public class SysApplyInController extends BaseController {
             if (sysApplyIn == null || !loginName.equals(sysApplyIn.getApplyUser())) {
                 return AjaxResult.error("不可操作");
             }
+            SysApplyOutDetail sysApplyOutDetail = new SysApplyOutDetail();
+            sysApplyOutDetail.setApplyId(sysApplyIn.getApplyId());
+            List<SysApplyOutDetail> sysApplyOutDetailList = sysApplyOutDetailService.selectSysApplyOutDetailList(sysApplyOutDetail);
+            for (SysApplyOutDetail sysApplyOutDetail1 : sysApplyOutDetailList) {
+                SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(sysApplyOutDetail1.getDocumentId());
+                int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail1.getCounts().toString());
+                sysDocumentFile.setCounts(Long.valueOf(count));
+                sysDocumentFile.setDocumentId(sysApplyOutDetail1.getDocumentId());
+                sysDocumentFileService.updateSysDocumentFile(sysDocumentFile);
+            }
         }
         AjaxResult res = sysApplyInService.deleteSysApplyInByIds(ids);
         return res;
@@ -1010,6 +1020,37 @@ public class SysApplyInController extends BaseController {
         sheetExcelDataList.add(sysDocumentFileSheetExcelData);
 
         util.exportSheetsExcel("出入库信息", sheetExcelDataList, response);
+    }
+
+    @Log(title = "修改出库档案份数", businessType = BusinessType.UPDATE)
+    @PostMapping("/editApplyOutCount")
+    @ResponseBody
+    public AjaxResult editApplyOutCount(SysApplyOutDetail sysApplyOutDetail) {
+        if ("1".equals(sysApplyOutDetail.getIsElec())) {
+            SysApplyOutDetail sysApplyOutDetail1 = sysApplyOutDetailService.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
+            SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(sysApplyOutDetail1.getDocumentId());
+            if (StringUtils.isNotNull(sysApplyOutDetail.getCounts()) || !sysApplyOutDetail.getCounts().equals(0)) {
+                if (sysApplyOutDetail.getCounts().longValue() > sysDocumentFile.getCounts().longValue()) {
+                    return error("出库份数大于库中存储份数");
+                }
+            } else {
+                return error("出库份数不能为空");
+            }
+            sysApplyOutDetail1.setCounts(sysApplyOutDetail.getCounts());
+            sysApplyOutDetail1.setUpdateBy(ShiroUtils.getLoginName());
+            sysApplyOutDetail1.setUpdateTime(new Date());
+            SysDocumentFile sysDocumentFile1 = new SysDocumentFile();
+            sysDocumentFile1.setDocumentId(sysApplyOutDetail1.getDocumentId());
+            int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) - Integer.parseInt(sysApplyOutDetail.getCounts().toString());
+            sysDocumentFile1.setCounts(Long.valueOf(count));
+            sysDocumentFile1.setUpdateBy(ShiroUtils.getLoginName());
+            sysDocumentFile1.setUpdateTime(new Date());
+            sysDocumentFileService.updateSysDocumentFile(sysDocumentFile1);
+            return toAjax(sysApplyOutDetailService.updateSysApplyOutDetail(sysApplyOutDetail));
+        } else {
+            return AjaxResult.error("出库文档类型为电子版，无需修改出库份数！！！");
+        }
+
     }
 
 }

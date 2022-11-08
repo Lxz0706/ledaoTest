@@ -521,6 +521,23 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
+    public static void main(String[] args) {
+        System.out.println(removeSameString("万兆楠,徐晓冬,蒋骄龙,万兆楠,祝家铭"));
+    }
+
+    public static String removeSameString(String str) {
+        Set<String> mlinkedset = new LinkedHashSet<>();
+        String[] strarray = str.split(",");
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < strarray.length; i++) {
+            if (!mlinkedset.contains(strarray[i])) {
+                mlinkedset.add(strarray[i]);
+                sb.append(strarray[i] + ",");
+            }
+        }
+        return sb.toString().substring(0, sb.toString().length() - 1);
+    }
+
     public static String removeSameString(String str, String type) {
         Set<String> mLinkedSet = new LinkedHashSet<String>();
         String[] strArray = str.split(",");
@@ -618,6 +635,48 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 获取省份简称
+     *
+     * @param province
+     * @return
+     */
+    public static String getProvince(String province) {
+        String newProvince = "";
+        if (province.contains("省")) {
+            newProvince = province.replace("省", "");
+        } else if (province.contains("市")) {
+            newProvince = province.replace("市", "");
+        } else if (province.contains("特别行政区")) {
+            newProvince = province.replace("特别行政区", "");
+        } else if (province.contains("壮族自治区")) {
+            newProvince = province.replace("壮族自治区", "");
+        } else if (province.contains("回族自治区")) {
+            newProvince = province.replace("回族自治区", "");
+        } else if (province.contains("维吾尔自治区")) {
+            newProvince = province.replace("维吾尔自治区", "");
+        } else if (province.contains("自治区")) {
+            newProvince = province.replace("自治区", "");
+        }
+        return newProvince;
+    }
+
+    /**
+     * 获取城市简称
+     *
+     * @param city
+     * @return
+     */
+    public static String getCity(String city) {
+        String newCity = "";
+        if (city.contains("市")) {
+            newCity = city.replace("市", "");
+        } else if (city.contains("县")) {
+            newCity = city.replace("县", "");
+        }
+        return newCity;
     }
 
 }

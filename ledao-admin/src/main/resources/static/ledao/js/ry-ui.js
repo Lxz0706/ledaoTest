@@ -343,7 +343,7 @@ var table = {
                     photos: {
                         "data": data
                     },
-                    closeBtn:1,
+                    closeBtn: 1,
                     anim: 5 // 0-6的选择，指定弹出图片动画类型，默认随机
                 });
             },
@@ -1237,14 +1237,15 @@ var table = {
                     $.operate.submit(url, "post", "json", data);
                 });
             },
-            changeAll:function (){
+            changeAll: function () {
                 table.set();
                 var rows = $.table.selectRows();
                 if (rows.length == 0) {
                     $.modal.alertWarning("请至少选择一条记录");
                     return;
-                };
-                console.log("========="+rows.length);
+                }
+                ;
+                console.log("=========" + rows.length);
                 for (var i = 0; i < rows.length; i++) {
                     console.log(rows[i].fileType);
                 }
@@ -1294,19 +1295,19 @@ var table = {
             },
 
             // 去除disable的input&select框必选
-             lock: function () {
+            lock: function () {
                 var txtSelect = $("select")
                 var txtInput = $("input")
                 var txtLabel = $("label")
-                for(var i =0;i < txtSelect.length;i++) {
-                    if(txtSelect[i].disabled) {
+                for (var i = 0; i < txtSelect.length; i++) {
+                    if (txtSelect[i].disabled) {
                         $(txtSelect[i]).removeClass('required')
                         $(txtLabel[i]).removeClass('is-required')
                     }
                 }
 
-                for(var k=0;k < txtInput.length;k++) {
-                    if(txtInput[k].readOnly) {
+                for (var k = 0; k < txtInput.length; k++) {
+                    if (txtInput[k].readOnly) {
                         $(txtInput[k]).removeClass('required')
                         $(txtLabel[k]).removeClass('is-required')
                     }
@@ -1393,7 +1394,7 @@ var table = {
                 }
             },
             // 查看信息
-            editLook:function (id) {
+            editLook: function (id) {
                 table.set();
                 if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
                     var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
@@ -1407,12 +1408,12 @@ var table = {
                     $.modal.opens("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
-            editApplyInAndOutLook: function (id,applyType,applyTypeUnDone,seOrEd) {
+            editApplyInAndOutLook: function (id, applyType, applyTypeUnDone, seOrEd) {
                 table.set();
                 var url = "edit/" + id + '/' + applyType + '/' + applyTypeUnDone + '/' + seOrEd
                 $.modal.opens("修改" + table.options.modalName, url);
             },
-            editApplyInAndOut: function (id,applyType,applyTypeUnDone,seOrEd) {
+            editApplyInAndOut: function (id, applyType, applyTypeUnDone, seOrEd) {
                 table.set();
                 var url = "edit/" + id + '/' + applyType + '/' + applyTypeUnDone + '/' + seOrEd
                 $.modal.open("修改" + table.options.modalName, url);
@@ -1480,7 +1481,7 @@ var table = {
                 $.ajax(config)
             },
 
-            uploadCheck:function (url,data,callback) {
+            uploadCheck: function (url, data, callback) {
                 var config = {
                     url: url,
                     type: "post",
@@ -2156,6 +2157,17 @@ var table = {
                 var index = path.lastIndexOf("."); // lastIndexOf("/")  找到最后一个  /  的位置
                 var fileType = path.substr(index + 1); // substr() 截取剩余的字符，即文件名doc
                 return fileType;
+            },
+            /**
+             * 限制输入框只能输入数字（小数点后3位）
+             * @param obj
+             */
+            getNumForStr: function (obj) {
+                obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+                obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+                obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个, 清除多余的
+                obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+                obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
             }
         }
     });

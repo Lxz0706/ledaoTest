@@ -5,7 +5,7 @@
  * by 樊小书生: http://www.fxss5201.cn/
  * github: https://github.com/fxss5201/steps
  */
-;(function(undefined) {
+;(function (undefined) {
     "use strict";
     var _global;
 
@@ -50,16 +50,18 @@
         })()
     };
 
-    var steps = function(options) {
+    var steps = function (options) {
         return new _steps(options);
     };
+
     // 插件构造函数
-    function _steps(options){
+    function _steps(options) {
         this._initial(options);
     }
+
     _steps.prototype = {
         constructor: this,
-        _initial: function(options) {
+        _initial: function (options) {
             var _this = this;
             // 默认参数
             var defined = {
@@ -87,47 +89,47 @@
                 customClass: ""
             };
             _this.options = utils.extend(true, defined, options); // 配置参数
-            if(!_this.options.el){
+            if (!_this.options.el) {
                 alert("请传入'el'参数");
                 return false;
             }
-            if(!_this.options.data || _this.options.data.length == 0){
+            if (!_this.options.data || _this.options.data.length == 0) {
                 alert("请传入'data'参数");
                 return false;
             }
             _this.options.dataLength = _this.options.data.length;
             _this.render();
         },
-        getBoxClass: function(){ // 最外层元素的class:"steps-horizontal","steps-center","steps-vertical"
+        getBoxClass: function () { // 最外层元素的class:"steps-horizontal","steps-center","steps-vertical"
             var _this = this,
                 options = _this.options,
                 direction = options.direction.toLowerCase(),
                 boxClass = "";
-            if(direction == "horizontal"){
+            if (direction == "horizontal") {
                 boxClass += "steps-horizontal";
-                if(options.center){
+                if (options.center) {
                     boxClass += " steps-center";
                 }
-            }else if(direction == "vertical"){
+            } else if (direction == "vertical") {
                 boxClass += "steps-vertical";
-            }else{
+            } else {
                 alert("参数'direction'错误");
             }
             return boxClass;
         },
-        getParentNode: function(){ // 通过参数el返回父元素
+        getParentNode: function () { // 通过参数el返回父元素
             var _this = this,
 
                 options = _this.options,
                 resultEl;
-            if (typeof options.el === "object"){ // 支持传入DOM对象
+            if (typeof options.el === "object") { // 支持传入DOM对象
                 resultEl = options.el;
-            } else if (typeof options.el === "string"){
+            } else if (typeof options.el === "string") {
                 resultEl = document.querySelector(options.el);
             }
             return resultEl;
         },
-        render: function(){ // 渲染样式
+        render: function () { // 渲染样式
             var _this = this,
                 options = _this.options,
                 boxHtml = "",
@@ -139,7 +141,7 @@
             boxHtml = boxHtml + '<div class="steps ' + options.boxClass + '">';
 
             var stepContainer = "";
-            options.data.forEach(function(currentValue, index, array){
+            options.data.forEach(function (currentValue, index, array) {
                 (currentValue[options.props.status] || currentValue[options.props.status] == 0) && (options.dataSetStatus = true);
 
                 // step的完成class
@@ -148,6 +150,7 @@
                     : ((!options.dataSetStatus && index <= options.active)
                         ? options.finishClass
                         : "");
+                console.log(options.dataSetStatus + "=======" + index + "-----" + options.active);
                 stepContainer = stepContainer + '<div class="step ' + options.defaultClass + ' ' + stepClass + '" style="' + _this.getStepStyle(index).join("") + '">{{stepHtml}}</div>';
 
                 // icon 处的布局
@@ -158,7 +161,7 @@
                 if (iconType == "number") {
                     stepIconInnerClass = "step-icon-number";
                     stepIconInnerText = index + 1;
-                } else if (iconType == "bullets"){
+                } else if (iconType == "bullets") {
                     stepIconInnerClass = "step-icon-bullets";
                 } else if (iconType == "custom") {
                     stepIconClass = "step-icon-custom-box";
@@ -172,7 +175,7 @@
                     lineIndex = options.dataOrder.indexOf("line"),
                     titleIndex = options.dataOrder.indexOf("title"),
                     descIndex = options.dataOrder.indexOf("description");
-                if(options.direction.toLowerCase() == "vertical" && options.dataWidth.length > 0){
+                if (options.direction.toLowerCase() == "vertical" && options.dataWidth.length > 0) {
                     lineStyle = "flex: " + (options.dataWidth[lineIndex] ? options.dataWidth[lineIndex] : "none") + ";";
                     titleStyle = "flex: " + (options.dataWidth[titleIndex] ? options.dataWidth[titleIndex] : "none") + ";";
                     descStyle = "flex: " + (options.dataWidth[descIndex] ? options.dataWidth[descIndex] : "none") + ";";
@@ -188,18 +191,18 @@
                 stepContainer = stepContainer.replace("{{stepHtml}}", stepHtml);
             });
 
-            if(options.dataSetStatus){
+            if (options.dataSetStatus) {
                 stepContainer = stepContainer.replace(/{{finishLineClass}}/g, "");
-            }else{
-                if(options.finishLine){
-                    for(var i = 0,len = options.dataLength; i < len; i++){
-                        if(i < options.active){
+            } else {
+                if (options.finishLine) {
+                    for (var i = 0, len = options.dataLength; i < len; i++) {
+                        if (i < options.active) {
                             stepContainer = stepContainer.replace(/{{finishLineClass}}/, options.finishLineClass);
-                        }else{
+                        } else {
                             stepContainer = stepContainer.replace(/{{finishLineClass}}/, "");
                         }
                     }
-                }else{
+                } else {
                     stepContainer = stepContainer.replace(/{{finishLineClass}}/g, "");
                 }
             }
@@ -225,30 +228,34 @@
             }
             return style;
         },
-        setActive: function(num){ // 重置active，如果data数据中含有status，则该方法自动废除
+        setActive: function (num) { // 重置active，如果data数据中含有status，则该方法自动废除
             var _this = this;
-            if(_this.options.dataSetStatus){
+            if (_this.options.dataSetStatus) {
                 alert("参数'data'中已设置'status',参数'active'已停用");
-            }else{
+            } else {
                 _this.options.active = num;
                 _this.render();
             }
         },
-        getActive: function(){ // 获取active，如果data数据中含有status，则该方法自动废除
+        getActive: function () { // 获取active，如果data数据中含有status，则该方法自动废除
             var _this = this;
-            if(_this.options.dataSetStatus){
+            if (_this.options.dataSetStatus) {
                 alert("参数'data'中已设置'status',参数'active'已停用");
-            }else{
+            } else {
                 return _this.options.active;
             }
         }
     }
     // 最后将插件对象暴露给全局对象
-    _global = (function(){ return this || (0, eval)('this'); }());
+    _global = (function () {
+        return this || (0, eval)('this');
+    }());
     if (typeof module !== "undefined" && module.exports) {
         module.exports = steps;
     } else if (typeof define === "function" && define.amd) {
-        define(function(){return steps;});
+        define(function () {
+            return steps;
+        });
     } else {
         !('steps' in _global) && (_global.steps = steps);
     }

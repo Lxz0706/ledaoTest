@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysPcczMapper">
+
+    <resultMap type="SysPccz" id="SysPcczResult">
+        <result property="id" column="id"/>
+        <result property="keyword" column="keyword"/>
+        <result property="title" column="title"/>
+        <result property="itemType" column="item_type"/>
+        <result property="gkr" column="gkr"/>
+        <result property="url" column="url"/>
+        <result property="status" column="status"/>
+        <result property="publishDate" column="publish_date"/>
+        <result property="uploadtime" column="uploadtime"/>
+    </resultMap>
+
+    <sql id="selectSysPcczVo">
+        select id,
+               keyword,
+               title,
+               item_type,
+               gkr,
+               url,
+               status,
+               publish_date,
+               uploadtime
+        from pccz
+    </sql>
+
+    <select id="selectSysPcczList" parameterType="SysPccz" resultMap="SysPcczResult">
+        <include refid="selectSysPcczVo"/>
+        <where>
+            <if test="keyword != null  and keyword != ''">and keyword = #{keyword}</if>
+            <if test="title != null  and title != ''">and title = #{title}</if>
+            <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
+            <if test="gkr != null  and gkr != ''">and gkr = #{gkr}</if>
+            <if test="url != null  and url != ''">and url = #{url}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="publishDate != null ">and publish_date = #{publishDate}</if>
+            <if test="uploadtime != null ">and uploadtime = #{uploadtime}</if>
+        </where>
+    </select>
+
+    <select id="selectSysPcczById" parameterType="Long" resultMap="SysPcczResult">
+        <include refid="selectSysPcczVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysPccz" parameterType="SysPccz">
+        insert into pccz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="keyword != null and keyword != ''">keyword,</if>
+            <if test="title != null">title,</if>
+            <if test="itemType != null">item_type,</if>
+            <if test="gkr != null">gkr,</if>
+            <if test="url != null">url,</if>
+            <if test="status != null">status,</if>
+            <if test="publishDate != null">publish_date,</if>
+            <if test="uploadtime != null">uploadtime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="keyword != null and keyword != ''">#{keyword},</if>
+            <if test="title != null">#{title},</if>
+            <if test="itemType != null">#{itemType},</if>
+            <if test="gkr != null">#{gkr},</if>
+            <if test="url != null">#{url},</if>
+            <if test="status != null">#{status},</if>
+            <if test="publishDate != null">#{publishDate},</if>
+            <if test="uploadtime != null">#{uploadtime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysPccz" parameterType="SysPccz">
+        update pccz
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="keyword != null and keyword != ''">keyword = #{keyword},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="itemType != null">item_type = #{itemType},</if>
+            <if test="gkr != null">gkr = #{gkr},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="publishDate != null">publish_date = #{publishDate},</if>
+            <if test="uploadtime != null">uploadtime = #{uploadtime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysPcczById" parameterType="Long">
+        delete
+        from pccz
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteSysPcczByIds" parameterType="String">
+        delete from pccz where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -29,22 +29,22 @@
             </form>
         </div>-->
 
-<!--        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:projectZck:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="system:projectZck:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-            <a class="btn btn-warning" onclick="updateManagerId()">
-                <i class="fa fa-download"></i> 修复
-            </a>
-        </div>-->
+        <!--        <div class="btn-group-sm" id="toolbar" role="group">
+                    <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:projectZck:add">
+                        <i class="fa fa-plus"></i> 添加
+                    </a>
+                    <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+                       shiro:hasPermission="system:projectZck:edit">
+                        <i class="fa fa-edit"></i> 修改
+                    </a>
+                    <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+                       shiro:hasPermission="system:projectZck:remove">
+                        <i class="fa fa-remove"></i> 删除
+                    </a>
+                    <a class="btn btn-warning" onclick="updateManagerId()">
+                        <i class="fa fa-download"></i> 修复
+                    </a>
+                </div>-->
         <!-- <div class="col-sm-12 select-table table-striped">
              <table id="bootstrap-table"></table>
          </div>-->
@@ -117,6 +117,18 @@
     var winHeight = height / 2;
     var lineHeight = winHeight / 8;
     var paddingTop = winHeight / 4;
+
+    function updateManager() {
+        $.ajax({
+            url: ctx + "system/project" + "/updateManager",
+            data: {},
+            dataType: "json",
+            type: "post",
+            success: function (data) {
+                console.log("data" + data);
+            }
+        })
+    }
 
     function showRow() {
         $.ajax({

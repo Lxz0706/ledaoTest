@@ -3,6 +3,7 @@ package com.ledao.web.controller.system;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.enums.BusinessType;
+import com.ledao.common.utils.GisUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.system.dao.SysJudicial;
 import com.ledao.system.service.ISysJudicialService;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author lxz
@@ -32,8 +36,7 @@ public class SysValuationModelController extends BaseController {
 
     @Log(title = "估值计算", businessType = BusinessType.OTHER)
     @GetMapping("/valuationModel")
-    public String valuationModel(String itemId, ModelMap modelMap) {
-        logger.info("itemId:=======" + itemId);
+    public String valuationModel(String itemId, String latLon, ModelMap modelMap) {
         SysJudicial sysJudicial1 = sysJudicialService.selectSysJudicialById(itemId);
         if (StringUtils.isNull(sysJudicial1.getItemConsultprice())) {
             modelMap.put("itemMarketPrice", sysJudicial1.getItemMarketprice());
@@ -44,7 +47,8 @@ public class SysValuationModelController extends BaseController {
         modelMap.put("itemCurrentprice", sysJudicial1.getItemCurrentprice());
         modelMap.put("itemType", sysJudicial1.getItemType());
         modelMap.put("itemStatus", sysJudicial1.getItemStatus());
-        modelMap.put("itemMarketPrice", sysJudicial1.getItemMarketprice());
+        modelMap.put("latLon", latLon);
         return prefix + "/valuationModel";
     }
+
 }

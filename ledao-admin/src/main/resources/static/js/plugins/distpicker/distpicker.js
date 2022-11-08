@@ -111,7 +111,6 @@
             }
 
             value = options[type];
-
             code = (
                 type === PROVINCE ? 86 :
                     type === CIRY ? this.$province && this.$province.find(':selected').data('code') :

@@ -441,7 +441,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
 
         if ("0".equals(sysApplyInEntity.getApplyType())) {
             //入库申请
-            if (user.getDirectorId() != null) {
+            if (StringUtils.isNotNull(user.getDirectorId()) && !user.getDirectorId().toString().equals("")) {
                 SysUser userDirector = userMapper.selectUserById(user.getDirectorId());
                 SysWorkflowProcess workDir = new SysWorkflowProcess();
                 workDir.setApplyLoginName(userDirector.getLoginName());
@@ -567,8 +567,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
 
             if ("0".equals(sysApplyInEntity.getIsReturn())) {
                 //需要归还
-
-
                 count++;
                 checkGet.setSortOrder(count);
                 checkGet.setCreateTime(new Date());
@@ -1587,8 +1585,11 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             List<SysApplyOutDetail> dfs = sysApplyOutDetailMapper.selectSysApplyOutDetailList(sd);
             for (SysApplyOutDetail df : dfs) {
                 if ("1".equals(df.getIsElec())) {
+                    SysDocumentFile sysDocumentFile1 = documentFileMapper.selectSysDocumentFileById(df.getDocumentId());
+                    int count = Integer.parseInt(sysDocumentFile1.getCounts().toString()) + Integer.parseInt(df.getCounts().toString());
                     SysDocumentFile sysDocumentFile = new SysDocumentFile();
                     sysDocumentFile.setDocumentStatu("1");
+                    sysDocumentFile.setCounts(Long.valueOf(count));
                     sysDocumentFile.setDocumentId(df.getDocumentId());
                     documentFileMapper.updateSysDocumentFile(sysDocumentFile);
                 }

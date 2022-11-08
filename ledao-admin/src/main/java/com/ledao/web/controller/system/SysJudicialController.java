@@ -1,7 +1,8 @@
 package com.ledao.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -82,11 +83,28 @@ public class SysJudicialController extends BaseController {
     @ResponseBody
     public String valuationmapList(SysJudicial sysJudicial) {
         JSONArray array = new JSONArray();
-        //统计请求的处理时间
-        //sysJudicial.setItemType("工业用房");
-        //sysJudicial.setItemStatus("已结束");
         List<SysJudicial> list = sysJudicialService.selectSysJudicialList(sysJudicial);
+        Map<String, String> map = new HashMap<>();
+        List<SysJudicial> sysJudicialList2 = new ArrayList<>();
         for (SysJudicial sysJudicial1 : list) {
+            if (StringUtils.isNotEmpty(sysJudicial1.getCoordinate())) {
+                if (!"0".equals(sysJudicial1.getCoordinate())) {
+                    if (map.containsKey(sysJudicial1.getCoordinate())) {
+                        StringBuffer sb = new StringBuffer();
+                        for (String s : sysJudicial1.getCoordinate().trim().split(",")) {
+                            sb.append(new BigDecimal(s.trim()).add(new BigDecimal("0.00001"))).append(",");
+                        }
+                        sysJudicial1.setCoordinate(sb.substring(0, sb.toString().length() - 1));
+                        map.put(sysJudicial1.getCoordinate(), sysJudicial1.getItemId());
+                        sysJudicialList2.add(sysJudicial1);
+                    } else {
+                        map.put(sysJudicial1.getCoordinate(), sysJudicial1.getItemId());
+                        sysJudicialList2.add(sysJudicial1);
+                    }
+                }
+            }
+        }
+        for (SysJudicial sysJudicial1 : sysJudicialList2) {
             JSONObject object = new JSONObject();
             if (StringUtils.isNotEmpty(sysJudicial1.getCoordinate())) {
                 if (!"0".equals(sysJudicial1.getCoordinate())) {
@@ -105,14 +123,29 @@ public class SysJudicialController extends BaseController {
                     //成交价
                     object.put("itemCurrentprice", sysJudicial1.getItemCurrentprice());
                     //成交日期
-                    object.put("itemEndTime", DateUtils.parseDateToStr("yyyy-MM-dd", sysJudicial1.getItemEndTime()));
+                    if (StringUtils.isNotNull(sysJudicial1.getItemEndTime())) {
+                        object.put("itemEndTime", DateUtils.parseDateToStr("yyyy-MM-dd", sysJudicial1.getItemEndTime()));
+                    }
                     //状态
                     object.put("tags", sysJudicial1.getTags());
+                    object.put("itemId", sysJudicial1.getItemId());
+                    object.put("latLon", GisUtils.getDistance(Double.valueOf(sysJudicial.getLatLon().split(",")[0]), Double.valueOf(sysJudicial.getLatLon().split(",")[1]), Double.valueOf(sysJudicial1.getCoordinate().split(",")[0]), Double.valueOf(sysJudicial1.getCoordinate().split(",")[1])));
                     array.add(object);
                 }
             }
         }
         return array.toString();
+    }
+
+    public static void main(String[] args) {
+        String s = "120.29650599,31.64596393; 133.997776, 36.749563; 120.36901443,31.55381549;120.34924183,31.60148982";
+        StringBuffer sb = new StringBuffer();
+        for (String ss : s.split(";")) {
+            for (String s1 : ss.split(",")) {
+                sb.append(new BigDecimal(s1.trim()).add(new BigDecimal("0.00001"))).append(",");
+            }
+        }
+        System.out.println("======" + sb.substring(0, sb.toString().length() - 1));
     }
 
     protected TableDataInfo getDataTable(List<?> list, SysJudicial sysJudicial) {

@@ -1,94 +1,218 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <th:block th:include="include :: header('【请填写功能名称】列表')"/>
     <th:block th:include="include :: select2-css"/>
 </head>
-<body class="gray-bg">
-<div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="select-list">
-                <input type="hidden" id="itemTypes" th:value="*{itemType}">
-                <input type="hidden" id="itemStatuses" th:value="*{itemStatus}">
-                <ul>
-                    <li>
-                        <label>类型：</label>
-                        <select id="itemType">
-                            <option value="">--请选择--</option>
-                            <option value="住宅用房">住宅用房</option>
-                            <option value="商业用房">商业用房</option>
-                            <option value="工业用房">工业用房</option>
-                        </select>
-                    </li>
-                    <li>
-                        <label>状态</label>
-                        <select id="itemStatus" onchange="changeStatus()">
-                            <option value="">--请选择--</option>
-                            <option value="已结束">成交</option>
-                            <option value="已结束(流拍)">流拍</option>
-                            <option value="市场法">市场法</option>
-                        </select>
-                    </li>
-                    <li>
-                        标的物建筑面积（m²）：
-                        <input type="text" id="floorSpace" onkeyup="num(this)" th:value="*{floorSpace}"
-                               placeholder="请输入标的物建筑面积" required>
-                    </li>
-                    <li>
-                        系数1：
-                        <input type="text" id="num1" onkeyup="num(this)" placeholder="请输入系数1" required>
-                    </li>
-                    <li>
-                        系数2：
-                        <input type="text" id="num2" onkeyup="num(this)" placeholder="请输入系数2" required>
-                    </li>
-                    <li>
-                        成交价格（元）：
-                        <input type="text" id="itemCurrentPrice" onkeyup="num(this)" th:value="*{itemCurrentprice}"
-                               placeholder="请输入成交价格">
-                    </li>
-                    <li id="itemPrices" style="display: none">
-                        挂牌价（元）：
-                        <input type="text" id="itemPrice" onkeyup="num(this)" placeholder="请输入挂牌价">
-                    </li>
-                    <li>
-                        评估价/市场价（元）：
-                        <input type="text" id="itemMarketPrice" onkeyup="num(this)" th:value="*{itemMarketPrice}"
-                               placeholder="请输入评估价/市场价">
-                    </li>
-                    <li>
-                        参考物建筑面积（m²）：
-                        <input type="text" id="building" onkeyup="num(this)" placeholder="请输入参考物建筑面积">
-                    </li>
-                    <li>
-                        参考物有证建筑面积（m²）：
-                        <input type="text" id="building1" onkeyup="num(this)" placeholder="请输入参考物有证建筑面积">
-                    </li>
-                    <li>
-                        赋值单价（有证）（元）：
-                        <input type="text" id="price1" onkeyup="num(this)" placeholder="请输入赋值单价（有证）">
-                    </li>
-                    <li>
-                        参考物无证建筑面积（m²）：
-                        <input type="text" id="building2" onkeyup="num(this)" placeholder="请输入参考物无证建筑面积">
-                    </li>
-                    <li>
-                        赋值单价（无证）（元）：
-                        <input type="text" id="price2" onkeyup="num(this)" placeholder="请输入赋值单价（无证）">
-                    </li>
-                    <li>
-                        结果：
-                        <input type="text" id="valuation" placeholder="结果">
-                    </li>
-                    <li>
-                        <a class="btn btn-primary btn-rounded btn-sm" onclick="reckon()"><i
-                                class="fa fa-search"></i>&nbsp;计算</a>
-                    </li>
-                </ul>
+<body>
+<div class="main-content">
+    <form id="form-user-add" class="form-horizontal">
+        <input type="hidden" id="itemTypes" th:value="*{itemType}">
+        <input type="hidden" id="itemStatuses" th:value="*{itemStatus}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">类型 ：</label>
+            <div class="col-sm-8">
+                <select id="itemType" name="itemType" onchange="itemTypeChange()" required>
+                    <option value="">--请选择--</option>
+                    <option value="住宅用房">住宅用房</option>
+                    <option value="商业用房">商业用房</option>
+                    <option value="工业用房">工业用房</option>
+                </select>
             </div>
         </div>
-    </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">状态 ：</label>
+            <div class="col-sm-8">
+                <select id="itemStatus" name="itemStatus" onchange="changeStatus()" required>
+                    <option value="">--请选择--</option>
+                    <option value="成交">成交</option>
+                    <option value="流拍">流拍</option>
+                    <!--                    <option value="市场法">市场法</option>-->
+                </select>
+            </div>
+        </div>
+        <div>
+            <div class="form-group isBuilding">
+                <label class="col-sm-3 control-label">参考物建筑面积（m²）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="building" name="building" onkeyup="num(this)" class="form-control"
+                           placeholder="请输入参考物建筑面积">
+                </div>
+            </div>
+            <div class="isGy">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">参考物土地面积（m²）：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="area" name="area" onkeyup="num(this)" class="form-control"
+                               placeholder="请输入参考物土地面积">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">参考物有证建筑面积（m²）：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="building1" name="building1" onkeyup="num(this)" class="form-control"
+                               placeholder="请输入参考物有证建筑面积">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">赋值单价（有证）（元）：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="price1" name="price1" onkeyup="num(this)" class="form-control"
+                               placeholder="请输入赋值单价（有证）">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">参考物无证建筑面积（m²）：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="building2" name="building2" onkeyup="num(this)" class="form-control"
+                               placeholder="请输入参考物无证建筑面积">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">赋值单价（无证）（元）：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="price2" name="price2" onkeyup="num(this)" class="form-control"
+                               placeholder="请输入赋值单价（无证）">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">成交价格（元）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="itemCurrentPrice" name="itemCurrentPrice" onkeyup="num(this)"
+                           th:value="*{itemCurrentprice}" class="form-control"
+                           placeholder="请输入成交价格">
+                </div>
+            </div>
+            <!--        <div class="form-group">-->
+            <!--            <label class="col-sm-3 control-label">挂牌价（元）：</label>-->
+            <!--            <div class="col-sm-8">-->
+            <!--                <input type="text" id="itemPrice" name="itemPrice" onkeyup="num(this)" class="form-control"-->
+            <!--                       placeholder="请输入挂牌价">-->
+            <!--            </div>-->
+            <!--        </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">评估价/市场价（元）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="itemMarketPrice" name="itemMarketPrice" onkeyup="num(this)"
+                           class="form-control"
+                           th:value="*{itemMarketPrice}"
+                           placeholder="请输入评估价/市场价">
+                </div>
+            </div>
+            <div class="form-group unitPrice">
+                <label class="col-sm-3 control-label">建筑物单价 ：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="unitPrice" name="unitPrice" class="form-control" placeholder="建筑物单价">
+                </div>
+            </div>
+            <div class="form-group areaUnitPrice">
+                <label class="col-sm-3 control-label">土地单价 ：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="areaUnitPrice" name="areaUnitPrice" class="form-control"
+                           placeholder="土地单价">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">与参考物之间距离（米） ：</label>
+                <div class="col-sm-8">
+                    <input type="text" name="latLon" class="form-control" placeholder="请手动输入与参考物之间距离（米）"
+                           th:value="*{latLon}">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-offset-5 col-sm-10">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="reckon()"><i
+                            class="fa fa-check"></i>单 价 计 算
+                    </button>&nbsp;
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <button class="btn btn-info" type="button" title="新增参考物" id="addSaltIpGrpBtn"
+                    onclick="addDiv(this)">
+                <span class="glyphicon glyphicon-plus"></span>新增参考物
+            </button>
+        </div>
+        <div class="form-group isBuilding">
+            <label class="col-sm-3 control-label">标的物建筑面积（m²）：</label>
+            <div class="col-sm-8">
+                <input type="text" id="floorSpace" name="floorSpace" onkeyup="num(this)"
+                       class="form-control"
+                       placeholder="请输入标的物建筑面积">
+            </div>
+        </div>
+        <div class="isGy">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">标的物土地面积（m²）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="areaSpace" name="areaSpace" onkeyup="num(this)"
+                           class="form-control"
+                           placeholder="请输入标的物建筑面积">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">标的物有证建筑面积（m²）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="building3" name="building3" onkeyup="num(this)"
+                           class="form-control"
+                           placeholder="请输入标的物有证建筑面积（m²）">
+                </div>
+            </div>
+            <div class="form-group">
+                    <label class="col-sm-3 control-label">赋值单价（有证）（元）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="price3" name="price3" onkeyup="num(this)"
+                           class="form-control"
+                           placeholder="请输入赋值单价（有证）（元）">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">标的物无证建筑面积（m²）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="building4" name="building4" onkeyup="num(this)"
+                           class="form-control"
+                           placeholder="请输入标的物无证建筑面积（m²）">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">赋值单价（无证）（元）：</label>
+                <div class="col-sm-8">
+                    <input type="text" id="price4" name="price4" onkeyup="num(this)"
+                           class="form-control"
+                           placeholder="请输入赋值单价（无证）（元）">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">系数1 (不填默认为1)：</label>
+            <div class="col-sm-8">
+                <input type="text" id="num1" name="num1" onkeyup="num(this)" placeholder="请输入系数1(不填默认为1)"
+                       class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">系数2 (不填默认为1)：</label>
+            <div class="col-sm-8">
+                <input type="text" id="num2" name="num2" onkeyup="num(this)" placeholder="请输入系数2(不填默认为1)"
+                       class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">参考物1估值总价 ：</label>
+            <div class="col-sm-8">
+                <input type="text" id="valuation" name="valuation" class="form-control" placeholder="参考物1估值总价">
+            </div>
+        </div>
+        <div class="row" id="jiSuan">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="button" class="btn btn-sm btn-primary" onclick="reckon1()"><i
+                        class="fa fa-check"></i>总 价 计 算
+                </button>&nbsp;
+            </div>
+        </div>
+    </form>
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: select2-js"/>
@@ -96,16 +220,18 @@
     var prefix = ctx + "system/valuationModel";
     var circle;
     var flag = false;
+    var i = 3;
+    var k = 1;
 
     $(function () {
         set_select_checked("itemType", $("#itemTypes").val());
         set_select_checked("itemStatus", $("#itemStatuses").val());
+        itemTypeChange();
     })
 
 
     function set_select_checked(selectId, checkValue) {
         var select = document.getElementById(selectId);
-
         for (var i = 0; i < select.options.length; i++) {
             if (select.options[i].value == checkValue) {
                 select.options[i].selected = true;
@@ -128,94 +254,115 @@
     }
 
     function itemTypeChange() {
-        var itemType = $('#itemType').val();
-        console.log("======" + itemType);
-    }
-
-    function changeStatus() {
-        var itemStatus = $("#itemStatus").val();
-        var itemPrice = $("#itemPrice").val();
-        if ($.common.equals("流拍", itemStatus)) {
-
-        } else if ($.common.equals("市场", itemStatus)) {
-            $("#itemPrices").show();
+        var itemType = $("#itemType").val();
+        if ($.common.equals("工业用房", itemType)) {
+            $(".isGy").show();
+            $(".unitPrice").hide();
+            $(".isBuilding").hide();
+            $(".areaUnitPrice").show();
+        } else {
+            $(".unitPrice").show();
+            $(".isBuilding").show();
+            $(".isGy").hide();
+            $(".areaUnitPrice").hide();
         }
     }
 
-    function reckon() {
+    function changeStatus() {
+        // if ($.validate.form()) {
+        //    //reckon();
+        // }
+    }
+
+    function reckon(obj) {
+        if (obj == undefined) {
+            obj = '';
+        }
         //类型
         var itemType = $('#itemType').val();
         //拍卖状态
         var itemStatus = $("#itemStatus").val();
         //计算公式
-        var reckon = $("#reckon").val();
+        var reckon = $("#reckon" + obj).val();
         //标的物建筑面积
-        var floorSpace = $("#floorSpace").val();
+        var floorSpace = $("#floorSpace" + obj).val();
         //系数1
-        var num1 = $("#num1").val();
+        var num1 = $("#num1" + obj).val();
         //系数2
-        var num2 = $("#num2").val();
-        //系数3
-        var num3 = $("#num3").val();
-        //系数4
-        var num4 = $("#num4").val();
+        var num2 = $("#num2" + obj).val();
         //成交价
-        var itemCurrentPrice = $("#itemCurrentPrice").val();
+        var itemCurrentPrice = $("#itemCurrentPrice" + obj).val();
         //参考物建筑面积
-        var building = $("#building").val();
+        var building = $("#building" + obj).val();
         //挂牌价
-        var itemPrice = $("#itemPrice").val();
+        //var itemPrice = $("#itemPrice").val();
         //评估价/市场价
-        var itemMarketPrice = $("#itemMarketPrice").val();
-        //有证建筑面积
-        var building1 = $("#building1").val();
-        //有证建筑面积
-        var building2 = $("#building2").val();
-        //有证建筑面积
-        var price1 = $("#price1").val();
-        //有证建筑面积
-        var price2 = $("#price2").val();
+        var itemMarketPrice = $("#itemMarketPrice" + obj).val();
+        //参考物有证建筑面积
+        var building1 = $("#building1" + obj).val();
+        //参考物无证建筑面积
+        var building2 = $("#building2" + obj).val();
+        //参考物有证建筑面积赋值单价
+        var price1 = $("#price1" + obj).val();
+        //参考物无证建筑面积赋值单价
+        var price2 = $("#price2" + obj).val();
+        //参考物土地面积
+        var area = $("#area" + obj).val();
 
         var value = "";
         //结果
         var valuation;
+        //单价
+        var unitPrice;
+        var areaUnitPrice;
 
-
-        var price = getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemPrice, itemMarketPrice, building1, price1, building2, price2);
-        console.log(price);
+        if (!$.common.equals("工业用房", itemType)) {
+            if ($.common.isEmpty(building)) {
+                return $.modal.alertWarning("请输入参考物建筑面积");
+            }
+        }
 
         if ($.common.isEmpty(num1)) {
-            num1 = 0.5;
+            num1 = 1;
         }
 
         if ($.common.isEmpty(num2)) {
-            num2 = 0.8;
+            num2 = 1;
         }
+
+        var price = getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemMarketPrice, building1, price1, building2, price2, area);
 
         if ($.common.equals("住宅用房", itemType)) {
-            valuation = (floorSpace * num1 * num2 * price)
+            unitPrice = price;
         } else if ($.common.equals("商业用房", itemType)) {
-            valuation = (floorSpace * num1 * num2 * price)
+            unitPrice = price;
         } else if ($.common.equals("工业用房", itemType)) {
-            valuation = ((floorSpace * num1 * price) + ((building1 * price1) + (building2 * price2)))
+            //标的物单价
+            unitPrice = price;
+            areaUnitPrice = price;
         }
-        console.log("valuation:-----" + valuation);
-        //$("#valuation").val(valuation.toFixed(3));
+
+        unitPrice = isNaN(unitPrice) ? 0 : unitPrice;
+        areaUnitPrice = isNaN(areaUnitPrice) ? 0 : areaUnitPrice;
+
+        if (!$.common.equals("工业用房", itemType)) {
+            $("#unitPrice" + obj).val($.common.isEmpty(unitPrice) ? 0 : unitPrice.toFixed(3));
+        } else {
+            $("#areaUnitPrice" + obj).val($.common.isEmpty(areaUnitPrice) ? 0 : areaUnitPrice.toFixed(3))
+        }
     }
 
-    function getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemPrice, itemMarketPrice, building1, price1, building2, price2) {
+    function getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemMarketPrice, building1, price1, building2, price2, area) {
         var price;
         var prices;
         if ($.common.equals("工业用房", itemType)) {
+            building = area;
             prices = (building1 * price1) + (building2 * price2);
         }
         if ($.common.isEmpty(prices)) {
             prices = 0;
         }
-        if ($.common.isEmpty(num1)) {
-            num1 = 0.8;
-        }
-        if ($.common.equals("已结束", itemStatus)) {
+        if ($.common.equals("成交", itemStatus)) {
             if ($.common.isNotEmpty(itemMarketPrice)) {
                 if (parseFloat(itemCurrentPrice) > parseFloat(itemMarketPrice)) {
                     price = (((itemCurrentPrice * num1) - prices) / building);
@@ -226,17 +373,218 @@
                 price = ((itemCurrentPrice - prices) / building);
             }
 
-        } else if ($.common.equals("已结束(流拍)", itemStatus)) {
+        } else if ($.common.equals("流拍", itemStatus)) {
             if (parseFloat(itemCurrentPrice) >= parseFloat(itemMarketPrice)) {
                 price = (((itemCurrentPrice * 0.8) - prices) / building);
             } else {
                 price = (((itemMarketPrice * 0.56) - prices) / building);
             }
-        } else if ($.common.equals("市场法", itemStatus)) {
-            price = (((itemPrice * num1) - prices) / building);
         }
+
         return price;
     }
+
+    function reckon1() {
+        var obj;
+        if (i == 3) {
+            obj = '';
+            getTotal(obj)
+        }
+        for (var j = 1; j < i; j++) {
+            obj = j;
+            getTotal(obj);
+        }
+
+    }
+
+    function getTotal(obj) {
+        if (obj == undefined || obj == 1 || obj == 2 || obj == '') {
+            obj = '';
+        }
+        //类型
+        var itemType = $('#itemType').val();
+        //标的物建筑面积
+        var floorSpace = $("#floorSpace").val();
+        //系数1
+        var num1 = $("#num1" + obj).val();
+        //系数2
+        var num2 = $("#num2" + obj).val();
+        //标的物土地面积
+        var areaSpace = $("#areaSpace").val();
+        //标的物有证建筑面积
+        var building3 = $("#building3").val();
+        //标的物无证建筑面积
+        var building4 = $("#building4").val();
+        //标的物有证建筑面积赋值单价
+        var price3 = $("#price3").val();
+        //标的物无证建筑面积赋值单价
+        var price4 = $("#price4").val();
+        //结果
+        var valuation;
+        //单价
+        var price;
+
+        if (!$.common.equals("工业用房", itemType)) {
+            price = $("#unitPrice" + obj).val();
+        } else {
+            price = $("#areaUnitPrice" + obj).val();
+        }
+        if (price !== undefined) {
+            if ($.common.isEmpty(price)) {
+                return $.modal.alertWarning("请先计算单价！！！");
+            }
+            if ($.common.isEmpty(num1)) {
+                num1 = 1;
+            }
+
+            if ($.common.isEmpty(num2)) {
+                num2 = 1;
+            }
+
+            if ($.common.equals("住宅用房", itemType)) {
+                valuation = (floorSpace * num1 * num2 * price);
+            } else if ($.common.equals("商业用房", itemType)) {
+                valuation = (floorSpace * num1 * num2 * price);
+            } else if ($.common.equals("工业用房", itemType)) {
+                valuation = ((areaSpace * num1 * price) + ((building3 * price3) + (building4 * price4)));
+            }
+
+            valuation = isNaN(valuation) ? 0 : valuation;
+            $("#valuation" + obj).val($.common.isEmpty(valuation) ? 0 : valuation.toFixed(3));
+        }
+    }
+
+    function addDiv(obj) {
+        k++;
+        html = '<div id="addDiv' + i + '">' +
+            '<div class="form-group isBuilding">\n' +
+            '                <label class="col-sm-3 control-label">参考物建筑面积（m²）：</label>\n' +
+            '                <div class="col-sm-8">\n' +
+            '                    <input type="text" id="building' + i + '" name="building' + i + '" onkeyup="num(this)" class="form-control"\n' +
+            '                           placeholder="请输入参考物建筑面积">\n' +
+            '                </div>\n' +
+            '            </div>' +
+            '<div class="isGy">\n' +
+            '                <div class="form-group">\n' +
+            '                    <label class="col-sm-3 control-label">参考物土地面积（m²）：</label>\n' +
+            '                    <div class="col-sm-8">\n' +
+            '                        <input type="text" id="area' + i + '" name="area' + i + '" onkeyup="num(this)" class="form-control"\n' +
+            '                               placeholder="请输入参考物土地面积">\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="form-group">\n' +
+            '                    <label class="col-sm-3 control-label">参考物有证建筑面积（m²）：</label>\n' +
+            '                    <div class="col-sm-8">\n' +
+            '                        <input type="text" id="building1' + i + '" name="building1' + i + '" onkeyup="num(this)" class="form-control"\n' +
+            '                               placeholder="请输入参考物有证建筑面积">\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="form-group">\n' +
+            '                    <label class="col-sm-3 control-label">赋值单价（有证）（元）：</label>\n' +
+            '                    <div class="col-sm-8">\n' +
+            '                        <input type="text" id="price1' + i + '" name="price1' + i + '" onkeyup="num(this)" class="form-control"\n' +
+            '                               placeholder="请输入赋值单价（有证）">\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="form-group">\n' +
+            '                    <label class="col-sm-3 control-label">参考物无证建筑面积（m²）：</label>\n' +
+            '                    <div class="col-sm-8">\n' +
+            '                        <input type="text" id="building2' + i + '" name="building2' + i + '" onkeyup="num(this)" class="form-control"\n' +
+            '                               placeholder="请输入参考物无证建筑面积">\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="form-group">\n' +
+            '                    <label class="col-sm-3 control-label">赋值单价（无证）（元）：</label>\n' +
+            '                    <div class="col-sm-8">\n' +
+            '                        <input type="text" id="price2' + i + '" name="price2' + i + '" onkeyup="num(this)" class="form-control"\n' +
+            '                               placeholder="请输入赋值单价（无证）">\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="form-group">\n' +
+            '                <label class="col-sm-3 control-label">成交价格（元）：</label>\n' +
+            '                <div class="col-sm-8">\n' +
+            '                    <input type="text" id="itemCurrentPrice' + i + '" name="itemCurrentPrice" onkeyup="num(this)"\n' +
+            '                           th:value="*{itemCurrentprice}" class="form-control"\n' +
+            '                           placeholder="请输入成交价格">\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="form-group">\n' +
+            '                <label class="col-sm-3 control-label">评估价/市场价（元）：</label>\n' +
+            '                <div class="col-sm-8">\n' +
+            '                    <input type="text" id="itemMarketPrice' + i + '" name="itemMarketPrice' + i + '" onkeyup="num(this)"\n' +
+            '                           class="form-control"\n' +
+            '                           th:value="*{itemMarketPrice}"\n' +
+            '                           placeholder="请输入评估价/市场价">\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="form-group unitPrice">\n' +
+            '                <label class="col-sm-3 control-label">建筑物单价 ：</label>\n' +
+            '                <div class="col-sm-8">\n' +
+            '                    <input type="text" id="unitPrice' + i + '" name="unitPrice" class="form-control" placeholder="建筑物单价">\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="form-group areaUnitPrice">\n' +
+            '                <label class="col-sm-3 control-label">土地单价 ：</label>\n' +
+            '                <div class="col-sm-8">\n' +
+            '                    <input type="text" id="areaUnitPrice' + i + '" name="areaUnitPrice' + i + '" class="form-control"\n' +
+            '                           placeholder="土地单价">\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="form-group">\n' +
+            '                <label class="col-sm-3 control-label">与参考物之间距离（米） ：</label>\n' +
+            '                <div class="col-sm-8">\n' +
+            '                    <input type="text" name="latLon' + i + '" class="form-control" placeholder="请手动输入与参考物之间距离（米）" th:value="*{latLon}">\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '            <div class="row form-group">\n' +
+            '                <div class="col-sm-offset-5 col-sm-10">\n' +
+            '                    <button type="button" class="btn btn-sm btn-primary" onclick="reckon(' + i + ')"><i\n' +
+            '                            class="fa fa-check"></i>单 价 计 算\n' +
+            '                    </button>&nbsp;\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '<div class="row form-group">\n' +
+            '                <div class="col-sm-offset-5 col-sm-10">\n' +
+            '                    <button class="btn btn-info" type="button" data-toggle="tooltip" title="删除" id="delWeChatNum" onclick="deleteDiv(' + i + ')"><i\n' +
+            '                            class="fa fa-check"></i>删除此参考物\n' +
+            '                    </button>&nbsp;\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '</div>'
+        obj.insertAdjacentHTML('beforebegin', html);
+        valueHtml =
+            '<div class="form-group" id="jiSuan' + i + '">\n' +
+            '<div class="form-group">\n' +
+            '            <label class="col-sm-3 control-label">系数1 (不填默认为1)：</label>\n' +
+            '            <div class="col-sm-8">\n' +
+            '                <input type="text" id="num1' + i + '" name="num1" onkeyup="num(this)" placeholder="请输入系数1(不填默认为1)"\n' +
+            '                       class="form-control">\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '        <div class="form-group">\n' +
+            '            <label class="col-sm-3 control-label">系数2 (不填默认为1)：</label>\n' +
+            '            <div class="col-sm-8">\n' +
+            '                <input type="text" id="num2' + i + '" name="num2" onkeyup="num(this)" placeholder="请输入系数2(不填默认为1)"\n' +
+            '                       class="form-control">\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '            <label class="col-sm-3 control-label">参考物' + k + '估值总价 ：</label>\n' +
+            '            <div class="col-sm-8">\n' +
+            '                <input type="text" id="valuation' + i + '" name="valuation' + i + '" class="form-control" placeholder="估值总价">\n' +
+            '            </div>\n' +
+            '        </div>';
+        $("#jiSuan").before(valueHtml);
+        itemTypeChange();
+        i++;
+    }
+
+    function deleteDiv(obj) {
+        $("#addDiv" + obj).remove();
+        $("#jiSuan" + obj).remove();
+        k--;
+    }
+
 
 </script>
 </body>

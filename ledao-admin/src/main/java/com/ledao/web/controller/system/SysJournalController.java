@@ -9,9 +9,7 @@ import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
-import com.ledao.system.service.ISysConfigService;
-import com.ledao.system.service.ISysDeptService;
-import com.ledao.system.service.ISysUserService;
+import com.ledao.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ledao.common.annotation.Log;
 import com.ledao.common.enums.BusinessType;
-import com.ledao.system.service.ISysJournalService;
 import com.ledao.common.core.controller.BaseController;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.utils.poi.ExcelUtil;
@@ -52,6 +49,9 @@ public class SysJournalController extends BaseController {
 
     @Autowired
     private ISysConfigService sysConfigService;
+
+    @Autowired
+    private ISysHolidayService sysHolidayService;
 
     //    @RequiresPermissions("system:journal:view")
     @GetMapping()
@@ -315,8 +315,14 @@ public class SysJournalController extends BaseController {
         String begintTime = (String) sysJournal.getParams().get("startTime");
         String endTime = (String) sysJournal.getParams().get("endTime");
         List<SysJournalCreator> list = new ArrayList<>();
+        SysHoliday sysHoliday = new SysHoliday();
+        List<SysHoliday> sysHolidayList = sysHolidayService.selectSysHolidayList(sysHoliday);
+        Set<String> set = new HashSet<>();
+        for (SysHoliday sysHoliday1 : sysHolidayList) {
+            set.add(sysHoliday1.getHoliday());
+        }
         for (String days : DateUtils.findDaysStr(begintTime, endTime)) {
-            Set<String> set = DateUtils.JJR(DateUtils.parseDateToStr("yyyy", DateUtils.parseDate(days)), DateUtils.parseDateToStr("MM", DateUtils.parseDate(days)));
+            //Set<String> set = DateUtils.JJR(DateUtils.parseDateToStr("yyyy", DateUtils.parseDate(days)), DateUtils.parseDateToStr("MM", DateUtils.parseDate(days)));
             if (!set.contains(days)) {
                 SysUser sysUser = new SysUser();
                 sysUser.setSelectTime(days);
@@ -326,16 +332,7 @@ public class SysJournalController extends BaseController {
                     sysJournalCreator.setUserName(sysUser1.getUserName());
                     sysJournalCreator.setBeginTime(days);
                     sysJournalCreator.setDeptName(sysDeptService.selectDeptById(sysUser1.getDeptId()).getDeptName());
-                    //if (list.size() > 0) {
-                    //    for (SysJournalCreator sysJournalCreator1 : list) {
-                     //       if (sysJournalCreator1.getUserName().equals(sysUser1.getUserName()) && !days.equals(sysJournalCreator1.getBeginTime())) {
-                     //           sysJournalCreator.setBeginTime(sysJournalCreator.getBeginTime() + "," + days);
-                    //        }
-                    //    }
-                   // } else {
-                        list.add(sysJournalCreator);
-                    //}
-
+                    list.add(sysJournalCreator);
                 }
             }
         }

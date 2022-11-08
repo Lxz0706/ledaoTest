@@ -67,6 +67,7 @@
         <result property="companyName" column="company_name"/>
         <result property="dailyDocumentTypeContract" column="daily_document_type_contract"/>
         <result property="eleDocumentStatu" column="ele_document_statu"/>
+        <result property="counts" column="counts"/>
     </resultMap>
 
     <sql id="selectSysApplyOutDetailVo">
@@ -90,7 +91,8 @@
                create_time,
                update_by,
                reviser,
-               update_time
+               update_time,
+               counts
         from sys_apply_out_detail
     </sql>
 
@@ -115,6 +117,7 @@
             <if test="eleDocumentStatu != null  and eleDocumentStatu != ''">and ele_document_statu =
                 #{eleDocumentStatu}
             </if>
+            <if test="counts !=null">and counts = #{counts}</if>
         </where>
         order by create_time desc
     </select>
@@ -141,6 +144,7 @@
         od.update_by,
         od.reviser,
         od.update_time,
+        od.counts,
         od.ele_document_statu,
         file.asset_number,
         file.contract_no,
@@ -223,6 +227,7 @@
             <if test="reviser != null">reviser,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="eleDocumentStatu != null">ele_document_statu,</if>
+            <if test="counts !=null">counts,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="applyId != null">#{applyId},</if>
@@ -245,6 +250,7 @@
             <if test="reviser != null">#{reviser},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="eleDocumentStatu != null">#{eleDocumentStatu},</if>
+            <if test="counts !=null">#{counts},</if>
         </trim>
     </insert>
 
@@ -271,6 +277,7 @@
             <if test="reviser != null">reviser = #{reviser},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="eleDocumentStatu != null">ele_document_statu = #{eleDocumentStatu},</if>
+            <if test="counts !=null">counts = #{counts},</if>
         </trim>
         where out_detail_id = #{outDetailId}
     </update>
@@ -317,6 +324,7 @@
             <if test="reviser != null">reviser = #{reviser},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="eleDocumentStatu != null">ele_document_statu = #{eleDocumentStatu},</if>
+            <if test="counts !=null">counts = #{counts},</if>
         </trim>
         where out_detail_id IN (${outFileDetailIds})
     </update>

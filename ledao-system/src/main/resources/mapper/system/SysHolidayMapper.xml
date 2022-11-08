@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysHolidayMapper">
+
+    <resultMap type="SysHoliday" id="SysHolidayResult">
+        <result property="holiday" column="holiday"/>
+    </resultMap>
+
+    <sql id="selectSysHolidayVo">
+        select holiday
+        from sys_holiday
+    </sql>
+
+    <select id="selectSysHolidayList" parameterType="SysHoliday" resultMap="SysHolidayResult">
+        <include refid="selectSysHolidayVo"/>
+        <where>
+            <if test="holiday != null  and holiday != ''">and holiday = #{holiday}</if>
+        </where>
+    </select>
+
+    <select id="selectSysHolidayById" parameterType="String" resultMap="SysHolidayResult">
+        <include refid="selectSysHolidayVo"/>
+        where holiday = #{holiday}
+    </select>
+
+    <insert id="insertSysHoliday" parameterType="SysHoliday">
+        insert into sys_holiday
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="holiday != null">holiday,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="holiday != null">#{holiday},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysHoliday" parameterType="SysHoliday">
+        update sys_holiday
+        <trim prefix="SET" suffixOverrides=",">
+        </trim>
+        where holiday = #{holiday}
+    </update>
+
+    <delete id="deleteSysHolidayById" parameterType="String">
+        delete
+        from sys_holiday
+        where holiday = #{holiday}
+    </delete>
+
+    <delete id="deleteSysHolidayByIds" parameterType="String">
+        delete from sys_holiday where holiday in
+        <foreach item="holiday" collection="array" open="(" separator="," close=")">
+            #{holiday}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysHoliday">
+        delete
+        from sys_holiday
+    </delete>
+
+</mapper>

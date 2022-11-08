@@ -101,7 +101,7 @@ public class SysProjectController extends BaseController {
         startPage();
         List<SysProject> list = sysProjectService.selectProject(sysProject);
         for (SysProject sysProject1 : list) {
-            SysProjectZck sysProjectZck=sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
+            SysProjectZck sysProjectZck = sysProjectZckService.selectSysProjectZckById(sysProject1.getProjectZckId());
             sysProject1.setProjectZckType(sysProjectZck.getProjectZckType());
 
             SysProject sysTaotalProject = sysProjectService.selectTotal(sysProject1);
@@ -1463,11 +1463,14 @@ public class SysProjectController extends BaseController {
             sysProject.setDebtStatus("处置中");
             List<SysProject> sysProjectList1 = sysProjectService.selectProject(sysProject);
             sysProjectZck1.setSyhs(Long.valueOf(sysProjectList1.size()));
-            if (StringUtils.isNotNull(sysProjectZck1.getSyhs()) && StringUtils.isNotNull(sysProjectZck1.getTotalCount())) {
+            if (0 != sysProjectZck1.getSyhs() && 0 != sysProjectZck1.getTotalCount()) {
                 //剩余百分比
                 sysProjectZck1.setSurplus(new BigDecimal(sysProjectZck1.getSyhs()).divide(new BigDecimal(sysProjectZck1.getTotalCount()), 2, BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).longValue());
                 //已结束百分比
                 sysProjectZck1.setCompleted(new BigDecimal(100).subtract(new BigDecimal(sysProjectZck1.getSyhs()).divide(new BigDecimal(sysProjectZck1.getTotalCount()), 2, BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100))).longValue());
+            } else {
+                sysProjectZck1.setSurplus(Long.valueOf(0));
+                sysProjectZck1.setCompleted(Long.valueOf(0));
             }
 
             for (SysProject sysProject1 : sysProjectList) {
@@ -1619,5 +1622,37 @@ public class SysProjectController extends BaseController {
             sysProjectService.updateSysProject(sysProject1);
         }
         return AjaxResult.success("成功修复历史数据！");
+    }
+
+    @PostMapping("/updateManager")
+    public AjaxResult updateManager() {
+        SysProject sysProject = new SysProject();
+        sysProject.setProjectZckId(Long.valueOf(41));
+        List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
+        for (SysProject sysProject1 : list) {
+            if (StringUtils.isNotEmpty(sysProject1.getProjectManager())) {
+                if ("万兆楠".contains(sysProject1.getProjectManager())) {
+                    sysProject1.setProjectManager("祝家铭," + sysProject1.getProjectManager());
+                } else {
+                    sysProject1.setProjectManager("万兆楠,祝家铭," + sysProject1.getProjectManager());
+                }
+            } else {
+                sysProject1.setProjectManager("万兆楠,祝家铭," + sysProject1.getProjectManager());
+            }
+            if (StringUtils.isNotEmpty(sysProject1.getProjectManagerId())) {
+                if ("81".contains(sysProject1.getProjectManagerId())) {
+                    sysProject1.setProjectManagerId("42," + sysProject1.getProjectManagerId());
+                } else {
+                    sysProject1.setProjectManagerId("81,42," + sysProject1.getProjectManagerId());
+                }
+            } else {
+                sysProject1.setProjectManagerId("81,42," + sysProject1.getProjectManagerId());
+            }
+
+            sysProject1.setProjectManager(StringUtils.removeSameString(sysProject1.getProjectManager()));
+            sysProject1.setProjectManagerId(StringUtils.removeSameString(sysProject1.getProjectManagerId()));
+            sysProjectService.updateSysProject(sysProject1);
+        }
+        return AjaxResult.success();
     }
 }

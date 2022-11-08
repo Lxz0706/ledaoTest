@@ -39,46 +39,49 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">合同本金(元)：</label>
                 <div class="col-sm-8">
-                    <input name="contractPrincipal" class="form-control" type="text">
+                    <input name="contractPrincipal" class="form-control" onkeyup="num(this)" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">本金余额(元)：</label>
                 <div class="col-sm-8">
-                    <input name="principalBalance" class="form-control" type="text">
+                    <input name="principalBalance" class="form-control" onkeyup="num(this)" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">利息余额(元)：</label>
                 <div class="col-sm-8">
-                    <input name="interestBalance" class="form-control" type="text" readonly>
+                    <input name="interestBalance" class="form-control" onkeyup="num(this)" type="text" readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">本息余额(元)：</label>
                 <div class="col-sm-8">
-                    <input name="principalInterestBalance" class="form-control" type="text">
+                    <input name="principalInterestBalance" class="form-control" onkeyup="num(this)" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">保证人：</label>
                 <div class="col-sm-8">
                     <textarea name="guarantor" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：保证人1;保证人2;保证人3</span>
+                    <span class="help-block m-b-none"><i
+                            class="fa fa-info-circle"></i>示例：保证人1;保证人2;保证人3</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">抵押物：</label>
                 <div class="col-sm-8">
                     <textarea name="collateral" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：抵押物1;抵押物2;抵押物3</span>
+                    <span class="help-block m-b-none"><i
+                            class="fa fa-info-circle"></i>示例：抵押物1;抵押物2;抵押物3</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">质押物：</label>
                 <div class="col-sm-8">
                     <textarea name="pledge" class="form-control"></textarea>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>示例：质押物1;质押物2;质押物3</span>
+                    <span class="help-block m-b-none"><i
+                            class="fa fa-info-circle"></i>示例：质押物1;质押物2;质押物3</span>
                 </div>
             </div>
         </div>
@@ -86,14 +89,15 @@
             <label class="col-sm-3 control-label" id="projectManagers"></label>
             <div class="col-sm-8">
                 <input class="form-control" type="hidden" name="projectManagerId" id="projectManagerId">
-                <input class="form-control" type="text" name="projectManager" id="projectManager" onclick="selectUserTree()">
+                <input class="form-control" type="text" name="projectManager" id="projectManager"
+                       onclick="selectUserTree()">
             </div>
         </div>
         <div id="otherTrue">
             <div class="form-group">
                 <label class="col-sm-3 control-label">涉诉金额(元)：</label>
                 <div class="col-sm-8">
-                    <input name="principalBalance" class="form-control" type="text">
+                    <input name="principalBalance" class="form-control" onkeyup="num(this)" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -116,7 +120,8 @@
                     <select name="debtStatus" class="form-control m-b"
                             th:with="type=${@dict.getType('sys_project_debtStatus')}">
                         <option value="">--请选择一条数据--</option>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
             </div>
@@ -355,6 +360,18 @@
         }
     })
 
+    /**
+     * 限制输入框只能输入数字（小数点后3位）
+     * @param obj
+     */
+    function num(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+    }
+
     $("#form-project-add").validate({
         focusCleanup: true
     });
@@ -587,23 +604,23 @@
         $.modal.openOptions(options);
     }
 
-    function doSelect(index, layero){
+    function doSelect(index, layero) {
 
         var body = layer.getChildFrame('body', index);
 
         var userIds = "";
         var userNames = "";
-        body.find("#multiselect_to option").each(function(){  //遍历所有option
+        body.find("#multiselect_to option").each(function () {  //遍历所有option
             var val = $(this).val();   //获取option值
             var txt = $(this).text();  //获取option的文本内容
-            if(val!= '' && txt!=''){
+            if (val != '' && txt != '') {
                 userIds = userIds + val + ",";
                 userNames = userNames + txt + ",";
             }
         });
 
-        userIds = userIds.substring(0,userIds.length-1);
-        userNames = userNames.substring(0,userNames.length-1);
+        userIds = userIds.substring(0, userIds.length - 1);
+        userNames = userNames.substring(0, userNames.length - 1);
 
         $("#projectManagerId").val(userIds);
         $("#projectManager").val(userNames);

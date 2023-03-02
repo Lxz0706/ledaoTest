@@ -17,8 +17,5 @@
         <module name="ledao-admin" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ledao-process" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -288,7 +288,7 @@
 
     function valuationModel(itemId, latLon) {
         var url = ctx + 'system/valuationModel/valuationModel?itemId=' + itemId + "&latLon=" + latLon;
-        $.modal.open("估值计算", url, '750', '600');
+        $.modal.openTab("估值计算", url, '750', '600');
     }
 
     //创建一个Icon

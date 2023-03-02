@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysValuationModelMapper">
+
+    <resultMap type="SysValuationModel" id="SysValuationModelResult">
+        <result property="valuationId" column="valuation_id"/>
+        <result property="mainId" column="main_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="itemType" column="item_type"/>
+        <result property="itemStatus" column="item_status"/>
+        <result property="building" column="building"/>
+        <result property="area" column="area"/>
+        <result property="building1" column="building1"/>
+        <result property="price1" column="price1"/>
+        <result property="building2" column="building2"/>
+        <result property="price2" column="price2"/>
+        <result property="itemCurrentPrice" column="item_current_price"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="areaUnitPrice" column="area_unit_price"/>
+        <result property="latLon" column="lat_lon"/>
+        <result property="floorSpace" column="floor_space"/>
+        <result property="areaSpace" column="area_space"/>
+        <result property="building3" column="building3"/>
+        <result property="price3" column="price3"/>
+        <result property="building4" column="building4"/>
+        <result property="price4" column="price4"/>
+        <result property="num1" column="num1"/>
+        <result property="num2" column="num2"/>
+        <result property="valuation" column="valuation"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="itemMarketPrice" column="item_market_price"/>
+    </resultMap>
+
+    <sql id="selectSysValuationModelVo">
+        select valuation_id,
+               main_id,
+               item_id,
+               item_type,
+               item_status,
+               building,
+               area,
+               building1,
+               price1,
+               building2,
+               price2,
+               item_current_price,
+               unit_price,
+               area_unit_price,
+               lat_lon,
+               floor_space,
+               area_space,
+               building3,
+               price3,
+               building4,
+               price4,
+               num1,
+               num2,
+               valuation,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               item_market_price
+        from sys_valuationmodel
+    </sql>
+
+    <select id="selectSysValuationModelList" parameterType="SysValuationModel" resultMap="SysValuationModelResult">
+        <include refid="selectSysValuationModelVo"/>
+        <where>
+            <if test="mainId != null ">and main_id = #{mainId}</if>
+            <if test="itemId != null  and itemId != ''">and item_id = #{itemId}</if>
+            <if test="itemType != null  and itemType != ''">and item_type = #{itemType}</if>
+            <if test="itemStatus != null  and itemStatus != ''">and item_status = #{itemStatus}</if>
+            <if test="building != null ">and building = #{building}</if>
+            <if test="area != null ">and area = #{area}</if>
+            <if test="building1 != null ">and building1 = #{building1}</if>
+            <if test="price1 != null ">and price1 = #{price1}</if>
+            <if test="building2 != null ">and building2 = #{building2}</if>
+            <if test="price2 != null ">and price2 = #{price2}</if>
+            <if test="itemCurrentPrice != null ">and item_current_price = #{itemCurrentPrice}</if>
+            <if test="unitPrice != null ">and unit_price = #{unitPrice}</if>
+            <if test="areaUnitPrice != null ">and area_unit_price = #{areaUnitPrice}</if>
+            <if test="latLon != null ">and lat_lon = #{latLon}</if>
+            <if test="floorSpace != null ">and floor_space = #{floorSpace}</if>
+            <if test="areaSpace != null ">and area_space = #{areaSpace}</if>
+            <if test="building3 != null ">and building3 = #{building3}</if>
+            <if test="price3 != null ">and price3 = #{price3}</if>
+            <if test="building4 != null ">and building4 = #{building4}</if>
+            <if test="price4 != null ">and price4 = #{price4}</if>
+            <if test="num1 != null ">and num1 = #{num1}</if>
+            <if test="num2 != null ">and num2 = #{num2}</if>
+            <if test="valuation != null ">and valuation = #{valuation}</if>
+            <if test="itemMarketPrice != null ">and item_market_price = #{itemMarketPrice}</if>
+        </where>
+    </select>
+
+    <select id="selectSysValuationModelById" parameterType="Long" resultMap="SysValuationModelResult">
+        <include refid="selectSysValuationModelVo"/>
+        where valuation_id = #{valuationId}
+    </select>
+
+    <insert id="insertSysValuationModel" parameterType="SysValuationModel" useGeneratedKeys="true"
+            keyProperty="valuationId">
+        insert into sys_valuationmodel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mainId != null">main_id,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="itemType != null">item_type,</if>
+            <if test="itemStatus != null">item_status,</if>
+            <if test="building != null">building,</if>
+            <if test="area != null">area,</if>
+            <if test="building1 != null">building1,</if>
+            <if test="price1 != null">price1,</if>
+            <if test="building2 != null">building2,</if>
+            <if test="price2 != null">price2,</if>
+            <if test="itemCurrentPrice != null">item_current_price,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="areaUnitPrice != null">area_unit_price,</if>
+            <if test="latLon != null">lat_lon,</if>
+            <if test="floorSpace != null">floor_space,</if>
+            <if test="areaSpace != null">area_space,</if>
+            <if test="building3 != null">building3,</if>
+            <if test="price3 != null">price3,</if>
+            <if test="building4 != null">building4,</if>
+            <if test="price4 != null">price4,</if>
+            <if test="num1 != null">num1,</if>
+            <if test="num2 != null">num2,</if>
+            <if test="valuation != null">valuation,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="itemMarketPrice != null">item_market_price,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mainId != null">#{mainId},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="itemType != null">#{itemType},</if>
+            <if test="itemStatus != null">#{itemStatus},</if>
+            <if test="building != null">#{building},</if>
+            <if test="area != null">#{area},</if>
+            <if test="building1 != null">#{building1},</if>
+            <if test="price1 != null">#{price1},</if>
+            <if test="building2 != null">#{building2},</if>
+            <if test="price2 != null">#{price2},</if>
+            <if test="itemCurrentPrice != null">#{itemCurrentPrice},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="areaUnitPrice != null">#{areaUnitPrice},</if>
+            <if test="latLon != null">#{latLon},</if>
+            <if test="floorSpace != null">#{floorSpace},</if>
+            <if test="areaSpace != null">#{areaSpace},</if>
+            <if test="building3 != null">#{building3},</if>
+            <if test="price3 != null">#{price3},</if>
+            <if test="building4 != null">#{building4},</if>
+            <if test="price4 != null">#{price4},</if>
+            <if test="num1 != null">#{num1},</if>
+            <if test="num2 != null">#{num2},</if>
+            <if test="valuation != null">#{valuation},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="itemMarketPrice != null">#{itemMarketPrice},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysValuationModel" parameterType="SysValuationModel">
+        update sys_valuationmodel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mainId != null">main_id = #{mainId},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="itemType != null">item_type = #{itemType},</if>
+            <if test="itemStatus != null">item_status = #{itemStatus},</if>
+            <if test="building != null">building = #{building},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="building1 != null">building1 = #{building1},</if>
+            <if test="price1 != null">price1 = #{price1},</if>
+            <if test="building2 != null">building2 = #{building2},</if>
+            <if test="price2 != null">price2 = #{price2},</if>
+            <if test="itemCurrentPrice != null">item_current_price = #{itemCurrentPrice},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="areaUnitPrice != null">area_unit_price = #{areaUnitPrice},</if>
+            <if test="latLon != null">lat_lon = #{latLon},</if>
+            <if test="floorSpace != null">floor_space = #{floorSpace},</if>
+            <if test="areaSpace != null">area_space = #{areaSpace},</if>
+            <if test="building3 != null">building3 = #{building3},</if>
+            <if test="price3 != null">price3 = #{price3},</if>
+            <if test="building4 != null">building4 = #{building4},</if>
+            <if test="price4 != null">price4 = #{price4},</if>
+            <if test="num1 != null">num1 = #{num1},</if>
+            <if test="num2 != null">num2 = #{num2},</if>
+            <if test="valuation != null">valuation = #{valuation},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="itemMarketPrice != null">item_market_price = #{itemMarketPrice},</if>
+        </trim>
+        where valuation_id = #{valuationId}
+    </update>
+
+    <delete id="deleteSysValuationModelById" parameterType="Long">
+        delete
+        from sys_valuationmodel
+        where valuation_id = #{valuationId}
+    </delete>
+
+    <delete id="deleteSysValuationModelByIds" parameterType="String">
+        delete from sys_valuationmodel where valuation_id in
+        <foreach item="valuationId" collection="array" open="(" separator="," close=")">
+            #{valuationId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -171,8 +171,7 @@ public class SysApplyInController extends BaseController {
     }
 
     @GetMapping("/reject/{applyId}/{applyType}/{approveStatu}")
-    public String reject(@PathVariable("applyId") String applyId, @PathVariable("applyType") String applyType,
-                         @PathVariable("approveStatu") String approveStatu, ModelMap modelMap) {
+    public String reject(@PathVariable("applyId") String applyId, @PathVariable("applyType") String applyType, @PathVariable("approveStatu") String approveStatu, ModelMap modelMap) {
 //        我的添加审批拒绝备注
         modelMap.put("applyId", applyId);
         modelMap.put("applyType", applyType);
@@ -418,10 +417,7 @@ public class SysApplyInController extends BaseController {
      * 新增档案入库申请
      */
     @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}/{applyType}")
-    public String editDocumentModal(@PathVariable("applyId") Long applyId
-            , @PathVariable("documentTypeVal") String documentTypeVal
-            , @PathVariable("applyType") String applyType
-            , ModelMap mmap) {
+    public String editDocumentModal(@PathVariable("applyId") Long applyId, @PathVariable("documentTypeVal") String documentTypeVal, @PathVariable("applyType") String applyType, ModelMap mmap) {
         mmap.put("applyId", applyId);
         mmap.put("documentTypeVal", documentTypeVal);
         mmap.put("applyType", applyType);
@@ -432,11 +428,7 @@ public class SysApplyInController extends BaseController {
      * 我的待办
      */
     @GetMapping("/editDocumentModal/{applyId}/{documentTypeVal}/{applyType}/{applyTypeUnDone}")
-    public String editDocumentModalUnDone(@PathVariable("applyId") Long applyId
-            , @PathVariable("documentTypeVal") String documentTypeVal
-            , @PathVariable("applyType") String applyType
-            , @PathVariable("applyTypeUnDone") String applyTypeUnDone
-            , ModelMap mmap) {
+    public String editDocumentModalUnDone(@PathVariable("applyId") Long applyId, @PathVariable("documentTypeVal") String documentTypeVal, @PathVariable("applyType") String applyType, @PathVariable("applyTypeUnDone") String applyTypeUnDone, ModelMap mmap) {
         mmap.put("applyId", applyId);
         mmap.put("documentTypeVal", documentTypeVal);
         mmap.put("applyType", applyType);
@@ -525,8 +517,7 @@ public class SysApplyInController extends BaseController {
      * 修改档案入库申请
      */
     @GetMapping("/edit/{applyId}/{applyType}/{applyTypeUnDone}/{seOrEd}")
-    public String edit(@PathVariable("applyId") Long applyId, @PathVariable("applyType") String applyType,
-                       @PathVariable("applyTypeUnDone") String applyTypeUnDone, @PathVariable("seOrEd") String seOrEd, ModelMap mmap) {
+    public String edit(@PathVariable("applyId") Long applyId, @PathVariable("applyType") String applyType, @PathVariable("applyTypeUnDone") String applyTypeUnDone, @PathVariable("seOrEd") String seOrEd, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("sysApplyIn", sysApplyIn);
         mmap.put(("appStatu"), sysApplyIn.getApproveStatu());
@@ -768,6 +759,12 @@ public class SysApplyInController extends BaseController {
             List<SysApplyOutDetail> sysApplyOutDetailList = sysApplyOutDetailService.selectSysApplyOutDetailList(sysApplyOutDetail);
             for (SysApplyOutDetail sysApplyOutDetail1 : sysApplyOutDetailList) {
                 SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(sysApplyOutDetail1.getDocumentId());
+                if (StringUtils.isNull(sysDocumentFile.getCounts())) {
+                    sysDocumentFile.setCounts(Long.valueOf(0));
+                }
+                if (StringUtils.isNull(sysApplyOutDetail1.getCounts())) {
+                    sysApplyOutDetail1.setCounts(Long.valueOf(0));
+                }
                 int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail1.getCounts().toString());
                 sysDocumentFile.setCounts(Long.valueOf(count));
                 sysDocumentFile.setDocumentId(sysApplyOutDetail1.getDocumentId());
@@ -856,7 +853,7 @@ public class SysApplyInController extends BaseController {
 
     @GetMapping("/download/resource")
     public void download(String ids, Long applyId, String debtorName, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String title = debtorName;
+        String title = StringUtils.replaceBlank(debtorName);
         //附件类型
         List<SysDictData> documentFileTypeDict = sysDictDataService.selectDictDataByType("document_file_type");
         List<SysDictData> companyList = sysDictDataService.selectDictDataByType("sys_company_name");
@@ -878,12 +875,12 @@ public class SysApplyInController extends BaseController {
                 SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(Long.valueOf(string));
                 String fileType = StringUtils.isNotNull(getValue(documentFileTypeDict, sysDocumentFile.getFileType())) ? getValue(documentFileTypeDict, sysDocumentFile.getFileType()) : "";
                 String companyName = getValue(companyList, sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId()).getCompanyName());
-                title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
+                title = StringUtils.isEmpty(StringUtils.replaceBlank(debtorName)) ? companyName : StringUtils.replaceBlank(debtorName);
                 String userName = userMapper.selectUserByLoginName(sysApplyIn.getApplyUser()).getUserName();
                 String applyTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn.getApplyTime());
                 Long counts = StringUtils.isNotNull(sysDocumentFile.getCounts()) ? sysDocumentFile.getCounts() : Long.valueOf(0);
                 Long pages = StringUtils.isNotNull(sysDocumentFile.getPages()) ? sysDocumentFile.getPages() : Long.valueOf(0);
-                createQrCodeImg(Long.valueOf(string), sysDocumentFile.getFileName().replace(" ", "").replace("（", "(").replace("）", ")"), title, title + ";" + applyTime + ";" + userName + ";" + fileType + ";" + counts + "份     " + pages + "页;", accessToken);
+                createQrCodeImg(Long.valueOf(string), StringUtils.replaceBlank(sysDocumentFile.getFileName().replace(" ", "").replace("（", "(").replace("）", ")")), title, title + ";" + applyTime + ";" + userName + ";" + fileType + ";" + counts + "份     " + pages + "页;", accessToken);
             }
         }
         downloadFile(title, request, response);
@@ -911,19 +908,19 @@ public class SysApplyInController extends BaseController {
     }
 
     public void createAndDow(String applyInIds, String debtorName, List<SysDictData> documentFileTypeDict, List<SysDictData> companyList, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String title = debtorName;
+        String title = StringUtils.replaceBlank(debtorName);
         String accessToken = configService.getWechatAccessToken();
         List<SysDocumentFile> sysDocumentFileList = sysDocumentFileService.selectDocListByApplyInIds(applyInIds);
         for (SysDocumentFile sysDocumentFile1 : sysDocumentFileList) {
             SysApplyIn sysApplyIn1 = sysApplyInService.selectSysApplyInById(sysDocumentFile1.getApplyId());
             String fileType = StringUtils.isNotNull(getValue(documentFileTypeDict, sysDocumentFile1.getFileType())) ? getValue(documentFileTypeDict, sysDocumentFile1.getFileType()) : "";
             String companyName = getValue(companyList, sysDocumentFile1.getCompanyName());
-            title = StringUtils.isEmpty(debtorName) ? companyName : debtorName;
+            title = StringUtils.isEmpty(StringUtils.replaceBlank(debtorName)) ? companyName : StringUtils.replaceBlank(debtorName);
             String userName = sysDocumentFile1.getCreatorName();
             String applyTime = DateUtils.parseDateToStr("yyyy-MM-dd", sysApplyIn1.getApplyTime());
             Long counts = StringUtils.isNotNull(sysDocumentFile1.getCounts()) ? sysDocumentFile1.getCounts() : Long.valueOf(0);
             Long pages = StringUtils.isNotNull(sysDocumentFile1.getPages()) ? sysDocumentFile1.getPages() : Long.valueOf(0);
-            createQrCodeImg(sysDocumentFile1.getDocumentId(), sysDocumentFile1.getFileName().replace(" ", "").replace("（", "(").replace("）", ")"), title, title + ";" + applyTime + ";" + userName + ";" + fileType + ";" + counts + "份     " + pages + "页;", accessToken);
+            createQrCodeImg(sysDocumentFile1.getDocumentId(), StringUtils.replaceBlank(sysDocumentFile1.getFileName().replace(" ", "").replace("（", "(").replace("）", ")")), title, title + ";" + applyTime + ";" + userName + ";" + fileType + ";" + counts + "份     " + pages + "页;", accessToken);
         }
         downloadFile(title, request, response);
     }
@@ -958,8 +955,7 @@ public class SysApplyInController extends BaseController {
         // 下载名称
         response.setCharacterEncoding("utf-8");
         response.setContentType("multipart/form-data");
-        response.setHeader("Content-Disposition",
-                "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, debtorName + ".zip"));
+        response.setHeader("Content-Disposition", "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, debtorName + ".zip"));
         FileUtils.writeBytes(downloadPath + ".zip", response.getOutputStream());
         FileUtils.delFolder(new File(downloadPath));
         File file = new File(downloadPath + ".zip");
@@ -1036,13 +1032,21 @@ public class SysApplyInController extends BaseController {
             } else {
                 return error("出库份数不能为空");
             }
+            //计算每份文件有多少页
+            int pages = Integer.parseInt(sysDocumentFile.getPages().toString()) / Integer.parseInt(sysDocumentFile.getCounts().toString());
+
+            //计算需要出库的文件总页数
+            sysApplyOutDetail1.setPages(Long.valueOf(Integer.parseInt(sysApplyOutDetail.getCounts().toString()) * pages));
             sysApplyOutDetail1.setCounts(sysApplyOutDetail.getCounts());
             sysApplyOutDetail1.setUpdateBy(ShiroUtils.getLoginName());
             sysApplyOutDetail1.setUpdateTime(new Date());
             SysDocumentFile sysDocumentFile1 = new SysDocumentFile();
             sysDocumentFile1.setDocumentId(sysApplyOutDetail1.getDocumentId());
+            //计算出库的份数
             int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) - Integer.parseInt(sysApplyOutDetail.getCounts().toString());
+            //计算剩余总页数
             sysDocumentFile1.setCounts(Long.valueOf(count));
+            sysDocumentFile1.setPages(Long.valueOf(Integer.parseInt(sysDocumentFile.getPages().toString()) - sysApplyOutDetail1.getPages()));
             sysDocumentFile1.setUpdateBy(ShiroUtils.getLoginName());
             sysDocumentFile1.setUpdateTime(new Date());
             sysDocumentFileService.updateSysDocumentFile(sysDocumentFile1);
@@ -1051,6 +1055,26 @@ public class SysApplyInController extends BaseController {
             return AjaxResult.error("出库文档类型为电子版，无需修改出库份数！！！");
         }
 
+    }
+
+    @PostMapping("/returnDocument")
+    @ResponseBody
+    public AjaxResult returnDocument(SysApplyOutDetail sysApplyOutDetail) {
+        try {
+            return sysApplyInService.returnDocument(sysApplyOutDetail);
+        } catch (Exception e) {
+        }
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/receiveDocument")
+    @ResponseBody
+    public AjaxResult receiveDocument(SysApplyOutDetail sysApplyOutDetail) {
+        try {
+            return sysApplyInService.returnDocument(sysApplyOutDetail);
+        } catch (Exception e) {
+        }
+        return AjaxResult.success();
     }
 
 }

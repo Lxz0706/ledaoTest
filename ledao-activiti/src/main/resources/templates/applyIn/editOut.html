@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 <head>
-    <th:block th:include="include :: header('修改档案出库申请')"/>
+    <th:block th:include="include :: header('新增档案出库申请')"/>
     <th:block th:include="include :: datetimepicker-css"/>
     <th:block th:include="include :: select2-css"/>
     <th:block th:include="include :: bootstrap-editable-css"/>
@@ -27,8 +27,7 @@
                  <select id="documentType"  name="documentType"
                          disabled
                          th:with="type=${@dict.getType('sys_document_busi_type')}" data-none-selected-text="请选择"
-                         class="form-control m-b"
-            >                         
+                         class="form-control m-b">                         
                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
                         th:field="*{documentType}">
                 </option>
@@ -185,8 +184,7 @@
                 <!--                   shiro:hasPermission="activity:documentFile:edit">-->
                 <!--                    <i class="fa fa-edit"></i> 修改-->
                 <!--                </a>-->
-                <a id="removeOut" class="btn btn-danger multiple" onclick="$.operate.removeAll()"
-                   shiro:hasPermission="activity:documentFile:remove">
+                <a id="removeOut" class="btn btn-danger multiple" onclick="$.operate.removeAll()">
                     <i class="fa fa-remove"></i> 删除
                 </a>
 
@@ -250,6 +248,9 @@
     var showDatilDocumentType = false
     var isElecObj = {}
     var isElecIndex = ''
+    var isReturnDocument = false;
+
+    var isReceiveDocument = false;
 
     $(function () {
         // 管理员与档案管理员
@@ -299,57 +300,38 @@
                 $("#isReceive").removeAttr("disabled");
             } else if (appStatu == "8") {
                 $("#isReturned").removeAttr("disabled");
+                isReturnDocument = true;
             } else if (appStatu == "9" && showNames) {
                 $("#isReceived").removeAttr("disabled");
+                isReceiveDocument = true;
             }
 
         } else if (showNames && applyUser != loginNameUser) {
             if (showNames) {
                 $("#toolbar").show();
-                $("#companyName").attr("disabled", "disabled")
-                $("#isReturn").attr("disabled", "disabled")
-                $("#isOut").attr("disabled", "disabled")
-                $("#isReturned").attr("disabled", "disabled")
-                $("#isReceived").attr("disabled", "disabled")
-                $("#planReturnTime").attr("disabled", "disabled")
-                $("#isReceive").attr("disabled", "disabled")
-                $("#outReason").attr("disabled", "disabled")
-                $("#remarks").attr("disabled", "disabled")
-                $("#projectNameVal").attr("disabled", "disabled")
-                $("#debtorNameTip").attr("disabled", "disabled")
-                $("#applyUser").attr("disabled", "disabled")
-                $("#applyUserName").attr("disabled", "disabled");
-                $("#planReturnTimeShow").show()
-                $("#realReturnTime").show()
-                $("#isOutShow").show()
-                $("#isReceiveShow").show()
-                $("#isReturnedShow").show()
-                $("#isReceivedShow").show()
-                $('.btn').removeAttr('onclick');
             } else {
                 $("#toolbar").hide();
-                $("#companyName").attr("disabled", "disabled")
-                $("#isReturn").attr("disabled", "disabled")
-                $("#isOut").attr("disabled", "disabled")
-                $("#isReturned").attr("disabled", "disabled")
-                $("#isReceived").attr("disabled", "disabled")
-                $("#planReturnTime").attr("disabled", "disabled")
-                $("#isReceive").attr("disabled", "disabled")
-                $("#outReason").attr("disabled", "disabled")
-                $("#remarks").attr("disabled", "disabled")
-                $("#projectNameVal").attr("disabled", "disabled")
-                $("#debtorNameTip").attr("disabled", "disabled")
-                $("#applyUser").attr("disabled", "disabled")
-                $("#applyUserName").attr("disabled", "disabled");
-                $("#planReturnTimeShow").show()
-                $("#realReturnTime").show()
-                $("#isOutShow").show()
-                $("#isReceiveShow").show()
-                $("#isReturnedShow").show()
-                $("#isReceivedShow").show()
-                $("a").attr("disabled", true);
                 $('.btn').removeAttr('onclick');
             }
+            $("#companyName").attr("disabled", "disabled")
+            $("#isReturn").attr("disabled", "disabled")
+            $("#isOut").attr("disabled", "disabled")
+            $("#isReturned").attr("disabled", "disabled")
+            $("#isReceived").attr("disabled", "disabled")
+            $("#planReturnTime").attr("disabled", "disabled")
+            $("#isReceive").attr("disabled", "disabled")
+            $("#outReason").attr("disabled", "disabled")
+            $("#remarks").attr("disabled", "disabled")
+            $("#projectNameVal").attr("disabled", "disabled")
+            $("#debtorNameTip").attr("disabled", "disabled")
+            $("#applyUser").attr("disabled", "disabled")
+            $("#applyUserName").attr("disabled", "disabled");
+            $("#planReturnTimeShow").show()
+            $("#realReturnTime").show()
+            $("#isOutShow").show()
+            $("#isReceiveShow").show()
+            $("#isReturnedShow").show()
+            $("#isReceivedShow").show()
         }
         if (documentTypeVal == "0") {
             projectName.style.display = 'block'
@@ -593,6 +575,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         if (showNames && applyUser != loginNameUser) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="receiveDocument(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>确认收到该档案</a> ');
                         } else if (showEdit) {
                             // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         } else if (showAllBut) {
@@ -600,6 +583,10 @@
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         } else if (showDelet) {
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outDetailId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        } else if (isReturnDocument) {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="returnDocument(\'' + row.outDetailId + '\')"><i class="fa fa-edit"></i>归还该档案</a> ');
+                        } else if (isReceiveDocument) {
+
                         }
                         return actions.join('');
                     }
@@ -610,6 +597,7 @@
         // applyTypeUnDone == "3" 是从我的已办入口进入
         if (applyTypeUnDone == "3") {
             if (seOrEd == 'edse1') {
+                console.log("12asddfa");
                 $("input").attr("readonly", "readonly");
                 $("input").removeAttr("onclick");
                 $("select").attr("disabled", true);
@@ -619,8 +607,10 @@
                 $("#editOut").removeAttr("disabled");
                 if (applyType == "1" && showNames) {
                     $("#isReceived").removeAttr("disabled");
+                    isReceiveDocument = true;
                 }
             } else {
+                console.log("gdffsj");
                 $("input").attr("readonly", "readonly");
                 $("input").removeAttr("onclick");
                 $("select").attr("disabled", true);
@@ -636,6 +626,7 @@
                 $("select").attr("disabled", true);
                 $("textarea").attr("disabled", true);
                 if (!showNames) {
+                    console.log("bvjksdf");
                     $("a").attr("disabled", true);
                     $('.btn').removeAttr('onclick');
                 }
@@ -783,7 +774,6 @@
     function isElecSelect(value, row, index) {
         if (value === "0") {
             if (showNames && applyUser != loginNameUser) {
-                console.log("1111111111");
                 return `
                         <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -792,7 +782,6 @@
                         </select>
                     `
             } else if (showEdit) {
-                console.log("2222222");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -801,7 +790,6 @@
                         </select>
                     `
             } else if (showAllBut) {
-                console.log("3333333333");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -810,7 +798,6 @@
                         </select>
                     `
             } else if (showDelet) {
-                console.log("44444444");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -819,7 +806,6 @@
                         </select>
                     `
             } else {
-                console.log("5555555");
                 return `
                         <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -830,7 +816,6 @@
             }
         } else if (value === "1") {
             if (showNames && applyUser != loginNameUser) {
-                console.log("66666666");
                 return `
                         <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -839,7 +824,6 @@
                         </select>
                     `
             } else if (showEdit) {
-                console.log("777777");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -848,7 +832,6 @@
                         </select>
                     `
             } else if (showAllBut) {
-                console.log("88888888");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -857,7 +840,6 @@
                         </select>
                     `
             } else if (showDelet) {
-                console.log("99999999");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -866,7 +848,6 @@
                         </select>
                     `
             } else {
-                console.log("1010101010");
                 return `
                         <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="">请选择</option>
@@ -877,7 +858,6 @@
             }
         } else {
             if (showNames && applyUser != loginNameUser) {
-                console.log("11111111112222222");
                 return `
                         <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
@@ -886,7 +866,6 @@
                         </select>
                     `
             } else if (showEdit) {
-                console.log("1212211212121212111111111");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
@@ -895,7 +874,6 @@
                         </select>
                     `
             } else if (showAllBut) {
-                console.log("131313131313");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
@@ -904,7 +882,6 @@
                         </select>
                     `
             } else if (showDelet) {
-                console.log("14141414141414");
                 return `
                         <select id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
@@ -913,7 +890,6 @@
                         </select>
                     `
             } else {
-                console.log("151515151515");
                 return `
                         <select disabled id="sele` + row.outDetailId + `" onchange="selectchange(` + row.outDetailId + `)">
                             <option value="" selected="true">请选择</option>
@@ -965,7 +941,14 @@
 
 
     function onEditableSave(field, row, rowIndex, oldValue, $el) {
-        if (!showNames && applyUser != loginNameUser && !showEdit && !showDelet && !showAllBut) {
+        if (showNames) {
+            if (row[i].isElec == null || row[i].isElec == '') {
+                $.modal.alertError('未选择借出文档类型，请先选择借出文档类型');
+                return true;
+            } else if ("0" === row.isElec) {
+                row.count = 0;
+                row.pages = 0;
+            }
             $.ajax({
                 type: "post",
                 url: prefix + "/editApplyOutCount",
@@ -986,6 +969,37 @@
             return $.modal.msgError("请先选择出库文档类型！！！");
         }
     }
+
+    function returnDocument(outDetailId) {
+        $.ajax({
+            url: prefix + "/returnDocument",
+            data: {
+                'outDetailId': outDetailId
+            },
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                $.operate.ajaxSuccess(result);
+                $.table.refresh();
+            }
+        })
+    }
+
+    function receiveDocument(outDetailId) {
+        $.ajax({
+            url: prefix + "/receiveDocument",
+            data: {
+                'outDetailId': outDetailId
+            },
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                $.operate.ajaxSuccess(result);
+                $.table.refresh();
+            }
+        })
+    }
+
 </script>
 </body>
 

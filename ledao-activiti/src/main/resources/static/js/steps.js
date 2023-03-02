@@ -150,7 +150,6 @@
                     : ((!options.dataSetStatus && index <= options.active)
                         ? options.finishClass
                         : "");
-                console.log(options.dataSetStatus + "=======" + index + "-----" + options.active);
                 stepContainer = stepContainer + '<div class="step ' + options.defaultClass + ' ' + stepClass + '" style="' + _this.getStepStyle(index).join("") + '">{{stepHtml}}</div>';
 
                 // icon 处的布局

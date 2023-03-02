@@ -206,6 +206,7 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService {
         if (outs != null && outs.size() > 0) {
             return AjaxResult.error("该档案已存在");
         }
+        SysApplyIn syApplyIn = sysApplyInMapper.selectSysApplyInById(applyId);
         String[] idsArr = Convert.toStrArray(ids);
         for (int i = 0; i < idsArr.length; i++) {
             SysApplyOutDetail SysApplyOutDetail = new SysApplyOutDetail();
@@ -214,6 +215,9 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService {
             SysApplyOutDetail.setCreateBy(loginName);
             SysApplyOutDetail.setCreateBy(loginName);
             SysApplyOutDetail.setCreateTime(new Date());
+            if ("0".equals(syApplyIn.getIsReturn())) {
+                SysApplyOutDetail.setIsReturned("1");
+            }
             SysDocumentFile sysDocumentFile = sysDocumentFileMapper.selectSysDocumentFileById(Long.parseLong(idsArr[i]));
             if (StringUtils.isNull(sysDocumentFile.getCounts())) {
                 SysApplyOutDetail.setCounts(Long.valueOf(0));

@@ -1627,27 +1627,11 @@ public class SysProjectController extends BaseController {
     @PostMapping("/updateManager")
     public AjaxResult updateManager() {
         SysProject sysProject = new SysProject();
-        sysProject.setProjectZckId(Long.valueOf(41));
+        sysProject.setProjectZckId(Long.valueOf(25));
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
         for (SysProject sysProject1 : list) {
-            if (StringUtils.isNotEmpty(sysProject1.getProjectManager())) {
-                if ("万兆楠".contains(sysProject1.getProjectManager())) {
-                    sysProject1.setProjectManager("祝家铭," + sysProject1.getProjectManager());
-                } else {
-                    sysProject1.setProjectManager("万兆楠,祝家铭," + sysProject1.getProjectManager());
-                }
-            } else {
-                sysProject1.setProjectManager("万兆楠,祝家铭," + sysProject1.getProjectManager());
-            }
-            if (StringUtils.isNotEmpty(sysProject1.getProjectManagerId())) {
-                if ("81".contains(sysProject1.getProjectManagerId())) {
-                    sysProject1.setProjectManagerId("42," + sysProject1.getProjectManagerId());
-                } else {
-                    sysProject1.setProjectManagerId("81,42," + sysProject1.getProjectManagerId());
-                }
-            } else {
-                sysProject1.setProjectManagerId("81,42," + sysProject1.getProjectManagerId());
-            }
+            sysProject1.setProjectManager(StringUtils.getSubString(sysProject1.getProjectManager(), ",祝家铭"));
+            sysProject1.setProjectManagerId(StringUtils.getSubString(sysProject1.getProjectManagerId(), ",42"));
 
             sysProject1.setProjectManager(StringUtils.removeSameString(sysProject1.getProjectManager()));
             sysProject1.setProjectManagerId(StringUtils.removeSameString(sysProject1.getProjectManagerId()));

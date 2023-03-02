@@ -195,15 +195,12 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                         users.add(sysUser1.getLoginName());
                         sysApplyIn.setIsDirector("0");
                     } else {
-                        //List<String> jls = getUsers("flgw");
-                        //users.addAll(jls);
-                        //sysApplyIn.setIsDirector("1");
                         List<SysRole> rflgw = ShiroUtils.getSysUser().getRoles();
                         List<String> ids = new ArrayList<>();
                         for (SysRole r : rflgw) {
                             ids.add(r.getRoleKey());
                         }
-//                当前操作人为法律顾问
+                        //当前操作人为法律顾问
                         if (ids.contains("flgw")) {
                             //发给总经理
                             List<String> jls = getUsers("zjl");
@@ -242,6 +239,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                             sysApplyIn.setIsDirector("1");
                         }
                     }
+                } else if ("9".equals(sysApplyIn.getApproveStatu())) {
+
                 }
             }
         }
@@ -358,9 +357,21 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                         if (desApOuts != null && desApOuts.size() > 0) {
                             for (SysApplyOutDetail out : desApOuts) {
                                 SysApplyIn app = sysApplyInMapper.selectSysApplyInById(out.getApplyId());
-                                if ("1".equals(out.getIsElec()) && app != null && ("1".equals(app.getApproveStatu()) || "5".equals(app.getApproveStatu()) || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
-                                    return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
+                                SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(d.getDocumentId());
+                                boolean flag = true;
+                                if (StringUtils.isNull(sysDocumentFile.getCounts()) || Long.valueOf(0).equals(sysDocumentFile.getCounts())) {
+                                    flag = false;
                                 }
+                                if (flag) {
+                                    if ("1".equals(out.getIsElec()) && app != null && ("5".equals(app.getApproveStatu()) || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
+                                        return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
+                                    }
+                                } else {
+                                    return AjaxResult.error("档案库中文档暂无，请与文档管理员联系");
+                                }
+//                                if ("1".equals(out.getIsElec()) && app != null && ("1".equals(app.getApproveStatu()) && flag || "5".equals(app.getApproveStatu()) || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
+//                                    return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
+//                                }
                             }
                         }
                     }
@@ -1251,7 +1262,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             if ("0".equals(documentType)) {
                 for (SysApplyInImport apply : ApplyList) {
                     SysApplyIn applyIn = new SysApplyIn();
-                    if ("投资部".equals(apply.getDepName())) {
+                    if ("投行一部".equals(apply.getDepName())) {
                         SysZcb sysZcb = new SysZcb();
                         sysZcb.setAssetPackageName(apply.getProjectName());
                         List<SysZcb> zcb = sysZcbMapper.selectSysZcbListNoLike(sysZcb);
@@ -1272,7 +1283,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                             }
                         }
 
-                    } else if ("投后部".equals(apply.getDepName())) {
+                    } else if ("投行二部".equals(apply.getDepName())) {
                         SysProjectZck sysProjectZck = new SysProjectZck();
                         sysProjectZck.setZckName(apply.getProjectName());
                         List<SysProjectZck> zcks = sysProjectZckMapper.selectSysProjectZckAllNoLike(sysProjectZck);
@@ -1530,7 +1541,9 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                         documentFileMapper.updateSysDocumentFile(sysDocumentFile);
                     }
                 }
-                saveWorkFlowProcessCheck(sysApplyIn);
+                SysApplyWorkflow workflow = new SysApplyWorkflow();
+                workflow.setRemark("档案已确认接收");
+                saveWorkFlow(sysApplyIn, workflow);
             } else {
                 sysApplyIn.setApproveStatu("8");
                 //出库待归还
@@ -1554,8 +1567,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     parm.put("word5", "申请时间：" + DateUtils.formatDateByPattern(sin.getApplyTime(), "yyyy-MM-dd"));
                     sendUsalMsg(users, sysApplyIn, parm);
                 }
+                workflow.setRemark("档案已确认接收");
+                saveWorkFlow(sysApplyIn, workflow);
 
-                saveWorkFlowProcessCheck(sysApplyIn);
+                //saveWorkFlowProcessCheck(sysApplyIn);
 
 
             }
@@ -1574,7 +1589,16 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 parm.put("word5", "档案已归还，请确认-申请时间：" + DateUtils.formatDateByPattern(sin.getApplyTime(), "yyyy-MM-dd"));
                 sendUsalMsg(users, sysApplyIn, parm);
             }
-            saveWorkFlowProcessCheck(sysApplyIn);
+            workflow.setRemark("已发送归还申请");
+            SysApplyOutDetail sysApplyOutDetail = new SysApplyOutDetail();
+            sysApplyOutDetail.setApplyId(sysApplyIn.getApplyId());
+            List<SysApplyOutDetail> list = sysApplyOutDetailMapper.selectSysApplyOutDetailList(sysApplyOutDetail);
+            for (SysApplyOutDetail sysApplyOutDetail1 : list) {
+                sysApplyOutDetail1.setIsReturned("0");
+                sysApplyOutDetailMapper.updateSysApplyOutDetail(sysApplyOutDetail1);
+            }
+            saveWorkFlow(sysApplyIn, workflow);
+            //saveWorkFlowProcessCheck(sysApplyIn);
         }
         if ("9".equals(sin.getApproveStatu()) && "0".equals(sysApplyIn.getIsReceived())) {
             sysApplyIn.setApproveStatu("3");
@@ -1592,6 +1616,8 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                     sysDocumentFile.setCounts(Long.valueOf(count));
                     sysDocumentFile.setDocumentId(df.getDocumentId());
                     documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+                    df.setIsReceived("0");
+                    sysApplyOutDetailMapper.updateSysApplyOutDetail(df);
                 }
             }
             List<String> users = new ArrayList<>();
@@ -1600,7 +1626,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             parm.put("word2", "实际提交人：" + userMapper.selectUserByLoginName(sin.getApplyUser()).getUserName());
             parm.put("word5", "档案归还已确认-申请时间：" + DateUtils.formatDateByPattern(sin.getApplyTime(), "yyyy-MM-dd"));
             sendUsalMsg(users, sysApplyIn, parm);
-            saveWorkFlowProcessCheck(sysApplyIn);
+            SysApplyWorkflow workflow = new SysApplyWorkflow();
+            workflow.setRemark("档案已归还");
+            saveWorkFlow(sysApplyIn, workflow);
+            //saveWorkFlowProcessCheck(sysApplyIn);
         }
 
         return sysApplyInMapper.updateSysApplyIn(sysApplyIn);
@@ -1676,5 +1705,101 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
         sysUser.setRoleKey(roleKey);
         List<SysUser> sysUserList = userMapper.selectUserByRoleKey(sysUser);
         return sysUserList;
+    }
+
+    /**
+     * 单独归还文档
+     *
+     * @param sysApplyOutDetail
+     * @return
+     */
+    @Override
+    public AjaxResult returnDocument(SysApplyOutDetail sysApplyOutDetail) {
+        SysApplyOutDetail sysApplyOutDetail1 = sysApplyOutDetailMapper.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
+        //判断该流程下存在几个文档
+        SysApplyOutDetail sysApplyOutDetail2 = new SysApplyOutDetail();
+        sysApplyOutDetail2.setApplyId(sysApplyOutDetail1.getApplyId());
+        sysApplyOutDetail2.setIsReturned("1");
+        List<SysApplyOutDetail> sysApplyOutDetailList = sysApplyOutDetailMapper.selectSysApplyOutDetailList(sysApplyOutDetail2);
+        if (sysApplyOutDetailList.size() <= 1) {
+            SysApplyIn sysApplyIn = sysApplyInMapper.selectSysApplyInById(sysApplyOutDetail1.getApplyId());
+            sysApplyIn.setIsReturned("0");
+            editSave(sysApplyIn);
+        } else {
+            if ("1".equals(sysApplyOutDetail1.getIsElec())) {
+                sysApplyOutDetail1.setIsReturned("0");
+                SysDocumentFile sysDocumentFile1 = documentFileMapper.selectSysDocumentFileById(sysApplyOutDetail1.getDocumentId());
+                if (StringUtils.isNull(sysDocumentFile1.getCounts())) {
+                    sysDocumentFile1.setCounts(Long.valueOf(0));
+                }
+                if (StringUtils.isNull(sysApplyOutDetail1.getCounts())) {
+                    sysApplyOutDetail1.setCounts(Long.valueOf(0));
+                }
+                int count = Integer.parseInt(sysDocumentFile1.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail1.getCounts().toString());
+                SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                sysDocumentFile.setDocumentStatu("1");
+                sysDocumentFile.setCounts(Long.valueOf(count));
+                sysDocumentFile.setDocumentId(sysApplyOutDetail1.getDocumentId());
+                documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+
+                SysApplyIn sysApplyIn = sysApplyInMapper.selectSysApplyInById(sysApplyOutDetail1.getApplyId());
+                sysApplyOutDetailMapper.updateSysApplyOutDetail(sysApplyOutDetail1);
+                JSONObject parm = new JSONObject();
+                List<String> users = new ArrayList<>();
+                users.add(sysApplyIn.getApplyUser());
+                users.add(sysApplyIn.getApplyUser());
+                List<String> jls = getUsers("documentAdmin");
+                for (String n : jls) {
+                    users.add(n);
+                }
+                parm.put("word1", "档案" + sysDocumentFile1.getFileName() + "已归还");
+                parm.put("word2", "实际提交人：" + userMapper.selectUserByLoginName(sysApplyOutDetail1.getCreateBy()).getUserName());
+                parm.put("word5", "档案归还已确认-申请时间：" + DateUtils.formatDateByPattern(sysApplyIn.getApplyTime(), "yyyy-MM-dd"));
+                sendUsalMsg(users, sysApplyIn, parm);
+            }
+        }
+        return AjaxResult.success();
+    }
+
+    @Override
+    public AjaxResult receiveDocument(SysApplyOutDetail sysApplyOutDetail) {
+        SysApplyOutDetail sysApplyOutDetail1 = sysApplyOutDetailMapper.selectSysApplyOutDetailById(sysApplyOutDetail.getOutDetailId());
+        //判断该流程下存在几个文档
+        SysApplyOutDetail sysApplyOutDetail2 = new SysApplyOutDetail();
+        sysApplyOutDetail2.setApplyId(sysApplyOutDetail1.getApplyId());
+        List<SysApplyOutDetail> sysApplyOutDetailList = sysApplyOutDetailMapper.selectSysApplyOutDetailList(sysApplyOutDetail2);
+        if (sysApplyOutDetailList.size() <= 1) {
+            SysApplyIn sysApplyIn = sysApplyInMapper.selectSysApplyInById(sysApplyOutDetail1.getApplyId());
+            sysApplyIn.setIsReceived("0");
+            editSave(sysApplyIn);
+        } else {
+            if ("1".equals(sysApplyOutDetail1.getIsElec())) {
+                sysApplyOutDetail1.setIsReceived("0");
+                SysDocumentFile sysDocumentFile1 = documentFileMapper.selectSysDocumentFileById(sysApplyOutDetail1.getDocumentId());
+                if (StringUtils.isNull(sysDocumentFile1.getCounts())) {
+                    sysDocumentFile1.setCounts(Long.valueOf(0));
+                }
+                if (StringUtils.isNull(sysApplyOutDetail1.getCounts())) {
+                    sysApplyOutDetail1.setCounts(Long.valueOf(0));
+                }
+                int count = Integer.parseInt(sysDocumentFile1.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail1.getCounts().toString());
+                SysDocumentFile sysDocumentFile = new SysDocumentFile();
+                sysDocumentFile.setDocumentStatu("1");
+                sysDocumentFile.setCounts(Long.valueOf(count));
+                sysDocumentFile.setDocumentId(sysApplyOutDetail1.getDocumentId());
+                documentFileMapper.updateSysDocumentFile(sysDocumentFile);
+
+                SysApplyIn sysApplyIn = sysApplyInMapper.selectSysApplyInById(sysApplyOutDetail1.getApplyId());
+                sysApplyOutDetailMapper.updateSysApplyOutDetail(sysApplyOutDetail1);
+                JSONObject parm = new JSONObject();
+                List<String> users = new ArrayList<>();
+                users.add(sysApplyIn.getApplyUser());
+                parm.put("word1", "档案" + sysDocumentFile1.getFileName() + "已确认收到");
+                parm.put("word2", "实际提交人：" + userMapper.selectUserByLoginName(sysApplyOutDetail1.getCreateBy()).getUserName());
+                parm.put("word5", "档案归还已确认-申请时间：" + DateUtils.formatDateByPattern(sysApplyIn.getApplyTime(), "yyyy-MM-dd"));
+                sendUsalMsg(users, sysApplyIn, parm);
+            }
+        }
+        return AjaxResult.success();
     }
 }

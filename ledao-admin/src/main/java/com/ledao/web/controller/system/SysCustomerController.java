@@ -258,9 +258,9 @@ public class SysCustomerController<main> extends BaseController {
             sysCustomer.setDeptName(ShiroUtils.getSysUser().getDept().getDeptName());
         }
         if (202 == sysCustomer.getDeptId()) {
-            sysCustomer.setDeptType("投后部");
+            sysCustomer.setDeptType("投行二部");
         } else if (201 == sysCustomer.getDeptId()) {
-            sysCustomer.setDeptType("投资部");
+            sysCustomer.setDeptType("投行一部");
         } else {
             sysCustomer.setDeptType(selectDeptTypeById(sysCustomer.getDeptId()));
         }
@@ -732,9 +732,9 @@ public class SysCustomerController<main> extends BaseController {
             thbSb.append(sysDept.getDeptId()).append(",");
         }
         if (tzbSb.toString().contains(deptId.toString())) {
-            deptType = "投资部";
+            deptType = "投行一部";
         } else if (thbSb.toString().contains(deptId.toString())) {
-            deptType = "投后部";
+            deptType = "投行二部";
         } else {
             deptType = "其他部门";
         }

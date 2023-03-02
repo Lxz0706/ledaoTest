@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.wenShuMapper">
+
+    <resultMap type="wenShu" id="wenShuResult">
+        <result property="courtId" column="court_id"/>
+        <result property="courtTitle" column="court_title"/>
+        <result property="courtCause" column="court_cause"/>
+        <result property="courtDate" column="court_date"/>
+        <result property="courtName" column="court_name"/>
+        <result property="courtNo" column="court_no"/>
+        <result property="pdfPath" column="pdf_path"/>
+        <result property="courtData" column="court_data"/>
+    </resultMap>
+
+    <sql id="selectwenShuVo">
+        select court_id,
+               court_title,
+               court_cause,
+               court_date,
+               court_name,
+               court_no,
+               pdf_path,
+               court_data
+        from wenshu
+    </sql>
+
+    <select id="selectwenShuList" parameterType="wenShu" resultMap="wenShuResult">
+        <include refid="selectwenShuVo"/>
+        <where>
+            <if test="courtTitle != null  and courtTitle != ''">and court_title = #{courtTitle}</if>
+            <if test="courtCause != null  and courtCause != ''">and court_cause = #{courtCause}</if>
+            <if test="courtDate != null ">and court_date = #{courtDate}</if>
+            <if test="courtName != null  and courtName != ''">and court_name like concat('%', #{courtName}, '%')</if>
+            <if test="courtNo != null  and courtNo != ''">and court_no = #{courtNo}</if>
+            <if test="pdfPath !=null and pdfPath !=''">and pdf_path = #{pdfPath}</if>
+            <if test="courtData !=null and courtData !=''">and court_data = #{courtData}</if>
+        </where>
+    </select>
+
+    <select id="selectwenShuById" parameterType="String" resultMap="wenShuResult">
+        <include refid="selectwenShuVo"/>
+        where court_id = #{courtId}
+    </select>
+
+    <insert id="insertwenShu" parameterType="wenShu">
+        insert into wenshu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courtId != null">court_id,</if>
+            <if test="courtTitle != null">court_title,</if>
+            <if test="courtCause != null">court_cause,</if>
+            <if test="courtDate != null">court_date,</if>
+            <if test="courtName != null">court_name,</if>
+            <if test="courtNo != null">court_no,</if>
+            <if test="pdfPath !=null">and pdf_path,</if>
+            <if test="courtData !=null">and court_data,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courtId != null">#{courtId},</if>
+            <if test="courtTitle != null">#{courtTitle},</if>
+            <if test="courtCause != null">#{courtCause},</if>
+            <if test="courtDate != null">#{courtDate},</if>
+            <if test="courtName != null">#{courtName},</if>
+            <if test="courtNo != null">#{courtNo},</if>
+            <if test="pdfPath !=null">#{pdfPath},</if>
+            <if test="courtData !=null">and court_data,</if>
+        </trim>
+    </insert>
+
+    <update id="updatewenShu" parameterType="wenShu">
+        update wenshu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courtTitle != null">court_title = #{courtTitle},</if>
+            <if test="courtCause != null">court_cause = #{courtCause},</if>
+            <if test="courtDate != null">court_date = #{courtDate},</if>
+            <if test="courtName != null">court_name = #{courtName},</if>
+            <if test="courtNo != null">court_no = #{courtNo},</if>
+            <if test="pdfPath !=null">and pdf_path = #{pdfPath}</if>
+            <if test="courtData !=null">and court_data = #{courtData},</if>
+        </trim>
+        where court_id = #{courtId}
+    </update>
+
+    <delete id="deletewenShuById" parameterType="String">
+        delete
+        from wenshu
+        where court_id = #{courtId}
+    </delete>
+
+    <delete id="deletewenShuByIds" parameterType="String">
+        delete from wenshu where court_id in
+        <foreach item="courtId" collection="array" open="(" separator="," close=")">
+            #{courtId}
+        </foreach>
+    </delete>
+
+</mapper>

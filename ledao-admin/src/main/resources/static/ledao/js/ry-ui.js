@@ -1150,6 +1150,7 @@ var table = {
             },
             // 批量删除信息
             removeAll: function () {
+                console.log("奥术大师大所");
                 table.set();
                 var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
                 if (rows.length == 0) {

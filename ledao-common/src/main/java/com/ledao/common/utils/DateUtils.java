@@ -640,7 +640,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println("=========" + JJR("2022", "10"));
+        System.out.println("=========" + JJR("2023", ""));
     }
 
     /**

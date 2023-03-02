@@ -129,13 +129,13 @@ public class SysNoticeController extends BaseController {
         notice.setReadFlag("未读");
         notice.setCreateBy(ShiroUtils.getLoginName());
         StringBuffer userIds = new StringBuffer();
-        StringBuffer userNames = new StringBuffer();
+        //StringBuffer userNames = new StringBuffer();
         StringBuffer deptIds = new StringBuffer();
-        StringBuffer deptNames = new StringBuffer();
+        //StringBuffer deptNames = new StringBuffer();
 
         if (StringUtils.isNotEmpty(notice.getShareDeptId()) && StringUtils.isNotEmpty(notice.getReceiverId())) {
             userIds.append(notice.getReceiverId());
-            userNames.append(notice.getReceiver());
+            //userNames.append(notice.getReceiver());
             for (String string : notice.getShareDeptId().split(",")) {
                 SysUser sysUser = new SysUser();
                 sysUser.setDeptId(Long.valueOf(string));
@@ -158,12 +158,12 @@ public class SysNoticeController extends BaseController {
                 for (SysUser sysUser1 : sysUserList) {
                     if (!userIds.toString().contains(sysUser1.getUserId().toString())) {
                         userIds.append(sysUser1.getUserId()).append(",");
-                        userNames.append(sysUser1.getUserName()).append(",");
+                        //userNames.append(sysUser1.getUserName()).append(",");
                     }
                 }
             }
             deptIds.append(notice.getShareDeptId());
-            deptNames.append(notice.getShareDeptName());
+            //deptNames.append(notice.getShareDeptName());
         } else if (StringUtils.isNotEmpty(notice.getShareDeptId()) && StringUtils.isEmpty(notice.getReceiverId())) {
             for (String string : notice.getShareDeptId().split(",")) {
                 SysUser sysUser = new SysUser();
@@ -186,21 +186,21 @@ public class SysNoticeController extends BaseController {
                 List<SysUser> sysUserList = sysUserService.selectUserListForDocument(sysUser);
                 for (SysUser sysUser1 : sysUserList) {
                     userIds.append(sysUser1.getUserId()).append(",");
-                    userNames.append(sysUser1.getUserName()).append(",");
+                    //userNames.append(sysUser1.getUserName()).append(",");
                 }
             }
             deptIds.append(notice.getShareDeptId());
-            deptNames.append(notice.getShareDeptName());
+            //deptNames.append(notice.getShareDeptName());
         } else if (StringUtils.isEmpty(notice.getShareDeptId()) && StringUtils.isNotEmpty(notice.getReceiverId())) {
             userIds.append(notice.getReceiverId());
-            userNames.append(notice.getReceiver());
+            //userNames.append(notice.getReceiver());
         } else if (StringUtils.isEmpty(notice.getReceiverId()) && StringUtils.isEmpty(notice.getReceiverId())) {
             SysDept sysDept = new SysDept();
             sysDept.setStatus("0");
             List<SysDept> sysDeptList = sysDeptService.selectDeptList(sysDept);
             for (SysDept sysDept1 : sysDeptList) {
                 deptIds.append(sysDept1.getDeptId()).append(",");
-                deptNames.append(sysDept1.getDeptName()).append(",");
+                //deptNames.append(sysDept1.getDeptName()).append(",");
                 SysUser sysUser = new SysUser();
                 sysUser.setDeptId(sysDept1.getDeptId());
                 SysUser currentUser = ShiroUtils.getSysUser();
@@ -221,14 +221,14 @@ public class SysNoticeController extends BaseController {
                 List<SysUser> sysUserList = sysUserService.selectUserList(sysUser);
                 for (SysUser sysUser1 : sysUserList) {
                     userIds.append(sysUser1.getUserId()).append(",");
-                    userNames.append(sysUser1.getUserName()).append(",");
+                    //userNames.append(sysUser1.getUserName()).append(",");
                 }
             }
         }
         notice.setReceiverId(userIds.toString());
-        notice.setReceiver(userNames.toString());
+        //notice.setReceiver(userNames.toString());
         notice.setShareDeptId(deptIds.toString());
-        notice.setShareDeptName(deptNames.toString());
+        //notice.setShareDeptName(deptNames.toString());
 
         return toAjax(noticeService.insertNotice(notice));
     }
@@ -406,9 +406,9 @@ public class SysNoticeController extends BaseController {
     @GetMapping("/detail/{noticeId}")
     public String detail(@PathVariable("noticeId") Long noticeId, ModelMap mmap) {
         SysNotice sysNotice = noticeService.selectNoticeById(noticeId);
-        if (StringUtils.isNotNull(sysNotice.getNoticeContent())) {
-            sysNotice.setNoticeContent(StringUtils.inputDataFilter(sysNotice.getNoticeContent()));
-        }
+//        if (StringUtils.isNotNull(sysNotice.getNoticeContent())) {
+//            sysNotice.setNoticeContent(StringUtils.inputDataFilter(sysNotice.getNoticeContent()));
+//        }
         if (StringUtils.isNotEmpty(sysNotice.getReceiver()) && StringUtils.isNotEmpty(sysNotice.getShareDeptName())) {
             sysNotice.setShareDeptAndUser(sysNotice.getShareDeptName() + "," + sysNotice.getReceiver());
         } else if (StringUtils.isEmpty(sysNotice.getShareDeptName())) {

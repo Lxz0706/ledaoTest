@@ -3,6 +3,7 @@ package com.ledao.web.controller.system;
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.pagehelper.PageHelper;
 import com.ledao.common.config.Global;
@@ -160,7 +161,7 @@ public class SysDocumentController extends BaseController {
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
                             && !"admin".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())) {
-                        sysDocument.setShareUserName(ShiroUtils.getSysUser().getUserName());
+                        sysDocument.setShareUserId(ShiroUtils.getSysUser().getUserId().toString());
                     }
                 }
             }
@@ -217,7 +218,7 @@ public class SysDocumentController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(SysDocument sysDocument, @RequestParam("file") MultipartFile file) throws IOException {
         StringBuffer userIds = new StringBuffer();
-        StringBuffer userNames = new StringBuffer();
+        //StringBuffer userNames = new StringBuffer();
         if (file.isEmpty()) {
             return error("请上传文件！");
         }
@@ -227,11 +228,11 @@ public class SysDocumentController extends BaseController {
         sysDocument.setFileType(FileUploadUtils.getExtension(file));
         sysDocument.setFileVersion("A");
         if (StringUtils.isNotEmpty(sysDocument.getShareUserId())) {
-            userIds.append(sysDocument.getShareUserId());
+            userIds.append(sysDocument.getShareUserId()).append(",");
         }
-        if (StringUtils.isNotEmpty(sysDocument.getShareUserName())) {
-            userNames.append(sysDocument.getShareUserName());
-        }
+//        if (StringUtils.isNotEmpty(sysDocument.getShareUserName())) {
+//            userNames.append(sysDocument.getShareUserName());
+//        }
         if (StringUtils.isNotEmpty(sysDocument.getShareDeptId())) {
             for (String string : sysDocument.getShareDeptId().split(",")) {
                 SysUser sysUser = new SysUser();
@@ -239,22 +240,13 @@ public class SysDocumentController extends BaseController {
                 SysUser currentUser = ShiroUtils.getSysUser();
                 if (currentUser != null) {
                     if (!currentUser.isAdmin()) {
-                        List<SysRole> getRoles = currentUser.getRoles();
-                        for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
-                                if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
-                                    if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
-                                        sysUser.setFormalFlag("0");
-                                    }
-                                }
-                            }
-                        }
+                        sysUser.setFormalFlag("0");
                     }
                 }
                 List<SysUser> sysUserList = sysUserService.selectUserListForDocument(sysUser);
                 for (SysUser sysUser1 : sysUserList) {
                     userIds.append(sysUser1.getUserId()).append(",");
-                    userNames.append(sysUser1.getUserName()).append(",");
+                    //userNames.append(sysUser1.getUserName()).append(",");
                 }
             }
         }
@@ -262,11 +254,11 @@ public class SysDocumentController extends BaseController {
         if (!Arrays.asList(userIds.toString().split(",")).contains(ShiroUtils.getUserId())) {
             userIds.append(ShiroUtils.getUserId());
         }
-        if (userNames.toString().indexOf(ShiroUtils.getSysUser().getUserName()) == -1) {
-            userNames.append(ShiroUtils.getSysUser().getUserName());
-        }
+//        if (userNames.toString().indexOf(ShiroUtils.getSysUser().getUserName()) == -1) {
+//            userNames.append(ShiroUtils.getSysUser().getUserName());
+//        }
         sysDocument.setShareUserId(userIds.toString());
-        sysDocument.setShareUserName(userNames.toString());
+        //sysDocument.setShareUserName(userNames.toString());
 
 
         //获取各类型名称及其子集

@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('档案入库申请列表')" />
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -40,19 +41,61 @@
                                             th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>-->
+<!--                            <li class="select-time">-->
+<!--                                <label>申请时间：</label>-->
+<!--                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>-->
+<!--                                <span>-</span>-->
+<!--                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>-->
+<!--                            </li>-->
+<!--                            <li id="fileName">-->
+<!--                                <label>文件名称：</label>-->
+<!--                                <input type="text" name="fileName"/>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <label>实际提交人：</label>-->
+<!--                                <input type="text" name="applyUserName"/>-->
+<!--                            </li>-->
                             <li class="select-time">
                                 <label>申请时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                       name="params[beginApplyTime]"/>
                                 <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                       name="params[endApplyTime]"/>
                             </li>
                             <li id="fileName">
-                                <label>文件名称：</label>
-                                <input type="text" name="fileName"/>
+                                文件名称：
+                                <input type="text" name="fileName" placeholder="请输入文件名称"/>
                             </li>
                             <li>
-                                <label>实际提交人：</label>
-                                <input type="text" name="applyUserName"/>
+                                实际提交人：
+                                <input type="text" name="applyUserName" placeholder="请输入实际提交人"/>
+                            </li>
+                            <li>
+                                档案袋编号：
+                                <input type="text" name="bagNo" placeholder="请输入档案袋编号">
+                            </li>
+                            <li>
+                                附件类型：
+                                <select name="fileType" class="form-control select2-multiple"
+                                        th:with="type=${@dict.getType('document_file_type')}" data-none-selected-text="请选择">
+                                    <option value="">--请选择数据--</option>
+                                    <option th:each="dict : ${type}" th:value="${dict.dictValue}"
+                                            th:text="${dict.dictLabel}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                在库状态：
+                                <select name="documentStatu" class="form-control select2-multiple"
+                                        th:with="type=${@dict.getType('document_in_status')}" data-none-selected-text="请选择">
+                                    <option value="">--请选择数据--</option>
+                                    <option th:each="dict : ${type}" th:value="${dict.dictValue}"
+                                            th:text="${dict.dictLabel}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>柜号：</label>
+                                <input type="text" name="cabinetNo" placeholder="请输入柜号">
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -87,6 +130,7 @@
         </div>
     </div>
     <th:block th:include="include :: footer" />
+     <th:block th:include="include :: select2-js"/>
     <script th:inline="javascript">
         var companyDictDatas = [[${@dict.getType('sys_company_name')}]];
         var documentTypeDictDatas = [[${@dict.getType('sys_document_busi_type')}]];

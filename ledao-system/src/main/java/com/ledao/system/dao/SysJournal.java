@@ -89,6 +89,11 @@ public class SysJournal extends BaseEntity {
 
     private String selectTime;
 
+    /**
+     * 是否正式员工
+     */
+    private String formalFlag;
+
     public String getProjectName() {
         return projectName;
     }
@@ -217,6 +222,14 @@ public class SysJournal extends BaseEntity {
         this.selectTime = selectTime;
     }
 
+    public String getFormalFlag() {
+        return formalFlag;
+    }
+
+    public void setFormalFlag(String formalFlag) {
+        this.formalFlag = formalFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -237,6 +250,7 @@ public class SysJournal extends BaseEntity {
                 .append("updateTime", getUpdateTime())
                 .append("projectName", getProjectName())
                 .append("selectTime", getSelectTime())
+                .append("formalFlag", getFormalFlag())
                 .toString();
     }
 }

@@ -8,8 +8,12 @@
 <body>
 <div class="main-content">
     <form id="form-user-add" class="form-horizontal">
+        <button type="button" class="btn btn-sm btn-primary" onclick="list()"><i
+                class="fa fa-check"></i>历史记录
+        </button>&nbsp;
         <input type="hidden" id="itemTypes" th:value="*{itemType}">
         <input type="hidden" id="itemStatuses" th:value="*{itemStatus}">
+        <input type="hidden" id="itemId" th:value="*{itemId}">
         <div class="form-group">
             <label class="col-sm-3 control-label">类型 ：</label>
             <div class="col-sm-8">
@@ -33,6 +37,7 @@
             </div>
         </div>
         <div>
+            <input id="valuationModelId" type="hidden">
             <div class="form-group isBuilding">
                 <label class="col-sm-3 control-label">参考物建筑面积（m²）：</label>
                 <div class="col-sm-8">
@@ -85,13 +90,6 @@
                            placeholder="请输入成交价格">
                 </div>
             </div>
-            <!--        <div class="form-group">-->
-            <!--            <label class="col-sm-3 control-label">挂牌价（元）：</label>-->
-            <!--            <div class="col-sm-8">-->
-            <!--                <input type="text" id="itemPrice" name="itemPrice" onkeyup="num(this)" class="form-control"-->
-            <!--                       placeholder="请输入挂牌价">-->
-            <!--            </div>-->
-            <!--        </div>-->
             <div class="form-group">
                 <label class="col-sm-3 control-label">评估价/市场价（元）：</label>
                 <div class="col-sm-8">
@@ -149,7 +147,7 @@
                 <div class="col-sm-8">
                     <input type="text" id="areaSpace" name="areaSpace" onkeyup="num(this)"
                            class="form-control"
-                           placeholder="请输入标的物建筑面积">
+                           placeholder="请输入标的物土地面积">
                 </div>
             </div>
             <div class="form-group">
@@ -161,7 +159,7 @@
                 </div>
             </div>
             <div class="form-group">
-                    <label class="col-sm-3 control-label">赋值单价（有证）（元）：</label>
+                <label class="col-sm-3 control-label">赋值单价（有证）（元）：</label>
                 <div class="col-sm-8">
                     <input type="text" id="price3" name="price3" onkeyup="num(this)"
                            class="form-control"
@@ -222,6 +220,8 @@
     var flag = false;
     var i = 3;
     var k = 1;
+    var valuationModelId;
+    var mainId;
 
     $(function () {
         set_select_checked("itemType", $("#itemTypes").val());
@@ -282,10 +282,6 @@
         var itemType = $('#itemType').val();
         //拍卖状态
         var itemStatus = $("#itemStatus").val();
-        //计算公式
-        var reckon = $("#reckon" + obj).val();
-        //标的物建筑面积
-        var floorSpace = $("#floorSpace" + obj).val();
         //系数1
         var num1 = $("#num1" + obj).val();
         //系数2
@@ -309,7 +305,6 @@
         //参考物土地面积
         var area = $("#area" + obj).val();
 
-        var value = "";
         //结果
         var valuation;
         //单价
@@ -330,7 +325,7 @@
             num2 = 1;
         }
 
-        var price = getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemMarketPrice, building1, price1, building2, price2, area);
+        var price = getPrice(itemCurrentPrice, itemType, num1, building, itemStatus, itemMarketPrice, building1, price1, building2, price2, area);
 
         if ($.common.equals("住宅用房", itemType)) {
             unitPrice = price;
@@ -344,15 +339,35 @@
 
         unitPrice = isNaN(unitPrice) ? 0 : unitPrice;
         areaUnitPrice = isNaN(areaUnitPrice) ? 0 : areaUnitPrice;
-
-        if (!$.common.equals("工业用房", itemType)) {
-            $("#unitPrice" + obj).val($.common.isEmpty(unitPrice) ? 0 : unitPrice.toFixed(3));
-        } else {
-            $("#areaUnitPrice" + obj).val($.common.isEmpty(areaUnitPrice) ? 0 : areaUnitPrice.toFixed(3))
+        var parms = {
+            'itemId': $("#itemId").val(),
+            'itemType': itemType,
+            'itemStatus': itemStatus,
+            'itemCurrentPrice': itemCurrentPrice,
+            'num1': num1,
+            'num2': num2,
+            'building': building,
+            'itemMarketPrice': itemMarketPrice,
+            'building1': building1,
+            'building2': building2,
+            'price1': price1,
+            'price2': price2,
+            'area': area,
+            'unitPrice': unitPrice,
+            'areaUnitPrice': areaUnitPrice
         }
+        addOrUpdate(parms);
+        $("#valuationModelId" + obj).val(valuationModelId);
+        //if (!$.common.equals("工业用房", itemType)) {
+        //  $("#unitPrice" + obj).val($.common.isEmpty(unitPrice) ? 0 : unitPrice.toFixed(3));
+        //} else {
+        $("#unitPrice" + obj).val($.common.isEmpty(unitPrice) ? 0 : unitPrice.toFixed(3));
+        $("#areaUnitPrice" + obj).val($.common.isEmpty(areaUnitPrice) ? 0 : areaUnitPrice.toFixed(3))
+        //}
+
     }
 
-    function getPrice(itemCurrentPrice, itemType, num1, value, building, itemStatus, reckon, itemMarketPrice, building1, price1, building2, price2, area) {
+    function getPrice(itemCurrentPrice, itemType, num1, building, itemStatus, itemMarketPrice, building1, price1, building2, price2, area) {
         var price;
         var prices;
         if ($.common.equals("工业用房", itemType)) {
@@ -380,11 +395,11 @@
                 price = (((itemMarketPrice * 0.56) - prices) / building);
             }
         }
-
         return price;
     }
 
     function reckon1() {
+        addValuation();
         var obj;
         if (i == 3) {
             obj = '';
@@ -401,6 +416,8 @@
         if (obj == undefined || obj == 1 || obj == 2 || obj == '') {
             obj = '';
         }
+        //valuationModelId
+        var valuationModelId = $("#valuationModelId" + obj).val();
         //类型
         var itemType = $('#itemType').val();
         //标的物建筑面积
@@ -451,12 +468,28 @@
 
             valuation = isNaN(valuation) ? 0 : valuation;
             $("#valuation" + obj).val($.common.isEmpty(valuation) ? 0 : valuation.toFixed(3));
+            var data = {
+                'valuationId': parseInt(valuationModelId),
+                'mainId': mainId,
+                'num1': num1,
+                'num2': num2,
+                'floorSpace': floorSpace,
+                'building3': building3,
+                'building4': building4,
+                'price3': price3,
+                'price4': price4,
+                'areaSpace': areaSpace,
+                'valuation': Number(valuation)
+            }
+            updateValuationModel(data);
+
         }
     }
 
     function addDiv(obj) {
         k++;
         html = '<div id="addDiv' + i + '">' +
+            '<input id="valuationModelId' + i + '" type="hidden">' +
             '<div class="form-group isBuilding">\n' +
             '                <label class="col-sm-3 control-label">参考物建筑面积（m²）：</label>\n' +
             '                <div class="col-sm-8">\n' +
@@ -556,24 +589,25 @@
         valueHtml =
             '<div class="form-group" id="jiSuan' + i + '">\n' +
             '<div class="form-group">\n' +
-            '            <label class="col-sm-3 control-label">系数1 (不填默认为1)：</label>\n' +
-            '            <div class="col-sm-8">\n' +
-            '                <input type="text" id="num1' + i + '" name="num1" onkeyup="num(this)" placeholder="请输入系数1(不填默认为1)"\n' +
-            '                       class="form-control">\n' +
-            '            </div>\n' +
-            '        </div>\n' +
-            '        <div class="form-group">\n' +
-            '            <label class="col-sm-3 control-label">系数2 (不填默认为1)：</label>\n' +
-            '            <div class="col-sm-8">\n' +
-            '                <input type="text" id="num2' + i + '" name="num2" onkeyup="num(this)" placeholder="请输入系数2(不填默认为1)"\n' +
-            '                       class="form-control">\n' +
-            '            </div>\n' +
-            '        </div>\n' +
-            '            <label class="col-sm-3 control-label">参考物' + k + '估值总价 ：</label>\n' +
-            '            <div class="col-sm-8">\n' +
-            '                <input type="text" id="valuation' + i + '" name="valuation' + i + '" class="form-control" placeholder="估值总价">\n' +
-            '            </div>\n' +
-            '        </div>';
+            '    <label class="col-sm-3 control-label">系数1 (不填默认为1)：</label>\n' +
+            '    <div class="col-sm-8">\n' +
+            '         <input type="text" id="num1' + i + '" name="num1" onkeyup="num(this)" placeholder="请输入系数1(不填默认为1)"\n' +
+            '                class="form-control">\n' +
+            '    </div>\n' +
+            '</div>\n' +
+            '<div class="form-group">\n' +
+            '   <label class="col-sm-3 control-label">系数2 (不填默认为1)：</label>\n' +
+            '   <div class="col-sm-8">\n' +
+            '        <input type="text" id="num2' + i + '" name="num2" onkeyup="num(this)" placeholder="请输入系数2(不填默认为1)"\n' +
+            '            class="form-control">\n' +
+            '   </div>\n' +
+            '</div>\n' +
+            '<div>\n' +
+            '   <label class="col-sm-3 control-label">参考物' + k + '估值总价 ：</label>\n' +
+            '   <div class="col-sm-8">\n' +
+            '        <input type="text" id="valuation' + i + '" name="valuation' + i + '" class="form-control" placeholder="估值总价">\n' +
+            '   </div>\n' +
+            '</div>';
         $("#jiSuan").before(valueHtml);
         itemTypeChange();
         i++;
@@ -585,6 +619,53 @@
         k--;
     }
 
+    function addOrUpdate(data) {
+        $.ajax({
+            url: prefix + "/add",
+            data: data,
+            datatype: 'json',
+            type: 'post',
+            async: false,
+            success: function (result) {
+                valuationModelId = result.data;
+            }
+        })
+    }
+
+    function updateValuationModel(data) {
+        $.ajax({
+            url: prefix + "/edit",
+            data: data,
+            datatype: 'json',
+            type: 'post',
+            async: false,
+            success: function (result) {
+                return result.data;
+            }
+        })
+    }
+
+    function addValuation() {
+        $.ajax({
+            url: prefix + "/addMain",
+            data: {
+                'itemType': $("#itemType").val(),
+                'itemStatus': $("#itemStatus").val()
+            },
+            datatype: 'json',
+            type: 'post',
+            async: false,
+            success: function (result) {
+                mainId = result.data;
+            }
+        })
+    }
+
+    function list() {
+        var itemId = $("#itemId").val();
+        var url = ctx + "system/valuationModel/toList?itemId=" + itemId;
+        $.modal.openTab("历史记录列表", url, '750', '600');
+    }
 
 </script>
 </body>

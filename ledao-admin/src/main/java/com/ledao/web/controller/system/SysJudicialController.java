@@ -113,8 +113,7 @@ public class SysJudicialController extends BaseController {
                     //标题
                     object.put("title", sysJudicial1.getItemTitle());
                     //坐标
-                    object.put("itemXY", sysJudicial1.getCoordinate());
-                    //标题
+                    object.put("itemXY", sysJudicial1.getCoordinate());//标题
                     object.put("itemTitle", sysJudicial1.getItemTitle());
                     //类型
                     object.put("type", sysJudicial1.getItemType());

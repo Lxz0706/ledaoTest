@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ledao.activity.dao.SysDocumentFile;
 import com.ledao.activity.service.ISysDocumentFileService;
+import com.ledao.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -186,7 +187,14 @@ public class SysApplyOutDetailController extends BaseController {
         for (String str : ids.split(",")) {
             SysApplyOutDetail sysApplyOutDetail = sysApplyOutDetailService.selectSysApplyOutDetailById(Long.valueOf(str));
             SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(sysApplyOutDetail.getDocumentId());
+            if (StringUtils.isNull(sysDocumentFile.getCounts())) {
+                sysDocumentFile.setCounts(Long.valueOf(0));
+            }
+            if (StringUtils.isNull(sysApplyOutDetail.getCounts())) {
+                sysApplyOutDetail.setCounts(Long.valueOf(0));
+            }
             int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail.getCounts().toString());
+
             sysDocumentFile.setDocumentId(sysApplyOutDetail.getDocumentId());
             sysDocumentFile.setCounts(Long.valueOf(count));
             sysDocumentFileService.updateSysDocumentFile(sysDocumentFile);

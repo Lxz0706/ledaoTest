@@ -96,6 +96,7 @@
             <if test="remarks3 != null  and remarks3 != ''">and a.remarks3 = #{remarks3}</if>
             <if test="creator != null  and creator != ''">and a.creator = #{creator}</if>
             <if test="reviser != null  and reviser != ''">and a.reviser = #{reviser}</if>
+            <if test="formalFlag !=null and formalFlag !=''">and b.formal_flag = #{formalFlag}</if>
         </where>
         order by a.create_time DESC
     </select>

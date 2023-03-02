@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.wenShuDetailMapper">
+
+    <resultMap type="wenShuDetail" id="wenShuDetailResult">
+        <result property="itemCourtId" column="item_court_id"/>
+        <result property="itemIndex" column="item_index"/>
+        <result property="itemData" column="item_data"/>
+    </resultMap>
+
+    <sql id="selectwenShuDetailVo">
+        select item_court_id, item_index, item_data
+        from wenshu_detail
+    </sql>
+
+    <select id="selectwenShuDetailList" parameterType="wenShuDetail" resultMap="wenShuDetailResult">
+        <include refid="selectwenShuDetailVo"/>
+        <where>
+            <if test="itemIndex != null ">and item_index = #{itemIndex}</if>
+            <if test="itemData != null  and itemData != ''">and item_data = #{itemData}</if>
+        </where>
+    </select>
+
+    <select id="selectwenShuDetailById" parameterType="String" resultMap="wenShuDetailResult">
+        <include refid="selectwenShuDetailVo"/>
+        where item_court_id = #{itemCourtId}
+    </select>
+
+    <insert id="insertwenShuDetail" parameterType="wenShuDetail">
+        insert into wenshu_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemCourtId != null">item_court_id,</if>
+            <if test="itemIndex != null">item_index,</if>
+            <if test="itemData != null">item_data,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemCourtId != null">#{itemCourtId},</if>
+            <if test="itemIndex != null">#{itemIndex},</if>
+            <if test="itemData != null">#{itemData},</if>
+        </trim>
+    </insert>
+
+    <update id="updatewenShuDetail" parameterType="wenShuDetail">
+        update wenshu_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemIndex != null">item_index = #{itemIndex},</if>
+            <if test="itemData != null">item_data = #{itemData},</if>
+        </trim>
+        where item_court_id = #{itemCourtId}
+    </update>
+
+    <delete id="deletewenShuDetailById" parameterType="String">
+        delete
+        from wenshu_detail
+        where item_court_id = #{itemCourtId}
+    </delete>
+
+    <delete id="deletewenShuDetailByIds" parameterType="String">
+        delete from wenshu_detail where item_court_id in
+        <foreach item="itemCourtId" collection="array" open="(" separator="," close=")">
+            #{itemCourtId}
+        </foreach>
+    </delete>
+
+    <select id="selectItemCourtIdList" parameterType="wenShuDetail" resultMap="wenShuDetailResult">
+        select item_court_id from wenshu_detail
+        <where>
+            <if test="itemData != null  and itemData != ''">and item_data like concat('%',#{itemData},'%')</if>
+        </where>
+        GROUP BY item_court_id
+    </select>
+
+</mapper>

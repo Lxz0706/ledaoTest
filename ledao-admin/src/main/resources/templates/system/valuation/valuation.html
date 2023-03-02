@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('估值计算主列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+<!--                <input type="text" name="itemId" th:value="*{itemId}">-->
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>类型：</label>
+                            <select id="itemType" name="itemType">
+                                <option value="">--请选择--</option>
+                                <option value="住宅用房">住宅用房</option>
+                                <option value="商业用房">商业用房</option>
+                                <option value="工业用房">工业用房</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>状态：</label>
+                            <select id="itemStatus" name="itemStatus">
+                                <option value="">--请选择--</option>
+                                <option value="成交">成交</option>
+                                <option value="流拍">流拍</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <!--            <div class="btn-group-sm" id="toolbar" role="group">-->
+        <!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:valuation:add">-->
+        <!--                    <i class="fa fa-plus"></i> 添加-->
+        <!--                </a>-->
+        <!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:valuation:edit">-->
+        <!--                    <i class="fa fa-edit"></i> 修改-->
+        <!--                </a>-->
+        <!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:valuation:remove">-->
+        <!--                    <i class="fa fa-remove"></i> 删除-->
+        <!--                </a>-->
+
+        <!--            </div>-->
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:valuation:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:valuation:remove')}]];
+    var prefix = ctx + "system/valuation";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail",
+            modalName: "估值计算主",
+            columns: [
+                {
+                    field: 'valuationId',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'itemType',
+                    title: '类型'
+                },
+                {
+                    field: 'itemStatus',
+                    title: '状态'
+                },
+                {
+                    field: 'creator',
+                    title: '创建人'
+                }, {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="detail(\'' + row.valuationId + '\')"><i class="fa fa-edit"></i>详情</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function detail(mainId) {
+        var url = prefix + "/detail/" + mainId;
+        $.modal.openTab("历史记录", url);
+    }
+</script>
+</body>
+</html>

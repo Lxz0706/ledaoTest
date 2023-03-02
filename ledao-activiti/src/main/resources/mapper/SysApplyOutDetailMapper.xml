@@ -67,7 +67,6 @@
         <result property="companyName" column="company_name"/>
         <result property="dailyDocumentTypeContract" column="daily_document_type_contract"/>
         <result property="eleDocumentStatu" column="ele_document_statu"/>
-        <result property="counts" column="counts"/>
     </resultMap>
 
     <sql id="selectSysApplyOutDetailVo">
@@ -92,7 +91,8 @@
                update_by,
                reviser,
                update_time,
-               counts
+               counts,
+               pages
         from sys_apply_out_detail
     </sql>
 

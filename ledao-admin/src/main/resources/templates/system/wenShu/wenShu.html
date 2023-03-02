@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('文书网列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>检索条件：</label>
+                            <input type="text" name="itemCourtData" placeholder="请输入案由、关键词、法院、当事人、律师"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <!--            <div class="btn-group-sm" id="toolbar" role="group">-->
+        <!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:wenShu:add">-->
+        <!--                    <i class="fa fa-plus"></i> 添加-->
+        <!--                </a>-->
+        <!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:wenShu:edit">-->
+        <!--                    <i class="fa fa-edit"></i> 修改-->
+        <!--                </a>-->
+        <!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:wenShu:remove">-->
+        <!--                    <i class="fa fa-remove"></i> 删除-->
+        <!--                </a>-->
+
+        <!--            </div>-->
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:wenShu:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:wenShu:remove')}]];
+    var prefix = ctx + "system/wenShu";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "文书网",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'courtId',
+                    title: '文书id',
+                    visible: false
+                },
+                {
+                    field: 'courtTitle',
+                    title: '标题'
+                },
+                {
+                    field: 'courtCause',
+                    title: '案由'
+                },
+                {
+                    field: 'courtName',
+                    title: '法院名称'
+                },
+                {
+                    field: 'courtNo',
+                    title: '案号'
+                },
+                {
+                    field: 'courtDate',
+                    title: '日期'
+                },
+                {
+                    field: '',
+                    title: '查看文件',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" id="" target="_blank" href="/documentFile/showPdfY?path=' + encodeURIComponent(row.pdfPath) + '><i class="fa fa-search"></i>预览</a>')
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

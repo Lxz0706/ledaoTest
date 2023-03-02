@@ -59,6 +59,11 @@ public class DataScopeAspect {
      */
     public static final String DATA_SCOPE = "dataScope";
 
+    /**
+     * 自定义数据2（避免与之前的冲突）
+     */
+    public static final String SCOPE_CUSTOM_DATA = "7";
+
     // 配置织入点
     @Pointcut("@annotation(com.ledao.common.annotation.DataScope)")
     public void dataScopePointCut() {
@@ -111,8 +116,8 @@ public class DataScopeAspect {
                         deptAlias, user.getDeptId(), userAlias, user.getLoginName(), userAlias, user.getUserId()));
             } else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope)) {
                 sqlString.append(StringUtils.format(
-                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) ) OR {}.create_by ='{}' or {}.user_id like '%{}%'",
-                        deptAlias, user.getDeptId(), user.getDeptId(), userAlias, user.getLoginName(), userAlias, user.getUserId()))
+                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) )",
+                        deptAlias, user.getDeptId(), user.getDeptId()))
                 ;
             } else if (DATA_SCOPE_SELFORSHARESELF.equals(dataScope)) {
                 if (StringUtils.isNotBlank(userAlias)) {
@@ -128,6 +133,10 @@ public class DataScopeAspect {
                     // 数据权限为仅本人且没有userAlias别名不查询任何数据
                     sqlString.append(" OR 1=0 ");
                 }
+            } else if (SCOPE_CUSTOM_DATA.equals(dataScope)) {
+                sqlString.append(StringUtils.format(
+                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) ", deptAlias,
+                        role.getRoleId()));
             }
         }
         if (StringUtils.isNotBlank(sqlString.toString())) {

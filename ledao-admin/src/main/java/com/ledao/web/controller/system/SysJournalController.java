@@ -90,12 +90,10 @@ public class SysJournalController extends BaseController {
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
             if (!currentUser.isAdmin()) {
+                sysUser.setFormalFlag("0");
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
                     if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
-                        if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
-                            sysUser.setFormalFlag("0");
-                        }
                         if (!"thbManager".equals(sysRole.getRoleKey()) && !"thbManager2".equals(sysRole.getRoleKey())
                                 && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())
                                 && !"documentAdmin".equals(sysRole.getRoleKey()) && !"Cc".equals(sysRole.getRoleKey())) {
@@ -120,19 +118,13 @@ public class SysJournalController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysJournal sysJournal) {
         startPage();
-        /*SysUser user = ShiroUtils.getSysUser();
-        List<SysRole> getRoles = user.getRoles();
-        boolean isZjl = false;
-        for (SysRole sysRole : getRoles) {
-            if ("zjl".equals(sysRole.getRoleKey()) || "admin".equals(user.getLoginName())) {
-                isZjl = true;
-                continue;
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                sysJournal.setFormalFlag("0");
             }
         }
-        if (!isZjl){
-            SysDept dept = sysDeptService.selectDeptById(user.getDeptId());
-            sysJournal.setDeptId(dept.getDeptId());
-        }*/
         List<SysJournal> list = sysJournalService.selectSysJournalList(sysJournal);
         return getDataTable(list);
     }
@@ -140,53 +132,11 @@ public class SysJournalController extends BaseController {
     @PostMapping("/deptList")
     @ResponseBody
     public TableDataInfo deptList() {
-        SysUser user = ShiroUtils.getSysUser();
-        List<SysRole> getRoles = user.getRoles();
-        boolean isZjl = false;
-        StringBuffer sb = new StringBuffer();
-        sb.append(user.getDeptId());
-        String seeJournal = sysConfigService.selectConfigByKey("seeJournal");
-        if (isFlag(user.getLoginName(), seeJournal)) {
-            //允许查看所有日志的账号
-            isZjl = true;
-        }/* else {
-            for (SysRole sysRole : getRoles) {
-                if ("zjl".equals(sysRole.getRoleKey()) || "seniorRoles".equals(sysRole.getRoleKey())) {
-                    //允许查看所有日志的角色
-                    isZjl = true;
-                    continue;
-                }
-//                if ("fkbjl".equals(sysRole.getRoleKey()) || "flgw".equals(sysRole.getRoleKey())) {
-//                    sb.append(",").append("201,202");
-//                }
-            }
-        }*/
+
         SysDept dept = new SysDept();
-        Long parendId = 100L;
-        dept.setParentId(parendId);
+        dept.setParentId(Long.valueOf("100"));
         List<SysDept> deps = deptService.selectDeptOneLevelList(dept);
-        if (isZjl) {
-            return getDataTable(deps);
-        } else {
-            List<SysDept> dts = new ArrayList<>();
-            SysDept deptNew = deptService.selectDeptById(user.getDeptId());
-            //for (SysDept deptNew : list) {
-            for (SysDept d : deps) {
-                if (d.getDeptId().toString().equals(deptNew.getDeptId().toString())) {
-                    dts.add(d);
-                    //return getDataTable(dts);
-                }
-                String[] depstra = deptNew.getAncestors().split(",");
-                for (String ds : depstra) {
-                    if (ds.equals(d.getDeptId().toString())) {
-                        dts.add(d);
-                        //return getDataTable(dts);
-                    }
-                }
-            }
-            //}
-            return getDataTable(dts);
-        }
+        return getDataTable(deps);
     }
 
     public boolean isFlag(String loginName, String loginNames) {

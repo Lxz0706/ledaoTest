@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('估值计算列表')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="main-content" id="addDiv">
+    <input name="mainId" id="mainId" type="text" th:value="*{mainId}">
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:valuationModel:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:valuationModel:remove')}]];
+    var prefix = ctx + "system/valuation";
+    var div;
+    var j = 0;
+
+    $(function () {
+        $.ajax({
+            url: prefix + "/detail2",
+            data: {
+                'valuationId': $("#mainId").val()
+            },
+            type: 'post',
+            datatype: "json",
+            success: function (result) {
+                var html = [];
+                var list = result.data;
+                html.push('<div class="form-group">\n' +
+                    '            <label class="col-sm-3 control-label">类型 ：</label>\n' +
+                    '            <div class="col-sm-8">\n' +
+                    '                <input type="text" id="itemType" name="itemType" onkeyup="num(this)" class="form-control"\n' +
+                    '                          value="' + list[0].itemType + '" readonly>\n' +
+                    '            </div>\n' +
+                    '        </div>\n' +
+                    '        <div class="form-group">\n' +
+                    '            <label class="col-sm-3 control-label">状态 ：</label>\n' +
+                    '            <div class="col-sm-8">\n' +
+                    '                  <input type="text" id="itemStatus" name="itemStatus" onkeyup="num(this)" class="form-control"\n' +
+                    '                           value="' + list[0].itemStatus + '" readonly>\n' +
+                    '            </div>\n' +
+                    '        </div>');
+                for (var i in list) {
+                    j++;
+                    if ($.common.isEmpty(list[i].itemMarketPrice)) {
+                        list[i].itemMarketPrice = '';
+                    }
+                    if ($.common.isEmpty(list[i].building)) {
+                        list[i].building = '';
+                    }
+                    if ($.common.isEmpty(list[i].building1)) {
+                        list[i].building1 = '';
+                    }
+                    if ($.common.isEmpty(list[i].price1)) {
+                        list[i].price1 = '';
+                    }
+                    if ($.common.isEmpty(list[i].building2)) {
+                        list[i].building2 = '';
+                    }
+                    if ($.common.isEmpty(list[i].price2)) {
+                        list[i].price2 = '';
+                    }
+                    if ($.common.isEmpty(list[i].itemCurrentPrice)) {
+                        list[i].itemCurrentPrice = '';
+                    }
+                    if ($.common.isEmpty(list[i].unitPrice)) {
+                        list[i].unitPrice = '';
+                    }
+                    if ($.common.isEmpty(list[i].areaUnitPrice)) {
+                        list[i].areaUnitPrice = '';
+                    }
+                    if ($.common.isEmpty(list[i].latLon)) {
+                        list[i].latLon = '';
+                    }
+                    if ($.common.isEmpty(list[i].floorSpace)) {
+                        list[i].floorSpace = '';
+                    }
+                    if ($.common.isEmpty(list[i].areaSpace)) {
+                        list[i].areaSpace = '';
+                    }
+                    if ($.common.isEmpty(list[i].building3)) {
+                        list[i].building3 = '';
+                    }
+                    if ($.common.isEmpty(list[i].price3)) {
+                        list[i].price3 = '';
+                    }
+                    if ($.common.isEmpty(list[i].building4)) {
+                        list[i].building4 = '';
+                    }
+                    if ($.common.isEmpty(list[i].price4)) {
+                        list[i].price4 = '';
+                    }
+                    if ($.common.isEmpty(list[i].num1)) {
+                        list[i].num1 = '';
+                    }
+                    if ($.common.isEmpty(list[i].num2)) {
+                        list[i].num2 = '';
+                    }
+                    if ($.common.isEmpty(list[i].valuation)) {
+                        list[i].valuation = '';
+                    }
+
+
+                    if ($.common.equals("工业用房", list[i].itemType)) {
+                        html += '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">参考物建筑面积（m²）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="building" name="building" onkeyup="num(this)" class="form-control"\n' +
+                            '                           value="' + list[i].building + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '                <div class="form-group">\n' +
+                            '                    <label class="col-sm-3 control-label">参考物土地面积（m²）：</label>\n' +
+                            '                    <div class="col-sm-8">\n' +
+                            '                        <input type="text" id="area" name="area" onkeyup="num(this)" class="form-control"\n' +
+                            '                                value="' + list[i].area + '" readonly>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '                <div class="form-group">\n' +
+                            '                    <label class="col-sm-3 control-label">参考物有证建筑面积（m²）：</label>\n' +
+                            '                    <div class="col-sm-8">\n' +
+                            '                        <input type="text" id="building1" name="building1" onkeyup="num(this)" class="form-control"\n' +
+                            '                               value="' + list[i].building1 + '" readonly>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '                <div class="form-group">\n' +
+                            '                    <label class="col-sm-3 control-label">赋值单价（有证）（元）：</label>\n' +
+                            '                    <div class="col-sm-8">\n' +
+                            '                        <input type="text" id="price1" name="price1" onkeyup="num(this)" class="form-control"\n' +
+                            '                                value="' + list[i].price1 + '" readonly>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '                <div class="form-group">\n' +
+                            '                    <label class="col-sm-3 control-label">参考物无证建筑面积（m²）：</label>\n' +
+                            '                    <div class="col-sm-8">\n' +
+                            '                        <input type="text" id="building2" name="building2" onkeyup="num(this)" class="form-control"\n' +
+                            '                                value="' + list[i].building2 + '" readonly>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '                <div class="form-group">\n' +
+                            '                    <label class="col-sm-3 control-label">赋值单价（无证）（元）：</label>\n' +
+                            '                    <div class="col-sm-8">\n' +
+                            '                        <input type="text" id="price2" name="price2" onkeyup="num(this)" class="form-control"\n' +
+                            '                                value="' + list[i].price2 + '" readonly>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">成交价格（元）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="itemCurrentPrice" name="itemCurrentPrice"\n' +
+                            '                           value="' + list[i].itemCurrentprice + '" class="form-control"\n' +
+                            '                          readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">评估价/市场价（元）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="itemMarketPrice" name="itemMarketPrice" onkeyup="num(this)"\n' +
+                            '                           class="form-control"\n' +
+                            '                           value="' + list[i].itemMarketPrice + '"\n' +
+                            '                           readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group unitPrice">\n' +
+                            '                <label class="col-sm-3 control-label">建筑物单价 ：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="unitPrice" name="unitPrice" class="form-control" value="' + list[i].unitPrice + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group areaUnitPrice">\n' +
+                            '                <label class="col-sm-3 control-label">土地单价 ：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="areaUnitPrice" name="areaUnitPrice" class="form-control"\n' +
+                            '                           value="' + list[i].areaUnitPrice + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">与参考物之间距离（米） ：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" name="latLon" class="form-control" \n' +
+                            '                           value="' + list[i].latLon + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '<div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">标的物建筑面积（m²）：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="floorSpace" name="floorSpace" onkeyup="num(this)"\n' +
+                            '                       class="form-control"\n' +
+                            '                       value="' + list[i].floorSpace + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">标的物土地面积（m²）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="areaSpace" name="areaSpace" onkeyup="num(this)"\n' +
+                            '                           class="form-control"\n' +
+                            '                           value="' + list[i].areaSpace + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">标的物有证建筑面积（m²）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="building3" name="building3" onkeyup="num(this)"\n' +
+                            '                           class="form-control"\n' +
+                            '                           value="' + list[i].building3 + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">赋值单价（有证）（元）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="price3" name="price3" onkeyup="num(this)"\n' +
+                            '                           class="form-control"\n' +
+                            '                           value="' + list[i].price3 + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">标的物无证建筑面积（m²）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="building4" name="building4" onkeyup="num(this)"\n' +
+                            '                           class="form-control"\n' +
+                            '                           value="' + list[i].building4 + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">系数1 (不填默认为1)：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="num1" name="num1" onkeyup="num(this)"\n' +
+                            '                       class="form-control" value="' + list[i].num1 + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">系数2 (不填默认为1)：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="num2" name="num2" onkeyup="num(this)" \n' +
+                            '                       class="form-control" value="' + list[i].num2 + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">参考物' + j + '估值总价 ：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="valuation" name="valuation" class="form-control" value="' + list[i].valuation + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>'
+
+                    } else {
+                        html += '<div class="row form-group">\n' +
+                            '                <div class="col-sm-offset-5 col-sm-10">\n' +
+                            '                    <button type="button" class="btn btn-sm btn-primary">参考物' + j + '\n' +
+                            '                    </button>&nbsp;\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">参考物建筑面积（m²）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="building" name="building" onkeyup="num(this)" class="form-control"\n' +
+                            '                          value="' + list[i].building + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">成交价格（元）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="itemCurrentPrice" name="itemCurrentPrice" onkeyup="num(this)"\n' +
+                            '                           value="' + list[i].itemCurrentPrice + '" class="form-control"\n' +
+                            '                          readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">评估价/市场价（元）：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="itemMarketPrice" name="itemMarketPrice" onkeyup="num(this)"\n' +
+                            '                           class="form-control"\n' +
+                            '                           value="' + list[i].itemMarketPrice + '"\n' +
+                            '                           readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">建筑物单价 ：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" id="unitPrice" name="unitPrice" class="form-control" value="' + list[i].unitPrice + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="form-group">\n' +
+                            '                <label class="col-sm-3 control-label">与参考物之间距离（米） ：</label>\n' +
+                            '                <div class="col-sm-8">\n' +
+                            '                    <input type="text" name="latLon" class="form-control" \n' +
+                            '                           value="' + list[i].latLon + '" readonly>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">标的物建筑面积（m²）：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="floorSpace" name="floorSpace" onkeyup="num(this)"\n' +
+                            '                       class="form-control"\n' +
+                            '                       value="' + list[i].floorSpace + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">系数1 (不填默认为1)：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="num1" name="num1" onkeyup="num(this)"\n' +
+                            '                       class="form-control" value="' + list[i].num1 + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">系数2 (不填默认为1)：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="num2" name="num2" onkeyup="num(this)" \n' +
+                            '                       class="form-control" value="' + list[i].num2 + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '        <div class="form-group">\n' +
+                            '            <label class="col-sm-3 control-label">参考物' + j + '估值总价 ：</label>\n' +
+                            '            <div class="col-sm-8">\n' +
+                            '                <input type="text" id="valuation" name="valuation" class="form-control" value="' + list[i].valuation + '" readonly>\n' +
+                            '            </div>\n' +
+                            '        </div>'
+                    }
+                }
+                $("#addDiv").html(html);
+            }
+        })
+    });
+
+</script>
+</body>
+</html>

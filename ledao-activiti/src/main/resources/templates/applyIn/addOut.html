@@ -273,7 +273,7 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目名称',
+                    title: '项目名称123',
                     visible: showDocumentType
                 },
                 {
@@ -621,8 +621,6 @@
     function selectchange(id, val) {
         var isElecId = "sele" + id
         var isElec = document.getElementById(isElecId).value
-        console.log('id+++++++++', id)
-        console.log('isElec+++++++++', isElec)
         $.ajax({
             url: "/activity/outFiledetail/edit",
             type: 'post',
@@ -702,6 +700,7 @@
     }
 
     function onEditableSave(field, row, rowIndex, oldValue, $el) {
+        console.log("文件类型：========" + row.isElec);
         $.ajax({
             type: "post",
             url: prefix + "/editApplyOutCount",

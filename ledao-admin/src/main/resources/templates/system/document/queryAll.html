@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('文件管理列表')"/>
     <!--<th:block th:include="include :: pdf-css"/>-->
@@ -43,6 +43,7 @@
     var editFlag = [[${@permission.hasPermi('system:document:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:document:remove')}]];
     var downLoadFlag = [[${@permission.hasPermi('system:document:download')}]]
+    var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
     var prefix = ctx + "system/document";
 
     $(function () {
@@ -72,8 +73,11 @@
                     }
                 },
                 {
-                    field: 'subsetType',
-                    title: '分类'
+                    field: 'documentType',
+                    title: '分类',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
                 },
                 {
                     field: 'fileName',
@@ -86,13 +90,6 @@
                     field: 'fileType',
                     title: '文件类型'
                 },
-                /*{
-                    field: 'shareDeptName',
-                    title: '共享部门名称',
-                    formatter: function (value, row, index) {
-                        return $.table.tooltip(value, 15);
-                    }
-                },*/
                 {
                     field: 'shareDeptAndUser',
                     title: '可见部门及人员',
@@ -109,54 +106,141 @@
                     align: 'left',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        if ("Y" == row.isAdmin) {
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.fileId + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        }
+                        var fileType = row.fileType.toLowerCase();
+
+
                         if ("Y" == row.downloadableFlag) {
-                            var fileType = row.fileType.toLowerCase();
-                            actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
-                            if ('doc' == fileType || 'docx' == fileType /*|| 'xls' == fileType
-                                || 'xlsx' == fileType*/ || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
-                            } else if ('pdf' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '"><i class="fa fa-search"></i>预览</a>');
-                            } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
-                                || 'png' == fileType || 'webp' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileUrl + "',\'" + row.fileType + '\')"+row.filw+><i class="fa fa-search"></i>预览</a>');
-                            } else if ('mp4' == fileType) {
-                                actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>播放</a>')
-                            }
+                            actions.push('<a class="btn btn-success btn-xs ' + downLoadFlag + '" href="javascript:void(0)" onclick="downLoad(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-download"></i>下载</a>');
+                        }
+                        if ('doc' == fileType || 'docx' == fileType || 'xls' == fileType
+                            || 'xlsx' == fileType || 'ppt' == fileType || 'pptx' == fileType || 'txt' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="toPdf(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('pdf' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" id="" target="_blank" href="/documentFile/showPdfY?path=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>')
+                            //actions.push('<a class="btn btn-success btn-xs" target="_blank" href="/js/plugins/pdfJS/web/viewer.html?file=' + encodeURIComponent(row.fileUrl) + '" onclick="toPdf1(\'' + row.fileId + "',\'" + row.fileUrl + '\')"><i class="fa fa-search"></i>预览</a>');
+                        } else if ('jpg' == fileType || 'bmp' == fileType || 'gif' == fileType || 'jpeg' == fileType
+                            || 'png' == fileType || 'webp' == fileType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="jpgToPdf(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + '\')"><i class="fa fa-search"></i>预览</a>');
+                        }  else if ('mp4' == fileType && 'SAP' == row.documentType) {
+                            actions.push('<a class="btn btn-success btn-xs" target="_top"  href="javascript:void(0)" onclick="playVideo(\'' + row.fileId + "',\'" + row.fileUrl + "',\'" + row.fileType + "',\'" + row.documentType + '\')"><i class="fa fa-search"></i>播放</a>')
+                            actions.push('<a class="btn btn-success btn-xs " onclick="showTraining((\'' + row.fileId + '\'))" href="javascript:void(0)"><i class="fa fa-search"></i>学习进度查看</a> ');
                         }
                         return actions.join('');
                     }
-                }]
+                }
+            ]
         };
         $.table.init(options);
     });
 
-    function playVideo(url, type) {
-        showVideo('<video controls="controls" autoplay="autoplay">\n' +
+    function playVideo(fileId, url, type, documentType) {
+        $.ajax({
+            url: prefix + '/previewCount',
+            data: {'fileId': fileId},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                $("#bootstrap-table").bootstrapTable("refresh", {silent: true});
+            }
+        })
+        showVideo('<video id="myVideo" controls="controls" autoplay="autoplay" height=\'100%\' width=\'100%\'>' +
             '  <source src="' + url + '" type="video/mp4" />\n' +
             '  <source src="' + url + '" type="video/ogg" />\n' +
             '  <source src="' + url + '" type="video/webm" />\n' +
             '  <object data="' + url + '">\n' +
             '    <embed src="' + url + '" />\n' +
             '  </object>\n' +
-            '</video>'
+            '</video>', fileId,documentType
         );
     }
 
-    function showVideo(content) {
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var totalTime;
+    var currentTimes;
+    var playTime;
+    var video;
+
+    function showVideo(content, fileId,documentType) {
         layer.open({
             type: 1,
             title: false, //不显示标题栏
-            shadeClose: true, //点击遮罩时关闭
-            area: ['400px', '230px'],
+            shadeClose: false, //点击遮罩时关闭
+            area: [width - 50 + "px", height - 50 + "px"],
             shade: 0.8,
             id: 'LAY_showImage_001', //设定一个id，防止重复弹出
             moveType: 1, //拖拽模式，0或者1
-            content: content
+            content: content,
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            yes: function (index, layero) {
+                if('SAP' == documentType){
+                    submitTraining(fileId);
+                    getVideo(fileId);
+                }
+                //事件
+                layer.close(index);
+            },
+            success: function (layero, index) {
+                if('SAP' == documentType){
+                    getCurrentTimeByDocumentId(fileId);
+                    getVideo(fileId);
+                }
+            }
         });
+    }
+
+    //获取该用户上次观看此视频的截止时间
+    function getCurrentTimeByDocumentId(fileId) {
+        var data = {"documentId": fileId}
+        $.ajax({
+            url: '/system/training/getCurrentTimeByDocumentId',
+            type: 'post',
+            data: data,
+            dataType: "JSON",
+            success: function (res) {
+                for (var i in res.data) {
+                    playTime = res.data[i].playTime;
+                }
+                video = document.getElementById("myVideo");
+                video.play();
+                video.currentTime = playTime;
+            }
+
+        })
+    }
+
+    function getVideo(fileId) {
+        video = document.getElementById("myVideo");
+        video.oncanplay = function () {
+            totalTime = video.duration.toFixed();
+            video.addEventListener("timeupdate", function () {
+                currentTimes = video.currentTime.toFixed();
+                console.log(currentTimes + "=====时间点：------" + video.currentTime.toFixed());
+            }, false);
+            video.addEventListener('pause', function () {
+                currentTimes = video.currentTime.toFixed();
+                console.log(currentTimes + '------暂停点：=====' + video.currentTime.toFixed());
+            })
+        }
+    }
+
+    function submitTraining(fileId) {
+        var data = {
+            "documentId": parseInt(fileId),
+            "totalTime": parseInt(totalTime),
+            "playTime": parseInt(currentTimes)
+        }
+        $.ajax({
+            url: '/system/training/add',
+            type: 'post',
+            data: data,
+            dataType: "JSON",
+            success: function (res) {
+                console.log(res);
+            }
+
+        })
     }
 
     function jpgToPdf(url, type) {
@@ -200,6 +284,11 @@
     function back() {
         var url = prefix + "/toList";
         $.modal.parentTab("文档管理", url);
+    }
+
+    function showTraining(documentId) {
+        var url = '/system/training/trainingList?documentId=' + documentId;
+        $.modal.opens("评论列表", url);
     }
 
 </script>

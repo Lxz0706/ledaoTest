@@ -92,7 +92,6 @@
         <result property="updateBy" column="update_by"/>
         <result property="reviser" column="reviser"/>
         <result property="updateTime" column="update_time"/>
-        <result property="realCreateName" column="realCreateName"/>
         <result property="reviserName" column="reviserName"/>
         <result property="dailyDocumentTypeContract" column="daily_document_type_contract"/>
     </resultMap>
@@ -324,7 +323,7 @@
         <if test="creator != null  and creator != ''">and file.creator = #{creator}</if>
         <if test="reviser != null  and reviser != ''">and file.reviser = #{reviser}</if>
         <if test="companyName != null  and companyName != ''">and app.company_name = #{companyName}</if>
-        <if test="debtorName != null  and debtorName != ''">and app.debtor_name = #{debtorName}</if>
+        <if test="debtorName != null  and debtorName != ''">and app.debtor_name regexp #{debtorName}</if>
         <if test="projectName != null  and projectName != ''">and app.project_name = #{projectName}</if>
         order by file.create_time desc
     </select>

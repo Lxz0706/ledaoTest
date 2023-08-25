@@ -25,7 +25,8 @@
     <select id="selectZcbListUseful" parameterType="SysZcb" resultMap="SysZcbResult">
         <include refid="selectSysZcbVo"/> where 	del_flag = '0'
         AND asset_status != ''
-        <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name = #{assetPackageName} </if>
+        <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name like concat('%',
+            #{assetPackageName}, '%') </if>
         <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
     </select>
 

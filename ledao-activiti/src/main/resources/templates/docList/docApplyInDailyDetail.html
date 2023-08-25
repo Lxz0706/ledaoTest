@@ -16,45 +16,6 @@
                         <ul>
                         	<input name="applyType" value="0" type="hidden"/>
                             <input name="approveStatu" value="3" type="hidden"/>
-                            <!--<li>
-                                <label>档案类别：</label>
-                                <select id="documentType" name="documentType"
-                                        th:with="type=${@dict.getType('sys_document_busi_type')}"
-                                        data-none-selected-text="请选择"
-                                        onchange="changeDocumentType(this.value)">
-                                    <option value="">&#45;&#45;请选择数据&#45;&#45;</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>-->
-                            <!--<li id="projectName">
-                                <label>项目名称：</label>
-                                <input type="text" name="projectName"/>
-                            </li>-->
-                            <!--<li>
-                                <label>公司名称：</label>
-                                <select id="companyName" name="companyName"
-                                        th:with="type=${@dict.getType('sys_company_name')}"
-                                        data-none-selected-text="请选择">
-                                    <option value="">&#45;&#45;请选择数据&#45;&#45;</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>-->
-<!--                            <li class="select-time">-->
-<!--                                <label>申请时间：</label>-->
-<!--                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginApplyTime]"/>-->
-<!--                                <span>-</span>-->
-<!--                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endApplyTime]"/>-->
-<!--                            </li>-->
-<!--                            <li id="fileName">-->
-<!--                                <label>文件名称：</label>-->
-<!--                                <input type="text" name="fileName"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <label>实际提交人：</label>-->
-<!--                                <input type="text" name="applyUserName"/>-->
-<!--                            </li>-->
                             <li class="select-time">
                                 <label>申请时间：</label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间"
@@ -111,18 +72,6 @@
                     <i class="fa fa-backward"></i> 返回
                 </a>
                 <a class="btn btn-success" onclick="downLoad()"><i class="fa fa-plus"></i>下载</a>
-                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="activity:applyIn:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>-->
-                <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="activity:applyIn:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>-->
-<!--                <a class="btn btn-danger single disabled" onclick="$.operate.applyBack()" shiro:hasPermission="activity:applyIn:applyBack">-->
-<!--                    <i class="fa fa-remove"></i> 撤回-->
-<!--                </a>-->
-<!--                <a class="btn btn-primary single disabled" onclick="$.operate.applySubmit()" shiro:hasPermission="activity:applyIn:applySubmit">-->
-<!--                    <i class="fa fa-user"></i> 提交审批-->
-<!--                </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -159,21 +108,6 @@
                     title: 'id',
                     visible: false
                 },
-                /*{
-                    field: 'documentType',
-                    title: '档案类别',
-                    formatter: function(value, item, index) {
-		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
-		            }
-                },*/
-                /*{
-                    field: 'projectName',
-                    title: '项目名称',
-                    formatter: function(value, item, index) {
-                        return $.table.tooltip(item.projectName,10);
-                    },
-                    visible: false
-                },*/
                 {
                     field: 'companyName',
                     title: '公司名称',
@@ -204,13 +138,6 @@
                     field: 'applyTime',
                     title: '申请时间'
                 },
-                // {
-                //     field: 'approveUser',
-                //     title: '下一节点审批人',
-                //     formatter: function(value, item, index) {
-                //         return strLength(item.approveUser);
-                //     }
-                // },
                 {
                     field: 'approveStatu',
                     title: '审批状态',

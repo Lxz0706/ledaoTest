@@ -1,24 +1,24 @@
 package com.ledao.activity.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
 import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.dao.SysApplyOutDetail;
 import com.ledao.activity.dao.SysDocumentFile;
 import com.ledao.activity.mapper.SysApplyInMapper;
+import com.ledao.activity.mapper.SysApplyOutDetailMapper;
 import com.ledao.activity.mapper.SysDocumentFileMapper;
+import com.ledao.activity.service.ISysApplyOutDetailService;
 import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.text.Convert;
+import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.framework.util.ShiroUtils;
-import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ledao.activity.mapper.SysApplyOutDetailMapper;
-import com.ledao.activity.dao.SysApplyOutDetail;
-import com.ledao.activity.service.ISysApplyOutDetailService;
-import com.ledao.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 档案出库详情记录Service业务层处理
@@ -208,25 +208,50 @@ public class SysApplyOutDetailServiceImpl implements ISysApplyOutDetailService {
         }
         SysApplyIn syApplyIn = sysApplyInMapper.selectSysApplyInById(applyId);
         String[] idsArr = Convert.toStrArray(ids);
+        int failureNum = 0;
+        StringBuilder failureMsg = new StringBuilder();
         for (int i = 0; i < idsArr.length; i++) {
-            SysApplyOutDetail SysApplyOutDetail = new SysApplyOutDetail();
-            SysApplyOutDetail.setDocumentId(Long.parseLong(idsArr[i]));
-            SysApplyOutDetail.setApplyId(applyId);
-            SysApplyOutDetail.setCreateBy(loginName);
-            SysApplyOutDetail.setCreateBy(loginName);
-            SysApplyOutDetail.setCreateTime(new Date());
-            if ("0".equals(syApplyIn.getIsReturn())) {
-                SysApplyOutDetail.setIsReturned("1");
+            try {
+                SysApplyOutDetail SysApplyOutDetail = new SysApplyOutDetail();
+                SysApplyOutDetail.setDocumentId(Long.parseLong(idsArr[i]));
+                SysApplyOutDetail.setApplyId(applyId);
+                SysApplyOutDetail.setCreateBy(loginName);
+                SysApplyOutDetail.setCreateBy(loginName);
+                SysApplyOutDetail.setCreateTime(new Date());
+                if ("0".equals(syApplyIn.getIsReturn())) {
+                    SysApplyOutDetail.setIsReturned("1");
+                }
+                SysDocumentFile sysDocumentFile = sysDocumentFileMapper.selectSysDocumentFileById(Long.parseLong(idsArr[i]));
+                //查询出单份文件对应的页数
+                int page = sysDocumentFile.getPages().intValue() / sysDocumentFile.getCounts().intValue();
+                if (StringUtils.isNull(sysDocumentFile.getCounts())) {
+                    SysApplyOutDetail.setCounts(Long.valueOf(0));
+                    SysApplyOutDetail.setPages(Long.valueOf(0));
+                } else {
+                    SysApplyOutDetail.setCounts(sysDocumentFile.getCounts());
+                    SysApplyOutDetail.setPages(sysDocumentFile.getCounts() * page);
+                }
+                sysApplyOutDetailMapper.insertSysApplyOutDetail(SysApplyOutDetail);
+                SysDocumentFile doc = sysDocumentFileMapper.selectSysDocumentFileById(sysDocumentFile.getDocumentId());
+                if (!"1".equals(doc.getDocumentStatu())) {
+                    failureNum++;
+                    failureMsg.append("<br/>" + failureNum + "当前档案纸质文件《" + doc.getFileName() + "》不在库");
+                } else {
+                    SysApplyOutDetail.setIsElec("1");
+                    sysApplyOutDetailMapper.updateSysApplyOutDetail(SysApplyOutDetail);
+                }
+            } catch (Exception e) {
+                failureNum++;
+                String msg = "<br/>" + failureNum + "新增失败：";
+                failureMsg.append(msg + e.getMessage());
             }
-            SysDocumentFile sysDocumentFile = sysDocumentFileMapper.selectSysDocumentFileById(Long.parseLong(idsArr[i]));
-            if (StringUtils.isNull(sysDocumentFile.getCounts())) {
-                SysApplyOutDetail.setCounts(Long.valueOf(0));
-            } else {
-                SysApplyOutDetail.setCounts(sysDocumentFile.getCounts());
-            }
-            sysApplyOutDetailMapper.insertSysApplyOutDetail(SysApplyOutDetail);
         }
-        updateSysApplyIn(applyId);
+        if (failureNum > 0) {
+            failureMsg.insert(0, "很抱歉，新增失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new BusinessException(failureMsg.toString());
+        } else {
+            updateSysApplyIn(applyId);
+        }
         return AjaxResult.success();
     }
 

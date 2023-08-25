@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysTrainingMapper">
+
+    <resultMap type="SysTraining" id="SysTrainingResult">
+        <result property="trainId" column="train_id"/>
+        <result property="documentId" column="document_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="playTime" column="play_time"/>
+        <result property="playbackProgress" column="playback_progress"/>
+        <result property="learnTime" column="learn_time"/>
+        <result property="totalTime" column="total_time"/>
+    </resultMap>
+
+    <sql id="selectSysTrainingVo">
+        select train_id,
+               document_id,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               play_time,
+               playback_progress,
+               learn_time,
+               total_time
+        from sys_training
+    </sql>
+
+    <select id="selectSysTrainingList" parameterType="SysTraining" resultMap="SysTrainingResult">
+        <include refid="selectSysTrainingVo"/>
+        <where>
+            <if test="createBy !=null and createBy !=''">and create_by = #{createBy}</if>
+            <if test="documentId != null ">and document_id = #{documentId}</if>
+            <if test="playTime != null ">and play_time = #{playTime}</if>
+            <if test="playbackProgress != null  and playbackProgress != ''">and playback_progress =
+                #{playbackProgress}
+            </if>
+            <if test="learnTime != null  and learnTime != ''">and learn_time = #{learnTime}</if>
+        </where>
+    </select>
+
+    <select id="selectSysTrainingById" parameterType="Long" resultMap="SysTrainingResult">
+        <include refid="selectSysTrainingVo"/>
+        where train_id = #{trainId}
+    </select>
+
+    <insert id="insertSysTraining" parameterType="SysTraining" useGeneratedKeys="true" keyProperty="trainId">
+        insert into sys_training
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="documentId != null">document_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="playTime != null">play_time,</if>
+            <if test="playbackProgress != null">playback_progress,</if>
+            <if test="learnTime != null">learn_time,</if>
+            <if test="totalTime !=null">total_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="documentId != null">#{documentId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="playTime != null">#{playTime},</if>
+            <if test="playbackProgress != null">#{playbackProgress},</if>
+            <if test="learnTime != null">#{learnTime},</if>
+            <if test="totalTime !=null">#{totalTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysTraining" parameterType="SysTraining">
+        update sys_training
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="documentId != null">document_id = #{documentId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="playTime != null">play_time = #{playTime},</if>
+            <if test="playbackProgress != null">playback_progress = #{playbackProgress},</if>
+            <if test="learnTime != null">learn_time = #{learnTime},</if>
+            <if test="totalTime !=null">total_time = #{totalTime},</if>
+        </trim>
+        where train_id = #{trainId}
+    </update>
+
+    <delete id="deleteSysTrainingById" parameterType="Long">
+        delete
+        from sys_training
+        where train_id = #{trainId}
+    </delete>
+
+    <delete id="deleteSysTrainingByIds" parameterType="String">
+        delete from sys_training where train_id in
+        <foreach item="trainId" collection="array" open="(" separator="," close=")">
+            #{trainId}
+        </foreach>
+    </delete>
+
+</mapper>

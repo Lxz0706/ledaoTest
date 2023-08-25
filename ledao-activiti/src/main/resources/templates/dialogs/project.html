@@ -19,8 +19,10 @@
                             <input type="text" name="projectName"/>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
                 </div>
@@ -41,6 +43,9 @@
     var fwProjectType = $("#fwProjectType").val();
     var projectZckType = $("#projectZckType").val();
     var otherFlag = $("#otherFlag").val();
+    var checkedIds = new Array();
+    var str;
+    var overAllIds = new Array();  //全局数组
 
     $(function () {
         var options = {
@@ -50,7 +55,9 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "投后部项目管理",
-            singleSelect: true,
+            singleSelect: false,
+            rememberSelected: true,
+            checkedIds: checkedIds,
             columns: [{
                 checkbox: true
             },
@@ -69,7 +76,7 @@
                     field: 'projectName',
                     title: '借款人名称',
                     formatter: function (value, row, index) {
-                        return $.table.tooltip(row.projectName,10);
+                        return $.table.tooltip(row.projectName, 10);
                     },
                     sortable: true
                 },
@@ -77,80 +84,56 @@
                     field: 'city',
                     title: '城市'
                 },
-                /*,
-                {
-                    field: 'totalPrice',
-                    title: '合同本金',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail3(\'' + row.projectId + "',\'" + row.totalPrice + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
-                    }
-                },
-                {
-                    field: 'totalInterest',
-                    title: '利息',
-                    formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
-                },
-                {
-                    field: 'totalPrincipalBalance',
-                    title: '本金余额(元)',
-                    formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
-                },
-                {
-                    field: 'totalInterestBalance',
-                    title: '利息余额',
-                    formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
-                },
-                {
-                    field: 'guarantors',
-                    title: '保证人',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail1(\'' + row.projectId + "',\'" + row.guarantors + '\')">' + strLength(row.guarantors) + '</a>';
-                    }
-                },
-                {
-                    field: 'collaterals',
-                    title: '抵押物',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail2(\'' + row.projectId + "',\'" + row.collaterals + '\')">' + strLength(row.collaterals) + '</a>';
-                    }
-                },
-                {
-                    field: 'pledges',
-                    title: '质押物',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail4(\'' + row.projectId + "',\'" + row.pledges + '\')">' + strLength(row.pledges) + '</a>';
-                    }
-                },
-                {
-                    field: 'recapture',
-                    title: '处置回现',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail5(\'' + row.projectId + '\')">' + $.operate.numberFormatter(value, 3, '.', ',') + '</a>';
-                    }
-                },
-                {
-                    field: 'projectManager',
-                    title: '项目经理'
-                },
-                {
-                    title: '最新进度情况',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="progress(\'' + row.projectId + '\')">最新进度情况</a>';
-                    }
-                },*/
                 {
                     field: 'debtStatus',
                     title: '债权状态'
                 }]
         };
         $.table.init(options);
+        $('#bootstrap-table').on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table', function (e, rows) {
+            var datas = $.isArray(rows) ? rows : [rows];        // 点击时获取选中的行或取消选中的行
+            examine(e.type, datas);                              // 保存到全局 Array() 里
+        });
+        $("#bootstrap-table").on("check-all.bs.table", (event, rows) => {
+            rows.forEach(function (item) {
+                checkedIds.push(item.projectId);
+            })
+        }).on("uncheck-all.bs.table", (event, rows) => {
+            rows.forEach(function (item) {
+                checkedIds.splice(checkedIds.indexOf(item.projectId), 1);
+            })
+        }).on("check.bs.table", (event, row) => {
+            checkedIds.push(row.projectId)
+        }).on("uncheck.bs.table", (event, row) => {
+            checkedIds.splice(checkedIds.indexOf(row.projectId), 1);
+        })
     });
+
+
+    function examine(type, datas) {
+        if (type.indexOf('uncheck') == -1) {
+            $.each(datas, function (i, v) {
+                // 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
+                if (checkedIds.indexOf(v.projectId) == -1) {
+                    checkedIds.push(v.projectId);
+                }
+            });
+        } else {
+            $.each(datas, function (i, v) {
+                checkedIds.splice(getArrIndex(v.projectId), 0);    //删除取消选中行
+            });
+        }
+    }
+
+    function getArrIndex(val) {
+        for (var i = 0; i < checkedIds.length; i++) {
+            if (checkedIds[i] === val) {
+                return i;
+            }
+            return -1;
+        }
+    }
+
 
     //控制显示的字数
     function strLength(value) {
@@ -177,50 +160,10 @@
         $.modal.parentTab(projectName + "列表", url);
     }
 
-    /*合同本金列表-详细*/
-    function detail3(id, contractPrincipal) {
-        var url = ctx + 'system/contract/contractList?projectId=' + id + "&projectZckType=" + projectZckType
-            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
-        $.modal.parentTab("合同本金列表", url);
-    }
-
-    /*保证人列表-详细*/
-    function detail1(id, bail) {
-        // var url = ctx + 'system/bail/bailList/' + id;
-        var url = ctx + 'system/bail/bailList?projectId=' + id + "&projectZckType=" + projectZckType
-            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
-        $.modal.parentTab("保证人列表", url);
-    }
-
-    /*抵押物列表-详细*/
-    function detail2(id, guarantor) {
-        //var url = ctx + 'system/mortgage/mortgageList/' + id;
-        var url = ctx + 'system/mortgage/mortgageList?projectId=' + id + "&projectZckType=" + projectZckType
-            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
-        $.modal.parentTab("抵押物列表", url);
-    }
-
-    /*质押物列表-详细*/
-    function detail4(id, pledge) {
-        //var url = ctx + 'system/pledge/pledgeList/' + id;
-        var url = ctx + 'system/pledge/pledgeList?projectId=' + id + "&projectZckType=" + projectZckType
-            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag;
-        $.modal.parentTab("质押物列表", url);
-    }
-
     function progress(id) {
-        //var url = ctx + 'system/progress/progressLists/' + id + "/Y";
         var url = ctx + 'system/progress/progressLists?projectManagementId=' + id + "&projectZckType=" + projectZckType
             + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&project=Y";
         $.modal.parentTab("进度情况列表", url);
-    }
-
-    //现金回现
-    function detail5(projectId) {
-        //var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId + "&project=Y";
-        var url = ctx + 'system/recapture/recaptureList?projectId=' + projectId + "&projectZckType=" + projectZckType
-            + "&fwProjectType=" + fwProjectType + "&otherFlag=" + otherFlag + "&project=Y";
-        $.modal.parentTab('处置回现列表', url);
     }
 
     function back() {
@@ -234,8 +177,19 @@
     }
 
     function submitHandler() {
-        var row = selectRows();
-        window.parent.getDobtSelected(row);
+        var str = uniqueFnByRows(checkedIds);
+        var dataes;
+        $.ajax({
+            url: prefix + '/getProjectListByIds',
+            data: {"projectIds": checkedIds},
+            dataType: 'JSON',
+            type: "post",
+            async: false,
+            success: function (res) {
+                dataes = res.data;
+            }
+        })
+        window.parent.getDobtSelected(dataes);
     }
 
     function selectRows() {
@@ -260,8 +214,8 @@
         var result = [];
         var hashObj = {};
         for (var i = 0; i < array.length; i++) {
-            if (!hashObj[array[i]]) {//参数id为主键，请根据自己的情况进行修改
-                hashObj[array[i]] = true;
+            if (!hashObj[array[i].projectId]) {//参数id为主键，请根据自己的情况进行修改
+                hashObj[array[i].projectId] = true;
                 result.push(array[i]);
             }
         }

@@ -36,14 +36,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">公司名称：</label>
             <div class="col-sm-8">
-                <!--                <select id="companyName" name="companyName"-->
-                <!--                        th:with="type=${@dict.getType('sys_company_name')}"-->
-                <!--                        data-none-selected-text="请选择" class="form-control m-b">-->
-                <!--                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
-                <!--                            th:value="${dict.dictValue}"></option>-->
-                <!--                </select>-->
                 <select id="companyName" name="companyName" class="form-control select2-multiple">
-                    <!--                        <option >&#45;&#45;请选择公司名称&#45;&#45;</option>-->
                     <option th:each="sysDictData:${sysDictData}" th:value="${sysDictData.dictValue}"
                             th:text="${sysDictData.dictLabel}"></option>
                 </select>
@@ -54,8 +47,10 @@
             <div class="col-sm-8">
                 <!--                <input name="debtorName" class="form-control" type="text">-->
                 <input name="debtorId" id="debtorNameVal" class="form-control" type="hidden">
-                <input autocomplete="off" name="debtorName" disabled id="debtorNameTip" class="form-control required"
-                       type="text" onclick="selectDebtor()">
+<!--                <input autocomplete="off" name="debtorName" disabled id="debtorNameTip" class="form-control required"-->
+<!--                       type="text" onclick="selectDebtor()">-->
+                <textarea autocomplete="off" name="debtorName" disabled id="debtorNameTip" class="form-control required"
+                           onclick="selectDebtor()" cols="" rows="" style="vertical-align:top;outline:none;"></textarea>
             </div>
         </div>
         <div class="form-group">
@@ -171,10 +166,6 @@
                    shiro:hasPermission="activity:documentFile:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <!--                <a class="btn btn-primary single" onclick="$.operate.edit()"-->
-                <!--                   shiro:hasPermission="activity:documentFile:edit">-->
-                <!--                    <i class="fa fa-edit"></i> 修改-->
-                <!--                </a>-->
                 <a class="btn btn-danger multiple" onclick="$.operate.removeAll()"
                    shiro:hasPermission="activity:documentFile:remove">
                     <i class="fa fa-remove"></i> 删除
@@ -207,10 +198,7 @@
     var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
     var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]]
     var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
-    var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
-    var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
     var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
-    var isReturn = document.getElementById("isReturn").value;
     var showNames = false;
     var ids = '';
     var optionUrl = prefix + "/editOutList/";
@@ -257,7 +245,6 @@
         var options = {
             // url: 档案出库获取的list
             url: docDetailUrl + "/listDocumentAndDetail/" + id,
-            // createUrl: prefix + "/editOutList/" + applyIds,
             updateUrl: prefix + "/editOutUpdate/{id}",
             removeUrl: docDetailUrl + "/remove",
             exportUrl: prefix + "/export",
@@ -273,7 +260,7 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目名称123',
+                    title: '项目名称',
                     visible: showDocumentType
                 },
                 {
@@ -492,19 +479,20 @@
         layer.close(layer.index);
     }
 
-    /*  function getThbSelected(row) {
-          $("#projectIdVal").val(row[0].projectZckId);
-          $("#projectNameVal").val(row[0].zckName);
-          layer.close(layer.index);
-      }*/
     function getDobtSelected(row) {
-        if (roleType == "inve") {
-            $("#debtorNameVal").val(row[0].id);
-            $("#debtorNameTip").val(row[0].projectName);
-        } else if (roleType == "thb") {
-            $("#debtorNameVal").val(row[0].projectId);
-            $("#debtorNameTip").val(row[0].projectName);
+        var id = "";
+        var projectName = "";
+        for (var i = 0; i < row.length; i++) {
+            if (roleType == "inve") {
+                id = row[i].id + "," + id;
+                projectName = row[i].projectName + "," + projectName;
+            } else if (roleType == "thb") {
+                id = row[i].projectId + "," + id;
+                projectName = row[i].projectName + "," + projectName;
+            }
         }
+        $("#debtorNameVal").val(id.substr(0, id.length - 1));
+        $("#debtorNameTip").val(projectName.substr(0, projectName.length - 1));
 
         layer.close(layer.index);
     }

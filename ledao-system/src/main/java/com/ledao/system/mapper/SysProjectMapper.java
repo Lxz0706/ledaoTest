@@ -108,8 +108,10 @@ public interface SysProjectMapper {
      */
     public SysProject selectTotalPrincipalBalanceByParentId(String projectZckIds);
 
-    public List<SysProject>  selectSysProjectListNoLike(SysProject sysProject);
+    public List<SysProject> selectSysProjectListNoLike(SysProject sysProject);
 
     public SysProject selectTotal(SysProject sysProject);
+
+    public List<SysProject> getProjectListByIds(String[] ids);
 
 }

@@ -48,12 +48,6 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">公司名称：</label>
             <div class="col-sm-8">
-                <!--                <select id="companyName" name="companyName"-->
-                <!--                        th:with="type=${@dict.getType('sys_company_name')}"-->
-                <!--                        data-none-selected-text="请选择" class="form-control m-b">-->
-                <!--                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
-                <!--                            th:value="${dict.dictValue}" th:field="*{companyName}"></option>-->
-                <!--                </select>-->
                 <select id="companyName" name="companyName" class="form-control select2-multiple"
                         th:field="*{companyName}">
                     <option th:each="sysDictData:${sysDictData}" th:value="${sysDictData.dictValue}"
@@ -66,8 +60,10 @@
             <div class="col-sm-8">
                 <!--                <input disabled name="debtorName" th:field="*{debtorName}" class="form-control" type="text">-->
                 <input name="debtorId" id="debtorNameVal" th:field="*{debtorId}" class="form-control" type="hidden">
-                <input autocomplete="off" name="debtorName" id="debtorNameTip" th:field="*{debtorName}"
-                       class="form-control required" type="text" onclick="selectDebtor()">
+<!--                <input autocomplete="off" name="debtorName" id="debtorNameTip" th:field="*{debtorName}"-->
+<!--                       class="form-control required" type="text" onclick="selectDebtor()">-->
+                <textarea autocomplete="off" name="debtorName" disabled id="debtorNameTip" class="form-control required"
+                          onclick="selectDebtor()" cols="" rows="" style="vertical-align:top;outline:none;" th:field="*{debtorName}"></textarea>
             </div>
         </div>
         <div class="form-group">
@@ -210,21 +206,11 @@
     var loginNameUser = [[${@permission.getPrincipalProperty('loginName')}]];
     var editFlag = [[${@permission.hasPermi('activity:detail:edit')}]];
     var removeFlag = [[${@permission.hasPermi('activity:detail:remove')}]];
-    var isPageDatas = [[${@dict.getType('sys_is_not')}]];
-    var isElecDatas = [[${@dict.getType('sys_borrow_type')}]];
-    var isReturnDatas = [[${@dict.getType('sys_is_not')}]];
-    var planReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
-    var realReturnTimeDatas = [[${@dict.getType('sys_is_not')}]];
-    var isOutDatas = [[${@dict.getType('sys_is_not')}]];
-    var isReceiveDatas = [[${@dict.getType('sys_is_not')}]];
-    var isReturnedDatas = [[${@dict.getType('sys_is_not')}]];
-    var isReceivedDatas = [[${@dict.getType('sys_is_not')}]];
     var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
     var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
     var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
     var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
     var deptId = [[${@permission.getPrincipalProperty('deptId')}]];
-    var optionIsElec = [[${@dict.getType('sys_borrow_type')}]]
     var showNames = false
     var documentTypeVal = document.getElementById("documentType").value
     var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
@@ -246,8 +232,6 @@
     var showDelet = false
     var showAllBut = false
     var showDatilDocumentType = false
-    var isElecObj = {}
-    var isElecIndex = ''
     var isReturnDocument = false;
 
     var isReceiveDocument = false;
@@ -502,7 +486,20 @@
                 },
                 {
                     field: 'pages',
-                    title: '页数/时长'
+                    title: '页数/时长',
+                    editable: {
+                        type: 'text',
+                        title: '页数/时长',
+                        emptytext: "【页数】为空",
+                        validate: function (value) {
+                            if (value == 30) {
+                                return '名称不能超过30个字符';
+                            }
+                            if (value == 0) {
+                                return '页数时长不能为空';
+                            }
+                        }
+                    }
                 },
                 {
                     field: 'documentStatu',
@@ -719,13 +716,27 @@
     }
 
     function getDobtSelected(row) {
-        if (roleType == "inve") {
-            $("#debtorNameVal").val(row[0].id);
-            $("#debtorNameTip").val(row[0].projectName);
-        } else if (roleType == "thb") {
-            $("#debtorNameVal").val(row[0].projectId);
-            $("#debtorNameTip").val(row[0].projectName);
+        // if (roleType == "inve") {
+        //     $("#debtorNameVal").val(row[0].id);
+        //     $("#debtorNameTip").val(row[0].projectName);
+        // } else if (roleType == "thb") {
+        //     $("#debtorNameVal").val(row[0].projectId);
+        //     $("#debtorNameTip").val(row[0].projectName);
+        // }
+
+        var id = "";
+        var projectName = "";
+        for (var i = 0; i < row.length; i++) {
+            if (roleType == "inve") {
+                id = row[i].id + "," + id;
+                projectName = row[i].projectName + "," + projectName;
+            } else if (roleType == "thb") {
+                id = row[i].projectId + "," + id;
+                projectName = row[i].projectName + "," + projectName;
+            }
         }
+        $("#debtorNameVal").val(id.substr(0, id.length - 1));
+        $("#debtorNameTip").val(projectName.substr(0, projectName.length - 1));
 
         layer.close(layer.index);
     }
@@ -942,7 +953,7 @@
 
     function onEditableSave(field, row, rowIndex, oldValue, $el) {
         if (showNames) {
-            if (row[i].isElec == null || row[i].isElec == '') {
+            if (row.isElec == null || row.isElec == '') {
                 $.modal.alertError('未选择借出文档类型，请先选择借出文档类型');
                 return true;
             } else if ("0" === row.isElec) {

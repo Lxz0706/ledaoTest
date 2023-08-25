@@ -573,6 +573,8 @@ public class SysProject extends BaseEntity {
      */
     private BigDecimal grossPrincipalBalance;
 
+    private String projectIds;
+
     public String getProjectZckType() {
         return projectZckType;
     }
@@ -1389,6 +1391,14 @@ public class SysProject extends BaseEntity {
         this.grossPrincipalBalance = grossPrincipalBalance;
     }
 
+    public String getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(String projectIds) {
+        this.projectIds = projectIds;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1480,6 +1490,7 @@ public class SysProject extends BaseEntity {
                 .append("grossCapital", getGrossCapital())
                 .append("grossInterest", getGrossInterest())
                 .append("grossPrincipalBalance", getGrossPrincipalBalance())
+                .append("projectIds", getProjectIds())
                 .toString();
     }
 }

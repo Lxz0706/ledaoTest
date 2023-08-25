@@ -2,10 +2,12 @@ package com.ledao.web.controller.system;
 
 import java.util.List;
 
+import com.ledao.common.annotation.RepeatSubmit;
 import com.ledao.system.dao.wenShuDetail;
 import com.ledao.system.service.IwenShuDetailService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,10 +38,7 @@ public class wenShuController extends BaseController {
     @Autowired
     private IwenShuService wenShuService;
 
-    @Autowired
-    private IwenShuDetailService wenShuDetailService;
-
-    @RequiresPermissions("system:wenShu:view")
+    //@RequiresPermissions("system:wenShu:view")
     @GetMapping()
     public String wenShu() {
         return prefix + "/wenShu";
@@ -48,13 +47,11 @@ public class wenShuController extends BaseController {
     /**
      * 查询文书网列表
      */
-    @RequiresPermissions("system:wenShu:list")
+    //@RequiresPermissions("system:wenShu:list")
     @PostMapping("/list")
     @ResponseBody
+    @RepeatSubmit
     public TableDataInfo list(wenShu wenShu) {
-        //wenShuDetail wenShuDetail = new wenShuDetail();
-        //wenShuDetail.setItemData(wenShu.getItemCourtData());
-        //List<wenShuDetail> wenShuDetailList = wenShuDetailService.selectwenShuDetailList(wenShuDetail);
         startPage();
         List<wenShu> list = wenShuService.selectwenShuList(wenShu);
         return getDataTable(list);

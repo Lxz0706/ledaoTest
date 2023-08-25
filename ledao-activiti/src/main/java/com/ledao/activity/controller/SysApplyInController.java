@@ -375,6 +375,9 @@ public class SysApplyInController extends BaseController {
     public String editOutList(@PathVariable("applyId") Long applyId, ModelMap mmap) {
         SysApplyIn sysApplyIn = sysApplyInService.selectSysApplyInById(applyId);
         mmap.put("applyId", applyId);
+        if (StringUtils.isNotEmpty(sysApplyIn.getDebtorName())) {
+            sysApplyIn.setDebtorName(sysApplyIn.getDebtorName().replace(",", "|"));
+        }
         mmap.put("sysApplyIn", sysApplyIn);
         return prefix + "/editOutList";
     }
@@ -765,8 +768,19 @@ public class SysApplyInController extends BaseController {
                 if (StringUtils.isNull(sysApplyOutDetail1.getCounts())) {
                     sysApplyOutDetail1.setCounts(Long.valueOf(0));
                 }
-                int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail1.getCounts().toString());
+
+                if (StringUtils.isNull(sysDocumentFile.getPages())) {
+                    sysDocumentFile.setPages(Long.valueOf(0));
+                }
+                if (StringUtils.isNull(sysApplyOutDetail.getPages())) {
+                    sysApplyOutDetail.setPages(Long.valueOf(0));
+                }
+                int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail.getCounts().toString());
+
+                int pages = Integer.parseInt(sysDocumentFile.getPages().toString()) + Integer.parseInt(sysApplyOutDetail.getPages().toString());
+
                 sysDocumentFile.setCounts(Long.valueOf(count));
+                sysDocumentFile.setPages(Long.valueOf(pages));
                 sysDocumentFile.setDocumentId(sysApplyOutDetail1.getDocumentId());
                 sysDocumentFileService.updateSysDocumentFile(sysDocumentFile);
             }
@@ -1032,27 +1046,30 @@ public class SysApplyInController extends BaseController {
             } else {
                 return error("出库份数不能为空");
             }
-            //计算每份文件有多少页
-            int pages = Integer.parseInt(sysDocumentFile.getPages().toString()) / Integer.parseInt(sysDocumentFile.getCounts().toString());
 
-            //计算需要出库的文件总页数
-            sysApplyOutDetail1.setPages(Long.valueOf(Integer.parseInt(sysApplyOutDetail.getCounts().toString()) * pages));
-            sysApplyOutDetail1.setCounts(sysApplyOutDetail.getCounts());
-            sysApplyOutDetail1.setUpdateBy(ShiroUtils.getLoginName());
-            sysApplyOutDetail1.setUpdateTime(new Date());
+            if (StringUtils.isNotNull(sysApplyOutDetail.getPages()) || !sysApplyOutDetail.getPages().equals(0)) {
+                if (sysApplyOutDetail.getPages().longValue() > sysDocumentFile.getPages().longValue()) {
+                    return error("出库页数大于库中存储页数");
+                }
+            } else {
+                return error("出库页数不能为空");
+            }
+
             SysDocumentFile sysDocumentFile1 = new SysDocumentFile();
             sysDocumentFile1.setDocumentId(sysApplyOutDetail1.getDocumentId());
             //计算出库的份数
             int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) - Integer.parseInt(sysApplyOutDetail.getCounts().toString());
+            //计算出库的页数
+            int pages = Integer.parseInt(sysDocumentFile.getPages().toString()) - Integer.parseInt(sysApplyOutDetail.getPages().toString());
             //计算剩余总页数
             sysDocumentFile1.setCounts(Long.valueOf(count));
-            sysDocumentFile1.setPages(Long.valueOf(Integer.parseInt(sysDocumentFile.getPages().toString()) - sysApplyOutDetail1.getPages()));
+            sysDocumentFile1.setPages(Long.valueOf(pages));
             sysDocumentFile1.setUpdateBy(ShiroUtils.getLoginName());
             sysDocumentFile1.setUpdateTime(new Date());
             sysDocumentFileService.updateSysDocumentFile(sysDocumentFile1);
             return toAjax(sysApplyOutDetailService.updateSysApplyOutDetail(sysApplyOutDetail));
         } else {
-            return AjaxResult.error("出库文档类型为电子版，无需修改出库份数！！！");
+            return AjaxResult.error("出库文档类型为电子版！！！");
         }
 
     }

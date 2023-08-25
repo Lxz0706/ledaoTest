@@ -18,20 +18,17 @@ import com.ledao.system.dao.*;
 import com.ledao.system.mapper.SysRoleMapper;
 import com.ledao.system.mapper.SysUserMapper;
 import com.ledao.system.service.*;
-
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.poi.ss.formula.functions.Count;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.jms.Queue;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import javax.jms.Queue;
 
 @Component("timedTask")
 public class TimedTask {
@@ -1092,7 +1089,7 @@ public class TimedTask {
     public static Boolean dateTime(Date date) {
         boolean flag = false;
         if (StringUtils.isNotNull(date)) {
-            Date dates = DateUtils.addTime(date, 30, 2);
+            Date dates = DateUtils.addTime(date, 30);
             if (DateUtils.timeDifference(new Date(), dates, 0)) {
                 flag = true;
             }
@@ -1344,4 +1341,22 @@ public class TimedTask {
             sysHolidayService.insertSysHoliday(sysHoliday);
         }
     }
+
+
+    /***
+     * 日志填写时间每日更新
+     */
+    public void setJournalTime() {
+        SysConfig sysConfig = new SysConfig();
+        sysConfig.setConfigKey("journalTime");
+        List<SysConfig> sysConfigList = sysConfigService.selectConfigList(sysConfig);
+        //获取第二天的日期
+        String nexDate = DateUtils.parseDateToStr("yyyy-MM-dd", DateUtils.addTime(DateUtils.getNowDate(), 1));
+        String value = DateUtils.dateTimeNow("yyyy-MM-dd") + " 17:30:00" + "," + nexDate + " 02:00:00";
+        for (SysConfig sysConfig1 : sysConfigList) {
+            sysConfig1.setConfigValue(value);
+            sysConfigService.updateConfig(sysConfig1);
+        }
+    }
+
 }

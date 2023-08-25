@@ -62,6 +62,9 @@
             <if test="shareDeptName != null  and shareDeptName != ''">and share_dept_name like concat('%',
                 #{shareDeptName}, '%')
             </if>
+            <if test="receiverId != null  and receiverId != ''">and receiver_id like concat('%',
+                #{receiverId},'%')
+            </if>
         </where>
         ORDER BY  read_flag DESC,create_time desc
     </select>

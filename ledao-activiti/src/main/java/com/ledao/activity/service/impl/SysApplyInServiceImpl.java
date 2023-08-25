@@ -1,23 +1,26 @@
 package com.ledao.activity.service.impl;
 
-import java.util.*;
-
 import com.alibaba.fastjson.JSONObject;
 import com.ledao.activity.dao.*;
 import com.ledao.activity.mapper.*;
 import com.ledao.activity.service.*;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.dao.entity.SysDictData;
+import com.ledao.common.core.dao.entity.SysDictType;
 import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.common.core.dao.entity.SysUser;
+import com.ledao.common.core.text.Convert;
 import com.ledao.common.exception.BusinessException;
+import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUtils;
 import com.ledao.common.utils.poi.ExcelUtil;
+import com.ledao.framework.util.ShiroUtils;
 import com.ledao.system.dao.*;
 import com.ledao.system.mapper.*;
 import com.ledao.system.service.ISysConfigService;
 import com.ledao.system.service.ISysDictDataService;
+import com.ledao.system.service.ISysDictTypeService;
 import org.activiti.engine.TaskService;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.slf4j.Logger;
@@ -26,14 +29,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.ledao.common.core.text.Convert;
-import com.ledao.common.utils.DateUtils;
-import com.ledao.framework.util.ShiroUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.jms.Queue;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 档案入库申请Service业务层处理
@@ -69,22 +72,10 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
     private SysApplyOutDetailMapper sysApplyOutDetailMapper;
 
     @Autowired
-    private SysZckMapper SysZckMapper;
-
-    @Autowired
-    private IProcessService processService;
-
-    @Autowired
     private ISysApplyWorkflowService iSysApplyWorkflowService;
 
     @Autowired
-    private IBizTodoItemService bizTodoItemService;
-
-    @Autowired
     private ISysDictDataService dictDataService;
-
-    @Autowired
-    private TaskService taskService;
 
     @Autowired
     private SysZcbMapper sysZcbMapper;
@@ -360,15 +351,18 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                                 SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(d.getDocumentId());
                                 boolean flag = true;
                                 if (StringUtils.isNull(sysDocumentFile.getCounts()) || Long.valueOf(0).equals(sysDocumentFile.getCounts())) {
-                                    flag = false;
-                                }
-                                if (flag) {
+                                    // flag = false;
                                     if ("1".equals(out.getIsElec()) && app != null && ("5".equals(app.getApproveStatu()) || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
                                         return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
                                     }
-                                } else {
-                                    return AjaxResult.error("档案库中文档暂无，请与文档管理员联系");
                                 }
+//                                if (!flag) {
+//                                    if ("1".equals(out.getIsElec()) && app != null && ("5".equals(app.getApproveStatu()) || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
+//                                        return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
+//                                    }
+//                                } else {
+//                                    return AjaxResult.error("档案库中文档暂无，请与文档管理员联系");
+//                                }
 //                                if ("1".equals(out.getIsElec()) && app != null && ("1".equals(app.getApproveStatu()) && flag || "5".equals(app.getApproveStatu()) || "7".equals(app.getApproveStatu()) || "8".equals(app.getApproveStatu()) || "9".equals(app.getApproveStatu()))) {
 //                                    return AjaxResult.error("存在档案已被他人申请出库借阅，请与文档管理员联系");
 //                                }
@@ -715,18 +709,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 iSysApplyWorkflowService.sendLittleMsg(parm);
             }
         }
-//        完成
-        /*if ("3".equals(sysApplyInEntity.getApproveStatu())){
-            SysUser us = userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser());
-            JSONObject parm = new JSONObject();
-            parm.put("toUser",us.getOpenId());
-//            parm.put("thing6",appName);
-            parm.put("thing4",userMapper.selectUserByLoginName(sysApplyInEntity.getApplyUser()).getUserName());
-            parm.put("time8",DateUtils.getNowDate());
-            parm.put("thing7",us.getUserName());
-            parm.put("time5",DateUtils.getNowDate());
-            iSysApplyWorkflowService.sendLittleMsg(parm);
-        }*/
     }
 
     public List<String> submitApplyInfo(SysApplyIn sysApplyIn) {
@@ -1019,40 +1001,50 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
     public List<SysApplyIn> selectSysApplyInListUser(SysApplyIn sysApplyIn) {
         return sysApplyInMapper.selectSysApplyInListUser(sysApplyIn);
     }
-   /* private List<SysApplyIn> addDobtName(List<SysApplyIn> sysApplyIns){
-	    for (SysApplyIn s:sysApplyIns){
-	        if ("inve".equals(s.getRoleType())){
-                SysZck sz = SysZckMapper.selectSysZckById(Long.parseLong(s.getDebtorName()));
-	            s.setDebtorNameTip(sz.getProjectName());
-            }
-        }
-	    return sysApplyIns;
-    }*/
 
     @Override
     public String checkUserRole(SysUser u) {
         //投后部---投后部项目 0
-        String[] stbList = new String[]{"thbManager", "thbManager2", "thbzz", "thbCommon"};
+        String[] stbList = getRoleList("thbRole");
         List<String> stbs = Arrays.asList(stbList);
         //并购重组---大型单体 1
-        String[] dxdtList = new String[]{"bgczCommon", "bgczManager"};
+        String[] dxdtList = getRoleList("dxdtRole");
         List<String> dxdts = Arrays.asList(dxdtList);
         //投资部---资产包 2
-        String[] tzbList = new String[]{"investmentCommon", "investmentManager", "investmentManager2", "tzbzz"};
+        String[] tzbList = getRoleList("tzbRole");
         List<String> tzbs = Arrays.asList(tzbList);
-//        SysUser u = ShiroUtils.getSysUser();
+//        String[] stbList = new String[]{"thbManager", "thbManager2", "thbzz", "thbCommon", "financeManager"};
+//        List<String> stbs = Arrays.asList(stbList);
+//        //并购重组---大型单体 1
+//        String[] dxdtList = new String[]{"bgczCommon", "bgczManager"};
+//        List<String> dxdts = Arrays.asList(dxdtList);
+//        //投资部---资产包 2
+//        String[] tzbList = new String[]{"investmentCommon", "investmentManager", "investmentManager2", "tzbzz"};
+//        List<String> tzbs = Arrays.asList(tzbList);
         List<SysRole> rs = u.getRoles();
 
         for (SysRole r : rs) {
-            if (stbs.contains(r.getRoleKey())) {
+            if(StringUtils.inStringIgnoreCase(r.getRoleKey(),stbList)){
                 return "thb";
-            } else if (dxdts.contains(r.getRoleKey())) {
+            } else if (StringUtils.inStringIgnoreCase(r.getRoleKey(),dxdtList)) {
                 return "bg";
-            } else if (tzbs.contains(r.getRoleKey())) {
+            } else if (StringUtils.inStringIgnoreCase(r.getRoleKey(),tzbList)) {
                 return "inve";
             }
+//            if (stbs.contains(r.getRoleKey())) {
+//                return "thb";
+//            } else if (dxdts.contains(r.getRoleKey())) {
+//                return "bg";
+//            } else if (tzbs.contains(r.getRoleKey())) {
+//                return "inve";
+//            }
         }
         return null;
+    }
+
+    public String[] getRoleList(String type) {
+        String sysConfig = configService.selectConfigByKey(type);
+        return sysConfig.split(",");
     }
 
     @Override
@@ -1276,7 +1268,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                             List<SysZck> zcks = sysZckMapper.selectSysZckListNoLike(sysZck);
                             if (zcks != null && zcks.size() > 0) {
                                 applyIn.setDebtorName(zcks.get(0).getProjectName());
-                                applyIn.setDebtorId(zcks.get(0).getId());
+                                applyIn.setDebtorId(zcks.get(0).getId().toString());
                                 applyIn.setRoleType("inve");
                                 applyIn.setDocumentType(documentType);
                                 insertApply(apply, applyIn);
@@ -1297,7 +1289,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                             List<SysProject> pros = sysProjectMapper.selectSysProjectListNoLike(sysProject);
                             if (pros != null && pros.size() > 0) {
                                 applyIn.setDebtorName(pros.get(0).getProjectName());
-                                applyIn.setDebtorId(pros.get(0).getProjectId());
+                                applyIn.setDebtorId(pros.get(0).getProjectId().toString());
                                 applyIn.setDocumentType(documentType);
                                 applyIn.setRoleType("thb");
                                 insertApply(apply, applyIn);

@@ -110,4 +110,10 @@ public class Arith {
         BigDecimal one = new BigDecimal("1");
         return b.divide(one, scale, RoundingMode.HALF_UP).doubleValue();
     }
+
+    public static long getPercent(double v1, double v2, int scale) {
+        double v3 = div(v1, v2, scale);
+        return Math.round(mul(v3, 100));
+
+    }
 }

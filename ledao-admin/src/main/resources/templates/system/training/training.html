@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('学习培训列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input name="documentId" id="documentId" th:value="*{documentId}" type="hidden">
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <!--            <div class="btn-group-sm" id="toolbar" role="group">-->
+        <!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:training:add">-->
+        <!--                    <i class="fa fa-plus"></i> 添加-->
+        <!--                </a>-->
+        <!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:training:edit">-->
+        <!--                    <i class="fa fa-edit"></i> 修改-->
+        <!--                </a>-->
+        <!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:training:remove">-->
+        <!--                    <i class="fa fa-remove"></i> 删除-->
+        <!--                </a>-->
+        <!--            </div>-->
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:training:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:training:remove')}]];
+    var prefix = ctx + "system/training";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "学习培训",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'trainId',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'documentId',
+                    title: '文件ID'
+                },
+                {
+                    field: 'documentName',
+                    title: '文件名称'
+                },
+                {
+                    field: 'playTime',
+                    title: '播放时间(秒)'
+                },
+                {
+                    field: 'playbackProgress',
+                    title: '播放进度'
+                },
+                {
+                    field: 'totalTime',
+                    title: '视频总时长(秒)'
+                },
+                {
+                    field: 'learnTime',
+                    title: '学习进度'
+                },
+                {
+                    field: 'creator',
+                    title: '学习人员'
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

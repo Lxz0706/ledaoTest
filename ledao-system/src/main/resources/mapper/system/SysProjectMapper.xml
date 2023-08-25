@@ -665,4 +665,15 @@
         WHERE project_zck_id IN (#{zckIds}) AND parent_id IS NULL AND del_flag='0'
     </select>
 
+    <select id="getProjectListByIds" parameterType="String" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            project_id in
+            <foreach item="projectId" collection="array" open="(" separator="," close=")">
+                #{projectId}
+            </foreach>
+        </where>
+        order by no asc
+    </select>
+
 </mapper>

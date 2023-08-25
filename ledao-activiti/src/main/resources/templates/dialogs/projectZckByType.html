@@ -19,13 +19,6 @@
                             <label>资产包状态：</label>
                             <input type="text" name="zckStatus"/>
                         </li>
-                        <!--<li>
-                            <label>资产库状态：</label>
-                            <select name="assetStatus" id="assetStatus" th:with="type=${@dict.getType('sys_zcb_assetStatus')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>-->
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -76,36 +69,6 @@
                         return $.table.tooltip(row.zckName,10);
                     }
                 },
-                /*
-                {
-                    field: 'startTime',
-                    title: '处置开始时间'
-                },
-                {
-                    field: 'endTime',
-                    title: '处置结束时间'
-                },
-                {
-                    field: 'bjye',
-                    title: '本金余额总额',
-                    formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
-                },
-                {
-                    field: 'czhx',
-                    title: '处置回现总额',
-                    formatter: function (value, row, index) {
-                        return $.operate.numberFormatter(value, 3, '.', ',');
-                    }
-                },
-                {
-                    field: 'syhs',
-                    title: '剩余债权户数'/!*,
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value);
-                    }*!/
-                },*/
                 {
                     field: 'zckStatus',
                     title: '资产包状态'

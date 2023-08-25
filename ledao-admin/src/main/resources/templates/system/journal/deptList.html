@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('日志列表')" />
+    <th:block th:include="include :: header('日志列表')"/>
     <style>
         .border {
             border: 1px solid #dee2e6;
@@ -9,135 +9,124 @@
     </style>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="user-form">
-                    <div class="select-list">
-                        <ul>
-                            <li class="select-time">
-                                <label>时间范围： </label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                       name="params[beginTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                       name="params[endTime]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-warning" onclick="exportExcel()">
-                                    <i class="fa fa-download"></i> 导出
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:journal:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>-->
-                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
-                    <i class="fa fa-remove"></i> 删除
-                </a>-->
-
-            </div>
-            <!--<div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>-->
-            <div class="container-div">
-                <div class="row">
-                    <div class="row" style="min-height: 80%;" id="showList"></div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="user-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>项目：</label>
+                            <input name="projectName" type="text"/>
+                        </li>
+                        <li>
+                            <label>日志内容：</label>
+                            <input name="workDetail" type="text"/>
+                        </li>
+                        <li class="select-time">
+                            <label>时间范围： </label>
+                            <input class="time-input" id="startTime" name="params[beginTime]" placeholder="开始时间"
+                                   type="text"/>
+                            <span>-</span>
+                            <input class="time-input" id="endTime" name="params[endTime]" placeholder="结束时间"
+                                   type="text"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="searchByParams()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-warning" onclick="exportExcel()">
+                                <i class="fa fa-download"></i> 导出
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:journal:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>-->
+            <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
+                <i class="fa fa-remove"></i> 删除
+            </a>-->
+
+        </div>
+        <!--<div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>-->
+        <div class="container-div">
+            <div class="row">
+                <div class="row" id="showList" style="min-height: 80%;"></div>
             </div>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:journal:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:journal:remove')}]];
-        var prefix = ctx + "system/journal";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:journal:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:journal:remove')}]];
+    var prefix = ctx + "system/journal";
 
-        $(function() {
-            /*var options = {
-                url: prefix + "/deptList",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "日志",
-                columns: [
-                    /!*{
-                    checkbox: true
-                },*!/
-                {
-                    title: "序号",
-                    formatter: function (value, row, index) {
-                        return $.table.serialNumber(index);
-                    }
-                },
-                {
-                    field: 'deptName',
-                    title: '部门',
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:void(0)" onclick="detail(\'' + row.deptId + "',\'" + row.deptName + '\')">' + row.deptName + '</a>';
-                    }
+    $(function () {
+        $.ajax({
+            url: prefix + "/deptList",
+            data: {},
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var row = result.rows;
+                var str = '';
+                var height = $(".row").height();
+                var winHeight = height / row.length - 15;
+                for (var i in row) {
+                    str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
+                    // str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictValue + "',\'" + row[i].dictLabel + '\')">' + row[i].dictLabel + '</a><br/>';
+                    str += '<a href="javascript:void(0)" style="font-size: 2.3em; font-weight:bold;letter-spacing:1em;" onclick="detail(\'' + row[i].deptId + "',\'" + row[i].deptName + '\')">' + row[i].deptName + '</a><br/>';
+                    str += '</div>';
                 }
-                ]
-            };
-            $.table.init(options);*/
-            $.ajax({
-                url: prefix + "/deptList",
-                data: {},
-                type: 'post',
-                dataType: 'json',
-                success: function (result) {
-                    var row = result.rows;
-                    var str = '';
-                    var height = $(".row").height();
-                    var winHeight = height / row.length-15;
-                    for (var i in row) {
-                        str += '<div class="border col-sm-12" style="display:inline-block;line-height: ' + winHeight + 'px;text-align: center">';
-                        // str += '<a href="javascript:void(0)" style="font-size: 3.5em; font-weight:bold;letter-spacing:0.8em;" onclick="detail(\'' + row[i].dictValue + "',\'" + row[i].dictLabel + '\')">' + row[i].dictLabel + '</a><br/>';
-                        str += '<a href="javascript:void(0)" style="font-size: 2.3em; font-weight:bold;letter-spacing:1em;" onclick="detail(\'' + row[i].deptId + "',\'" + row[i].deptName + '\')">' + row[i].deptName + '</a><br/>';
-                        str += '</div>';
-                    }
-                    $("#showList").html(str);
-                }
-            })
-        });
+                $("#showList").html(str);
+            }
+        })
+    });
 
-        /*$("input[name='createTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });*/
+    /*$("input[name='createTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });*/
 
-        function detail(deptId,deptName){
-            var url = prefix+"/userListByDepId?parentId="+deptId;
-            $.modal.parentTab(deptName, url);
-        }
+    function detail(deptId, deptName) {
+        var url = prefix + "/userListByDepId?parentId=" + deptId;
+        $.modal.parentTab(deptName, url);
+    }
 
-        function showComment(id){
-            var url = '/system/comment/commentList?id=' + id;
-            $.modal.opens("评论列表", url);
-        }
+    function showComment(id) {
+        var url = '/system/comment/commentList?id=' + id;
+        $.modal.opens("评论列表", url);
+    }
 
-        function exportExcel() {
-            $.ajax({
-                url: prefix + "/selectJournalForCreate",
-                data: {
-                    "params[startTime]": $("#startTime").val(),
-                    "params[endTime]": $("#endTime").val()
-                },
-                type: "post",
-                success: function (result) {
-                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
-                }
-            })
-        }
-    </script>
+    function exportExcel() {
+        $.ajax({
+            url: prefix + "/selectJournalForCreate",
+            data: {
+                "params[startTime]": $("#startTime").val(),
+                "params[endTime]": $("#endTime").val()
+            },
+            type: "post",
+            success: function (result) {
+                window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            }
+        })
+    }
+    function searchByParams() {
+        var data = $("#user-form").serialize();
+        $.operate.gets(prefix + "/queryAll", data, "查询界面");
+    }
+</script>
 </body>
 </html>

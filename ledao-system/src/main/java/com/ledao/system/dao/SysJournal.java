@@ -94,6 +94,14 @@ public class SysJournal extends BaseEntity {
      */
     private String formalFlag;
 
+    private String beginTime;
+
+    private String endTime;
+
+    private String projectType;
+
+    private String name;
+
     public String getProjectName() {
         return projectName;
     }
@@ -230,6 +238,38 @@ public class SysJournal extends BaseEntity {
         this.formalFlag = formalFlag;
     }
 
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getProjectType() {
+        return projectType;
+    }
+
+    public void setProjectType(String projectType) {
+        this.projectType = projectType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -251,6 +291,7 @@ public class SysJournal extends BaseEntity {
                 .append("projectName", getProjectName())
                 .append("selectTime", getSelectTime())
                 .append("formalFlag", getFormalFlag())
+                .append("projectType", getProjectType())
                 .toString();
     }
 }

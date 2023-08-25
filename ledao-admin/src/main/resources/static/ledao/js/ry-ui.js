@@ -1150,7 +1150,6 @@ var table = {
             },
             // 批量删除信息
             removeAll: function () {
-                console.log("奥术大师大所");
                 table.set();
                 var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
                 if (rows.length == 0) {
@@ -1914,7 +1913,6 @@ var table = {
             notAllowLastLevel: function (_tree) {
                 var nodes = _tree.getSelectedNodes();
                 for (var i = 0; i < nodes.length; i++) {
-                    console.log("=======" + nodes[i].isParent);
                     if (!nodes[i].isParent) {
                         $.modal.msgError("不能选择最后层级节点（" + nodes[i].name + "）");
                         return false;

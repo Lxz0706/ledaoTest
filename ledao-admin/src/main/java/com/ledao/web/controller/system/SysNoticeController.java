@@ -95,7 +95,7 @@ public class SysNoticeController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                         notice.setCreateBy(ShiroUtils.getLoginName());
                         notice.setReceiver(ShiroUtils.getSysUser().getUserName());
                     }
@@ -129,13 +129,10 @@ public class SysNoticeController extends BaseController {
         notice.setReadFlag("未读");
         notice.setCreateBy(ShiroUtils.getLoginName());
         StringBuffer userIds = new StringBuffer();
-        //StringBuffer userNames = new StringBuffer();
         StringBuffer deptIds = new StringBuffer();
-        //StringBuffer deptNames = new StringBuffer();
 
         if (StringUtils.isNotEmpty(notice.getShareDeptId()) && StringUtils.isNotEmpty(notice.getReceiverId())) {
             userIds.append(notice.getReceiverId());
-            //userNames.append(notice.getReceiver());
             for (String string : notice.getShareDeptId().split(",")) {
                 SysUser sysUser = new SysUser();
                 sysUser.setDeptId(Long.valueOf(string));
@@ -144,7 +141,7 @@ public class SysNoticeController extends BaseController {
                     if (!currentUser.isAdmin()) {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                                 if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                     if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                         sysUser.setFormalFlag("0");
@@ -158,12 +155,10 @@ public class SysNoticeController extends BaseController {
                 for (SysUser sysUser1 : sysUserList) {
                     if (!userIds.toString().contains(sysUser1.getUserId().toString())) {
                         userIds.append(sysUser1.getUserId()).append(",");
-                        //userNames.append(sysUser1.getUserName()).append(",");
                     }
                 }
             }
             deptIds.append(notice.getShareDeptId());
-            //deptNames.append(notice.getShareDeptName());
         } else if (StringUtils.isNotEmpty(notice.getShareDeptId()) && StringUtils.isEmpty(notice.getReceiverId())) {
             for (String string : notice.getShareDeptId().split(",")) {
                 SysUser sysUser = new SysUser();
@@ -173,7 +168,7 @@ public class SysNoticeController extends BaseController {
                     if (!currentUser.isAdmin()) {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                                 if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                     if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                         sysUser.setFormalFlag("0");
@@ -186,21 +181,17 @@ public class SysNoticeController extends BaseController {
                 List<SysUser> sysUserList = sysUserService.selectUserListForDocument(sysUser);
                 for (SysUser sysUser1 : sysUserList) {
                     userIds.append(sysUser1.getUserId()).append(",");
-                    //userNames.append(sysUser1.getUserName()).append(",");
                 }
             }
             deptIds.append(notice.getShareDeptId());
-            //deptNames.append(notice.getShareDeptName());
         } else if (StringUtils.isEmpty(notice.getShareDeptId()) && StringUtils.isNotEmpty(notice.getReceiverId())) {
             userIds.append(notice.getReceiverId());
-            //userNames.append(notice.getReceiver());
-        } else if (StringUtils.isEmpty(notice.getReceiverId()) && StringUtils.isEmpty(notice.getReceiverId())) {
+        } else if (StringUtils.isEmpty(notice.getShareDeptId()) && StringUtils.isEmpty(notice.getReceiverId())) {
             SysDept sysDept = new SysDept();
             sysDept.setStatus("0");
             List<SysDept> sysDeptList = sysDeptService.selectDeptList(sysDept);
             for (SysDept sysDept1 : sysDeptList) {
                 deptIds.append(sysDept1.getDeptId()).append(",");
-                //deptNames.append(sysDept1.getDeptName()).append(",");
                 SysUser sysUser = new SysUser();
                 sysUser.setDeptId(sysDept1.getDeptId());
                 SysUser currentUser = ShiroUtils.getSysUser();
@@ -208,11 +199,9 @@ public class SysNoticeController extends BaseController {
                     if (!currentUser.isAdmin()) {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                                 if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
-                                    if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
-                                        sysUser.setFormalFlag("0");
-                                    }
+                                    sysUser.setFormalFlag("0");
                                 }
                             }
                         }
@@ -221,14 +210,14 @@ public class SysNoticeController extends BaseController {
                 List<SysUser> sysUserList = sysUserService.selectUserList(sysUser);
                 for (SysUser sysUser1 : sysUserList) {
                     userIds.append(sysUser1.getUserId()).append(",");
-                    //userNames.append(sysUser1.getUserName()).append(",");
                 }
             }
+            notice.setShareDeptAndUser("全公司");
         }
+        userIds.append(",").append(ShiroUtils.getUserId());
+        deptIds.append(",").append(ShiroUtils.getSysUser().getDeptId());
         notice.setReceiverId(userIds.toString());
-        //notice.setReceiver(userNames.toString());
         notice.setShareDeptId(deptIds.toString());
-        //notice.setShareDeptName(deptNames.toString());
 
         return toAjax(noticeService.insertNotice(notice));
     }
@@ -266,7 +255,7 @@ public class SysNoticeController extends BaseController {
                     if (!currentUser.isAdmin()) {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                                 if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                     sysUser.setFormalFlag("0");
                                 }
@@ -293,7 +282,7 @@ public class SysNoticeController extends BaseController {
                     if (!currentUser.isAdmin()) {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                                 if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                     sysUser.setFormalFlag("0");
                                 }
@@ -326,7 +315,7 @@ public class SysNoticeController extends BaseController {
                     if (!currentUser.isAdmin()) {
                         List<SysRole> getRoles = currentUser.getRoles();
                         for (SysRole sysRole : getRoles) {
-                            if (!"SJXXB".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
+                            if (!"SJXXB".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
                                 if (StringUtils.equals("0", ShiroUtils.getSysUser().getFormalFlag())) {
                                     sysUser.setFormalFlag("0");
                                 }
@@ -430,7 +419,6 @@ public class SysNoticeController extends BaseController {
         PageHelper.startPage(0, 10);
         SysNotice sysNotice = new SysNotice();
         sysNotice.setNoticeType(getRequest().getParameter("type"));
-        //sysNotice.setReadFlag("未读");
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
         if (currentUser != null) {
@@ -438,9 +426,8 @@ public class SysNoticeController extends BaseController {
             if (!currentUser.isAdmin()) {
                 List<SysRole> getRoles = currentUser.getRoles();
                 for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey())&& !"documentAdmin".equals(sysRole.getRoleKey())) {
-                        sysNotice.setCreateBy(ShiroUtils.getLoginName());
-                        sysNotice.setReceiver(ShiroUtils.getSysUser().getUserName());
+                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"admin".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey()) && !"zjl".equals(sysRole.getRoleKey()) && !"documentAdmin".equals(sysRole.getRoleKey())) {
+                        sysNotice.setReceiverId(ShiroUtils.getSysUser().getUserId().toString());
                     }
                 }
             }

@@ -7,7 +7,6 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-<!--        <input name="roleType" id="roleType" th:value="*{roleType}" type="hidden">-->
         <form class="form-horizontal m" id="form-applyIn-add" th:object="${sysApplyIn}">
             <input name="applyType" value="0" type="hidden"/>
             <input name="realCreateBy" value="" type="hidden" id="realCreateBy">
@@ -42,14 +41,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">公司名称：</label>
                 <div class="col-sm-8">
-<!--                    <select id="companyName" name="companyName"-->
-<!--                                        th:with="type=${@dict.getType('sys_company_name')}"-->
-<!--                                        data-none-selected-text="请选择" class="form-control m-b">-->
-<!--                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
-<!--                                            th:value="${dict.dictValue}"></option>-->
-<!--                    </select>-->
                     <select id="companyName" name="companyName" class="form-control select2-multiple">
-<!--                        <option >&#45;&#45;请选择公司名称&#45;&#45;</option>-->
                         <option th:each="sysDictData:${sysDictData}" th:value="${sysDictData.dictValue}" th:text="${sysDictData.dictLabel}"></option>
                     </select>
                 </div>
@@ -109,10 +101,6 @@
         var documentScanTypeDictDatas = [[${@dict.getType('document_scan_type')}]];
         var dailyDocumentTypeDictDatas = [[${@dict.getType('daily_document_type')}]];
         var dailyDocumentTypeDictDatasContract = [[${@dict.getType('contract_document_type')}]];
-        var documentStatuDictDatas = [[${@dict.getType('document_in_status')}]];
-        var busiDocumentTypeDictDatas = [[${@dict.getType('busi_document_type')}]];
-        var documentInTypeDictDatas = [[${@dict.getType('document_in_type')}]];
-        var documentLevelDictDatas = [[${@dict.getType('document_level')}]];
         var sysCompanyName = [[${@dict.getType('sys_company_name')}]];
         var roles = [[${@permission.getPrincipalProperty('roles')}]];
         var loginName = [[${@permission.getPrincipalProperty('loginName')}]];
@@ -163,7 +151,6 @@
             console.log(id)
             var options = {
                 url: prefixDocumentFile + "/listDocApp/" + id,
-                // createUrl: prefix + "/editDocumentModal/" + ids + '/' + documentTypeVal + '/' + applyType + '/' + applyTypeUnDone,
                 updateUrl: prefixDocumentFile + "/edit/{id}",
                 removeUrl: prefixDocumentFile + "/remove",
                 exportUrl: prefix + "/export",
@@ -176,13 +163,6 @@
                         title: 'id',
                         visible: false
                     },
-                    // {
-                    //     field: 'documentType',
-                    //     title: '档案类别',
-                    //     formatter: function(value, item, index) {
-                    //         return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
-                    //     }
-                    // },
                     {
                         field: 'projectName',
                         title: '项目名称',
@@ -254,54 +234,6 @@
                             return strLength(item.pages);
                         }
                     },
-                    // {
-                    //     field: 'documentStatu',
-                    //     title: '档案状态',
-                    //     visible: showNames,
-                    //     formatter: function(value, item, index) {
-                    //         return strLength($.table.selectDictLabel(documentStatuDictDatas, item.documentStatu));
-                    //     }
-                    // },
-                    // {
-                    //     field: 'cabinetNo',
-                    //     title: '柜号',
-                    //     visible: showNames,
-                    //     formatter: function(value, item, index) {
-                    //         return strLength(item.cabinetNo);
-                    //     }
-                    // },
-                    // {
-                    //     field: 'bagNo',
-                    //     title: '档案袋编号',
-                    //     visible: showNames,
-                    //     formatter: function(value, item, index) {
-                    //         return strLength(item.bagNo);
-                    //     }
-                    // },
-                    // {
-                    //     field: 'documentGetType',
-                    //     title: '档案类型',
-                    //     visible: showNames,
-                    //     formatter: function(value, item, index) {
-                    //         return strLength($.table.selectDictLabel(busiDocumentTypeDictDatas, item.documentGetType));
-                    //     }
-                    // },
-                    // {
-                    //     field: 'fileGetType',
-                    //     title: '文件类型',
-                    //     visible: showNames,
-                    //     formatter: function(value, item, index) {
-                    //         return strLength($.table.selectDictLabel(documentInTypeDictDatas, item.fileGetType));
-                    //     }
-                    // },
-                    // {
-                    //     field: 'documentLevel',
-                    //     title: '档案级别',
-                    //     visible: showNames,
-                    //     formatter: function(value, item, index) {
-                    //         return strLength($.table.selectDictLabel(documentLevelDictDatas, item.fileGetType));
-                    //     }
-                    // },
                     {
                         field: 'fileNames',
                         title: '附件',
@@ -478,6 +410,7 @@
         }*/
         function getDobtSelected(row){
             if (roleType == "inve"){
+                console.log("asfasfdasdasdas");
                 $("#debtorNameVal").val(row[0].id);
                 $("#debtorNameTip").val(row[0].projectName);
             }else if(roleType == "thb"){

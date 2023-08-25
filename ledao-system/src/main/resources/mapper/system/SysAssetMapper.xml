@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysAssetMapper">
+    
+    <resultMap type="SysAsset" id="SysAssetResult">
+        <result property="assetId"    column="asset_id"    />
+        <result property="assetName"    column="asset_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="managerId"    column="manager_id"    />
+        <result property="managerName"    column="manager_name"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectSysAssetVo">
+        select asset_id, asset_name, create_time, manager_id, manager_name, create_by from sys_asset
+    </sql>
+
+    <select id="selectSysAssetList" parameterType="SysAsset" resultMap="SysAssetResult">
+        <include refid="selectSysAssetVo"/>
+        <where>  
+            <if test="assetName != null  and assetName != ''"> and asset_name like concat('%', #{assetName}, '%')</if>
+            <if test="managerId != null  and managerId != ''"> and manager_id = #{managerId}</if>
+            <if test="managerName != null  and managerName != ''"> and manager_name like concat('%', #{managerName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysAssetById" parameterType="Long" resultMap="SysAssetResult">
+        <include refid="selectSysAssetVo"/>
+        where asset_id = #{assetId}
+    </select>
+        
+    <insert id="insertSysAsset" parameterType="SysAsset" useGeneratedKeys="true" keyProperty="assetId">
+        insert into sys_asset
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="assetName != null">asset_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="managerId != null">manager_id,</if>
+            <if test="managerName != null">manager_name,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="assetName != null">#{assetName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="managerId != null">#{managerId},</if>
+            <if test="managerName != null">#{managerName},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysAsset" parameterType="SysAsset">
+        update sys_asset
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetName != null">asset_name = #{assetName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="managerId != null">manager_id = #{managerId},</if>
+            <if test="managerName != null">manager_name = #{managerName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where asset_id = #{assetId}
+    </update>
+
+    <delete id="deleteSysAssetById" parameterType="Long">
+        delete from sys_asset where asset_id = #{assetId}
+    </delete>
+
+    <delete id="deleteSysAssetByIds" parameterType="String">
+        delete from sys_asset where asset_id in 
+        <foreach item="assetId" collection="array" open="(" separator="," close=")">
+            #{assetId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -28,7 +28,7 @@
                                 </select>
                             </li>-->
                             <li>
-                                <label>公司名称1231：</label>
+                                <label>公司名称：</label>
 <!--                                <select id="companyName" name="companyName"-->
 <!--                                        th:with="type=${@dict.getType('sys_company_name')}"-->
 <!--                                        data-none-selected-text="请选择">-->
@@ -108,29 +108,6 @@
                 modalName: "档案入库申请",
                 status: "In",
                 columns: [
-                   /* {
-                    checkbox: true
-                },*/
-                /*{
-                    field: 'applyId',
-                    title: 'id',
-                    visible: false
-                },*/
-                /*{
-                    field: 'documentType',
-                    title: '档案类别',
-                    formatter: function(value, item, index) {
-		            	return $.table.selectDictLabel(documentTypeDictDatas, item.documentType);
-		            }
-                },*/
-                /*{
-                    field: 'projectName',
-                    title: '项目名称',
-                    formatter: function(value, item, index) {
-                        return $.table.tooltip(item.projectName,10);
-                    },
-                    visible: showPro
-                },*/
                 {
                     title: "序号",
                     formatter: function (value, row, index) {
@@ -141,7 +118,6 @@
                     field: 'companyName',
                     title: '公司名称',
                     formatter: function(value, item, index) {
-		            	// return $.table.tooltip(getDictStr($.table.selectDictLabel(companyDictDatas, item.companyName)),10);
                         var lable = $.table.selectDictLabel(companyDictDatas, item.companyName);
                         var lableStr ='';
                         if (lable!=''&& lable!= undefined){

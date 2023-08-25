@@ -1,25 +1,14 @@
 package com.ledao.common.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import com.alibaba.fastjson.JSONObject;
+import com.ledao.common.utils.http.HttpUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import java.lang.management.ManagementFactory;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.ledao.common.utils.http.HttpUtils;
-import com.ledao.common.utils.qrCode.HttpUtil;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.apache.commons.lang3.time.DateFormatUtils;
-
-import java.io.IOException;
 
 /**
  * 时间工具类
@@ -246,13 +235,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 时间添加或减少
      */
-    public static Date addTime(Date dateTime, int index, int type) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dateTime);//设置起时间
-        Calendar c = Calendar.getInstance();
-        c.setTime(dateTime);
-        c.add(Calendar.DAY_OF_MONTH, index);
-        return dateTime;
+    public static Date addTime(Date dateTime, int index) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+        calendar.add(Calendar.DAY_OF_MONTH, index);
+        return calendar.getTime();
+
     }
 
     /**
@@ -759,5 +747,34 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             }
         }
         return dateList;
+    }
+
+    /**
+     * @param nowTime   当前时间
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     * @author sunran   判断当前时间在时间区间内
+     */
+    public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
+        if (nowTime.getTime() == startTime.getTime()
+                || nowTime.getTime() == endTime.getTime()) {
+            return true;
+        }
+
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(startTime);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

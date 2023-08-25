@@ -118,7 +118,7 @@ public class SysApplyIn extends BaseEntity {
      * 债务人名称
      */
     //@ExcelProperty(value = "债务人id")
-    private Long debtorId;
+    private String debtorId;
 
     /**
      * 申请人
@@ -330,11 +330,11 @@ public class SysApplyIn extends BaseEntity {
         this.taskId = taskId;
     }
 
-    public Long getDebtorId() {
+    public String getDebtorId() {
         return debtorId;
     }
 
-    public void setDebtorId(Long debtorId) {
+    public void setDebtorId(String debtorId) {
         this.debtorId = debtorId;
     }
 

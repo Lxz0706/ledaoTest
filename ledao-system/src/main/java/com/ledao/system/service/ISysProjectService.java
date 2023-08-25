@@ -109,4 +109,6 @@ public interface ISysProjectService {
     public SysProject selectTotalPrincipalBalanceByParentId(String projectZckIds);
 
     public SysProject selectTotal(SysProject sysProject);
+
+    public List<SysProject> getProjectListByIds(String ids);
 }

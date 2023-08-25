@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改资产管理')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-asset-edit" th:object="${sysAsset}">
+        <input name="assetId" th:field="*{assetId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">资产名称：</label>
+            <div class="col-sm-8">
+                <input name="assetName" th:field="*{assetName}" class="form-control" type="text">
+            </div>
+        </div>
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">null：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    -->
+        <!--                </div>-->
+        <!--            </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">负责人：</label>
+            <div class="col-sm-8">
+                <input name="managerId" id="managerId" th:field="*{managerId}" class="form-control" type="hidden">
+                <input name="managerName" id="managerName" th:field="*{managerName}" class="form-control" type="text"
+                       onclick="selectUserTree()">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/asset";
+    $("#form-asset-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-asset-edit').serialize());
+        }
+    }
+
+    function selectUserTree() {
+        var options = {
+            title: '人员选择',
+            width: "750",
+            url: ctx + "system/user/selectUserTree?selectedUserIds=" + $("#managerId").val() + "&selectedUserNames=" + $("#managerName").val() + "&multiSelectFlag=true" + "&deptId=false",
+            callBack: doSelect
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSelect(index, layero) {
+
+        var body = layer.getChildFrame('body', index);
+
+        var userIds = "";
+        var userNames = "";
+        body.find("#multiselect_to option").each(function () {  //遍历所有option
+            var val = $(this).val();   //获取option值
+            var txt = $(this).text();  //获取option的文本内容
+            if (val != '' && txt != '') {
+                userIds = userIds + val + ",";
+                userNames = userNames + txt + ",";
+            }
+        });
+
+        userIds = userIds.substring(0, userIds.length - 1);
+        userNames = userNames.substring(0, userNames.length - 1);
+
+        $("#managerId").val(userIds);
+        $("#managerName").val(userNames);
+        layer.close(index);
+    }
+</script>
+</body>
+</html>

@@ -1,185 +1,187 @@
 
+w
+java:S2293Æ"YReplace the type specification in this constructor call with the diamond operator ("<>").(Œõãç8Ñ„†’‚1
+|
+java:S2293­"YReplace the type specification in this constructor call with the diamond operator ("<>").(™ºöºıÿÿÿÿ8Ó„†’‚1
+w
+java:S2293ô"YReplace the type specification in this constructor call with the diamond operator ("<>").(Œõãç8Ó„†’‚1
+|
+java:S2293­
+"YReplace the type specification in this constructor call with the diamond operator ("<>").(™ºöºıÿÿÿÿ8Ó„†’‚1
+i
+java:S1192Ö"KDefine a constant instead of duplicating this literal "thbManager" 3 times.(ºáµ§8Ô„†’‚1
+m
+java:S1192Ã"ODefine a constant instead of duplicating this literal "projectZckType" 3 times.(ê§’8Ô„†’‚1
+q
+java:S1192’"NDefine a constant instead of duplicating this literal "documentAdmin" 4 times.(ÉÁ©şÿÿÿÿ8Ô„†’‚1
 p
-java:S2293µ"YReplace the type specification in this constructor call with the diamond operator ("<>").(Œõãç
-u
-java:S2293œ"YReplace the type specification in this constructor call with the diamond operator ("<>").(™ºöºıÿÿÿÿ
-p
-java:S2293ã"YReplace the type specification in this constructor call with the diamond operator ("<>").(Œõãç
-u
-java:S2293œ"YReplace the type specification in this constructor call with the diamond operator ("<>").(™ºöºıÿÿÿÿ
-b
-java:S1192Å"KDefine a constant instead of duplicating this literal "thbManager" 3 times.(ºáµ§
-f
-java:S1192²"ODefine a constant instead of duplicating this literal "projectZckType" 3 times.(ê§’
+java:S1192Ï"MDefine a constant instead of duplicating this literal "projectZckId" 3 times.(šÈÒıÿÿÿÿ8Õ„†’‚1
+d
+java:S1192‘"FDefine a constant instead of duplicating this literal "SJXXB" 4 times.(ØŸ›¦8Õ„†’‚1
+n
+java:S1192œ"KDefine a constant instead of duplicating this literal "sysProject" 3 times.(¶Ú­ úÿÿÿÿ8Õ„†’‚1
+k
+java:S1192Ò"NDefine a constant instead of duplicating this literal "fwProjectType" 6 times.(²®íK8Õ„†’‚1
 j
-java:S1192"NDefine a constant instead of duplicating this literal "documentAdmin" 4 times.(ÉÁ©şÿÿÿÿ
-i
-java:S1192¾"MDefine a constant instead of duplicating this literal "projectZckId" 3 times.(šÈÒıÿÿÿÿ
-]
-java:S1192€"FDefine a constant instead of duplicating this literal "SJXXB" 4 times.(ØŸ›¦
-g
-java:S1192‹"KDefine a constant instead of duplicating this literal "sysProject" 3 times.(¶Ú­ úÿÿÿÿ
-d
-java:S1192Á"NDefine a constant instead of duplicating this literal "fwProjectType" 6 times.(²®íK
-c
-java:S1192€"LDefine a constant instead of duplicating this literal "seniorRoles" 4 times.(ØŸ›¦
-f
-java:S1192À"JDefine a constant instead of duplicating this literal "otherFlag" 5 times.(Â²Şûúÿÿÿÿ
-K
-java:S1066æ"/Merge this if statement with the enclosing one.(Å„çğúÿÿÿÿ
-K
-java:S1066ï"/Merge this if statement with the enclosing one.(¢ºŸûúÿÿÿÿ
-K
-java:S1066Í"/Merge this if statement with the enclosing one.(¢ºŸûúÿÿÿÿ
-K
-java:S1066Û"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ
-K
-java:S1066ß"/Merge this if statement with the enclosing one.(†áë™úÿÿÿÿ
-K
-java:S1066±"/Merge this if statement with the enclosing one.(æùŞàÿÿÿÿÿ
-F
-java:S1066ğ"/Merge this if statement with the enclosing one.(¦ã€Ç
-F
-java:S1066¾	"/Merge this if statement with the enclosing one.(¦ã€Ç
-K
-java:S1066Ñ"/Merge this if statement with the enclosing one.(¢ºŸûúÿÿÿÿ
-z
-java:S1488æ"cImmediately return this expression instead of assigning it to the temporary variable "sysUserList".(È¸Òø
-{
-java:S1149´"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ô©çÅùÿÿÿÿ
-{
-java:S1149µ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(¨°±ôıÿÿÿÿ
-{
-java:S1149"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ô©çÅùÿÿÿÿ
-{
-java:S1149"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(¨°±ôıÿÿÿÿ
-v
-java:S1149ò"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-{
-java:S1149ó"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(– ñÎúÿÿÿÿ
-v
-java:S1149ô"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ƒõı»
-v
-java:S1149õ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(‚Öá
-{
-java:S1149ö"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(æÉ–ıüÿÿÿÿ
-v
-java:S1149Ã"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-v
-java:S1149õ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-{
-java:S1149ö"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(– ñÎúÿÿÿÿ
-v
-java:S1149÷"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ƒõı»
-v
-java:S1149ø"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(‚Öá
-v
-java:S1149ğ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-v
-java:S1149—	"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-{
-java:S1149˜	"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(– ñÎúÿÿÿÿ
-v
-java:S1149™	"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ƒõı»
-v
-java:S1149š	"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(‚Öá
-v
-java:S1149•
-"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-v
-java:S1149“"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-v
-java:S1149§"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
-h
-java:S3776d"RRefactor this method to reduce its Cognitive Complexity from 45 to the 15 allowed.(ñÆ¼¡
-F
-java:S2200"/Only the sign of the result should be examined.(ÄØÛ¡
-:
-java:S2129«"Remove this "Long" constructor(öÒéÖûÿÿÿÿ
-5
-java:S2129¬"Remove this "Long" constructor(ö²µ‘
-U
-java:S1155­">Use isEmpty() to check whether the collection is empty or not.(ó¬Ó†
-5
-java:S2129®"Remove this "Long" constructor(öåÜ
-W	java:S125º"<This block of commented-out lines of code should be removed.(‰²ˆúÿÿÿÿ
-i
-java:S3776Ö"RRefactor this method to reduce its Cognitive Complexity from 49 to the 15 allowed.(­Ş–Á
-d
-java:S5361ú"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Áåüûÿÿÿÿ
-^
-java:S5361†"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Ÿõó9
-d
-java:S5361’"HReplace this call to "replaceAll()" by a call to the "replace()" method.(‹±øÿÿÿÿ
-k
-java:S3981¬"TThe size of "sysCustomerList" is always ">=0", so update this test to use isEmpty().( Â±Õ
-O	java:S106á"9Replace this use of System.out or System.err by a logger.(â ¬Ğ
-R	java:S125ä"<This block of commented-out lines of code should be removed.(£Ş«Œ
-i
-java:S3776—"RRefactor this method to reduce its Cognitive Complexity from 65 to the 15 allowed.(—‚ñª
-d
-java:S5361¢"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Áåüûÿÿÿÿ
-U
-java:S1155£">Use isEmpty() to check whether the collection is empty or not.(äòª£
-R	java:S125§"<This block of commented-out lines of code should be removed.(®Š±´
-^
-java:S5361¾"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Ÿõó9
-U
-java:S1155¿">Use isEmpty() to check whether the collection is empty or not.(ùÀš¯
-Q	java:S125Ã"<This block of commented-out lines of code should be removed.(·îÉ
-d
-java:S5361Ù"HReplace this call to "replaceAll()" by a call to the "replace()" method.(‹±øÿÿÿÿ
-U
-java:S1155Ú">Use isEmpty() to check whether the collection is empty or not.(ùÀš¯
-W	java:S125Ş"<This block of commented-out lines of code should be removed.(¥àã½øÿÿÿÿ
-k
-java:S3981‡"TThe size of "sysCustomerList" is always ">=0", so update this test to use isEmpty().( Â±Õ
-O	java:S106»"9Replace this use of System.out or System.err by a logger.(â ¬Ğ
-R	java:S125¾"<This block of commented-out lines of code should be removed.(£Ş«Œ
-i
-java:S3776Õ"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(óË…³
-g
-java:S3252ß"KUse static access with "org.apache.commons.lang3.StringUtils" for "equals".(†áë™úÿÿÿÿ
-U
-java:S1155…">Use isEmpty() to check whether the collection is empty or not.(äòª£
-U
-java:S1155">Use isEmpty() to check whether the collection is empty or not.(ùÀš¯
-Z
-java:S1155—">Use isEmpty() to check whether the collection is empty or not.(Ò ıÍıÿÿÿÿ
-U
-java:S1155 ">Use isEmpty() to check whether the collection is empty or not.(®¾ÒÙ
-Z
-java:S1854Ä"CRemove this useless assignment to local variable "sysProjectsList".(«óî
-n
-java:S3776Ù"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(µÉª¨ûÿÿÿÿ
-n
-java:S3776›"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(‹óüúÿÿÿÿ
-W	java:S125¢"<This block of commented-out lines of code should be removed.(ÚçıÚıÿÿÿÿ
-R	java:S125µ"<This block of commented-out lines of code should be removed.(ºë
-W	java:S125¸"<This block of commented-out lines of code should be removed.(”¡¬æøÿÿÿÿ
-Y
-java:S1854Ú"BRemove this useless assignment to local variable "sysProjectList".(òğÚ‰
-V
-java:S1854Ù"?Remove this useless assignment to local variable "assetStatus".(ë¯Úô
-G
-java:S1481Ù"0Remove this unused "assetStatus" local variable.(ë¯Úô
-W	java:S125İ"<This block of commented-out lines of code should be removed.(´±‰İøÿÿÿÿ
-n
-java:S3776ê"RRefactor this method to reduce its Cognitive Complexity from 78 to the 15 allowed.(”¨œ·øÿÿÿÿ
-F
-java:S2200µ"/Only the sign of the result should be examined.(ÄØÛ¡
+java:S1192‘"LDefine a constant instead of duplicating this literal "seniorRoles" 4 times.(ØŸ›¦8Õ„†’‚1
+m
+java:S1192Ñ"JDefine a constant instead of duplicating this literal "otherFlag" 5 times.(Â²Şûúÿÿÿÿ8Õ„†’‚1
+R
+java:S1066÷"/Merge this if statement with the enclosing one.(Å„çğúÿÿÿÿ8×„†’‚1
+R
+java:S1066€"/Merge this if statement with the enclosing one.(¢ºŸûúÿÿÿÿ8×„†’‚1
+R
+java:S1066Ş"/Merge this if statement with the enclosing one.(¢ºŸûúÿÿÿÿ8×„†’‚1
+R
+java:S1066ì"/Merge this if statement with the enclosing one.(’î†ùÿÿÿÿ8×„†’‚1
+R
+java:S1066ğ"/Merge this if statement with the enclosing one.(†áë™úÿÿÿÿ8×„†’‚1
+R
+java:S1066Â"/Merge this if statement with the enclosing one.(æùŞàÿÿÿÿÿ8Ù„†’‚1
+M
+java:S1066"/Merge this if statement with the enclosing one.(¦ã€Ç8Ù„†’‚1
+M
+java:S1066Ï"/Merge this if statement with the enclosing one.(¦ã€Ç8Ù„†’‚1
+R
+java:S1066â"/Merge this if statement with the enclosing one.(¢ºŸûúÿÿÿÿ8Ù„†’‚1
+
+java:S1488÷"cImmediately return this expression instead of assigning it to the temporary variable "sysUserList".(È¸Òø8â„†’‚1
+‚
+java:S1149Å"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ô©çÅùÿÿÿÿ8…†’‚1
+‚
+java:S1149Æ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(¨°±ôıÿÿÿÿ8…†’‚1
+‚
+java:S1149Ÿ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ô©çÅùÿÿÿÿ8††’‚1
+‚
+java:S1149 "_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(¨°±ôıÿÿÿÿ8††’‚1
+}
+java:S1149ƒ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8††’‚1
+‚
+java:S1149„"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(– ñÎúÿÿÿÿ8††’‚1
+}
+java:S1149…"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ƒõı»8††’‚1
+}
+java:S1149†"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(‚Öá8††’‚1
+‚
+java:S1149‡"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(æÉ–ıüÿÿÿÿ8††’‚1
+}
+java:S1149Ô"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8‡†’‚1
+}
+java:S1149†"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8‡†’‚1
+‚
+java:S1149‡"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(– ñÎúÿÿÿÿ8‡†’‚1
+}
+java:S1149ˆ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ƒõı»8‡†’‚1
+}
+java:S1149‰"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(‚Öá8‡†’‚1
+}
+java:S1149"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8‡†’‚1
+}
+java:S1149¨"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8‡†’‚1
+‚
+java:S1149©"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(– ñÎúÿÿÿÿ8ˆ†’‚1
+}
+java:S1149ª"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ƒõı»8ˆ†’‚1
+}
+java:S1149«"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(‚Öá8ˆ†’‚1
+}
+java:S1149¦	"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8ˆ†’‚1
+}
+java:S1149¤
+"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8ˆ†’‚1
+}
+java:S1149¸
+"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰8ˆ†’‚1
 o
-java:S3776ì"SRefactor this method to reduce its Cognitive Complexity from 134 to the 15 allowed.(‘îğæûÿÿÿÿ
-T
-java:S1854î"8Remove this useless assignment to local variable "list".(«„ÿ–ùÿÿÿÿ
-F
-java:S2200İ	"/Only the sign of the result should be examined.(ÄØÛ¡
-R	java:S125
-"<This block of commented-out lines of code should be removed.(Å”ÒØ
+java:S3776d"RRefactor this method to reduce its Cognitive Complexity from 45 to the 15 allowed.(ñÆ¼¡8•†’‚1
+M
+java:S2200"/Only the sign of the result should be examined.(ÄØÛ¡8¦†’‚1
+A
+java:S2129«"Remove this "Long" constructor(öÒéÖûÿÿÿÿ8­†’‚1
+<
+java:S2129¬"Remove this "Long" constructor(ö²µ‘8®†’‚1
+\
+java:S1155­">Use isEmpty() to check whether the collection is empty or not.(ó¬Ó†8¯†’‚1
+<
+java:S2129®"Remove this "Long" constructor(öåÜ8¯†’‚1
+p
+java:S3776ç"RRefactor this method to reduce its Cognitive Complexity from 49 to the 15 allowed.(­Ş–Á8¹†’‚1
+k
+java:S5361‹"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Áåüûÿÿÿÿ8È†’‚1
+e
+java:S5361—"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Ÿõó98Ë†’‚1
+k
+java:S5361£"HReplace this call to "replaceAll()" by a call to the "replace()" method.(‹±øÿÿÿÿ8Í†’‚1
+r
+java:S3981½"TThe size of "sysCustomerList" is always ">=0", so update this test to use isEmpty().( Â±Õ8Ó†’‚1
+V	java:S106ò"9Replace this use of System.out or System.err by a logger.(â ¬Ğ8Ü†’‚1
+Y	java:S125õ"<This block of commented-out lines of code should be removed.(£Ş«Œ8İ†’‚1
+p
+java:S3776¨"RRefactor this method to reduce its Cognitive Complexity from 65 to the 15 allowed.(—‚ñª8ã†’‚1
+k
+java:S5361³"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Áåüûÿÿÿÿ8ç†’‚1
+\
+java:S1155´">Use isEmpty() to check whether the collection is empty or not.(äòª£8é†’‚1
+Y	java:S125¸"<This block of commented-out lines of code should be removed.(®Š±´8é†’‚1
+e
+java:S5361Ï"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Ÿõó98î†’‚1
+\
+java:S1155Ğ">Use isEmpty() to check whether the collection is empty or not.(ùÀš¯8î†’‚1
+X	java:S125Ô"<This block of commented-out lines of code should be removed.(·îÉ8ğ†’‚1
+k
+java:S5361ê"HReplace this call to "replaceAll()" by a call to the "replace()" method.(‹±øÿÿÿÿ8ó†’‚1
+\
+java:S1155ë">Use isEmpty() to check whether the collection is empty or not.(ùÀš¯8ó†’‚1
+^	java:S125ï"<This block of commented-out lines of code should be removed.(¥àã½øÿÿÿÿ8õ†’‚1
+r
+java:S3981˜"TThe size of "sysCustomerList" is always ">=0", so update this test to use isEmpty().( Â±Õ8ü†’‚1
+V	java:S106Ì"9Replace this use of System.out or System.err by a logger.(â ¬Ğ8†Ÿ†’‚1
+Y	java:S125Ï"<This block of commented-out lines of code should be removed.(£Ş«Œ8‡Ÿ†’‚1
+p
+java:S3776æ"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(óË…³8ŒŸ†’‚1
 n
-java:S3776¤"RRefactor this method to reduce its Cognitive Complexity from 88 to the 15 allowed.(Éõœäıÿÿÿÿ
-R	java:S125¬"<This block of commented-out lines of code should be removed.(Æƒ¸š
-F
-java:S2200÷"/Only the sign of the result should be examined.(ÄØÛ¡
-S
-java:S1854³"7Remove this useless assignment to local variable "url".(œ†‘ùúÿÿÿÿ
+java:S3252ğ"KUse static access with "org.apache.commons.lang3.StringUtils" for "equals".(†áë™úÿÿÿÿ8‘Ÿ†’‚1
+\
+java:S1155–">Use isEmpty() to check whether the collection is empty or not.(äòª£8–Ÿ†’‚1
+\
+java:S1155Ÿ">Use isEmpty() to check whether the collection is empty or not.(ùÀš¯8˜Ÿ†’‚1
+a
+java:S1155¨">Use isEmpty() to check whether the collection is empty or not.(Ò ıÍıÿÿÿÿ8šŸ†’‚1
+\
+java:S1155±">Use isEmpty() to check whether the collection is empty or not.(®¾ÒÙ8œŸ†’‚1
+a
+java:S1854Õ"CRemove this useless assignment to local variable "sysProjectsList".(«óî8 Ÿ†’‚1
+u
+java:S3776ê"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(µÉª¨ûÿÿÿÿ8¤Ÿ†’‚1
+u
+java:S3776¬"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(‹óüúÿÿÿÿ8°Ÿ†’‚1
+^	java:S125³"<This block of commented-out lines of code should be removed.(ÚçıÚıÿÿÿÿ8´Ÿ†’‚1
+Y	java:S125Æ"<This block of commented-out lines of code should be removed.(ºë8¹Ÿ†’‚1
+^	java:S125É"<This block of commented-out lines of code should be removed.(”¡¬æøÿÿÿÿ8¹Ÿ†’‚1
+`
+java:S1854ë"BRemove this useless assignment to local variable "sysProjectList".(òğÚ‰8»Ÿ†’‚1
+]
+java:S1854ê"?Remove this useless assignment to local variable "assetStatus".(ë¯Úô8»Ÿ†’‚1
+N
+java:S1481ê"0Remove this unused "assetStatus" local variable.(ë¯Úô8½Ÿ†’‚1
+^	java:S125î"<This block of commented-out lines of code should be removed.(´±‰İøÿÿÿÿ8¾Ÿ†’‚1
+u
+java:S3776û"RRefactor this method to reduce its Cognitive Complexity from 78 to the 15 allowed.(”¨œ·øÿÿÿÿ8ÀŸ†’‚1
+M
+java:S2200Æ"/Only the sign of the result should be examined.(ÄØÛ¡8ÏŸ†’‚1
+v
+java:S3776ı"SRefactor this method to reduce its Cognitive Complexity from 134 to the 15 allowed.(‘îğæûÿÿÿÿ8ÖŸ†’‚1
+[
+java:S1854ÿ"8Remove this useless assignment to local variable "list".(«„ÿ–ùÿÿÿÿ8×Ÿ†’‚1
+M
+java:S2200î"/Only the sign of the result should be examined.(ÄØÛ¡8éŸ†’‚1
+Y	java:S125®	"<This block of commented-out lines of code should be removed.(Å”ÒØ8õŸ†’‚1
+u
+java:S3776µ
+"RRefactor this method to reduce its Cognitive Complexity from 88 to the 15 allowed.(Éõœäıÿÿÿÿ8ùŸ†’‚1
+Y	java:S125½
+"<This block of commented-out lines of code should be removed.(Æƒ¸š8ıŸ†’‚1
+M
+java:S2200ˆ"/Only the sign of the result should be examined.(ÄØÛ¡8‹ †’‚1
+Z
+java:S1854Ä"7Remove this useless assignment to local variable "url".(œ†‘ùúÿÿÿÿ8“ †’‚1

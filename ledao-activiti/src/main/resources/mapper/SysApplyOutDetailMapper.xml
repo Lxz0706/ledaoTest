@@ -26,6 +26,8 @@
         <result property="reviser" column="reviser"/>
         <result property="updateTime" column="update_time"/>
         <result property="eleDocumentStatu" column="ele_document_statu"/>
+        <result property="pages" column="pages"/>
+        <result property="counts" column="counts"/>
     </resultMap>
     <resultMap type="SysApplyOutDetail" id="SysApplyOutDocDetailResult">
         <result property="outDetailId" column="out_detail_id"/>
@@ -146,6 +148,7 @@
         od.update_time,
         od.counts,
         od.ele_document_statu,
+        od.pages,
         file.asset_number,
         file.contract_no,
         file.asset_pag,
@@ -228,6 +231,7 @@
             <if test="updateTime != null">update_time,</if>
             <if test="eleDocumentStatu != null">ele_document_statu,</if>
             <if test="counts !=null">counts,</if>
+            <if test="pages !=null">pages,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="applyId != null">#{applyId},</if>
@@ -251,6 +255,7 @@
             <if test="updateTime != null">#{updateTime},</if>
             <if test="eleDocumentStatu != null">#{eleDocumentStatu},</if>
             <if test="counts !=null">#{counts},</if>
+            <if test="pages !=null">#{pages},</if>
         </trim>
     </insert>
 
@@ -278,6 +283,7 @@
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="eleDocumentStatu != null">ele_document_statu = #{eleDocumentStatu},</if>
             <if test="counts !=null">counts = #{counts},</if>
+            <if test="pages !=null">pages = #{pages},</if>
         </trim>
         where out_detail_id = #{outDetailId}
     </update>
@@ -325,6 +331,7 @@
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="eleDocumentStatu != null">ele_document_statu = #{eleDocumentStatu},</if>
             <if test="counts !=null">counts = #{counts},</if>
+            <if test="pages !=null">pages = #{pages},</if>
         </trim>
         where out_detail_id IN (${outFileDetailIds})
     </update>

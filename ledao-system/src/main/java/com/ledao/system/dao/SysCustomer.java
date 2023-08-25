@@ -62,13 +62,13 @@ public class SysCustomer extends BaseEntity {
     /*
      * 客户标签
      * */
-    @Excel(name = "客户标签",width = 30)
+    @Excel(name = "客户标签", width = 30)
     private String customerLable;
 
     /*
      * 关联项目
      * */
-    @Excel(name = "合作项目",width = 60)
+    @Excel(name = "合作项目", width = 60)
     private String projectName;
 
     /**

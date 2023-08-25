@@ -1,29 +1,31 @@
 package com.ledao.web.controller.system;
 
-import java.util.*;
-
+import com.ledao.common.annotation.Log;
+import com.ledao.common.core.controller.BaseController;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.dao.entity.SysDept;
 import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.common.core.dao.entity.SysUser;
+import com.ledao.common.core.page.TableDataInfo;
+import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.*;
+import com.ledao.system.dao.SysAsset;
+import com.ledao.system.dao.SysHoliday;
+import com.ledao.system.dao.SysJournal;
+import com.ledao.system.dao.SysJournalCreator;
 import com.ledao.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ledao.common.annotation.Log;
-import com.ledao.common.enums.BusinessType;
-import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.common.utils.poi.ExcelUtil;
-import com.ledao.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 日志Controller
@@ -52,6 +54,9 @@ public class SysJournalController extends BaseController {
 
     @Autowired
     private ISysHolidayService sysHolidayService;
+
+    @Autowired
+    private ISysAssetService sysAssetService;
 
     //    @RequiresPermissions("system:journal:view")
     @GetMapping()
@@ -126,16 +131,35 @@ public class SysJournalController extends BaseController {
             }
         }
         List<SysJournal> list = sysJournalService.selectSysJournalList(sysJournal);
+        for (SysJournal sysJournal1 : list) {
+            if (StringUtils.isEmpty(sysJournal1.getProjectName())) {
+                sysJournal1.setProjectName("无项目");
+            }
+            if ("2".equals(sysJournal1.getProjectType())) {
+                SysAsset sysAsset = sysAssetService.selectSysAssetById(Long.valueOf(sysJournal1.getProId()));
+                sysJournal1.setProjectName(sysAsset.getAssetName());
+            }
+        }
         return getDataTable(list);
     }
 
     @PostMapping("/deptList")
     @ResponseBody
     public TableDataInfo deptList() {
-
         SysDept dept = new SysDept();
         dept.setParentId(Long.valueOf("100"));
         List<SysDept> deps = deptService.selectDeptOneLevelList(dept);
+        SysJournal sysJournal = new SysJournal();
+//        sysJournal.setCreateBy("qianguojun");
+//        List<SysJournal> sysJournalList = sysJournalService.selectSysJournalList(sysJournal);
+//        for (SysJournal sysJournal1 : sysJournalList) {
+//            SysJournal sysJournal2 = new SysJournal();
+//            sysJournal2.setProId(sysJournal1.getProId());
+//            sysJournal2.setWorkDetail(sysJournal1.getWorkDetail());
+//            sysJournal2.setCreateBy("law-" + sysJournal1.getCreateBy());
+//            sysJournal2.setCreateTime(sysJournal1.getCreateTime());
+//            sysJournalService.insertSysJournal(sysJournal2);
+//        }
         return getDataTable(deps);
     }
 
@@ -250,7 +274,7 @@ public class SysJournalController extends BaseController {
     }
 
     public List<String> getUserByKey() {
-        String[] users = sysConfigService.selectConfigByKey("lawUser").split(",");
+        String[] users = sysConfigService.selectConfigByKey("RZTB").split(",");
         List<String> list = new ArrayList<>();
         for (String stringUser : users) {
             SysUser sysUser = sysUserService.selectUserByLoginName(stringUser);
@@ -288,6 +312,12 @@ public class SysJournalController extends BaseController {
         }
         ExcelUtil<SysJournalCreator> util = new ExcelUtil<SysJournalCreator>(SysJournalCreator.class);
         return util.exportExcel(list, "未填写日志人员");
+    }
+
+    @GetMapping("/queryAll")
+    public String queryAll(ModelMap modelMap, SysJournal sysJournal) {
+        modelMap.put("sysJournal", sysJournal);
+        return prefix + "/queryAll";
     }
 
 }

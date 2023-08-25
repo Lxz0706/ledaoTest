@@ -68,7 +68,7 @@
         <!--<if test="deptId != null  and deptId != ''">
             and t2.dept_id = #{deptId}
         </if>-->
-        <if test="deptName != null  and deptName != ''">and dept_name like concat('%',#{deptName}, '%')</if>
+        <!--        <if test="deptName != null  and deptName != ''">and dept_name like concat('%',#{deptName}, '%')</if>-->
         <if test="wechatFlag != null  and wechatFlag != ''">and weChat_flag = #{wechatFlag}</if>
         <if test="reason != null  and reason != ''">and reason like concat('%', #{reason}, '%')</if>
         <if test="weChatNumber != null  and weChatNumber != ''">and we_chat_number like
@@ -93,6 +93,12 @@
             and customer_id in
             <foreach collection="customerIds" item="customerId" open="(" separator="," close=")">
                 #{customerId}
+            </foreach>
+        </if>
+        <if test="deptIds != null  and deptIds.length > 0 ">
+            and dept_id in
+            <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+                #{deptId}
             </foreach>
         </if>
         <!--<if test="createBy != null and createBy != ''">

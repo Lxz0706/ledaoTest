@@ -109,44 +109,7 @@ public class SysZckController extends BaseController {
     @ResponseBody
     public TableDataInfo listDoc(SysZck sysZck) {
         startPage();
-        SysUser currentUser = ShiroUtils.getSysUser();
-        /*if (currentUser != null) {
-            // 如果是超级管理员，则不过滤数据
-            if (!currentUser.isAdmin()) {
-                List<SysRole> getRoles = currentUser.getRoles();
-                for (SysRole sysRole : getRoles) {
-                    if (!"SJXXB".equals(sysRole.getRoleKey()) && !"seniorRoles".equals(sysRole.getRoleKey())
-                            && !"investmentManager".equals(sysRole.getRoleKey()) && !"tzbzz".equals(sysRole.getRoleKey())) {
-                        sysZck.setCreateBy(currentUser.getLoginName());
-                    }
-                }
-            }
-        }*/
         List<SysZck> list = sysZckService.selectSysZck(sysZck);
-        /*for (SysZck sysZck1 : list) {
-            SysZck sysZck3 = new SysZck();
-            sysZck3.setId(sysZck1.getId());
-            List<SysZck> list1 = sysZckService.selectSysZckByParentId(sysZck1);
-            for (SysZck sysZck2 : list1) {
-                SysZck sysZck4 = sysZckService.selectSysZckById(sysZck2.getId());
-                if (StringUtils.isEmpty(sysZck4.getCapValue()) || StringUtils.isNull(sysZck4.getCapValue())) {
-                    sysZck4.setCapValue(new BigDecimal(0).toString());
-                } else {
-                    sysZck4.setCapValue(new BigDecimal(sysZck4.getCapValue()).toString());
-                }
-                if (sysZck1.getCapValues() == null) {
-                    sysZck1.setCapValues(new BigDecimal(0));
-                }
-                sysZck1.setCapValues(new BigDecimal(sysZck4.getCapValue()).add(sysZck1.getCapValues()));
-                if (sysZck4.getTotalPrice() == null) {
-                    sysZck4.setTotalPrice(new BigDecimal(0));
-                }
-                if (sysZck1.getTotalPrice1() == null) {
-                    sysZck1.setTotalPrice1(new BigDecimal(0));
-                }
-                sysZck1.setTotalPrice1(sysZck1.getTotalPrice1().add(sysZck4.getTotalPrice()));
-            }
-        }*/
         return getDataTable(list);
     }
 
@@ -184,6 +147,13 @@ public class SysZckController extends BaseController {
         startPage();
         List<SysZck> list = sysZckService.selectSysZckList(sysZck);
         return getDataTable(list);
+    }
+
+    @PostMapping("/getZckListByIds")
+    @ResponseBody
+    public AjaxResult getProjectListByIds(SysZck sysZck) {
+        List<SysZck> list = sysZckService.selectSysZckByZckId(sysZck.getIds());
+        return AjaxResult.success(list);
     }
 
     /**

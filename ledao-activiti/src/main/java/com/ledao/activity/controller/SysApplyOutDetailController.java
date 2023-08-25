@@ -114,7 +114,6 @@ public class SysApplyOutDetailController extends BaseController {
     /**
      * 新增保存档案出库详情记录
      */
-//    @RequiresPermissions("activity:outFiledetail:add")
     @Log(title = "档案出库添加要出库的档案id", businessType = BusinessType.INSERT)
     @PostMapping("/addDocDetailIds")
     @ResponseBody
@@ -193,10 +192,20 @@ public class SysApplyOutDetailController extends BaseController {
             if (StringUtils.isNull(sysApplyOutDetail.getCounts())) {
                 sysApplyOutDetail.setCounts(Long.valueOf(0));
             }
+
+            if (StringUtils.isNull(sysDocumentFile.getPages())) {
+                sysDocumentFile.setPages(Long.valueOf(0));
+            }
+            if (StringUtils.isNull(sysApplyOutDetail.getPages())) {
+                sysApplyOutDetail.setPages(Long.valueOf(0));
+            }
             int count = Integer.parseInt(sysDocumentFile.getCounts().toString()) + Integer.parseInt(sysApplyOutDetail.getCounts().toString());
+
+            int pages = Integer.parseInt(sysDocumentFile.getPages().toString()) + Integer.parseInt(sysApplyOutDetail.getPages().toString());
 
             sysDocumentFile.setDocumentId(sysApplyOutDetail.getDocumentId());
             sysDocumentFile.setCounts(Long.valueOf(count));
+            sysDocumentFile.setPages(Long.valueOf(pages));
             sysDocumentFileService.updateSysDocumentFile(sysDocumentFile);
         }
         return toAjax(sysApplyOutDetailService.deleteSysApplyOutDetailByIds(ids));

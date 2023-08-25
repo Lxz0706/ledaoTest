@@ -545,16 +545,16 @@
         if (projectType == 0) {
             if (($.common.isNotEmpty(projectManagerId) && projectManagerId.indexOf(userId) != -1 && projectZckType == "automaticSwitch") || projectZckType == "serve" || loginName == "admin") {
                 var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + "&projectType=" + projectType;
-                $.modal.open('上传底层资料', url);
+                $.modal.open('上传底层资料1', url);
             } else if (projectZckType == "serve") {
                 var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + '&projectType=' + projectType;
-                $.modal.open('上传底层资料', url);
+                $.modal.open('上传底层资料2', url);
             } else {
                 $.modal.alertError("无法上传");
             }
         } else {
             var url = ctx + 'system/underlyingdata/add?projectId=' + projectId + "&projectType=" + projectType;
-            $.modal.open('上传底层资料', url);
+            $.modal.open('上传底层资料3', url);
         }
     }
 

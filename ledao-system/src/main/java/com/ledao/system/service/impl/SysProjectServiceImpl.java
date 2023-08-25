@@ -160,4 +160,8 @@ public class SysProjectServiceImpl implements ISysProjectService {
     public SysProject selectTotal(SysProject sysProject) {
         return sysProjectMapper.selectTotal(sysProject);
     }
+
+    public List<SysProject> getProjectListByIds(String ids) {
+        return sysProjectMapper.getProjectListByIds(Convert.toStrArray(ids));
+    }
 }

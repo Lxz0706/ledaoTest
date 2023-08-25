@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('资产管理列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>资产名称：</label>
+                            <input name="assetName" type="text"/>
+                        </li>
+                        <!--                            <li>-->
+                        <!--                                <label>null：</label>-->
+                        <!--                                <input type="text" name="managerId"/>-->
+                        <!--                            </li>-->
+                        <!--                            <li>-->
+                        <!--                                <label>null：</label>-->
+                        <!--                                <input type="text" name="managerName"/>-->
+                        <!--                            </li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:asset:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:asset:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:asset:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:asset:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:asset:remove')}]];
+    var prefix = ctx + "system/asset";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail/{id}",
+            modalName: "资产管理",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'assetId',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'assetName',
+                    title: '资产名称'
+                },
+                {
+                    field: 'managerId',
+                    title: '负责人ID',
+                    visible: false
+                },
+                {
+                    field: 'managerName',
+                    title: '负责人'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.assetId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.assetId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-default btn-xs" href="javascript:void(0)" onclick="queryAll(\'' + row.assetId + '\')"><i class="fa fa-search"></i>详细</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function queryAll(id) {
+        console.log("id:======" + id);
+        $.modal.openTab("查询界面", prefix + "/queryAll?assetId=" + id);
+    }
+</script>
+</body>
+</html>

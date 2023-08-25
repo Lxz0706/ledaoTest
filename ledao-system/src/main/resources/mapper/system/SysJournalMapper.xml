@@ -22,7 +22,8 @@
         <result property="updateTime" column="update_time"/>
         <result property="deptName" column="dept_name"/>
         <result property="userName" column="user_name"/>
-        <result property="projectName" column="project_Name"/>
+        <result property="projectName" column="project_name"/>
+        <result property="projectType" column="project_type"/>
     </resultMap>
 
     <sql id="selectSysJournalVo">
@@ -40,14 +41,15 @@
                create_time,
                update_by,
                reviser,
-               update_time
+               update_time,
+               project_type
         from sys_journal
     </sql>
 
     <select id="selectSysJournalList" parameterType="SysJournal" resultMap="SysJournalResult">
         SELECT
         a.id,
-        pro.project_name,
+        pro.project_name AS name,
         b.user_name,
         a.dep_id,
         a.pro_id,
@@ -63,12 +65,15 @@
         a.create_time,
         a.update_by,
         a.reviser,
-        a.update_time
+        a.update_time,
+        a.project_type,
+        d.asset_name AS name
         FROM
         sys_journal a
         LEFT JOIN sys_project pro on a.pro_id= pro.project_id
         LEFT JOIN sys_user b ON a.create_by = b.login_name
         LEFT JOIN sys_dept c ON b.dept_id = c.dept_id
+        left join sys_asset d on a.pro_id = d.asset_id
         <where>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and date_format(a.create_time,'%Y%m%d') &gt;= date_format(#{params.beginTime},'%Y%m%d')
@@ -88,7 +93,8 @@
             <if test="depId != null  and depId != ''">and a.dep_id = #{depId}</if>
             <if test="proId != null  and proId != ''">and a.pro_id = #{proId}</if>
             <if test="createBy != null  and createBy != ''">and a.create_by = #{createBy}</if>
-            <if test="workDetail != null  and workDetail != ''">and a.work_detail = #{workDetail}</if>
+            <if test="workDetail != null  and workDetail != ''">and a.work_detail like concat('%', #{workDetail},'%')
+            </if>
             <if test="shared != null  and shared != ''">and a.shared = #{shared}</if>
             <if test="modularOrder != null ">and a.modular_order = #{modularOrder}</if>
             <if test="remarks1 != null  and remarks1 != ''">and a.remarks1 = #{remarks1}</if>

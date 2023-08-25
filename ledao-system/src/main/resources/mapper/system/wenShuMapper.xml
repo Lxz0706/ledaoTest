@@ -36,7 +36,7 @@
             <if test="courtName != null  and courtName != ''">and court_name like concat('%', #{courtName}, '%')</if>
             <if test="courtNo != null  and courtNo != ''">and court_no = #{courtNo}</if>
             <if test="pdfPath !=null and pdfPath !=''">and pdf_path = #{pdfPath}</if>
-            <if test="courtData !=null and courtData !=''">and court_data = #{courtData}</if>
+            <if test="courtData !=null and courtData !=''">and court_data like concat('%', #{courtData},'%') </if>
         </where>
     </select>
 

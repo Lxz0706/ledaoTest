@@ -623,6 +623,8 @@ public class SysZck extends BaseEntity {
 
     private Long parentId;
 
+    private String ids;
+
     public Long getId() {
         return id;
     }
@@ -1519,6 +1521,14 @@ public class SysZck extends BaseEntity {
         this.customerId = customerId;
     }
 
+    public String getIds() {
+        return ids;
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1615,6 +1625,7 @@ public class SysZck extends BaseEntity {
                 .append("parentId", getParentId())
                 .append("zcbStatus", getZcbStatus())
                 .append("gzjy", getGzjy())
+                .append("ids", getIds())
                 .toString();
     }
 }

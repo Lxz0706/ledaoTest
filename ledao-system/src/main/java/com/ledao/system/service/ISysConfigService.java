@@ -90,4 +90,10 @@ public interface ISysConfigService {
      * @return accessToken
      */
     public String getSubscribeAccessToken();
+
+    /***
+     * 获取乐道熊猫小程序token
+     * @return accessToken
+     */
+    public String getLeDaoPanDaAccessToken();
 }

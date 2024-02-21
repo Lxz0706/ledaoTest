@@ -17,5 +17,14 @@
         <module name="ledao-admin" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ledao-activiti" target="1.8" />
+      <module name="ledao-admin" target="1.8" />
+      <module name="ledao-common" target="1.8" />
+      <module name="ledao-framework" target="1.8" />
+      <module name="ledao-generator" target="1.8" />
+      <module name="ledao-quartz" target="1.8" />
+      <module name="ledao-system" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

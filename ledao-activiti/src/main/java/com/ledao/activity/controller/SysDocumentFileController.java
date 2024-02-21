@@ -1,11 +1,19 @@
 package com.ledao.activity.controller;
 
-import java.util.List;
-
 import com.ledao.activity.dao.SysApplyIn;
+import com.ledao.activity.dao.SysDocumentFile;
 import com.ledao.activity.service.ISysApplyInService;
+import com.ledao.activity.service.ISysDocumentFileService;
+import com.ledao.common.annotation.Log;
+import com.ledao.common.core.controller.BaseController;
+import com.ledao.common.core.dao.AjaxResult;
+import com.ledao.common.core.dao.entity.SysRole;
+import com.ledao.common.core.dao.entity.SysUser;
+import com.ledao.common.core.page.TableDataInfo;
+import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.StringUtils;
 import com.ledao.common.utils.file.FileUtils;
+import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -13,36 +21,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.ledao.activity.dao.SysDocumentFile;
-import com.ledao.activity.service.ISysDocumentFileService;
-import com.ledao.common.annotation.Log;
-import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.common.core.page.TableDataInfo;
-import com.ledao.common.enums.BusinessType;
-import com.ledao.common.utils.poi.ExcelUtil;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * 档案Controller
- * 
+ *
  * @author lxz
  * @date 2021-08-04
  */
 @Controller
 @RequestMapping("/documentFile")
-public class SysDocumentFileController extends BaseController
-{
+public class SysDocumentFileController extends BaseController {
     private String prefix = "documentFile";
 
     private static final Logger log = LoggerFactory.getLogger(SysDocumentFileController.class);
@@ -56,10 +48,9 @@ public class SysDocumentFileController extends BaseController
     @Autowired
     private com.ledao.system.service.ISysUserService ISysUserService;
 
-//    @RequiresPermissions("activity:documentFile:view")
+    //    @RequiresPermissions("activity:documentFile:view")
     @GetMapping()
-    public String documentFile()
-    {
+    public String documentFile() {
         return prefix + "/documentFile";
     }
 
@@ -69,17 +60,27 @@ public class SysDocumentFileController extends BaseController
 //    @RequiresPermissions("activity:documentFile:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysDocumentFile sysDocumentFile)
-    {
+    public TableDataInfo list(SysDocumentFile sysDocumentFile) {
         startPage();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser != null) {
+            // 如果是超级管理员，则不过滤数据
+            if (!currentUser.isAdmin()) {
+                List<SysRole> getRoles = currentUser.getRoles();
+                for (SysRole sysRole : getRoles) {
+                    if (!"hrcommon".equals(sysRole.getRoleKey()) && !"hrzz".equals(sysRole.getRoleKey())) {
+                        sysDocumentFile.setDailyDocumentType("0");
+                    }
+                }
+            }
+        }
         List<SysDocumentFile> list = sysDocumentFileService.selectSysDocumentFileDetailList(sysDocumentFile);
         return getDataTable(list);
     }
 
     @PostMapping("/listDocApp")
     @ResponseBody
-    public TableDataInfo listDocApp(SysDocumentFile sysDocumentFile)
-    {
+    public TableDataInfo listDocApp(SysDocumentFile sysDocumentFile) {
         startPage();
         List<SysDocumentFile> list = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
         return getDataTable(list);
@@ -87,8 +88,7 @@ public class SysDocumentFileController extends BaseController
 
     @PostMapping("/listDocApp/{applyId}")
     @ResponseBody
-    public TableDataInfo listDocApp(SysDocumentFile sysDocumentFile,@PathVariable("applyId") Long applyId)
-    {
+    public TableDataInfo listDocApp(SysDocumentFile sysDocumentFile, @PathVariable("applyId") Long applyId) {
         startPage();
         sysDocumentFile.setApplyId(applyId);
         List<SysDocumentFile> list = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
@@ -102,8 +102,7 @@ public class SysDocumentFileController extends BaseController
     @Log(title = "档案", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysDocumentFile sysDocumentFile)
-    {
+    public AjaxResult export(SysDocumentFile sysDocumentFile) {
         List<SysDocumentFile> list = sysDocumentFileService.selectSysDocumentFileList(sysDocumentFile);
         ExcelUtil<SysDocumentFile> util = new ExcelUtil<SysDocumentFile>(SysDocumentFile.class);
         return util.exportExcel(list, "documentFile");
@@ -113,8 +112,7 @@ public class SysDocumentFileController extends BaseController
      * 新增档案
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -165,8 +163,7 @@ public class SysDocumentFileController extends BaseController
      */
     @GetMapping("/edit/{documentId}/{applyTypeUnDone}")
     public String edit(@PathVariable("documentId") Long documentId,
-                       @PathVariable("applyTypeUnDone") String applyTypeUnDone,ModelMap mmap)
-    {
+                       @PathVariable("applyTypeUnDone") String applyTypeUnDone, ModelMap mmap) {
         SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(documentId);
 //        sysDocumentFile.setCreatorName(ISysUserService.selectUserByLoginName(sysDocumentFile.getCreator()).getUserName());
 //        sysDocumentFile.setReviserName(ISysUserService.selectUserByLoginName(sysDocumentFile.getReviser()).getUserName());
@@ -176,8 +173,7 @@ public class SysDocumentFileController extends BaseController
     }
 
     @GetMapping("/edit/{documentId}")
-    public String edit(@PathVariable("documentId") Long documentId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("documentId") Long documentId, ModelMap mmap) {
         SysDocumentFile sysDocumentFile = sysDocumentFileService.selectSysDocumentFileById(documentId);
 //        sysDocumentFile.setCreatorName(ISysUserService.selectUserByLoginName(sysDocumentFile.getCreator()).getUserName());
 //        sysDocumentFile.setReviserName(ISysUserService.selectUserByLoginName(sysDocumentFile.getReviser()).getUserName());
@@ -192,8 +188,7 @@ public class SysDocumentFileController extends BaseController
     @Log(title = "档案", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(SysDocumentFile sysDocumentFile)
-    {
+    public AjaxResult editSave(SysDocumentFile sysDocumentFile) {
         String loginName = ShiroUtils.getLoginName();
         SysDocumentFile f = new SysDocumentFile();
         f.setAssetPag(sysDocumentFile.getAssetPag());
@@ -207,29 +202,29 @@ public class SysDocumentFileController extends BaseController
         f.setFileScanType(sysDocumentFile.getFileScanType());
         f.setApplyId(sysDocumentFile.getApplyId());
         List<SysDocumentFile> ss = sysDocumentFileService.selectSysDocumentFileTotalList(f);
-        if (ss !=null && ss.size()>0){
-            for (SysDocumentFile df:ss) {
-                if (df.getDocumentId().longValue()!=sysDocumentFile.getDocumentId().longValue()){
+        if (ss != null && ss.size() > 0) {
+            for (SysDocumentFile df : ss) {
+                if (df.getDocumentId().longValue() != sysDocumentFile.getDocumentId().longValue()) {
                     return AjaxResult.error("存在重复记录，请检查");
                 }
             }
 
         }
         AjaxResult res = toAjax(sysDocumentFileService.updateSysDocumentFile(sysDocumentFile));
-        SysApplyIn ap =  sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
+        SysApplyIn ap = sysApplyInService.selectSysApplyInById(sysDocumentFile.getApplyId());
         ap.setReviser(ShiroUtils.getLoginName());
         sysApplyInService.updateSysApplyIn(ap);
         return res;
     }
 
     @GetMapping("/showPdfY")
-    public void showPdfY(HttpServletResponse response,String path){
+    public void showPdfY(HttpServletResponse response, String path) {
         try {
             //  本地的pdf文件
 //            String path="D:\\document\\jys-fund\\test1.pdf";
-            FileUtils.showPdf(response,path);
+            FileUtils.showPdf(response, path);
 //            return Response.create().success();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
 //            return Response.create().error(e.getMessage());
@@ -241,10 +236,9 @@ public class SysDocumentFileController extends BaseController
      */
     @RequiresPermissions("activity:documentFile:remove")
     @Log(title = "档案", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         logger.info("开始进行档案删除操作");
         return toAjax(sysDocumentFileService.deleteSysDocumentFileByIds(ids));
     }

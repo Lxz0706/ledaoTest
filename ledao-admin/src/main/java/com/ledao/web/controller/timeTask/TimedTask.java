@@ -8,6 +8,7 @@ import com.ledao.activity.dao.SysWorkflowProcess;
 import com.ledao.activity.mapper.SysApplyWorkflowMapper;
 import com.ledao.activity.mapper.SysWorkflowProcessMapper;
 import com.ledao.activity.service.ISysApplyInService;
+import com.ledao.activity.service.ISysApplyWorkflowService;
 import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.common.core.dao.entity.SysUser;
 import com.ledao.common.message.WechatMessageUtil;
@@ -28,6 +29,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.*;
 
 @Component("timedTask")
@@ -118,6 +120,12 @@ public class TimedTask {
 
     @Autowired
     private ISysHolidayService sysHolidayService;
+
+    @Autowired
+    private ISysApplyWorkflowService sysApplyWorkflowService;
+
+    @Autowired
+    private ISysReservationDateService sysReservationDateService;
 
     public void timeTask() throws ParseException {
         //应收应付未收服务费消息提醒
@@ -1342,6 +1350,58 @@ public class TimedTask {
         }
     }
 
+    public void getHolidayAndTAndFr() {
+
+        List<String> list = new ArrayList<>();
+        //今年节假日和非周四周五日期
+        Set<String> set = DateUtils.JJRForThAndFri(DateUtils.parseDateToStr("yyyy", new Date()), "");
+
+        //明年节假日和非周四周五日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 1);
+        int nextYear = calendar.get(Calendar.YEAR);
+        Set<String> set1 = DateUtils.JJRForThAndFri(String.valueOf(nextYear), "");
+        Iterator it = set.iterator();
+        sysReservationDateService.deleteSysReservationDate();
+        while (it.hasNext()) {
+            list.add((String) it.next());
+        }
+        Iterator it1 = set1.iterator();
+        while (it1.hasNext()) {
+            list.add((String) it1.next());
+        }
+        for (String str : sortDate(list)) {
+            SysReservationDate sysReservationDate = new SysReservationDate();
+            sysReservationDate.setReservationDate(str);
+            sysReservationDateService.insertSysReservationDate(sysReservationDate);
+        }
+    }
+
+    /**
+     * 日期排序
+     *
+     * @param list
+     * @return
+     */
+    public static List<String> sortDate(List<String> list) {
+        List<String> newSortDate = new ArrayList<>();
+        Collections.sort(list, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                //字符串分割可使用正则表达式，需要加[]，支持2020-01-19和2020/01/19两种日期格式
+                String[] split1 = o1.split("[-｜/]");
+                String[] split2 = o2.split("[-｜/]");
+                for (int i = 0; i < split1.length; i++) {
+                    if (Integer.parseInt(split1[i]) != Integer.parseInt(split2[i])) {
+                        return Integer.parseInt(split1[i]) - Integer.parseInt(split2[i]);
+                    }
+                }
+                return 0;
+            }
+        });
+        newSortDate = list;
+        return newSortDate;
+    }
 
     /***
      * 日志填写时间每日更新
@@ -1356,6 +1416,43 @@ public class TimedTask {
         for (SysConfig sysConfig1 : sysConfigList) {
             sysConfig1.setConfigValue(value);
             sysConfigService.updateConfig(sysConfig1);
+        }
+    }
+
+    /**
+     * 档案库未审批流程提醒
+     */
+    public void sendMsgForApplyIn() {
+        SysApplyIn sysApplyIn = new SysApplyIn();
+        sysApplyIn.setApproveStatu("5");
+        List<SysApplyIn> sysApplyInList = sysApplyInService.selectSysApplyInList(sysApplyIn);
+        LocalTime startTime = LocalTime.of(8, 30);
+        LocalTime endTime = LocalTime.of(17, 30);
+        LocalTime currentTime = LocalTime.now();
+        for (SysApplyIn sysApplyIn1 : sysApplyInList) {
+            if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                int day = DateUtils.differentDays(sysApplyIn1.getApplyTime(), new Date());
+                if (day >= 3) {
+                    String appName = "";
+                    if ("0".equals(sysApplyIn1.getApplyType())) {
+                        appName = "入库申请";
+                    } else {
+                        appName = "出库申请";
+                    }
+                    SysUser us = userMapper.selectUserByLoginName(sysApplyIn1.getApproveUser());
+                    if (us != null && StringUtils.isNotEmpty(us.getComOpenId())) {
+                        JSONObject parm = new JSONObject();
+                        parm.put("toUser", us.getComOpenId());
+                        parm.put("thing2", userMapper.selectUserByLoginName(sysApplyIn1.getApplyUser()).getUserName() + "提交的" + appName);
+                        parm.put("thing4", us.getUserName());
+                        parm.put("time3", DateUtils.parseDateToStr("yyyy-MM-dd HH:mm:ss", new Date()));
+                        parm.put("pagepath", "pages/workFlow/index?current=2");
+                        String accessToken = configService.getWechatComAccessToken();
+                        parm.put("accessToken", accessToken);
+                        sysApplyWorkflowService.sendLittleMsg(parm, "sendMsgForApplyIn");
+                    }
+                }
+            }
         }
     }
 

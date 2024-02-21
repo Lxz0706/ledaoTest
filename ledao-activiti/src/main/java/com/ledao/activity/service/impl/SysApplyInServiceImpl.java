@@ -706,7 +706,7 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
                 parm.put("word5", thing14);
                 String accessToken = configService.getWechatComAccessToken();
                 parm.put("accessToken", accessToken);
-                iSysApplyWorkflowService.sendLittleMsg(parm);
+                iSysApplyWorkflowService.sendLittleMsg(parm,"zyQueueCommon");
             }
         }
     }
@@ -1013,14 +1013,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
         //投资部---资产包 2
         String[] tzbList = getRoleList("tzbRole");
         List<String> tzbs = Arrays.asList(tzbList);
-//        String[] stbList = new String[]{"thbManager", "thbManager2", "thbzz", "thbCommon", "financeManager"};
-//        List<String> stbs = Arrays.asList(stbList);
-//        //并购重组---大型单体 1
-//        String[] dxdtList = new String[]{"bgczCommon", "bgczManager"};
-//        List<String> dxdts = Arrays.asList(dxdtList);
-//        //投资部---资产包 2
-//        String[] tzbList = new String[]{"investmentCommon", "investmentManager", "investmentManager2", "tzbzz"};
-//        List<String> tzbs = Arrays.asList(tzbList);
         List<SysRole> rs = u.getRoles();
 
         for (SysRole r : rs) {
@@ -1031,13 +1023,6 @@ public class SysApplyInServiceImpl implements ISysApplyInService {
             } else if (StringUtils.inStringIgnoreCase(r.getRoleKey(),tzbList)) {
                 return "inve";
             }
-//            if (stbs.contains(r.getRoleKey())) {
-//                return "thb";
-//            } else if (dxdts.contains(r.getRoleKey())) {
-//                return "bg";
-//            } else if (tzbs.contains(r.getRoleKey())) {
-//                return "inve";
-//            }
         }
         return null;
     }

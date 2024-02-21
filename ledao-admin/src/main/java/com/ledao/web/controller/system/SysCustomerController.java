@@ -248,7 +248,7 @@ public class SysCustomerController<main> extends BaseController {
             sysCustomer.setWeChatNumber(sysCustomer.getWeChatNumber().replace(",", "/"));
         }
         SysUser sysUser = sysUserService.selectUserByLoginName(sysCustomer.getCreateBy());
-        sysCustomer.setDeptId(sysUser.getDept().getParentId());
+        sysCustomer.setDeptId(sysUser.getDept().getDeptId());
 
         sysCustomer.setAgentId(ShiroUtils.getLoginName());
         sysCustomer.setAgent(ShiroUtils.getSysUser().getUserName());

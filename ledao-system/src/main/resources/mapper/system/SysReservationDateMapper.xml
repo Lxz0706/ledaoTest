@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysReservationDateMapper">
+    
+    <resultMap type="SysReservationDate" id="SysReservationDateResult">
+        <result property="reservationDateId"    column="reservation_date_id"    />
+        <result property="reservationDate"    column="reservation_date"    />
+    </resultMap>
+
+    <sql id="selectSysReservationDateVo">
+        select reservation_date_id, reservation_date from sys_reservation_date
+    </sql>
+
+    <select id="selectSysReservationDateList" parameterType="SysReservationDate" resultMap="SysReservationDateResult">
+        <include refid="selectSysReservationDateVo"/>
+        <where>  
+            <if test="reservationDate != null  and reservationDate != ''"> and reservation_date = #{reservationDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysReservationDateById" parameterType="Long" resultMap="SysReservationDateResult">
+        <include refid="selectSysReservationDateVo"/>
+        where reservation_date_id = #{reservationDateId}
+    </select>
+        
+    <insert id="insertSysReservationDate" parameterType="SysReservationDate" useGeneratedKeys="true" keyProperty="reservationDateId">
+        insert into sys_reservation_date
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reservationDate != null">reservation_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reservationDate != null">#{reservationDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysReservationDate" parameterType="SysReservationDate">
+        update sys_reservation_date
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reservationDate != null">reservation_date = #{reservationDate},</if>
+        </trim>
+        where reservation_date_id = #{reservationDateId}
+    </update>
+
+    <delete id="deleteSysReservationDateById" parameterType="Long">
+        delete from sys_reservation_date where reservation_date_id = #{reservationDateId}
+    </delete>
+
+    <delete id="deleteSysReservationDateByIds" parameterType="String">
+        delete from sys_reservation_date where reservation_date_id in 
+        <foreach item="reservationDateId" collection="array" open="(" separator="," close=")">
+            #{reservationDateId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysReservationDate">
+        delete
+        from sys_reservation_date
+    </delete>
+
+</mapper>

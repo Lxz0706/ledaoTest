@@ -287,4 +287,40 @@ public class SysConfigServiceImpl implements ISysConfigService {
         return accessToken;
     }
 
+    /***
+     * 获取乐道熊猫小程序token
+     * @return
+     */
+    @Override
+    public String getLeDaoPanDaAccessToken() {
+        String accessToken = "";
+        try {
+            SysConfig config = new SysConfig();
+            config.setConfigKey("leDaoPanDaAccessToken");
+            List<SysConfig> confs = configMapper.selectConfigList(config);
+            boolean needSave = false;
+            if (confs != null && confs.size() > 0) {
+                if (((DateUtils.getNowDate().getTime() - confs.get(0).getCreateTime().getTime()) / 1000 / 60 < 60) && StringUtils.isNotEmpty(confs.get(0).getConfigValue())) {
+                    accessToken = confs.get(0).getConfigValue();
+                } else {
+                    needSave = true;
+                    for (SysConfig conf : confs) {
+                        configMapper.deleteConfigByIds(new String[]{conf.getConfigId().toString()});
+                    }
+                }
+            } else {
+                needSave = true;
+            }
+            if (needSave) {
+                accessToken = WxQrCode.getAccessToken(WeChatConstants.LDPANDAAPPID, WeChatConstants.LDPANDASECRET);
+                config.setConfigValue(accessToken);
+                System.out.println("获取的leDaoPanDaAccessToken：" + accessToken);
+                configMapper.insertConfig(config);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accessToken;
+    }
+
 }

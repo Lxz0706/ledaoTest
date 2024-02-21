@@ -23,11 +23,20 @@
     </sql>
 
     <select id="selectZcbListUseful" parameterType="SysZcb" resultMap="SysZcbResult">
-        <include refid="selectSysZcbVo"/> where 	del_flag = '0'
-        AND asset_status != ''
-        <if test="assetPackageName != null  and assetPackageName != ''">and asset_package_name like concat('%',
-            #{assetPackageName}, '%') </if>
-        <if test="assetStatus != null  and assetStatus != ''">and asset_status = #{assetStatus}</if>
+        SELECT id, asset_package_name,asset_status,'tz' as projectType FROM sys_zcb t2 WHERE
+        t2.del_flag='0' AND t2.asset_status != ''
+        <if test="assetPackageName != null  and assetPackageName != ''">and t2.asset_package_name like concat('%',
+            #{assetPackageName}, '%')
+        </if>
+        <if test="assetStatus != null  and assetStatus != ''">and t2.asset_status = #{assetStatus}</if>
+        UNION ALL
+        SELECT id, project_name as asset_package_name,project_status as asset_status,'bg' as projectType FROM sys_bgczzck t1 WHERE t1.del_flag ='0' AND t1.project_status != ''
+        <if test="assetPackageName != null  and assetPackageName != ''">and t1.project_name like concat('%',
+            #{assetPackageName},'%')
+        </if>
+        <if test="assetStatus != null  and assetStatus != ''">and t1.project_status like
+            concat('%',#{assetStatus},'%')
+        </if>
     </select>
 
     <select id="selectSysZcbListNoLike" parameterType="SysZcb" resultMap="SysZcbResult">

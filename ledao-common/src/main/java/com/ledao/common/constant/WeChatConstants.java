@@ -11,14 +11,6 @@ public class WeChatConstants {
     //https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/template-message/templateMessage.send.html
 
     /**
-     * 点击详情跳转的页面
-     */
-    public static final String WECHATIINDEX = "pages/index/index";//维修主管派给维修工和老师时的id
-    /**
-     * 使用的推送消息的模板id
-     */
-    public static final String WECHATCUMPLATEIDTOTEACHER = "Bq-HDA3NwYRrvRkHvuInOemuN2AAaU9t_ua_UfEu_AQ";
-    /**
      * 微信appid
      */
     public static final String WXAPPID = "wx9356d3274f830bf6";
@@ -69,5 +61,19 @@ public class WeChatConstants {
      * 破产类消息提醒
      */
     public static final String WXMSGTASK_BANKRUPTCY_PUSH = "52LhrTId4O-m7bvR-068SK4zLlqVdoJk2-vMiy-tWdA";
+
+    /**
+     * 流程超时提醒模板ID
+     */
+    public static final String WXMSGPROCESS_Timeout = "7B-Vy80hWEh1nBwnBCZ5VnSJ_qIJHezt3ZR3UHFNm7E";
+
+    /**
+     * 乐道熊猫小程序appid
+     */
+    public static final String LDPANDAAPPID = "wx2013e13c53e46afc";
+    /**
+     * 乐道熊猫小程序secret
+     */
+    public static final String LDPANDASECRET = "1553bd71be6a600d7d99a0962dbbee69";
 
 }

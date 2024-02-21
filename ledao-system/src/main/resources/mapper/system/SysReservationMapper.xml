@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysReservationMapper">
+
+    <resultMap type="SysReservation" id="SysReservationResult">
+        <result property="reservationId" column="reservation_id"/>
+        <result property="buyerName" column="buyer_name"/>
+        <result property="reservationTime" column="reservation_time"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="buyerIdCard" column="buyer_id_card"/>
+        <result property="buyerPhone" column="buyer_phone"/>
+        <result property="roomNumber" column="room_number"/>
+        <result property="createUserId" column="create_user_id"/>
+    </resultMap>
+
+    <sql id="selectSysReservationVo">
+        select reservation_id,
+               buyer_name,
+               reservation_time,
+               user_id,
+               create_time,
+               update_time,
+               buyer_id_card,
+               buyer_phone,
+               room_number,
+               create_user_id
+        from sys_reservation
+    </sql>
+
+    <select id="selectSysReservationList" parameterType="SysReservation" resultMap="SysReservationResult">
+        <include refid="selectSysReservationVo"/>
+        <where>
+            <if test="buyerName != null  and buyerName != ''">and buyer_name like concat('%', #{buyerName}, '%')</if>
+            <if test="reservationTime != null ">and reservation_time = #{reservationTime}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="buyerIdCard != null  and buyerIdCard != ''">and buyer_id_card = #{buyerIdCard}</if>
+            <if test="buyerPhone != null  and buyerPhone != ''">and buyer_phone = #{buyerPhone}</if>
+            <if test="roomNumber != null  and roomNumber != ''">and room_number = #{roomNumber}</if>
+            <if test="createUserId != null">and create_user_id = #{createUserId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysReservationById" parameterType="Long" resultMap="SysReservationResult">
+        <include refid="selectSysReservationVo"/>
+        where reservation_id = #{reservationId}
+    </select>
+
+    <insert id="insertSysReservation" parameterType="SysReservation" useGeneratedKeys="true"
+            keyProperty="reservationId">
+        insert into sys_reservation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="buyerName != null">buyer_name,</if>
+            <if test="reservationTime != null">reservation_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="buyerIdCard != null">buyer_id_card,</if>
+            <if test="buyerPhone != null">buyer_phone,</if>
+            <if test="roomNumber != null">room_number,</if>
+            <if test="createUserId != null">create_user_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="buyerName != null">#{buyerName},</if>
+            <if test="reservationTime != null">#{reservationTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="buyerIdCard != null">#{buyerIdCard},</if>
+            <if test="buyerPhone != null">#{buyerPhone},</if>
+            <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="createUserId != null">#{createUserId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysReservation" parameterType="SysReservation">
+        update sys_reservation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="buyerName != null">buyer_name = #{buyerName},</if>
+            <if test="reservationTime != null">reservation_time = #{reservationTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="buyerIdCard != null">buyer_id_card = #{buyerIdCard},</if>
+            <if test="buyerPhone != null">buyer_phone = #{buyerPhone},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="createUserId != null">create_user_id = #{createUserId},</if>
+        </trim>
+        where reservation_id = #{reservationId}
+    </update>
+
+    <delete id="deleteSysReservationById" parameterType="Long">
+        delete
+        from sys_reservation
+        where reservation_id = #{reservationId}
+    </delete>
+
+    <delete id="deleteSysReservationByIds" parameterType="String">
+        delete from sys_reservation where reservation_id in
+        <foreach item="reservationId" collection="array" open="(" separator="," close=")">
+            #{reservationId}
+        </foreach>
+    </delete>
+
+</mapper>

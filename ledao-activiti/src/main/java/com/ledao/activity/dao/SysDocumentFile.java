@@ -1,16 +1,15 @@
 package com.ledao.activity.dao;
 
-import java.util.List;
-
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.HeadFontStyle;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
+import com.ledao.common.core.dao.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.ledao.common.core.dao.BaseEntity;
+import java.util.List;
 
 /**
  * 档案对象 sys_document_file
@@ -261,6 +260,8 @@ public class SysDocumentFile extends BaseEntity {
      */
     private List<SysFileDetail> fileDetails;
 
+    private String documentTypes;
+
 
     public String getDailyDocumentType() {
         return dailyDocumentType;
@@ -510,6 +511,14 @@ public class SysDocumentFile extends BaseEntity {
         this.applyInIds = applyInIds;
     }
 
+    public String getDocumentTypes() {
+        return documentTypes;
+    }
+
+    public void setDocumentTypes(String documentTypes) {
+        this.documentTypes = documentTypes;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -543,6 +552,7 @@ public class SysDocumentFile extends BaseEntity {
                 .append("dailyDocumentTypeContract", getDailyDocumentTypeContract())
                 .append("applyUserName", getApplyUserName())
                 .append("applyInIds", getApplyInIds())
+                .append("documentTypes", getDocumentTypes())
                 .toString();
     }
 

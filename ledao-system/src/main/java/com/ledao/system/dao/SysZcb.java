@@ -62,6 +62,16 @@ public class SysZcb extends BaseEntity {
      * 客户名称
      */
     private String customer;
+    @Excel(name = "项目名称")
+    private String projectName;
+
+    /**
+     * 项目状态
+     */
+    @Excel(name = "项目状态")
+    private String projectStatus;
+
+    private String projectType;
 
     public Long getId() {
         return id;
@@ -143,6 +153,31 @@ public class SysZcb extends BaseEntity {
         this.customer = customer;
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectStatus() {
+        return projectStatus;
+    }
+
+    public void setProjectStatus(String projectStatus) {
+        this.projectStatus = projectStatus;
+    }
+
+
+    public String getProjectType() {
+        return projectType;
+    }
+
+    public void setProjectType(String projectType) {
+        this.projectType = projectType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -155,6 +190,9 @@ public class SysZcb extends BaseEntity {
                 .append("evaluationTime", getEvaluationTime())
                 .append("collateralTotal", getCollateralTotal())
                 .append("capValue", getCapValue())
+                .append("projectName", getProjectName())
+                .append("projectStatus", getProjectStatus())
+                .append("projectType", getProjectType())
                 .toString();
     }
 }

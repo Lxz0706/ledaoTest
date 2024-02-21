@@ -325,6 +325,7 @@
         <if test="companyName != null  and companyName != ''">and app.company_name = #{companyName}</if>
         <if test="debtorName != null  and debtorName != ''">and app.debtor_name regexp #{debtorName}</if>
         <if test="projectName != null  and projectName != ''">and app.project_name = #{projectName}</if>
+        <if test="documentTypes != null  and documentTypes != ''">and file.document_type != #{documentTypes}</if>
         order by file.create_time desc
     </select>
 

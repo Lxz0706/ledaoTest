@@ -1,12 +1,12 @@
 package com.ledao.system.dao;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.ledao.common.annotation.Excel;
 import com.ledao.common.core.dao.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 重组并购项目信息库对象 sys_bgczzck
@@ -91,6 +91,8 @@ public class SysBgczzck extends BaseEntity {
     private BigDecimal principalInterestBalance;
 
     private String principalInterestBalances;
+
+    private String projectType;
 
     /**
      * 本息计算基准日
@@ -469,6 +471,13 @@ public class SysBgczzck extends BaseEntity {
      * 司法情况
      */
     private Long lawSize;
+
+    private String assetPackageName;
+
+    /**
+     * 资产包状态
+     */
+    private String assetStatus;
 
     public Long getId() {
         return id;
@@ -1143,6 +1152,30 @@ public class SysBgczzck extends BaseEntity {
         this.lawSize = lawSize;
     }
 
+    public String getAssetPackageName() {
+        return assetPackageName;
+    }
+
+    public void setAssetPackageName(String assetPackageName) {
+        this.assetPackageName = assetPackageName;
+    }
+
+    public String getAssetStatus() {
+        return assetStatus;
+    }
+
+    public void setAssetStatus(String assetStatus) {
+        this.assetStatus = assetStatus;
+    }
+
+    public String getProjectType() {
+        return projectType;
+    }
+
+    public void setProjectType(String projectType) {
+        this.projectType = projectType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -1216,6 +1249,9 @@ public class SysBgczzck extends BaseEntity {
                 .append("customer", getCustomer())
                 .append("customerId", getCustomerId())
                 .append("isFile", getIsFile())
+                .append("assetPackageName", getAssetPackageName())
+                .append("assetStatus", getAssetStatus())
+                .append("projectType",getProjectType())
                 .toString();
     }
 }

@@ -493,49 +493,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
-     * 根据日期判断是星期几
-     *
-     * @param dt
-     * @return
-     */
-    public static String getWeekOfDate(Date dt) {
-        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dt);
-        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0) {
-            w = 0;
-        }
-        return weekDays[w];
-    }
-
-    /**
-     * 判断该日期是否是该月的最后一天
-     *
-     * @param date 需要判断的日期
-     * @return
-     */
-    public static boolean isLastDayOfMonth(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar.get(Calendar.DAY_OF_MONTH) == calendar
-                .getActualMaximum(Calendar.DAY_OF_MONTH);
-    }
-
-    /**
-     * 获取未来 第 past 天的日期
-     *
-     * @param past
-     * @return
-     */
-    public static Date getFetureDate(int past) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + past);
-        Date today = calendar.getTime();
-        return today;
-    }
-
-    /**
      * 判断date2是否在date1后面
      *
      * @param date1
@@ -590,6 +547,115 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return JSONObject.parseObject(rspStr, Map.class);
     }
 
+
+    public static Set<String> JJRForThAndFri(String year, String month) {
+        Set<String> monthWekDay = new HashSet<>();
+        Map jjr = new HashMap<>();
+        if (StringUtils.isNotEmpty(month)) {
+            monthWekDay = getWeekendInMonthForThAndFri(year, month);
+            jjr = getJjr(year, month);
+        } else {
+            monthWekDay = getWeekdaysInYearForThAndFri(year);
+            jjr = getJjr(year, "");
+        }
+        Integer code = (Integer) jjr.get("code");
+        if (code != 0) {
+            return monthWekDay;
+        }
+        Map<String, Map<String, Object>> holiday = (Map<String, Map<String, Object>>) jjr.get("holiday");
+        Set<String> strings = holiday.keySet();
+        for (String str : strings) {
+            Map<String, Object> stringObjectMap = holiday.get(str);
+            Integer wage = (Integer) stringObjectMap.get("wage");
+            String date = (String) stringObjectMap.get("date");
+            //筛选掉补班
+            if (wage.equals(1)) {
+                monthWekDay.remove(date);
+            } else {
+                monthWekDay.add(date);
+            }
+        }
+        return monthWekDay;
+    }
+
+    /***
+     * 获取全年的非周四周五日期
+     * @param year
+     * @return
+     */
+    public static Set<String> getWeekdaysInYearForThAndFri(String year) {
+        Set<String> dateList = new HashSet<String>();
+        SimpleDateFormat simdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = new GregorianCalendar(Integer.valueOf(year), 0, 1);
+        int i = 1;
+        while (calendar.get(Calendar.YEAR) < Integer.valueOf(year) + 1) {
+            calendar.set(Calendar.WEEK_OF_YEAR, i++);
+            //周末
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            if (calendar.get(Calendar.YEAR) == Integer.valueOf(year)) {
+                dateList.add(simdf.format(calendar.getTime()));
+            }
+            //周一
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            if (calendar.get(Calendar.YEAR) == Integer.valueOf(year)) {
+                dateList.add(simdf.format(calendar.getTime()));
+            }
+            //周二
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+            if (calendar.get(Calendar.YEAR) == Integer.valueOf(year)) {
+                dateList.add(simdf.format(calendar.getTime()));
+            }
+            //周三
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+            if (calendar.get(Calendar.YEAR) == Integer.valueOf(year)) {
+                dateList.add(simdf.format(calendar.getTime()));
+            }
+            //周六
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+            if (calendar.get(Calendar.YEAR) == Integer.valueOf(year)) {
+                dateList.add(simdf.format(calendar.getTime()));
+            }
+        }
+        return dateList;
+    }
+
+    /**
+     * 获取当月的所有周末
+     *
+     * @param year
+     * @param month
+     * @return
+     */
+
+    public static Set<String> getWeekendInMonthForThAndFri(String year, String month) {
+        Set<String> dateList = new HashSet<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, Integer.valueOf(year));
+        calendar.set(Calendar.MONTH, Integer.valueOf(month) - 1);
+        // 设置为当月第一天
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        // 当月最大天数
+        int daySize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for (int i = 0; i < daySize - 1; i++) {
+            String days = "";
+            //在第一天的基础上加1
+            calendar.add(Calendar.DATE, 1);
+            int week = calendar.get(Calendar.DAY_OF_WEEK);
+            // 1代表周日，7代表周六 判断这是一个星期的第几天从而判断是否是周末
+            if (week == Calendar.SATURDAY || week == Calendar.SUNDAY || week == Calendar.MONDAY || week == Calendar.TUESDAY || week == Calendar.WEDNESDAY) {
+                int ct = calendar.get(Calendar.DAY_OF_MONTH);
+                if (ct < 10) {
+                    days = "0" + ct;
+                } else {
+                    days = String.valueOf(ct);
+                }
+                // 得到当天是一个月的第几天
+                dateList.add(year + "-" + month + "-" + days);
+            }
+        }
+        return dateList;
+    }
+
     /**
      * 获取当月的所有周末
      *
@@ -627,10 +693,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return dateList;
     }
 
-    public static void main(String[] args) {
-        System.out.println("=========" + JJR("2023", ""));
-    }
-
     /**
      * 计算两个时间之间的每一天
      *
@@ -660,68 +722,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             daysStrList.add(dayStr);
         }
         return daysStrList;
-    }
-
-    /**
-     * 前/后?分钟
-     *
-     * @param d
-     * @param minute
-     * @return
-     */
-    public static Date rollMinute(Date d, int minute) {
-        return new Date(d.getTime() + minute * 60 * 1000);
-    }
-
-    /**
-     * 前/后?天
-     *
-     * @param d
-     * @param day
-     * @return
-     */
-    public static Date rollDay(Date d, int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        cal.add(Calendar.DAY_OF_MONTH, day);
-        return cal.getTime();
-    }
-
-    /**
-     * 前/后?月
-     *
-     * @param d
-     * @param mon
-     * @return
-     */
-    public static Date rollMon(Date d, int mon) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        cal.add(Calendar.MONTH, mon);
-        return cal.getTime();
-    }
-
-    /**
-     * 前/后?年
-     *
-     * @param d
-     * @param year
-     * @return
-     */
-    public static Date rollYear(Date d, int year) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        cal.add(Calendar.YEAR, year);
-        return cal.getTime();
-    }
-
-    public static Date rollDate(Date d, int year, int mon, int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        cal.add(Calendar.YEAR, year);
-        cal.add(Calendar.MONTH, mon);
-        cal.add(Calendar.DAY_OF_MONTH, day);
-        return cal.getTime();
     }
 
     /**
@@ -776,5 +776,23 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         } else {
             return false;
         }
+    }
+
+    public static List<Date> getDatesBetween(String startDate, String endDate) {
+        List<Date> dates = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        System.out.println(parseDate(startDate.trim()) + "======");
+        calendar.setTime(parseDate(startDate.trim()));
+
+        while (!calendar.getTime().after(parseDate(endDate.trim()))) {
+            Date currentDate = calendar.getTime();
+            dates.add(currentDate);
+            calendar.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(parseDate("2023-11-29"));
     }
 }

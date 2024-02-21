@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysBuyerMapper">
+
+    <resultMap type="SysBuyer" id="SysBuyerResult">
+        <result property="buyerId" column="buyer_id"/>
+        <result property="roomNumber" column="room_number"/>
+        <result property="buyerName" column="buyer_name"/>
+        <result property="buyerCard" column="buyer_card"/>
+        <result property="buyerPhoneNumer" column="buyer_phone_numer"/>
+        <result property="buyerAddress" column="buyer_address"/>
+    </resultMap>
+
+    <sql id="selectSysBuyerVo">
+        select buyer_id, room_number, buyer_name, buyer_card, buyer_phone_numer, buyer_address
+        from sys_buyer
+    </sql>
+
+    <select id="selectSysBuyerList" parameterType="SysBuyer" resultMap="SysBuyerResult">
+        <include refid="selectSysBuyerVo"/>
+        <where>
+            <if test="roomNumber != null  and roomNumber != ''">and room_number = #{roomNumber}</if>
+            <if test="buyerName != null  and buyerName != ''">and buyer_name like concat('%', #{buyerName}, '%')</if>
+            <if test="buyerCard != null  and buyerCard != ''">and buyer_card like concat('%', #{buyerCard}, '%')</if>
+            <if test="buyerPhoneNumer != null  and buyerPhoneNumer != ''">and buyer_phone_numer like concat('%',
+                #{buyerPhoneNumer}, '%')
+            </if>
+            <if test="buyerAddress != null  and buyerAddress != ''">and buyer_address like concat('%', #{buyerAddress},
+                '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSysBuyerById" parameterType="Long" resultMap="SysBuyerResult">
+        <include refid="selectSysBuyerVo"/>
+        where buyer_id = #{buyerId}
+    </select>
+
+    <insert id="insertSysBuyer" parameterType="SysBuyer" useGeneratedKeys="true" keyProperty="buyerId">
+        insert into sys_buyer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomNumber != null">room_number,</if>
+            <if test="buyerName != null">buyer_name,</if>
+            <if test="buyerCard != null">buyer_card,</if>
+            <if test="buyerPhoneNumer != null">buyer_phone_numer,</if>
+            <if test="buyerAddress != null">buyer_address,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="buyerName != null">#{buyerName},</if>
+            <if test="buyerCard != null">#{buyerCard},</if>
+            <if test="buyerPhoneNumer != null">#{buyerPhoneNumer},</if>
+            <if test="buyerAddress != null">#{buyerAddress},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysBuyer" parameterType="SysBuyer">
+        update sys_buyer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="buyerName != null">buyer_name = #{buyerName},</if>
+            <if test="buyerCard != null">buyer_card = #{buyerCard},</if>
+            <if test="buyerPhoneNumer != null">buyer_phone_numer = #{buyerPhoneNumer},</if>
+            <if test="buyerAddress != null">buyer_address = #{buyerAddress},</if>
+        </trim>
+        where buyer_id = #{buyerId}
+    </update>
+
+    <delete id="deleteSysBuyerById" parameterType="Long">
+        delete
+        from sys_buyer
+        where buyer_id = #{buyerId}
+    </delete>
+
+    <delete id="deleteSysBuyerByIds" parameterType="String">
+        delete from sys_buyer where buyer_id in
+        <foreach item="buyerId" collection="array" open="(" separator="," close=")">
+            #{buyerId}
+        </foreach>
+    </delete>
+
+</mapper>

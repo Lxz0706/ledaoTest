@@ -108,12 +108,18 @@
     </select>
 
     <select id="selectSysBgczzckListUseful" parameterType="SysBgczzck" resultMap="SysBgczzckResult">
-        <include refid="selectSysBgczzckVo"/> where del_flag = '0'
-        AND project_status != ''
-        <if test="projectName != null  and projectName != ''">and project_name like concat('%',
+        SELECT id, asset_package_name as project_name,asset_status as project_status,'tz' as projectType FROM sys_zcb t2 WHERE
+        t2.del_flag='0' AND t2.asset_status != ''
+        <if test="projectName != null  and projectName != ''">and t2.asset_package_name like concat('%',
+            #{projectName}, '%')
+        </if>
+        <if test="projectStatus != null  and projectStatus != ''">and t2.asset_status = #{projectStatus}</if>
+        UNION ALL
+        SELECT id, project_name,project_status,'bg' as projectType FROM sys_bgczzck t1 WHERE t1.del_flag ='0' AND t1.project_status != ''
+        <if test="projectName != null  and projectName != ''">and t1.project_name like concat('%',
             #{projectName},'%')
         </if>
-        <if test="projectStatus != null  and projectStatus != ''">and project_status like
+        <if test="projectStatus != null  and projectStatus != ''">and t1.project_status like
             concat('%',#{projectStatus},'%')
         </if>
     </select>

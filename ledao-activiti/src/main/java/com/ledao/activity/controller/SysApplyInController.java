@@ -765,8 +765,8 @@ public class SysApplyInController extends BaseController {
                 if (StringUtils.isNull(sysDocumentFile.getCounts())) {
                     sysDocumentFile.setCounts(Long.valueOf(0));
                 }
-                if (StringUtils.isNull(sysApplyOutDetail1.getCounts())) {
-                    sysApplyOutDetail1.setCounts(Long.valueOf(0));
+                if (StringUtils.isNull(sysApplyOutDetail.getCounts())) {
+                    sysApplyOutDetail.setCounts(Long.valueOf(0));
                 }
 
                 if (StringUtils.isNull(sysDocumentFile.getPages())) {

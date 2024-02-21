@@ -11,15 +11,14 @@ import com.ledao.common.core.dao.entity.SysUser;
 
 /**
  * 档案出入库审批流程Service接口
- * 
+ *
  * @author lxz
  * @date 2021-08-04
  */
-public interface ISysApplyWorkflowService 
-{
+public interface ISysApplyWorkflowService {
     /**
      * 查询档案出入库审批流程
-     * 
+     *
      * @param workflowId 档案出入库审批流程ID
      * @return 档案出入库审批流程
      */
@@ -27,7 +26,7 @@ public interface ISysApplyWorkflowService
 
     /**
      * 查询档案出入库审批流程列表
-     * 
+     *
      * @param sysApplyWorkflow 档案出入库审批流程
      * @return 档案出入库审批流程集合
      */
@@ -35,7 +34,7 @@ public interface ISysApplyWorkflowService
 
     /**
      * 新增档案出入库审批流程
-     * 
+     *
      * @param sysApplyWorkflow 档案出入库审批流程
      * @return 结果
      */
@@ -43,7 +42,7 @@ public interface ISysApplyWorkflowService
 
     /**
      * 修改档案出入库审批流程
-     * 
+     *
      * @param sysApplyWorkflow 档案出入库审批流程
      * @return 结果
      */
@@ -51,7 +50,7 @@ public interface ISysApplyWorkflowService
 
     /**
      * 批量删除档案出入库审批流程
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -59,20 +58,21 @@ public interface ISysApplyWorkflowService
 
     /**
      * 删除档案出入库审批流程信息
-     * 
+     *
      * @param workflowId 档案出入库审批流程ID
      * @return 结果
      */
     public int deleteSysApplyWorkflowById(Long workflowId);
-    
+
     /**
      * 根据applyId获取审批流程
+     *
      * @param sysApplyIn
      * @return
      */
-	public List<SysApplyWorkflow> selectSysApplyWorkflowList(SysApplyIn sysApplyIn);
+    public List<SysApplyWorkflow> selectSysApplyWorkflowList(SysApplyIn sysApplyIn);
 
-	public AjaxResult sendLittleMsg(JSONObject parm);
+    public AjaxResult sendLittleMsg(JSONObject parm, String queueName);
 
     void sendTaskMsg(List<SysUser> us, Map<String, String> parmStr);
 

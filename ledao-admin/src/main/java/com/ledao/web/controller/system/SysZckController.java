@@ -1,14 +1,19 @@
 package com.ledao.web.controller.system;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.*;
-
+import com.ledao.common.annotation.Log;
+import com.ledao.common.core.controller.BaseController;
+import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.core.dao.entity.SysRole;
 import com.ledao.common.core.dao.entity.SysUser;
+import com.ledao.common.core.page.TableDataInfo;
+import com.ledao.common.enums.BusinessType;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.common.utils.poi.ExcelUtil;
 import com.ledao.framework.util.ShiroUtils;
-import com.ledao.system.dao.*;
+import com.ledao.system.dao.SysItem;
+import com.ledao.system.dao.SysProject;
+import com.ledao.system.dao.SysZcb;
+import com.ledao.system.dao.SysZck;
 import com.ledao.system.service.ISysItemService;
 import com.ledao.system.service.ISysProjectService;
 import com.ledao.system.service.ISysZcbService;
@@ -18,13 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import com.ledao.common.annotation.Log;
-import com.ledao.common.enums.BusinessType;
-import com.ledao.common.core.controller.BaseController;
-import com.ledao.common.core.dao.AjaxResult;
-import com.ledao.common.utils.poi.ExcelUtil;
-import com.ledao.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 资产信息库Controller
@@ -491,6 +497,9 @@ public class SysZckController extends BaseController {
     public TableDataInfo listesDoc(SysZcb sysZcb) {
         startPage();
         List<SysZcb> list = sysZcbService.selectZcbListUseful(sysZcb);
+//        for (SysZcb sysZcb1 : list) {
+//            sysZcb1.setProjectType("tz");
+//        }
         return getDataTable(list);
     }
 

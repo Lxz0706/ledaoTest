@@ -46,23 +46,11 @@
     $(function () {
         var options = {
             url: prefix + "/listesDoc",
-            createUrl: prefix + "/add/{id}",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
-            detailUrl: prefix + "/detail/{id}",
-            importUrl: prefix + "/importData",
-            importTemplateUrl: prefix + "/importTemplate",
             modalName: "资产信息库",
             singleSelect: true,
             columns: [{
                 checkbox: true
             },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    visible: false
-                },
                 {
                     title: "序号",
                     formatter: function (value, row, index) {
@@ -80,93 +68,6 @@
                     field: 'assetStatus',
                     title: '资产包状态'
                 }
-
-                /*,
-
-               {
-                    field: 'projectName',
-                    title: '借款人名称'
-                },
-                {
-                    field: 'city',
-                    title: '城市/地区'
-                },
-                {
-                    field: 'principalBalance',
-                    title: '本金余额',
-                    formatter:function (value,row,index) {
-                        return $.operate.numberFormatter(value,3,'.',',');
-                    }
-                }
-                ,
-               {
-                   field: 'guarantor',
-                   title: '保证人'
-               },
-               {
-                   field: 'mortgageRank',
-                   title: '抵押顺位'
-               },
-               {
-                   field: 'natureLand',
-                   title: '土地性质'
-               },
-               {
-                   field: 'landArea',
-                   title: '土地面积',
-                   sortable: true
-               },
-               {
-                   field: 'floors',
-                   title: '所在层数/总层数'
-               },
-               {
-                   field: 'collateType',
-                   title: '抵/置押物类型'
-               },
-               {
-                   field: 'floorage',
-                   title: '建筑面积/㎡',
-                   sortable: true
-               },
-               {
-                   field: 'landUnitPrice',
-                   title: '土地单价',
-                   formatter:function (value,row,index) {
-                       return $.operate.numberFormatter(value,3,'.',',');
-                   }
-               },
-               {
-                   field: 'otherCollateralUnitPrice',
-                   title: '其它抵置押物单价',
-                   formatter:function (value,row,index) {
-                       return $.operate.numberFormatter(value,3,'.',',');
-                   }
-               },
-               {
-                   field: 'totalPrice',
-                   title: '总价',
-                   sortable: true,
-                   formatter:function (value,row,index) {
-                       return $.operate.numberFormatter(value,3,'.',',');
-                   }
-               },
-               {
-                   field: 'capValue',
-                   title: '盖帽值',
-                   sortable: true
-               },
-               {
-                   title: '操作',
-                   align: 'center',
-                   formatter: function (value, row, index) {
-                       var actions = [];
-                       /!*actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');*!/
-                       actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="detail(\'' + row.id + "',\'" + row.projectName + '\')"><i class="fa fa-search"></i>详细</a>');
-                       /!*actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');*!/
-                       return actions.join('');
-                   }
-               }*/
                 ]
         };
         $.table.init(options);
@@ -228,6 +129,7 @@
     }
     function submitHandler() {
         var row = selectRows();
+        console.log("row:====", row);
         window.parent.getZcdSelected(row);
     }
 

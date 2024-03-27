@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledao.system.mapper.SysReshuffleMapper">
+    
+    <resultMap type="SysReshuffle" id="SysReshuffleResult">
+        <result property="reshuffleId"    column="reshuffle_id"    />
+        <result property="staffId"    column="staff_id"    />
+        <result property="transferBefore"    column="transfer_before"    />
+        <result property="transferAfter"    column="transfer_after"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysReshuffleVo">
+        select reshuffle_id, staff_id, transfer_before, transfer_after, transfer_type, create_by, create_time, update_by, update_time from sys_reshuffle
+    </sql>
+
+    <select id="selectSysReshuffleList" parameterType="SysReshuffle" resultMap="SysReshuffleResult">
+        <include refid="selectSysReshuffleVo"/>
+        <where>  
+            <if test="staffId != null "> and staff_id = #{staffId}</if>
+            <if test="transferBefore != null  and transferBefore != ''"> and transfer_before = #{transferBefore}</if>
+            <if test="transferAfter != null  and transferAfter != ''"> and transfer_after = #{transferAfter}</if>
+            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysReshuffleById" parameterType="Long" resultMap="SysReshuffleResult">
+        <include refid="selectSysReshuffleVo"/>
+        where reshuffle_id = #{reshuffleId}
+    </select>
+        
+    <insert id="insertSysReshuffle" parameterType="SysReshuffle" useGeneratedKeys="true" keyProperty="reshuffleId">
+        insert into sys_reshuffle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="staffId != null">staff_id,</if>
+            <if test="transferBefore != null">transfer_before,</if>
+            <if test="transferAfter != null">transfer_after,</if>
+            <if test="transferType != null">transfer_type,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="staffId != null">#{staffId},</if>
+            <if test="transferBefore != null">#{transferBefore},</if>
+            <if test="transferAfter != null">#{transferAfter},</if>
+            <if test="transferType != null">#{transferType},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysReshuffle" parameterType="SysReshuffle">
+        update sys_reshuffle
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="staffId != null">staff_id = #{staffId},</if>
+            <if test="transferBefore != null">transfer_before = #{transferBefore},</if>
+            <if test="transferAfter != null">transfer_after = #{transferAfter},</if>
+            <if test="transferType != null">transfer_type = #{transferType},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where reshuffle_id = #{reshuffleId}
+    </update>
+
+    <delete id="deleteSysReshuffleById" parameterType="Long">
+        delete from sys_reshuffle where reshuffle_id = #{reshuffleId}
+    </delete>
+
+    <delete id="deleteSysReshuffleByIds" parameterType="String">
+        delete from sys_reshuffle where reshuffle_id in 
+        <foreach item="reshuffleId" collection="array" open="(" separator="," close=")">
+            #{reshuffleId}
+        </foreach>
+    </delete>
+
+    <select id="selectReshuffleByStaffId" parameterType="Long" resultMap="SysReshuffleResult">
+        <include refid="selectSysReshuffleVo"/>
+        where staff_id = #{staffId}
+    </select>
+    
+</mapper>

@@ -160,4 +160,9 @@
           WHERE (FIND_IN_SET(p_id,@pv)>0 And @pv := concat(@pv, ',', department_id)) AND del_flag='0' AND `status`='0'
     </select>
 
+    <select id="selectSysDeparmentByDeparmentName" parameterType="String" resultMap="SysDepartmentResult">
+        SELECT * FROM sys_department
+            where department_name = #{deparmentName}
+    </select>
+
 </mapper>

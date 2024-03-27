@@ -1,7 +1,5 @@
 package com.ledao.common.utils.bean;
 
-import org.springframework.stereotype.Component;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

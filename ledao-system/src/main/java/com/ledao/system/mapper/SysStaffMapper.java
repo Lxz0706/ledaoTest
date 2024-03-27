@@ -1,8 +1,8 @@
 package com.ledao.system.mapper;
 
-import java.util.List;
-
 import com.ledao.system.dao.SysStaff;
+
+import java.util.List;
 
 /**
  * 员工信息Mapper接口
@@ -82,4 +82,18 @@ public interface SysStaffMapper {
      * @return
      */
     public List<SysStaff> selectStaffBySecretaryLing(SysStaff staff);
+
+
+    /**
+     * 根据id查询
+     */
+    public List<SysStaff> selectByIds(String[] ids);
+
+    /**
+     * 根据员工名称查询员工信息
+     *
+     * @param staffName
+     * @return
+     */
+    public SysStaff selectStaffByStaffName(String staffName);
 }

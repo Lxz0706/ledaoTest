@@ -1,9 +1,9 @@
 package com.ledao.system.mapper;
 
-import java.util.List;
-
 import com.ledao.system.dao.SysDepartment;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 公司部门Mapper接口
@@ -100,4 +100,12 @@ public interface SysDepartmentMapper {
      * @return
      */
     public List<SysDepartment> selectDepartmentByPId(Long pId);
+
+    /**
+     * 根据部门名称查询部门信息
+     *
+     * @param deparmentName
+     * @return
+     */
+    public SysDepartment selectSysDeparmentByDeparmentName(String deparmentName);
 }

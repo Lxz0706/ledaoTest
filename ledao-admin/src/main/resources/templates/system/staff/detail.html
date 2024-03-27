@@ -8,12 +8,20 @@
     <input id="resumeUrl" th:value="${sysStaff.resumeUrl}" type="hidden">
     <table class="table table-striped">
         <tr>
+            <td style="width: 20%!important;"><h5>劳动关系：</h5></td>
+            <td style="width: 80%!important;"><span th:text="${sysStaff.laborRelations}"/></td>
+        </tr>
+        <tr>
             <td style="width: 20%!important;"><h5>员工姓名：</h5></td>
             <td style="width: 80%!important;"><span th:text="${sysStaff.staffName}"/></td>
         </tr>
         <tr>
-            <td><h5>出生日期：</h5></td>
-            <td><span th:text="${#dates.format(sysStaff.birthday, 'yyyy-MM-dd')}"/></td>
+            <td><h5>部门：</h5></td>
+            <td><span th:text="${sysStaff.departmentName}"/></td>
+        </tr>
+        <tr>
+            <td><h5>职位：</h5></td>
+            <td><span th:text="${sysStaff.position}"/></td>
         </tr>
         <tr>
             <td><h5>性别：</h5></td>
@@ -24,12 +32,16 @@
             <td><span th:text="${#dates.format(sysStaff.entryDate, 'yyyy-MM-dd')}"/></td>
         </tr>
         <tr>
-            <td><h5>核算入职日期：</h5></td>
-            <td><span th:text="${#dates.format(sysStaff.accounteEntryDate, 'yyyy-MM-dd')}"/></td>
+            <td><h5>原始入职日期：</h5></td>
+            <td><span th:text="${#dates.format(sysStaff.entryDate, 'yyyy-MM-dd')}"/></td>
         </tr>
         <tr>
             <td><h5>司龄：</h5></td>
             <td><span th:text="${sysStaff.secretaryLing}"/></td>
+        </tr>
+        <tr>
+            <td><h5>政治面貌：</h5></td>
+            <td><span th:text="${@dict.getLabel('sys_staff_politicalOutlook', sysStaff.politicalOutlook)}"/></td>
         </tr>
         <tr>
             <td><h5>联系方式1：</h5></td>
@@ -40,12 +52,60 @@
             <td><span th:text="${sysStaff.contact2}"/></td>
         </tr>
         <tr>
-            <td><h5>所属部门：</h5></td>
-            <td><span th:text="${sysStaff.departmentName}"/></td>
+            <td><h5>出生日期：</h5></td>
+            <td><span th:text="${#dates.format(sysStaff.birthday, 'yyyy-MM-dd')}"/></td>
+        </tr>
+        <tr>
+            <td><h5>年龄：</h5></td>
+            <td><span th:text="${sysStaff.age}"/></td>
+        </tr>
+        <tr>
+            <td><h5>身份证号码：</h5></td>
+            <td><span th:text="${sysStaff.idNo}"/></td>
+        </tr>
+        <tr>
+            <td><h5>原籍：</h5></td>
+            <td><span th:text="${sysStaff.origin}"/></td>
         </tr>
         <tr>
             <td><h5>学历：</h5></td>
             <td><span th:text="${@dict.getLabel('sys_staff_education', sysStaff.education)}"/></td>
+        </tr>
+        <tr>
+            <td><h5>专业：</h5></td>
+            <td><span th:text="${sysStaff.speciality}"/></td>
+        </tr>
+        <tr>
+            <td><h5>婚育：</h5></td>
+            <td><span th:text="${@dict.getLabel('sys_staff_marriage', sysStaff.marriage)}"/></td>
+        </tr>
+        <tr>
+            <td><h5>民族：</h5></td>
+            <td><span th:text="${sysStaff.nation}"/></td>
+        </tr>
+        <tr>
+            <td><h5>公司履历：</h5></td>
+            <td><span th:text="${sysStaff.companyResume}"/></td>
+        </tr>
+        <tr>
+            <td><h5>住址：</h5></td>
+            <td><span th:text="${sysStaff.address}"/></td>
+        </tr>
+        <tr>
+            <td><h5>紧急联系人：</h5></td>
+            <td><span th:text="${sysStaff.emergencyContact}"/></td>
+        </tr>
+        <tr>
+            <td><h5>紧急联系人电话：</h5></td>
+            <td><span th:text="${sysStaff.emergencyContactPhone}"/></td>
+        </tr>
+        <tr>
+            <td><h5>毕业院校：</h5></td>
+            <td><span th:text="${sysStaff.graduationInstitution}"/></td>
+        </tr>
+        <tr>
+            <td><h5>核算入职日期：</h5></td>
+            <td><span th:text="${#dates.format(sysStaff.accounteEntryDate, 'yyyy-MM-dd')}"/></td>
         </tr>
         <tr>
             <td><h5>员工状态：</h5></td>

@@ -3,7 +3,6 @@ package com.ledao.common.utils;
 import com.ledao.common.core.text.StrFormatter;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import sun.misc.BASE64Encoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -411,8 +410,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
                 data.write(by, 0, len);
             }
             // 对字节数组Base64编码
-            BASE64Encoder encoder = new BASE64Encoder();
-            strNetImageToBase64 = encoder.encode(data.toByteArray());
+            strNetImageToBase64 = Arrays.toString(Base64.getEncoder().encode(data.toByteArray()));
             // 关闭流
             is.close();
 
@@ -444,9 +442,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             e.printStackTrace();
         }
         // 对字节数组Base64编码
-        BASE64Encoder encoder = new BASE64Encoder();
         // 返回Base64编码过的字节数组字符串
-        strLocalImageToBase64 = encoder.encode(Objects.requireNonNull(data));
+        strLocalImageToBase64 = Arrays.toString(Base64.getEncoder().encode(Objects.requireNonNull(data)));
         return strLocalImageToBase64;
     }
 

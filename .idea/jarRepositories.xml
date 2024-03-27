@@ -2,6 +2,11 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="tensorflow-maven-repo" />
+      <option name="name" value="tensorflow-maven-repo" />
+      <option name="url" value="https://maven.aliyun.com/repository/public" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="public" />
       <option name="name" value="aliyun nexus" />
       <option name="url" value="https://maven.aliyun.com/repository/public" />
@@ -10,6 +15,16 @@
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="Central repository" />
+      <option name="name" value="Central repository" />
+      <option name="url" value="https://maven.aliyun.com/repository/public" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="Central repository" />
+      <option name="name" value="Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -29,6 +44,16 @@
     <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
+      <option name="url" value="https://maven.aliyun.com/repository/public" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://repo1.maven.org/maven2/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="tensorflow-snapshots" />
+      <option name="name" value="tensorflow-snapshots" />
       <option name="url" value="https://maven.aliyun.com/repository/public" />
     </remote-repository>
   </component>

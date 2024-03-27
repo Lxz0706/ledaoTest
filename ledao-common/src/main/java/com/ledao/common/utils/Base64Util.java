@@ -1,8 +1,9 @@
 package com.ledao.common.utils;
 
-import sun.misc.BASE64Decoder;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.Base64;
 
 public class Base64Util {
     /**
@@ -14,7 +15,7 @@ public class Base64Util {
             FileInputStream fileForInput = new FileInputStream(picPath);
             byte[] bytes = new byte[fileForInput.available()];
             fileForInput.read(bytes);
-            content = new sun.misc.BASE64Encoder().encode(bytes); // 具体的编码方法
+            content = Arrays.toString(Base64.getEncoder().encode(bytes)); // 具体的编码方法
             fileForInput.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +28,7 @@ public class Base64Util {
      */
     public static void getPicFormatBASE64(String str, String picPath) {
         try {
-            byte[] result = new sun.misc.BASE64Decoder().decodeBuffer(str.trim());
+            byte[] result = Base64.getDecoder().decode(str.trim());
             File file = new File(picPath);
             //如果文件夹不存在则创建
             if (!file.exists() && !file.isDirectory()) {
@@ -51,12 +52,11 @@ public class Base64Util {
             return null;
         }
 
-        BASE64Decoder decoder = new BASE64Decoder();
         //图片的输出流
         OutputStream imageOut = null;
         try {
             //Base64解码
-            byte[] b = decoder.decodeBuffer(imgStr);
+            byte[] b = Base64.getDecoder().decode(imgStr);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {
                     //调整异常数据

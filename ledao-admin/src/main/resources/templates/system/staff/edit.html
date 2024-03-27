@@ -1,229 +1,277 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改员工信息')"/>
-    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: header('修改员工信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-staff-edit" th:object="${sysStaff}" enctype="multipart/form-data">
-        <input name="staffId" th:field="*{staffId}" type="hidden">
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">员工姓名：</label>
-            <div class="col-sm-8">
-                <input name="staffName" th:field="*{staffName}" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">出生日期：</label>
-            <div class="col-sm-8">
-                <div class="input-group date">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="birthday" th:value="${#dates.format(sysStaff.birthday, 'yyyy-MM-dd')}"
-                           class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-staff-edit" th:object="${sysStaff}">
+            <input name="staffId" th:field="*{staffId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">所属部门：</label>
+                <div class="col-sm-8">
+                    <input name="departmentId" id="departmentId" th:field="*{departmentId}" class="form-control"
+                           type="hidden">
+                    <input name="departmentName" id="departmentName" th:field="*{departmentName}" class="form-control"
+                           type="text" onclick="selectDeptTree()" required>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">性别：</label>
-            <div class="col-sm-8">
-                <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}" required>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
-                            th:field="*{sex}"></option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">原始入职日期：</label>
-            <div class="col-sm-8">
-                <div class="input-group date">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="entryDate" th:value="${#dates.format(sysStaff.entryDate, 'yyyy-MM-dd')}"
-                           class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">员工姓名：</label>
+                <div class="col-sm-8">
+                    <input name="staffName" th:field="*{staffName}" class="form-control" type="text">
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">核算入职日期：</label>
-            <div class="col-sm-8">
-                <div class="input-group date">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="accounteEntryDate" id="accounteEntryDate"
-                           th:value="${#dates.format(sysStaff.accounteEntryDate, 'yyyy-MM-dd')}" class="form-control"
-                           placeholder="yyyy-MM-dd" type="text" onchange="accounteEntryDateChange()">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">职位：</label>
+                <div class="col-sm-8">
+                    <input name="position" th:field="*{position}" class="form-control" type="text">
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">司龄：</label>
-            <div class="col-sm-8">
-                <input name="secretaryLing" th:field="*{secretaryLing}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">联系方式1：</label>
-            <div class="col-sm-8">
-                <input name="contact1" th:field="*{contact1}" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">联系方式2：</label>
-            <div class="col-sm-8">
-                <input name="contact2" th:field="*{contact2}" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">所属部门：</label>
-            <div class="col-sm-8">
-                <input name="departmentId" id="departmentId" th:field="*{departmentId}" class="form-control"
-                       type="hidden">
-                <input name="departmentName" id="departmentName" th:field="*{departmentName}" class="form-control"
-                       type="text" onclick="selectDeptTree()" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">学历：</label>
-            <div class="col-sm-8">
-                <select name="education" class="form-control m-b" th:with="type=${@dict.getType('sys_staff_education')}"
-                        required>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
-                            th:field="*{education}"></option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">员工状态：</label>
-            <div class="col-sm-8">
-                <label class="toggle-switch switch-solid">
-                    <input type="checkbox" id="status" th:checked="${sysStaff.status == '0' ? true : false}"
-                           onchange="statusChange()">
-                    <span></span>
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">离职日期：</label>
-            <div class="col-sm-8">
-                <div class="input-group date">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="leaveDate" th:value="${#dates.format(sysStaff.leaveDate, 'yyyy-MM-dd')}"
-                           class="form-control" placeholder="yyyy-MM-dd" type="text">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">劳动关系：</label>
+                <div class="col-sm-8">
+                    <input name="laborRelations" th:field="*{laborRelations}" class="form-control" type="text">
                 </div>
             </div>
-        </div>
-        <!--<div class="form-group">
-            <label class="col-sm-3 control-label">简历：</label>
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <input name="resume" id="resume" type="file" multiple="multiple">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">性别：</label>
+                <div class="col-sm-8">
+                    <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{sex}"></option>
+                    </select>
                 </div>
             </div>
-        </div>-->
-    </form>
-</div>
-<th:block th:include="include :: footer"/>
-<th:block th:include="include :: datetimepicker-js"/>
-<script src="../static/ajax/libs/moment/moment.js"
-        th:src="@{/ajax/libs/moment/moment.js}"></script>
-<script type="text/javascript">
-    var prefix = ctx + "system/staff";
-    $("#form-staff-edit").validate({
-        focusCleanup: true
-    });
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">入职日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="entryDate" th:value="${#dates.format(sysStaff.entryDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">司龄：</label>
+                <div class="col-sm-8">
+                    <input name="secretaryLing" th:field="*{secretaryLing}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">政治面貌：</label>
+                <div class="col-sm-8">
+                    <select name="politicalOutlook" class="form-control m-b" th:with="type=${@dict.getType('sys_staff_politicalOutlook')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{politicalOutlook}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">联系方式1：</label>
+                <div class="col-sm-8">
+                    <input name="contact1" th:field="*{contact1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">出生日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="birthday" th:value="${#dates.format(sysStaff.birthday, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">身份证号码：</label>
+                <div class="col-sm-8">
+                    <input name="idNo" th:field="*{idNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">原籍：</label>
+                <div class="col-sm-8">
+                    <input name="origin" th:field="*{origin}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">学历：</label>
+                <div class="col-sm-8">
+                    <select name="education" class="form-control m-b" th:with="type=${@dict.getType('sys_staff_education')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{education}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">专业：</label>
+                <div class="col-sm-8">
+                    <input name="speciality" th:field="*{speciality}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">婚育：</label>
+                <div class="col-sm-8">
+                    <select name="marriage" class="form-control m-b" th:with="type=${@dict.getType('sys_staff_marriage')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{marriage}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">民族：</label>
+                <div class="col-sm-8">
+                    <input name="nation" th:field="*{nation}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司履历：</label>
+                <div class="col-sm-8">
+                    <input name="companyResume" th:field="*{companyResume}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">住址：</label>
+                <div class="col-sm-8">
+                    <input name="address" th:field="*{address}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">紧急联系人：</label>
+                <div class="col-sm-8">
+                    <input name="emergencyContact" th:field="*{emergencyContact}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">紧急联系人电话：</label>
+                <div class="col-sm-8">
+                    <input name="emergencyContactPhone" th:field="*{emergencyContactPhone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">毕业院校：</label>
+                <div class="col-sm-8">
+                    <input name="graduationInstitution" th:field="*{graduationInstitution}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">离职日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="leaveDate" th:value="${#dates.format(sysStaff.leaveDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">核算入职日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="accounteEntryDate" th:value="${#dates.format(sysStaff.accounteEntryDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/staff";
+        $("#form-staff-edit").validate({
+            focusCleanup: true
+        });
 
-    function submitHandler() {
-        if ($.validate.form()) {
-            var data = $("#form-staff-edit").serializeArray();
-            var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
-            data.push({"name": "status", "value": status});
-            $.operate.save(prefix + "/edit", data);
-        }
-    }
-
-    $("input[name='birthday']").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView: "month",
-        autoclose: true
-    });
-
-    $("input[name='entryDate']").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView: "month",
-        autoclose: true
-    });
-
-    $("input[name='leaveDate']").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView: "month",
-        autoclose: true
-    });
-
-    $("input[name='accounteEntryDate']").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView: "month",
-        autoclose: true
-    });
-
-    function selectDeptTree() {
-        var departmentId = $("#departmentId").val();
-        var url = "";
-        if ($.common.isNotEmpty(departmentId)) {
-            url = ctx + "system/department/selectDeptTree/" + departmentId;
-        } else {
-            url = ctx + "system/department/selectDeptTree";
-        }
-        var options = {
-            title: '选择部门',
-            width: "380",
-            url: url,
-            callBack: doSubmit
-        };
-        $.modal.openOptions(options);
-    }
-
-    function doSubmit(index, layero) {
-        var tree = layero.find("iframe")[0].contentWindow.$._tree;
-        if ($.tree.notAllowParents(tree)) {
-            var body = layer.getChildFrame('body', index);
-            $("#departmentId").val(body.find('#treeId').val());
-            $("#departmentName").val(body.find('#treeName').val());
-            layer.close(index);
-            if ("已离职" == $("#departmentName").val()) {
-                $("#status").prop("checked", false);
-            } else {
-                $("#status").prop("checked", true);
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $("#form-staff-edit").serializeArray();
+                var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+                data.push({"name": "status", "value": status});
+                $.operate.save(prefix + "/edit", data);
             }
         }
-    }
 
-    function accounteEntryDateChange() {
-        var date = $("#accounteEntryDate").val();
-        var newDate = new Date();
-        var a = moment(date);
-        var b = moment(newDate);
-        b.diff(a, "years");
-        $("#secretaryLing").val(b.diff(a, "years"));
-    }
+        $("input[name='entryDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
 
-    function statusChange() {
-        var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
-        if ("1" == status) {
-            $.ajax({
-                url: prefix + "/selectDepartment",
-                type: 'post',
-                data: '',
-                dataType: 'json',
-                success: function (result) {
-                    $("#departmentId").val(result.data.departmentId);
-                    $("#departmentName").val(result.data.departmentName);
-                }
-            })
-        } else {
-            $.modal.msgError("请先修改所属部门");
-            selectDeptTree();
-            $("#status").prop("checked", false);
+        $("input[name='birthday']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='leaveDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='accounteEntryDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        function selectDeptTree() {
+            var departmentId = $("#departmentId").val();
+            var url = "";
+            if ($.common.isNotEmpty(departmentId)) {
+                url = ctx + "system/department/selectDeptTree/" + departmentId;
+            } else {
+                url = ctx + "system/department/selectDeptTree";
+            }
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: url,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
         }
-    }
-</script>
+
+        function doSubmit(index, layero) {
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#departmentId").val(body.find('#treeId').val());
+                $("#departmentName").val(body.find('#treeName').val());
+                layer.close(index);
+                if ("已离职" == $("#departmentName").val()) {
+                    $("#status").prop("checked", false);
+                } else {
+                    $("#status").prop("checked", true);
+                }
+            }
+        }
+
+        function accounteEntryDateChange() {
+            var date = $("#accounteEntryDate").val();
+            var newDate = new Date();
+            var a = moment(date);
+            var b = moment(newDate);
+            b.diff(a, "years");
+            $("#secretaryLing").val(b.diff(a, "years"));
+        }
+
+        function statusChange() {
+            var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+            if ("1" == status) {
+                $.ajax({
+                    url: prefix + "/selectDepartment",
+                    type: 'post',
+                    data: '',
+                    dataType: 'json',
+                    success: function (result) {
+                        $("#departmentId").val(result.data.departmentId);
+                        $("#departmentName").val(result.data.departmentName);
+                    }
+                })
+            } else {
+                $.modal.msgError("请先修改所属部门");
+                selectDeptTree();
+                $("#status").prop("checked", false);
+            }
+        }
+    </script>
 </body>
 </html>

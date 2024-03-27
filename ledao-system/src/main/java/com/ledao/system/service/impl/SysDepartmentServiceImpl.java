@@ -1,19 +1,21 @@
 package com.ledao.system.service.impl;
 
-import java.util.*;
-
 import com.ledao.common.constant.UserConstants;
 import com.ledao.common.core.dao.Ztree;
+import com.ledao.common.core.text.Convert;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.DateUtils;
 import com.ledao.common.utils.StringUtils;
+import com.ledao.system.dao.SysDepartment;
+import com.ledao.system.mapper.SysDepartmentMapper;
+import com.ledao.system.service.ISysDepartmentService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ledao.system.mapper.SysDepartmentMapper;
-import com.ledao.system.dao.SysDepartment;
-import com.ledao.system.service.ISysDepartmentService;
-import com.ledao.common.core.text.Convert;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * 公司部门Service业务层处理
@@ -234,5 +236,16 @@ public class SysDepartmentServiceImpl implements ISysDepartmentService {
     @Override
     public List<SysDepartment> selectDepartmentByPId(Long pId) {
         return sysDepartmentMapper.selectDepartmentByPId(pId);
+    }
+
+    /**
+     * 根据部门名称查询部门信息
+     *
+     * @param deparmentName
+     * @return
+     */
+    @Override
+    public SysDepartment selectSysDeparmentByDeparmentName(String deparmentName) {
+        return sysDepartmentMapper.selectSysDeparmentByDeparmentName(deparmentName);
     }
 }

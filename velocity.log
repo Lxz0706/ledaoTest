@@ -1,493 +1,276 @@
-2022-11-08 13:36:11,811 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-08 13:36:11,811 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-08 13:36:11,812 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-08 13:36:11,812 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-08 13:36:11,812 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-08 13:36:11,812 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-08 13:36:11,812 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-08 13:36:11,812 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-08 13:36:11,813 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,174 - Log4JLogChute initialized using file 'velocity.log'
-2022-11-11 09:31:56,175 - Initializing Velocity, Calling init()...
-2022-11-11 09:31:56,175 - Starting Apache Velocity v1.7 (compiled: 2010-11-19 12:14:37)
-2022-11-11 09:31:56,175 - Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
-2022-11-11 09:31:56,175 - Trying to use logger class org.apache.velocity.runtime.log.AvalonLogChute
-2022-11-11 09:31:56,175 - Target log system for org.apache.velocity.runtime.log.AvalonLogChute is not available (java.lang.NoClassDefFoundError: org/apache/log/Priority).  Falling back to next log system...
-2022-11-11 09:31:56,175 - Trying to use logger class org.apache.velocity.runtime.log.Log4JLogChute
-2022-11-11 09:31:56,175 - Using logger class org.apache.velocity.runtime.log.Log4JLogChute
-2022-11-11 09:31:56,179 - ResourceLoader instantiated: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,210 - ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl) with class java.util.Collections$SynchronizedMap cache map.
-2022-11-11 09:31:56,213 - Loaded System Directive: org.apache.velocity.runtime.directive.Stop
-2022-11-11 09:31:56,214 - Loaded System Directive: org.apache.velocity.runtime.directive.Define
-2022-11-11 09:31:56,215 - Loaded System Directive: org.apache.velocity.runtime.directive.Break
-2022-11-11 09:31:56,216 - Loaded System Directive: org.apache.velocity.runtime.directive.Evaluate
-2022-11-11 09:31:56,217 - Loaded System Directive: org.apache.velocity.runtime.directive.Literal
-2022-11-11 09:31:56,217 - Loaded System Directive: org.apache.velocity.runtime.directive.Macro
-2022-11-11 09:31:56,219 - Loaded System Directive: org.apache.velocity.runtime.directive.Parse
-2022-11-11 09:31:56,220 - Loaded System Directive: org.apache.velocity.runtime.directive.Include
-2022-11-11 09:31:56,220 - Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
-2022-11-11 09:31:56,242 - Created '20' parsers.
-2022-11-11 09:31:56,244 - Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
-2022-11-11 09:31:56,247 - Could not load resource 'VM_global_library.vm' from ResourceLoader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader: ClasspathResourceLoader Error: cannot find resource VM_global_library.vm
-2022-11-11 09:31:56,247 - Velocimacro : Default library not found.
-2022-11-11 09:31:56,247 - Velocimacro : allowInline = true : VMs can be defined inline in templates
-2022-11-11 09:31:56,247 - Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
-2022-11-11 09:31:56,247 - Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
-2022-11-11 09:31:56,247 - Velocimacro : autoload off : VM system will not automatically reload global library macros
-2022-11-11 09:31:56,292 - ResourceManager : found vm/java/dao.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,316 - ResourceManager : found vm/java/mapper.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,319 - ResourceManager : found vm/java/service.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,332 - ResourceManager : found vm/java/serviceImpl.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,353 - ResourceManager : found vm/java/controller.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,365 - ResourceManager : found vm/xml/mapper.xml.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,373 - ResourceManager : found vm/html/list.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,388 - ResourceManager : found vm/html/add.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,390 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:56,391 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:56,403 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:56,403 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,403 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,403 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,403 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,403 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:56,404 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:56,410 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,431 - ResourceManager : found vm/java/dao.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,434 - ResourceManager : found vm/java/mapper.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,436 - ResourceManager : found vm/java/service.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,439 - ResourceManager : found vm/java/serviceImpl.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,443 - ResourceManager : found vm/java/controller.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,449 - ResourceManager : found vm/xml/mapper.xml.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,453 - ResourceManager : found vm/html/list.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,457 - ResourceManager : found vm/html/add.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,457 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:58,457 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:58,457 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 09:31:58,457 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 09:31:58,461 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 09:31:58,461 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:58,461 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:58,461 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 09:31:58,461 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 09:31:58,462 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,628 - Log4JLogChute initialized using file 'velocity.log'
-2022-11-11 10:53:22,628 - Initializing Velocity, Calling init()...
-2022-11-11 10:53:22,628 - Starting Apache Velocity v1.7 (compiled: 2010-11-19 12:14:37)
-2022-11-11 10:53:22,628 - Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
-2022-11-11 10:53:22,628 - Trying to use logger class org.apache.velocity.runtime.log.AvalonLogChute
-2022-11-11 10:53:22,628 - Target log system for org.apache.velocity.runtime.log.AvalonLogChute is not available (java.lang.NoClassDefFoundError: org/apache/log/Priority).  Falling back to next log system...
-2022-11-11 10:53:22,628 - Trying to use logger class org.apache.velocity.runtime.log.Log4JLogChute
-2022-11-11 10:53:22,628 - Using logger class org.apache.velocity.runtime.log.Log4JLogChute
-2022-11-11 10:53:22,631 - ResourceLoader instantiated: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,639 - ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl) with class java.util.Collections$SynchronizedMap cache map.
-2022-11-11 10:53:22,641 - Loaded System Directive: org.apache.velocity.runtime.directive.Stop
-2022-11-11 10:53:22,642 - Loaded System Directive: org.apache.velocity.runtime.directive.Define
-2022-11-11 10:53:22,643 - Loaded System Directive: org.apache.velocity.runtime.directive.Break
-2022-11-11 10:53:22,643 - Loaded System Directive: org.apache.velocity.runtime.directive.Evaluate
-2022-11-11 10:53:22,643 - Loaded System Directive: org.apache.velocity.runtime.directive.Literal
-2022-11-11 10:53:22,644 - Loaded System Directive: org.apache.velocity.runtime.directive.Macro
-2022-11-11 10:53:22,645 - Loaded System Directive: org.apache.velocity.runtime.directive.Parse
-2022-11-11 10:53:22,646 - Loaded System Directive: org.apache.velocity.runtime.directive.Include
-2022-11-11 10:53:22,647 - Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
-2022-11-11 10:53:22,666 - Created '20' parsers.
-2022-11-11 10:53:22,683 - Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
-2022-11-11 10:53:22,685 - Could not load resource 'VM_global_library.vm' from ResourceLoader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader: ClasspathResourceLoader Error: cannot find resource VM_global_library.vm
-2022-11-11 10:53:22,685 - Velocimacro : Default library not found.
-2022-11-11 10:53:22,685 - Velocimacro : allowInline = true : VMs can be defined inline in templates
-2022-11-11 10:53:22,685 - Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
-2022-11-11 10:53:22,685 - Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
-2022-11-11 10:53:22,685 - Velocimacro : autoload off : VM system will not automatically reload global library macros
-2022-11-11 10:53:22,710 - ResourceManager : found vm/java/dao.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,722 - ResourceManager : found vm/java/mapper.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,725 - ResourceManager : found vm/java/service.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,729 - ResourceManager : found vm/java/serviceImpl.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,733 - ResourceManager : found vm/java/controller.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,737 - ResourceManager : found vm/xml/mapper.xml.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,743 - ResourceManager : found vm/html/list.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,748 - ResourceManager : found vm/html/add.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,749 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 10:53:22,749 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 10:53:22,749 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-11 10:53:22,749 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-11 10:53:22,752 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-11 10:53:22,752 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 10:53:22,752 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 10:53:22,754 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-11 10:53:22,754 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-11 10:53:22,754 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:42,878 - Log4JLogChute initialized using file 'velocity.log'
-2022-11-21 13:51:42,878 - Initializing Velocity, Calling init()...
-2022-11-21 13:51:42,878 - Starting Apache Velocity v1.7 (compiled: 2010-11-19 12:14:37)
-2022-11-21 13:51:42,878 - Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
-2022-11-21 13:51:42,878 - Trying to use logger class org.apache.velocity.runtime.log.AvalonLogChute
-2022-11-21 13:51:42,878 - Target log system for org.apache.velocity.runtime.log.AvalonLogChute is not available (java.lang.NoClassDefFoundError: org/apache/log/Priority).  Falling back to next log system...
-2022-11-21 13:51:42,878 - Trying to use logger class org.apache.velocity.runtime.log.Log4JLogChute
-2022-11-21 13:51:42,879 - Using logger class org.apache.velocity.runtime.log.Log4JLogChute
-2022-11-21 13:51:42,882 - ResourceLoader instantiated: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:42,889 - ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl) with class java.util.Collections$SynchronizedMap cache map.
-2022-11-21 13:51:42,891 - Loaded System Directive: org.apache.velocity.runtime.directive.Stop
-2022-11-21 13:51:42,892 - Loaded System Directive: org.apache.velocity.runtime.directive.Define
-2022-11-21 13:51:42,892 - Loaded System Directive: org.apache.velocity.runtime.directive.Break
-2022-11-21 13:51:42,893 - Loaded System Directive: org.apache.velocity.runtime.directive.Evaluate
-2022-11-21 13:51:42,893 - Loaded System Directive: org.apache.velocity.runtime.directive.Literal
-2022-11-21 13:51:42,893 - Loaded System Directive: org.apache.velocity.runtime.directive.Macro
-2022-11-21 13:51:42,894 - Loaded System Directive: org.apache.velocity.runtime.directive.Parse
-2022-11-21 13:51:42,895 - Loaded System Directive: org.apache.velocity.runtime.directive.Include
-2022-11-21 13:51:42,895 - Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
-2022-11-21 13:51:42,905 - Created '20' parsers.
-2022-11-21 13:51:42,907 - Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
-2022-11-21 13:51:42,909 - Could not load resource 'VM_global_library.vm' from ResourceLoader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader: ClasspathResourceLoader Error: cannot find resource VM_global_library.vm
-2022-11-21 13:51:42,909 - Velocimacro : Default library not found.
-2022-11-21 13:51:42,909 - Velocimacro : allowInline = true : VMs can be defined inline in templates
-2022-11-21 13:51:42,909 - Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
-2022-11-21 13:51:42,909 - Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
-2022-11-21 13:51:42,909 - Velocimacro : autoload off : VM system will not automatically reload global library macros
-2022-11-21 13:51:42,958 - ResourceManager : found vm/java/dao.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:42,983 - ResourceManager : found vm/java/mapper.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:42,986 - ResourceManager : found vm/java/service.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:42,999 - ResourceManager : found vm/java/serviceImpl.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:43,010 - ResourceManager : found vm/java/controller.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:43,020 - ResourceManager : found vm/xml/mapper.xml.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:43,032 - ResourceManager : found vm/html/list.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:43,039 - ResourceManager : found vm/html/add.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:43,040 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,040 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,040 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,040 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,040 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,040 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,041 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,042 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,042 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,042 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:51:43,042 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:51:43,056 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,057 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:51:43,058 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:51:43,068 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,589 - ResourceManager : found vm/java/dao.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,592 - ResourceManager : found vm/java/mapper.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,594 - ResourceManager : found vm/java/service.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,598 - ResourceManager : found vm/java/serviceImpl.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,601 - ResourceManager : found vm/java/controller.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,605 - ResourceManager : found vm/xml/mapper.xml.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,608 - ResourceManager : found vm/html/list.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,613 - ResourceManager : found vm/html/add.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,613 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2022-11-21 13:53:00,614 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2022-11-21 13:53:00,618 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2022-11-21 13:53:00,618 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2022-11-21 13:53:00,620 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,531 - Log4JLogChute initialized using file 'velocity.log'
-2023-07-07 14:55:47,534 - Initializing Velocity, Calling init()...
-2023-07-07 14:55:47,534 - Starting Apache Velocity v1.7 (compiled: 2010-11-19 12:14:37)
-2023-07-07 14:55:47,534 - Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
-2023-07-07 14:55:47,534 - Trying to use logger class org.apache.velocity.runtime.log.AvalonLogChute
-2023-07-07 14:55:47,534 - Target log system for org.apache.velocity.runtime.log.AvalonLogChute is not available (java.lang.NoClassDefFoundError: org/apache/log/Priority).  Falling back to next log system...
-2023-07-07 14:55:47,534 - Trying to use logger class org.apache.velocity.runtime.log.Log4JLogChute
-2023-07-07 14:55:47,534 - Using logger class org.apache.velocity.runtime.log.Log4JLogChute
-2023-07-07 14:55:47,538 - ResourceLoader instantiated: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,561 - ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl) with class java.util.Collections$SynchronizedMap cache map.
-2023-07-07 14:55:47,563 - Loaded System Directive: org.apache.velocity.runtime.directive.Stop
-2023-07-07 14:55:47,563 - Loaded System Directive: org.apache.velocity.runtime.directive.Define
-2023-07-07 14:55:47,564 - Loaded System Directive: org.apache.velocity.runtime.directive.Break
-2023-07-07 14:55:47,564 - Loaded System Directive: org.apache.velocity.runtime.directive.Evaluate
-2023-07-07 14:55:47,565 - Loaded System Directive: org.apache.velocity.runtime.directive.Literal
-2023-07-07 14:55:47,565 - Loaded System Directive: org.apache.velocity.runtime.directive.Macro
-2023-07-07 14:55:47,566 - Loaded System Directive: org.apache.velocity.runtime.directive.Parse
-2023-07-07 14:55:47,567 - Loaded System Directive: org.apache.velocity.runtime.directive.Include
-2023-07-07 14:55:47,567 - Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
-2023-07-07 14:55:47,581 - Created '20' parsers.
-2023-07-07 14:55:47,583 - Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
-2023-07-07 14:55:47,585 - Could not load resource 'VM_global_library.vm' from ResourceLoader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader: ClasspathResourceLoader Error: cannot find resource VM_global_library.vm
-2023-07-07 14:55:47,585 - Velocimacro : Default library not found.
-2023-07-07 14:55:47,585 - Velocimacro : allowInline = true : VMs can be defined inline in templates
-2023-07-07 14:55:47,585 - Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
-2023-07-07 14:55:47,585 - Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
-2023-07-07 14:55:47,585 - Velocimacro : autoload off : VM system will not automatically reload global library macros
-2023-07-07 14:55:47,610 - ResourceManager : found vm/java/dao.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,640 - ResourceManager : found vm/java/mapper.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,647 - ResourceManager : found vm/java/service.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,652 - ResourceManager : found vm/java/serviceImpl.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,658 - ResourceManager : found vm/java/controller.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,670 - ResourceManager : found vm/xml/mapper.xml.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,684 - ResourceManager : found vm/html/list.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,692 - ResourceManager : found vm/html/add.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
-2023-07-07 14:55:47,693 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
-2023-07-07 14:55:47,695 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-2023-07-07 14:55:47,695 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2023-07-07 14:55:47,695 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2023-07-07 14:55:47,696 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2023-07-07 14:55:47,696 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2023-07-07 14:55:47,696 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2023-07-07 14:55:47,696 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2023-07-07 14:55:47,696 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
-2023-07-07 14:55:47,696 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
-2023-07-07 14:55:47,699 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:29:51,997 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,997 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,997 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,997 - Null reference [template 'vm/html/add.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 70, column 141] : ${dict.default} cannot be resolved.
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 70, column 141] : ${dict.default} cannot be resolved.
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 70, column 141] : ${dict.default} cannot be resolved.
+2024-03-14 16:29:51,999 - Null reference [template 'vm/html/add.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:51,999 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:29:52,000 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:29:52,006 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Null reference [template 'vm/html/edit.html.vm', line 51, column 49] : ${type} cannot be resolved.
+2024-03-14 16:29:52,007 - Null reference [template 'vm/html/edit.html.vm', line 51, column 67] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:29:52,007 - Null reference [template 'vm/html/edit.html.vm', line 51, column 96] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Null reference [template 'vm/html/edit.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:29:52,007 - Null reference [template 'vm/html/edit.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,007 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Null reference [template 'vm/html/edit.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:29:52,008 - Null reference [template 'vm/html/edit.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Null reference [template 'vm/html/edit.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:29:52,008 - Null reference [template 'vm/html/edit.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:29:52,008 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:29:52,010 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,333 - ResourceManager : found vm/java/dao.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,338 - ResourceManager : found vm/java/mapper.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,340 - ResourceManager : found vm/java/service.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,345 - ResourceManager : found vm/java/serviceImpl.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,350 - ResourceManager : found vm/java/controller.java.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,357 - ResourceManager : found vm/xml/mapper.xml.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,362 - ResourceManager : found vm/html/list.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 61] : ${type} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 79] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 108] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 61] : ${type} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 79] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 108] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 61] : ${type} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 79] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 108] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 61] : ${type} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 79] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,363 - Null reference [template 'vm/html/list.html.vm', line 33, column 108] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,369 - ResourceManager : found vm/html/add.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,369 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 51, column 49] : ${type} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 51, column 67] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 51, column 96] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 70, column 141] : ${dict.default} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 70, column 141] : ${dict.default} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 70, column 141] : ${dict.default} cannot be resolved.
+2024-03-14 16:33:50,370 - Null reference [template 'vm/html/add.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,370 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 10]
+2024-03-14 16:33:50,371 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/add.html.vm[line 26, column 50]
+2024-03-14 16:33:50,379 - ResourceManager : found vm/html/edit.html.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,379 - Null reference [template 'vm/html/edit.html.vm', line 51, column 49] : ${type} cannot be resolved.
+2024-03-14 16:33:50,379 - Null reference [template 'vm/html/edit.html.vm', line 51, column 67] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,379 - Null reference [template 'vm/html/edit.html.vm', line 51, column 96] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,379 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Null reference [template 'vm/html/edit.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,380 - Null reference [template 'vm/html/edit.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Null reference [template 'vm/html/edit.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,380 - Null reference [template 'vm/html/edit.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Null reference [template 'vm/html/edit.html.vm', line 70, column 110] : ${dict.dictValue} cannot be resolved.
+2024-03-14 16:33:50,380 - Null reference [template 'vm/html/edit.html.vm', line 71, column 81] : ${dict.dictLabel} cannot be resolved.
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,380 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,381 - Right side ($treeParentCode) of '!=' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 10]
+2024-03-14 16:33:50,381 - Right side ($treeParentCode) of '==' operation has null value. If it is a reference, it may not be in the context or its toString() returned null. vm/html/edit.html.vm[line 27, column 50]
+2024-03-14 16:33:50,384 - ResourceManager : found vm/sql/sql.vm with loader org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader

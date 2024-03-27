@@ -1,7 +1,6 @@
 package com.ledao.common.utils;
 
 import com.ledao.common.utils.file.FileUploadUtils;
-import sun.font.FontDesignMetrics;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,34 +29,6 @@ public class WxImageTool {
         ImageIO.write(imgWithGoods, "png", new File(savePath));
     }
 
-
-    /**
-     * 获取指定字体指定内容的宽度
-     *
-     * @param font    字体
-     * @param content 内容
-     * @return
-     */
-    public static int getWordWidth(Font font, String content) {
-        FontDesignMetrics metrics = FontDesignMetrics.getMetrics(font);
-        int width = 0;
-        for (int i = 0; i < content.length(); i++) {
-            width += metrics.charWidth(content.charAt(i));
-        }
-        return width;
-    }
-
-    /**
-     * 获取指定字体指定内容的宽度
-     *
-     * @param font    字体
-     * @param content 内容
-     * @return
-     */
-    public static int getWordWidthBody(Font font, String content) {
-        FontDesignMetrics metrics = FontDesignMetrics.getMetrics(font);
-        return metrics.stringWidth(content);
-    }
 
 
     /**

@@ -71,14 +71,6 @@ public class CommonController {
         }
     }
 
-    public static void main(String[] args) {
-        String fileName = "1as2xc3asd.xlsx";
-        String realFileName = fileName.substring(fileName.indexOf("_") + 1);
-        System.out.println(FileUtils.isValidFilName(fileName));
-        System.out.println(FileUtils.isValidFilename(fileName));
-        System.out.println("真实名称：===="+realFileName);
-    }
-
     /**
      * 通用上传请求
      */

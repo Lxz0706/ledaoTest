@@ -128,7 +128,6 @@ public class SysBgczzckController extends BaseController {
         String id = getRequest().getParameter("ids");
         String projectStatus = getRequest().getParameter("projectStatus");
         sysBgczzck.setProjectStatus(projectStatus);
-        logger.info(sysBgczzck.getProjectStatus());
         List<SysBgczzck> list = new ArrayList<>();
         if (StringUtils.isNotEmpty(id) && StringUtils.isNotNull(id)) {
             list = sysBgczzckService.selectByIds(id);

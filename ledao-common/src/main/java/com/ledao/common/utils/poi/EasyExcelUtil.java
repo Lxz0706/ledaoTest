@@ -4,18 +4,21 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.style.WriteCellStyle;
+import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
-import com.ledao.common.config.Global;
 import com.ledao.common.core.dao.AjaxResult;
 import com.ledao.common.exception.BusinessException;
 import com.ledao.common.utils.bean.SheetExcelData;
-import com.ledao.common.utils.file.FileUtils;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
@@ -46,6 +49,18 @@ public class EasyExcelUtil {
                         .head(sheetExcelDataList.get(i).gettClass())
                         .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).build();
                 excelWriter.write(sheetExcelDataList.get(i).getDataList(), writeSheet);
+
+//                //表头样式
+//                WriteCellStyle headWriteCellStyle = new WriteCellStyle();
+//                //设置表头居中对齐
+//                headWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+//                //内容样式
+//                WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
+//                //设置内容靠左对齐
+//                contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.LEFT);
+//                HorizontalCellStyleStrategy horizontalCellStyleStrategy = new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+//                EasyExcel.write(getOutputStream(fileName, response), clazz).excelType(ExcelTypeEnum.XLSX).sheet(sheetExcelDataList.get(i).getSheetName()).registerWriteHandler(horizontalCellStyleStrategy).doWrite(sheetExcelDataList.get(i));
+
             }
             //return AjaxResult.success(filename);
         } catch (Exception e) {
@@ -88,18 +103,38 @@ public class EasyExcelUtil {
     }
 
     /**
-     * 获取下载路径
+     * 导出
      *
-     * @param filename 文件名称
+     * @param response
+     * @param data
+     * @param fileName
+     * @param sheetName
+     * @param clazz
+     * @return
+     * @throws Exception
      */
-    public String getAbsoluteFile(String filename) {
-        String downloadPath = Global.getDownloadPath() + filename;
-        File desc = new File(downloadPath);
-        if (!desc.getParentFile().exists()) {
-            desc.getParentFile().mkdirs();
-        }
-        return downloadPath;
+    public static AjaxResult writeExcel(HttpServletResponse response, List<? extends Object> data, String fileName, String sheetName, Class clazz) throws Exception {
+        //表头样式
+        WriteCellStyle headWriteCellStyle = new WriteCellStyle();
+        //设置表头居中对齐
+        headWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        //内容样式
+        WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
+        //设置内容靠左对齐
+        contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.LEFT);
+        HorizontalCellStyleStrategy horizontalCellStyleStrategy = new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+        EasyExcel.write(getOutputStream(fileName, response), clazz).excelType(ExcelTypeEnum.XLSX).sheet(sheetName).registerWriteHandler(horizontalCellStyleStrategy).doWrite(data);
+        return AjaxResult.success();
     }
+
+    private static OutputStream getOutputStream(String fileName, HttpServletResponse response) throws Exception {
+        fileName = URLEncoder.encode(fileName, "UTF-8");
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+        return response.getOutputStream();
+    }
+
 
 }
 

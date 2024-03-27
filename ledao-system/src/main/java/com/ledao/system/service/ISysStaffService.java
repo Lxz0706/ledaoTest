@@ -1,8 +1,8 @@
 package com.ledao.system.service;
 
-import java.util.List;
-
 import com.ledao.system.dao.SysStaff;
+
+import java.util.List;
 
 /**
  * 员工信息Service接口
@@ -90,4 +90,27 @@ public interface ISysStaffService {
      * @return
      */
     public List<SysStaff> selectStaffBySecretaryLing(SysStaff staff);
+
+    /**
+     * 根据id查询
+     */
+    public List<SysStaff> selectByIds(String ids);
+
+    /**
+     * 导入用户数据
+     *
+     * @param sysStaffList    用户数据列表
+     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
+     * @param operName        操作用户
+     * @return 结果
+     */
+    public String importStaff(List<SysStaff> sysStaffList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 根据员工名称查询员工信息
+     *
+     * @param staffName
+     * @return
+     */
+    public SysStaff selectStaffByStaffName(String staffName);
 }

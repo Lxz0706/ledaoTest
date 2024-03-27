@@ -91,4 +91,12 @@ public interface ISysDepartmentService {
      * @return
      */
     public List<SysDepartment> selectDepartmentByPId(Long pId);
+
+    /**
+     * 根据部门名称查询部门信息
+     *
+     * @param deparmentName
+     * @return
+     */
+    public SysDepartment selectSysDeparmentByDeparmentName(String deparmentName);
 }

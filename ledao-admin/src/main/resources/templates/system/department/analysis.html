@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('客户库列表')"/>
     <style type="text/css">
@@ -23,7 +23,7 @@
                     <ul>
                         <li class="select-time">
                             <label>创建时间：</label><input type="text" class="time-input" id="startTime"
-                                                       placeholder="开始时间" name="beginTime"/>
+                                                           placeholder="开始时间" name="beginTime"/>
                             <span>-</span><input type="text" class="time-input" id="endTime" placeholder="结束时间"
                                                  name="endTime"/>
                         </li>
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="col-xs-12">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="ibox-title">
                     <h5>司龄分布</a></h5>
                 </div>
@@ -53,7 +53,7 @@
                     <div id="secretaryLingAnalysis"></div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="ibox-title">
                     <h5>性别分布</a></h5>
                 </div>
@@ -61,12 +61,22 @@
                     <div id="sexAnalysis"></div>
                 </div>
             </div>
-            <div class="col-sm-4">
+        </div>
+        <div class="col-xs-12">
+            <div class="col-sm-6">
                 <div class="ibox-title">
                     <h5>学历分布</a></h5>
                 </div>
                 <div class="ibox-content">
                     <div id="educationAnalysis"></div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox-title">
+                    <h5>年龄分布</a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="ageAnalysis"></div>
                 </div>
             </div>
         </div>
@@ -84,6 +94,7 @@
         educationAnalysis();
         sexAnalysis();
         secretaryLingAnalysis();
+        ageAnalysis();
     });
 
 
@@ -217,24 +228,6 @@
                 });
                 chart.interval().position('type*value').size(20).color('#F29A76');
                 chart.render();
-                /*var chart = new G2.Chart({
-                    container: 'secretaryLingAnalysis',
-                    autoFit: true,
-                    height: 385,
-                });
-                chart.source(result);
-                chart.scale('value', {
-                    alias: '人',
-                    nice: true
-                });
-                chart.axis('type', {
-                    label: {
-                        offset: 12
-                    }
-                });
-                chart.coord().transpose();
-                chart.interval().position('type*value').size(20).color('#F29A76');
-                chart.render();*/
             }
         });
     }
@@ -264,6 +257,42 @@
                 chart.render();
             }
         });
+    }
+
+    function ageAnalysis(data) {
+        $.ajax({
+            url: ctx + 'system/staff/selectStaffByAge',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var chart = new G2.Chart({
+                    container: 'ageAnalysis',
+                    autoFit: true,
+                    height: 385,
+                });
+                var COLORS = ['#88ABDA', '#EFC4CE', '#388431', '#00BFFF', '#5F9EA0', '#E1FFFF', '#00FFFF', '#D4F2E7', '#00CED1'];
+                chart.coord('theta', {
+                    radius: 0.9
+                });
+                chart.source(result);
+                chart.tooltip({
+                    showTitle: false
+                });
+                chart.intervalStack().position('sold').shape('radiusPie').color('type', COLORS).label('sold', {
+                    useHtml: true,
+                    htmlTemplate: function htmlTemplate(text, item) {
+                        return '<div style="text-align:center;">' + (text * 100).toFixed(0) + '%</div>';
+                    }
+                }).tooltip('type*value', function (type, value) {
+                    return {
+                        name: type,
+                        value: value + " 人"
+                    }
+                });
+                chart.render();
+            }
+        })
     }
 
 

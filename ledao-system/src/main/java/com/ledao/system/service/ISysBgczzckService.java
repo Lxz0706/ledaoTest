@@ -82,4 +82,6 @@ public interface ISysBgczzckService {
     public List<SysBgczzck> selectByIds(String ids);
 
     List<SysBgczzck> selectSysBgczzckListUseful(SysBgczzck sysBgczzck);
+
+
 }
